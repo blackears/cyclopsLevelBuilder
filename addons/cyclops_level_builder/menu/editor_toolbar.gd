@@ -2,7 +2,17 @@
 extends PanelContainer
 class_name EditorToolbar
 
-var editorPlugin:CyclopsLevelBuilder
+var editor_plugin:CyclopsLevelBuilder:
+	get:
+		return editor_plugin
+	set(value):
+		editor_plugin = value
+		editor_plugin.active_node_changed.connect(on_active_node_changed)
+#var editor_plugin:CyclopsLevelBuilder
+
+func on_active_node_changed():
+	update_grid()
+	
 
 #enum Tool { MOVE, DRAW, CLIP, VERTEX, EDGE, FACE }
 #var tool:Tool = Tool.MOVE
@@ -20,8 +30,13 @@ func _ready():
 	$HBoxContainer/grid_size.add_item("8", 7)
 	$HBoxContainer/grid_size.add_item("16", 8)
 	
-	pass # Replace with function body.
+	update_grid
 
+func update_grid():
+	if editor_plugin.active_node:
+		var size:int = editor_plugin.active_node.grid_size
+		$HBoxContainer/grid_size.select(size + 4)
+		
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -32,16 +47,17 @@ func _on_grid_size_item_selected(index):
 #	if Engine.is_editor_hint():
 	print("_on_grid_size_item_selected " + str(index))
 
-	var iface:EditorInterface = editorPlugin.get_editor_interface()
-	var settings:EditorSettings = iface.get_editor_settings()
+#	var iface:EditorInterface = editor_plugin.get_editor_interface()
+#	var settings:EditorSettings = iface.get_editor_settings()
 	
-	settings.set_setting("editors/3d/grid_size", index)
+#	settings.set_setting("editors/3d/grid_size", index)
 	
-	pass # Replace with function body.
+	if editor_plugin.active_node:
+		editor_plugin.active_node.grid_size = index - 4
 
 
 func _on_bn_move_pressed():
-	editorPlugin.switch_to_tool(ToolMove.new())
+	editor_plugin.switch_to_tool(ToolMove.new())
 
 
 func _on_bn_draw_pressed():

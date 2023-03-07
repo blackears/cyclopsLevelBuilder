@@ -2,26 +2,36 @@
 extends EditorPlugin
 class_name CyclopsLevelBuilder
 
+signal active_node_changed
+
 const AUTOLOAD_NAME = "CyclopsAutoload"
 
 #var dock:Control
 var toolbar:EditorToolbar
 var activated:bool = false
 
-var block_create_distance:float = 5
+
+var block_create_distance:float = 20
 var tool:CyclopsTool = null
 
-var current_node:GeometryBrush
+#var _active_node:GeometryBrush
+var active_node:GeometryBrushes:
+	get:
+		return active_node
+	set(value):
+		if active_node != value:
+			active_node = value
+			active_node_changed.emit()
 
 func _enter_tree():
-	add_custom_type("GeometryBrush", "Node3D", preload("controls/geometry_brush.gd"), preload("controls/geometryBrushIcon.png"))
+	add_custom_type("GeometryBrushes", "Node3D", preload("controls/geometry_brushes.gd"), preload("controls/geometryBrushIcon.png"))
 
 	add_autoload_singleton(AUTOLOAD_NAME, "res://addons/cyclops_level_builder/cyclops_global_scene.tscn")
 	
 #	dock = preload("menu/cyclops_control_panel.tscn").instantiate()
 	
 	toolbar = preload("menu/editor_toolbar.tscn").instantiate()
-	toolbar.editorPlugin = self
+	toolbar.editor_plugin = self
 	
 	var editor:EditorInterface = get_editor_interface()
 	var selection:EditorSelection = editor.get_selection()
@@ -40,8 +50,8 @@ func update_activation():
 	if !nodes.is_empty():
 		var node:Node = nodes[0]
 		
-		if node is GeometryBrush:
-			current_node = node
+		if node is GeometryBrushes:
+			active_node = node
 			if !activated:
 				add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, toolbar)
 				activated = true
@@ -50,7 +60,7 @@ func update_activation():
 				remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, toolbar)
 				activated = false
 	else:
-		current_node = null
+		active_node = null
 
 func on_selection_changed():
 	update_activation()
@@ -59,7 +69,7 @@ func _exit_tree():
 	# Clean-up of the plugin goes here.
 	remove_autoload_singleton(AUTOLOAD_NAME)
 	
-	remove_custom_type("GeometryBrush")
+	remove_custom_type("GeometryBrushes")
 	
 	
 	if activated:
@@ -70,7 +80,7 @@ func _exit_tree():
 	toolbar.queue_free()
 
 func _handles(object:Object):
-	return object is GeometryBrush
+	return object is GeometryBrushes
 
 func _forward_3d_draw_over_viewport(viewport_control:Control):
 	#Draw on top of viweport here

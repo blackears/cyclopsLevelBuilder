@@ -1,9 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://btii8ith16g4i"]
+[gd_scene load_steps=2 format=3 uid="uid://bcmdpdkwasdcb"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/geometry_brush.gd" id="1_86qfm"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/geometry_brushes.gd" id="1_5eqg2"]
 
 [node name="Node3D" type="Node3D"]
 
 [node name="GeometryBrush" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
-script = ExtResource("1_86qfm")
+script = ExtResource("1_5eqg2")

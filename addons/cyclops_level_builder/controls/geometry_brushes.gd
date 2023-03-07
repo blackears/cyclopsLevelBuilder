@@ -1,7 +1,8 @@
 @tool
 extends Node3D
-class_name GeometryBrush
+class_name GeometryBrushes
 
+@export var grid_size:int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -19,3 +20,6 @@ func _input(event):
 		
 	#print(event.as_text())
 	pass
+
+func intersect_ray(origin:Vector3, dir:Vector3):
+	return null
