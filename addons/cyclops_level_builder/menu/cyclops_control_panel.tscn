@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://bqfu1fwucf2s"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/menu/cyclops_control_panel.gd" id="1_wfa3d"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/geometry_brush.gd" id="2_xxwjh"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wfa3d")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 21.0
+offset_right = 145.0
+offset_bottom = 114.0
+text = "Draw Brush"
+
+[node name="GeometryBrush" type="Node3D" parent="."]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 0, 0, 0)
+script = ExtResource("2_xxwjh")
+
+[node name="Node3D" type="Node3D" parent="."]

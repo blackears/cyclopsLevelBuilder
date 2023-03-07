@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://dbf1o278qhyks"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/cyclops_global_scene.gd" id="1_nu1d3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kxtm4"]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission = Color(1, 1, 0, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_sl0cw"]
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_nu1d3")
+vertex_material = SubResource("StandardMaterial3D_kxtm4")
+
+[node name="ControlMesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_sl0cw")
