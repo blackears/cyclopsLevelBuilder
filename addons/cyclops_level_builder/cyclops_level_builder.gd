@@ -1,3 +1,26 @@
+# MIT License
+#
+# Copyright (c) 2023 Mark McKay
+# https://github.com/blackears/cyclopsLevelBuilder
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 @tool
 extends EditorPlugin
 class_name CyclopsLevelBuilder
@@ -7,6 +30,7 @@ signal active_node_changed
 const AUTOLOAD_NAME = "CyclopsAutoload"
 
 #var dock:Control
+var top_toolbar:TopToolbar
 var toolbar:EditorToolbar
 var activated:bool = false
 
@@ -32,6 +56,9 @@ func _enter_tree():
 	
 	toolbar = preload("menu/editor_toolbar.tscn").instantiate()
 	toolbar.editor_plugin = self
+
+	top_toolbar = preload("menu/top_toolbar.tscn").instantiate()
+	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, top_toolbar)
 	
 	var editor:EditorInterface = get_editor_interface()
 	var selection:EditorSelection = editor.get_selection()
@@ -71,6 +98,7 @@ func _exit_tree():
 	
 	remove_custom_type("GeometryBrushes")
 	
+	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, top_toolbar)
 	
 	if activated:
 #		remove_control_from_docks(dock)
