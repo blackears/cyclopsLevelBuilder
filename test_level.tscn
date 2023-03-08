@@ -6,3 +6,4 @@
 
 [node name="GeometryBrush" type="Node3D" parent="."]
 script = ExtResource("1_5eqg2")
+grid_size = 1
