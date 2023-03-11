@@ -89,7 +89,17 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 	#				var brush:GeometryBrush = preload("../controls/geometry_brush.tscn").instantiate()
 					var brush:GeometryBrush = preload("../controls/geometry_brush.gd").new()
-					builder.active_node.add_child(brush)
+					var name_idx:int = 0
+					while true:
+						var name = "Brush%s" % name_idx
+						if !builder.active_node.find_child(name, false):
+							brush.name = name
+							break
+						name_idx += 1
+					
+					builder.active_node.add_child(brush)					
+					#brush.owner = builder.active_node
+					brush.owner = builder.get_editor_interface().get_edited_scene_root()
 					#print("adding to %s" % builder.active_node.name)
 					
 									
