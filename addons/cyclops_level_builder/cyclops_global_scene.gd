@@ -25,42 +25,42 @@
 extends Node3D
 class_name CyclopsGlobalScene
 
-@export var vertex_material:BaseMaterial3D
-@export var selected_material:Material
+@export var tool_material:BaseMaterial3D
+#@export var selected_material:Material
 
 #var mesh:ImmediateMesh
-var dirty:bool = true
+#var dirty:bool = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	#mesh = ImmediateMesh.new()
 	pass # Replace with function body.
 	
-func rebuild_mesh():
-#	var mat:StandardMaterial3D = StandardMaterial3D.new()
-#	mat.emission = Color(1, 0, 1)
-#	mat.emission_enabled = true
-#	mat.albedo_color = Color(0, 0, 0)
-	
-	
-	if dirty:
-		var mesh:ImmediateMesh = ImmediateMesh.new()
-
-#		mesh.clear_surfaces()
-		
-#		mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, vertex_material)
-		mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, selected_material)
-#		mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, mat)
-
-		mesh.surface_add_vertex(Vector3(0, 0, 0))
-		mesh.surface_add_vertex(Vector3(0, 1, 0))
-		mesh.surface_add_vertex(Vector3(0, 1, 1))
-		
-		mesh.surface_end()
-		
-		$ControlMesh.mesh = mesh
-		
-		dirty = false
+#func rebuild_mesh():
+##	var mat:StandardMaterial3D = StandardMaterial3D.new()
+##	mat.emission = Color(1, 0, 1)
+##	mat.emission_enabled = true
+##	mat.albedo_color = Color(0, 0, 0)
+#
+#
+#	if dirty:
+#		var mesh:ImmediateMesh = ImmediateMesh.new()
+#
+##		mesh.clear_surfaces()
+#
+##		mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, vertex_material)
+#		mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, tool_material)
+##		mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, mat)
+#
+#		mesh.surface_add_vertex(Vector3(0, 0, 0))
+#		mesh.surface_add_vertex(Vector3(0, 1, 0))
+#		mesh.surface_add_vertex(Vector3(0, 1, 1))
+#
+#		mesh.surface_end()
+#
+#		$ToolInstance3D.mesh = mesh
+#
+#		dirty = false
 
 func draw_rect(start:Vector3, end:Vector3):	
 	#print ("draw_rect %s %s" % [start, end])
@@ -73,7 +73,7 @@ func draw_rect(start:Vector3, end:Vector3):
 	
 	var mesh:ImmediateMesh = ImmediateMesh.new()
 	
-	mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, selected_material)
+	mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, tool_material)
 
 	mesh.surface_add_vertex(p0)
 	mesh.surface_add_vertex(p1)
@@ -83,11 +83,11 @@ func draw_rect(start:Vector3, end:Vector3):
 	
 	mesh.surface_end()
 	
-	$ControlMesh.mesh = mesh
+	$ToolInstance3D.mesh = mesh
 	
 
 func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3):	
-	#print ("draw_rect %s %s" % [start, end])
+	print ("draw_cube %s %s %s" % [p0, p1, p2])
 	
 	var bounds:AABB = AABB(p0, Vector3.ZERO)
 	bounds = bounds.expand(p1)
@@ -105,7 +105,7 @@ func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3):
 	
 	var mesh:ImmediateMesh = ImmediateMesh.new()
 	
-	mesh.surface_begin(Mesh.PRIMITIVE_LINES, selected_material)
+	mesh.surface_begin(Mesh.PRIMITIVE_LINES, tool_material)
 
 	mesh.surface_add_vertex(p000)
 	mesh.surface_add_vertex(p001)
@@ -136,7 +136,8 @@ func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3):
 	
 	mesh.surface_end()
 	
-	$ControlMesh.mesh = mesh
+#$	$ControlMesh.mesh = mesh
+	$ToolInstance3D.mesh = mesh
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

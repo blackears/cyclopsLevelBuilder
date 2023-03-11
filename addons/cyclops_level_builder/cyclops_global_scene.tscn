@@ -1,21 +1,20 @@
-[gd_scene load_steps=5 format=3 uid="uid://dbf1o278qhyks"]
+[gd_scene load_steps=4 format=3 uid="uid://dbf1o278qhyks"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/cyclops_global_scene.gd" id="1_nu1d3"]
-[ext_resource type="Material" uid="uid://drxgp15acqq0b" path="res://addons/cyclops_level_builder/shaders/outline_tool.tres" id="2_qac4w"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kxtm4"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ammj"]
 albedo_color = Color(0, 0, 0, 1)
 emission_enabled = true
 emission = Color(1, 1, 0, 1)
-use_point_size = true
-point_size = 4.0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_sl0cw"]
 
-[node name="Node3D" type="Node3D"]
+[node name="CyclopsGlobals" type="Node3D"]
 script = ExtResource("1_nu1d3")
-vertex_material = SubResource("StandardMaterial3D_kxtm4")
-selected_material = ExtResource("2_qac4w")
+tool_material = SubResource("StandardMaterial3D_5ammj")
 
 [node name="ControlMesh" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("PlaneMesh_sl0cw")
+
+[node name="ToolInstance3D" type="MeshInstance3D" parent="."]

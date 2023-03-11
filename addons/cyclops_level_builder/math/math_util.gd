@@ -39,3 +39,5 @@ static func closest_point_on_line(ray_origin:Vector3, ray_dir:Vector3, line_orig
 	var a:Vector3 = ray_dir.cross(line_dir)
 	var w_perp:Vector3 = ray_dir.cross(a)
 	return intersect_plane(line_origin, line_dir, ray_origin, w_perp)
+
+	

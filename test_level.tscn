@@ -1,9 +1,44 @@
-[gd_scene load_steps=2 format=3 uid="uid://bcmdpdkwasdcb"]
+[gd_scene load_steps=8 format=3 uid="uid://bcmdpdkwasdcb"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/geometry_brushes.gd" id="1_5eqg2"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/geometry_brush.gd" id="2_w5434"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/math/control_mesh.gd" id="3_sky7f"]
+
+[sub_resource type="Resource" id="Resource_pel2n"]
+script = ExtResource("3_sky7f")
+
+[sub_resource type="Environment" id="Environment_b1nvb"]
+ambient_light_color = Color(0.784314, 0.784314, 0.784314, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_aguaj"]
+
+[sub_resource type="TorusMesh" id="TorusMesh_ubx5g"]
+inner_radius = 0.9
 
 [node name="Node3D" type="Node3D"]
 
-[node name="GeometryBrush" type="Node3D" parent="."]
+[node name="GeometryBrushes" type="Node3D" parent="."]
 script = ExtResource("1_5eqg2")
 grid_size = 1
+
+[node name="GeometryBrush" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.5, 0, 0)
+script = ExtResource("2_w5434")
+control_mesh = SubResource("Resource_pel2n")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-1, -1.3027e-14, -8.74228e-08, 0, 1, -1.49012e-07, 8.74228e-08, -1.49012e-07, -1, 8, 5.5, -15.5)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.00766267, -0.829678, 0.55819, -0.400001, 0.514145, 0.758719, -0.916483, -0.217463, -0.335811, -0.5, 0, -10)
+light_energy = 5.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_b1nvb")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, -2, -2)
+mesh = SubResource("SphereMesh_aguaj")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+mesh = SubResource("TorusMesh_ubx5g")

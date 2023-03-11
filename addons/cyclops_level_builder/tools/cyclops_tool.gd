@@ -22,7 +22,7 @@
 # SOFTWARE.
 
 @tool
-extends Node
+extends Resource
 class_name CyclopsTool
 
 var builder:EditorPlugin

@@ -49,6 +49,7 @@ var active_node:GeometryBrushes:
 
 func _enter_tree():
 	add_custom_type("GeometryBrushes", "Node3D", preload("controls/geometry_brushes.gd"), preload("controls/geometryBrushIcon.png"))
+	#add_custom_type("GeometryBrush", "Node3D", preload("controls/geometry_brush.tscn"), preload("controls/geometryBrushIcon.png"))
 
 	add_autoload_singleton(AUTOLOAD_NAME, "res://addons/cyclops_level_builder/cyclops_global_scene.tscn")
 	
