@@ -80,7 +80,7 @@ func _on_grid_size_item_selected(index):
 
 
 func _on_bn_move_pressed():
-	editor_plugin.switch_to_tool(ToolMove.new())
+	editor_plugin.switch_to_tool(ToolBlock.new())
 
 
 func _on_bn_draw_pressed():

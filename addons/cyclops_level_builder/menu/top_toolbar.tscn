@@ -12,6 +12,7 @@ offset_bottom = 83.0
 script = ExtResource("1_ukfd5")
 
 [node name="TextureButton" type="TextureButton" parent="."]
+layout_mode = 0
 offset_right = 18.0
 offset_bottom = 18.0
 toggle_mode = true

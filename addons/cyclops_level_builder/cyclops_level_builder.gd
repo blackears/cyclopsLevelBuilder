@@ -39,7 +39,7 @@ var block_create_distance:float = 20
 var tool:CyclopsTool = null
 
 #var _active_node:GeometryBrush
-var active_node:GeometryBrushes:
+var active_node:CyclopsBlocks:
 	get:
 		return active_node
 	set(value):
@@ -48,7 +48,8 @@ var active_node:GeometryBrushes:
 			active_node_changed.emit()
 
 func _enter_tree():
-	add_custom_type("GeometryBrushes", "Node3D", preload("controls/geometry_brushes.gd"), preload("controls/geometryBrushIcon.png"))
+	add_custom_type("CyclopsBlocks", "Node3D", preload("controls/cyclops_blocks.gd"), preload("controls/cyclops_blocks_icon.png"))
+	add_custom_type("CyclopsBlock", "Node", preload("controls/cyclops_block.gd"), preload("controls/cyclops_blocks_icon.png"))
 	#add_custom_type("GeometryBrush", "Node3D", preload("controls/geometry_brush.tscn"), preload("controls/geometryBrushIcon.png"))
 
 	add_autoload_singleton(AUTOLOAD_NAME, "res://addons/cyclops_level_builder/cyclops_global_scene.tscn")
@@ -58,8 +59,8 @@ func _enter_tree():
 	toolbar = preload("menu/editor_toolbar.tscn").instantiate()
 	toolbar.editor_plugin = self
 
-	top_toolbar = preload("menu/top_toolbar.tscn").instantiate()
-	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, top_toolbar)
+#	top_toolbar = preload("menu/top_toolbar.tscn").instantiate()
+#	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, top_toolbar)
 	
 	var editor:EditorInterface = get_editor_interface()
 	var selection:EditorSelection = editor.get_selection()
@@ -69,7 +70,14 @@ func _enter_tree():
 	
 	update_activation()
 	
-	switch_to_tool(ToolMove.new())
+	switch_to_tool(ToolBlock.new())
+
+func find_blocks_root(node:Node)->CyclopsBlocks:
+	if node is CyclopsBlocks:
+		return node
+	if node is CyclopsBlock:
+		return find_blocks_root(node.get_parent())
+	return null
 
 func update_activation():
 	var editor:EditorInterface = get_editor_interface()
@@ -78,8 +86,10 @@ func update_activation():
 	if !nodes.is_empty():
 		var node:Node = nodes[0]
 		
-		if node is GeometryBrushes:
-			active_node = node
+		var blocks_root:CyclopsBlocks = find_blocks_root(node)
+		
+		if blocks_root:
+			active_node = blocks_root
 			if !activated:
 				add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, toolbar)
 				activated = true
@@ -97,7 +107,8 @@ func _exit_tree():
 	# Clean-up of the plugin goes here.
 	remove_autoload_singleton(AUTOLOAD_NAME)
 	
-	remove_custom_type("GeometryBrushes")
+	remove_custom_type("CyclopsBlocks")
+	remove_custom_type("CyclopsBlock")
 	
 	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, top_toolbar)
 	
@@ -109,7 +120,7 @@ func _exit_tree():
 	toolbar.queue_free()
 
 func _handles(object:Object):
-	return object is GeometryBrushes
+	return object is CyclopsBlocks or object is CyclopsBlock
 
 func _forward_3d_draw_over_viewport(viewport_control:Control):
 	#Draw on top of viweport here

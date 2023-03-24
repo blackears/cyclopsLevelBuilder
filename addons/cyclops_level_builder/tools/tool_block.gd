@@ -23,7 +23,7 @@
 
 @tool
 extends CyclopsTool
-class_name ToolMove
+class_name ToolBlock
 
 enum DragStyle { NONE, BLOCK_BASE, BLOCK_HEIGHT }
 var drag_style:DragStyle = DragStyle.NONE
@@ -39,7 +39,7 @@ var block_drag_p2_local:Vector3
 var drag_floor_normal:Vector3
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
-	var active_brushes:GeometryBrushes = self.builder.active_node
+	var blocks_root:CyclopsBlocks = self.builder.active_node
 	
 	if event is InputEventMouseButton:
 		
@@ -53,19 +53,19 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 					var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 
-					var result = active_brushes.intersect_ray(origin, dir)
+					var result = blocks_root.intersect_ray(origin, dir)
 					if !result:
 						drag_floor_normal = Vector3.UP
 						
 						drag_style = DragStyle.BLOCK_BASE
 						var start_pos:Vector3 = origin + builder.block_create_distance * dir
-						var w2l = active_brushes.global_transform.inverse()
+						var w2l = blocks_root.global_transform.inverse()
 						var start_pos_local:Vector3 = w2l * start_pos
 
 						#print("start_pos %s" % start_pos)
 						#print("start_pos_local %s" % start_pos_local)
 						
-						var grid_step_size:float = pow(2, active_brushes.grid_size)
+						var grid_step_size:float = pow(2, blocks_root.grid_size)
 
 						
 						#print("start_pos_local %s" % start_pos_local)
@@ -88,18 +88,18 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					#print("set 3 drag_style %s" % drag_style)
 					
 	#				var brush:GeometryBrush = preload("../controls/geometry_brush.tscn").instantiate()
-					var brush:GeometryBrush = preload("../controls/geometry_brush.gd").new()
+					var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
 					var name_idx:int = 0
 					while true:
-						var name = "Brush%s" % name_idx
+						var name = "Block_%s" % name_idx
 						if !builder.active_node.find_child(name, false):
-							brush.name = name
+							block.name = name
 							break
 						name_idx += 1
 					
-					builder.active_node.add_child(brush)					
+					blocks_root.add_child(block)
 					#brush.owner = builder.active_node
-					brush.owner = builder.get_editor_interface().get_edited_scene_root()
+					block.owner = builder.get_editor_interface().get_edited_scene_root()
 					#print("adding to %s" % builder.active_node.name)
 					
 									
@@ -109,10 +109,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 					var mesh:ControlMesh = ControlMesh.new()
 					mesh.init_block(block_drag_p0_local, block_drag_p1_local, block_drag_p2_local)
-					mesh.dump()
-					brush.control_mesh = mesh
+					#mesh.dump()
+					block.control_mesh = mesh
 					
-					#brush.init_block(block_drag_p0_local, block_drag_p1_local, block_drag_p2_local)
 
 			
 			#print("pick origin %s " % origin)
@@ -126,7 +125,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 		
 		var start_pos:Vector3 = origin + builder.block_create_distance * dir
-		var w2l = active_brushes.global_transform.inverse()
+		var w2l = blocks_root.global_transform.inverse()
 		var origin_local:Vector3 = w2l * origin
 		var dir_local:Vector3 = w2l.basis * dir
 		
@@ -136,7 +135,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 			block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
 			
-			var grid_step_size:float = pow(2, active_brushes.grid_size)
+			var grid_step_size:float = pow(2, blocks_root.grid_size)
 			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
 			
 			var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
@@ -146,7 +145,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #			block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, Vector3.UP)
 			block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, block_drag_p1_local, drag_floor_normal)
 			
-			var grid_step_size:float = pow(2, active_brushes.grid_size)
+			var grid_step_size:float = pow(2, blocks_root.grid_size)
 			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
 			
 			var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")

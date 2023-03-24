@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://chuwp6awho53q"
-path="res://.godot/imported/geometryBrushIcon.svg-0cda1ec581b86d249778a47ada74f2f2.ctex"
+path="res://.godot/imported/cyclops_blocks_icon.svg-414ada9d6f04d5c0268945bd04d0bc8b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/cyclops_level_builder/controls/geometryBrushIcon.svg"
-dest_files=["res://.godot/imported/geometryBrushIcon.svg-0cda1ec581b86d249778a47ada74f2f2.ctex"]
+source_file="res://addons/cyclops_level_builder/controls/cyclops_blocks_icon.svg"
+dest_files=["res://.godot/imported/cyclops_blocks_icon.svg-414ada9d6f04d5c0268945bd04d0bc8b.ctex"]
 
 [params]
 

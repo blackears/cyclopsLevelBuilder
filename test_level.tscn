@@ -1,11 +1,22 @@
-[gd_scene load_steps=8 format=3 uid="uid://bcmdpdkwasdcb"]
+[gd_scene load_steps=12 format=3 uid="uid://c8xgan01ujspi"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/geometry_brushes.gd" id="1_5eqg2"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/geometry_brush.gd" id="2_w5434"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/math/control_mesh.gd" id="3_sky7f"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/cyclops_blocks.gd" id="1_p74uy"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/cyclops_block.gd" id="2_ma0wo"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/math/control_mesh.gd" id="3_halcv"]
 
-[sub_resource type="Resource" id="Resource_pel2n"]
-script = ExtResource("3_sky7f")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hmhpg"]
+
+[sub_resource type="Resource" id="Resource_b8hbu"]
+script = ExtResource("3_halcv")
+
+[sub_resource type="Resource" id="Resource_6ve67"]
+script = ExtResource("3_halcv")
+
+[sub_resource type="Resource" id="Resource_2e0it"]
+script = ExtResource("3_halcv")
+
+[sub_resource type="Resource" id="Resource_b3y0f"]
+script = ExtResource("3_halcv")
 
 [sub_resource type="Environment" id="Environment_b1nvb"]
 ambient_light_color = Color(0.784314, 0.784314, 0.784314, 1)
@@ -17,14 +28,26 @@ inner_radius = 0.9
 
 [node name="Node3D" type="Node3D"]
 
-[node name="GeometryBrushes" type="Node3D" parent="."]
-script = ExtResource("1_5eqg2")
+[node name="CyclopsBlocks" type="Node3D" parent="."]
+script = ExtResource("1_p74uy")
 grid_size = 1
+default_material = SubResource("StandardMaterial3D_hmhpg")
 
-[node name="GeometryBrush" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.5, 0, 0)
-script = ExtResource("2_w5434")
-control_mesh = SubResource("Resource_pel2n")
+[node name="Block_0" type="Node" parent="CyclopsBlocks"]
+script = ExtResource("2_ma0wo")
+control_mesh = SubResource("Resource_b8hbu")
+
+[node name="Block_1" type="Node" parent="CyclopsBlocks"]
+script = ExtResource("2_ma0wo")
+control_mesh = SubResource("Resource_6ve67")
+
+[node name="Block_2" type="Node" parent="CyclopsBlocks"]
+script = ExtResource("2_ma0wo")
+control_mesh = SubResource("Resource_2e0it")
+
+[node name="Block_3" type="Node" parent="CyclopsBlocks"]
+script = ExtResource("2_ma0wo")
+control_mesh = SubResource("Resource_b3y0f")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(-1, -1.3027e-14, -8.74228e-08, 0, 1, -1.49012e-07, 8.74228e-08, -1.49012e-07, -1, 8, 5.5, -15.5)

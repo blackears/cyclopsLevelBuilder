@@ -23,19 +23,46 @@
 
 @tool
 extends Node3D
-class_name GeometryBrushes
+class_name CyclopsBlocks
 
 @export var grid_size:int = 0
+@export var default_material:Material = StandardMaterial3D.new()
+
+var mesh_instance:MeshInstance3D
+var dirty:bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	child_entered_tree.connect(on_child_entered_tree)
+	child_exiting_tree.connect(on_child_exiting_tree)
+	
+	mesh_instance = MeshInstance3D.new()
+	add_child(mesh_instance)
+	#mesh_instance.mesh
 
-
+func on_child_entered_tree(node:Node):
+	dirty = true
+	
+func on_child_exiting_tree(node:Node):
+	dirty = true
+	
+func rebuild_mesh():
+	var mesh:ImmediateMesh = ImmediateMesh.new()
+	
+	for child in get_children():
+		if child is CyclopsBlock:
+			var block:CyclopsBlock = child
+			if block.control_mesh:
+				block.control_mesh.append_mesh(mesh, default_material)
+				pass
+	
+	mesh_instance.mesh = mesh
+	dirty = false
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	
-	pass
+	if dirty:
+		rebuild_mesh()
 
 func _input(event):
 	if Engine.is_editor_hint():

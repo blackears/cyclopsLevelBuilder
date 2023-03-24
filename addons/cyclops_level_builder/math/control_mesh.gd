@@ -241,6 +241,33 @@ func get_edge(vert_idx0:int, vert_idx1:int)->EdgeInfo:
 			return e
 	return null
 
+
+#func build_mesh(material:Material)->ImmediateMesh:
+func append_mesh(mesh:ImmediateMesh, material:Material):
+	
+#	var mesh:ImmediateMesh = ImmediateMesh.new()
+	
+	for face in faces:
+		mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, material)
+#		print("face %s" % face.index)
+		
+		mesh.surface_set_normal(face.normal)
+		
+		var num_corners:int = face.face_corner_indices.size()
+		for i in num_corners:
+#			var idx = ((i + 1) >> 1) if i & 1 else wrap(num_corners - (i >> 1), 0, num_corners)
+#			var idx = num_corners - (i + 1) / 2 if i & 1 else i / 2
+			var idx = (i + 1) / 2 if i & 1 else wrap(num_corners - (i / 2), 0, num_corners)
+			var fc:FaceCornerInfo = face_corners[face.face_corner_indices[idx]]
+#			if i == 0:
+#				idx = 0
+			mesh.surface_add_vertex(vertices[fc.vertex_index].point)
+#			print ("%s %s %s" % [idx, fc.vertex_index, control_mesh.vertices[fc.vertex_index].point])
+	
+		mesh.surface_end()
+		
+#	return mesh
+	
 func dump():
 	print ("Verts")
 	for v in vertices:

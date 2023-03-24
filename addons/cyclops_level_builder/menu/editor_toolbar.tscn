@@ -18,7 +18,7 @@ tooltip_text = "Move"
 toggle_mode = true
 button_pressed = true
 button_group = SubResource("ButtonGroup_i8xwa")
-text = "Move"
+text = "Block"
 
 [node name="bn_draw" type="Button" parent="HBoxContainer"]
 layout_mode = 2

@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://cpi7fiakp7isq"]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/menu/cyclops_control_panel.gd" id="1_wfa3d"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/geometry_brushes.gd" id="2_6o3gn"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/cyclops_blocks.gd" id="2_6o3gn"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
