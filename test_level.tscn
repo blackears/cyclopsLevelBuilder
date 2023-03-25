@@ -36,4 +36,4 @@ script = ExtResource("2_ma0wo")
 block_data = SubResource("Resource_5souf")
 
 [node name="Marker3D" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 2.5, -12.5)
+transform = Transform3D(0.965926, 0.0669873, 0.25, 0, 0.965926, -0.258819, -0.258819, 0.25, 0.933013, 3, 5.5, -9)

@@ -64,7 +64,7 @@ class AddBlockCommand extends RefCounted:
 
 		block.block_data = mesh.to_block_data()
 		block_inst_id = block.get_instance_id()
-#		print("AddBlockCommand do_it()")
+#		print("AddBlockCommand do_it() %s" % block_inst_id)
 		
 	func undo_it():
 		var block = instance_from_id(block_inst_id)
@@ -86,9 +86,13 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 					var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 
+#					print("origin %s  dir %s" % [origin, dir])
+
 					var result:IntersectResults = blocks_root.intersect_ray_closest(origin, dir)
+#					print("result %s" % result)
+					
 					if result:
-						print("Hit! %s" % result)
+#						print("Hit! %s" % result)
 						drag_floor_normal = result.normal
 						#Snap normal to best axis
 						if abs(drag_floor_normal.x) > abs(drag_floor_normal.y) && abs(drag_floor_normal.x) > abs(drag_floor_normal.z):
@@ -109,7 +113,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						block_drag_p0_local = MathUtil.snap_to_grid(start_pos_local, grid_step_size)
 						
 					else:
-						print("Miss")
+#						print("Miss")
 						drag_floor_normal = Vector3.UP
 						
 						drag_style = DragStyle.BLOCK_BASE
@@ -151,16 +155,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #					print("AABB %s" % bounds)
 					
 					if bounds.has_volume():
-					
-						###############################
-						###############################
-						###############################
-						###############################
-						###############################
-						###############################
-						###############################
-						#print("set 3 drag_style %s" % drag_style)
-						
 						var command:AddBlockCommand = AddBlockCommand.new()
 						
 						#var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
@@ -172,17 +166,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 								command.block_name = name
 								break
 							name_idx += 1
-						
-#						blocks_root.add_child(block)
-#						block.owner = builder.get_editor_interface().get_edited_scene_root()
-						
-#						var mesh:ControlMesh = ControlMesh.new()
-#						mesh.init_block(bounds)
-#						mesh.triplanar_unwrap()
-						#mesh.dump()
-						#block.control_mesh = mesh
-
-#						block.block_data = mesh.to_block_data()
 
 						command.blocks_root_inst_id = blocks_root.get_instance_id()
 						command.block_owner = builder.get_editor_interface().get_edited_scene_root()
@@ -221,7 +204,19 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
 			
 			var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
-			global_scene.draw_rect(block_drag_p0_local, block_drag_cur)
+			
+			var p01:Vector3
+			var p10:Vector3
+			if abs(drag_floor_normal.x) > abs(drag_floor_normal.y) and abs(drag_floor_normal.x) > abs(drag_floor_normal.z):
+				p01 = Vector3(block_drag_p0_local.x, block_drag_p0_local.y, block_drag_cur.z)
+				p10 = Vector3(block_drag_p0_local.x, block_drag_cur.y, block_drag_p0_local.z)
+			elif abs(drag_floor_normal.y) > abs(drag_floor_normal.z):
+				p01 = Vector3(block_drag_p0_local.x, block_drag_p0_local.y, block_drag_cur.z)
+				p10 = Vector3(block_drag_cur.x, block_drag_p0_local.y, block_drag_p0_local.z)
+			else:
+				p01 = Vector3(block_drag_p0_local.x, block_drag_cur.y, block_drag_p0_local.z)
+				p10 = Vector3(block_drag_cur.x, block_drag_p0_local.y, block_drag_p0_local.z)
+			global_scene.draw_loop([block_drag_p0_local, p01, block_drag_cur, p10], true)
 
 		elif drag_style == DragStyle.BLOCK_HEIGHT:
 #			block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, Vector3.UP)
