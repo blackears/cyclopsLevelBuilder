@@ -113,7 +113,24 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				
 			else:
 				if drag_style == DragStyle.READY:
+					
+					var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
+					var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+
+					var result:IntersectResults = blocks_root.intersect_ray_closest(origin, dir)
+					
+					if result:
+						if e.ctrl_pressed:
+							result.object.selected = !result.object.selected
+						else:
+							for child in blocks_root.get_children():
+								if child is CyclopsBlock:
+									var block:CyclopsBlock = child
+									block.selected = block == result.object
+						pass
+					
 					drag_style = DragStyle.NONE
+					
 				elif drag_style == DragStyle.BLOCK_BASE:
 					block_drag_p1_local = block_drag_cur
 					drag_style = DragStyle.BLOCK_HEIGHT

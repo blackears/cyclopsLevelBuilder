@@ -113,6 +113,12 @@ func _init():
 #	dump()
 	pass
 
+func get_face_indices()->PackedInt32Array:
+	var result:PackedInt32Array
+	for f in faces:
+		result.append(f.index)
+	return result
+
 func clear_lists():
 	vertices = []
 	edges = []
@@ -336,7 +342,7 @@ func to_block_data()->BlockData:
 	
 	return block
 
-func append_mesh(mesh:ImmediateMesh, material:Material):
+func append_mesh(mesh:ImmediateMesh, material:Material, color:Color = Color.WHITE):
 	
 	for face in faces:
 		mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, material)
@@ -349,6 +355,7 @@ func append_mesh(mesh:ImmediateMesh, material:Material):
 			var idx = (i + 1) / 2 if i & 1 else wrap(num_corners - (i / 2), 0, num_corners)
 			var fc:FaceCornerInfo = face_corners[face.face_corner_indices[idx]]
 
+			mesh.surface_set_color(color)
 			mesh.surface_set_uv(fc.uv)
 			mesh.surface_add_vertex(vertices[fc.vertex_index].point)
 #			print ("%s %s %s" % [idx, fc.vertex_index, control_mesh.vertices[fc.vertex_index].point])

@@ -39,16 +39,35 @@ func _ready():
 	
 	mesh_instance = MeshInstance3D.new()
 	add_child(mesh_instance)
-	#mesh_instance.mesh
+
+	for node in get_children():
+		if node is CyclopsBlock:
+			var block:CyclopsBlock = node
+			block.mesh_changed.connect(on_child_mesh_changed)
+			
+#			print("adding child %s" % node.name)
 	
-#	default_material = preload("res://addons/cyclops_level_builder/art/materials/grid.tres").new()
+	
+func on_child_mesh_changed():
+	dirty = true
 	
 
 func on_child_entered_tree(node:Node):
-	dirty = true
+	if node is CyclopsBlock:
+		var block:CyclopsBlock = node
+		block.mesh_changed.connect(on_child_mesh_changed)
+		
+#		print("on_child_entered_tree %s" % node.name)
+		dirty = true
 	
 func on_child_exiting_tree(node:Node):
-	dirty = true
+	if node is CyclopsBlock:
+		var block:CyclopsBlock = node
+		block.mesh_changed.disconnect(on_child_mesh_changed)
+
+#		print("on_child_exited_tree %s" % node.name)
+		
+		dirty = true
 	
 func rebuild_mesh():
 	var mesh:ImmediateMesh = ImmediateMesh.new()
@@ -57,7 +76,8 @@ func rebuild_mesh():
 		if child is CyclopsBlock:
 			var block:CyclopsBlock = child
 			if block.control_mesh:
-				block.control_mesh.append_mesh(mesh, default_material)
+				var color = Color.RED if block.selected else Color.WHITE
+				block.control_mesh.append_mesh(mesh, default_material, color)
 	
 	mesh_instance.mesh = mesh
 	dirty = false

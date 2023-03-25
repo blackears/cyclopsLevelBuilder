@@ -3,4 +3,5 @@
 [ext_resource type="Texture2D" uid="uid://dpoaquoridpp6" path="res://addons/cyclops_level_builder/art/textures/grid_cell.png" id="1_of5ni"]
 
 [resource]
+vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("1_of5ni")

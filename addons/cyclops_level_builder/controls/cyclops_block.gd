@@ -28,6 +28,14 @@ class_name CyclopsBlock
 signal mesh_changed
 
 var control_mesh:ControlMesh
+var selected:bool = false:
+	get:
+		return selected
+	set(value):
+		if value == selected:
+			return
+		selected = value
+		mesh_changed.emit()
 
 @export var block_data:BlockData:
 	get:
@@ -53,6 +61,31 @@ func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 		
 	return result
 
+#func select():
+##	for idx in control_mesh.get_face_indices():
+##		control_mesh.faces[idx].selected = true
+#	selected = true
+#
+#	mesh_changed.emit()
+#
+#func unselect():
+#	for idx in control_mesh.get_face_indices():
+#		control_mesh.faces[idx].selected = false
+#
+#	mesh_changed.emit()
+
+func select_face(face_idx:int, select_type:Selection.Type = Selection.Type.REPLACE):
+	if select_type == Selection.Type.REPLACE:
+		for f in control_mesh.faces:
+			f.selected = f.index == face_idx
+	elif select_type == Selection.Type.ADD:
+		control_mesh.faces[face_idx].selected = true
+	elif select_type == Selection.Type.SUBTRACT:
+		control_mesh.faces[face_idx].selected = true
+	elif select_type == Selection.Type.TOGGLE:
+		control_mesh.faces[face_idx].selected = !control_mesh.faces[face_idx].selected
+
+	mesh_changed.emit()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
