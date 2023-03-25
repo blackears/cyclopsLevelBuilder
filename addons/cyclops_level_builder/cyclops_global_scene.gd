@@ -87,7 +87,7 @@ func draw_rect(start:Vector3, end:Vector3):
 	
 
 func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3):	
-	print ("draw_cube %s %s %s" % [p0, p1, p2])
+#	print ("draw_cube %s %s %s" % [p0, p1, p2])
 	
 	var bounds:AABB = AABB(p0, Vector3.ZERO)
 	bounds = bounds.expand(p1)

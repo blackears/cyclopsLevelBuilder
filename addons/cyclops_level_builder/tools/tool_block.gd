@@ -110,7 +110,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var mesh:ControlMesh = ControlMesh.new()
 					mesh.init_block(block_drag_p0_local, block_drag_p1_local, block_drag_p2_local)
 					#mesh.dump()
-					block.control_mesh = mesh
+					#block.control_mesh = mesh
+
+					block.block_data = mesh.to_block_data()
 					
 
 			

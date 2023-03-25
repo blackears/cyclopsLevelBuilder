@@ -22,7 +22,7 @@
 # SOFTWARE.
 
 @tool
-extends Resource
+extends RefCounted
 class_name ControlMesh
 
 
@@ -241,6 +241,89 @@ func get_edge(vert_idx0:int, vert_idx1:int)->EdgeInfo:
 			return e
 	return null
 
+
+func init_block_data(block:BlockData):
+	clear_lists()
+
+	for i in block.points.size():
+		var v:VertexInfo = VertexInfo.new(i, block.points[i])	
+		vertices.append(v)
+
+	var corner_index_offset:int = 0
+	for face_index in block.face_vertex_count.size():
+		var num_face_verts = block.face_vertex_count[face_index]
+		
+		var face_corners_local:Array[int] = []
+		for i in num_face_verts:
+			var vertex_index = block.face_vertex_indices[corner_index_offset]
+			
+			var face_corner:FaceCornerInfo = FaceCornerInfo.new(corner_index_offset, vertex_index, face_index)
+			face_corner.uv = block.uvs[corner_index_offset]
+			face_corners.append(face_corner)
+			face_corners_local.append(corner_index_offset)
+			corner_index_offset += 1
+		
+		var face:FaceInfo = FaceInfo.new(face_index, face_corners_local)
+		face.material_index = block.face_material_indices[face_index]
+		faces.append(face)
+		
+		#Calc normal		
+		var fc0:FaceCornerInfo = face_corners[face_corners_local[0]]
+		var p0:Vector3 = vertices[fc0.vertex_index].point
+#
+		var weighted_normal:Vector3
+		for i in range(1, num_face_verts - 1):
+			var fc1:FaceCornerInfo = face_corners[face_corners_local[i]]
+			var fc2:FaceCornerInfo = face_corners[face_corners_local[i + 1]]
+			var p1:Vector3 = vertices[fc1.vertex_index].point
+			var p2:Vector3 = vertices[fc2.vertex_index].point
+
+			var v1:Vector3 = p1 - p0
+			var v2:Vector3 = p2 - p0
+			weighted_normal += v2.cross(v1)
+			
+		face.normal = weighted_normal.normalized()
+			
+	#Calculate edges
+	for face in faces:
+		var num_corners = face.face_corner_indices.size()
+		for i0 in num_corners:
+			var i1:int = wrap(i0 + 1, 0, num_corners)
+			var fc0:FaceCornerInfo = face_corners[face.face_corner_indices[i0]]
+			var fc1:FaceCornerInfo = face_corners[face.face_corner_indices[i1]]
+			
+			var edge:EdgeInfo = get_edge(fc0.vertex_index, fc1.vertex_index)
+			if !edge:
+				var edge_idx = edges.size()
+				edge = EdgeInfo.new(edge_idx, fc0.vertex_index, fc1.vertex_index)
+				edges.append(edge)
+			
+				var v0:VertexInfo = vertices[fc0.vertex_index]
+				v0.edge_indices.append(edge_idx)
+				
+				var v1:VertexInfo = vertices[fc1.vertex_index]
+				v1.edge_indices.append(edge_idx)
+
+			edge.face_indices.append(face.index)
+
+
+func to_block_data()->BlockData:
+	var block:BlockData = preload("res://addons/cyclops_level_builder/resources/block_data.gd").new()
+#	var block:BlockData = BlockData.new()
+	
+	for v in vertices:
+		block.points.append(v.point)
+	
+	for f in faces:
+		block.face_vertex_count.append(f.face_corner_indices.size())
+		block.face_material_indices.append(f.material_index)
+		
+		for fc_idx in f.face_corner_indices:
+			var fc:FaceCornerInfo = face_corners[fc_idx]
+			block.face_vertex_indices.append(fc.vertex_index)
+			block.uvs.append(fc.uv)
+	
+	return block
 
 #func build_mesh(material:Material)->ImmediateMesh:
 func append_mesh(mesh:ImmediateMesh, material:Material):

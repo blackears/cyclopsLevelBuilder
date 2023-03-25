@@ -21,19 +21,29 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+@tool
 extends Node
 class_name CyclopsBlock
 
 signal mesh_changed
 
-@export var control_mesh:ControlMesh:
+var control_mesh:ControlMesh
+
+@export var block_data:BlockData:
 	get:
-		return control_mesh
+		return block_data
 	set(value):
-		if control_mesh != value:
-			control_mesh = value
+		if block_data != value:
+			block_data = value
+#			control_mesh = ControlMesh.new()
+			control_mesh = ControlMesh.new()
+			control_mesh.init_block_data(block_data)
+			
 			mesh_changed.emit()
+
 #			dirty = true
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

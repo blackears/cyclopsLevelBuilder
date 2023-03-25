@@ -54,7 +54,6 @@ func rebuild_mesh():
 			var block:CyclopsBlock = child
 			if block.control_mesh:
 				block.control_mesh.append_mesh(mesh, default_material)
-				pass
 	
 	mesh_instance.mesh = mesh
 	dirty = false
