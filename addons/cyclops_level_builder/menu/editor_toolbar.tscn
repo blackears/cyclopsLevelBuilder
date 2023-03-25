@@ -12,7 +12,7 @@ script = ExtResource("1_o71fd")
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="bn_move" type="Button" parent="HBoxContainer"]
+[node name="bn_block" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 tooltip_text = "Move"
 toggle_mode = true
@@ -20,12 +20,12 @@ button_pressed = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Block"
 
-[node name="bn_draw" type="Button" parent="HBoxContainer"]
+[node name="bn_prism" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 tooltip_text = "Draw"
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
-text = "Draw"
+text = "Prism"
 
 [node name="bn_clip" type="Button" parent="HBoxContainer"]
 layout_mode = 2
@@ -53,19 +53,19 @@ text = "Face"
 
 [node name="bn_flipX" type="Button" parent="HBoxContainer"]
 layout_mode = 2
-text = "B"
+text = "Flip X"
 
 [node name="bn_flipY" type="Button" parent="HBoxContainer"]
 layout_mode = 2
-text = "B"
+text = "Flip Y"
 
 [node name="bn_flipZ" type="Button" parent="HBoxContainer"]
 layout_mode = 2
-text = "B"
+text = "Flip Z"
 
 [node name="bn_duplicate" type="Button" parent="HBoxContainer"]
 layout_mode = 2
-text = "B"
+text = "Duplicate"
 
 [node name="bn_textureLock" type="Button" parent="HBoxContainer"]
 layout_mode = 2
@@ -101,9 +101,12 @@ popup/item_8/id = 8
 [node name="MenuButton" type="MenuButton" parent="HBoxContainer"]
 layout_mode = 2
 text = "Edit"
+item_count = 1
+popup/item_0/text = "Item"
+popup/item_0/id = 0
 
-[connection signal="pressed" from="HBoxContainer/bn_move" to="." method="_on_bn_move_pressed"]
-[connection signal="pressed" from="HBoxContainer/bn_draw" to="." method="_on_bn_draw_pressed"]
+[connection signal="pressed" from="HBoxContainer/bn_block" to="." method="_on_bn_move_pressed"]
+[connection signal="pressed" from="HBoxContainer/bn_prism" to="." method="_on_bn_draw_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_clip" to="." method="_on_bn_clip_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_vertex" to="." method="_on_bn_vertex_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_edge" to="." method="_on_bn_edge_pressed"]

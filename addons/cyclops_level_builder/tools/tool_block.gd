@@ -25,11 +25,12 @@
 extends CyclopsTool
 class_name ToolBlock
 
-enum DragStyle { NONE, BLOCK_BASE, BLOCK_HEIGHT }
+enum DragStyle { NONE, READY, BLOCK_BASE, BLOCK_HEIGHT }
 var drag_style:DragStyle = DragStyle.NONE
 #enum State { READY, DRAG_BASE }
 #var dragging:bool = false
-var mouse_start:Vector2
+var viewport_camera_start:Camera3D
+var event_start:InputEventMouseButton
 
 var block_drag_cur:Vector3
 var block_drag_p0_local:Vector3
@@ -38,38 +39,61 @@ var block_drag_p2_local:Vector3
 
 var drag_floor_normal:Vector3
 
-class AddBlockCommand extends RefCounted:
-#class AddBlockCommand:
-#	var blocks_root:CyclopsBlocks
-	var blocks_root_inst_id:int
-	var block_name:String
-	var block_owner:Node
-	var bounds:AABB
-#	var block:CyclopsBlock
-	var block_inst_id:int
-	
-	func do_it():
-		var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
-		
-		var blocks_root = instance_from_id(blocks_root_inst_id)
-		blocks_root.add_child(block)
-		block.owner = block_owner
-		block.name = block_name
-		
-		var mesh:ControlMesh = ControlMesh.new()
-		mesh.init_block(bounds)
-		mesh.triplanar_unwrap()
-		#mesh.dump()
-		#block.control_mesh = mesh
+var min_drag_distance:float = 4
 
-		block.block_data = mesh.to_block_data()
-		block_inst_id = block.get_instance_id()
-#		print("AddBlockCommand do_it() %s" % block_inst_id)
+func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
+	var blocks_root:CyclopsBlocks = self.builder.active_node
+	var e:InputEventMouseButton = event
+	
+	var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
+	var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+
+#					print("origin %s  dir %s" % [origin, dir])
+
+	var result:IntersectResults = blocks_root.intersect_ray_closest(origin, dir)
+#					print("result %s" % result)
+	
+	if result:
+#						print("Hit! %s" % result)
+		drag_floor_normal = result.normal
+		#Snap normal to best axis
+		if abs(drag_floor_normal.x) > abs(drag_floor_normal.y) && abs(drag_floor_normal.x) > abs(drag_floor_normal.z):
+			drag_floor_normal = Vector3(1, 0, 0) if drag_floor_normal.x > 0 else Vector3(-1, 0, 0)
+		elif abs(drag_floor_normal.y) > abs(drag_floor_normal.z):
+			drag_floor_normal = Vector3(0, 1, 0) if drag_floor_normal.y > 0 else Vector3(0, -1, 0)
+		else:
+			drag_floor_normal = Vector3(0, 0, 1) if drag_floor_normal.z > 0 else Vector3(0, 0, -1)
+
+		drag_style = DragStyle.BLOCK_BASE
+
+		var start_pos:Vector3 = result.position
+		var w2l = blocks_root.global_transform.inverse()
+		var start_pos_local:Vector3 = w2l * start_pos
+
+		var grid_step_size:float = pow(2, blocks_root.grid_size)
+
+		block_drag_p0_local = MathUtil.snap_to_grid(start_pos_local, grid_step_size)
 		
-	func undo_it():
-		var block = instance_from_id(block_inst_id)
-		block.queue_free()
-#		print("AddBlockCommand undo_it()")
+	else:
+#						print("Miss")
+		drag_floor_normal = Vector3.UP
+		
+		drag_style = DragStyle.BLOCK_BASE
+		var start_pos:Vector3 = origin + builder.block_create_distance * dir
+		var w2l = blocks_root.global_transform.inverse()
+		var start_pos_local:Vector3 = w2l * start_pos
+
+		#print("start_pos %s" % start_pos)
+		#print("start_pos_local %s" % start_pos_local)
+		
+		var grid_step_size:float = pow(2, blocks_root.grid_size)
+
+		
+		#print("start_pos_local %s" % start_pos_local)
+		block_drag_p0_local = MathUtil.snap_to_grid(start_pos_local, grid_step_size)
+		
+		#print("block_drag_start_local %s" % block_drag_start_local)
+	#print("set 1 drag_style %s" % drag_style)
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
 	var blocks_root:CyclopsBlocks = self.builder.active_node
@@ -81,60 +105,16 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 			if e.is_pressed():
 				if drag_style == DragStyle.NONE:
-					mouse_start = e.position
+					event_start = event
+					viewport_camera_start = viewport_camera
 					
-					var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
-					var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
-
-#					print("origin %s  dir %s" % [origin, dir])
-
-					var result:IntersectResults = blocks_root.intersect_ray_closest(origin, dir)
-#					print("result %s" % result)
-					
-					if result:
-#						print("Hit! %s" % result)
-						drag_floor_normal = result.normal
-						#Snap normal to best axis
-						if abs(drag_floor_normal.x) > abs(drag_floor_normal.y) && abs(drag_floor_normal.x) > abs(drag_floor_normal.z):
-							drag_floor_normal = Vector3(1, 0, 0) if drag_floor_normal.x > 0 else Vector3(-1, 0, 0)
-						elif abs(drag_floor_normal.y) > abs(drag_floor_normal.z):
-							drag_floor_normal = Vector3(0, 1, 0) if drag_floor_normal.y > 0 else Vector3(0, -1, 0)
-						else:
-							drag_floor_normal = Vector3(0, 0, 1) if drag_floor_normal.z > 0 else Vector3(0, 0, -1)
-
-						drag_style = DragStyle.BLOCK_BASE
-
-						var start_pos:Vector3 = result.position
-						var w2l = blocks_root.global_transform.inverse()
-						var start_pos_local:Vector3 = w2l * start_pos
-
-						var grid_step_size:float = pow(2, blocks_root.grid_size)
-
-						block_drag_p0_local = MathUtil.snap_to_grid(start_pos_local, grid_step_size)
-						
-					else:
-#						print("Miss")
-						drag_floor_normal = Vector3.UP
-						
-						drag_style = DragStyle.BLOCK_BASE
-						var start_pos:Vector3 = origin + builder.block_create_distance * dir
-						var w2l = blocks_root.global_transform.inverse()
-						var start_pos_local:Vector3 = w2l * start_pos
-
-						#print("start_pos %s" % start_pos)
-						#print("start_pos_local %s" % start_pos_local)
-						
-						var grid_step_size:float = pow(2, blocks_root.grid_size)
-
-						
-						#print("start_pos_local %s" % start_pos_local)
-						block_drag_p0_local = MathUtil.snap_to_grid(start_pos_local, grid_step_size)
-						
-						#print("block_drag_start_local %s" % block_drag_start_local)
-					#print("set 1 drag_style %s" % drag_style)
+					drag_style = DragStyle.READY
+#					start_block_drag(viewport_camera, event)
 				
 			else:
-				if drag_style == DragStyle.BLOCK_BASE:
+				if drag_style == DragStyle.READY:
+					drag_style = DragStyle.NONE
+				elif drag_style == DragStyle.BLOCK_BASE:
 					block_drag_p1_local = block_drag_cur
 					drag_style = DragStyle.BLOCK_HEIGHT
 					
@@ -155,7 +135,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #					print("AABB %s" % bounds)
 					
 					if bounds.has_volume():
-						var command:AddBlockCommand = AddBlockCommand.new()
+						var command:CommandAddBlock = CommandAddBlock.new()
 						
 						#var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
 						var name_idx:int = 0
@@ -196,7 +176,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		
 		#print("drag_style %s" % drag_style)
 		
-		if drag_style == DragStyle.BLOCK_BASE:
+		if drag_style == DragStyle.READY:
+			var offset:Vector2 = e.position - event_start.position
+			if offset.length() > min_drag_distance:
+				start_block_drag(viewport_camera_start, event_start)
+				
+		elif drag_style == DragStyle.BLOCK_BASE:
 
 			block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
 			

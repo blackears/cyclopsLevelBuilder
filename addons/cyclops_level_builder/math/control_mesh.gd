@@ -30,6 +30,7 @@ class VertexInfo:
 	var index:int
 	var point:Vector3
 	var edge_indices:Array[int] = []
+	var selected:bool
 	
 	func _init(_index:int, _point:Vector3 = Vector3.ZERO):
 		index = _index
@@ -48,6 +49,7 @@ class EdgeInfo:
 	var start_index:int
 	var end_index:int
 	var face_indices:Array[int] = []
+	var selected:bool
 	
 	func _init(_index:int, _start:int = 0, _end:int = 0):
 		index = _index
@@ -67,6 +69,7 @@ class FaceInfo:
 #	var vertex_indices:Array[int]
 	var face_corner_indices:Array[int]
 	var material_index:int
+	var selected:bool
 	
 	func _init(_index:int, _face_corner_indices:Array[int] = [], _mat_index:int = 0):
 		index = _index
@@ -85,6 +88,7 @@ class FaceCornerInfo:
 	var uv:Vector2
 	var vertex_index:int
 	var face_index:int
+	var selected:bool
 	
 	func _init(_index:int, _vertex_index:int, _face_index:int):
 		vertex_index = _vertex_index
