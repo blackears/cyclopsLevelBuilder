@@ -1,5 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://c8xgan01ujspi"]
+[gd_scene load_steps=7 format=3 uid="uid://c8xgan01ujspi"]
 
+[ext_resource type="Script" path="res://test_level.gd" id="1_k5d46"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/cyclops_blocks.gd" id="1_p74uy"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/cyclops_block.gd" id="2_ma0wo"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/block_data.gd" id="3_aqrij"]
@@ -7,74 +8,19 @@
 [sub_resource type="Environment" id="Environment_b1nvb"]
 ambient_light_color = Color(0.784314, 0.784314, 0.784314, 1)
 
-[sub_resource type="Resource" id="Resource_d8pi7"]
+[sub_resource type="Resource" id="Resource_5souf"]
 script = ExtResource("3_aqrij")
-points = PackedVector3Array(1, 6, -13, 1, 6, -8, 1, 8, -8, 1, 8, -13, 8, 6, -13, 8, 6, -8, 8, 8, -8, 8, 8, -13)
-uvs = PackedVector2Array(1, -13, 1, -8, 8, -8, 8, -13, 1, 6, 1, 8, 8, 8, 8, 6, 1, -8, 1, -13, 8, -13, 8, -8, 1, 8, 1, 6, 8, 6, 8, 8, 8, -13, 8, -8, 6, -8, 6, -13, 6, -13, 6, -8, 8, -8, 8, -13)
-face_vertex_indices = PackedInt32Array(0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7, 3, 2, 1, 0, 4, 5, 6, 7)
-face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
-face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
-
-[sub_resource type="Resource" id="Resource_viwdp"]
-script = ExtResource("3_aqrij")
-points = PackedVector3Array(-13, 2, -12, -13, 2, -5, -13, 8, -5, -13, 8, -12, 1, 2, -12, 1, 2, -5, 1, 8, -5, 1, 8, -12)
-uvs = PackedVector2Array(-13, -12, -13, -5, 1, -5, 1, -12, -13, 2, -13, 8, 1, 8, 1, 2, -13, -5, -13, -12, 1, -12, 1, -5, -13, 8, -13, 2, 1, 2, 1, 8, 8, -12, 8, -5, 2, -5, 2, -12, 2, -12, 2, -5, 8, -5, 8, -12)
-face_vertex_indices = PackedInt32Array(0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7, 3, 2, 1, 0, 4, 5, 6, 7)
-face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
-face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
-
-[sub_resource type="Resource" id="Resource_fkt4j"]
-script = ExtResource("3_aqrij")
-points = PackedVector3Array(-16, 0, -2, -16, 0, -1, -16, 1, -1, -16, 1, -2, -15, 0, -2, -15, 0, -1, -15, 1, -1, -15, 1, -2)
-uvs = PackedVector2Array(-16, -2, -16, -1, -15, -1, -15, -2, -16, 0, -16, 1, -15, 1, -15, 0, -16, -1, -16, -2, -15, -2, -15, -1, -16, 1, -16, 0, -15, 0, -15, 1, 1, -2, 1, -1, 0, -1, 0, -2, 0, -2, 0, -1, 1, -1, 1, -2)
-face_vertex_indices = PackedInt32Array(0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7, 3, 2, 1, 0, 4, 5, 6, 7)
-face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
-face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
-
-[sub_resource type="Resource" id="Resource_i3okx"]
-script = ExtResource("3_aqrij")
-points = PackedVector3Array(-7, 1, -16, -7, 1, -14, -7, 4, -14, -7, 4, -16, 0, 1, -16, 0, 1, -14, 0, 4, -14, 0, 4, -16)
-uvs = PackedVector2Array(-7, -16, -7, -14, 0, -14, 0, -16, -7, 1, -7, 4, 0, 4, 0, 1, -7, -14, -7, -16, 0, -16, 0, -14, -7, 4, -7, 1, 0, 1, 0, 4, 4, -16, 4, -14, 1, -14, 1, -16, 1, -16, 1, -14, 4, -14, 4, -16)
-face_vertex_indices = PackedInt32Array(0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7, 3, 2, 1, 0, 4, 5, 6, 7)
-face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
-face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
-
-[sub_resource type="Resource" id="Resource_j85bk"]
-script = ExtResource("3_aqrij")
-points = PackedVector3Array(-21, -1, -7, -21, -1, -3, -21, 3, -3, -21, 3, -7, -17, -1, -7, -17, -1, -3, -17, 3, -3, -17, 3, -7)
-uvs = PackedVector2Array(-21, -7, -21, -3, -17, -3, -17, -7, -21, -1, -21, 3, -17, 3, -17, -1, -21, -3, -21, -7, -17, -7, -17, -3, -21, 3, -21, -1, -17, -1, -17, 3, 3, -7, 3, -3, -1, -3, -1, -7, -1, -7, -1, -3, 3, -3, 3, -7)
-face_vertex_indices = PackedInt32Array(0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7, 3, 2, 1, 0, 4, 5, 6, 7)
-face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
-face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
-
-[sub_resource type="Resource" id="Resource_8vd20"]
-script = ExtResource("3_aqrij")
-points = PackedVector3Array(-18, 3, 2, -18, 3, 8, -18, 8, 8, -18, 8, 2, -12, 3, 2, -12, 3, 8, -12, 8, 8, -12, 8, 2)
-uvs = PackedVector2Array(-18, 2, -18, 8, -12, 8, -12, 2, -18, 3, -18, 8, -12, 8, -12, 3, -18, 8, -18, 2, -12, 2, -12, 8, -18, 8, -18, 3, -12, 3, -12, 8, 8, 2, 8, 8, 3, 8, 3, 2, 3, 2, 3, 8, 8, 8, 8, 2)
-face_vertex_indices = PackedInt32Array(0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7, 3, 2, 1, 0, 4, 5, 6, 7)
-face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
-face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
-
-[sub_resource type="Resource" id="Resource_ha50u"]
-script = ExtResource("3_aqrij")
-points = PackedVector3Array(-1, 6, -19, -1, 6, -17, -1, 11, -17, -1, 11, -19, 4, 6, -19, 4, 6, -17, 4, 11, -17, 4, 11, -19)
-uvs = PackedVector2Array(-1, -19, -1, -17, 4, -17, 4, -19, -1, 6, -1, 11, 4, 11, 4, 6, -1, -17, -1, -19, 4, -19, 4, -17, -1, 11, -1, 6, 4, 6, 4, 11, 11, -19, 11, -17, 6, -17, 6, -19, 6, -19, 6, -17, 11, -17, 11, -19)
-face_vertex_indices = PackedInt32Array(0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7, 3, 2, 1, 0, 4, 5, 6, 7)
-face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
-face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
-
-[sub_resource type="Resource" id="Resource_m2pyw"]
-script = ExtResource("3_aqrij")
-points = PackedVector3Array(-11, -1, -1, -11, -1, 6, -11, 7, 6, -11, 7, -1, -3, -1, -1, -3, -1, 6, -3, 7, 6, -3, 7, -1)
-uvs = PackedVector2Array(-11, -1, -11, 6, -3, 6, -3, -1, -11, -1, -11, 7, -3, 7, -3, -1, -11, 6, -11, -1, -3, -1, -3, 6, -11, 7, -11, -1, -3, -1, -3, 7, 7, -1, 7, 6, -1, 6, -1, -1, -1, -1, -1, 6, 7, 6, 7, -1)
+points = PackedVector3Array(0, 0, -5, 0, 0, 0, 0, 8, 0, 0, 8, -5, 10, 0, -5, 10, 0, 0, 10, 8, 0, 10, 8, -5)
+uvs = PackedVector2Array(0, -5, 0, 0, 10, 0, 10, -5, 0, 0, 0, 8, 10, 8, 10, 0, 0, 0, 0, -5, 10, -5, 10, 0, 0, 8, 0, 0, 10, 0, 10, 8, 8, -5, 8, 0, 0, 0, 0, -5, 0, -5, 0, 0, 8, 0, 8, -5)
 face_vertex_indices = PackedInt32Array(0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7, 3, 2, 1, 0, 4, 5, 6, 7)
 face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
 face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
 
 [node name="Node3D" type="Node3D"]
+script = ExtResource("1_k5d46")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-1, -1.3027e-14, -8.74228e-08, 0, 1, -1.49012e-07, 8.74228e-08, -1.49012e-07, -1, 8, 5.5, -15.5)
+transform = Transform3D(-1, -1.3027e-14, -8.74228e-08, -4.37114e-08, 0.866026, 0.5, 7.57104e-08, 0.5, -0.866026, 8, 10.5, -19.5)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.00766267, -0.829678, 0.55819, -0.400001, 0.514145, 0.758719, -0.916483, -0.217463, -0.335811, -0.5, 0, -10)
@@ -85,34 +31,9 @@ environment = SubResource("Environment_b1nvb")
 [node name="CyclopsBlocks" type="Node3D" parent="."]
 script = ExtResource("1_p74uy")
 
-[node name="Block_0" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("2_ma0wo")
-block_data = SubResource("Resource_d8pi7")
-
 [node name="Block_1" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("2_ma0wo")
-block_data = SubResource("Resource_viwdp")
+block_data = SubResource("Resource_5souf")
 
-[node name="Block_2" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("2_ma0wo")
-block_data = SubResource("Resource_fkt4j")
-
-[node name="Block_3" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("2_ma0wo")
-block_data = SubResource("Resource_i3okx")
-
-[node name="Block_4" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("2_ma0wo")
-block_data = SubResource("Resource_j85bk")
-
-[node name="Block_5" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("2_ma0wo")
-block_data = SubResource("Resource_8vd20")
-
-[node name="Block_6" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("2_ma0wo")
-block_data = SubResource("Resource_ha50u")
-
-[node name="Block_7" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("2_ma0wo")
-block_data = SubResource("Resource_m2pyw")
+[node name="Marker3D" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 2.5, -12.5)

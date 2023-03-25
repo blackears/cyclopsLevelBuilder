@@ -100,6 +100,7 @@ var vertices:Array[VertexInfo] = []
 var edges:Array[EdgeInfo] = []
 var faces:Array[FaceInfo] = []
 var face_corners:Array[FaceCornerInfo] = []
+var bounds:AABB
 
 #var points:PackedVector3Array
 
@@ -113,10 +114,11 @@ func clear_lists():
 	edges = []
 	faces = []
 	face_corners = []
+	bounds = AABB()
 
-func init_block(bounds:AABB):
-	var p000:Vector3 = bounds.position
-	var p111:Vector3 = bounds.end
+func init_block(block_bounds:AABB):
+	var p000:Vector3 = block_bounds.position
+	var p111:Vector3 = block_bounds.end
 	var p001:Vector3 = Vector3(p000.x, p000.y, p111.z)
 	var p010:Vector3 = Vector3(p000.x, p111.y, p000.z)
 	var p011:Vector3 = Vector3(p000.x, p111.y, p111.z)
@@ -167,12 +169,17 @@ func init_from_face_lists(verts:PackedVector3Array, index_list:PackedInt32Array,
 	for i in verts.size():
 		var v:VertexInfo = VertexInfo.new(i, verts[i])	
 		vertices.append(v)
+		
+		if i == 0:
+			bounds = AABB(verts[0], Vector3.ZERO)
+		else:
+			bounds = bounds.expand(verts[i])
 	
 	var vertex_index_offset:int = 0
 	for face_index in face_len_list.size():
 		var num_face_verts = face_len_list[face_index]
-		if num_face_verts < 3:
-			continue
+#		if num_face_verts < 3:
+#			continue
 		
 		var face_corners_local:Array[int] = []
 		for i in num_face_verts:
@@ -243,6 +250,11 @@ func init_block_data(block:BlockData):
 	for i in block.points.size():
 		var v:VertexInfo = VertexInfo.new(i, block.points[i])	
 		vertices.append(v)
+		
+		if i == 0:
+			bounds = AABB(v.point, Vector3.ZERO)
+		else:
+			bounds = bounds.expand(v.point)
 
 	var corner_index_offset:int = 0
 	for face_index in block.face_vertex_count.size():
@@ -350,6 +362,57 @@ func triplanar_unwrap(scale:float = 1):
 			fc.uv = Vector2(v.point.x, v.point.z) * scale
 		else:
 			fc.uv = Vector2(v.point.x, v.point.y) * scale
+
+
+func triangulate_face(face:FaceInfo)->PackedVector3Array:
+	var points:PackedVector3Array
+	for fc_idx in face.face_corner_indices:
+		var fc:FaceCornerInfo = face_corners[fc_idx]
+		points.append(vertices[fc.vertex_index].point)
+	
+	return MathUtil.trianglate_face(points, face.normal)
+	
+
+func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
+	if bounds.intersects_ray(origin, dir) == null:
+		return null
+	
+	var best_result:IntersectResults
+	
+	for f in faces:
+		var tris:PackedVector3Array = triangulate_face(f)
+		for i in range(0, tris.size(), 3):
+			var p0:Vector3 = tris[i]
+			var p1:Vector3 = tris[i + 1]
+			var p2:Vector3 = tris[i + 2]
+			
+			#Godot uses clockwise winding
+			var tri_area_x2:Vector3 = MathUtil.triangle_determinant(p0, p2, p1)
+			
+			var p_hit:Vector3 = MathUtil.intersect_plane(origin, dir, p0, tri_area_x2)
+			if !p_hit.is_finite():
+				continue
+			
+			if MathUtil.triangle_determinant(p_hit, p1, p0).dot(tri_area_x2) < 0:
+				continue
+			if MathUtil.triangle_determinant(p_hit, p2, p1).dot(tri_area_x2) < 0:
+				continue
+			if MathUtil.triangle_determinant(p_hit, p0, p2).dot(tri_area_x2) < 0:
+				continue
+			
+			#Intersection
+			var dist_sq:float = (origin - p_hit).length_squared()
+			if !best_result || best_result.distance_squared > dist_sq:
+			
+				var result:IntersectResults = IntersectResults.new()
+				result.face_index = f.index
+				result.normal = f.normal
+				result.position = p_hit
+				result.distance_squared = dist_sq
+				
+				best_result = result
+				
+	return best_result
 	
 func dump():
 	print ("Verts")

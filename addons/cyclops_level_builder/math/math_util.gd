@@ -41,4 +41,30 @@ static func closest_point_on_line(ray_origin:Vector3, ray_dir:Vector3, line_orig
 	var w_perp:Vector3 = ray_dir.cross(a)
 	return intersect_plane(line_origin, line_dir, ray_origin, w_perp)
 
+static func trianglate_face(points:PackedVector3Array, normal:Vector3)->PackedVector3Array:
+	var result:PackedVector3Array
+	
+	while (points.size() >= 3):
+		var num_points:int = points.size()
+		for i in range(0, num_points):
+			var p0:Vector3 = points[i]
+			var p1:Vector3 = points[wrap(i + 1, 0, num_points)]
+			var p2:Vector3 = points[wrap(i + 2, 0, num_points)]
+		
+			#Godot uses clockwise winding
+			var tri_norm_dir:Vector3 = (p2 - p0).cross(p1 - p0)
+			if tri_norm_dir.dot(normal) > 0:
+				result.append(p0)
+				result.append(p1)
+				result.append(p2)
+				
+				points.remove_at(i + 1)
+				break
+	
+	return result
+
+#Returns the normal of a triangle with a length twice the area of the triangle
+static func triangle_determinant(p0:Vector3, p1:Vector3, p2:Vector3)->Vector3:
+	return (p1 - p0).cross(p2 - p0)
+	
 	

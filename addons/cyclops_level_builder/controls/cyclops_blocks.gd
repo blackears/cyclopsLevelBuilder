@@ -74,5 +74,14 @@ func _input(event):
 	#print(event.as_text())
 	pass
 
-func intersect_ray(origin:Vector3, dir:Vector3):
-	return null
+func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
+	var best_result:IntersectResults
+		
+	for child in get_children():
+		if child is CyclopsBlock:
+			var result:IntersectResults = child.intersect_ray_closest(origin, dir)
+			if result:
+				if !best_result or result.distance_squared < best_result.distance_squared:
+					best_result = result			
+		
+	return best_result

@@ -22,44 +22,14 @@
 # SOFTWARE.
 
 @tool
-extends Node
-class_name CyclopsBlock
+extends RefCounted
+class_name IntersectResults
 
-signal mesh_changed
+var object:CyclopsBlock
+var face_index:int
+var position:Vector3
+var normal:Vector3
+var distance_squared:float
 
-var control_mesh:ControlMesh
-
-@export var block_data:BlockData:
-	get:
-		return block_data
-	set(value):
-		if block_data != value:
-			block_data = value
-#			control_mesh = ControlMesh.new()
-			control_mesh = ControlMesh.new()
-			control_mesh.init_block_data(block_data)
-			
-			mesh_changed.emit()
-
-#			dirty = true
-
-func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
-	if !block_data:
-		return null
-	
-	var result:IntersectResults = control_mesh.intersect_ray_closest(origin, dir)
-	if result:
-		result.object = self
-		
-	return result
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
+func _to_string():
+	return "object:%s face_idx:%s pos:%s norm:%s dist_sq:%s" % [object, face_index, position, normal, distance_squared]

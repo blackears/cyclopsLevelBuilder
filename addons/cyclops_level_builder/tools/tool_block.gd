@@ -53,8 +53,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 					var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 
-					var result = blocks_root.intersect_ray(origin, dir)
-					if !result:
+					var result:IntersectResults = blocks_root.intersect_ray_closest(origin, dir)
+					if result:
+						print("Hit! %s" % result)
+					else:
+						print("Miss")
 						drag_floor_normal = Vector3.UP
 						
 						drag_style = DragStyle.BLOCK_BASE
