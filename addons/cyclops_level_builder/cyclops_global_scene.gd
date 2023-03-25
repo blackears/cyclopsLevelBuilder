@@ -84,6 +84,9 @@ func draw_rect(start:Vector3, end:Vector3):
 	mesh.surface_end()
 	
 	$ToolInstance3D.mesh = mesh
+
+func clear_tool_mesh():
+	$ToolInstance3D.mesh = null
 	
 
 func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3):	

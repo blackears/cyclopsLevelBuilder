@@ -26,7 +26,8 @@ extends Node3D
 class_name CyclopsBlocks
 
 @export var grid_size:int = 0
-@export var default_material:Material = StandardMaterial3D.new()
+#@export var default_material:Material = StandardMaterial3D.new()
+@export var default_material:Material = preload("res://addons/cyclops_level_builder/art/materials/grid.tres")
 
 var mesh_instance:MeshInstance3D
 var dirty:bool = false
@@ -39,6 +40,9 @@ func _ready():
 	mesh_instance = MeshInstance3D.new()
 	add_child(mesh_instance)
 	#mesh_instance.mesh
+	
+#	default_material = preload("res://addons/cyclops_level_builder/art/materials/grid.tres").new()
+	
 
 func on_child_entered_tree(node:Node):
 	dirty = true

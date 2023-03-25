@@ -82,37 +82,45 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					#print("set 2 drag_style %s" % drag_style)
 					
 				elif drag_style == DragStyle.BLOCK_HEIGHT:
+#					print("Adding block %s %s %s" % [block_drag_p0_local, block_drag_p1_local, block_drag_p2_local])
 					block_drag_p2_local = block_drag_cur
 					drag_style = DragStyle.NONE
-				
-					#print("set 3 drag_style %s" % drag_style)
-					
-	#				var brush:GeometryBrush = preload("../controls/geometry_brush.tscn").instantiate()
-					var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
-					var name_idx:int = 0
-					while true:
-						var name = "Block_%s" % name_idx
-						if !builder.active_node.find_child(name, false):
-							block.name = name
-							break
-						name_idx += 1
-					
-					blocks_root.add_child(block)
-					#brush.owner = builder.active_node
-					block.owner = builder.get_editor_interface().get_edited_scene_root()
-					#print("adding to %s" % builder.active_node.name)
-					
-									
-					#var rm:RichMesh = RichMesh.new()
-									
-					print("Adding block %s %s %s" % [block_drag_p0_local, block_drag_p1_local, block_drag_p2_local])
-					
-					var mesh:ControlMesh = ControlMesh.new()
-					mesh.init_block(block_drag_p0_local, block_drag_p1_local, block_drag_p2_local)
-					#mesh.dump()
-					#block.control_mesh = mesh
 
-					block.block_data = mesh.to_block_data()
+					var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
+					global_scene.clear_tool_mesh()
+
+					var bounds:AABB = AABB(block_drag_p0_local, Vector3.ZERO)
+					bounds = bounds.expand(block_drag_p1_local)
+					bounds = bounds.expand(block_drag_p2_local)
+					
+#					print("AABB %s" % bounds)
+					
+					if bounds.has_volume():
+					
+						#print("set 3 drag_style %s" % drag_style)
+						
+		#				var brush:GeometryBrush = preload("../controls/geometry_brush.tscn").instantiate()
+						var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
+						var name_idx:int = 0
+						while true:
+							var name = "Block_%s" % name_idx
+							if !builder.active_node.find_child(name, false):
+								block.name = name
+								break
+							name_idx += 1
+						
+						blocks_root.add_child(block)
+						#brush.owner = builder.active_node
+						block.owner = builder.get_editor_interface().get_edited_scene_root()
+						#print("adding to %s" % builder.active_node.name)
+						
+						var mesh:ControlMesh = ControlMesh.new()
+						mesh.init_block(bounds)
+						mesh.triplanar_unwrap()
+						#mesh.dump()
+						#block.control_mesh = mesh
+
+						block.block_data = mesh.to_block_data()
 					
 
 			

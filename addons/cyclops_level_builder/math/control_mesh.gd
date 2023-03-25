@@ -104,7 +104,7 @@ var face_corners:Array[FaceCornerInfo] = []
 #var points:PackedVector3Array
 
 func _init():
-	init_block(Vector3.ZERO, Vector3.LEFT + Vector3.FORWARD, Vector3.UP)
+#	init_block(Vector3.ZERO, Vector3.LEFT + Vector3.FORWARD, Vector3.UP)
 #	dump()
 	pass
 
@@ -114,12 +114,7 @@ func clear_lists():
 	faces = []
 	face_corners = []
 
-func init_block(p0:Vector3, p1:Vector3, p2:Vector3):
-	
-	var bounds:AABB = AABB(p0, Vector3.ZERO)
-	bounds = bounds.expand(p1)
-	bounds = bounds.expand(p2)
-	
+func init_block(bounds:AABB):
 	var p000:Vector3 = bounds.position
 	var p111:Vector3 = bounds.end
 	var p001:Vector3 = Vector3(p000.x, p000.y, p111.z)
@@ -325,10 +320,7 @@ func to_block_data()->BlockData:
 	
 	return block
 
-#func build_mesh(material:Material)->ImmediateMesh:
 func append_mesh(mesh:ImmediateMesh, material:Material):
-	
-#	var mesh:ImmediateMesh = ImmediateMesh.new()
 	
 	for face in faces:
 		mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, material)
@@ -338,18 +330,26 @@ func append_mesh(mesh:ImmediateMesh, material:Material):
 		
 		var num_corners:int = face.face_corner_indices.size()
 		for i in num_corners:
-#			var idx = ((i + 1) >> 1) if i & 1 else wrap(num_corners - (i >> 1), 0, num_corners)
-#			var idx = num_corners - (i + 1) / 2 if i & 1 else i / 2
 			var idx = (i + 1) / 2 if i & 1 else wrap(num_corners - (i / 2), 0, num_corners)
 			var fc:FaceCornerInfo = face_corners[face.face_corner_indices[idx]]
-#			if i == 0:
-#				idx = 0
+
+			mesh.surface_set_uv(fc.uv)
 			mesh.surface_add_vertex(vertices[fc.vertex_index].point)
 #			print ("%s %s %s" % [idx, fc.vertex_index, control_mesh.vertices[fc.vertex_index].point])
 	
 		mesh.surface_end()
 		
-#	return mesh
+func triplanar_unwrap(scale:float = 1):
+	for fc in face_corners:
+		var v:VertexInfo = vertices[fc.vertex_index]
+		var f:FaceInfo = faces[fc.face_index]
+		
+		if abs(f.normal.x) > abs(f.normal.y) && abs(f.normal.x) > abs(f.normal.z):
+			fc.uv = Vector2(v.point.y, v.point.z) * scale
+		elif abs(f.normal.y) > abs(f.normal.z):
+			fc.uv = Vector2(v.point.x, v.point.z) * scale
+		else:
+			fc.uv = Vector2(v.point.x, v.point.y) * scale
 	
 func dump():
 	print ("Verts")
