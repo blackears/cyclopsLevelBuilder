@@ -38,6 +38,39 @@ var block_drag_p2_local:Vector3
 
 var drag_floor_normal:Vector3
 
+class AddBlockCommand extends RefCounted:
+#class AddBlockCommand:
+#	var blocks_root:CyclopsBlocks
+	var blocks_root_inst_id:int
+	var block_name:String
+	var block_owner:Node
+	var bounds:AABB
+#	var block:CyclopsBlock
+	var block_inst_id:int
+	
+	func do_it():
+		var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
+		
+		var blocks_root = instance_from_id(blocks_root_inst_id)
+		blocks_root.add_child(block)
+		block.owner = block_owner
+		block.name = block_name
+		
+		var mesh:ControlMesh = ControlMesh.new()
+		mesh.init_block(bounds)
+		mesh.triplanar_unwrap()
+		#mesh.dump()
+		#block.control_mesh = mesh
+
+		block.block_data = mesh.to_block_data()
+		block_inst_id = block.get_instance_id()
+#		print("AddBlockCommand do_it()")
+		
+	func undo_it():
+		var block = instance_from_id(block_inst_id)
+		block.queue_free()
+#		print("AddBlockCommand undo_it()")
+
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
 	var blocks_root:CyclopsBlocks = self.builder.active_node
 	
@@ -56,6 +89,25 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var result:IntersectResults = blocks_root.intersect_ray_closest(origin, dir)
 					if result:
 						print("Hit! %s" % result)
+						drag_floor_normal = result.normal
+						#Snap normal to best axis
+						if abs(drag_floor_normal.x) > abs(drag_floor_normal.y) && abs(drag_floor_normal.x) > abs(drag_floor_normal.z):
+							drag_floor_normal = Vector3(1, 0, 0) if drag_floor_normal.x > 0 else Vector3(-1, 0, 0)
+						elif abs(drag_floor_normal.y) > abs(drag_floor_normal.z):
+							drag_floor_normal = Vector3(0, 1, 0) if drag_floor_normal.y > 0 else Vector3(0, -1, 0)
+						else:
+							drag_floor_normal = Vector3(0, 0, 1) if drag_floor_normal.z > 0 else Vector3(0, 0, -1)
+
+						drag_style = DragStyle.BLOCK_BASE
+
+						var start_pos:Vector3 = result.position
+						var w2l = blocks_root.global_transform.inverse()
+						var start_pos_local:Vector3 = w2l * start_pos
+
+						var grid_step_size:float = pow(2, blocks_root.grid_size)
+
+						block_drag_p0_local = MathUtil.snap_to_grid(start_pos_local, grid_step_size)
+						
 					else:
 						print("Miss")
 						drag_floor_normal = Vector3.UP
@@ -100,31 +152,48 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 					if bounds.has_volume():
 					
+						###############################
+						###############################
+						###############################
+						###############################
+						###############################
+						###############################
+						###############################
 						#print("set 3 drag_style %s" % drag_style)
 						
-		#				var brush:GeometryBrush = preload("../controls/geometry_brush.tscn").instantiate()
-						var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
+						var command:AddBlockCommand = AddBlockCommand.new()
+						
+						#var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
 						var name_idx:int = 0
 						while true:
 							var name = "Block_%s" % name_idx
 							if !builder.active_node.find_child(name, false):
-								block.name = name
+#								block.name = name
+								command.block_name = name
 								break
 							name_idx += 1
 						
-						blocks_root.add_child(block)
-						#brush.owner = builder.active_node
-						block.owner = builder.get_editor_interface().get_edited_scene_root()
-						#print("adding to %s" % builder.active_node.name)
+#						blocks_root.add_child(block)
+#						block.owner = builder.get_editor_interface().get_edited_scene_root()
 						
-						var mesh:ControlMesh = ControlMesh.new()
-						mesh.init_block(bounds)
-						mesh.triplanar_unwrap()
+#						var mesh:ControlMesh = ControlMesh.new()
+#						mesh.init_block(bounds)
+#						mesh.triplanar_unwrap()
 						#mesh.dump()
 						#block.control_mesh = mesh
 
-						block.block_data = mesh.to_block_data()
+#						block.block_data = mesh.to_block_data()
+
+						command.blocks_root_inst_id = blocks_root.get_instance_id()
+						command.block_owner = builder.get_editor_interface().get_edited_scene_root()
+						command.bounds = bounds
+
+						var undo:EditorUndoRedoManager = builder.get_undo_redo()
+						undo.create_action("Add block", UndoRedo.MERGE_DISABLE)
+						undo.add_do_method(command, "do_it")
+						undo.add_undo_method(command, "undo_it")
 					
+						undo.commit_action()
 
 			
 			#print("pick origin %s " % origin)
