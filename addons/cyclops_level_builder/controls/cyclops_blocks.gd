@@ -31,7 +31,7 @@ class_name CyclopsBlocks
 @export var default_material:Material = preload("res://addons/cyclops_level_builder/art/materials/grid.tres")
 
 var mesh_instance:MeshInstance3D
-var dirty:bool = false
+var dirty:bool = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
