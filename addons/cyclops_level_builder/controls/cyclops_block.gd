@@ -27,7 +27,7 @@ class_name CyclopsBlock
 
 signal mesh_changed
 
-var control_mesh:ControlMesh
+var control_mesh:GeneralMesh
 var selected:bool = false:
 	get:
 		return selected
@@ -43,8 +43,7 @@ var selected:bool = false:
 	set(value):
 		if block_data != value:
 			block_data = value
-#			control_mesh = ControlMesh.new()
-			control_mesh = ControlMesh.new()
+			control_mesh = GeneralMesh.new()
 			control_mesh.init_block_data(block_data)
 			
 			mesh_changed.emit()

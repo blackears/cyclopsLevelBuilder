@@ -43,7 +43,7 @@ func do_it():
 	block.owner = block_owner
 	block.name = block_name
 	
-	var mesh:ControlMesh = ControlMesh.new()
+	var mesh:GeneralMesh = GeneralMesh.new()
 	mesh.init_block(bounds)
 	mesh.triplanar_unwrap()
 	#mesh.dump()

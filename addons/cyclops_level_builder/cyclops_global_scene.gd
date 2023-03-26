@@ -154,7 +154,6 @@ func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3):
 	
 	mesh.surface_end()
 	
-#$	$ControlMesh.mesh = mesh
 	$ToolInstance3D.mesh = mesh
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

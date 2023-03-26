@@ -41,7 +41,7 @@ func add_block(block:CyclopsBlock):
 #Moves all blocks from the start position by this amount
 func move_to(offset:Vector3):
 	for block_idx in tracked_blocks.size():
-		var ctl_mesh:ControlMesh = ControlMesh.new()
+		var ctl_mesh:GeneralMesh = GeneralMesh.new()
 		ctl_mesh.init_block_data(tracked_block_data[block_idx])
 		ctl_mesh.translate(offset)
 		var result_data:BlockData = ctl_mesh.to_block_data()

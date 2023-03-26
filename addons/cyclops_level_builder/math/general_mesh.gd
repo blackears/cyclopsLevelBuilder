@@ -23,7 +23,7 @@
 
 @tool
 extends RefCounted
-class_name ControlMesh
+class_name GeneralMesh
 
 
 class VertexInfo:
