@@ -181,21 +181,24 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						command.bounds = bounds
 
 						var undo:EditorUndoRedoManager = builder.get_undo_redo()
-						undo.create_action("Add block", UndoRedo.MERGE_DISABLE)
-						undo.add_do_method(command, "do_it")
-						undo.add_undo_method(command, "undo_it")
-					
-						undo.commit_action()
+#						undo.create_action("Add block", UndoRedo.MERGE_DISABLE)
+#						undo.add_do_method(command, "do_it")
+#						undo.add_undo_method(command, "undo_it")
+#
+#						undo.commit_action()
 
+						command.add_to_undo_manager(undo)
 
 				elif drag_style == DragStyle.MOVE_BLOCK:
 
 					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-					undo.create_action("Move blocks", UndoRedo.MERGE_DISABLE)
-					undo.add_do_method(cmd_move_blocks, "do_it")
-					undo.add_undo_method(cmd_move_blocks, "undo_it")
-				
-					undo.commit_action()
+#					undo.create_action("Move blocks", UndoRedo.MERGE_DISABLE)
+#					undo.add_do_method(cmd_move_blocks, "do_it")
+#					undo.add_undo_method(cmd_move_blocks, "undo_it")
+#
+#					undo.commit_action()
+					
+					cmd_move_blocks.add_to_undo_manager(undo)
 					
 					
 					drag_style = DragStyle.NONE			

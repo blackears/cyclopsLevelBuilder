@@ -22,35 +22,34 @@
 # SOFTWARE.
 
 @tool
-class_name CommandAddBlock
-extends RefCounted
+class_name CommandMoveBlocks
+extends CyclopsCommand
 
-var blocks_root_inst_id:int
-var block_name:String
-var block_owner:Node
-var bounds:AABB
-#	var block:CyclopsBlock
-var block_inst_id:int
+var move_offset:Vector3
+
+var tracked_blocks:Array[CyclopsBlock]
+var tracked_block_data:Array[BlockData]
+
+func _init():
+	command_name = "Move blocks"
+
+#Add blocks to be moved here
+func add_block(block:CyclopsBlock):
+	tracked_blocks.append(block)
+	tracked_block_data.append(block.block_data.duplicate())
+
+#Moves all blocks from the start position by this amount
+func move_to(offset:Vector3):
+	for block_idx in tracked_blocks.size():
+		var ctl_mesh:ControlMesh = ControlMesh.new()
+		ctl_mesh.init_block_data(tracked_block_data[block_idx])
+		ctl_mesh.translate(offset)
+		var result_data:BlockData = ctl_mesh.to_block_data()
+		tracked_blocks[block_idx].block_data = result_data
 
 func do_it():
-	var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
-	
-	var blocks_root = instance_from_id(blocks_root_inst_id)
-	blocks_root.add_child(block)
-	block.owner = block_owner
-	block.name = block_name
-	
-	var mesh:ControlMesh = ControlMesh.new()
-	mesh.init_block(bounds)
-	mesh.triplanar_unwrap()
-	#mesh.dump()
-	#block.control_mesh = mesh
+	move_to(move_offset)
 
-	block.block_data = mesh.to_block_data()
-	block_inst_id = block.get_instance_id()
-#		print("AddBlockCommand do_it() %s" % block_inst_id)
-	
 func undo_it():
-	var block = instance_from_id(block_inst_id)
-	block.queue_free()
-#		print("AddBlockCommand undo_it()")
+	move_to(Vector3.ZERO)
+	

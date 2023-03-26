@@ -22,31 +22,21 @@
 # SOFTWARE.
 
 @tool
-class_name CommandMoveBlocks
+class_name CyclopsCommand
 extends RefCounted
 
-var move_offset:Vector3
+var command_name:String = ""
 
-var tracked_blocks:Array[CyclopsBlock]
-var tracked_block_data:Array[BlockData]
+func add_to_undo_manager(undo_manager:EditorUndoRedoManager):
+	undo_manager.create_action("Move blocks", UndoRedo.MERGE_DISABLE)
+	undo_manager.add_do_method(self, "do_it")
+	undo_manager.add_undo_method(self, "undo_it")
 
-#Add blocks to be moved here
-func add_block(block:CyclopsBlock):
-	tracked_blocks.append(block)
-	tracked_block_data.append(block.block_data.duplicate())
+	undo_manager.commit_action()
 
-#Moves all blocks from the start position by this amount
-func move_to(offset:Vector3):
-	for block_idx in tracked_blocks.size():
-		var ctl_mesh:ControlMesh = ControlMesh.new()
-		ctl_mesh.init_block_data(tracked_block_data[block_idx])
-		ctl_mesh.translate(offset)
-		var result_data:BlockData = ctl_mesh.to_block_data()
-		tracked_blocks[block_idx].block_data = result_data
+func do_it()->void:
+	pass
 
-func do_it():
-	move_to(move_offset)
+func undo_it()->void:
+	pass
 
-func undo_it():
-	move_to(Vector3.ZERO)
-	
