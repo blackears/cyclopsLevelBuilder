@@ -26,6 +26,7 @@ extends Node3D
 class_name CyclopsBlocks
 
 @export var grid_size:int = 0
+@export var selection_color:Color = Color(1, .5, .5, 1)
 #@export var default_material:Material = StandardMaterial3D.new()
 @export var default_material:Material = preload("res://addons/cyclops_level_builder/art/materials/grid.tres")
 
@@ -76,7 +77,8 @@ func rebuild_mesh():
 		if child is CyclopsBlock:
 			var block:CyclopsBlock = child
 			if block.control_mesh:
-				var color = Color.RED if block.selected else Color.WHITE
+				var color:Color = selection_color if block.selected else Color.WHITE
+				#var color = Color.RED if block.selected else Color.WHITE
 				block.control_mesh.append_mesh(mesh, default_material, color)
 	
 	mesh_instance.mesh = mesh
