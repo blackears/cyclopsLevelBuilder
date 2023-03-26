@@ -25,7 +25,7 @@
 extends CyclopsTool
 class_name ToolBlock
 
-enum DragStyle { NONE, READY, BLOCK_BASE, BLOCK_HEIGHT }
+enum DragStyle { NONE, READY, BLOCK_BASE, BLOCK_HEIGHT, MOVE_BLOCK }
 var drag_style:DragStyle = DragStyle.NONE
 #enum State { READY, DRAG_BASE }
 #var dragging:bool = false
@@ -40,6 +40,9 @@ var block_drag_p2_local:Vector3
 var drag_floor_normal:Vector3
 
 var min_drag_distance:float = 4
+
+#Keep a copy of move command here while we are building it
+var cmd_move_blocks:CommandMoveBlocks
 
 func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 	var blocks_root:CyclopsBlocks = self.builder.active_node
@@ -64,8 +67,6 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 		else:
 			drag_floor_normal = Vector3(0, 0, 1) if drag_floor_normal.z > 0 else Vector3(0, 0, -1)
 
-		drag_style = DragStyle.BLOCK_BASE
-
 		var start_pos:Vector3 = result.position
 		var w2l = blocks_root.global_transform.inverse()
 		var start_pos_local:Vector3 = w2l * start_pos
@@ -73,6 +74,17 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 		var grid_step_size:float = pow(2, blocks_root.grid_size)
 
 		block_drag_p0_local = MathUtil.snap_to_grid(start_pos_local, grid_step_size)
+		
+		if result.object.selected:
+			drag_style = DragStyle.MOVE_BLOCK
+			
+			cmd_move_blocks = CommandMoveBlocks.new()
+			for child in blocks_root.get_children():
+				if child is CyclopsBlock and child.selected:
+					cmd_move_blocks.add_block(child)
+		else:
+			drag_style = DragStyle.BLOCK_BASE
+
 		
 	else:
 #						print("Miss")
@@ -175,7 +187,18 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 						undo.commit_action()
 
-			
+
+				elif drag_style == DragStyle.MOVE_BLOCK:
+
+					var undo:EditorUndoRedoManager = builder.get_undo_redo()
+					undo.create_action("Move blocks", UndoRedo.MERGE_DISABLE)
+					undo.add_do_method(cmd_move_blocks, "do_it")
+					undo.add_undo_method(cmd_move_blocks, "undo_it")
+				
+					undo.commit_action()
+					
+					
+					drag_style = DragStyle.NONE			
 			#print("pick origin %s " % origin)
 				
 			return  true
@@ -207,6 +230,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 			
+			#Draw tool
 			var p01:Vector3
 			var p10:Vector3
 			if abs(drag_floor_normal.x) > abs(drag_floor_normal.y) and abs(drag_floor_normal.x) > abs(drag_floor_normal.z):
@@ -229,7 +253,15 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 			global_scene.draw_cube(block_drag_p0_local, block_drag_p1_local, block_drag_cur)
-	
+
+		elif drag_style == DragStyle.MOVE_BLOCK:
+			block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
+			var grid_step_size:float = pow(2, blocks_root.grid_size)
+			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
+			
+			cmd_move_blocks.move_offset = block_drag_cur - block_drag_p0_local
+			cmd_move_blocks.do_it()
+
 	return false
 	#return EditorPlugin.AFTER_GUI_INPUT_STOP if true else EditorPlugin.AFTER_GUI_INPUT_PASS
 

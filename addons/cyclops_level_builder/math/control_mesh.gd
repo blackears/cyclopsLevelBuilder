@@ -425,6 +425,10 @@ func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 				
 	return best_result
 	
+func translate(offset:Vector3):
+	for v in vertices:
+		v.point += offset
+	
 func dump():
 	print ("Verts")
 	for v in vertices:
