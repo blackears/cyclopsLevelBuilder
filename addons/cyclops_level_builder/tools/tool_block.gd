@@ -25,7 +25,7 @@
 extends CyclopsTool
 class_name ToolBlock
 
-enum DragStyle { NONE, READY, BLOCK_BASE, BLOCK_HEIGHT, MOVE_BLOCK }
+enum DragStyle { NONE, READY, BLOCK_BASE, BLOCK_HEIGHT, MOVE_BLOCK, MOVE_FACE }
 var drag_style:DragStyle = DragStyle.NONE
 #enum State { READY, DRAG_BASE }
 #var dragging:bool = false
@@ -43,6 +43,8 @@ var min_drag_distance:float = 4
 
 #Keep a copy of move command here while we are building it
 var cmd_move_blocks:CommandMoveBlocks
+var cmd_move_face:CommandMoveFace
+var move_face_origin:Vector3 #Kep track of the origin when moving a face
 
 func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 	var blocks_root:CyclopsBlocks = self.builder.active_node
@@ -75,7 +77,17 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 
 		block_drag_p0_local = MathUtil.snap_to_grid(start_pos_local, grid_step_size)
 		
-		if result.object.selected:
+		if e.shift_pressed:
+			drag_style = DragStyle.MOVE_FACE
+			
+			cmd_move_face = CommandMoveFace.new()
+			cmd_move_face.face_index = result.face_index
+			cmd_move_face.tracked_block = result.object
+			cmd_move_face.tracked_block_data = result.object.block_data
+			move_face_origin = result.position
+			cmd_move_face.move_dir_normal = result.object.control_mesh.faces[result.face_index].normal
+			
+		elif result.object.selected:
 			drag_style = DragStyle.MOVE_BLOCK
 			
 			cmd_move_blocks = CommandMoveBlocks.new()
@@ -181,28 +193,22 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						command.bounds = bounds
 
 						var undo:EditorUndoRedoManager = builder.get_undo_redo()
-#						undo.create_action("Add block", UndoRedo.MERGE_DISABLE)
-#						undo.add_do_method(command, "do_it")
-#						undo.add_undo_method(command, "undo_it")
-#
-#						undo.commit_action()
 
 						command.add_to_undo_manager(undo)
 
 				elif drag_style == DragStyle.MOVE_BLOCK:
 
 					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-#					undo.create_action("Move blocks", UndoRedo.MERGE_DISABLE)
-#					undo.add_do_method(cmd_move_blocks, "do_it")
-#					undo.add_undo_method(cmd_move_blocks, "undo_it")
-#
-#					undo.commit_action()
-					
 					cmd_move_blocks.add_to_undo_manager(undo)
 					
+					drag_style = DragStyle.NONE			
+				
+				elif drag_style == DragStyle.MOVE_FACE:
+
+					var undo:EditorUndoRedoManager = builder.get_undo_redo()
+					cmd_move_face.add_to_undo_manager(undo)
 					
 					drag_style = DragStyle.NONE			
-			#print("pick origin %s " % origin)
 				
 			return  true
 			
@@ -282,7 +288,13 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			cmd_move_blocks.move_offset = block_drag_cur - block_drag_p0_local
 			cmd_move_blocks.do_it()
-
+			
+		elif drag_style == DragStyle.MOVE_FACE:			
+			var drag_to:Vector3 = MathUtil.closest_point_on_line(origin_local, dir_local, move_face_origin, cmd_move_face.move_dir_normal)
+			cmd_move_face.move_amount = (drag_to - move_face_origin).dot(cmd_move_face.move_dir_normal)
+			
+			cmd_move_face.do_it()
+			
 	return false
 	#return EditorPlugin.AFTER_GUI_INPUT_STOP if true else EditorPlugin.AFTER_GUI_INPUT_PASS
 

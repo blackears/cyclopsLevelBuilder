@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://c8xgan01ujspi"]
+[gd_scene load_steps=16 format=3 uid="uid://c8xgan01ujspi"]
 
 [ext_resource type="Script" path="res://test_level.gd" id="1_k5d46"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/cyclops_blocks.gd" id="1_p74uy"]
@@ -72,6 +72,22 @@ face_vertex_indices = PackedInt32Array(0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0,
 face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
 face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
 
+[sub_resource type="Resource" id="Resource_msut2"]
+script = ExtResource("3_aqrij")
+points = PackedVector3Array(0, 8, -4, 0, 8, -2, 0, 11, -2, 0, 11, -4, 2, 8, -4, 2, 8, -2, 2, 11, -2, 2, 11, -4)
+uvs = PackedVector2Array(0, -4, 0, -2, 2, -2, 2, -4, 0, 8, 0, 11, 2, 11, 2, 8, 0, -2, 0, -4, 2, -4, 2, -2, 0, 11, 0, 8, 2, 8, 2, 11, 11, -4, 11, -2, 8, -2, 8, -4, 8, -4, 8, -2, 11, -2, 11, -4)
+face_vertex_indices = PackedInt32Array(0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7, 3, 2, 1, 0, 4, 5, 6, 7)
+face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
+face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
+
+[sub_resource type="Resource" id="Resource_natoa"]
+script = ExtResource("3_aqrij")
+points = PackedVector3Array(1, 2, -10, 1, 2, -5, 1, 4, -5, 1, 4, -10, 3, 2, -10, 3, 2, -5, 3, 4, -5, 3, 4, -10)
+uvs = PackedVector2Array(1, -10, 1, -5, 3, -5, 3, -10, 1, 2, 1, 4, 3, 4, 3, 2, 1, -5, 1, -10, 3, -10, 3, -5, 1, 4, 1, 2, 3, 2, 3, 4, 4, -10, 4, -5, 2, -5, 2, -10, 2, -10, 2, -5, 4, -5, 4, -10)
+face_vertex_indices = PackedInt32Array(0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7, 3, 2, 1, 0, 4, 5, 6, 7)
+face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
+face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
+
 [node name="Node3D" type="Node3D"]
 script = ExtResource("1_k5d46")
 
@@ -118,6 +134,14 @@ block_data = SubResource("Resource_rsvn8")
 [node name="Block_7" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("2_ma0wo")
 block_data = SubResource("Resource_iafyc")
+
+[node name="Block_8" type="Node" parent="CyclopsBlocks"]
+script = ExtResource("2_ma0wo")
+block_data = SubResource("Resource_msut2")
+
+[node name="Block_9" type="Node" parent="CyclopsBlocks"]
+script = ExtResource("2_ma0wo")
+block_data = SubResource("Resource_natoa")
 
 [node name="Marker3D" type="Marker3D" parent="."]
 transform = Transform3D(0.965926, 0.0669873, 0.25, 0, 0.965926, -0.258819, -0.258819, 0.25, 0.933013, 3, 5.5, -9)
