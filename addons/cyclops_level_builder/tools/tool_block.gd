@@ -216,10 +216,27 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		var w2l = blocks_root.global_transform.inverse()
 		var origin_local:Vector3 = w2l * origin
 		var dir_local:Vector3 = w2l.basis * dir
+	
+		var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 		
 		#print("drag_style %s" % drag_style)
 		
-		if drag_style == DragStyle.READY:
+		if drag_style == DragStyle.NONE:
+			if e.shift_pressed:
+				#block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
+				var result:IntersectResults = blocks_root.intersect_ray_closest(origin, dir)
+				if result:
+					var block:CyclopsBlock = result.object
+					var face = block.control_mesh.faces[result.face_index]
+					var points:PackedVector3Array = block.control_mesh.get_face_points(face)
+					
+					global_scene.draw_loop(points, true)
+				else:
+					global_scene.clear_tool_mesh()
+			else:
+				global_scene.clear_tool_mesh()
+				
+		elif drag_style == DragStyle.READY:
 			var offset:Vector2 = e.position - event_start.position
 			if offset.length() > min_drag_distance:
 				start_block_drag(viewport_camera_start, event_start)
@@ -230,8 +247,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			var grid_step_size:float = pow(2, blocks_root.grid_size)
 			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
-			
-			var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 			
 			#Draw tool
 			var p01:Vector3
@@ -254,7 +269,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var grid_step_size:float = pow(2, blocks_root.grid_size)
 			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
 			
-			var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 			global_scene.draw_cube(block_drag_p0_local, block_drag_p1_local, block_drag_cur)
 
 		elif drag_style == DragStyle.MOVE_BLOCK:

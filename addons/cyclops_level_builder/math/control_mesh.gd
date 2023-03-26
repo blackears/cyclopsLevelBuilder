@@ -375,12 +375,15 @@ func triplanar_unwrap(scale:float = 1):
 			fc.uv = Vector2(v.point.x, v.point.y) * scale
 
 
-func triangulate_face(face:FaceInfo)->PackedVector3Array:
+func get_face_points(face:FaceInfo)->PackedVector3Array:
 	var points:PackedVector3Array
 	for fc_idx in face.face_corner_indices:
 		var fc:FaceCornerInfo = face_corners[fc_idx]
 		points.append(vertices[fc.vertex_index].point)
+	return points
 	
+func triangulate_face(face:FaceInfo)->PackedVector3Array:
+	var points:PackedVector3Array = get_face_points(face)
 	return MathUtil.trianglate_face(points, face.normal)
 	
 

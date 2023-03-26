@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://c8xgan01ujspi"]
+[gd_scene load_steps=14 format=3 uid="uid://c8xgan01ujspi"]
 
 [ext_resource type="Script" path="res://test_level.gd" id="1_k5d46"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/cyclops_blocks.gd" id="1_p74uy"]
@@ -40,9 +40,9 @@ face_vertex_indices = PackedInt32Array(0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0,
 face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
 face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
 
-[sub_resource type="Resource" id="Resource_0p35q"]
+[sub_resource type="Resource" id="Resource_p5xy5"]
 script = ExtResource("3_aqrij")
-points = PackedVector3Array(-2, 9, -4, -2, 9, 0, -2, 12, 0, -2, 12, -4, 0, 9, -4, 0, 9, 0, 0, 12, 0, 0, 12, -4)
+points = PackedVector3Array(2, 11, -8, 2, 11, -4, 2, 14, -4, 2, 14, -8, 4, 11, -8, 4, 11, -4, 4, 14, -4, 4, 14, -8)
 uvs = PackedVector2Array(2, -8, 2, -4, 4, -4, 4, -8, 2, 11, 2, 14, 4, 14, 4, 11, 2, -4, 2, -8, 4, -8, 4, -4, 2, 14, 2, 11, 4, 11, 4, 14, 14, -8, 14, -4, 11, -4, 11, -8, 11, -8, 11, -4, 14, -4, 14, -8)
 face_vertex_indices = PackedInt32Array(0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7, 3, 2, 1, 0, 4, 5, 6, 7)
 face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
@@ -56,10 +56,18 @@ face_vertex_indices = PackedInt32Array(0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0,
 face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
 face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
 
-[sub_resource type="Resource" id="Resource_ned6t"]
+[sub_resource type="Resource" id="Resource_rsvn8"]
 script = ExtResource("3_aqrij")
-points = PackedVector3Array(4, 9, 1, 4, 9, 2, 4, 12, 2, 4, 12, 1, 9, 9, 1, 9, 9, 2, 9, 12, 2, 9, 12, 1)
+points = PackedVector3Array(10, 7, -3, 10, 7, -2, 10, 10, -2, 10, 10, -3, 15, 7, -3, 15, 7, -2, 15, 10, -2, 15, 10, -3)
 uvs = PackedVector2Array(8, -3, 8, -2, 13, -2, 13, -3, 8, 11, 8, 14, 13, 14, 13, 11, 8, -2, 8, -3, 13, -3, 13, -2, 8, 14, 8, 11, 13, 11, 13, 14, 14, -3, 14, -2, 11, -2, 11, -3, 11, -3, 11, -2, 14, -2, 14, -3)
+face_vertex_indices = PackedInt32Array(0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7, 3, 2, 1, 0, 4, 5, 6, 7)
+face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
+face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
+
+[sub_resource type="Resource" id="Resource_iafyc"]
+script = ExtResource("3_aqrij")
+points = PackedVector3Array(8, 12, -3, 8, 12, -2, 8, 13, -2, 8, 13, -3, 11, 12, -3, 11, 12, -2, 11, 13, -2, 11, 13, -3)
+uvs = PackedVector2Array(8, -3, 8, -2, 11, -2, 11, -3, 8, 12, 8, 13, 11, 13, 11, 12, 8, -2, 8, -3, 11, -3, 11, -2, 8, 13, 8, 12, 11, 12, 11, 13, 13, -3, 13, -2, 12, -2, 12, -3, 12, -3, 12, -2, 13, -2, 13, -3)
 face_vertex_indices = PackedInt32Array(0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7, 3, 2, 1, 0, 4, 5, 6, 7)
 face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
 face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
@@ -97,7 +105,7 @@ block_data = SubResource("Resource_7rjnv")
 
 [node name="Block_4" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("2_ma0wo")
-block_data = SubResource("Resource_0p35q")
+block_data = SubResource("Resource_p5xy5")
 
 [node name="Block_5" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("2_ma0wo")
@@ -105,7 +113,11 @@ block_data = SubResource("Resource_3x7cu")
 
 [node name="Block_6" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("2_ma0wo")
-block_data = SubResource("Resource_ned6t")
+block_data = SubResource("Resource_rsvn8")
+
+[node name="Block_7" type="Node" parent="CyclopsBlocks"]
+script = ExtResource("2_ma0wo")
+block_data = SubResource("Resource_iafyc")
 
 [node name="Marker3D" type="Marker3D" parent="."]
 transform = Transform3D(0.965926, 0.0669873, 0.25, 0, 0.965926, -0.258819, -0.258819, 0.25, 0.933013, 3, 5.5, -9)
