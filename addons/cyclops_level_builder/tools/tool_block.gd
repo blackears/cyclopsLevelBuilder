@@ -258,7 +258,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			global_scene.draw_cube(block_drag_p0_local, block_drag_p1_local, block_drag_cur)
 
 		elif drag_style == DragStyle.MOVE_BLOCK:
-			block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
+			if e.alt_pressed:
+				block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
+			else:
+				block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
+			
 			var grid_step_size:float = pow(2, blocks_root.grid_size)
 			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
 			
