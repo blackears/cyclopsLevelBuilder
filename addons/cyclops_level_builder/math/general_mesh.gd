@@ -26,7 +26,7 @@ extends RefCounted
 class_name GeneralMesh
 
 
-class VertexInfo:
+class VertexInfo extends RefCounted:
 	var index:int
 	var point:Vector3
 	var edge_indices:Array[int] = []
@@ -44,7 +44,7 @@ class VertexInfo:
 			
 		return s
 
-class EdgeInfo:
+class EdgeInfo extends RefCounted:
 	var index:int
 	var start_index:int
 	var end_index:int
@@ -63,7 +63,7 @@ class EdgeInfo:
 		s += "]"
 		return s
 
-class FaceInfo:
+class FaceInfo extends RefCounted:
 	var index:int
 	var normal:Vector3
 #	var vertex_indices:Array[int]
@@ -83,7 +83,7 @@ class FaceInfo:
 		s += "]"
 		return s
 
-class FaceCornerInfo:
+class FaceCornerInfo extends RefCounted:
 	var index:int
 	var uv:Vector2
 	var vertex_index:int
@@ -401,17 +401,17 @@ func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 			var p2:Vector3 = tris[i + 2]
 			
 			#Godot uses clockwise winding
-			var tri_area_x2:Vector3 = MathUtil.triangle_determinant(p0, p2, p1)
+			var tri_area_x2:Vector3 = MathUtil.triangle_area_x2(p0, p1, p2)
 			
 			var p_hit:Vector3 = MathUtil.intersect_plane(origin, dir, p0, tri_area_x2)
 			if !p_hit.is_finite():
 				continue
 			
-			if MathUtil.triangle_determinant(p_hit, p1, p0).dot(tri_area_x2) < 0:
+			if MathUtil.triangle_area_x2(p_hit, p0, p1).dot(tri_area_x2) < 0:
 				continue
-			if MathUtil.triangle_determinant(p_hit, p2, p1).dot(tri_area_x2) < 0:
+			if MathUtil.triangle_area_x2(p_hit, p1, p2).dot(tri_area_x2) < 0:
 				continue
-			if MathUtil.triangle_determinant(p_hit, p0, p2).dot(tri_area_x2) < 0:
+			if MathUtil.triangle_area_x2(p_hit, p2, p0).dot(tri_area_x2) < 0:
 				continue
 			
 			#Intersection
