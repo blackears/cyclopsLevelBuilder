@@ -240,15 +240,20 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					#var points:PackedVector3Array = block.control_mesh.get_face_points(face)
 					
 					global_scene.draw_loop(points, true)
+					return true
 				else:
 					global_scene.clear_tool_mesh()
+					
 			else:
 				global_scene.clear_tool_mesh()
+
 				
 		elif drag_style == DragStyle.READY:
 			var offset:Vector2 = e.position - event_start.position
 			if offset.length() > min_drag_distance:
 				start_block_drag(viewport_camera_start, event_start)
+
+			return true
 				
 		elif drag_style == DragStyle.BLOCK_BASE:
 
@@ -271,6 +276,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				p10 = Vector3(block_drag_cur.x, block_drag_p0_local.y, block_drag_p0_local.z)
 			global_scene.draw_loop([block_drag_p0_local, p01, block_drag_cur, p10], true)
 
+			return true
+
 		elif drag_style == DragStyle.BLOCK_HEIGHT:
 #			block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, Vector3.UP)
 			block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, block_drag_p1_local, drag_floor_normal)
@@ -279,6 +286,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
 			
 			global_scene.draw_cube(block_drag_p0_local, block_drag_p1_local, block_drag_cur)
+
+			return true
 
 		elif drag_style == DragStyle.MOVE_BLOCK:
 			if e.alt_pressed:
@@ -293,6 +302,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			cmd_move_blocks.move_offset = block_drag_cur - block_drag_p0_local
 			cmd_move_blocks.do_it()
+
+			return true
 			
 		elif drag_style == DragStyle.MOVE_FACE:			
 			var drag_to:Vector3 = MathUtil.closest_point_on_line(origin_local, dir_local, move_face_origin, cmd_move_face.move_dir_normal)
@@ -303,8 +314,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			cmd_move_face.move_amount = (drag_to - move_face_origin).dot(cmd_move_face.move_dir_normal)
 			
 			cmd_move_face.do_it()
-			
-	return false
-	#return EditorPlugin.AFTER_GUI_INPUT_STOP if true else EditorPlugin.AFTER_GUI_INPUT_PASS
+		
+			return true
+	
+	return super._gui_input(viewport_camera, event)		
 
 

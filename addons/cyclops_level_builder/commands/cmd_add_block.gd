@@ -49,10 +49,10 @@ func do_it():
 	block.block_data = mesh.to_convex_block_data()
 	block_inst_id = block.get_instance_id()
 
-	print("AddBlockCommand do_it() %s %s" % [block_inst_id, bounds])
+#	print("AddBlockCommand do_it() %s %s" % [block_inst_id, bounds])
 	
 func undo_it():
 	var block = instance_from_id(block_inst_id)
 	block.queue_free()
 
-	print("AddBlockCommand undo_it()")
+#	print("AddBlockCommand undo_it()")
