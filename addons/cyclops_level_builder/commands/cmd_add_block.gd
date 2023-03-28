@@ -43,17 +43,16 @@ func do_it():
 	block.owner = block_owner
 	block.name = block_name
 	
-	var mesh:GeneralMesh = GeneralMesh.new()
+	var mesh:ConvexVolume = ConvexVolume.new()
 	mesh.init_block(bounds)
-	mesh.triplanar_unwrap()
-	#mesh.dump()
-	#block.control_mesh = mesh
 
-	block.block_data = mesh.to_block_data()
+	block.block_data = mesh.to_convex_block_data()
 	block_inst_id = block.get_instance_id()
-#		print("AddBlockCommand do_it() %s" % block_inst_id)
+
+	print("AddBlockCommand do_it() %s %s" % [block_inst_id, bounds])
 	
 func undo_it():
 	var block = instance_from_id(block_inst_id)
 	block.queue_free()
-#		print("AddBlockCommand undo_it()")
+
+	print("AddBlockCommand undo_it()")

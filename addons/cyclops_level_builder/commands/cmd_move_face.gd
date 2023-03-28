@@ -29,7 +29,7 @@ var move_dir_normal:Vector3
 var move_amount:float
 
 var tracked_block:CyclopsBlock
-var tracked_block_data:BlockData
+var tracked_block_data:ConvexBlockData
 var face_index:int
 
 

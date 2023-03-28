@@ -25,7 +25,7 @@
 extends Resource
 class_name CyclopsTool
 
-var builder:EditorPlugin
+var builder:CyclopsLevelBuilder
 
 #func _init(_editorPlugin:EditorPlugin):
 #	editorPlugin = _editorPlugin

@@ -27,7 +27,8 @@ class_name CyclopsBlock
 
 signal mesh_changed
 
-var control_mesh:GeneralMesh
+var control_mesh:ConvexVolume
+
 var selected:bool = false:
 	get:
 		return selected
@@ -37,14 +38,14 @@ var selected:bool = false:
 		selected = value
 		mesh_changed.emit()
 
-@export var block_data:BlockData:
+@export var block_data:ConvexBlockData:
 	get:
 		return block_data
 	set(value):
 		if block_data != value:
 			block_data = value
-			control_mesh = GeneralMesh.new()
-			control_mesh.init_block_data(block_data)
+			control_mesh = ConvexVolume.new()
+			control_mesh.init_from_convex_block_data(block_data)
 			
 			mesh_changed.emit()
 
@@ -60,18 +61,6 @@ func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 		
 	return result
 
-#func select():
-##	for idx in control_mesh.get_face_indices():
-##		control_mesh.faces[idx].selected = true
-#	selected = true
-#
-#	mesh_changed.emit()
-#
-#func unselect():
-#	for idx in control_mesh.get_face_indices():
-#		control_mesh.faces[idx].selected = false
-#
-#	mesh_changed.emit()
 
 func select_face(face_idx:int, select_type:Selection.Type = Selection.Type.REPLACE):
 	if select_type == Selection.Type.REPLACE:

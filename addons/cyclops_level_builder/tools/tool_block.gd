@@ -91,6 +91,7 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 			drag_style = DragStyle.MOVE_BLOCK
 			
 			cmd_move_blocks = CommandMoveBlocks.new()
+			cmd_move_blocks.lock_uvs = builder.lock_uvs
 			for child in blocks_root.get_children():
 				if child is CyclopsBlock and child.selected:
 					cmd_move_blocks.add_block(child)
@@ -133,7 +134,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					viewport_camera_start = viewport_camera
 					
 					drag_style = DragStyle.READY
-#					start_block_drag(viewport_camera, event)
 				
 			else:
 				if drag_style == DragStyle.READY:
@@ -279,9 +279,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 		elif drag_style == DragStyle.MOVE_BLOCK:
 			if e.alt_pressed:
-				block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
+#				block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
+				block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, block_drag_p0_local, Vector3.UP)
 			else:
-				block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
+#				block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
+				block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, Vector3.UP)
 			
 			var grid_step_size:float = pow(2, blocks_root.grid_size)
 			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)

@@ -101,3 +101,7 @@ func _on_bn_edge_pressed():
 
 func _on_bn_face_pressed():
 	pass
+
+
+func _on_check_lock_uvs_toggled(button_pressed):
+	editor_plugin.lock_uvs = button_pressed

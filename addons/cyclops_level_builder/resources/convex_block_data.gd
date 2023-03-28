@@ -28,3 +28,4 @@ class_name ConvexBlockData
 @export var face_planes:Array[Plane]
 @export var face_uv_transform:Array[Transform2D]
 @export var face_material_indices:PackedInt32Array
+@export var face_ids:PackedInt32Array

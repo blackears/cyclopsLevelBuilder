@@ -26,9 +26,10 @@ class_name CommandMoveBlocks
 extends CyclopsCommand
 
 var move_offset:Vector3
+var lock_uvs:bool = false
 
 var tracked_blocks:Array[CyclopsBlock]
-var tracked_block_data:Array[BlockData]
+var tracked_block_data:Array[ConvexBlockData]
 
 func _init():
 	command_name = "Move blocks"
@@ -41,10 +42,10 @@ func add_block(block:CyclopsBlock):
 #Moves all blocks from the start position by this amount
 func move_to(offset:Vector3):
 	for block_idx in tracked_blocks.size():
-		var ctl_mesh:GeneralMesh = GeneralMesh.new()
-		ctl_mesh.init_block_data(tracked_block_data[block_idx])
-		ctl_mesh.translate(offset)
-		var result_data:BlockData = ctl_mesh.to_block_data()
+		var ctl_mesh:ConvexVolume = ConvexVolume.new()
+		ctl_mesh.init_from_convex_block_data(tracked_block_data[block_idx])
+		ctl_mesh.translate(offset, lock_uvs)
+		var result_data:ConvexBlockData = ctl_mesh.to_convex_block_data()
 		tracked_blocks[block_idx].block_data = result_data
 
 func do_it():

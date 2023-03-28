@@ -48,6 +48,9 @@ class FaceInfo extends RefCounted:
 	var face_index:int
 	var selected:bool
 	
+	func _to_string():
+		return "%s %s" % [str(vertices), normal]
+	
 	func append(vertex:Vector3):
 		vertices.append(vertex)
 	
@@ -126,7 +129,7 @@ class FaceInfo extends RefCounted:
 		new_face.normal = normal
 		new_face.uv_transform = uv_transform
 		new_face.material_index = material_index
-		new_face.index = face_index
+		new_face.face_index = face_index
 		new_face.selected = selected
 			
 		var result:FaceCutResult = FaceCutResult.new()
@@ -144,6 +147,20 @@ class FaceCutResult extends RefCounted:
 var faces:Array[FaceInfo] = []
 var bounds:AABB
 
+func tristrip_vertex_range(num_verts:int)->PackedInt32Array:
+	var result:PackedInt32Array
+	
+	result.append(0)
+	result.append(1)
+	for i in range(2, num_verts):
+		if (i & 1) == 0:
+			result.append(num_verts - (i >> 1))
+		else:
+			result.append((i >> 1) + 1)
+	
+	return result
+	
+
 func append_mesh(mesh:ImmediateMesh, material:Material, color:Color = Color.WHITE):
 	
 	for face in faces:
@@ -152,7 +169,8 @@ func append_mesh(mesh:ImmediateMesh, material:Material, color:Color = Color.WHIT
 		
 		mesh.surface_set_normal(face.normal)
 		
-		for p in face.vertices:
+		for i in tristrip_vertex_range(face.vertices.size()):
+			var p:Vector3 = face.vertices[i]
 			mesh.surface_set_color(color)
 			
 			var uv:Vector2
@@ -179,7 +197,7 @@ func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 	var best_result:IntersectResults
 	
 	for face in faces:
-		var tris:PackedVector3Array = MathUtil.trianglate_face(face.points, face.normal)
+		var tris:PackedVector3Array = MathUtil.trianglate_face(face.vertices, face.normal)
 		for i in range(0, tris.size(), 3):
 			var p0:Vector3 = tris[i]
 			var p1:Vector3 = tris[i + 1]
@@ -259,9 +277,8 @@ func cut_with_plane(plane:Plane, face_index:int, uv_transform:Transform2D = Tran
 		#Build new face
 	
 	var mesh_result:ConvexMesh = ConvexMesh.new()
-	mesh_result.faces = new_faces
-
-	calc_bounds()
+	mesh_result.faces = new_faces	
+	mesh_result.calc_bounds()
 	
 	return mesh_result
 
@@ -269,12 +286,17 @@ func calc_bounds():
 	var all_verts:PackedVector3Array
 	for f in faces:
 		all_verts.append_array(f.vertices)
-	bounds = MathUtil.get_bounds(all_verts)
+	bounds = MathUtil.calc_bounds(all_verts)
 
 func init_cube_huge():
-	var min_float:float = -2^63
-	var max_float:float = 2^63
+#	var min_float:float = -1.79769e308
+#	var max_float:float = 1.79769e308
+	var min_float:float = -1000000000
+	var max_float:float = 1000000000
 	init_cube(Vector3(min_float, min_float, min_float), Vector3(max_float, max_float, max_float))
+
+func init_cube_bounds(bounds:AABB):
+	init_cube(bounds.position, bounds.end)
 
 func init_cube(min_pos:Vector3, max_pos:Vector3):
 	var p000:Vector3 = Vector3(min_pos.x, min_pos.y, min_pos.z)
@@ -314,3 +336,11 @@ func init_cube(min_pos:Vector3, max_pos:Vector3):
 	faces.append(face)
 	
 	calc_bounds()
+
+
+func _to_string()->String:
+	var result:String = ""
+	for face in faces:
+		result += "%s\n" % str(face)
+	return result
+	

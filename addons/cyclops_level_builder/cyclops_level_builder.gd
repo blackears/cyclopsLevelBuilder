@@ -37,6 +37,7 @@ var activated:bool = false
 
 var block_create_distance:float = 20
 var tool:CyclopsTool = null
+var lock_uvs:bool = false
 
 #var _active_node:GeometryBrush
 var active_node:CyclopsBlocks:
