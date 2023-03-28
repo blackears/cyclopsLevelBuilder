@@ -45,7 +45,7 @@ class FaceInfo extends RefCounted:
 	var normal:Vector3
 	var uv_transform:Transform2D = Transform2D.IDENTITY
 	var material_index:int
-	var face_index:int
+	var face_id:int
 	var selected:bool
 	
 	func _to_string():
@@ -65,7 +65,7 @@ class FaceInfo extends RefCounted:
 		result.normal = normal
 		result.uv_transform = uv_transform
 		result.material_index = material_index
-		result.face_index = face_index
+		result.face_id = face_id
 		result.selected = selected
 		return result
 			
@@ -129,7 +129,7 @@ class FaceInfo extends RefCounted:
 		new_face.normal = normal
 		new_face.uv_transform = uv_transform
 		new_face.material_index = material_index
-		new_face.face_index = face_index
+		new_face.face_id = face_id
 		new_face.selected = selected
 			
 		var result:FaceCutResult = FaceCutResult.new()
@@ -146,6 +146,14 @@ class FaceCutResult extends RefCounted:
 
 var faces:Array[FaceInfo] = []
 var bounds:AABB
+
+func get_face_points(face_id:int)->PackedVector3Array:
+	for face in faces:
+		if face.face_id == face_id:
+			return face.vertices
+
+	var result:PackedVector3Array
+	return result
 
 func tristrip_vertex_range(num_verts:int)->PackedInt32Array:
 	var result:PackedInt32Array
@@ -222,7 +230,7 @@ func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 			if !best_result || best_result.distance_squared > dist_sq:
 			
 				var result:IntersectResults = IntersectResults.new()
-				result.face_index = face.face_index
+				result.face_id = face.face_id
 				result.normal = face.normal
 				result.position = p_hit
 				result.distance_squared = dist_sq
@@ -232,15 +240,22 @@ func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 	return best_result
 
 #Keep volume on the over side of the plane
-func cut_with_plane(plane:Plane, face_index:int, uv_transform:Transform2D = Transform2D.IDENTITY, material_index:int = 0, selected:bool = false)->ConvexMesh:
+func cut_with_plane(new_id:int, plane:Plane, face_id:int, uv_transform:Transform2D = Transform2D.IDENTITY, material_index:int = 0, selected:bool = false)->ConvexMesh:
 	var new_faces:Array[FaceInfo] = []
 	
 	var results:Array[FaceCutResult] = []
 	
 	for face in faces:
 		var side:Position = face.plane_side_test(plane)
-		if side == Position.OVER or side == Position.ON:
+		if side == Position.OVER:
 			new_faces.append(face.duplicate())
+		elif side == Position.ON:
+			var new_face = face.duplicate()
+			new_face.face_id = face_id
+			new_face.uv_transform = uv_transform
+			new_face.material_index = material_index
+			new_face.selected = selected
+			new_faces.append(new_face)
 		elif side == Position.UNDER:
 			continue
 		else:
@@ -270,7 +285,7 @@ func cut_with_plane(plane:Plane, face_index:int, uv_transform:Transform2D = Tran
 		face.normal = MathUtil.face_area_x2(face.vertices).normalized()
 		face.uv_transform = uv_transform
 		face.material_index = material_index
-		face.face_index = face_index
+		face.face_index = new_id
 		face.selected = selected
 		
 		new_faces.append(face)

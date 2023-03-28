@@ -30,17 +30,26 @@ var move_amount:float
 
 var tracked_block:CyclopsBlock
 var tracked_block_data:ConvexBlockData
-var face_index:int
+var face_id:int
+var lock_uvs:bool = false
 
 
 func _init():
 	command_name = "Move face"
+
+func move_to(offset:Vector3):
+#	print("move_to off %s faceid %s amount %s movedir %s" % [offset, face_id, move_amount, move_dir_normal])
 	
+	var ctl_mesh:ConvexVolume = ConvexVolume.new()
+	ctl_mesh.init_from_convex_block_data(tracked_block_data)
+	ctl_mesh.translate_face(face_id, offset, lock_uvs)
+	var result_data:ConvexBlockData = ctl_mesh.to_convex_block_data()
+	tracked_block.block_data = result_data
+
+
 func do_it():
-#	move_to(move_offset)
-	pass
+	move_to(move_dir_normal * move_amount)
 
 func undo_it():
-#	move_to(Vector3.ZERO)
-	pass
+	move_to(Vector3.ZERO)
 

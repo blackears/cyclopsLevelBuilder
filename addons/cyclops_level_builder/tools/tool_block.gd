@@ -81,11 +81,12 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 			drag_style = DragStyle.MOVE_FACE
 			
 			cmd_move_face = CommandMoveFace.new()
-			cmd_move_face.face_index = result.face_index
+			cmd_move_face.face_id = result.face_id
 			cmd_move_face.tracked_block = result.object
 			cmd_move_face.tracked_block_data = result.object.block_data
+			cmd_move_face.lock_uvs = builder.lock_uvs
 			move_face_origin = result.position
-			cmd_move_face.move_dir_normal = result.object.control_mesh.faces[result.face_index].normal
+			cmd_move_face.move_dir_normal = result.object.control_mesh.faces[result.face_id].plane.normal
 			
 		elif result.object.selected:
 			drag_style = DragStyle.MOVE_BLOCK
@@ -233,8 +234,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				var result:IntersectResults = blocks_root.intersect_ray_closest(origin, dir)
 				if result:
 					var block:CyclopsBlock = result.object
-					var face = block.control_mesh.faces[result.face_index]
-					var points:PackedVector3Array = block.control_mesh.get_face_points(face)
+					var convex_mesh:ConvexMesh = block.control_mesh.build_mesh()
+					var points:PackedVector3Array = convex_mesh.get_face_points(result.face_id)
+					#var face = block.control_mesh.faces[result.face_index]
+					#var points:PackedVector3Array = block.control_mesh.get_face_points(face)
 					
 					global_scene.draw_loop(points, true)
 				else:
@@ -293,6 +296,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 		elif drag_style == DragStyle.MOVE_FACE:			
 			var drag_to:Vector3 = MathUtil.closest_point_on_line(origin_local, dir_local, move_face_origin, cmd_move_face.move_dir_normal)
+			#print("move_face_origin %s norm %s" % [move_face_origin, cmd_move_face.move_dir_normal])
+			var grid_step_size:float = pow(2, blocks_root.grid_size)
+			drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
+			
 			cmd_move_face.move_amount = (drag_to - move_face_origin).dot(cmd_move_face.move_dir_normal)
 			
 			cmd_move_face.do_it()

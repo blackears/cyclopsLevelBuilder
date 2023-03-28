@@ -97,10 +97,33 @@ func to_convex_block_data()->ConvexBlockData:
 	
 	return result
 
+func get_face(face_id:int)->PlaneInfo:
+	for face in faces:
+		if face.id == face_id:
+			return face
+	return null
+
+func translate_face(face_id:int, offset:Vector3, lock_uvs:bool = false):
+	var xform:Transform3D = Transform3D(Basis.IDENTITY, -offset)
+
+	var p:PlaneInfo = get_face(face_id)
+	p.plane = p.plane * xform
+	
+	if lock_uvs:
+		var axis:MathUtil.Axis = MathUtil.get_longest_axis(p.plane.normal)
+		var uv_offset:Vector2
+		if axis == MathUtil.Axis.X:
+			uv_offset = Vector2(offset.y, offset.z)
+		elif axis == MathUtil.Axis.Y:
+			uv_offset = Vector2(offset.x, offset.z)
+		else:
+			uv_offset = Vector2(offset.x, offset.y)
+		
+		p.uv_transform = p.uv_transform.translated(-uv_offset)
+
 func translate(offset:Vector3, lock_uvs:bool = false):
 	var xform:Transform3D = Transform3D(Basis.IDENTITY, -offset)
 	
-	#print("translate yy %s" % offset)
 	for p in faces:
 		p.plane = p.plane * xform
 		
@@ -115,7 +138,6 @@ func translate(offset:Vector3, lock_uvs:bool = false):
 				uv_offset = Vector2(offset.x, offset.y)
 			
 			p.uv_transform = p.uv_transform.translated(-uv_offset)
-			pass
 	
 
 func unused_id()->int:
@@ -157,7 +179,8 @@ func build_mesh()->ConvexMesh:
 #	print("build_mesh %s" % convex_mesh._to_string())
 	
 	for plane in faces:
-		var new_mesh:ConvexMesh = convex_mesh.cut_with_plane(plane.plane, unused_id(), plane.uv_transform, plane.material_index, plane.selected)
+		var new_id = unused_id()
+		var new_mesh:ConvexMesh = convex_mesh.cut_with_plane(new_id, plane.plane, plane.id, plane.uv_transform, plane.material_index, plane.selected)
 		convex_mesh = new_mesh
 	return convex_mesh
 

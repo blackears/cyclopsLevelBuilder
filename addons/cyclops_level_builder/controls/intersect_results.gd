@@ -26,10 +26,10 @@ extends RefCounted
 class_name IntersectResults
 
 var object:CyclopsBlock
-var face_index:int
+var face_id:int
 var position:Vector3
 var normal:Vector3
 var distance_squared:float
 
 func _to_string():
-	return "object:%s face_idx:%s pos:%s norm:%s dist_sq:%s" % [object, face_index, position, normal, distance_squared]
+	return "object:%s face_id:%s pos:%s norm:%s dist_sq:%s" % [object, face_id, position, normal, distance_squared]
