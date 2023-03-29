@@ -176,12 +176,15 @@ func build_mesh()->ConvexMesh:
 	var convex_mesh:ConvexMesh = ConvexMesh.new()
 	convex_mesh.init_cube_bounds(bounds)
 	
-#	print("build_mesh %s" % convex_mesh._to_string())
+	print("build_mesh %s" % convex_mesh._to_string())
 	
 	for plane in faces:
 		var new_id = unused_id()
 		var new_mesh:ConvexMesh = convex_mesh.cut_with_plane(new_id, plane.plane, plane.id, plane.uv_transform, plane.material_index, plane.selected)
 		convex_mesh = new_mesh
+		
+		print("after_cut %s" % convex_mesh._to_string())
+
 	return convex_mesh
 
 func append_mesh(mesh:ImmediateMesh, material:Material, color:Color = Color.WHITE):

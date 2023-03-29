@@ -22,7 +22,7 @@
 # SOFTWARE.
 
 @tool
-class_name CommandAddBlock
+class_name CommandAddBlock2
 extends CyclopsCommand
 
 var blocks_root_inst_id:int

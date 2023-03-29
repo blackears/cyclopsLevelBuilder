@@ -27,7 +27,7 @@
 extends RefCounted
 class_name ConvexMesh
 
-enum Position { OVER, UNDER, CROSSING, ON }
+enum Position { OVER, UNDER, CROSSING, ON, ON_UNDER }
 
 #class VertexInfo extends RefCounted:
 #	var point:Vector3
@@ -87,9 +87,29 @@ class FaceInfo extends RefCounted:
 		
 		if has_over:
 			return Position.OVER
+		if has_under and has_on:
+			return Position.ON_UNDER
 		if has_under:
 			return Position.UNDER
 		return Position.ON
+	
+	func get_on_under_bridge(plane:Plane)->FaceCutResult:
+		if plane.has_point(vertices[0]) && plane.has_point(vertices[vertices.size() - 1]):
+			var result:FaceCutResult = FaceCutResult.new()
+			result.bridge_vert0 = vertices[0]
+			result.bridge_vert1 = vertices[vertices.size() - 1]
+			return result
+		
+		for i in vertices.size():
+			var v0:Vector3 = vertices[i]
+			if plane.has_point(v0):
+				var result:FaceCutResult = FaceCutResult.new()
+				result.bridge_vert0 = vertices[i + 1]
+				result.bridge_vert1 = vertices[i]
+				return result
+				
+		return null
+		
 	
 	#Returns a new face equal to the portion of the face on the over side of the plane
 	func cut_with_plane(plane:Plane)->FaceCutResult:
@@ -122,7 +142,7 @@ class FaceInfo extends RefCounted:
 				new_verts.append(bridge_vert0)
 			elif !over0 and over1:
 				bridge_vert1 = plane.intersects_segment(v0, v1)
-				new_verts.append(bridge_vert0)
+				new_verts.append(bridge_vert1)
 
 		var new_face:FaceInfo = FaceInfo.new()
 		new_face.vertices = new_verts
@@ -258,8 +278,14 @@ func cut_with_plane(new_id:int, plane:Plane, face_id:int, uv_transform:Transform
 			new_faces.append(new_face)
 		elif side == Position.UNDER:
 			continue
+		elif side == Position.ON_UNDER:
+			var result:FaceCutResult = face.get_on_under_bridge(plane)
+			results.append(result)
 		else:
+			#print("cutting plane %s" % [plane])
+			#print("face verts %s" % [face.vertices])
 			var result:FaceCutResult = face.cut_with_plane(plane)
+			#print("result bridge %s %s" % [result.bridge_vert0, result.bridge_vert1])
 			results.append(result)
 			new_faces.append(result.face)
 	
@@ -267,16 +293,26 @@ func cut_with_plane(new_id:int, plane:Plane, face_id:int, uv_transform:Transform
 		#Cut eliminates everything
 		return null
 		
+	#print("=============new faces")
+	#for face in new_faces:
+		#print ("face %s" % face)
+		
 	if !results.is_empty():	
 		var results_sorted:Array[FaceCutResult] = []
 		results_sorted.append(results.pop_front())
 		
 		while !results.is_empty():
+			var count:int = 0
+			
 			for i in results.size():
 				var r:FaceCutResult = results[i]
 				if r.bridge_vert0.is_equal_approx(results_sorted.back().bridge_vert1):
 					results_sorted.append(results.pop_at(i))
+					count += 1
 					break
+			
+			assert(count > 0, "Error: was unable to connect polygon segment")
+				
 				
 		results_sorted.reverse()
 		var face:FaceInfo = FaceInfo.new()
@@ -285,7 +321,7 @@ func cut_with_plane(new_id:int, plane:Plane, face_id:int, uv_transform:Transform
 		face.normal = MathUtil.face_area_x2(face.vertices).normalized()
 		face.uv_transform = uv_transform
 		face.material_index = material_index
-		face.face_index = new_id
+		face.face_id = new_id
 		face.selected = selected
 		
 		new_faces.append(face)

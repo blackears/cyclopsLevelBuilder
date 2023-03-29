@@ -170,7 +170,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #					print("AABB %s" % bounds)
 					
 					if bounds.has_volume():
-						var command:CommandAddBlock = CommandAddBlock.new()
+						var command:CommandAddBlock2 = CommandAddBlock2.new()
 						
 						#var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
 						command.block_name = GeneralUtil.find_unique_name(builder.active_node, "Block_")
