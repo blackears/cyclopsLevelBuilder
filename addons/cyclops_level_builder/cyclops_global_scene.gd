@@ -62,7 +62,8 @@ func _ready():
 #
 #		dirty = false
 
-func draw_loop(points:Array[Vector3], closed:bool = true):
+#func draw_loop(points:Array[Vector3], closed:bool = true):
+func draw_loop(points:PackedVector3Array, closed:bool = true):
 	var mesh:ImmediateMesh = ImmediateMesh.new()
 	
 	mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, tool_material)
@@ -76,6 +77,43 @@ func draw_loop(points:Array[Vector3], closed:bool = true):
 	mesh.surface_end()
 	
 	$ToolInstance3D.mesh = mesh
+
+func draw_prism(points:PackedVector3Array, extrude:Vector3):
+	var mesh:ImmediateMesh = ImmediateMesh.new()
+
+	#Bottom loop	
+	mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, tool_material)
+
+	for p in points:
+		mesh.surface_add_vertex(p)
+
+	mesh.surface_add_vertex(points[0])
+	
+	mesh.surface_end()
+
+	#Top loop	
+	mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, tool_material)
+
+	for p in points:
+		mesh.surface_add_vertex(p + extrude)
+
+	mesh.surface_add_vertex(points[0] + extrude)
+	
+	mesh.surface_end()
+	
+	#Sides
+	mesh.surface_begin(Mesh.PRIMITIVE_LINES, tool_material)
+
+	for p in points:
+		mesh.surface_add_vertex(p)
+		mesh.surface_add_vertex(p + extrude)
+	
+	mesh.surface_end()
+	
+	$ToolInstance3D.mesh = mesh
+		
+	
+	
 
 func draw_rect(start:Vector3, end:Vector3):	
 	#print ("draw_rect %s %s" % [start, end])

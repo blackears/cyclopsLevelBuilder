@@ -60,14 +60,7 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 	
 	if result:
 #						print("Hit! %s" % result)
-		drag_floor_normal = result.normal
-		#Snap normal to best axis
-		if abs(drag_floor_normal.x) > abs(drag_floor_normal.y) && abs(drag_floor_normal.x) > abs(drag_floor_normal.z):
-			drag_floor_normal = Vector3(1, 0, 0) if drag_floor_normal.x > 0 else Vector3(-1, 0, 0)
-		elif abs(drag_floor_normal.y) > abs(drag_floor_normal.z):
-			drag_floor_normal = Vector3(0, 1, 0) if drag_floor_normal.y > 0 else Vector3(0, -1, 0)
-		else:
-			drag_floor_normal = Vector3(0, 0, 1) if drag_floor_normal.z > 0 else Vector3(0, 0, -1)
+		drag_floor_normal = MathUtil.snap_to_best_axis_normal(result.normal)
 
 		var start_pos:Vector3 = result.position
 		var w2l = blocks_root.global_transform.inverse()

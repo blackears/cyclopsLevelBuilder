@@ -108,4 +108,80 @@ static func calc_bounds(points:PackedVector3Array)->AABB:
 	for i in range(1, points.size()):
 		result = result.expand(points[i])
 	return result
+
+#Returns value equal to twise the area between the two vectors.  Clockwise windings have negative area
+static func triange_area_2x_2d(a:Vector2, b:Vector2)->float:
+	return a.x * b.y - a.y * b.x
+
+#Finds the bouding polygons of this set of points with a clockwise winding
+static func bounding_polygon_2d(base_points:PackedVector2Array)->PackedVector2Array:
+	if base_points.size() <= 2:
+		return base_points
+
+	
+	#Start with leftmost vertex, topmost if more than one
+	var p_init:Vector2 = base_points[0]
+	for p in base_points:
+		if p.x < p_init.x or (p.x == p_init.x and p.y > p_init.y):
+			p_init = p
+
+
+	var p_cur:Vector2 = p_init
+	var last_segment_dir = Vector2(0, 1)
+	
+	var polygon:PackedVector2Array
+
+	while true:	
+		var best_point:Vector2
+		var best_dir:Vector2
+		var best_angle:float = 0
 		
+		for p in base_points:
+			if p.is_equal_approx(p_cur):
+				continue
+				
+			var point_dir:Vector2 = (p - p_cur).normalized()
+			var angle:float = acos(-last_segment_dir.dot(point_dir))
+			
+			if angle > best_angle or (angle == best_angle and p_cur.distance_squared_to(p) > p_cur.distance_squared_to(best_point)):
+				best_point = p
+				best_dir = point_dir
+				best_angle = angle
+		
+		p_cur = best_point
+		last_segment_dir = best_dir
+		polygon.append(best_point)
+		
+		if best_point.is_equal_approx(p_init):
+			break
+		
+	return polygon		
+		
+#static func bounding_polygon(base_points:PackedVector3Array, plane:Plane)->PackedVector3Array:
+static func bounding_polygon_3d(base_points:PackedVector3Array, normal:Vector3)->PackedVector3Array:
+	if base_points.size() <= 2:
+		return base_points
+	
+	#Rotation to point along Z axis
+	var quat:Quaternion = Quaternion(normal, Vector3.FORWARD)
+#	var quat_i:Quaternion = quat.inverse()
+	
+	var xform:Transform3D = Transform3D(Basis(quat), -base_points[0])
+	var xform_inv = xform.inverse()
+	
+	var points_rot:PackedVector2Array
+	
+	for p in base_points:
+		var p_rot = xform * p
+		points_rot.append(Vector2(p.x, p.y))
+		pass
+		
+	var points_bounds:PackedVector2Array = bounding_polygon_2d(points_rot)
+		
+	var result:PackedVector3Array
+	for p in points_bounds:
+		var p_result = xform_inv * Vector3(p.x, p.y, 0)
+		points_rot.append(p_result)
+	
+	return result
+	

@@ -83,10 +83,6 @@ func _on_bn_move_pressed():
 	editor_plugin.switch_to_tool(ToolBlock.new())
 
 
-func _on_bn_draw_pressed():
-	pass
-
-
 func _on_bn_clip_pressed():
 	pass
 
@@ -105,3 +101,7 @@ func _on_bn_face_pressed():
 
 func _on_check_lock_uvs_toggled(button_pressed):
 	editor_plugin.lock_uvs = button_pressed
+
+
+func _on_bn_prism_pressed():
+	editor_plugin.switch_to_tool(ToolPrism.new())
