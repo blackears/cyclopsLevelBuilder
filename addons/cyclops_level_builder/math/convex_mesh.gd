@@ -94,18 +94,19 @@ class FaceInfo extends RefCounted:
 		return Position.ON
 	
 	func get_on_under_bridge(plane:Plane)->FaceCutResult:
-		if plane.has_point(vertices[0]) && plane.has_point(vertices[vertices.size() - 1]):
-			var result:FaceCutResult = FaceCutResult.new()
-			result.bridge_vert0 = vertices[0]
-			result.bridge_vert1 = vertices[vertices.size() - 1]
-			return result
+#		if plane.has_point(vertices[0]) && plane.has_point(vertices[vertices.size() - 1]):
+#			var result:FaceCutResult = FaceCutResult.new()
+#			result.bridge_vert0 = vertices[0]
+#			result.bridge_vert1 = vertices[vertices.size() - 1]
+#			return result
 		
-		for i in vertices.size():
+		for i in vertices.size() - 1:
 			var v0:Vector3 = vertices[i]
-			if plane.has_point(v0):
+			var v1:Vector3 = vertices[wrap(i + 1, 0, vertices.size())]
+			if plane.has_point(v0) and plane.has_point(v1):
 				var result:FaceCutResult = FaceCutResult.new()
-				result.bridge_vert0 = vertices[i + 1]
-				result.bridge_vert1 = vertices[i]
+				result.bridge_vert0 = v1
+				result.bridge_vert1 = v0
 				return result
 				
 		return null
@@ -280,7 +281,8 @@ func cut_with_plane(new_id:int, plane:Plane, face_id:int, uv_transform:Transform
 			continue
 		elif side == Position.ON_UNDER:
 			var result:FaceCutResult = face.get_on_under_bridge(plane)
-			results.append(result)
+			if result:
+				results.append(result)
 		else:
 			#print("cutting plane %s" % [plane])
 			#print("face verts %s" % [face.vertices])
@@ -310,7 +312,17 @@ func cut_with_plane(new_id:int, plane:Plane, face_id:int, uv_transform:Transform
 					results_sorted.append(results.pop_at(i))
 					count += 1
 					break
+
+			if count == 0:
+				print("========= bridge error")
+				for face in new_faces:
+					print ("face %s" % face)
 			
+				for r in results:
+					print("result %s %s" % [r.bridge_vert0, r.bridge_vert0])
+				for r in results_sorted:
+					print("sort_result %s %s" % [r.bridge_vert0, r.bridge_vert0])
+					
 			assert(count > 0, "Error: was unable to connect polygon segment")
 				
 				

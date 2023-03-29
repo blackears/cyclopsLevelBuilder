@@ -59,7 +59,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					var result:IntersectResults = blocks_root.intersect_ray_closest(origin, dir)
 					if result:
-						floor_normal = MathUtil.snap_to_best_axis_normal(result.normal)
+#						floor_normal = MathUtil.snap_to_best_axis_normal(result.normal)
+						floor_normal = result.normal
 
 						var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
 #						var start_pos:Vector3 = result.position
