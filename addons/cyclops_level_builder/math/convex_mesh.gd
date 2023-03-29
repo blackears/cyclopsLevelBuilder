@@ -44,7 +44,7 @@ class FaceInfo extends RefCounted:
 	var vertices:PackedVector3Array = []
 	var normal:Vector3
 	var uv_transform:Transform2D = Transform2D.IDENTITY
-	var material_index:int
+	var material_id:int
 	var face_id:int
 	var selected:bool
 	
@@ -64,7 +64,7 @@ class FaceInfo extends RefCounted:
 		result.vertices = vertices
 		result.normal = normal
 		result.uv_transform = uv_transform
-		result.material_index = material_index
+		result.material_id = material_id
 		result.face_id = face_id
 		result.selected = selected
 		return result
@@ -149,7 +149,7 @@ class FaceInfo extends RefCounted:
 		new_face.vertices = new_verts
 		new_face.normal = normal
 		new_face.uv_transform = uv_transform
-		new_face.material_index = material_index
+		new_face.material_id = material_id
 		new_face.face_id = face_id
 		new_face.selected = selected
 			
@@ -167,6 +167,16 @@ class FaceCutResult extends RefCounted:
 
 var faces:Array[FaceInfo] = []
 var bounds:AABB
+
+func add_face(points:PackedVector3Array, normal:Vector3, plane_id:int, uv_transform:Transform2D, material_id:int)->FaceInfo:
+	var face:FaceInfo = FaceInfo.new()
+	faces.append(face)
+	face.vertices = points
+	face.normal = normal
+	face.face_id = plane_id
+	face.uv_transform = uv_transform
+	face.material_id = material_id
+	return face
 
 func get_face_points(face_id:int)->PackedVector3Array:
 	for face in faces:

@@ -29,14 +29,14 @@ class_name ConvexVolume
 class PlaneInfo extends RefCounted:
 	var id:int
 	var plane:Plane #Face normal points in direction of interior
-	var material_index:int
+	var material_id:int
 	var uv_transform:Transform2D
 	var selected:bool
 	
-	func _init(id:int, plane:Plane, uv_transform:Transform2D = Transform2D.IDENTITY, material_index:int = 0, selected:bool = false):
+	func _init(id:int, plane:Plane, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0, selected:bool = false):
 		self.id = id
 		self.plane = plane
-		self.material_index = material_index
+		self.material_id = material_id
 		self.uv_transform = uv_transform
 		self.selected = selected
 		
@@ -90,7 +90,7 @@ func to_convex_block_data()->ConvexBlockData:
 	var result:ConvexBlockData = ConvexBlockData.new()
 	
 	for face in faces:
-		result.face_material_indices.append(face.material_index)
+		result.face_material_indices.append(face.material_id)
 		result.face_planes.append(face.plane)
 		result.face_uv_transform.append(face.uv_transform)
 		result.face_ids.append(face.id)
@@ -153,6 +153,15 @@ func contains_point(point:Vector3)->bool:
 	return true
 
 func calc_bounds()->AABB:
+	var points:PackedVector3Array = calc_convex_hull_points()
+				
+	var result:AABB = AABB(points[0], Vector3.ZERO)
+	for p in points:
+		result = result.expand(p)
+		
+	return result
+
+func calc_convex_hull_points()->PackedVector3Array:
 	var points:PackedVector3Array
 	
 	for i0 in range(0, faces.size()):
@@ -165,22 +174,46 @@ func calc_bounds()->AABB:
 				if !contains_point(result):
 					continue
 				points.append(result)
-				
-	var result:AABB = AABB(points[0], Vector3.ZERO)
-	for p in points:
-		result = result.expand(p)
-		
-	return result
-
-func build_mesh()->ConvexMesh:
-	var convex_mesh:ConvexMesh = ConvexMesh.new()
-	convex_mesh.init_cube_bounds(bounds)
 	
-	#print("build_mesh %s" % convex_mesh._to_string())
+	return points
+
+func calc_mesh()->ConvexMesh:
+	var points:PackedVector3Array = calc_convex_hull_points()
+#	print("points %s" % points)
+	
+	var result_mesh:ConvexMesh = ConvexMesh.new()
 	
 	for plane in faces:
+		var points_on_plane:PackedVector3Array
+		for p in points:
+			if plane.plane.has_point(p):
+				points_on_plane.append(p)
+
+		print("points_on_plane %s" % points_on_plane)
+	
+		var poly_points:PackedVector3Array = MathUtil.bounding_polygon_3d(points_on_plane, plane.plane.normal)
+		var area_2x:Vector3 = MathUtil.face_area_x2(poly_points)
+		if area_2x.dot(plane.plane.normal) > 0:
+			poly_points.reverse()
+		
+		var mesh_face:ConvexMesh.FaceInfo = result_mesh.add_face(poly_points, -plane.plane.normal, plane.id, plane.uv_transform, plane.material_id)
+		mesh_face.selected = plane.selected
+
+		print("poly_points %s" % poly_points)
+	
+	result_mesh.calc_bounds()
+	return result_mesh
+
+#@deprecated
+func build_mesh()->ConvexMesh:
+	assert(false, "Deprecated.  Use calc_mesh")
+	
+	var convex_mesh:ConvexMesh = ConvexMesh.new()
+	convex_mesh.init_cube_bounds(bounds)
+		
+	for plane in faces:
 		var new_id = unused_id()
-		var new_mesh:ConvexMesh = convex_mesh.cut_with_plane(new_id, plane.plane, plane.id, plane.uv_transform, plane.material_index, plane.selected)
+		var new_mesh:ConvexMesh = convex_mesh.cut_with_plane(new_id, plane.plane, plane.id, plane.uv_transform, plane.material_id, plane.selected)
 		convex_mesh = new_mesh
 		
 		#print("after_cut %s" % convex_mesh._to_string())
@@ -191,7 +224,7 @@ func append_mesh(mesh:ImmediateMesh, material:Material, color:Color = Color.WHIT
 #	if Engine.is_editor_hint():
 #		return
 
-	var convex_mesh:ConvexMesh = build_mesh()
+	var convex_mesh:ConvexMesh = calc_mesh()
 	
 	convex_mesh.append_mesh(mesh, material, color)
 	
@@ -200,5 +233,5 @@ func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 	if bounds.intersects_ray(origin, dir) == null:
 		return null
 	
-	var convex_mesh:ConvexMesh = build_mesh()
+	var convex_mesh:ConvexMesh = calc_mesh()
 	return convex_mesh.intersect_ray_closest(origin, dir)
