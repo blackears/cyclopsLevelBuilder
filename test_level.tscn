@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://c8xgan01ujspi"]
+[gd_scene load_steps=12 format=3 uid="uid://c8xgan01ujspi"]
 
 [ext_resource type="Script" path="res://test_level.gd" id="1_k5d46"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/cyclops_blocks.gd" id="1_p74uy"]
@@ -8,44 +8,30 @@
 [sub_resource type="Environment" id="Environment_b1nvb"]
 ambient_light_color = Color(0.784314, 0.784314, 0.784314, 1)
 
-[sub_resource type="Resource" id="Resource_6hgn6"]
+[sub_resource type="Resource" id="Resource_57ktd"]
 script = ExtResource("4_g4ksq")
-face_planes = Array[Plane]([Plane(1, 0, 0, -5), Plane(-1, 0, 0, 3), Plane(0, 1, 0, -5), Plane(0, 0, -1, -10), Plane(0, -1, 0, 0), Plane(0, 0, 1, 7)])
+face_planes = Array[Plane]([Plane(1, 0, 0, -4), Plane(-1, 0, 0, -1), Plane(0, 1, 0, -4), Plane(0, 0, -1, -11), Plane(0, -1, 0, 3), Plane(0, 0, 1, 4)])
 face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
 face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_7tkn4"]
+[sub_resource type="Resource" id="Resource_nid7w"]
 script = ExtResource("4_g4ksq")
-face_planes = Array[Plane]([Plane(1, 0, 0, -4), Plane(-1, 0, 0, 3), Plane(0, 1, 0, -6), Plane(0, 0, -1, -7), Plane(0, -1, 0, 0), Plane(0, 0, 1, 4)])
+face_planes = Array[Plane]([Plane(1, 0, 0, -3), Plane(-1, 0, 0, 0), Plane(0, 1, 0, -3), Plane(0, 0, -1, -9), Plane(0, -1, 0, 2), Plane(0, 0, 1, 6)])
 face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
 face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_d83px"]
+[sub_resource type="Resource" id="Resource_a6m74"]
 script = ExtResource("4_g4ksq")
-face_planes = Array[Plane]([Plane(1, 0, 0, 4), Plane(-1, 0, 0, -7), Plane(0, 1, 0, -7), Plane(0, 0, -1, -7), Plane(0, -1, 0, 2), Plane(0, 0, 1, 2)])
+face_planes = Array[Plane]([Plane(1, 0, 0, -4), Plane(-1, 0, 0, 1), Plane(0, 1, 0, -2), Plane(0, 0, -1, -7), Plane(0, -1, 0, -2), Plane(0, 0, 1, 4)])
 face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
 face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_d5lhk"]
+[sub_resource type="Resource" id="Resource_q8gw2"]
 script = ExtResource("4_g4ksq")
-face_planes = Array[Plane]([Plane(1, 0, 0, 3), Plane(-1, 0, 0, -6), Plane(0, 1, 0, -2), Plane(0, 0, -1, -6), Plane(0, -1, 0, -2), Plane(0, 0, 1, 5)])
-face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
-face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
-face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
-
-[sub_resource type="Resource" id="Resource_2lmhh"]
-script = ExtResource("4_g4ksq")
-face_planes = Array[Plane]([Plane(1, 0, 0, -4), Plane(-1, 0, 0, 3), Plane(0, 1, 0, 0), Plane(0, 0, -1, -9), Plane(0, -1, 0, -3), Plane(0, 0, 1, 6)])
-face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
-face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
-face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
-
-[sub_resource type="Resource" id="Resource_g7aox"]
-script = ExtResource("4_g4ksq")
-face_planes = Array[Plane]([Plane(1, 0, 0, 3), Plane(-1, 0, 0, -5), Plane(0, 1, 0, -1), Plane(0, 0, -1, -4), Plane(0, -1, 0, -1), Plane(0, 0, 1, 0)])
+face_planes = Array[Plane]([Plane(1, 0, 0, -9), Plane(-1, 0, 0, 4), Plane(0, 1, 0, 0), Plane(0, 0, -1, -6), Plane(0, -1, 0, -2), Plane(0, 0, 1, 4)])
 face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
 face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
@@ -71,44 +57,21 @@ environment = SubResource("Environment_b1nvb")
 [node name="CyclopsBlocks" type="Node3D" parent="."]
 script = ExtResource("1_p74uy")
 
-[node name="Block_1" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_pkaua")
-block_data = SubResource("Resource_6hgn6")
-
-[node name="Block_5" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_pkaua")
-
 [node name="Block_0" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("3_pkaua")
+block_data = SubResource("Resource_57ktd")
 
-[node name="Block_10" type="Node" parent="CyclopsBlocks"]
+[node name="Block_1" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("3_pkaua")
-
-[node name="Block_9" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_pkaua")
-
-[node name="Block_11" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_pkaua")
+block_data = SubResource("Resource_nid7w")
 
 [node name="Block_2" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("3_pkaua")
-block_data = SubResource("Resource_7tkn4")
-
-[node name="Block_4" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_pkaua")
-block_data = SubResource("Resource_d83px")
-
-[node name="Block_12" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_pkaua")
-block_data = SubResource("Resource_d5lhk")
+block_data = SubResource("Resource_a6m74")
 
 [node name="Block_3" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("3_pkaua")
-block_data = SubResource("Resource_2lmhh")
-
-[node name="Block_6" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_pkaua")
-block_data = SubResource("Resource_g7aox")
+block_data = SubResource("Resource_q8gw2")
 
 [node name="Marker3D" type="Marker3D" parent="."]
 transform = Transform3D(0.965926, -0.0669873, -0.25, 2.21068e-08, 0.965926, -0.258819, 0.258819, 0.25, 0.933013, 2, -3, 2)

@@ -162,26 +162,38 @@ static func bounding_polygon_3d(base_points:PackedVector3Array, normal:Vector3)-
 	if base_points.size() <= 2:
 		return base_points
 	
+	#var quat:Quaternion = Quaternion()
+#	var basis:Basis = Basis.IDENTITY
 	#Rotation to point along Z axis
+#	var axis = Vector3.FORWARD.cross(normal)
+#	if !axis.is_zero_approx():
+#		#Roy=tate normal onto forward axis
+#		quat.x = axis.x
+#		quat.y = axis.y
+#		quat.z = axis.z
+#		quat.w = 1 + Vector3.FORWARD.dot(normal)
+		
 	var quat:Quaternion = Quaternion(normal, Vector3.FORWARD)
-#	var quat_i:Quaternion = quat.inverse()
 	
-	var xform:Transform3D = Transform3D(Basis(quat), -base_points[0])
+#	var xform:Transform3D = Transform3D(Basis(quat), -base_points[0])
+	var xform:Transform3D = Transform3D(Basis(quat))
+	xform = xform.translated_local(-base_points[0])
 	var xform_inv = xform.inverse()
 	
-	var points_rot:PackedVector2Array
+	#print("xform %s" % xform)
+	
+	var points_local:PackedVector2Array
 	
 	for p in base_points:
-		var p_rot = xform * p
-		points_rot.append(Vector2(p.x, p.y))
-		pass
+		var p_local = xform * p
+		points_local.append(Vector2(p_local.x, p_local.y))
 		
-	var points_bounds:PackedVector2Array = bounding_polygon_2d(points_rot)
+	var points_bounds:PackedVector2Array = bounding_polygon_2d(points_local)
 		
 	var result:PackedVector3Array
 	for p in points_bounds:
 		var p_result = xform_inv * Vector3(p.x, p.y, 0)
-		points_rot.append(p_result)
+		result.append(p_result)
 	
 	return result
 	

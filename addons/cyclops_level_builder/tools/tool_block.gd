@@ -173,14 +173,16 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						var command:CommandAddBlock = CommandAddBlock.new()
 						
 						#var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
-						var name_idx:int = 0
-						while true:
-							var name = "Block_%s" % name_idx
-							if !builder.active_node.find_child(name, false):
-#								block.name = name
-								command.block_name = name
-								break
-							name_idx += 1
+						command.block_name = GeneralUtil.find_unique_name(builder.active_node, "Block_")
+						
+#						var name_idx:int = 0
+#						while true:
+#							var name = "Block_%s" % name_idx
+#							if !builder.active_node.find_child(name, false):
+##								block.name = name
+#								command.block_name = name
+#								break
+#							name_idx += 1
 
 						command.blocks_root_inst_id = blocks_root.get_instance_id()
 						command.block_owner = builder.get_editor_interface().get_edited_scene_root()
@@ -252,8 +254,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 			block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
 			
+			#print("block_drag_cur %s" % block_drag_cur)
+			
 			var grid_step_size:float = pow(2, blocks_root.grid_size)
 			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
+
+			#print("block_drag_cur snapped %s" % block_drag_cur)
 			
 			#Draw tool
 			var p01:Vector3

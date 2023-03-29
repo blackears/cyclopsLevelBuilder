@@ -91,11 +91,29 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var p:Vector3 = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
 					base_points.append(p)
 
+					#print("base %s " % base_points)
 					var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
+					#print("bounding %s " % bounding_points)
 					global_scene.draw_loop(bounding_points, true)
 					
 					return true
 				elif tool_state == ToolState.DRAG_HEIGHT:
+					var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
+					var offset:Vector3 = block_drag_cur - base_points[0]
+
+					var command:CommandAddPrism = CommandAddPrism.new()
+					command.block_name = GeneralUtil.find_unique_name(builder.active_node, "Block_")
+					command.blocks_root_inst_id = blocks_root.get_instance_id()
+					command.block_owner = builder.get_editor_interface().get_edited_scene_root()
+					command.base_polygon = bounding_points
+					command.extrude = offset
+
+					var undo:EditorUndoRedoManager = builder.get_undo_redo()
+
+					command.add_to_undo_manager(undo)
+					
+					global_scene.clear_tool_mesh()
+					
 					tool_state = ToolState.READY
 					return true
 			
@@ -118,7 +136,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			block_drag_cur = to_local(block_drag_cur, blocks_root.global_transform.inverse(), grid_step_size)
 			
 			var offset:Vector3 = block_drag_cur - base_points[0]
-			global_scene.draw_prism(base_points, offset)
+			var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
+			
+			global_scene.draw_prism(bounding_points, offset)
 
 			return true
 

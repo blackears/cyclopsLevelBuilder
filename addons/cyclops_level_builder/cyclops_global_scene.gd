@@ -25,7 +25,7 @@
 extends Node3D
 class_name CyclopsGlobalScene
 
-@export var tool_material:BaseMaterial3D
+@export var tool_material:Material
 #@export var selected_material:Material
 
 #var mesh:ImmediateMesh
