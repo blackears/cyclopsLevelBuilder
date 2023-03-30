@@ -5,8 +5,18 @@ extends Node3D
 func _ready():
 	
 	await get_tree().process_frame
+	
+	var b:Basis = Basis.IDENTITY
+	print("basis %s" % b)
+	b = b.scaled(Vector3(2, 3, .4))
+	print("basis %s" % b)
+	b = b.scaled(Vector3.ONE)
+	print("basis %s" % b)
 
-	var points:PackedVector3Array = [Vector3(4, 6, 1), Vector3(6, 6, 0), Vector3(5, 6, -2), Vector3(3, 6, -1)]
+	b = Basis.IDENTITY.scaled(Vector3.ONE * .5)
+	print("basis %s" % b)
+
+#	var points:PackedVector3Array = [Vector3(4, 6, 1), Vector3(6, 6, 0), Vector3(5, 6, -2), Vector3(3, 6, -1)]
 	
 	#print("points %s" % points)
 #	var bounds:PackedVector3Array = MathUtil.bounding_polygon_3d(points, Vector3(0, 1, 0))

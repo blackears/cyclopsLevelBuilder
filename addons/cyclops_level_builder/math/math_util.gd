@@ -22,7 +22,7 @@
 # SOFTWARE.
 
 @tool
-extends Node
+#extends RefCounted
 class_name  MathUtil
 
 enum Axis { X, Y, Z }
