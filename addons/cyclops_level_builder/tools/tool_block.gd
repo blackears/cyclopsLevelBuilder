@@ -229,7 +229,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				var result:IntersectResults = blocks_root.intersect_ray_closest(origin, dir)
 				if result:
 					var block:CyclopsBlock = result.object
-					var convex_mesh:ConvexMesh = block.control_mesh.build_mesh()
+					var convex_mesh:ConvexMesh = block.control_mesh.calc_mesh()
 					var points:PackedVector3Array = convex_mesh.get_face_points(result.face_id)
 					#var face = block.control_mesh.faces[result.face_index]
 					#var points:PackedVector3Array = block.control_mesh.get_face_points(face)
@@ -312,7 +312,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			cmd_move_face.move_amount = (drag_to - move_face_origin).dot(cmd_move_face.move_dir_normal)
 			
-			cmd_move_face.do_it()
+			cmd_move_face.do_it_intermediate()
 		
 			return true
 	

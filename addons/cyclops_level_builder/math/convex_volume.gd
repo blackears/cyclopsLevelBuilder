@@ -44,6 +44,7 @@ class PlaneInfo extends RefCounted:
 var faces:Array[PlaneInfo] = []
 var bounds:AABB
 
+
 func init_block(block_bounds:AABB):
 	var p000:Vector3 = block_bounds.position
 	var p111:Vector3 = block_bounds.end
@@ -103,6 +104,29 @@ func get_face(face_id:int)->PlaneInfo:
 			return face
 	return null
 
+func is_empty():
+	return bounds.size .is_zero_approx()
+
+func remove_unused_planes():
+	var points:PackedVector3Array = calc_convex_hull_points()
+	var remove_list:Array[PlaneInfo] = []
+	
+	for face in faces:
+		#var count:int = 0
+		var points_on_plane:PackedVector3Array
+		for p in points:
+			if face.plane.has_point(p):
+				points_on_plane.append(p)
+#				count += 1
+				
+		if MathUtil.points_are_colinear(points_on_plane):
+			remove_list.append(face)
+#		if count < 3:
+#			remove_list.append(face)
+		
+	for face in remove_list:
+		faces.remove_at(faces.find(face))
+
 func translate_face(face_id:int, offset:Vector3, lock_uvs:bool = false):
 	var xform:Transform3D = Transform3D(Basis.IDENTITY, -offset)
 
@@ -120,6 +144,7 @@ func translate_face(face_id:int, offset:Vector3, lock_uvs:bool = false):
 			uv_offset = Vector2(offset.x, offset.y)
 		
 		p.uv_transform = p.uv_transform.translated(-uv_offset)
+		bounds = calc_bounds()
 
 func translate(offset:Vector3, lock_uvs:bool = false):
 	var xform:Transform3D = Transform3D(Basis.IDENTITY, -offset)
@@ -189,7 +214,7 @@ func calc_mesh()->ConvexMesh:
 			if plane.plane.has_point(p):
 				points_on_plane.append(p)
 
-		print("points_on_plane %s" % points_on_plane)
+#		print("points_on_plane %s" % points_on_plane)
 	
 		var poly_points:PackedVector3Array = MathUtil.bounding_polygon_3d(points_on_plane, plane.plane.normal)
 		var area_2x:Vector3 = MathUtil.face_area_x2(poly_points)
@@ -199,7 +224,7 @@ func calc_mesh()->ConvexMesh:
 		var mesh_face:ConvexMesh.FaceInfo = result_mesh.add_face(poly_points, -plane.plane.normal, plane.id, plane.uv_transform, plane.material_id)
 		mesh_face.selected = plane.selected
 
-		print("poly_points %s" % poly_points)
+#		print("poly_points %s" % poly_points)
 	
 	result_mesh.calc_bounds()
 	return result_mesh

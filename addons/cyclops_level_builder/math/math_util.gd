@@ -197,3 +197,29 @@ static func bounding_polygon_3d(base_points:PackedVector3Array, normal:Vector3)-
 	
 	return result
 	
+static func points_are_colinear(points:PackedVector3Array)->bool:
+	if points.size() <= 2:
+		return true
+		
+	var p0:Vector3 = points[0]
+	var p1:Vector3 = p0
+	var index:int = 0
+	for i in range(1, points.size()):
+		if !points[i].is_equal_approx(p0):
+			p1 = points[i]
+			index = i
+			break
+		
+	if index == 0:
+		return true
+	
+	var v10:Vector3 = p1 - p0
+	for i in range(index + 1, points.size()):
+		if !triangle_area_x2(p0, p1, points[i]).is_zero_approx():
+			return false
+			
+	return  true
+	
+	
+	
+	

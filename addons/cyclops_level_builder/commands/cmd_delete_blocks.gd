@@ -66,10 +66,6 @@ func undo_it():
 		var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
 		
 		
-#		var mesh:ConvexVolume = ConvexVolume.new()
-#		mesh.init_from_convex_block_data(tracked_block_data[i])
-
-		#block.owner = block_owner
 		blocks_root.add_child(block)
 		block.owner = blocks_root.owner
 #		block.owner = builder.get_editor_interface().get_edited_scene_root()
