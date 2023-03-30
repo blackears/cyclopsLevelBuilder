@@ -1,0 +1,38 @@
+[gd_resource type="VisualShader" load_steps=3 format=3 uid="uid://cc5tovf48xmg1"]
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_mqcg1"]
+constant = Color(0, 0, 0, 1)
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_kvn47"]
+parameter_name = "ColorParameter"
+default_value_enabled = true
+default_value = Color(0, 0, 0, 1)
+
+[resource]
+code = "shader_type spatial;
+uniform vec4 ColorParameter : source_color = vec4(0.000000, 0.000000, 0.000000, 1.000000);
+
+
+
+void fragment() {
+// ColorConstant:2
+	vec4 n_out2p0 = vec4(0.000000, 0.000000, 0.000000, 1.000000);
+
+
+// ColorParameter:3
+	vec4 n_out3p0 = ColorParameter;
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+	EMISSION = vec3(n_out3p0.xyz);
+
+
+}
+"
+nodes/fragment/0/position = Vector2(480, 140)
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorConstant_mqcg1")
+nodes/fragment/2/position = Vector2(227.319, 156.469)
+nodes/fragment/3/node = SubResource("VisualShaderNodeColorParameter_kvn47")
+nodes/fragment/3/position = Vector2(80, 280)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 0, 5)

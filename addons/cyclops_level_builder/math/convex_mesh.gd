@@ -228,6 +228,17 @@ func append_mesh(mesh:ImmediateMesh, material:Material, color:Color = Color.WHIT
 	
 		mesh.surface_end()
 
+func append_mesh_wire(mesh:ImmediateMesh, material:Material, color:Color = Color.WHITE):
+	
+	for face in faces:
+		mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, material)
+#		print("face %s" % face.index)
+		
+		for p in face.vertices:
+			mesh.surface_add_vertex(p)
+		mesh.surface_add_vertex(face.vertices[0])
+
+		mesh.surface_end()
 
 func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 	if bounds.intersects_ray(origin, dir) == null:

@@ -258,6 +258,15 @@ func append_mesh(mesh:ImmediateMesh, material:Material, color:Color = Color.WHIT
 	
 	if convex_mesh:
 		convex_mesh.append_mesh(mesh, material, color)
+
+func append_mesh_wire(mesh:ImmediateMesh, material:Material, color:Color = Color.WHITE):
+#	if Engine.is_editor_hint():
+#		return
+
+	var convex_mesh:ConvexMesh = calc_mesh()
+	
+	if convex_mesh:
+		convex_mesh.append_mesh_wire(mesh, material, color)
 	
 
 func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:

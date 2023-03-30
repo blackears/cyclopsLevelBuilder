@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://beudd4f4c1wl8"]
+
+[ext_resource type="Shader" uid="uid://cc5tovf48xmg1" path="res://addons/cyclops_level_builder/shaders/outline_shader.tres" id="1_kqx88"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_kqx88")
+shader_parameter/ColorParameter = Color(0, 0, 0, 1)
