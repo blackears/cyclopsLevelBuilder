@@ -69,6 +69,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #
 #						var p:Vector3 = MathUtil.snap_to_grid(start_pos_local, grid_step_size)
 						base_points.append(p)
+
+						global_scene.clear_tool_mesh()					
 						global_scene.draw_loop(base_points, false)
 						return true
 						
@@ -83,6 +85,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #						#print("start_pos_local %s" % start_pos_local)
 #						var p:Vector3 = MathUtil.snap_to_grid(start_pos_local, grid_step_size)
 						base_points.append(p)
+						
+						global_scene.clear_tool_mesh()
 						global_scene.draw_loop(base_points, false)
 						return true
 						
@@ -95,6 +99,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					#print("base %s " % base_points)
 					var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
 					#print("bounding %s " % bounding_points)
+					global_scene.clear_tool_mesh()
 					global_scene.draw_loop(bounding_points, true)
 					
 					return true
@@ -139,6 +144,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var offset:Vector3 = block_drag_cur - base_points[0]
 			var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
 			
+			global_scene.clear_tool_mesh()
 			global_scene.draw_prism(bounding_points, offset)
 
 			return true

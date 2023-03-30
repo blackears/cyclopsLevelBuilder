@@ -237,6 +237,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					#var face = block.control_mesh.faces[result.face_index]
 					#var points:PackedVector3Array = block.control_mesh.get_face_points(face)
 					
+					global_scene.clear_tool_mesh()
 					global_scene.draw_loop(points, true)
 					return true
 				else:
@@ -276,6 +277,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			else:
 				p01 = Vector3(block_drag_p0_local.x, block_drag_cur.y, block_drag_p0_local.z)
 				p10 = Vector3(block_drag_cur.x, block_drag_p0_local.y, block_drag_p0_local.z)
+
+			global_scene.clear_tool_mesh()				
 			global_scene.draw_loop([block_drag_p0_local, p01, block_drag_cur, p10], true)
 
 			return true
@@ -286,7 +289,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			var grid_step_size:float = pow(2, blocks_root.grid_size)
 			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
-			
+
+			global_scene.clear_tool_mesh()			
 			global_scene.draw_cube(block_drag_p0_local, block_drag_p1_local, block_drag_cur)
 
 			return true

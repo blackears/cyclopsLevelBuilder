@@ -84,7 +84,7 @@ func _on_bn_move_pressed():
 
 
 func _on_bn_clip_pressed():
-	pass
+	editor_plugin.switch_to_tool(ToolClip.new())
 
 
 func _on_bn_vertex_pressed():

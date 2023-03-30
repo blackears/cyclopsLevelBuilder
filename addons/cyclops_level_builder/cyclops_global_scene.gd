@@ -27,90 +27,67 @@ class_name CyclopsGlobalScene
 
 @export var tool_material:Material
 #@export var selected_material:Material
+var tool_mesh:ImmediateMesh
 
 #var mesh:ImmediateMesh
 #var dirty:bool = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	#mesh = ImmediateMesh.new()
+	tool_mesh = ImmediateMesh.new()
+	$ToolInstance3D.mesh = tool_mesh
 	pass # Replace with function body.
-	
-#func rebuild_mesh():
-##	var mat:StandardMaterial3D = StandardMaterial3D.new()
-##	mat.emission = Color(1, 0, 1)
-##	mat.emission_enabled = true
-##	mat.albedo_color = Color(0, 0, 0)
-#
-#
-#	if dirty:
-#		var mesh:ImmediateMesh = ImmediateMesh.new()
-#
-##		mesh.clear_surfaces()
-#
-##		mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, vertex_material)
-#		mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, tool_material)
-##		mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, mat)
-#
-#		mesh.surface_add_vertex(Vector3(0, 0, 0))
-#		mesh.surface_add_vertex(Vector3(0, 1, 0))
-#		mesh.surface_add_vertex(Vector3(0, 1, 1))
-#
-#		mesh.surface_end()
-#
-#		$ToolInstance3D.mesh = mesh
-#
-#		dirty = false
+
 
 #func draw_loop(points:Array[Vector3], closed:bool = true):
 func draw_loop(points:PackedVector3Array, closed:bool = true):
-	var mesh:ImmediateMesh = ImmediateMesh.new()
+	#var mesh:ImmediateMesh = ImmediateMesh.new()
 	
-	mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, tool_material)
+	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, tool_material)
 
 	for p in points:
-		mesh.surface_add_vertex(p)
+		tool_mesh.surface_add_vertex(p)
 
 	if closed:		
-		mesh.surface_add_vertex(points[0])
+		tool_mesh.surface_add_vertex(points[0])
 	
-	mesh.surface_end()
+	tool_mesh.surface_end()
 	
-	$ToolInstance3D.mesh = mesh
+	#$ToolInstance3D.mesh = mesh
 
 func draw_prism(points:PackedVector3Array, extrude:Vector3):
-	var mesh:ImmediateMesh = ImmediateMesh.new()
+	#var mesh:ImmediateMesh = ImmediateMesh.new()
 
 	#Bottom loop	
-	mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, tool_material)
+	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, tool_material)
 
 	for p in points:
-		mesh.surface_add_vertex(p)
+		tool_mesh.surface_add_vertex(p)
 
-	mesh.surface_add_vertex(points[0])
+	tool_mesh.surface_add_vertex(points[0])
 	
-	mesh.surface_end()
+	tool_mesh.surface_end()
 
 	#Top loop	
-	mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, tool_material)
+	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, tool_material)
 
 	for p in points:
-		mesh.surface_add_vertex(p + extrude)
+		tool_mesh.surface_add_vertex(p + extrude)
 
-	mesh.surface_add_vertex(points[0] + extrude)
+	tool_mesh.surface_add_vertex(points[0] + extrude)
 	
-	mesh.surface_end()
+	tool_mesh.surface_end()
 	
 	#Sides
-	mesh.surface_begin(Mesh.PRIMITIVE_LINES, tool_material)
+	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINES, tool_material)
 
 	for p in points:
-		mesh.surface_add_vertex(p)
-		mesh.surface_add_vertex(p + extrude)
+		tool_mesh.surface_add_vertex(p)
+		tool_mesh.surface_add_vertex(p + extrude)
 	
-	mesh.surface_end()
+	tool_mesh.surface_end()
 	
-	$ToolInstance3D.mesh = mesh
+	#$ToolInstance3D.mesh = mesh
 		
 	
 	
@@ -124,22 +101,24 @@ func draw_rect(start:Vector3, end:Vector3):
 	var p3:Vector3 = Vector3(p2.x, p0.y, p0.z)
 	
 	
-	var mesh:ImmediateMesh = ImmediateMesh.new()
+	#var mesh:ImmediateMesh = ImmediateMesh.new()
 	
-	mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, tool_material)
+	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, tool_material)
 
-	mesh.surface_add_vertex(p0)
-	mesh.surface_add_vertex(p1)
-	mesh.surface_add_vertex(p2)
-	mesh.surface_add_vertex(p3)
-	mesh.surface_add_vertex(p0)
+	tool_mesh.surface_add_vertex(p0)
+	tool_mesh.surface_add_vertex(p1)
+	tool_mesh.surface_add_vertex(p2)
+	tool_mesh.surface_add_vertex(p3)
+	tool_mesh.surface_add_vertex(p0)
 	
-	mesh.surface_end()
+	tool_mesh.surface_end()
 	
-	$ToolInstance3D.mesh = mesh
+	#$ToolInstance3D.mesh = tool_mesh
 
 func clear_tool_mesh():
-	$ToolInstance3D.mesh = null
+	#tool_mesh = ImmediateMesh.new()
+	#$ToolInstance3D.mesh = tool_mesh
+	tool_mesh.clear_surfaces()
 	
 
 func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3):	
@@ -159,40 +138,40 @@ func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3):
 	var p110:Vector3 = Vector3(p111.x, p111.y, p000.z)
 	
 	
-	var mesh:ImmediateMesh = ImmediateMesh.new()
+	#var mesh:ImmediateMesh = ImmediateMesh.new()
 	
-	mesh.surface_begin(Mesh.PRIMITIVE_LINES, tool_material)
+	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINES, tool_material)
 
-	mesh.surface_add_vertex(p000)
-	mesh.surface_add_vertex(p001)
-	mesh.surface_add_vertex(p000)
-	mesh.surface_add_vertex(p100)
-	mesh.surface_add_vertex(p101)
-	mesh.surface_add_vertex(p001)
-	mesh.surface_add_vertex(p101)
-	mesh.surface_add_vertex(p100)
+	tool_mesh.surface_add_vertex(p000)
+	tool_mesh.surface_add_vertex(p001)
+	tool_mesh.surface_add_vertex(p000)
+	tool_mesh.surface_add_vertex(p100)
+	tool_mesh.surface_add_vertex(p101)
+	tool_mesh.surface_add_vertex(p001)
+	tool_mesh.surface_add_vertex(p101)
+	tool_mesh.surface_add_vertex(p100)
 
-	mesh.surface_add_vertex(p010)
-	mesh.surface_add_vertex(p011)
-	mesh.surface_add_vertex(p010)
-	mesh.surface_add_vertex(p110)
-	mesh.surface_add_vertex(p111)
-	mesh.surface_add_vertex(p011)
-	mesh.surface_add_vertex(p111)
-	mesh.surface_add_vertex(p110)
+	tool_mesh.surface_add_vertex(p010)
+	tool_mesh.surface_add_vertex(p011)
+	tool_mesh.surface_add_vertex(p010)
+	tool_mesh.surface_add_vertex(p110)
+	tool_mesh.surface_add_vertex(p111)
+	tool_mesh.surface_add_vertex(p011)
+	tool_mesh.surface_add_vertex(p111)
+	tool_mesh.surface_add_vertex(p110)
 	
-	mesh.surface_add_vertex(p000)
-	mesh.surface_add_vertex(p010)
-	mesh.surface_add_vertex(p100)
-	mesh.surface_add_vertex(p110)
-	mesh.surface_add_vertex(p101)
-	mesh.surface_add_vertex(p111)
-	mesh.surface_add_vertex(p001)
-	mesh.surface_add_vertex(p011)
+	tool_mesh.surface_add_vertex(p000)
+	tool_mesh.surface_add_vertex(p010)
+	tool_mesh.surface_add_vertex(p100)
+	tool_mesh.surface_add_vertex(p110)
+	tool_mesh.surface_add_vertex(p101)
+	tool_mesh.surface_add_vertex(p111)
+	tool_mesh.surface_add_vertex(p001)
+	tool_mesh.surface_add_vertex(p011)
 	
-	mesh.surface_end()
+	tool_mesh.surface_end()
 	
-	$ToolInstance3D.mesh = mesh
+	#$ToolInstance3D.mesh = mesh
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
