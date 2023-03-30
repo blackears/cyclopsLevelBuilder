@@ -67,6 +67,7 @@ static func trianglate_face(points:PackedVector3Array, normal:Vector3)->PackedVe
 
 #Returns the normal of a triangle with a length twice the area of the triangle
 static func triangle_determinant(p0:Vector3, p1:Vector3, p2:Vector3)->Vector3:
+	assert(false, "Deprecated")
 	return (p1 - p0).cross(p2 - p0)
 
 #Returns a vector pointing along the normal in the clockwise winding direction with a length equal to twice the area of the triangle
@@ -75,8 +76,10 @@ static func triangle_area_x2(p0:Vector3, p1:Vector3, p2:Vector3)->Vector3:
 	
 #Returns a vector poitning along the normal in the clockwise winding direction with a lengh equal to twice the area of the face
 static func face_area_x2(points:PackedVector3Array)->Vector3:
-	var result:Vector3
+	if points.size() <= 1:
+		return Vector3.ZERO
 	
+	var result:Vector3
 	var p0:Vector3 = points[0]
 	
 	for i in range(1, points.size() - 1):
@@ -104,6 +107,9 @@ static func get_longest_axis(vector:Vector3)->Axis:
 		return Axis.Z
 		
 static func calc_bounds(points:PackedVector3Array)->AABB:
+	if points.is_empty():
+		return AABB(Vector3.ZERO, Vector3.ZERO)
+	
 	var result:AABB = AABB(points[0], Vector3.ZERO)
 	for i in range(1, points.size()):
 		result = result.expand(points[i])

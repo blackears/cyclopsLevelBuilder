@@ -26,7 +26,7 @@ class_name CommandDaleteBlocks
 extends CyclopsCommand
 
 var blocks_root:CyclopsBlocks
-var block_owner:Node
+#var block_owner:Node
 #var builder:CyclopsLevelBuilder
 
 
@@ -65,10 +65,9 @@ func undo_it():
 	for i in tracked_block_data.size():
 		var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
 		
-		
 		blocks_root.add_child(block)
-		block.owner = blocks_root.owner
-#		block.owner = builder.get_editor_interface().get_edited_scene_root()
+#		block.owner = blocks_root.owner
+		block.owner = builder.get_editor_interface().get_edited_scene_root()
 		block.block_data = tracked_block_data[i]
 		block.name = block_names[i]
 		block.selected = block_selected[i]

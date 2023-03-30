@@ -179,7 +179,9 @@ func contains_point(point:Vector3)->bool:
 
 func calc_bounds()->AABB:
 	var points:PackedVector3Array = calc_convex_hull_points()
-				
+	if points.is_empty():
+		return AABB(Vector3.ZERO, Vector3.ZERO)
+	
 	var result:AABB = AABB(points[0], Vector3.ZERO)
 	for p in points:
 		result = result.expand(p)
@@ -203,6 +205,9 @@ func calc_convex_hull_points()->PackedVector3Array:
 	return points
 
 func calc_mesh()->ConvexMesh:
+	if !bounds.has_volume():
+		return null
+	
 	var points:PackedVector3Array = calc_convex_hull_points()
 #	print("points %s" % points)
 	
@@ -251,7 +256,8 @@ func append_mesh(mesh:ImmediateMesh, material:Material, color:Color = Color.WHIT
 
 	var convex_mesh:ConvexMesh = calc_mesh()
 	
-	convex_mesh.append_mesh(mesh, material, color)
+	if convex_mesh:
+		convex_mesh.append_mesh(mesh, material, color)
 	
 
 func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:

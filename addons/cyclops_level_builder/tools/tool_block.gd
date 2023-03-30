@@ -78,6 +78,9 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 			cmd_move_face.tracked_block = result.object
 			cmd_move_face.tracked_block_data = result.object.block_data
 			cmd_move_face.lock_uvs = builder.lock_uvs
+			cmd_move_face.blocks_root = builder.active_node
+			cmd_move_face.builder = builder
+#			cmd_move_face.blocks_owner = builder.get_editor_interface().get_edited_scene_root()
 			move_face_origin = result.position
 			cmd_move_face.move_dir_normal = result.object.control_mesh.faces[result.face_id].plane.normal
 			

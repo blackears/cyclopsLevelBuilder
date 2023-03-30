@@ -26,6 +26,7 @@ class_name CyclopsCommand
 extends RefCounted
 
 var command_name:String = ""
+var builder:CyclopsLevelBuilder
 
 func add_to_undo_manager(undo_manager:EditorUndoRedoManager):
 	undo_manager.create_action("Move blocks", UndoRedo.MERGE_DISABLE)

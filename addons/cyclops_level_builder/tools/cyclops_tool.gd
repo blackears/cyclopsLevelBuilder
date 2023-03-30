@@ -45,7 +45,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		if e.keycode == KEY_X:
 			var cmd:CommandDaleteBlocks = CommandDaleteBlocks.new()
 			cmd.blocks_root = blocks_root
-			cmd.block_owner = builder.get_editor_interface().get_edited_scene_root()
+			cmd.builder = builder
+			#cmd.block_owner = builder.get_editor_interface().get_edited_scene_root()
 			#cmd.builder = builder
 			
 			for child in blocks_root.get_children():

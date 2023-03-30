@@ -29,7 +29,10 @@ var move_dir_normal:Vector3
 var move_amount:float
 
 var blocks_root:CyclopsBlocks
-var block_owner:Node
+#var block_owner:Node
+#var builder:CyclopsLevelBuilder
+var block_name:String
+var block_selected:bool
 
 var tracked_block:CyclopsBlock
 var tracked_block_data:ConvexBlockData
@@ -63,13 +66,26 @@ func do_it_intermediate():
 	move_to(move_dir_normal * move_amount, true)
 
 func do_it():
+	block_name = tracked_block.name
+	block_selected = tracked_block.selected
+	
 	move_to(move_dir_normal * move_amount, false)
 
 func undo_it():
 	if deleted:
+		var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
 		
+		blocks_root.add_child(block)
+		block.owner = blocks_root.owner
+#		block.owner = builder.get_editor_interface().get_edited_scene_root()
+		block.block_data = tracked_block_data
+		block.name = block_name
+		block.selected = block_selected
+		
+		tracked_block = block
 		
 		deleted = false
-		pass
+		return
+	
 	move_to(Vector3.ZERO, false)
 
