@@ -25,17 +25,15 @@
 class_name CommandClipBlock
 extends CyclopsCommand
 
-#var blocks_root:CyclopsBlocks
+#Public data to set before activating command
 var blocks_root_path:NodePath
 var block_path:NodePath
-
-var block_sibling_name:String
-
-#var clipped_block:CyclopsBlock
 var cut_plane:Plane
 var uv_transform:Transform2D = Transform2D.IDENTITY
 var material_id:int = 0
 
+#Private
+var block_sibling_name:String
 var old_block_data:ConvexBlockData
 var block_sibling_path:NodePath
 

@@ -22,57 +22,50 @@
 # SOFTWARE.
 
 @tool
-class_name CommandDaleteBlocks
+class_name CommandDeleteBlocks
 extends CyclopsCommand
 
-var blocks_root:CyclopsBlocks
-#var block_owner:Node
-#var builder:CyclopsLevelBuilder
+#Public data to set before activating command
+var blocks_root_path:NodePath
 
-
-var tracked_blocks:Array[CyclopsBlock]
+#Private
+var blocks_to_delete:Array[NodePath]
 var tracked_block_data:Array[ConvexBlockData]
 var block_names:Array[String]
 var block_selected:Array[bool]
 
 func _init():
-	command_name = "Dalete blocks"
+	command_name = "Delete blocks"
 
 #Add blocks to be moved here
-func add_block(block:CyclopsBlock):
-	tracked_blocks.append(block)
+func add_block(block_path:NodePath):
+	blocks_to_delete.append(block_path)
+	
+	var block:CyclopsBlock = builder.get_node(block_path)
 	block_names.append(block.name)
 	block_selected.append(block.selected)
 	tracked_block_data.append(block.block_data.duplicate())
 
-#Moves all blocks from the start position by this amount
-#func move_to(offset:Vector3):
-#	for block_idx in tracked_blocks.size():
-#		var ctl_mesh:ConvexVolume = ConvexVolume.new()
-#		ctl_mesh.init_from_convex_block_data(tracked_block_data[block_idx])
-#		ctl_mesh.translate(offset, lock_uvs)
-#		var result_data:ConvexBlockData = ctl_mesh.to_convex_block_data()
-#		tracked_blocks[block_idx].block_data = result_data
-
 func do_it():
-	print("doing delete")
-	for block in tracked_blocks:
+	#print("doing delete")
+	for block_path in blocks_to_delete:
+		var block:CyclopsBlock = builder.get_node(block_path)
 		block.queue_free()
-	tracked_blocks = []
 
 func undo_it():
-	print("undoing delete")
-	for i in tracked_block_data.size():
+	#print("undoing delete")
+	print("undoing delete %s" % blocks_root_path)
+	var blocks_root:CyclopsBlocks = builder.get_node(blocks_root_path)
+	
+	for i in blocks_to_delete.size():
 		var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
-		
-		blocks_root.add_child(block)
-#		block.owner = blocks_root.owner
-		block.owner = builder.get_editor_interface().get_edited_scene_root()
 		block.block_data = tracked_block_data[i]
 		block.name = block_names[i]
 		block.selected = block_selected[i]
 		
-		tracked_blocks.append(block)
+		blocks_root.add_child(block)
+		block.owner = builder.get_editor_interface().get_edited_scene_root()
+		
 
 		
 	

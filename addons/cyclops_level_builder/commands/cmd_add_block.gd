@@ -25,12 +25,13 @@
 class_name CommandAddBlock2
 extends CyclopsCommand
 
-var blocks_root_inst_id:int
+#Public data to set before activating command
+var blocks_root_path:NodePath
 var block_name:String
-var block_owner:Node
 var bounds:AABB
-#	var block:CyclopsBlock
-var block_inst_id:int
+
+#Private data
+var block_path:NodePath
 
 func _init():
 	command_name = "Add block"
@@ -38,21 +39,21 @@ func _init():
 func do_it():
 	var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
 	
-	var blocks_root = instance_from_id(blocks_root_inst_id)
+	var blocks_root:CyclopsBlocks = builder.get_node(blocks_root_path)
 	blocks_root.add_child(block)
-	block.owner = block_owner
+	block.owner = builder.get_editor_interface().get_edited_scene_root()
 	block.name = block_name
 	
 	var mesh:ConvexVolume = ConvexVolume.new()
 	mesh.init_block(bounds)
 
 	block.block_data = mesh.to_convex_block_data()
-	block_inst_id = block.get_instance_id()
+	block_path = block.get_path()
 
 #	print("AddBlockCommand do_it() %s %s" % [block_inst_id, bounds])
 	
 func undo_it():
-	var block = instance_from_id(block_inst_id)
+	var block:CyclopsBlock = builder.get_node(block_path)
 	block.queue_free()
 
 #	print("AddBlockCommand undo_it()")

@@ -42,24 +42,23 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 		var blocks_root:CyclopsBlocks = self.builder.active_node
 		
-		if e.keycode == KEY_X:
-			var cmd:CommandDaleteBlocks = CommandDaleteBlocks.new()
-			cmd.blocks_root = blocks_root
-			cmd.builder = builder
-			#cmd.block_owner = builder.get_editor_interface().get_edited_scene_root()
-			#cmd.builder = builder
-			
-			for child in blocks_root.get_children():
-				if child is CyclopsBlock:
-					var block:CyclopsBlock = child
-					if block.selected:
-						cmd.add_block(block)
-			
-			if cmd.tracked_blocks.size() > 0:
-				var undo:EditorUndoRedoManager = builder.get_undo_redo()
-				cmd.add_to_undo_manager(undo)
-			
-			return true
+		if e.is_pressed():
+			if e.keycode == KEY_X:
+				var cmd:CommandDeleteBlocks = CommandDeleteBlocks.new()
+				cmd.blocks_root_path = blocks_root.get_path()
+				cmd.builder = builder
+				
+				for child in blocks_root.get_children():
+					if child is CyclopsBlock:
+						var block:CyclopsBlock = child
+						if block.selected:
+							cmd.add_block(block.get_path())
+				
+				if cmd.blocks_to_delete.size() > 0:
+					var undo:EditorUndoRedoManager = builder.get_undo_redo()
+					cmd.add_to_undo_manager(undo)
+				
+				return true
 	
 	return false
 

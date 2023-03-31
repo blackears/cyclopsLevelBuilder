@@ -74,24 +74,24 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 			drag_style = DragStyle.MOVE_FACE
 			
 			cmd_move_face = CommandMoveFace.new()
-			cmd_move_face.face_id = result.face_id
-			cmd_move_face.tracked_block = result.object
-			cmd_move_face.tracked_block_data = result.object.block_data
-			cmd_move_face.lock_uvs = builder.lock_uvs
-			cmd_move_face.blocks_root = builder.active_node
 			cmd_move_face.builder = builder
-#			cmd_move_face.blocks_owner = builder.get_editor_interface().get_edited_scene_root()
-			move_face_origin = result.position
+			cmd_move_face.blocks_root_path = builder.active_node.get_path()
+			cmd_move_face.block_path = result.object.get_path()
+			cmd_move_face.face_id = result.face_id
+			cmd_move_face.lock_uvs = builder.lock_uvs
 			cmd_move_face.move_dir_normal = result.object.control_mesh.faces[result.face_id].plane.normal
+
+			move_face_origin = result.position
 			
 		elif result.object.selected:
 			drag_style = DragStyle.MOVE_BLOCK
 			
 			cmd_move_blocks = CommandMoveBlocks.new()
+			cmd_move_blocks.builder = builder
 			cmd_move_blocks.lock_uvs = builder.lock_uvs
 			for child in blocks_root.get_children():
 				if child is CyclopsBlock and child.selected:
-					cmd_move_blocks.add_block(child)
+					cmd_move_blocks.add_block(child.get_path())
 		else:
 			drag_style = DragStyle.BLOCK_BASE
 
@@ -175,20 +175,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					if bounds.has_volume():
 						var command:CommandAddBlock2 = CommandAddBlock2.new()
 						
-						#var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
-						command.block_name = GeneralUtil.find_unique_name(builder.active_node, "Block_")
-						
-#						var name_idx:int = 0
-#						while true:
-#							var name = "Block_%s" % name_idx
-#							if !builder.active_node.find_child(name, false):
-##								block.name = name
-#								command.block_name = name
-#								break
-#							name_idx += 1
-
-						command.blocks_root_inst_id = blocks_root.get_instance_id()
-						command.block_owner = builder.get_editor_interface().get_edited_scene_root()
+						command.builder = builder
+						command.blocks_root_path = blocks_root.get_path()
+						command.block_name = GeneralUtil.find_unique_name(builder.active_node, "Block_")						
 						command.bounds = bounds
 
 						var undo:EditorUndoRedoManager = builder.get_undo_redo()

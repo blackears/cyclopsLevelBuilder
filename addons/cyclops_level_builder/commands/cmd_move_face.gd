@@ -25,20 +25,22 @@
 class_name CommandMoveFace
 extends CyclopsCommand
 
+#Public data to set before activating command
+var blocks_root_path:NodePath
+var block_path:NodePath
 var move_dir_normal:Vector3
 var move_amount:float
-
-var blocks_root:CyclopsBlocks
-#var block_owner:Node
-#var builder:CyclopsLevelBuilder
-var block_name:String
-var block_selected:bool
-
-var tracked_block:CyclopsBlock
-var tracked_block_data:ConvexBlockData
 var face_id:int
 var lock_uvs:bool = false
+
+
+#Private
+var block_name:String
+var block_selected:bool
+var tracked_block_data:ConvexBlockData
+
 var deleted:bool = false
+
 
 func _init():
 	command_name = "Move face"
@@ -49,25 +51,39 @@ func move_to(offset:Vector3, intermediate:bool):
 	var ctl_mesh:ConvexVolume = ConvexVolume.new()
 	ctl_mesh.init_from_convex_block_data(tracked_block_data)
 	ctl_mesh.translate_face(face_id, offset, lock_uvs)
+
+	var block:CyclopsBlock = builder.get_node(block_path)
 	
 	if ctl_mesh.is_empty():
 		if !intermediate:
-			tracked_block.queue_free()
+			block.queue_free()
 			deleted = true
 		return
 	
 	ctl_mesh.remove_unused_planes()
 	
 	var result_data:ConvexBlockData = ctl_mesh.to_convex_block_data()
-	tracked_block.block_data = result_data
+	block.block_data = result_data
 
 	
 func do_it_intermediate():
+	if !tracked_block_data:
+		var block:CyclopsBlock = builder.get_node(block_path)
+		
+		block_name = block.name
+		block_selected = block.selected
+		tracked_block_data = block.block_data
+
 	move_to(move_dir_normal * move_amount, true)
 
 func do_it():
-	block_name = tracked_block.name
-	block_selected = tracked_block.selected
+	
+	if !tracked_block_data:
+		var block:CyclopsBlock = builder.get_node(block_path)
+		
+		block_name = block.name
+		block_selected = block.selected
+		tracked_block_data = block.block_data
 	
 	move_to(move_dir_normal * move_amount, false)
 
@@ -75,14 +91,12 @@ func undo_it():
 	if deleted:
 		var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
 		
+		var blocks_root:CyclopsBlocks = builder.get_node(blocks_root_path)
 		blocks_root.add_child(block)
-		block.owner = blocks_root.owner
-#		block.owner = builder.get_editor_interface().get_edited_scene_root()
+		block.owner = builder.get_editor_interface().get_edited_scene_root()
 		block.block_data = tracked_block_data
 		block.name = block_name
 		block.selected = block_selected
-		
-		tracked_block = block
 		
 		deleted = false
 		return
