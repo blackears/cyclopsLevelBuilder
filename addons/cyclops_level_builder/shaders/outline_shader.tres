@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=3 format=3 uid="uid://cc5tovf48xmg1"]
+[gd_resource type="VisualShader" load_steps=5 format=3 uid="uid://cc5tovf48xmg1"]
 
 [sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_mqcg1"]
 constant = Color(0, 0, 0, 1)
@@ -8,9 +8,15 @@ parameter_name = "ColorParameter"
 default_value_enabled = true
 default_value = Color(0, 0, 0, 1)
 
+[sub_resource type="VisualShaderNodeLinearSceneDepth" id="VisualShaderNodeLinearSceneDepth_d3ao7"]
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_pyrux"]
+default_input_values = [0, 0.0, 1, 1.0]
+
 [resource]
 code = "shader_type spatial;
 uniform vec4 ColorParameter : source_color = vec4(0.000000, 0.000000, 0.000000, 1.000000);
+uniform sampler2D depth_tex_frg_4 : hint_depth_texture;
 
 
 
@@ -23,16 +29,38 @@ void fragment() {
 	vec4 n_out3p0 = ColorParameter;
 
 
+	float n_out4p0;
+// LinearSceneDepth:4
+	{
+		float __log_depth = textureLod(depth_tex_frg_4, SCREEN_UV, 0.0).x;
+		vec3 __depth_ndc = vec3(SCREEN_UV * 2.0 - 1.0, __log_depth);
+		vec4 __depth_view = INV_PROJECTION_MATRIX * vec4(__depth_ndc, 1.0);
+		__depth_view.xyz /= __depth_view.w;
+		n_out4p0 = -__depth_view.z;
+	}
+
+
+// FloatOp:5
+	float n_in5p1 = 1.00000;
+	float n_out5p0 = n_out4p0 + n_in5p1;
+
+
 // Output:0
 	ALBEDO = vec3(n_out2p0.xyz);
 	EMISSION = vec3(n_out3p0.xyz);
+	NORMAL_MAP_DEPTH = n_out5p0;
 
 
 }
 "
+graph_offset = Vector2(-10.4364, 103.709)
 nodes/fragment/0/position = Vector2(480, 140)
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorConstant_mqcg1")
 nodes/fragment/2/position = Vector2(227.319, 156.469)
 nodes/fragment/3/node = SubResource("VisualShaderNodeColorParameter_kvn47")
 nodes/fragment/3/position = Vector2(80, 280)
-nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 0, 5)
+nodes/fragment/4/node = SubResource("VisualShaderNodeLinearSceneDepth_d3ao7")
+nodes/fragment/4/position = Vector2(0, 560)
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatOp_pyrux")
+nodes/fragment/5/position = Vector2(260, 520)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 0, 5, 4, 0, 5, 0, 5, 0, 0, 10)

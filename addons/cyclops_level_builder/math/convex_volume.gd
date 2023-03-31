@@ -78,6 +78,10 @@ func init_prisim(base_points:Array[Vector3], extrude_dir:Vector3):
 	
 	bounds = calc_bounds()
 
+func add_face(plane:Plane, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0):	
+	faces.append(PlaneInfo.new(unused_id(), plane, uv_transform, material_id))
+	remove_unused_planes()
+	bounds = calc_bounds()
 
 func init_from_convex_block_data(data:ConvexBlockData):
 	faces = []
