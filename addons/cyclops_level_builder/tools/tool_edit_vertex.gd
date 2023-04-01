@@ -49,8 +49,8 @@ func setup_tool():
 	
 	var blocks_root:CyclopsBlocks = builder.active_node
 	for child in blocks_root.get_children():
-		if child is CyclopsBlock:
-			var block:CyclopsBlock = child
+		if child is CyclopsConvexBlock:
+			var block:CyclopsConvexBlock = child
 			if block.selected:
 				var points:PackedVector3Array = block.control_mesh.calc_convex_hull_points()
 

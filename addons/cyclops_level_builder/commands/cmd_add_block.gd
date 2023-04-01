@@ -37,7 +37,7 @@ func _init():
 	command_name = "Add block"
 
 func do_it():
-	var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
+	var block:CyclopsConvexBlock = preload("../controls/cyclops_convex_block.gd").new()
 	
 	var blocks_root:CyclopsBlocks = builder.get_node(blocks_root_path)
 	blocks_root.add_child(block)
@@ -53,7 +53,7 @@ func do_it():
 #	print("AddBlockCommand do_it() %s %s" % [block_inst_id, bounds])
 	
 func undo_it():
-	var block:CyclopsBlock = builder.get_node(block_path)
+	var block:CyclopsConvexBlock = builder.get_node(block_path)
 	block.queue_free()
 
 #	print("AddBlockCommand undo_it()")

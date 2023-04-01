@@ -49,8 +49,8 @@ func _ready():
 	add_child(mesh_wire_instance)
 
 	for node in get_children():
-		if node is CyclopsBlock:
-			var block:CyclopsBlock = node
+		if node is CyclopsConvexBlock:
+			var block:CyclopsConvexBlock = node
 			block.mesh_changed.connect(on_child_mesh_changed)
 			
 #			print("adding child %s" % node.name)
@@ -61,16 +61,16 @@ func on_child_mesh_changed():
 	
 
 func on_child_entered_tree(node:Node):
-	if node is CyclopsBlock:
-		var block:CyclopsBlock = node
+	if node is CyclopsConvexBlock:
+		var block:CyclopsConvexBlock = node
 		block.mesh_changed.connect(on_child_mesh_changed)
 		
 #		print("on_child_entered_tree %s" % node.name)
 		dirty = true
 	
 func on_child_exiting_tree(node:Node):
-	if node is CyclopsBlock:
-		var block:CyclopsBlock = node
+	if node is CyclopsConvexBlock:
+		var block:CyclopsConvexBlock = node
 		block.mesh_changed.disconnect(on_child_mesh_changed)
 
 #		print("on_child_exited_tree %s" % node.name)
@@ -82,8 +82,8 @@ func rebuild_mesh():
 	var mesh_wire:ImmediateMesh = ImmediateMesh.new()
 	
 	for child in get_children():
-		if child is CyclopsBlock:
-			var block:CyclopsBlock = child
+		if child is CyclopsConvexBlock:
+			var block:CyclopsConvexBlock = child
 			if block.control_mesh:
 				var color:Color = selection_color if block.selected else Color.WHITE
 				block.control_mesh.append_mesh(mesh, default_material, color)
@@ -109,7 +109,7 @@ func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 	var best_result:IntersectResults
 		
 	for child in get_children():
-		if child is CyclopsBlock:
+		if child is CyclopsConvexBlock:
 			var result:IntersectResults = child.intersect_ray_closest(origin, dir)
 			if result:
 				if !best_result or result.distance_squared < best_result.distance_squared:

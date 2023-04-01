@@ -40,14 +40,14 @@ func _init():
 func add_block(block_path:NodePath):
 	blocks_to_move.append(block_path)
 	
-	var block:CyclopsBlock = builder.get_node(block_path)
+	var block:CyclopsConvexBlock = builder.get_node(block_path)
 	#tracked_blocks.append(block)
 	tracked_block_data.append(block.block_data.duplicate())
 
 #Moves all blocks from the start position by this amount
 func move_to(offset:Vector3):
 	for i in blocks_to_move.size():
-		var block:CyclopsBlock = builder.get_node(blocks_to_move[i])
+		var block:CyclopsConvexBlock = builder.get_node(blocks_to_move[i])
 		
 		var ctl_mesh:ConvexVolume = ConvexVolume.new()
 		ctl_mesh.init_from_convex_block_data(tracked_block_data[i])

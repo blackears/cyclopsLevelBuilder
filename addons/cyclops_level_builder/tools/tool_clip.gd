@@ -30,7 +30,7 @@ var tool_state:ToolState = ToolState.READY
 
 var clip_points:PackedVector3Array
 var clip_normals:PackedVector3Array
-var clip_block:CyclopsBlock
+var clip_block:CyclopsConvexBlock
 
 func has_clip_point(point:Vector3)->bool:
 	for p in clip_points:

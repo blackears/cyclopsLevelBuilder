@@ -49,8 +49,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				cmd.builder = builder
 				
 				for child in blocks_root.get_children():
-					if child is CyclopsBlock:
-						var block:CyclopsBlock = child
+					if child is CyclopsConvexBlock:
+						var block:CyclopsConvexBlock = child
 						if block.selected:
 							cmd.add_block(block.get_path())
 				

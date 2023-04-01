@@ -55,7 +55,7 @@ var active_node:CyclopsBlocks:
 
 func _enter_tree():
 	add_custom_type("CyclopsBlocks", "Node3D", preload("controls/cyclops_blocks.gd"), preload("controls/cyclops_blocks_icon.png"))
-	add_custom_type("CyclopsBlock", "Node", preload("controls/cyclops_block.gd"), preload("controls/cyclops_blocks_icon.png"))
+	add_custom_type("CyclopsConvexBlock", "Node", preload("controls/cyclops_convex_block.gd"), preload("controls/cyclops_blocks_icon.png"))
 	#add_custom_type("GeometryBrush", "Node3D", preload("controls/geometry_brush.tscn"), preload("controls/geometryBrushIcon.png"))
 
 	add_autoload_singleton(AUTOLOAD_NAME, "res://addons/cyclops_level_builder/cyclops_global_scene.tscn")
@@ -86,7 +86,7 @@ func _enter_tree():
 func find_blocks_root(node:Node)->CyclopsBlocks:
 	if node is CyclopsBlocks:
 		return node
-	if node is CyclopsBlock:
+	if node is CyclopsConvexBlock:
 		return find_blocks_root(node.get_parent())
 	return null
 
@@ -131,7 +131,7 @@ func _exit_tree():
 	toolbar.queue_free()
 
 func _handles(object:Object):
-	return object is CyclopsBlocks or object is CyclopsBlock
+	return object is CyclopsBlocks or object is CyclopsConvexBlock
 
 func _forward_3d_draw_over_viewport(viewport_control:Control):
 	#Draw on top of viweport here

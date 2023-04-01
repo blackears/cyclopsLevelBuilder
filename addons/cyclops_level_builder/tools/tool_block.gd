@@ -90,7 +90,7 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 			cmd_move_blocks.builder = builder
 			cmd_move_blocks.lock_uvs = builder.lock_uvs
 			for child in blocks_root.get_children():
-				if child is CyclopsBlock and child.selected:
+				if child is CyclopsConvexBlock and child.selected:
 					cmd_move_blocks.add_block(child.get_path())
 		else:
 			drag_style = DragStyle.BLOCK_BASE
@@ -145,8 +145,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 							result.object.selected = !result.object.selected
 						else:
 							for child in blocks_root.get_children():
-								if child is CyclopsBlock:
-									var block:CyclopsBlock = child
+								if child is CyclopsConvexBlock:
+									var block:CyclopsConvexBlock = child
 									block.selected = block == result.object
 						pass
 					
@@ -220,7 +220,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				#block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
 				var result:IntersectResults = blocks_root.intersect_ray_closest(origin, dir)
 				if result:
-					var block:CyclopsBlock = result.object
+					var block:CyclopsConvexBlock = result.object
 					var convex_mesh:ConvexMesh = block.control_mesh.calc_mesh()
 					var points:PackedVector3Array = convex_mesh.get_face_points(result.face_id)
 					#var face = block.control_mesh.faces[result.face_index]

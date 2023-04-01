@@ -42,7 +42,7 @@ func _init():
 
 func do_it():
 	var blocks_root:CyclopsBlocks = builder.get_node(blocks_root_path)
-	var block:CyclopsBlock = builder.get_node(block_path)
+	var block:CyclopsConvexBlock = builder.get_node(block_path)
 	
 	old_block_data = block.block_data.duplicate()
 	
@@ -61,7 +61,7 @@ func do_it():
 	block.block_data = vol0.to_convex_block_data()
 	
 	#Create second block
-	var block_sibling:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
+	var block_sibling:CyclopsConvexBlock = preload("../controls/cyclops_convex_block.gd").new()
 	
 	blocks_root.add_child(block_sibling)
 	block_sibling.owner = builder.get_editor_interface().get_edited_scene_root()
@@ -72,10 +72,10 @@ func do_it():
 	
 
 func undo_it():
-	var block:CyclopsBlock = builder.get_node(block_path)
+	var block:CyclopsConvexBlock = builder.get_node(block_path)
 	block.block_data = old_block_data
 	
-	var block_sibling:CyclopsBlock = builder.get_node(block_sibling_path)
+	var block_sibling:CyclopsConvexBlock = builder.get_node(block_sibling_path)
 	block_sibling.queue_free()
 	
 	

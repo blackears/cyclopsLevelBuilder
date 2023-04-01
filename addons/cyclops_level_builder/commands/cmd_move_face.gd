@@ -52,7 +52,7 @@ func move_to(offset:Vector3, intermediate:bool):
 	ctl_mesh.init_from_convex_block_data(tracked_block_data)
 	ctl_mesh.translate_face(face_id, offset, lock_uvs)
 
-	var block:CyclopsBlock = builder.get_node(block_path)
+	var block:CyclopsConvexBlock = builder.get_node(block_path)
 	
 	if ctl_mesh.is_empty():
 		if !intermediate:
@@ -68,7 +68,7 @@ func move_to(offset:Vector3, intermediate:bool):
 	
 func do_it_intermediate():
 	if !tracked_block_data:
-		var block:CyclopsBlock = builder.get_node(block_path)
+		var block:CyclopsConvexBlock = builder.get_node(block_path)
 		
 		block_name = block.name
 		block_selected = block.selected
@@ -79,7 +79,7 @@ func do_it_intermediate():
 func do_it():
 	
 	if !tracked_block_data:
-		var block:CyclopsBlock = builder.get_node(block_path)
+		var block:CyclopsConvexBlock = builder.get_node(block_path)
 		
 		block_name = block.name
 		block_selected = block.selected
@@ -89,7 +89,7 @@ func do_it():
 
 func undo_it():
 	if deleted:
-		var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
+		var block:CyclopsConvexBlock = preload("../controls/cyclops_convex_block.gd").new()
 		
 		var blocks_root:CyclopsBlocks = builder.get_node(blocks_root_path)
 		blocks_root.add_child(block)

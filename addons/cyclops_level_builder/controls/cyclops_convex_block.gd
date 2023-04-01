@@ -23,7 +23,7 @@
 
 @tool
 extends Node
-class_name CyclopsBlock
+class_name CyclopsConvexBlock
 
 signal mesh_changed
 

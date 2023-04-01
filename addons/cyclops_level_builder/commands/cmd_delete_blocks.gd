@@ -41,7 +41,7 @@ func _init():
 func add_block(block_path:NodePath):
 	blocks_to_delete.append(block_path)
 	
-	var block:CyclopsBlock = builder.get_node(block_path)
+	var block:CyclopsConvexBlock = builder.get_node(block_path)
 	block_names.append(block.name)
 	block_selected.append(block.selected)
 	tracked_block_data.append(block.block_data.duplicate())
@@ -49,7 +49,7 @@ func add_block(block_path:NodePath):
 func do_it():
 	#print("doing delete")
 	for block_path in blocks_to_delete:
-		var block:CyclopsBlock = builder.get_node(block_path)
+		var block:CyclopsConvexBlock = builder.get_node(block_path)
 		block.queue_free()
 
 func undo_it():
@@ -58,7 +58,7 @@ func undo_it():
 	var blocks_root:CyclopsBlocks = builder.get_node(blocks_root_path)
 	
 	for i in blocks_to_delete.size():
-		var block:CyclopsBlock = preload("../controls/cyclops_block.gd").new()
+		var block:CyclopsConvexBlock = preload("../controls/cyclops_convex_block.gd").new()
 		block.block_data = tracked_block_data[i]
 		block.name = block_names[i]
 		block.selected = block_selected[i]
