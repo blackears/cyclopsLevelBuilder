@@ -43,6 +43,17 @@ static func closest_point_on_line(ray_origin:Vector3, ray_dir:Vector3, line_orig
 	var w_perp:Vector3 = ray_dir.cross(a)
 	return intersect_plane(line_origin, line_dir, ray_origin, w_perp)
 
+#Shortest distance from point to given ray.  Returns NAN if point is behind origin of ray.
+static func distance_to_ray(ray_origin:Vector3, ray_dir:Vector3, point:Vector3):
+	var offset = point - ray_origin
+	var parallel:Vector3 = offset.project(ray_dir)
+	if parallel.dot(ray_dir) < 0:
+		return NAN
+		
+	var perp:Vector3 = offset - parallel	
+	return perp.length()
+	
+
 static func trianglate_face(points:PackedVector3Array, normal:Vector3)->PackedVector3Array:
 	var result:PackedVector3Array
 	
@@ -64,11 +75,6 @@ static func trianglate_face(points:PackedVector3Array, normal:Vector3)->PackedVe
 				break
 	
 	return result
-
-#Returns the normal of a triangle with a length twice the area of the triangle
-static func triangle_determinant(p0:Vector3, p1:Vector3, p2:Vector3)->Vector3:
-	assert(false, "Deprecated")
-	return (p1 - p0).cross(p2 - p0)
 
 #Returns a vector pointing along the normal in the clockwise winding direction with a length equal to twice the area of the triangle
 static func triangle_area_x2(p0:Vector3, p1:Vector3, p2:Vector3)->Vector3:

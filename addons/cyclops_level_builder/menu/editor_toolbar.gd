@@ -88,7 +88,7 @@ func _on_bn_clip_pressed():
 
 
 func _on_bn_vertex_pressed():
-	pass
+	editor_plugin.switch_to_tool(ToolEditVertex.new())
 
 
 func _on_bn_edge_pressed():

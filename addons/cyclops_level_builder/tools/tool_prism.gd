@@ -33,6 +33,13 @@ var base_points:PackedVector3Array
 var block_drag_cur:Vector3
 
 
+func _activate(builder:CyclopsLevelBuilder):
+	super._activate(builder)
+
+	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
+	global_scene.clear_tool_mesh()
+	
+
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
 	var blocks_root:CyclopsBlocks = self.builder.active_node
 	var grid_step_size:float = pow(2, blocks_root.grid_size)
@@ -63,11 +70,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						floor_normal = result.normal
 
 						var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
-#						var start_pos:Vector3 = result.position
-#						var w2l = blocks_root.global_transform.inverse()
-#						var start_pos_local:Vector3 = w2l * start_pos
 #
-#						var p:Vector3 = MathUtil.snap_to_grid(start_pos_local, grid_step_size)
 						base_points.append(p)
 
 						global_scene.clear_tool_mesh()					
@@ -78,12 +81,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						floor_normal = Vector3.UP
 						
 						var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
-#						var start_pos:Vector3 = origin + builder.block_create_distance * dir
-#						var w2l = blocks_root.global_transform.inverse()
-#						var start_pos_local:Vector3 = w2l * start_pos
-#
-#						#print("start_pos_local %s" % start_pos_local)
-#						var p:Vector3 = MathUtil.snap_to_grid(start_pos_local, grid_step_size)
 						base_points.append(p)
 						
 						global_scene.clear_tool_mesh()
@@ -133,8 +130,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		var w2l = blocks_root.global_transform.inverse()
 		var origin_local:Vector3 = w2l * origin
 		var dir_local:Vector3 = w2l.basis * dir
-
-		#var p:Vector3 = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
 		
 		if tool_state == ToolState.DRAG_HEIGHT:
 			block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, base_points[0], floor_normal)

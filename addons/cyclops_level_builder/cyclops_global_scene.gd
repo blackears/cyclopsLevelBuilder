@@ -28,11 +28,10 @@ class_name CyclopsGlobalScene
 @export var tool_material:Material
 #@export var selected_material:Material
 var tool_mesh:ImmediateMesh
-var vertex_size:float = .05
+#var vertex_size:float = .05
 
 var unit_sphere:GeometryMesh
-#var mesh:ImmediateMesh
-#var dirty:bool = true
+var builder:CyclopsLevelBuilder
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -184,8 +183,12 @@ func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3):
 	#$ToolInstance3D.mesh = mesh
 
 func draw_vertex(position:Vector3):
-	var xform:Transform3D = Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * vertex_size), position)
+	var xform:Transform3D = Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * builder.handle_point_radius), position)
 	draw_sphere(xform)
+
+func draw_points(points:PackedVector3Array):
+	for p in points:
+		draw_vertex(p)
 
 func draw_sphere(xform:Transform3D = Transform3D.IDENTITY, segs_lat:int = 6, segs_long:int = 8):
 #	var geo_mesh:GeometryMesh = MathGeometry.unit_sphere()

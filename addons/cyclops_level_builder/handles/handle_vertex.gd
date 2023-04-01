@@ -22,49 +22,14 @@
 # SOFTWARE.
 
 @tool
-extends Resource
-class_name CyclopsTool
+extends CyclopsTool
+class_name HandleVertex
 
-var builder:CyclopsLevelBuilder
-
-#func _init(_editorPlugin:EditorPlugin):
-#	editorPlugin = _editorPlugin
-
-func _activate(_builder:CyclopsLevelBuilder):
-	builder = _builder
-	
-func _deactivate():
-	pass
-
-func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
-	if event is InputEventKey:
-		var e:InputEventKey = event
-
-		var blocks_root:CyclopsBlocks = self.builder.active_node
-		
-		if e.is_pressed():
-			if e.keycode == KEY_X:
-				var cmd:CommandDeleteBlocks = CommandDeleteBlocks.new()
-				cmd.blocks_root_path = blocks_root.get_path()
-				cmd.builder = builder
-				
-				for child in blocks_root.get_children():
-					if child is CyclopsBlock:
-						var block:CyclopsBlock = child
-						if block.selected:
-							cmd.add_block(block.get_path())
-				
-				if cmd.blocks_to_delete.size() > 0:
-					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-					cmd.add_to_undo_manager(undo)
-				
-				return true
-	
-	return false
+var position:Vector3
+#var id:int  #Label to link this vertex back to whatever is being tracked
+var initial_position:Vector3
+var block_path:NodePath
 
 
-func to_local(point:Vector3, world_to_local:Transform3D, grid_step_size:float)->Vector3:
-	var p_local:Vector3 = world_to_local * point
-
-	return MathUtil.snap_to_grid(p_local, grid_step_size)
-
+func _to_string():
+	return "%s init pos %s   pos %s" % [block_path, initial_position, position]

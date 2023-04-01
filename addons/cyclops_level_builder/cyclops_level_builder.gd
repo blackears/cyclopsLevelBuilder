@@ -42,6 +42,8 @@ var lock_uvs:bool = false
 var tool_uv_transform:Transform2D
 var tool_material_id:int
 
+var handle_point_radius:float = .05
+
 #var _active_node:GeometryBrush
 var active_node:CyclopsBlocks:
 	get:
@@ -73,6 +75,11 @@ func _enter_tree():
 	var undo:EditorUndoRedoManager = get_undo_redo()
 	
 	update_activation()
+
+	#Wait until everything is loaded	
+	await get_tree().process_frame
+	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
+	global_scene.builder = self
 	
 	switch_to_tool(ToolBlock.new())
 
