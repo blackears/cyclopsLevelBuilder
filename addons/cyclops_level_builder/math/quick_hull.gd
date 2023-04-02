@@ -36,7 +36,7 @@ class DirectedEdge extends RefCounted:
 	func reverse()->DirectedEdge:
 		return DirectedEdge.new(p1, p0)
 	
-	func ewuals(e:DirectedEdge)->bool:
+	func equals(e:DirectedEdge)->bool:
 		return p0 == e.p0 && p1 == e.p1
 
 class Facet extends RefCounted:
@@ -91,7 +91,7 @@ class Facet extends RefCounted:
 		return best_point
 	
 class Hull extends RefCounted:
-	var facets:Array[Facet]
+	var facets:Array[Facet] = []
 	
 	func get_non_empty_facet()->Facet:
 		for f in facets:
@@ -110,8 +110,14 @@ class Hull extends RefCounted:
 		for f in facets:
 			result += "%s\n" % f
 		return result
+		
+	func format_points()->String:
+		var result:String = ""
+		for f in facets:
+			result += "%s,\n" % f.points
+		return result		
 
-func determinate_3(v0:Vector3, v1:Vector3, v2:Vector3)->float:
+static func determinate_3(v0:Vector3, v1:Vector3, v2:Vector3)->float:
 	return v0.x * v1.y * v2.z \
 		- v0.x * v1.z * v2.y \
 		+ v0.z * v1.x * v2.y \
@@ -119,7 +125,7 @@ func determinate_3(v0:Vector3, v1:Vector3, v2:Vector3)->float:
 		+ v0.y * v1.z * v2.x \
 		- v0.z * v1.y * v2.x;
 
-func create_initial_simplex(points:PackedVector3Array)->Hull:
+static func create_initial_simplex(points:PackedVector3Array)->Hull:
 	#Find initial simplex
 	var p0:Vector3 = points[0]
 	var p1:Vector3 = points[1]
@@ -176,7 +182,7 @@ func create_initial_simplex(points:PackedVector3Array)->Hull:
 	return hull
 	
 
-func quickhull(points:PackedVector3Array)->Hull:
+static func quickhull(points:PackedVector3Array)->Hull:
 	if points.size() < 4:
 		return null
 		
@@ -189,7 +195,10 @@ func quickhull(points:PackedVector3Array)->Hull:
 		if facet == null:
 			break
 
+#		print("-facet %s" % facet)
+
 		var p_over:Vector3 = facet.get_furthest_point()
+#		print("over point %s" % p_over)
 		
 		var visibile_faces:Array[Facet] = [facet]
 		var edges:Array[DirectedEdge] = facet.get_edges()
@@ -218,8 +227,11 @@ func quickhull(points:PackedVector3Array)->Hull:
 		var remaining_over_points:PackedVector3Array
 		for f in visibile_faces:
 			for pf in f.over_points:
+				if pf == p_over:
+					continue
 				if !remaining_over_points.has(pf):
 					remaining_over_points.append(pf)
+					#print("over point for test %s" % pf)
 					
 			hull.facets.remove_at(hull.facets.find(f))
 		
@@ -228,10 +240,14 @@ func quickhull(points:PackedVector3Array)->Hull:
 			f.init_from_points(e.p0, e.p1, p_over)
 			hull.facets.append(f)
 
+			#print("facet over test %s" % f)
+
 			for p in remaining_over_points:
-				if f.plane.is_point_over(p):
+				if f.plane.is_point_over(p) && !f.plane.has_point(p):
 					f.over_points.append(p)
 				
+		#print("hull %s" % hull.format_points())
+		
 	return hull
 
 	

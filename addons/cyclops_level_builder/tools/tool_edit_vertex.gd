@@ -142,9 +142,13 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						
 				return true
 			else:
-				#Finish drag
-				tool_state = ToolState.READY
-				pass
+				if tool_state == ToolState.DRAGGING:
+					#Finish drag
+					var undo:EditorUndoRedoManager = builder.get_undo_redo()
+
+					cmd_move_vertex.add_to_undo_manager(undo)
+									
+					tool_state = ToolState.READY
 
 	elif event is InputEventMouseMotion:
 		var e:InputEventMouseMotion = event
@@ -169,7 +173,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			drag_handle.position = drag_to
 			
 			cmd_move_vertex.move_offset = drag_to - drag_handle.initial_position
-			#cmd_move_vertex.do_it()
+			cmd_move_vertex.do_it()
 
 			draw_tool()
 			return true

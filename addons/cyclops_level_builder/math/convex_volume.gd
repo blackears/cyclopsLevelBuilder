@@ -92,9 +92,30 @@ func init_from_convex_block_data(data:ConvexBlockData):
 	bounds = calc_bounds()
 
 #Calc convex hull bouding points
-func init_from_points(points:PackedVector3Array):
-	assert(false, "TODO")
-	pass
+func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0):
+	faces = []
+
+	var hull:QuickHull.Hull = QuickHull.quickhull(points)
+	
+	var planes:Array[Plane] = []
+	
+	#print("init_from_points")
+	for facet in hull.facets:
+		var plane:Plane = facet.plane
+		
+#		print("plane %s" % plane)
+		plane = Plane(-plane.normal, plane.get_center())
+		
+#		if planes.has(plane):
+		if planes.any(func(p): return p.is_equal_approx(plane)):
+			continue
+		planes.append(plane)
+		#print("plane %s" % plane)
+			
+		var id:int = faces.size()
+		faces.append(PlaneInfo.new(id, plane, uv_transform, material_id))
+
+	bounds = calc_bounds()
 
 
 func copy_face_attributes(ref_vol:ConvexVolume):
