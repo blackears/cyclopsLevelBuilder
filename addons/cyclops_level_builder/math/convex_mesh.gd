@@ -186,6 +186,47 @@ func get_face_points(face_id:int)->PackedVector3Array:
 	var result:PackedVector3Array
 	return result
 
+func get_face_coincident_with_plane(plane:Plane)->FaceInfo:
+	for fl in faces:
+		var all_on:bool = true
+		for v in fl.vertices:
+			if !plane.has_point(v):
+				all_on = false
+				break
+		if all_on:
+			return fl
+				
+	return null
+
+func get_best_face_match(ref_face:FaceInfo)->FaceInfo:
+	var best_num_common_verts:int
+	var best_normal_dot:float = -1
+	var best_face_match:FaceInfo
+	
+	for fl in faces:
+		var count:int = 0
+		
+		for v in fl.vertices:
+			if ref_face.has(v):
+				count += 1
+		
+		var normal_dot:float = fl.normal.dot(ref_face.normal)
+		if count > best_num_common_verts || (count == best_num_common_verts && normal_dot > best_normal_dot):
+			best_num_common_verts = count
+			best_normal_dot = fl.normal.dot(ref_face.normal)
+			best_face_match = fl
+	
+	return best_face_match
+
+func copy_face_attributes(ref_vol:ConvexMesh):
+	
+	for fl in faces:
+		var fr:FaceInfo = ref_vol.get_best_face_match(fl)
+		fl.material_id = fr.material_id
+		fl.uv_transform = fr.uv_transform
+		fl.selected = fr.selected		
+		
+
 func tristrip_vertex_range(num_verts:int)->PackedInt32Array:
 	var result:PackedInt32Array
 	

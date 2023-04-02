@@ -91,6 +91,25 @@ func init_from_convex_block_data(data:ConvexBlockData):
 
 	bounds = calc_bounds()
 
+#Calc convex hull bouding points
+func init_from_points(points:PackedVector3Array):
+	assert(false, "TODO")
+	pass
+
+
+func copy_face_attributes(ref_vol:ConvexVolume):
+	var local_mesh:ConvexMesh = calc_mesh()
+	var ref_mesh:ConvexMesh = ref_vol.calc_mesh()
+
+	local_mesh.copy_face_attributes(ref_mesh)
+	
+	for fl in faces:
+		var mesh_face:ConvexMesh.FaceInfo = local_mesh.get_face_coincident_with_plane(fl.plane)
+		
+		fl.material_id = mesh_face.material_id
+		fl.uv_transform = mesh_face.uv_transform
+		fl.selected = mesh_face.selected
+
 func to_convex_block_data()->ConvexBlockData:
 	var result:ConvexBlockData = ConvexBlockData.new()
 	

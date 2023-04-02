@@ -169,7 +169,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			drag_handle.position = drag_to
 			
 			cmd_move_vertex.move_offset = drag_to - drag_handle.initial_position
-			cmd_move_vertex.do_it_intermediate()
+			#cmd_move_vertex.do_it()
 
 			draw_tool()
 			return true

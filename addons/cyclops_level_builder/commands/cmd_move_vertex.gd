@@ -31,15 +31,34 @@ var vertex_position:Vector3
 var move_offset:Vector3 = Vector3.ZERO
 
 #Private
+var tracked_block_data:ConvexBlockData
 
 func _init():
 	command_name = "Move vertex"
 
-func do_it_intermediate():
-	pass
 
 func do_it():
-	pass
+	var block:CyclopsConvexBlock = builder.get_node(block_path)
+	
+	if !tracked_block_data:	
+		tracked_block_data = block.block_data
+		
+	var vol:ConvexVolume = ConvexVolume.new()
+	vol.init_from_convex_block_data(tracked_block_data)
+	
+	var points:PackedVector3Array = vol.calc_convex_hull_points()
+	var new_points:PackedVector3Array
+	for p in points:
+		if !p.is_equal_approx(vertex_position):
+			new_points.append(p)
+	new_points.append(vertex_position + move_offset)
+	
+	var new_vol:ConvexVolume = ConvexVolume.new()
+	new_vol.init_from_points(new_points)
+	
+	new_vol.copy_face_attributes(vol)
+	block.block_data = new_vol.to_convex_block_data()
 
 func undo_it():
-	pass
+	var block:CyclopsConvexBlock = builder.get_node(block_path)
+	block.block_data = tracked_block_data

@@ -47,6 +47,12 @@ func _init():
 
 func move_to(offset:Vector3, intermediate:bool):
 #	print("move_to off %s faceid %s amount %s movedir %s" % [offset, face_id, move_amount, move_dir_normal])
+	if !tracked_block_data:
+		var block:CyclopsConvexBlock = builder.get_node(block_path)
+		
+		block_name = block.name
+		block_selected = block.selected
+		tracked_block_data = block.block_data
 	
 	var ctl_mesh:ConvexVolume = ConvexVolume.new()
 	ctl_mesh.init_from_convex_block_data(tracked_block_data)
@@ -67,24 +73,9 @@ func move_to(offset:Vector3, intermediate:bool):
 
 	
 func do_it_intermediate():
-	if !tracked_block_data:
-		var block:CyclopsConvexBlock = builder.get_node(block_path)
-		
-		block_name = block.name
-		block_selected = block.selected
-		tracked_block_data = block.block_data
-
 	move_to(move_dir_normal * move_amount, true)
 
 func do_it():
-	
-	if !tracked_block_data:
-		var block:CyclopsConvexBlock = builder.get_node(block_path)
-		
-		block_name = block.name
-		block_selected = block.selected
-		tracked_block_data = block.block_data
-	
 	move_to(move_dir_normal * move_amount, false)
 
 func undo_it():
