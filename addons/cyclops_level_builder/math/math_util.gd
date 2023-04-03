@@ -231,6 +231,32 @@ static func points_are_colinear(points:PackedVector3Array)->bool:
 			
 	return  true
 	
+
+static func furthest_point_from_line(line_origin:Vector3, line_dir:Vector3, points:PackedVector3Array)->Vector3:
+	var best_point:Vector3
+	var best_dist:float = 0
 	
+	for p in points:
+		var offset:Vector3 = p - line_origin
+		var along:Vector3 = offset.project(line_dir)
+		var perp:Vector3 = offset - along
+		var dist:float = perp.length_squared()
+		if dist > best_dist:
+			best_dist = dist
+			best_point = p
+		
+	return best_point
+
+static func furthest_point_from_plane(plane:Plane, points:PackedVector3Array)->Vector3:
+	var best_point:Vector3
+	var best_distance:float = 0
 	
+	for p in points:
+		var dist = plane.distance_to(p)
+		if dist > best_distance:
+			best_point = p
+			best_distance = dist
+			
+	return best_point
+
 	

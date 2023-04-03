@@ -128,7 +128,81 @@ static func determinate_3(v0:Vector3, v1:Vector3, v2:Vector3)->float:
 		+ v0.y * v1.z * v2.x \
 		- v0.z * v1.y * v2.x;
 
+
 static func create_initial_simplex(points:PackedVector3Array)->Hull:
+	if points.size() < 4:
+		return null
+		
+	#For first two points, pick furthest apart along one of the axes
+	var max_x:Vector3 = points[0]
+	var min_x:Vector3 = points[0]
+	var max_y:Vector3 = points[0]
+	var min_y:Vector3 = points[0]
+	var max_z:Vector3 = points[0]
+	var min_z:Vector3 = points[0]
+	
+	for idx in range(1, points.size()):
+		var p:Vector3 = points[idx]
+		if p.x > max_x.x:
+			max_x = p
+		if p.x < min_x.x:
+			min_x = p
+		if p.y > max_y.y:
+			max_y = p
+		if p.y < min_y.y:
+			min_y = p
+		if p.z > max_z.z:
+			max_z = p
+		if p.z < min_z.z:
+			min_z = p
+	
+	var p0:Vector3
+	var p1:Vector3
+	var dx:float = max_x.distance_squared_to(min_x)
+	var dy:float = max_y.distance_squared_to(min_y)
+	var dz:float = max_z.distance_squared_to(min_z)
+	
+	if dx > dy and dx > dz:
+		p0 = max_x
+		p1 = min_x
+	elif dy > dz:
+		p0 = max_y
+		p1 = min_y
+	else:
+		p0 = max_z
+		p1 = min_z
+	
+	#Find furthest point from line for second point
+	var p2:Vector3 = MathUtil.furthest_point_from_line(p0, p1 - p0, points)
+	var p3:Vector3 = MathUtil.furthest_point_from_plane(Plane(p0, p1, p2), points)
+	
+	#Make simplex
+	var hull:Hull = Hull.new()
+	
+	var f0:Facet = Facet.new()
+	f0.init_from_points_under(p1, p2, p3, p0)
+	var f1:Facet = Facet.new()
+	f1.init_from_points_under(p2, p3, p0, p1)
+	var f2:Facet = Facet.new()
+	f2.init_from_points_under(p3, p0, p1, p2)
+	var f3:Facet = Facet.new()
+	f3.init_from_points_under(p0, p1, p2, p3)
+	
+	hull.facets.append(f0)
+	hull.facets.append(f1)
+	hull.facets.append(f2)
+	hull.facets.append(f3)
+	
+	for p in points:
+		for f in hull.facets:
+			if f.plane.is_point_over(p) && !f.plane.has_point(p):
+				f.over_points.append(p)
+	
+	return hull
+	
+	
+#Deprecated
+static func create_initial_simplex_old(points:PackedVector3Array)->Hull:
 	#Find initial simplex
 	var p0:Vector3 = points[0]
 	var p1:Vector3 = points[1]
@@ -193,27 +267,28 @@ static func quickhull(points:PackedVector3Array)->Hull:
 	if !hull:
 		return null
 	
-	#print("initial simplex %s" % hull)
+	print("initial points %s" % points)
+	print("initial simplex %s" % hull.format_points())
 	
 	while true:
 		var facet:Facet = hull.get_non_empty_facet()
 		if facet == null:
 			break
 
-		#print("-facet %s" % facet)
+		print("-facet %s" % facet)
 
 		var p_over:Vector3 = facet.get_furthest_point()
-		#print("over point %s" % p_over)
+		print("over point %s" % p_over)
 		
-		#print("hull %s" % hull.format_points())
+		print("hull %s" % hull.format_points())
 		
 		var visibile_faces:Array[Facet] = [facet]
 		var edges:Array[DirectedEdge] = facet.get_edges()
 		var visited_edges:Array[DirectedEdge] = []
 		var boundary_edges:Array[DirectedEdge] = []
 		
-#		for e in edges:
-#			print("init edge search set %s" % e)
+		for e in edges:
+			print("init edge search set %s" % e)
 			
 		
 		#Find set of edges that form the boundary of faces visible to point 
@@ -231,7 +306,7 @@ static func quickhull(points:PackedVector3Array)->Hull:
 				var neighbor_edges:Array[DirectedEdge] = neighbor_facet.get_edges()
 				for e in neighbor_edges:
 					if !visited_edges.any(func(edge): return edge.equals(e)):
-						print("adding edge to search set %s" % e)
+						#print("adding edge to search set %s" % e)
 						edges.append(e)
 			else:
 				boundary_edges.append(edge)

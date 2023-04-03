@@ -90,6 +90,12 @@ func init_from_convex_block_data(data:ConvexBlockData):
 		faces.append(PlaneInfo.new(i, data.face_planes[i], data.face_uv_transform[i], data.face_material_indices[i]))
 
 	bounds = calc_bounds()
+	
+	#var points:PackedVector3Array = calc_convex_hull_points()
+	#print("volume points %s" % points)
+	#var hull = QuickHull.quickhull(points)
+	#print("hull %s" % hull.format_points())
+	
 
 #Calc convex hull bouding points
 func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0):
@@ -104,16 +110,18 @@ func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Tran
 	for facet in hull.facets:
 		var plane:Plane = facet.plane
 		
+		print("facet candidate %s" % facet)
+		
 		plane = Plane(-plane.normal, plane.get_center())
 		
-		print("plane %s" % plane)
 #		print("plane %s" % plane)
 		
 #		if planes.has(plane):
 		if planes.any(func(p): return p.is_equal_approx(plane)):
 			continue
+			
 		planes.append(plane)
-		#print("plane %s" % plane)
+		print("plane %s" % plane)
 			
 		var id:int = faces.size()
 		faces.append(PlaneInfo.new(id, plane, uv_transform, material_id))
@@ -236,8 +244,11 @@ func calc_bounds()->AABB:
 	return result
 
 func has_point(points:PackedVector3Array, point:Vector3):
+	const epsilon = .0001
+	
 	for p in points:
-		if point.is_equal_approx(p):
+#		if point.is_equal_approx(p):
+		if point.distance_squared_to(p) < epsilon * epsilon:
 			return true
 	return false
 
@@ -260,6 +271,26 @@ func calc_convex_hull_points()->PackedVector3Array:
 	return points
 
 func calc_mesh()->ConvexMesh:
+	if !bounds.has_volume():
+		return null
+	
+	var points:PackedVector3Array = calc_convex_hull_points()
+	var hull:QuickHull.Hull = QuickHull.quickhull(points)
+
+	var result_mesh:ConvexMesh = ConvexMesh.new()
+	
+	for f in hull.facets:
+		
+		var mesh_face:ConvexMesh.FaceInfo = result_mesh.add_face(f.points, f.plane.normal, result_mesh.faces.size(), Transform2D.IDENTITY, 0)
+		mesh_face.selected = false
+
+#		print("poly_points %s" % poly_points)
+	
+	result_mesh.calc_bounds()
+	return result_mesh
+	
+#Deprecated
+func calc_mesh_old()->ConvexMesh:
 	if !bounds.has_volume():
 		return null
 	

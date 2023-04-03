@@ -214,6 +214,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 		
 		#print("drag_style %s" % drag_style)
+		if (e.button_mask & MOUSE_BUTTON_MASK_MIDDLE):
+			return false
 		
 		if drag_style == DragStyle.NONE:
 			if e.shift_pressed:
@@ -234,7 +236,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 			else:
 				global_scene.clear_tool_mesh()
-
+			
+			return false
 				
 		elif drag_style == DragStyle.READY:
 			var offset:Vector2 = e.position - event_start.position

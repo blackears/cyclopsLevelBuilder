@@ -109,6 +109,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	if event is InputEventMouseButton:
 		
 		var e:InputEventMouseButton = event
+		
+		if (e.button_mask & MOUSE_BUTTON_MASK_MIDDLE):
+			return false
+		
 		if e.button_index == MOUSE_BUTTON_LEFT:
 
 			if e.is_pressed():

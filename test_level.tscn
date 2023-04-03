@@ -8,9 +8,9 @@
 [sub_resource type="Environment" id="Environment_b1nvb"]
 ambient_light_color = Color(0.784314, 0.784314, 0.784314, 1)
 
-[sub_resource type="Resource" id="Resource_tpth5"]
+[sub_resource type="Resource" id="Resource_pui1j"]
 script = ExtResource("4_g4ksq")
-face_planes = Array[Plane]([Plane(0, 1, 0, -2), Plane(0.16129, 0.967742, -0.193548, -1.80645), Plane(-2.26184e-07, 0.316228, 0.948683, -4.42719), Plane(0.62385, -0.0519877, 0.779813, -5.51068), Plane(0.939619, 0.335578, -0.0671157, -4.16117), Plane(-0.768221, -0.640184, -1.06842e-07, -1.79252), Plane(-1.07288e-06, -1, -5.06639e-07, -4), Plane(0.610278, -0.213597, -0.762848, -2.99036), Plane(0.0298011, 0.178806, -0.983433, -1.28144), Plane(-0.861372, -0.373261, -0.344549, -1.32077)])
+face_planes = Array[Plane]([Plane(2.32603e-08, 1, -1.33747e-07, 3), Plane(-1, 4.56969e-07, -2.1855e-07, -2), Plane(-0.361772, 0.226106, 0.904432, 2.66806), Plane(-0.707107, 4.35518e-07, -0.707106, -7.77817), Plane(-0.172774, 0.604708, -0.777482, -5.52876), Plane(0.0392169, -0.960784, 0.27451, -6.09804), Plane(0.13019, -0.390568, 0.911321, -0.650954), Plane(0.894427, 0.268329, 0.357771, -1.52052), Plane(0.659381, -0.725318, -0.197814, -8.96757), Plane(0.356915, -0.92798, -0.107074, -8.60165)])
 face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
 face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
@@ -25,7 +25,7 @@ height = 0.2
 script = ExtResource("1_k5d46")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.965926, -0.129409, 0.224144, 0.0669871, 0.961516, 0.266456, -0.25, -0.242362, 0.937422, 8, 1.5, 8.5)
+transform = Transform3D(-0.25, -0.242362, 0.937422, 0.0669871, 0.961516, 0.266456, -0.965926, 0.129409, -0.224144, 7, 9.5, -4.5)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.00766267, -0.829678, 0.55819, -0.400001, 0.514145, 0.758719, -0.916483, -0.217463, -0.335811, -0.5, 0, -10)
@@ -36,9 +36,9 @@ environment = SubResource("Environment_b1nvb")
 [node name="CyclopsBlocks" type="Node3D" parent="."]
 script = ExtResource("1_p74uy")
 
-[node name="Block_0" type="Node" parent="CyclopsBlocks"]
+[node name="Block_8" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("3_mer4f")
-block_data = SubResource("Resource_tpth5")
+block_data = SubResource("Resource_pui1j")
 
 [node name="Marker3D" type="Marker3D" parent="."]
 transform = Transform3D(0.965926, -0.0669873, -0.25, 2.21068e-08, 0.965926, -0.258819, 0.258819, 0.25, 0.933013, 1.5, 8.5, 17)

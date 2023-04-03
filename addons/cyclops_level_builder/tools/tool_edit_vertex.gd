@@ -153,6 +153,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 	elif event is InputEventMouseMotion:
 		var e:InputEventMouseMotion = event
+
+		if (e.button_mask & MOUSE_BUTTON_MASK_MIDDLE):
+			return false		
 			
 		if tool_state == ToolState.DRAGGING:
 

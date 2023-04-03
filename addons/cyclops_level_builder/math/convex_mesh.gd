@@ -29,16 +29,6 @@ class_name ConvexMesh
 
 enum Position { OVER, UNDER, CROSSING, ON, ON_UNDER }
 
-#class VertexInfo extends RefCounted:
-#	var point:Vector3
-#	var uv:Vector2
-#
-#	func _init(point:Vector3):
-#		self.point = point
-#
-#	func duplicate()->VertexInfo:
-#		pass
-
 
 class FaceInfo extends RefCounted:
 	var vertices:PackedVector3Array = []

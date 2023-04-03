@@ -123,6 +123,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	elif event is InputEventMouseMotion:
 		var e:InputEventMouseMotion = event
 
+		if (e.button_mask & MOUSE_BUTTON_MASK_MIDDLE):
+			return false		
+
 		var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 		var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 
@@ -130,7 +133,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		var w2l = blocks_root.global_transform.inverse()
 		var origin_local:Vector3 = w2l * origin
 		var dir_local:Vector3 = w2l.basis * dir
-		
+
 		if tool_state == ToolState.DRAG_HEIGHT:
 			block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, base_points[0], floor_normal)
 			
