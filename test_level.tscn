@@ -8,9 +8,9 @@
 [sub_resource type="Environment" id="Environment_b1nvb"]
 ambient_light_color = Color(0.784314, 0.784314, 0.784314, 1)
 
-[sub_resource type="Resource" id="Resource_pui1j"]
+[sub_resource type="Resource" id="Resource_248i3"]
 script = ExtResource("4_g4ksq")
-face_planes = Array[Plane]([Plane(2.32603e-08, 1, -1.33747e-07, 3), Plane(-1, 4.56969e-07, -2.1855e-07, -2), Plane(-0.361772, 0.226106, 0.904432, 2.66806), Plane(-0.707107, 4.35518e-07, -0.707106, -7.77817), Plane(-0.172774, 0.604708, -0.777482, -5.52876), Plane(0.0392169, -0.960784, 0.27451, -6.09804), Plane(0.13019, -0.390568, 0.911321, -0.650954), Plane(0.894427, 0.268329, 0.357771, -1.52052), Plane(0.659381, -0.725318, -0.197814, -8.96757), Plane(0.356915, -0.92798, -0.107074, -8.60165)])
+face_planes = Array[Plane]([Plane(7.89055e-07, 1, 2.21388e-07, 3), Plane(0.911172, 0.404969, 0.0759314, -1.44267), Plane(0.407306, -0.678843, -0.610961, -11.6082), Plane(8.61662e-08, -0.316227, -0.948684, -13.2816), Plane(-0.99449, 0.0331504, 0.099449, -1.59118), Plane(0.359584, -0.932257, -0.039954, -7.75105), Plane(0.669483, -0.624849, 0.401691, -3.4813), Plane(-0.993715, 0.0184023, 0.110413, -1.60098), Plane(-0.828517, 0.092057, 0.552345, 0.276171), Plane(0.291389, -0.388515, 0.874156, -1.16555)])
 face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
 face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
@@ -38,7 +38,7 @@ script = ExtResource("1_p74uy")
 
 [node name="Block_8" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("3_mer4f")
-block_data = SubResource("Resource_pui1j")
+block_data = SubResource("Resource_248i3")
 
 [node name="Marker3D" type="Marker3D" parent="."]
 transform = Transform3D(0.965926, -0.0669873, -0.25, 2.21068e-08, 0.965926, -0.258819, 0.258819, 0.25, 0.933013, 1.5, 8.5, 17)

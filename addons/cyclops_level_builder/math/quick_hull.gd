@@ -200,64 +200,6 @@ static func create_initial_simplex(points:PackedVector3Array)->Hull:
 	
 	return hull
 	
-	
-#Deprecated
-static func create_initial_simplex_old(points:PackedVector3Array)->Hull:
-	#Find initial simplex
-	var p0:Vector3 = points[0]
-	var p1:Vector3 = points[1]
-	var p2:Vector3 = Vector3.INF
-	var p3:Vector3 = Vector3.INF
-	
-	var p10:Vector3 = p1 - p0
-	var p20:Vector3
-	var p30:Vector3
-	
-	var idx:int = 2
-	while true:
-		p2 = points[idx]
-		idx += 1
-		p20 = p2 - p0
-		if !p10.cross(p20).is_zero_approx():
-			break
-		if idx == points.size():
-			return null
-
-	while true:
-		p3 = points[idx]
-		idx += 1
-		p30 = p3 - p0
-		var det = determinate_3(p10, p20, p30)
-		if !is_zero_approx(det):
-			break
-			
-		if idx == points.size():
-			return null
-
-	
-	var hull:Hull = Hull.new()
-	
-	var f0:Facet = Facet.new()
-	f0.init_from_points_under(p1, p2, p3, p0)
-	var f1:Facet = Facet.new()
-	f1.init_from_points_under(p2, p3, p0, p1)
-	var f2:Facet = Facet.new()
-	f2.init_from_points_under(p3, p0, p1, p2)
-	var f3:Facet = Facet.new()
-	f3.init_from_points_under(p0, p1, p2, p3)
-	
-	hull.facets.append(f0)
-	hull.facets.append(f1)
-	hull.facets.append(f2)
-	hull.facets.append(f3)
-	
-	for p in points:
-		for f in hull.facets:
-			if f.plane.is_point_over(p) && !f.plane.has_point(p):
-				f.over_points.append(p)
-	
-	return hull
-	
 
 static func quickhull(points:PackedVector3Array)->Hull:
 	if points.size() < 4:
@@ -267,28 +209,28 @@ static func quickhull(points:PackedVector3Array)->Hull:
 	if !hull:
 		return null
 	
-	print("initial points %s" % points)
-	print("initial simplex %s" % hull.format_points())
+	#print("initial points %s" % points)
+	#print("initial simplex %s" % hull.format_points())
 	
 	while true:
 		var facet:Facet = hull.get_non_empty_facet()
 		if facet == null:
 			break
 
-		print("-facet %s" % facet)
+		#print("-facet %s" % facet)
 
 		var p_over:Vector3 = facet.get_furthest_point()
-		print("over point %s" % p_over)
+		#print("over point %s" % p_over)
 		
-		print("hull %s" % hull.format_points())
+		#print("hull %s" % hull.format_points())
 		
 		var visibile_faces:Array[Facet] = [facet]
 		var edges:Array[DirectedEdge] = facet.get_edges()
 		var visited_edges:Array[DirectedEdge] = []
 		var boundary_edges:Array[DirectedEdge] = []
 		
-		for e in edges:
-			print("init edge search set %s" % e)
+#		for e in edges:
+#			print("init edge search set %s" % e)
 			
 		
 		#Find set of edges that form the boundary of faces visible to point 

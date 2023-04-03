@@ -102,15 +102,15 @@ func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Tran
 	faces = []
 
 	var hull:QuickHull.Hull = QuickHull.quickhull(points)
-	print("hull %s" % hull.format_points())
+	#print("hull %s" % hull.format_points())
 	
 	var planes:Array[Plane] = []
 	
-	print("init_from_points")
+	#print("init_from_points")
 	for facet in hull.facets:
 		var plane:Plane = facet.plane
 		
-		print("facet candidate %s" % facet)
+		#print("facet candidate %s" % facet)
 		
 		plane = Plane(-plane.normal, plane.get_center())
 		
@@ -121,7 +121,7 @@ func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Tran
 			continue
 			
 		planes.append(plane)
-		print("plane %s" % plane)
+		#print("plane %s" % plane)
 			
 		var id:int = faces.size()
 		faces.append(PlaneInfo.new(id, plane, uv_transform, material_id))
@@ -270,6 +270,18 @@ func calc_convex_hull_points()->PackedVector3Array:
 	
 	return points
 
+func get_closest_face(plane:Plane)->PlaneInfo:
+	var best_dot:float = -1
+	var best_plane:PlaneInfo
+	
+	for f in faces:
+		var dot:float = plane.normal.dot(f.plane.normal)
+		if dot > best_dot:
+			best_dot = dot
+			best_plane = f
+			
+	return best_plane
+
 func calc_mesh()->ConvexMesh:
 	if !bounds.has_volume():
 		return null
@@ -281,16 +293,22 @@ func calc_mesh()->ConvexMesh:
 	
 	for f in hull.facets:
 		
-		var mesh_face:ConvexMesh.FaceInfo = result_mesh.add_face(f.points, f.plane.normal, result_mesh.faces.size(), Transform2D.IDENTITY, 0)
+		var plane_info:PlaneInfo = get_closest_face(f.plane)
+		
+		var mesh_face:ConvexMesh.FaceInfo = result_mesh.add_face(f.points, f.plane.normal, plane_info.id, plane_info.uv_transform, plane_info.material_id)
 		mesh_face.selected = false
 
 #		print("poly_points %s" % poly_points)
+	#result_mesh.copy_face_attributes()
+	#copy_face_attributes(self)
 	
 	result_mesh.calc_bounds()
 	return result_mesh
 	
 #Deprecated
 func calc_mesh_old()->ConvexMesh:
+	assert(false)
+	
 	if !bounds.has_volume():
 		return null
 	
