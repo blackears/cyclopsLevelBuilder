@@ -51,6 +51,13 @@ class FaceInfo extends RefCounted:
 	func _to_string():
 		return "%s %s" % [str(vertices), normal]
 	
+	func has_vertex(v:Vector3)->bool:
+		for vl in vertices:
+			if vl.is_equal_approx(v):
+				return true
+		return false
+		
+	
 	func append(vertex:Vector3):
 		vertices.append(vertex)
 	
@@ -207,7 +214,7 @@ func get_best_face_match(ref_face:FaceInfo)->FaceInfo:
 		var count:int = 0
 		
 		for v in fl.vertices:
-			if ref_face.has(v):
+			if ref_face.has_vertex(v):
 				count += 1
 		
 		var normal_dot:float = fl.normal.dot(ref_face.normal)

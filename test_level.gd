@@ -14,13 +14,28 @@ func test_planes():
 	
 	print("has2 %s" % planes.any(func(p): return p.is_equal_approx(p1)))
 
+func test_volume():
+	#var face_planes:Array[Plane] = Array([Plane(0, 1, 0, 11), Plane(0, 0, -1, -16), Plane(-0.957704, 0.239425, 0.159618, -2.47408), Plane(0.948683, 0, -0.316228, -1.26491), Plane(-0.948683, -4.52367e-07, -0.316228, -12.6491), Plane(1.18011e-06, -0.707107, -0.707107, -21.2132), Plane(0.588349, -0.196116, 0.784464, 9.80581), Plane(0.303045, -0.505077, 0.808122, 4.64669), Plane(0.948683, -0.316228, 0, -0.632454), Plane(0.514496, -0.857493, 0, -9.94692)])
+#	var face_uv_transform:Array[Transform2D] = Array([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
+	#var face_material_indices = PackedInt32Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+	#var face_ids = PackedInt32Array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+	var points:PackedVector3Array = [Vector3(3, -1.999998, -4), Vector3(4.000005, -3.000003, 1.999994), Vector3(-1.999997, -5.000001, -1), Vector3(-0.999991, 0.999997, -5.999997), Vector3(-5, 4, -2), Vector3(-2.999999, -2, 1), Vector3(5, 1, -3)]
+	var vol = ConvexVolume.new()
+	vol.init_from_points(points)
+	
+	for f in vol.faces:
+		print("vol plane %s" % f.plane)
+
+	pass
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
 	await get_tree().process_frame
 
-	test_planes()
+	#test_planes()
+	test_volume()
 
 
 	var points:PackedVector3Array

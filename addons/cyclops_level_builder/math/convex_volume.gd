@@ -96,15 +96,18 @@ func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Tran
 	faces = []
 
 	var hull:QuickHull.Hull = QuickHull.quickhull(points)
+	print("hull %s" % hull.format_points())
 	
 	var planes:Array[Plane] = []
 	
-	#print("init_from_points")
+	print("init_from_points")
 	for facet in hull.facets:
 		var plane:Plane = facet.plane
 		
-#		print("plane %s" % plane)
 		plane = Plane(-plane.normal, plane.get_center())
+		
+		print("plane %s" % plane)
+#		print("plane %s" % plane)
 		
 #		if planes.has(plane):
 		if planes.any(func(p): return p.is_equal_approx(plane)):
@@ -232,6 +235,12 @@ func calc_bounds()->AABB:
 		
 	return result
 
+func has_point(points:PackedVector3Array, point:Vector3):
+	for p in points:
+		if point.is_equal_approx(p):
+			return true
+	return false
+
 func calc_convex_hull_points()->PackedVector3Array:
 	var points:PackedVector3Array
 	
@@ -243,6 +252,8 @@ func calc_convex_hull_points()->PackedVector3Array:
 				if result == null:
 					continue
 				if !contains_point(result):
+					continue
+				if has_point(points, result):
 					continue
 				points.append(result)
 	

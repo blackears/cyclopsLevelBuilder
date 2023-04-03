@@ -33,6 +33,9 @@ class DirectedEdge extends RefCounted:
 		self.p0 = p0
 		self.p1 = p1
 		
+	func _to_string()->String:
+		return "%s %s" % [p0, p1]
+		
 	func reverse()->DirectedEdge:
 		return DirectedEdge.new(p1, p0)
 	
@@ -45,7 +48,7 @@ class Facet extends RefCounted:
 	var over_points:PackedVector3Array
 	
 	func _to_string():
-		var result:String = "plane %s\npoints %s\nover %s" % [plane, points, over_points]
+		var result:String = "plane %s\ncentroid %s\npoints %s\nover %s" % [plane, (points[0] + points[1] + points[2])/3, points, over_points]
 		
 		return result
 	
@@ -176,7 +179,7 @@ static func create_initial_simplex(points:PackedVector3Array)->Hull:
 	
 	for p in points:
 		for f in hull.facets:
-			if f.plane.is_point_over(p):
+			if f.plane.is_point_over(p) && !f.plane.has_point(p):
 				f.over_points.append(p)
 	
 	return hull
@@ -190,20 +193,28 @@ static func quickhull(points:PackedVector3Array)->Hull:
 	if !hull:
 		return null
 	
+	#print("initial simplex %s" % hull)
+	
 	while true:
 		var facet:Facet = hull.get_non_empty_facet()
 		if facet == null:
 			break
 
-#		print("-facet %s" % facet)
+		#print("-facet %s" % facet)
 
 		var p_over:Vector3 = facet.get_furthest_point()
-#		print("over point %s" % p_over)
+		#print("over point %s" % p_over)
+		
+		#print("hull %s" % hull.format_points())
 		
 		var visibile_faces:Array[Facet] = [facet]
 		var edges:Array[DirectedEdge] = facet.get_edges()
 		var visited_edges:Array[DirectedEdge] = []
 		var boundary_edges:Array[DirectedEdge] = []
+		
+#		for e in edges:
+#			print("init edge search set %s" % e)
+			
 		
 		#Find set of edges that form the boundary of faces visible to point 
 		# being added.  We're basically flood filling from central facet until 
@@ -220,9 +231,11 @@ static func quickhull(points:PackedVector3Array)->Hull:
 				var neighbor_edges:Array[DirectedEdge] = neighbor_facet.get_edges()
 				for e in neighbor_edges:
 					if !visited_edges.any(func(edge): return edge.equals(e)):
+						print("adding edge to search set %s" % e)
 						edges.append(e)
 			else:
 				boundary_edges.append(edge)
+				#print("adding edge to boundary set %s" % edge)
 		
 		var remaining_over_points:PackedVector3Array
 		for f in visibile_faces:
@@ -240,7 +253,7 @@ static func quickhull(points:PackedVector3Array)->Hull:
 			f.init_from_points(e.p0, e.p1, p_over)
 			hull.facets.append(f)
 
-			#print("facet over test %s" % f)
+			#print("adding facet %s" % f)
 
 			for p in remaining_over_points:
 				if f.plane.is_point_over(p) && !f.plane.has_point(p):

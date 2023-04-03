@@ -149,6 +149,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					cmd_move_vertex.add_to_undo_manager(undo)
 									
 					tool_state = ToolState.READY
+					setup_tool()
 
 	elif event is InputEventMouseMotion:
 		var e:InputEventMouseMotion = event
