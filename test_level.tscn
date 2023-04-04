@@ -2,18 +2,22 @@
 
 [ext_resource type="Script" path="res://test_level.gd" id="1_k5d46"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/cyclops_blocks.gd" id="1_p74uy"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/cyclops_convex_block.gd" id="3_mer4f"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/convex_block_data.gd" id="4_g4ksq"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/cyclops_convex_block.gd" id="3_jcbda"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/convex_block_data.gd" id="4_sa36e"]
 
 [sub_resource type="Environment" id="Environment_b1nvb"]
 ambient_light_color = Color(0.784314, 0.784314, 0.784314, 1)
 
-[sub_resource type="Resource" id="Resource_248i3"]
-script = ExtResource("4_g4ksq")
-face_planes = Array[Plane]([Plane(7.89055e-07, 1, 2.21388e-07, 3), Plane(0.911172, 0.404969, 0.0759314, -1.44267), Plane(0.407306, -0.678843, -0.610961, -11.6082), Plane(8.61662e-08, -0.316227, -0.948684, -13.2816), Plane(-0.99449, 0.0331504, 0.099449, -1.59118), Plane(0.359584, -0.932257, -0.039954, -7.75105), Plane(0.669483, -0.624849, 0.401691, -3.4813), Plane(-0.993715, 0.0184023, 0.110413, -1.60098), Plane(-0.828517, 0.092057, 0.552345, 0.276171), Plane(0.291389, -0.388515, 0.874156, -1.16555)])
-face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
-face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+[sub_resource type="Resource" id="Resource_qmecf"]
+script = ExtResource("4_sa36e")
+vertex_points = PackedVector3Array(-3, 7, 0, -3, 7, 4, -3, 5, 4, -3, 5, 0, 0, 7, 0, 0, 7, 4, 0, 5, 4, 0, 5, 0)
+vertex_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0)
+face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
+face_vertex_indices = PackedInt32Array(0, 1, 2, 3, 7, 6, 5, 4, 1, 0, 4, 5, 2, 1, 5, 6, 3, 2, 6, 7, 0, 3, 7, 4)
+face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
+face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
+face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
+face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_dnvdv"]
 
@@ -36,12 +40,12 @@ environment = SubResource("Environment_b1nvb")
 [node name="CyclopsBlocks" type="Node3D" parent="."]
 script = ExtResource("1_p74uy")
 
-[node name="Block_8" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_mer4f")
-block_data = SubResource("Resource_248i3")
+[node name="Block_0" type="Node" parent="CyclopsBlocks"]
+script = ExtResource("3_jcbda")
+block_data = SubResource("Resource_qmecf")
 
 [node name="Marker3D" type="Marker3D" parent="."]
-transform = Transform3D(0.965926, -0.0669873, -0.25, 2.21068e-08, 0.965926, -0.258819, 0.258819, 0.25, 0.933013, 1.5, 8.5, 17)
+transform = Transform3D(0.965926, -0.0669873, -0.25, 2.21068e-08, 0.965926, -0.258819, 0.258819, 0.25, 0.933013, -1.5, 6.5, -1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 7, 11.5)

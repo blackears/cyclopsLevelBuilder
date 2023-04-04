@@ -26,26 +26,79 @@ extends RefCounted
 class_name ConvexVolume
 
 
-class PlaneInfo extends RefCounted:
+class VertexInfo extends RefCounted:
+	var mesh:ConvexVolume
+	#var index:int
+	var point:Vector3
+	var edge_indices:Array[int] = []
+	var selected:bool
+	
+	func _init(mesh:ConvexVolume, point:Vector3 = Vector3.ZERO):
+		self.mesh = mesh
+		self.point = point
+		
+	func _to_string():
+		var s:String = "%s [" % [point]
+		for i in edge_indices:
+			s += "%s " %  i
+		s += "]"
+			
+		return s
+
+class EdgeInfo extends RefCounted:
+	var mesh:ConvexVolume
+	var start_index:int
+	var end_index:int
+	var face_indices:Array[int] = []
+	var selected:bool
+	
+	func _init(mesh:ConvexVolume, start:int = 0, end:int = 0):
+		self.mesh = mesh
+		start_index = start
+		end_index = end
+
+	func _to_string():
+		var s:String = "%s %s [" % [start_index, end_index]
+		for i in face_indices:
+			s += "%s " % i
+		s += "]"
+		return s
+
+
+class FaceInfo extends RefCounted:
+	var mesh:ConvexVolume
 	var id:int
-	var plane:Plane #Face normal points in direction of interior
+	var normal:Vector3 #Face normal points in direction of interior
 	var material_id:int
 	var uv_transform:Transform2D
 	var selected:bool
+	var vertex_indices:Array[int]
 	
-	func _init(id:int, plane:Plane, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0, selected:bool = false):
+	func _init(mesh:ConvexVolume, id:int, normal:Vector3, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0, selected:bool = false):
+		self.mesh = mesh
 		self.id = id
-		self.plane = plane
+		self.normal = normal
 		self.material_id = material_id
 		self.uv_transform = uv_transform
 		self.selected = selected
+	
+	func get_plane()->Plane:
+		return Plane(normal, mesh.vertices[vertex_indices[0]].point)
+	
+	func get_points()->PackedVector3Array:
+		var result:PackedVector3Array
+		for i in vertex_indices:
+			result.append(mesh.vertices[i].point)
+		return result
 		
 
-var faces:Array[PlaneInfo] = []
+var vertices:Array[VertexInfo] = []
+var edges:Array[EdgeInfo] = []
+var faces:Array[FaceInfo] = []
 var bounds:AABB
 
 
-func init_block(block_bounds:AABB):
+func init_block(block_bounds:AABB, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0):
 	var p000:Vector3 = block_bounds.position
 	var p111:Vector3 = block_bounds.end
 	var p001:Vector3 = Vector3(p000.x, p000.y, p111.z)
@@ -55,172 +108,327 @@ func init_block(block_bounds:AABB):
 	var p101:Vector3 = Vector3(p111.x, p000.y, p111.z)
 	var p110:Vector3 = Vector3(p111.x, p111.y, p000.z)
 	
-	init_prisim([p000, p001, p011, p010], p100 - p000)
+	init_prisim([p000, p001, p011, p010], p100 - p000, uv_transform, material_id)
 	
 
-func init_prisim(base_points:Array[Vector3], extrude_dir:Vector3):
+func init_prisim(base_points:Array[Vector3], extrude_dir:Vector3, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0):
+	vertices = []
+	edges = []
 	faces = []
-	var base_normal = extrude_dir.normalized()
-	faces.append(PlaneInfo.new(0, Plane(base_normal, base_points[0]), Transform2D.IDENTITY, 0))
-	faces.append(PlaneInfo.new(1, Plane(-base_normal, base_points[0] + extrude_dir), Transform2D.IDENTITY, 0))
+	var base_normal = -extrude_dir.normalized()
 	
 	var face_area_x2:Vector3 = MathUtil.face_area_x2(base_points)
-	#Flip normal if face winding clockwise relative to extrude direction
-#	var normal_flip:float = 1 if face_area_x2.dot(base_normal) < 0 else -1
+	if face_area_x2.dot(extrude_dir) > 0:
+		base_points.reverse()
 	
-	for i in base_points.size():
-		var p0:Vector3 = base_points[i]
-		var p1:Vector3 = base_points[wrap(i + 1, 0, base_points.size())]
-		
-#		var normal = (p1 - p0).cross(base_normal).normalized() * normal_flip
-		var normal = (p1 - p0).cross(face_area_x2).normalized()
-		faces.append(PlaneInfo.new(faces.size(), Plane(normal, p0), Transform2D.IDENTITY, 0))
+	for p in base_points:
+		var v:VertexInfo = VertexInfo.new(self, p)
+		vertices.append(v)
+	for p in base_points:
+		var v:VertexInfo = VertexInfo.new(self, p + extrude_dir)
+		vertices.append(v)
 	
-	bounds = calc_bounds()
+	var f0:FaceInfo = FaceInfo.new(self, faces.size(), base_normal, uv_transform, material_id)
+	#var ggg = range(base_points.size())
+	f0.vertex_indices = []
+	f0.vertex_indices.append_array(range(base_points.size()))
+	faces.append(f0)
+	var f1:FaceInfo = FaceInfo.new(self, faces.size(), -base_normal, uv_transform, material_id)
+	f1.vertex_indices = []
+	f1.vertex_indices.append_array(range(base_points.size(), base_points.size() * 2))
+	f1.vertex_indices.reverse()
+	faces.append(f1)
+	
 
-func add_face(plane:Plane, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0):	
-	faces.append(PlaneInfo.new(unused_id(), plane, uv_transform, material_id))
-	remove_unused_planes()
+	for i in base_points.size():
+		var p_idx0:int = i
+		var p_idx1:int = wrap(i + 1, 0, base_points.size())
+		
+		var v0:VertexInfo = vertices[p_idx0]
+		var v1:VertexInfo = vertices[p_idx1]
+		
+		var normal = base_normal.cross(v1.point - v0.point).normalized()
+		var f:FaceInfo = FaceInfo.new(self, faces.size(), normal, uv_transform, material_id)
+		f.vertex_indices = [p_idx1, p_idx0, p_idx0 + base_points.size(), p_idx1 + base_points.size()]
+		faces.append(f)
+	
+	build_edges()
+	
 	bounds = calc_bounds()
 
 func init_from_convex_block_data(data:ConvexBlockData):
+	vertices = []
+	edges = []
 	faces = []
 	
-	for i in data.face_planes.size():
-		faces.append(PlaneInfo.new(i, data.face_planes[i], data.face_uv_transform[i], data.face_material_indices[i]))
+	for i in data.vertex_points.size():
+		var v:VertexInfo = VertexInfo.new(self, data.vertex_points[i])
+		vertices.append(v)
+		v.selected = data.vertex_selected[i]
+		
+	var face_vertex_count:int = 0
+	for face_idx in data.face_vertex_count.size():
+		var num_verts:int = data.face_vertex_count[face_idx]
+		var vert_indices:Array[int]
+		var vert_points:PackedVector3Array
+		for i in num_verts:
+			var vert_idx:int = data.face_vertex_indices[face_vertex_count]
+			vert_indices.append(vert_idx)
+			vert_points.append(vertices[vert_idx].point)
+#			var v_idx:int = data.face_vertex_indices[count]
+			face_vertex_count += 1
+		
+		var normal = MathUtil.face_area_x2(vert_points).normalized()
+		var f:FaceInfo = FaceInfo.new(self, data.face_ids[face_idx], normal, data.face_uv_transform[face_idx], data.face_material_indices[face_idx])
+		f.selected = data.face_selected[face_idx]
+		f.vertex_indices = vert_indices
+		
+		faces.append(f)
 
-	bounds = calc_bounds()
+	build_edges()
 	
-	#var points:PackedVector3Array = calc_convex_hull_points()
-	#print("volume points %s" % points)
-	#var hull = QuickHull.quickhull(points)
-	#print("hull %s" % hull.format_points())
+	bounds = calc_bounds()
 	
 
 #Calc convex hull bouding points
 func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0):
+	vertices = []
+	edges = []
 	faces = []
 
 	var hull:QuickHull.Hull = QuickHull.quickhull(points)
 	#print("hull %s" % hull.format_points())
+	var hull_points:Array[Vector3] = hull.get_points()
 	
-	var planes:Array[Plane] = []
+	for p in hull_points:
+		vertices.append(VertexInfo.new(self, p))
 	
-	#print("init_from_points")
 	for facet in hull.facets:
 		var plane:Plane = facet.plane
+		var vert_indices:Array[int] = []
 		
-		#print("facet candidate %s" % facet)
+		for p in facet.points:
+			var vert_idx:int = hull_points.find(p)
+			vert_indices.append(vert_idx)
 		
-		plane = Plane(-plane.normal, plane.get_center())
-		
-#		print("plane %s" % plane)
-		
-#		if planes.has(plane):
-		if planes.any(func(p): return p.is_equal_approx(plane)):
-			continue
-			
-		planes.append(plane)
-		#print("plane %s" % plane)
-			
-		var id:int = faces.size()
-		faces.append(PlaneInfo.new(id, plane, uv_transform, material_id))
+		var f:FaceInfo = FaceInfo.new(self, faces.size(), plane.normal, uv_transform, material_id)
+		f.vertex_indices = vert_indices
+	
 
+	build_edges()
+	
 	bounds = calc_bounds()
+	
 
+
+func get_edge(vert_idx0:int, vert_idx1:int)->EdgeInfo:
+	for e in edges:
+		if e.start_index == vert_idx0 && e.end_index == vert_idx1:
+			return e
+		if e.start_index == vert_idx1 && e.end_index == vert_idx0:
+			return e
+	return null
+
+
+func build_edges():
+			
+	#Calculate edges
+	for face in faces:
+		var num_corners = face.vertex_indices.size()
+		for i0 in num_corners:
+			var i1:int = wrap(i0 + 1, 0, num_corners)
+			var v0_idx:int = face.vertex_indices[i0]
+			var v1_idx:int = face.vertex_indices[i1]
+			
+			var edge:EdgeInfo = get_edge(v0_idx, v1_idx)
+			if !edge:
+				var edge_idx = edges.size()
+				edge = EdgeInfo.new(self, v0_idx, v1_idx)
+				edges.append(edge)
+			
+				var v0:VertexInfo = vertices[v0_idx]
+				v0.edge_indices.append(edge_idx)
+				
+				var v1:VertexInfo = vertices[v1_idx]
+				v1.edge_indices.append(edge_idx)
+
+			edge.face_indices.append(face.id)
+
+func get_face_coincident_with_plane(plane:Plane)->FaceInfo:
+	for f in faces:
+		var p:Plane = f.get_plane()
+		if p.is_equal_approx(plane):
+			return f
+	return null
 
 func copy_face_attributes(ref_vol:ConvexVolume):
-	var local_mesh:ConvexMesh = calc_mesh()
-	var ref_mesh:ConvexMesh = ref_vol.calc_mesh()
-
-	local_mesh.copy_face_attributes(ref_mesh)
+#	var local_mesh:ConvexMesh = calc_mesh()
+#	var ref_mesh:ConvexMesh = ref_vol.calc_mesh()
+#
+#	local_mesh.copy_face_attributes(ref_mesh)
 	
 	for fl in faces:
-		var mesh_face:ConvexMesh.FaceInfo = local_mesh.get_face_coincident_with_plane(fl.plane)
+		var ref_face:FaceInfo = ref_vol.get_face_coincident_with_plane(fl.get_plane())
 		
-		fl.material_id = mesh_face.material_id
-		fl.uv_transform = mesh_face.uv_transform
-		fl.selected = mesh_face.selected
+		fl.material_id = ref_face.material_id
+		fl.uv_transform = ref_face.uv_transform
+		fl.selected = ref_face.selected
 
 func to_convex_block_data()->ConvexBlockData:
 	var result:ConvexBlockData = ConvexBlockData.new()
 	
+	for v in vertices:
+		result.vertex_points.append(v.point)
+		result.vertex_selected.append(v.selected)
+
 	for face in faces:
-		result.face_material_indices.append(face.material_id)
-		result.face_planes.append(face.plane)
-		result.face_uv_transform.append(face.uv_transform)
+		var num_verts:int = face.vertex_indices.size()
+		result.face_vertex_count.append(num_verts)
+		result.face_vertex_indices.append_array(face.vertex_indices)
 		result.face_ids.append(face.id)
+		result.face_selected.append(face.selected)
+		result.face_material_indices.append(face.material_id)
+		result.face_uv_transform.append(face.uv_transform)
 	
 	return result
 
-func get_face(face_id:int)->PlaneInfo:
+func get_face(face_id:int)->FaceInfo:
 	for face in faces:
 		if face.id == face_id:
 			return face
 	return null
 
-func is_empty():
-	return bounds.size .is_zero_approx()
-
-func remove_unused_planes():
-	var points:PackedVector3Array = calc_convex_hull_points()
-	var remove_list:Array[PlaneInfo] = []
+#enum PlaneSide { OVER, ON, UNDER }
+func cut_with_plane(plane:Plane, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0)->ConvexVolume:
+#
+#	#Calculate hull points
+#	var new_points:Array[Vector3]
+#	for f in faces:
+#		for i0 in f.vertex_indices.size():
+#			var i1:int = wrap(i0 + 1, 0, f.vertex_indices.size())
+#			var v0_idx:int = f.vertex_indices[i0]
+#			var v1_idx:int = f.vertex_indices[i1]
+#			var v0:VertexInfo = vertices[v0_idx]
+#			var v1:VertexInfo = vertices[v1_idx]
+#
+#			var v0_over = plane.is_point_over(v0.point)
+#			var v0_on = plane.has_point(v0.point)
+#			var v1_over = plane.is_point_over(v1.point)
+#			var v1_on = plane.has_point(v1.point)
+#			if v0_over || v0_on:
+#				if !new_points.any(func(p): return p.is_equal_approx(v0.point)):
+#					new_points.append(v0.point)
+#
+#			if v0_over && !v0_on:
+#				if !v1_over && !v1_on:
+#					var pm:Vector3 = plane.intersects_segment(v0.point, v1.point)
+#					if !new_points.any(func(p): return p.is_equal_approx(pm)):
+#						new_points.append(pm)
+#			elif !v0_over && !v0_on:
+#				if v1_over && !v1_on:
+#					var pm:Vector3 = plane.intersects_segment(v0.point, v1.point)
+#					if !new_points.any(func(p): return p.is_equal_approx(pm)):
+#						new_points.append(pm)
+			
+	#var hull:QuickHull.Hull = QuickHull.quickhull(new_points)
 	
-	for face in faces:
-		#var count:int = 0
-		var points_on_plane:PackedVector3Array
-		for p in points:
-			if face.plane.has_point(p):
-				points_on_plane.append(p)
-#				count += 1
-				
-		if MathUtil.points_are_colinear(points_on_plane):
-			remove_list.append(face)
-#		if count < 3:
-#			remove_list.append(face)
+	var planes:Array[Plane]
+	for f in faces:
+		planes.append(f.get_plane())
+	planes.append(plane)
+	var hull_points:Array[Vector3] = MathUtil.get_convex_hull_points_from_planes(planes)
+	if hull_points.is_empty():
+		return null
 		
-	for face in remove_list:
-		faces.remove_at(faces.find(face))
+	var new_vol:ConvexVolume = ConvexVolume.new()
+	new_vol.init_from_points(hull_points)
+	
+	new_vol.copy_face_attributes(self)
+			
+	for f in faces:
+		if f.plane.is_equal_approx(plane):
+			f.uv_transform = uv_transform
+			f.material_id = material_id
 
-func translate_face(face_id:int, offset:Vector3, lock_uvs:bool = false):
+	return new_vol
+
+func is_empty():
+	return bounds.size.is_zero_approx()
+
+func translate_face_plane(face_id:int, offset:Vector3, lock_uvs:bool = false)->ConvexVolume:
 	var xform:Transform3D = Transform3D(Basis.IDENTITY, -offset)
 
-	var p:PlaneInfo = get_face(face_id)
-	p.plane = p.plane * xform
-	
-	if lock_uvs:
-		var axis:MathUtil.Axis = MathUtil.get_longest_axis(p.plane.normal)
-		var uv_offset:Vector2
-		if axis == MathUtil.Axis.X:
-			uv_offset = Vector2(offset.y, offset.z)
-		elif axis == MathUtil.Axis.Y:
-			uv_offset = Vector2(offset.x, offset.z)
+	var source_face:FaceInfo
+	var transformed_plane:Plane
+
+	var planes:Array[Plane] = []
+	for f in faces:
+		if f.id == face_id:
+			transformed_plane = f.get_plane() * xform
+			planes.append(transformed_plane)
+			source_face = f
 		else:
-			uv_offset = Vector2(offset.x, offset.y)
+			planes.append(f.plane)
+
+	var hull_points:Array[Vector3] = MathUtil.get_convex_hull_points_from_planes(planes)
+	if hull_points:
+		return null
+	
+	var new_vol:ConvexVolume = ConvexVolume.new()
+	new_vol.init_from_points(hull_points)
+	new_vol.copy_face_attributes(self)
+	
+	return new_vol
 		
-		p.uv_transform = p.uv_transform.translated(-uv_offset)
-		bounds = calc_bounds()
+	######
+
+#	var p:FaceInfo = get_face(face_id)
+#	p.plane = p.plane * xform
+#
+#
+#	if lock_uvs:
+#		var axis:MathUtil.Axis = MathUtil.get_longest_axis(p.plane.normal)
+#		var uv_offset:Vector2
+#		if axis == MathUtil.Axis.X:
+#			uv_offset = Vector2(offset.y, offset.z)
+#		elif axis == MathUtil.Axis.Y:
+#			uv_offset = Vector2(offset.x, offset.z)
+#		else:
+#			uv_offset = Vector2(offset.x, offset.y)
+#
+#		p.uv_transform = p.uv_transform.translated(-uv_offset)
+#		bounds = calc_bounds()
+
+#func get_face_points(f:FaceInfo)->PackedVector3Array:
+#	var result:PackedVector3Array
+#	for vi in f.vertex_indices:
+#		result.append(vertices[vi].point)
+#	return result
 
 func translate(offset:Vector3, lock_uvs:bool = false):
 	var xform:Transform3D = Transform3D(Basis.IDENTITY, -offset)
 	
-	for p in faces:
-		p.plane = p.plane * xform
-		
-		if lock_uvs:
-			var axis:MathUtil.Axis = MathUtil.get_longest_axis(p.plane.normal)
-			var uv_offset:Vector2
-			if axis == MathUtil.Axis.X:
-				uv_offset = Vector2(offset.y, offset.z)
-			elif axis == MathUtil.Axis.Y:
-				uv_offset = Vector2(offset.x, offset.z)
-			else:
-				uv_offset = Vector2(offset.x, offset.y)
-			
-			p.uv_transform = p.uv_transform.translated(-uv_offset)
+	for v in vertices:
+		v.point = xform * v.point
+	
+#
+#	for p in faces:
+#		p.plane = p.plane * xform
+#
+#		if lock_uvs:
+#			var axis:MathUtil.Axis = MathUtil.get_longest_axis(p.plane.normal)
+#			var uv_offset:Vector2
+#			if axis == MathUtil.Axis.X:
+#				uv_offset = Vector2(offset.y, offset.z)
+#			elif axis == MathUtil.Axis.Y:
+#				uv_offset = Vector2(offset.x, offset.z)
+#			else:
+#				uv_offset = Vector2(offset.x, offset.y)
+#
+#			p.uv_transform = p.uv_transform.translated(-uv_offset)
 	
 
-func unused_id()->int:
+func unused_face_id()->int:
 	var idx = 0
 	for p in faces:
 		idx = max(idx, p.id)
@@ -228,139 +436,223 @@ func unused_id()->int:
 
 func contains_point(point:Vector3)->bool:
 	for f in faces:
-		if !f.plane.has_point(point) && !f.plane.is_point_over(point):
+		var plane:Plane = f.get_plane()
+		if !plane.has_point(point) && !plane.is_point_over(point):
 			return false
 	return true
 
-func calc_bounds()->AABB:
-	var points:PackedVector3Array = calc_convex_hull_points()
-	if points.is_empty():
-		return AABB(Vector3.ZERO, Vector3.ZERO)
-	
-	var result:AABB = AABB(points[0], Vector3.ZERO)
-	for p in points:
-		result = result.expand(p)
-		
-	return result
 
-func has_point(points:PackedVector3Array, point:Vector3):
-	const epsilon = .0001
-	
-	for p in points:
-#		if point.is_equal_approx(p):
-		if point.distance_squared_to(p) < epsilon * epsilon:
-			return true
-	return false
-
-func calc_convex_hull_points()->PackedVector3Array:
+func get_points()->PackedVector3Array:
 	var points:PackedVector3Array
 	
-	for i0 in range(0, faces.size()):
-		for i1 in range(i0 + 1, faces.size()):
-			for i2 in range(i1 + 1, faces.size()):
-				var result = faces[i0].plane.intersect_3(faces[i1].plane, faces[i2].plane)
-
-				if result == null:
-					continue
-				if !contains_point(result):
-					continue
-				if has_point(points, result):
-					continue
-				points.append(result)
+	for v in vertices:
+		points.append(v.point)
 	
 	return points
 
-func get_closest_face(plane:Plane)->PlaneInfo:
-	var best_dot:float = -1
-	var best_plane:PlaneInfo
-	
-	for f in faces:
-		var dot:float = plane.normal.dot(f.plane.normal)
-		if dot > best_dot:
-			best_dot = dot
-			best_plane = f
-			
-	return best_plane
-
-func calc_mesh()->ConvexMesh:
-	if !bounds.has_volume():
-		return null
-	
-	var points:PackedVector3Array = calc_convex_hull_points()
-	var hull:QuickHull.Hull = QuickHull.quickhull(points)
-
-	var result_mesh:ConvexMesh = ConvexMesh.new()
-	
-	for f in hull.facets:
+func calc_bounds()->AABB:
+	if vertices.is_empty():
+		return AABB()
 		
-		var plane_info:PlaneInfo = get_closest_face(f.plane)
+	var result:AABB = AABB(vertices[0].point, Vector3.ZERO)
+	
+	for v_idx in range(1, vertices.size()):
+		result = result.expand(vertices[v_idx].point)
 		
-		var mesh_face:ConvexMesh.FaceInfo = result_mesh.add_face(f.points, f.plane.normal, plane_info.id, plane_info.uv_transform, plane_info.material_id)
-		mesh_face.selected = false
+	return result
 
-#		print("poly_points %s" % poly_points)
-	#result_mesh.copy_face_attributes()
-	#copy_face_attributes(self)
-	
-	result_mesh.calc_bounds()
-	return result_mesh
-	
-#Deprecated
-func calc_mesh_old()->ConvexMesh:
-	assert(false)
-	
-	if !bounds.has_volume():
-		return null
-	
-	var points:PackedVector3Array = calc_convex_hull_points()
-#	print("points %s" % points)
-	
-	var result_mesh:ConvexMesh = ConvexMesh.new()
-	
-	for plane in faces:
-		var points_on_plane:PackedVector3Array
-		for p in points:
-			if plane.plane.has_point(p):
-				points_on_plane.append(p)
+#func has_point(points:PackedVector3Array, point:Vector3):
+#	const epsilon = .0001
+#
+#	for p in points:
+##		if point.is_equal_approx(p):
+#		if point.distance_squared_to(p) < epsilon * epsilon:
+#			return true
+#	return false
 
-#		print("points_on_plane %s" % points_on_plane)
+#func get_closest_face(plane:Plane)->FaceInfo:
+#	var best_dot:float = -1
+#	var best_plane:FaceInfo
+#
+#	for f in faces:
+#		var dot:float = plane.normal.dot(f.normal)
+#		if dot > best_dot:
+#			best_dot = dot
+#			best_plane = f
+#
+#	return best_plane
+
+#func calc_mesh()->ConvexMesh:
+#	if !bounds.has_volume():
+#		return null
+#
+#	var points:PackedVector3Array = calc_convex_hull_points()
+#	var hull:QuickHull.Hull = QuickHull.quickhull(points)
+#
+#	var result_mesh:ConvexMesh = ConvexMesh.new()
+#
+#	for f in hull.facets:
+#
+#		var plane_info:FaceInfo = get_closest_face(f.plane)
+#
+#		var mesh_face:ConvexMesh.FaceInfo = result_mesh.add_face(f.points, f.plane.normal, plane_info.id, plane_info.uv_transform, plane_info.material_id)
+#		mesh_face.selected = false
+#
+##		print("poly_points %s" % poly_points)
+#	#result_mesh.copy_face_attributes()
+#	#copy_face_attributes(self)
+#
+#	result_mesh.calc_bounds()
+#	return result_mesh
+#
+##Deprecated
+#func calc_mesh_old()->ConvexMesh:
+#	assert(false)
+#
+#	if !bounds.has_volume():
+#		return null
+#
+#	var points:PackedVector3Array = calc_convex_hull_points()
+##	print("points %s" % points)
+#
+#	var result_mesh:ConvexMesh = ConvexMesh.new()
+#
+#	for plane in faces:
+#		var points_on_plane:PackedVector3Array
+#		for p in points:
+#			if plane.plane.has_point(p):
+#				points_on_plane.append(p)
+#
+##		print("points_on_plane %s" % points_on_plane)
+#
+#		var poly_points:PackedVector3Array = MathUtil.bounding_polygon_3d(points_on_plane, plane.plane.normal)
+#		var area_2x:Vector3 = MathUtil.face_area_x2(poly_points)
+#		if area_2x.dot(plane.plane.normal) > 0:
+#			poly_points.reverse()
+#
+#		var mesh_face:ConvexMesh.FaceInfo = result_mesh.add_face(poly_points, -plane.plane.normal, plane.id, plane.uv_transform, plane.material_id)
+#		mesh_face.selected = plane.selected
+#
+##		print("poly_points %s" % poly_points)
+#
+#	result_mesh.calc_bounds()
+#	return result_mesh
+
+
+func tristrip_vertex_range(num_verts:int)->PackedInt32Array:
+	var result:PackedInt32Array
 	
-		var poly_points:PackedVector3Array = MathUtil.bounding_polygon_3d(points_on_plane, plane.plane.normal)
-		var area_2x:Vector3 = MathUtil.face_area_x2(poly_points)
-		if area_2x.dot(plane.plane.normal) > 0:
-			poly_points.reverse()
-		
-		var mesh_face:ConvexMesh.FaceInfo = result_mesh.add_face(poly_points, -plane.plane.normal, plane.id, plane.uv_transform, plane.material_id)
-		mesh_face.selected = plane.selected
-
-#		print("poly_points %s" % poly_points)
+	result.append(0)
+	result.append(1)
+	for i in range(2, num_verts):
+		if (i & 1) == 0:
+			result.append(num_verts - (i >> 1))
+		else:
+			result.append((i >> 1) + 1)
 	
-	result_mesh.calc_bounds()
-	return result_mesh
-
-
+	return result
+	
 func append_mesh(mesh:ImmediateMesh, material:Material, color:Color = Color.WHITE):
 #	if Engine.is_editor_hint():
 #		return
 
-	var convex_mesh:ConvexMesh = calc_mesh()
+	for face in faces:
+		mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, material)
+#		print("face %s" % face.index)
+		
+		mesh.surface_set_normal(face.normal)
+		
+		for i in tristrip_vertex_range(face.vertex_indices.size()):
+			var v_idx:int = face.vertex_indices[i]
+			var p:Vector3 = vertices[v_idx].point
+			mesh.surface_set_color(color)
+			
+			var uv:Vector2
+			var axis:MathUtil.Axis = MathUtil.get_longest_axis(face.normal)
+			if axis == MathUtil.Axis.X:
+				uv = Vector2(p.y, p.z)
+			elif axis == MathUtil.Axis.Y:
+				uv = Vector2(p.x, p.z)
+			elif axis == MathUtil.Axis.Z:
+				uv = Vector2(p.x, p.y)
+				
+			uv = face.uv_transform * uv
+			mesh.surface_set_uv(uv)
+			
+			mesh.surface_add_vertex(p)
 	
-	if convex_mesh:
-		convex_mesh.append_mesh(mesh, material, color)
+		mesh.surface_end()
+
+
+#	var convex_mesh:ConvexMesh = calc_mesh()
+#
+#	if convex_mesh:
+#		convex_mesh.append_mesh(mesh, material, color)
 
 func append_mesh_wire(mesh:ImmediateMesh, material:Material, color:Color = Color.WHITE):
 #	if Engine.is_editor_hint():
 #		return
 
-	var convex_mesh:ConvexMesh = calc_mesh()
-	
-	if convex_mesh:
-		convex_mesh.append_mesh_wire(mesh, material, color)
-	
+#	var convex_mesh:ConvexMesh = calc_mesh()
+#
+#	if convex_mesh:
+#		convex_mesh.append_mesh_wire(mesh, material, color)
+
+	for face in faces:
+		mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, material)
+#		print("face %s" % face.index)
+		
+		for i in face.vertex_indices.size():
+			var v_idx:int = face.vertex_indices[i]
+			mesh.surface_add_vertex(vertices[v_idx].point)
+		var v_idx:int = face.vertex_indices[0]
+		mesh.surface_add_vertex(vertices[v_idx].point)
+
+		mesh.surface_end()	
 
 func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 	if bounds.intersects_ray(origin, dir) == null:
 		return null
 	
-	var convex_mesh:ConvexMesh = calc_mesh()
-	return convex_mesh.intersect_ray_closest(origin, dir)
+#	var convex_mesh:ConvexMesh = calc_mesh()
+#	return convex_mesh.intersect_ray_closest(origin, dir)
+
+	if bounds.intersects_ray(origin, dir) == null:
+		return null
+	
+	var best_result:IntersectResults
+	
+	for face in faces:
+		var tris:PackedVector3Array = MathUtil.trianglate_face(face.get_points(), face.normal)
+		for i in range(0, tris.size(), 3):
+			var p0:Vector3 = tris[i]
+			var p1:Vector3 = tris[i + 1]
+			var p2:Vector3 = tris[i + 2]
+			
+			#Godot uses clockwise winding
+			var tri_area_x2:Vector3 = MathUtil.triangle_area_x2(p0, p1, p2)
+			
+			var p_hit:Vector3 = MathUtil.intersect_plane(origin, dir, p0, tri_area_x2)
+			if !p_hit.is_finite():
+				continue
+			
+			if MathUtil.triangle_area_x2(p_hit, p0, p1).dot(tri_area_x2) < 0:
+				continue
+			if MathUtil.triangle_area_x2(p_hit, p1, p2).dot(tri_area_x2) < 0:
+				continue
+			if MathUtil.triangle_area_x2(p_hit, p2, p0).dot(tri_area_x2) < 0:
+				continue
+			
+			#Intersection
+			var dist_sq:float = (origin - p_hit).length_squared()
+			if !best_result || best_result.distance_squared > dist_sq:
+			
+				var result:IntersectResults = IntersectResults.new()
+				result.face_id = face.id
+				result.normal = face.normal
+				result.position = p_hit
+				result.distance_squared = dist_sq
+				
+				best_result = result
+					
+	return best_result

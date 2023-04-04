@@ -79,7 +79,7 @@ static func trianglate_face(points:PackedVector3Array, normal:Vector3)->PackedVe
 static func triangle_area_x2(p0:Vector3, p1:Vector3, p2:Vector3)->Vector3:
 	return (p2 - p0).cross(p1 - p0)
 	
-#Returns a vector poitning along the normal in the clockwise winding direction with a lengh equal to twice the area of the face
+#Returns a vector pointing along the normal in the clockwise winding direction with a lengh equal to twice the area of the face
 static func face_area_x2(points:PackedVector3Array)->Vector3:
 	if points.size() <= 1:
 		return Vector3.ZERO
@@ -94,6 +94,10 @@ static func face_area_x2(points:PackedVector3Array)->Vector3:
 		result += (p2 - p0).cross(p1 - p0)
 	
 	return result
+
+static func fit_plane(points:PackedVector3Array)->Plane:
+	var normal:Vector3 = face_area_x2(points).normalized()
+	return Plane(normal, points[0])
 
 static func snap_to_best_axis_normal(vector:Vector3)->Vector3:
 	if abs(vector.x) > abs(vector.y) and abs(vector.x) > abs(vector.z):
@@ -259,4 +263,26 @@ static func furthest_point_from_plane(plane:Plane, points:PackedVector3Array)->V
 			
 	return best_point
 
+static func planar_volume_contains_point(planes:Array[Plane], point:Vector3)->bool:
+	for p in planes:
+		if !p.is_point_over(point) && !p.has_point(point):
+			return false
+	return true
 	
+static func get_convex_hull_points_from_planes(planes:Array[Plane])->Array[Vector3]:
+	var points:Array[Vector3]
+	
+	for i0 in range(0, planes.size()):
+		for i1 in range(i0 + 1, planes.size()):
+			for i2 in range(i1 + 1, planes.size()):
+				var result = planes[i0].intersect_3(planes[i1], planes[i2])
+
+				if result == null:
+					continue
+				if !planar_volume_contains_point(planes, result):
+					continue
+				if points.any(func(p):return p.is_equal_approx(result)):
+					continue
+				points.append(result)
+	
+	return points

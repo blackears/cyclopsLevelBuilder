@@ -33,11 +33,19 @@ func test_volume2():
 	var points:PackedVector3Array = [Vector3(1.999997, 3, 8.999995), Vector3(1.999995, 7.000015, 8.999995), Vector3(-5, 3, 6.999998), Vector3(1.999998, 3, 2.999989), Vector3(-2.999995, 3, 0.999999), Vector3(-5.000003, 6.999996, 3.000013), Vector3(-2.999998, 6.999998, 6.000011), Vector3(0.999997, 7.000027, 3.000014)]
 
 	var vol = ConvexVolume.new()
+	vol.init_block(AABB(Vector3(0, 0, 0), Vector3(1, 1, 1)))
+
 	vol.init_from_points(points)
 	
 	for f in vol.faces:
 		print("vol plane %s" % f.plane)
 	pass
+
+func isect_test():
+	var result:IntersectResults = $CyclopsBlocks.intersect_ray_closest($Marker3D.transform.origin, $Marker3D.transform.basis.z)
+	#var result:IntersectResults = $CyclopsBlocks.intersect_ray_closest(Vector3(-2.827666, 11.78138, -14.39898), Vector3(0.703937, -0.382888, 0.598221))
+	pass
+	
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -46,6 +54,7 @@ func _ready():
 
 	#test_planes()
 	#test_volume2()
+	isect_test()
 
 
 #	var points:PackedVector3Array

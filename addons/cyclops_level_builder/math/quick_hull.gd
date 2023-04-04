@@ -113,21 +113,108 @@ class Hull extends RefCounted:
 		for f in facets:
 			result += "%s\n" % f
 		return result
+
+
+	func get_points()->Array[Vector3]:
+		var result:Array[Vector3]	
 		
+		for f in facets:
+			for p in f.points:
+				if !result.any(func(pl):return pl.is_equal_approx(p)):
+					result.append(p)
+		
+		return result
+				
 	func format_points()->String:
 		var result:String = ""
 		for f in facets:
 			result += "%s,\n" % f.points
 		return result		
 
-static func determinate_3(v0:Vector3, v1:Vector3, v2:Vector3)->float:
-	return v0.x * v1.y * v2.z \
-		- v0.x * v1.z * v2.y \
-		+ v0.z * v1.x * v2.y \
-		- v0.y * v1.x * v2.z \
-		+ v0.y * v1.z * v2.x \
-		- v0.z * v1.y * v2.x;
 
+static func form_loop(edges:Array[DirectedEdge])->PackedVector3Array:
+	var sorted:Array[DirectedEdge] = []
+	
+	var cur_edge:DirectedEdge = edges.pop_back()
+	sorted.append(cur_edge)
+	
+	while !edges.is_empty():
+		var found_edge:bool = false
+		for i in edges.size():
+			var e:DirectedEdge = edges[i]
+			if e.p0.is_equal_approx(cur_edge.p1):
+				edges.remove_at(i)
+				cur_edge = e
+				sorted.append(e)
+				found_edge = true
+				break
+		
+		if !found_edge:
+			assert(found_edge, "Unable to complete loop")
+			pass
+#		if !found_edge:
+#			assert(false, "Unable to complete loop")
+#			return PackedVector3Array()
+	
+	var result:PackedVector3Array
+	for e in sorted:
+		result.append(e.p0)
+	return result
+
+static func merge_coplanar_facets(hull:Hull)->Hull:
+#	print("hull %s " % hull)
+	#print("hull %s " % hull.format_points())
+	
+	var new_hull:Hull = Hull.new()
+	var already_seen:Array[Facet] = []
+	
+	for facet_idx in hull.facets.size():
+		var facet:Facet = hull.facets[facet_idx]
+		if already_seen.has(facet):
+			continue
+		already_seen.append(facet)
+		
+		#print("merging facet %s" % facet)
+
+		var neighbor_set:Array[Facet] = []
+		neighbor_set.append(facet)
+		var boundary:Array[DirectedEdge] = []
+		
+		while !neighbor_set.is_empty():
+			var cur_facet:Facet = neighbor_set.pop_back()			
+			var edges:Array[DirectedEdge] = cur_facet.get_edges()
+			
+			for e in edges:
+				var neighbor:Facet = hull.get_facet_with_edge(e.reverse())
+				if neighbor.plane.is_equal_approx(facet.plane):
+					if !already_seen.has(neighbor):
+						already_seen.append(neighbor)
+						neighbor_set.append(neighbor)
+				else:
+					boundary.append(e)
+		
+		
+		var points:PackedVector3Array = form_loop(boundary)
+				
+		var nf:Facet = Facet.new()
+		nf.plane = facet.plane
+		nf.points = points
+		new_hull.facets.append(nf)
+	
+	return new_hull
+	
+#	var facet_map:Dictionary = {}
+#
+#	for f in hull.facets:
+#		for i0 in f.points.size():
+#			var i1:int = wrap(i0 + 1, 0, f.points.size())
+#			var e:DirectedEdge = DirectedEdge.new(f.points[i0], f.points[i1])
+#			facet_map[e] = f
+#
+#		f.get_edges()
+#		hull.get_facet_with_edge()
+	
+			
 
 static func create_initial_simplex(points:PackedVector3Array)->Hull:
 	if points.size() < 4:
@@ -199,7 +286,7 @@ static func create_initial_simplex(points:PackedVector3Array)->Hull:
 				f.over_points.append(p)
 	
 	return hull
-	
+
 
 static func quickhull(points:PackedVector3Array)->Hull:
 	if points.size() < 4:
@@ -277,7 +364,8 @@ static func quickhull(points:PackedVector3Array)->Hull:
 					f.over_points.append(p)
 				
 		#print("hull %s" % hull.format_points())
-		
+	
+	hull = merge_coplanar_facets(hull)
 	return hull
 
 	
