@@ -52,7 +52,7 @@ func setup_tool():
 		if child is CyclopsConvexBlock:
 			var block:CyclopsConvexBlock = child
 			if block.selected:
-				var points:PackedVector3Array = block.control_mesh.calc_convex_hull_points()
+				var points:PackedVector3Array = block.control_mesh.get_points()
 
 				for p in points:
 					var handle:HandleVertex = HandleVertex.new()

@@ -129,7 +129,6 @@ func init_prisim(base_points:Array[Vector3], extrude_dir:Vector3, uv_transform:T
 		vertices.append(v)
 	
 	var f0:FaceInfo = FaceInfo.new(self, faces.size(), base_normal, uv_transform, material_id)
-	#var ggg = range(base_points.size())
 	f0.vertex_indices = []
 	f0.vertex_indices.append_array(range(base_points.size()))
 	faces.append(f0)
@@ -283,11 +282,6 @@ func get_face_most_similar_to_plane(plane:Plane)->FaceInfo:
 	return best_face
 
 func copy_face_attributes(ref_vol:ConvexVolume):
-#	var local_mesh:ConvexMesh = calc_mesh()
-#	var ref_mesh:ConvexMesh = ref_vol.calc_mesh()
-#
-#	local_mesh.copy_face_attributes(ref_mesh)
-	
 	for fl in faces:
 		var ref_face:FaceInfo = ref_vol.get_face_most_similar_to_plane(fl.get_plane())
 		
@@ -381,52 +375,11 @@ func translate_face_plane(face_id:int, offset:Vector3, lock_uvs:bool = false)->C
 	
 	return new_vol
 		
-	######
-
-#	var p:FaceInfo = get_face(face_id)
-#	p.plane = p.plane * xform
-#
-#
-#	if lock_uvs:
-#		var axis:MathUtil.Axis = MathUtil.get_longest_axis(p.plane.normal)
-#		var uv_offset:Vector2
-#		if axis == MathUtil.Axis.X:
-#			uv_offset = Vector2(offset.y, offset.z)
-#		elif axis == MathUtil.Axis.Y:
-#			uv_offset = Vector2(offset.x, offset.z)
-#		else:
-#			uv_offset = Vector2(offset.x, offset.y)
-#
-#		p.uv_transform = p.uv_transform.translated(-uv_offset)
-#		bounds = calc_bounds()
-
-#func get_face_points(f:FaceInfo)->PackedVector3Array:
-#	var result:PackedVector3Array
-#	for vi in f.vertex_indices:
-#		result.append(vertices[vi].point)
-#	return result
-
 func translate(offset:Vector3, lock_uvs:bool = false):
 	var xform:Transform3D = Transform3D(Basis.IDENTITY, offset)
 	
 	for v in vertices:
 		v.point = xform * v.point
-	
-#
-#	for p in faces:
-#		p.plane = p.plane * xform
-#
-#		if lock_uvs:
-#			var axis:MathUtil.Axis = MathUtil.get_longest_axis(p.plane.normal)
-#			var uv_offset:Vector2
-#			if axis == MathUtil.Axis.X:
-#				uv_offset = Vector2(offset.y, offset.z)
-#			elif axis == MathUtil.Axis.Y:
-#				uv_offset = Vector2(offset.x, offset.z)
-#			else:
-#				uv_offset = Vector2(offset.x, offset.y)
-#
-#			p.uv_transform = p.uv_transform.translated(-uv_offset)
 	
 
 func unused_face_id()->int:
@@ -461,83 +414,6 @@ func calc_bounds()->AABB:
 		result = result.expand(vertices[v_idx].point)
 		
 	return result
-
-#func has_point(points:PackedVector3Array, point:Vector3):
-#	const epsilon = .0001
-#
-#	for p in points:
-##		if point.is_equal_approx(p):
-#		if point.distance_squared_to(p) < epsilon * epsilon:
-#			return true
-#	return false
-
-#func get_closest_face(plane:Plane)->FaceInfo:
-#	var best_dot:float = -1
-#	var best_plane:FaceInfo
-#
-#	for f in faces:
-#		var dot:float = plane.normal.dot(f.normal)
-#		if dot > best_dot:
-#			best_dot = dot
-#			best_plane = f
-#
-#	return best_plane
-
-#func calc_mesh()->ConvexMesh:
-#	if !bounds.has_volume():
-#		return null
-#
-#	var points:PackedVector3Array = calc_convex_hull_points()
-#	var hull:QuickHull.Hull = QuickHull.quickhull(points)
-#
-#	var result_mesh:ConvexMesh = ConvexMesh.new()
-#
-#	for f in hull.facets:
-#
-#		var plane_info:FaceInfo = get_closest_face(f.plane)
-#
-#		var mesh_face:ConvexMesh.FaceInfo = result_mesh.add_face(f.points, f.plane.normal, plane_info.id, plane_info.uv_transform, plane_info.material_id)
-#		mesh_face.selected = false
-#
-##		print("poly_points %s" % poly_points)
-#	#result_mesh.copy_face_attributes()
-#	#copy_face_attributes(self)
-#
-#	result_mesh.calc_bounds()
-#	return result_mesh
-#
-##Deprecated
-#func calc_mesh_old()->ConvexMesh:
-#	assert(false)
-#
-#	if !bounds.has_volume():
-#		return null
-#
-#	var points:PackedVector3Array = calc_convex_hull_points()
-##	print("points %s" % points)
-#
-#	var result_mesh:ConvexMesh = ConvexMesh.new()
-#
-#	for plane in faces:
-#		var points_on_plane:PackedVector3Array
-#		for p in points:
-#			if plane.plane.has_point(p):
-#				points_on_plane.append(p)
-#
-##		print("points_on_plane %s" % points_on_plane)
-#
-#		var poly_points:PackedVector3Array = MathUtil.bounding_polygon_3d(points_on_plane, plane.plane.normal)
-#		var area_2x:Vector3 = MathUtil.face_area_x2(poly_points)
-#		if area_2x.dot(plane.plane.normal) > 0:
-#			poly_points.reverse()
-#
-#		var mesh_face:ConvexMesh.FaceInfo = result_mesh.add_face(poly_points, -plane.plane.normal, plane.id, plane.uv_transform, plane.material_id)
-#		mesh_face.selected = plane.selected
-#
-##		print("poly_points %s" % poly_points)
-#
-#	result_mesh.calc_bounds()
-#	return result_mesh
 
 
 func tristrip_vertex_range(num_verts:int)->PackedInt32Array:
@@ -585,19 +461,9 @@ func append_mesh(mesh:ImmediateMesh, material:Material, color:Color = Color.WHIT
 		mesh.surface_end()
 
 
-#	var convex_mesh:ConvexMesh = calc_mesh()
-#
-#	if convex_mesh:
-#		convex_mesh.append_mesh(mesh, material, color)
-
 func append_mesh_wire(mesh:ImmediateMesh, material:Material, color:Color = Color.WHITE):
 #	if Engine.is_editor_hint():
 #		return
-
-#	var convex_mesh:ConvexMesh = calc_mesh()
-#
-#	if convex_mesh:
-#		convex_mesh.append_mesh_wire(mesh, material, color)
 
 	for face in faces:
 		mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, material)
@@ -614,9 +480,6 @@ func append_mesh_wire(mesh:ImmediateMesh, material:Material, color:Color = Color
 func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 	if bounds.intersects_ray(origin, dir) == null:
 		return null
-	
-#	var convex_mesh:ConvexMesh = calc_mesh()
-#	return convex_mesh.intersect_ray_closest(origin, dir)
 
 	if bounds.intersects_ray(origin, dir) == null:
 		return null

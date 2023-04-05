@@ -46,7 +46,7 @@ func do_it():
 	var vol:ConvexVolume = ConvexVolume.new()
 	vol.init_from_convex_block_data(tracked_block_data)
 	
-	var points:PackedVector3Array = vol.calc_convex_hull_points()
+	var points:PackedVector3Array = vol.get_points()
 	print("do_it")
 	print("old points %s " % points)
 	var new_points:PackedVector3Array
