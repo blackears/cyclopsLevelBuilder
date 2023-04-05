@@ -53,6 +53,14 @@ func test_move_face():
 	var new_vol:ConvexVolume = vol.translate_face_plane(0, Vector3(5, 0, 0))
 	pass
 
+func test_cut_plane():
+	var vol:ConvexVolume = ConvexVolume.new()
+	vol.init_block(AABB(Vector3(0, 0, 0), Vector3(5, 5, 5)))
+
+	var plane = Plane(Vector3(-1, 0, 0), Vector3(3, 3, 3))
+	var new_vol:ConvexVolume = vol.cut_with_plane(plane)
+	pass
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
@@ -61,7 +69,7 @@ func _ready():
 	#test_planes()
 	#test_volume2()
 	#isect_test()
-	test_move_face()
+	test_cut_plane()
 
 
 #	var points:PackedVector3Array

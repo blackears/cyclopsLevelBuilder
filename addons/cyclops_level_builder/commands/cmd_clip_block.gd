@@ -49,15 +49,16 @@ func do_it():
 	var cut_plane_reverse:Plane = Plane(-cut_plane.normal, cut_plane.get_center())
 
 	#var block_data:ConvexBlockData = clipped_block.block_data
-	var vol0:ConvexVolume = ConvexVolume.new()
-	vol0.init_from_convex_block_data(old_block_data)
-	vol0.add_face(cut_plane, builder.tool_uv_transform, builder.tool_material_id)
+#	var vol0:ConvexVolume = ConvexVolume.new()
+#	vol0.init_from_convex_block_data(old_block_data)
+	var vol0:ConvexVolume = block.control_mesh.cut_with_plane(cut_plane, builder.tool_uv_transform, builder.tool_material_id)
 	
-	var vol1:ConvexVolume = ConvexVolume.new()
-	vol1.init_from_convex_block_data(old_block_data)
-	vol1.add_face(cut_plane_reverse, builder.tool_uv_transform, builder.tool_material_id)
+#	var vol1:ConvexVolume = ConvexVolume.new()
+#	vol1.init_from_convex_block_data(old_block_data)
+#	vol1.add_face(cut_plane_reverse, builder.tool_uv_transform, builder.tool_material_id)
+	var vol1:ConvexVolume = block.control_mesh.cut_with_plane(MathUtil.flip_plane(cut_plane), builder.tool_uv_transform, builder.tool_material_id)
 
-	#Set data of existing block
+	#Set data of existing block	
 	block.block_data = vol0.to_convex_block_data()
 	
 	#Create second block

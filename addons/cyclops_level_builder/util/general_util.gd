@@ -33,4 +33,10 @@ static func find_unique_name(parent:Node, base_name:String)->String:
 			
 		name_idx += 1
 	return ""
+
+static func format_planes_string(planes:Array[Plane])->String:
+	var result:String = ""
+	for p in planes:
+		result = result + "(%s, %s, %s, %s)," % [p.x, p.y, p.z, p.d]
+	return result
 	

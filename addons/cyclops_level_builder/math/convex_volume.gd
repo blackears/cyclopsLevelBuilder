@@ -326,41 +326,14 @@ func get_face(face_id:int)->FaceInfo:
 #enum PlaneSide { OVER, ON, UNDER }
 func cut_with_plane(plane:Plane, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0)->ConvexVolume:
 #
-#	#Calculate hull points
-#	var new_points:Array[Vector3]
-#	for f in faces:
-#		for i0 in f.vertex_indices.size():
-#			var i1:int = wrap(i0 + 1, 0, f.vertex_indices.size())
-#			var v0_idx:int = f.vertex_indices[i0]
-#			var v1_idx:int = f.vertex_indices[i1]
-#			var v0:VertexInfo = vertices[v0_idx]
-#			var v1:VertexInfo = vertices[v1_idx]
-#
-#			var v0_over = plane.is_point_over(v0.point)
-#			var v0_on = plane.has_point(v0.point)
-#			var v1_over = plane.is_point_over(v1.point)
-#			var v1_on = plane.has_point(v1.point)
-#			if v0_over || v0_on:
-#				if !new_points.any(func(p): return p.is_equal_approx(v0.point)):
-#					new_points.append(v0.point)
-#
-#			if v0_over && !v0_on:
-#				if !v1_over && !v1_on:
-#					var pm:Vector3 = plane.intersects_segment(v0.point, v1.point)
-#					if !new_points.any(func(p): return p.is_equal_approx(pm)):
-#						new_points.append(pm)
-#			elif !v0_over && !v0_on:
-#				if v1_over && !v1_on:
-#					var pm:Vector3 = plane.intersects_segment(v0.point, v1.point)
-#					if !new_points.any(func(p): return p.is_equal_approx(pm)):
-#						new_points.append(pm)
-			
-	#var hull:QuickHull.Hull = QuickHull.quickhull(new_points)
-	
 	var planes:Array[Plane]
 	for f in faces:
-		planes.append(f.get_plane())
+		#Top of planr should point toward interior
+		planes.append(MathUtil.flip_plane(f.get_plane()))
 	planes.append(plane)
+	
+	#print("planes %s" % GeneralUtil.format_planes_string(planes))
+	
 	var hull_points:Array[Vector3] = MathUtil.get_convex_hull_points_from_planes(planes)
 	if hull_points.is_empty():
 		return null
@@ -370,10 +343,12 @@ func cut_with_plane(plane:Plane, uv_transform:Transform2D = Transform2D.IDENTITY
 	
 	new_vol.copy_face_attributes(self)
 			
-	for f in faces:
-		if f.plane.is_equal_approx(plane):
+	for f in new_vol.faces:
+		var f_plane:Plane = MathUtil.flip_plane(f.get_plane())
+		if f_plane.is_equal_approx(plane):
 			f.uv_transform = uv_transform
 			f.material_id = material_id
+			break
 
 	return new_vol
 

@@ -267,9 +267,15 @@ static func furthest_point_from_plane(plane:Plane, points:PackedVector3Array)->V
 	return best_point
 
 static func planar_volume_contains_point(planes:Array[Plane], point:Vector3)->bool:
+#	print("candidate %s" % point)
+	
 	for p in planes:
-		if !p.is_point_over(point) && !p.has_point(point):
+		var is_over:bool = p.is_point_over(point)
+		var is_on:bool = p.has_point(point)
+		if !is_over && !is_on:
+#			print("reject by %s" % p)
 			return false
+#	print("passed %s" % point)
 	return true
 	
 static func get_convex_hull_points_from_planes(planes:Array[Plane])->Array[Vector3]:
@@ -290,10 +296,12 @@ static func get_convex_hull_points_from_planes(planes:Array[Plane])->Array[Vecto
 
 				if result == null:
 					continue
+				#print("candidate %s" % result)
 				if !planar_volume_contains_point(planes, result):
 					continue
 				if points.any(func(p):return p.is_equal_approx(result)):
 					continue
+				#print("adding %s" % result)
 				points.append(result)
 	
 	return points
