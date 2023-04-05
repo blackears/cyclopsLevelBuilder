@@ -60,6 +60,36 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				
 				return true
 	
+	if event is InputEventMouseButton:
+		var e:InputEventMouseButton = event
+		
+		if e.button_index == MOUSE_BUTTON_MIDDLE:
+			if e.alt_pressed:
+				if e.is_pressed():
+					if builder.active_node:
+
+						var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
+						var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+						
+						var start_pos:Vector3 = origin + builder.block_create_distance * dir
+						var w2l = builder.active_node.global_transform.inverse()
+						var origin_local:Vector3 = w2l * origin
+						var dir_local:Vector3 = w2l.basis * dir
+						
+						var result:IntersectResults = builder.active_node.intersect_ray_closest(origin_local, dir_local)
+						if result:
+							var ed_iface:EditorInterface = builder.get_editor_interface()
+							var base_control:Control = ed_iface.get_base_control()
+							
+							#viewport_camera
+							var new_cam_origin:Vector3 = result.position + \
+								viewport_camera.global_transform.basis.z * builder.block_create_distance
+							viewport_camera.global_transform.origin = new_cam_origin
+					return true
+			
+
+		
+	
 	return false
 
 

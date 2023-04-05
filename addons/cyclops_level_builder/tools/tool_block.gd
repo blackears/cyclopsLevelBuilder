@@ -215,12 +215,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		
 		#print("drag_style %s" % drag_style)
 		if (e.button_mask & MOUSE_BUTTON_MASK_MIDDLE):
-			return false
+			return super._gui_input(viewport_camera, event)
 		
 		if drag_style == DragStyle.NONE:
 			if e.shift_pressed:
 				#block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
-				var result:IntersectResults = blocks_root.intersect_ray_closest(origin, dir)
+				var result:IntersectResults = blocks_root.intersect_ray_closest(origin_local, dir_local)
 				if result:
 					var block:CyclopsConvexBlock = result.object
 #					var convex_mesh:ConvexMesh = block.control_mesh.calc_mesh()
