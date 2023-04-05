@@ -165,6 +165,12 @@ func init_from_convex_block_data(data:ConvexBlockData):
 		var v:VertexInfo = VertexInfo.new(self, data.vertex_points[i])
 		vertices.append(v)
 		v.selected = data.vertex_selected[i]
+
+	var num_edges:int = data.edge_vertex_indices.size() / 2
+	for i in num_edges:
+		var edge:EdgeInfo = EdgeInfo.new(self, data.edge_vertex_indices[i * 2], data.edge_vertex_indices[i * 2 + 1])
+		edges.append(edge)
+		edge.selected = data.edge_selected[i]
 		
 	var face_vertex_count:int = 0
 	for face_idx in data.face_vertex_count.size():
@@ -185,7 +191,7 @@ func init_from_convex_block_data(data:ConvexBlockData):
 		
 		faces.append(f)
 
-	build_edges()
+	#build_edges()
 	
 	bounds = calc_bounds()
 	
@@ -295,6 +301,10 @@ func to_convex_block_data()->ConvexBlockData:
 	for v in vertices:
 		result.vertex_points.append(v.point)
 		result.vertex_selected.append(v.selected)
+
+	for e in edges:
+		result.edge_vertex_indices.append_array([e.start_index, e.end_index])
+		result.edge_selected.append(e.selected)
 
 	for face in faces:
 		var num_verts:int = face.vertex_indices.size()
