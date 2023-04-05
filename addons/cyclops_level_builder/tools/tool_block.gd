@@ -79,7 +79,7 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 			cmd_move_face.block_path = result.object.get_path()
 			cmd_move_face.face_id = result.face_id
 			cmd_move_face.lock_uvs = builder.lock_uvs
-			cmd_move_face.move_dir_normal = result.object.control_mesh.faces[result.face_id].plane.normal
+			cmd_move_face.move_dir_normal = result.object.control_mesh.faces[result.face_id].normal
 
 			move_face_origin = result.position
 			
@@ -223,8 +223,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				var result:IntersectResults = blocks_root.intersect_ray_closest(origin, dir)
 				if result:
 					var block:CyclopsConvexBlock = result.object
-					var convex_mesh:ConvexMesh = block.control_mesh.calc_mesh()
-					var points:PackedVector3Array = convex_mesh.get_face_points(result.face_id)
+#					var convex_mesh:ConvexMesh = block.control_mesh.calc_mesh()
+					var convex_mesh:ConvexVolume = block.control_mesh
+					var points:PackedVector3Array = convex_mesh.get_face(result.face_id).get_points()
+#					var points:PackedVector3Array = convex_mesh.get_face_points(result.face_id)
 					#var face = block.control_mesh.faces[result.face_index]
 					#var points:PackedVector3Array = block.control_mesh.get_face_points(face)
 					

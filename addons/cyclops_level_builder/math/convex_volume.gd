@@ -196,8 +196,10 @@ func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Tran
 	edges = []
 	faces = []
 
+	#print("init_from_points %s" % points)
 	var hull:QuickHull.Hull = QuickHull.quickhull(points)
 	#print("hull %s" % hull.format_points())
+	
 	var hull_points:Array[Vector3] = hull.get_points()
 	
 	for p in hull_points:
@@ -213,6 +215,7 @@ func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Tran
 		
 		var f:FaceInfo = FaceInfo.new(self, faces.size(), plane.normal, uv_transform, material_id)
 		f.vertex_indices = vert_indices
+		faces.append(f)
 	
 
 	build_edges()
@@ -261,6 +264,18 @@ func get_face_coincident_with_plane(plane:Plane)->FaceInfo:
 			return f
 	return null
 
+func get_face_most_similar_to_plane(plane:Plane)->FaceInfo:
+	var best_dot:float = -1
+	var best_face:FaceInfo
+	
+	for f in faces:
+		var p:Plane = f.get_plane()
+		var dot = p.normal.dot(plane.normal)
+		if dot >= best_dot:
+			best_dot = dot
+			best_face = f
+	return best_face
+
 func copy_face_attributes(ref_vol:ConvexVolume):
 #	var local_mesh:ConvexMesh = calc_mesh()
 #	var ref_mesh:ConvexMesh = ref_vol.calc_mesh()
@@ -268,7 +283,7 @@ func copy_face_attributes(ref_vol:ConvexVolume):
 #	local_mesh.copy_face_attributes(ref_mesh)
 	
 	for fl in faces:
-		var ref_face:FaceInfo = ref_vol.get_face_coincident_with_plane(fl.get_plane())
+		var ref_face:FaceInfo = ref_vol.get_face_most_similar_to_plane(fl.get_plane())
 		
 		fl.material_id = ref_face.material_id
 		fl.uv_transform = ref_face.uv_transform
@@ -364,14 +379,15 @@ func translate_face_plane(face_id:int, offset:Vector3, lock_uvs:bool = false)->C
 	var planes:Array[Plane] = []
 	for f in faces:
 		if f.id == face_id:
-			transformed_plane = f.get_plane() * xform
+			transformed_plane = MathUtil.flip_plane(f.get_plane()) * xform
 			planes.append(transformed_plane)
 			source_face = f
 		else:
-			planes.append(f.plane)
+			planes.append(MathUtil.flip_plane(f.get_plane()))
 
+	#print("planes %s" % str(planes))
 	var hull_points:Array[Vector3] = MathUtil.get_convex_hull_points_from_planes(planes)
-	if hull_points:
+	if hull_points.is_empty():
 		return null
 	
 	var new_vol:ConvexVolume = ConvexVolume.new()
@@ -406,7 +422,7 @@ func translate_face_plane(face_id:int, offset:Vector3, lock_uvs:bool = false)->C
 #	return result
 
 func translate(offset:Vector3, lock_uvs:bool = false):
-	var xform:Transform3D = Transform3D(Basis.IDENTITY, -offset)
+	var xform:Transform3D = Transform3D(Basis.IDENTITY, offset)
 	
 	for v in vertices:
 		v.point = xform * v.point

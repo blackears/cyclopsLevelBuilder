@@ -75,6 +75,9 @@ static func trianglate_face(points:PackedVector3Array, normal:Vector3)->PackedVe
 	
 	return result
 
+static func flip_plane(plane:Plane)->Plane:
+	return Plane(-plane.normal, plane.get_center())
+
 #Returns a vector pointing along the normal in the clockwise winding direction with a length equal to twice the area of the triangle
 static func triangle_area_x2(p0:Vector3, p1:Vector3, p2:Vector3)->Vector3:
 	return (p2 - p0).cross(p1 - p0)
@@ -270,6 +273,14 @@ static func planar_volume_contains_point(planes:Array[Plane], point:Vector3)->bo
 	return true
 	
 static func get_convex_hull_points_from_planes(planes:Array[Plane])->Array[Vector3]:
+	#Check for overlapping planes
+	for i0 in range(0, planes.size()):
+		for i1 in range(i0 + 1, planes.size()):
+			var p0:Plane = planes[i0]
+			var p1:Plane = flip_plane(planes[i1])
+			if p0.is_equal_approx(p1):
+				return []
+	
 	var points:Array[Vector3]
 	
 	for i0 in range(0, planes.size()):

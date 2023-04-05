@@ -8,12 +8,12 @@
 [sub_resource type="Environment" id="Environment_b1nvb"]
 ambient_light_color = Color(0.784314, 0.784314, 0.784314, 1)
 
-[sub_resource type="Resource" id="Resource_qmecf"]
+[sub_resource type="Resource" id="Resource_28y5n"]
 script = ExtResource("4_sa36e")
-vertex_points = PackedVector3Array(-3, 7, 0, -3, 7, 4, -3, 5, 4, -3, 5, 0, 0, 7, 0, 0, 7, 4, 0, 5, 4, 0, 5, 0)
+vertex_points = PackedVector3Array(1, 5, 2, 1, 7, 2, 1, 7, -2, 1, 5, -2, -4, 7, -2, -4, 7, 2, -4, 5, -2, -4, 5, 2)
 vertex_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0)
 face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
-face_vertex_indices = PackedInt32Array(0, 1, 2, 3, 7, 6, 5, 4, 1, 0, 4, 5, 2, 1, 5, 6, 3, 2, 6, 7, 0, 3, 7, 4)
+face_vertex_indices = PackedInt32Array(0, 1, 2, 3, 4, 2, 1, 5, 6, 3, 2, 4, 7, 5, 1, 0, 7, 6, 4, 5, 7, 0, 3, 6)
 face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
 face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
 face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
@@ -42,7 +42,7 @@ script = ExtResource("1_p74uy")
 
 [node name="Block_0" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("3_jcbda")
-block_data = SubResource("Resource_qmecf")
+block_data = SubResource("Resource_28y5n")
 
 [node name="Marker3D" type="Marker3D" parent="."]
 transform = Transform3D(0.965926, -0.0669873, -0.25, 2.21068e-08, 0.965926, -0.258819, 0.258819, 0.25, 0.933013, -1.5, 6.5, -1)

@@ -45,7 +45,13 @@ func isect_test():
 	var result:IntersectResults = $CyclopsBlocks.intersect_ray_closest($Marker3D.transform.origin, $Marker3D.transform.basis.z)
 	#var result:IntersectResults = $CyclopsBlocks.intersect_ray_closest(Vector3(-2.827666, 11.78138, -14.39898), Vector3(0.703937, -0.382888, 0.598221))
 	pass
+
+func test_move_face():
+	var vol:ConvexVolume = ConvexVolume.new()
+	vol.init_block(AABB(Vector3(0, 0, 0), Vector3(5, 5, 5)))
 	
+	var new_vol:ConvexVolume = vol.translate_face_plane(0, Vector3(5, 0, 0))
+	pass
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -54,7 +60,8 @@ func _ready():
 
 	#test_planes()
 	#test_volume2()
-	isect_test()
+	#isect_test()
+	test_move_face()
 
 
 #	var points:PackedVector3Array

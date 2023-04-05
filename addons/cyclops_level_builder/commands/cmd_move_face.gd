@@ -56,19 +56,29 @@ func move_to(offset:Vector3, intermediate:bool):
 	
 	var ctl_mesh:ConvexVolume = ConvexVolume.new()
 	ctl_mesh.init_from_convex_block_data(tracked_block_data)
-	ctl_mesh.translate_face(face_id, offset, lock_uvs)
+	#ctl_mesh.translate_face(face_id, offset, lock_uvs)
+	var new_mesh:ConvexVolume = ctl_mesh.translate_face_plane(face_id, offset, lock_uvs)
+
+	#print("offset %s" % offset)
+	#print("ctl_mesh %s" % ctl_mesh.get_points())
+
 
 	var block:CyclopsConvexBlock = builder.get_node(block_path)
 	
-	if ctl_mesh.is_empty():
+#	if ctl_mesh.is_empty():
+	if new_mesh == null || new_mesh.is_empty():
+		#print("new_mesh  EMPTY")
+		block.block_data = null
 		if !intermediate:
 			block.queue_free()
 			deleted = true
 		return
 	
-	ctl_mesh.remove_unused_planes()
+	#ctl_mesh.remove_unused_planes()
+	#print("new_mesh %s" % new_mesh.get_points())
 	
-	var result_data:ConvexBlockData = ctl_mesh.to_convex_block_data()
+	var result_data:ConvexBlockData = new_mesh.to_convex_block_data()
+#	var result_data:ConvexBlockData = ctl_mesh.to_convex_block_data()
 	block.block_data = result_data
 
 	
