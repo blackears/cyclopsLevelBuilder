@@ -47,9 +47,14 @@ var selected:bool = false:
 			control_mesh = ConvexVolume.new()
 			control_mesh.init_from_convex_block_data(block_data)
 			
+			###############
+#			var pts = control_mesh.get_points()
+#			var hull:QuickHull.Hull = QuickHull.quickhull(pts)
+#			print("hull %s" % hull.format_points())
+			###############
+			
 			mesh_changed.emit()
 
-#			dirty = true
 
 func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 	if !block_data:

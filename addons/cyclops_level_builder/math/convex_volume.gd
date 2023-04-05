@@ -190,9 +190,9 @@ func init_from_convex_block_data(data:ConvexBlockData):
 		
 		faces.append(f)
 
-	#build_edges()
 	
 	bounds = calc_bounds()
+	print("init_from_convex_block_data %s" % format_faces_string())
 	
 
 #Calc convex hull bouding points
@@ -520,3 +520,13 @@ func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 				best_result = result
 					
 	return best_result
+
+func format_faces_string()->String:
+	var s:String = ""
+	for f in faces:
+		s = s + "["
+		for v_idx in f.vertex_indices:
+			s += "%s, " % vertices[v_idx].point
+		s = s + "],\n"
+	return s
+			
