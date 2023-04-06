@@ -27,6 +27,8 @@ class_name CyclopsConvexBlock
 
 signal mesh_changed
 
+@export var materials:Array[Material]
+
 var control_mesh:ConvexVolume
 
 var selected:bool = false:
@@ -46,12 +48,6 @@ var selected:bool = false:
 			block_data = value
 			control_mesh = ConvexVolume.new()
 			control_mesh.init_from_convex_block_data(block_data)
-			
-			###############
-#			var pts = control_mesh.get_points()
-#			var hull:QuickHull.Hull = QuickHull.quickhull(pts)
-#			print("hull %s" % hull.format_points())
-			###############
 			
 			mesh_changed.emit()
 

@@ -29,7 +29,7 @@ signal active_node_changed
 
 const AUTOLOAD_NAME = "CyclopsAutoload"
 
-#var dock:Control
+var material_dock:Control
 var top_toolbar:TopToolbar
 var toolbar:EditorToolbar
 var activated:bool = false
@@ -54,13 +54,13 @@ var active_node:CyclopsBlocks:
 			active_node_changed.emit()
 
 func _enter_tree():
-	add_custom_type("CyclopsBlocks", "Node3D", preload("controls/cyclops_blocks.gd"), preload("controls/cyclops_blocks_icon.png"))
-	add_custom_type("CyclopsConvexBlock", "Node", preload("controls/cyclops_convex_block.gd"), preload("controls/cyclops_blocks_icon.png"))
+	add_custom_type("CyclopsBlocks", "Node3D", preload("nodes/cyclops_blocks.gd"), preload("nodes/cyclops_blocks_icon.png"))
+	add_custom_type("CyclopsConvexBlock", "Node", preload("nodes/cyclops_convex_block.gd"), preload("nodes/cyclops_blocks_icon.png"))
 	#add_custom_type("GeometryBrush", "Node3D", preload("controls/geometry_brush.tscn"), preload("controls/geometryBrushIcon.png"))
 
 	add_autoload_singleton(AUTOLOAD_NAME, "res://addons/cyclops_level_builder/cyclops_global_scene.tscn")
 	
-#	dock = preload("menu/cyclops_control_panel.tscn").instantiate()
+	material_dock = preload("res://addons/cyclops_level_builder/controls/material_palette/material_palette_viewport.tscn").instantiate()
 	
 	toolbar = preload("menu/editor_toolbar.tscn").instantiate()
 	toolbar.editor_plugin = self
@@ -103,10 +103,12 @@ func update_activation():
 			active_node = blocks_root
 			if !activated:
 				add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, toolbar)
+				add_control_to_dock(DOCK_SLOT_LEFT_UL, material_dock)
 				activated = true
 		else:
 			if activated:
 				remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, toolbar)
+				remove_control_from_docks(material_dock)
 				activated = false
 	else:
 		active_node = null
@@ -124,10 +126,10 @@ func _exit_tree():
 	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, top_toolbar)
 	
 	if activated:
-#		remove_control_from_docks(dock)
+		remove_control_from_docks(material_dock)
 		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, toolbar)
 
-#	dock.queue_free()
+	material_dock.queue_free()
 	toolbar.queue_free()
 
 func _handles(object:Object):

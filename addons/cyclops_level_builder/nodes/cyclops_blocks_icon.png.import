@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bdmaqfi82aq41"
-path="res://.godot/imported/cyclops_blocks_icon.png-70ad8b4079389f11bdb5fc2452bd463a.ctex"
+path="res://.godot/imported/cyclops_blocks_icon.png-24c4441d9ebe4c1c02b0cf9fcbf537f3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/cyclops_level_builder/controls/cyclops_blocks_icon.png"
-dest_files=["res://.godot/imported/cyclops_blocks_icon.png-70ad8b4079389f11bdb5fc2452bd463a.ctex"]
+source_file="res://addons/cyclops_level_builder/nodes/cyclops_blocks_icon.png"
+dest_files=["res://.godot/imported/cyclops_blocks_icon.png-24c4441d9ebe4c1c02b0cf9fcbf537f3.ctex"]
 
 [params]
 

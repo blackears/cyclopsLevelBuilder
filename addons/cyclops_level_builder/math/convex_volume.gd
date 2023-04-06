@@ -192,7 +192,7 @@ func init_from_convex_block_data(data:ConvexBlockData):
 
 	
 	bounds = calc_bounds()
-	print("init_from_convex_block_data %s" % format_faces_string())
+	#print("init_from_convex_block_data %s" % format_faces_string())
 	
 
 #Calc convex hull bouding points
