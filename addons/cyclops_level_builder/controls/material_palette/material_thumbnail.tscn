@@ -1,8 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://eu6jo61g0sfb"]
+[gd_scene load_steps=8 format=3 uid="uid://eu6jo61g0sfb"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/material_palette/material_thumbnail.gd" id="1_bk6mq"]
 [ext_resource type="Theme" uid="uid://c0gpl22e2g6ay" path="res://addons/cyclops_level_builder/controls/material_palette/thumbnail_selected_theme.tres" id="1_pvt6l"]
 [ext_resource type="Theme" uid="uid://bx26luxdhj3jq" path="res://addons/cyclops_level_builder/controls/material_palette/thumbnail_normal_theme.tres" id="3_a3d05"]
+[ext_resource type="Material" uid="uid://b4173ircb7rqb" path="res://materials/cinder_blocks_mat.tres" id="4_4u88u"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_rac0x"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="QuadMesh" id="QuadMesh_tdnp8"]
+
+[sub_resource type="Environment" id="Environment_p06d0"]
 
 [node name="PanelContainer" type="PanelContainer"]
 offset_right = 107.0
@@ -20,9 +28,31 @@ metadata/_edit_lock_ = true
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
 layout_mode = 2
+texture = SubResource("ViewportTexture_rac0x")
+stretch_mode = 3
 
 [node name="MaterialName" type="Label" parent="VBoxContainer"]
 layout_mode = 2
+
+[node name="SubViewport" type="SubViewport" parent="."]
+own_world_3d = true
+size = Vector2i(64, 64)
+
+[node name="Node3D" type="Node3D" parent="SubViewport"]
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+projection = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewport/Node3D"]
+mesh = SubResource("QuadMesh_tdnp8")
+surface_material_override/0 = ExtResource("4_4u88u")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewport/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewport/Node3D"]
+environment = SubResource("Environment_p06d0")
 
 [connection signal="focus_entered" from="." to="." method="_on_focus_entered"]
 [connection signal="focus_exited" from="." to="." method="_on_focus_exited"]

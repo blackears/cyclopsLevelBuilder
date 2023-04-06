@@ -39,12 +39,16 @@ class_name MaterialThumbnail
 			tracked_material = null
 		else:
 			var res:Resource = load(material_path)
-			print("loaded res %s" % res)
+			#print("loaded res %s" % res)
 			
 			if res is Material:
 				tracked_material = res
 			else:
 				tracked_material = null
+			
+#			var mesh:MeshInstance3D = get_node("SubViewport/Node3D/MeshInstance3D")
+#			mesh.material_override = tracked_material
+#			$SubViewport/Node3D/MeshInstance3D.material_override = tracked_material
 
 @export var group:ThumbnailGroup:
 	get:
@@ -69,6 +73,10 @@ var tracked_material:Material
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+#	var view_tex:ViewportTexture = ViewportTexture.new()
+#	view_tex.viewport_path = get_node("SubViewport").get_path()
+#	$VBoxContainer/TextureRect.texture = view_tex
+	
 	pass # Replace with function body.
 
 
@@ -79,6 +87,8 @@ func _process(delta):
 	else:
 		theme = theme_normal
 	
+	var mesh:MeshInstance3D = get_node("SubViewport/Node3D/MeshInstance3D")
+	mesh.material_override = tracked_material
 	
 	
 	if tracked_material:
@@ -92,11 +102,11 @@ func _process(delta):
 	else:
 		$VBoxContainer/MaterialName.text = ""
 		
-	if tracked_material is StandardMaterial3D:
-		var std:StandardMaterial3D = tracked_material
-		$VBoxContainer/TextureRect.texture = std.albedo_texture
-	else:
-		$VBoxContainer/TextureRect.texture = null
+#	if tracked_material is StandardMaterial3D:
+#		var std:StandardMaterial3D = tracked_material
+#		$VBoxContainer/TextureRect.texture = std.albedo_texture
+#	else:
+#		$VBoxContainer/TextureRect.texture = null
 	
 func _gui_input(event):
 	if event is InputEventMouseButton:
