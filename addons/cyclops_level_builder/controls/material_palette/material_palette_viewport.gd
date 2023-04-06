@@ -80,6 +80,7 @@ func update_thumbnails():
 		thumbnail.owner = self
 	
 	if cur_sel:
-		for child in get_children():
+		for child in $ScrollContainer/HFlowContainer.get_children():
 			if child.material_path == cur_sel:
-				child.grab_focus()
+				child.selected = true
+				break

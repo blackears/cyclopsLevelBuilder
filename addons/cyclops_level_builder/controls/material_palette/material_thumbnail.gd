@@ -32,7 +32,19 @@ class_name MaterialThumbnail
 		return material_path
 	set(value):
 		material_path = value
-		$VBoxContainer/MaterialName.text = value
+		$VBoxContainer/MaterialName.text = material_path
+#		print("setting material path %s" % material_path)
+		
+		if material_path == null || material_path.is_empty():
+			tracked_material = null
+		else:
+			var res:Resource = load(material_path)
+			print("loaded res %s" % res)
+			
+			if res is Material:
+				tracked_material = res
+			else:
+				tracked_material = null
 
 @export var group:ThumbnailGroup:
 	get:
@@ -49,10 +61,11 @@ class_name MaterialThumbnail
 		if group != null:
 			group.add_thumbnail(self)
 			
-			
 
 @export var theme_normal:Theme
 @export var theme_selected:Theme
+
+var tracked_material:Material
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -65,6 +78,25 @@ func _process(delta):
 		theme = theme_selected
 	else:
 		theme = theme_normal
+	
+	
+	
+	if tracked_material:
+		var name:String = tracked_material.resource_name
+		if name.is_empty():
+			name = material_path.get_file()
+			var idx:int = name.rfind(".")
+			if idx != -1:
+				name = name.substr(0, idx)
+		$VBoxContainer/MaterialName.text = name
+	else:
+		$VBoxContainer/MaterialName.text = ""
+		
+	if tracked_material is StandardMaterial3D:
+		var std:StandardMaterial3D = tracked_material
+		$VBoxContainer/TextureRect.texture = std.albedo_texture
+	else:
+		$VBoxContainer/TextureRect.texture = null
 	
 func _gui_input(event):
 	if event is InputEventMouseButton:

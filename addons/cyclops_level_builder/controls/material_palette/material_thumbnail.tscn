@@ -8,6 +8,7 @@
 offset_right = 107.0
 offset_bottom = 51.0
 focus_mode = 2
+mouse_filter = 1
 theme = ExtResource("3_a3d05")
 script = ExtResource("1_bk6mq")
 theme_normal = ExtResource("3_a3d05")
@@ -21,10 +22,6 @@ metadata/_edit_lock_ = true
 layout_mode = 2
 
 [node name="MaterialName" type="Label" parent="VBoxContainer"]
-layout_mode = 2
-text = "Material"
-
-[node name="Button" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 
 [connection signal="focus_entered" from="." to="." method="_on_focus_entered"]

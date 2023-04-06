@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3]
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dlxl7djaxp6r5"]
 
 [ext_resource type="Texture2D" uid="uid://cka3nxhb64kc8" path="res://art/textures/bricks_floor.png" id="1_5c8ov"]
 
