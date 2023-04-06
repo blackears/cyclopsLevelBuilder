@@ -50,7 +50,7 @@ var selected:bool = false:
 			control_mesh.init_from_convex_block_data(block_data)
 			
 			mesh_changed.emit()
-
+	
 
 func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 	if !block_data:
@@ -75,6 +75,19 @@ func select_face(face_idx:int, select_type:Selection.Type = Selection.Type.REPLA
 		control_mesh.faces[face_idx].selected = !control_mesh.faces[face_idx].selected
 
 	mesh_changed.emit()
+
+func append_mesh(mesh:ImmediateMesh):
+	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
+	
+#	var color:Color = global_scene.selection_color if selected else Color.WHITE
+	
+	control_mesh.append_mesh(mesh, materials, global_scene.default_material, selected, global_scene.selection_color)
+
+func append_mesh_wire(mesh:ImmediateMesh):
+	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
+	
+	var mat:Material = global_scene.outline_material
+	control_mesh.append_mesh_wire(mesh, mat)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

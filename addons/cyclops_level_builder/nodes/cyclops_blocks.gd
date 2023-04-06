@@ -84,10 +84,12 @@ func rebuild_mesh():
 	for child in get_children():
 		if child is CyclopsConvexBlock:
 			var block:CyclopsConvexBlock = child
-			if block.control_mesh:
-				var color:Color = selection_color if block.selected else Color.WHITE
-				block.control_mesh.append_mesh(mesh, default_material, color)
-				block.control_mesh.append_mesh_wire(mesh_wire, outline_material, color)
+			block.append_mesh(mesh)
+			block.append_mesh_wire(mesh)
+#			if block.control_mesh:
+#				var color:Color = selection_color if block.selected else Color.WHITE
+#				block.control_mesh.append_mesh(mesh, default_material, color)
+#				block.control_mesh.append_mesh_wire(mesh_wire, outline_material, color)
 	
 	mesh_instance.mesh = mesh
 	mesh_wire_instance.mesh = mesh_wire

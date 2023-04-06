@@ -56,13 +56,13 @@ func do_it():
 #	var vol1:ConvexVolume = ConvexVolume.new()
 #	vol1.init_from_convex_block_data(old_block_data)
 #	vol1.add_face(cut_plane_reverse, builder.tool_uv_transform, builder.tool_material_id)
-	var vol1:ConvexVolume = block.control_mesh.cut_with_plane(MathUtil.flip_plane(cut_plane), builder.tool_uv_transform, builder.tool_material_id)
+	var vol1:ConvexVolume = block.control_mesh.cut_with_plane(MathUtil.flip_plane(cut_plane), builder.tool_uv_transform, -1)
 
 	#Set data of existing block	
 	block.block_data = vol0.to_convex_block_data()
 	
 	#Create second block
-	var block_sibling:CyclopsConvexBlock = preload("../controls/cyclops_convex_block.gd").new()
+	var block_sibling:CyclopsConvexBlock = preload("../nodes/cyclops_convex_block.gd").new()
 	
 	blocks_root.add_child(block_sibling)
 	block_sibling.owner = builder.get_editor_interface().get_edited_scene_root()

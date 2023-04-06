@@ -3,4 +3,5 @@
 [ext_resource type="Texture2D" uid="uid://cka3nxhb64kc8" path="res://art/textures/bricks_floor.png" id="1_5c8ov"]
 
 [resource]
+vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("1_5c8ov")

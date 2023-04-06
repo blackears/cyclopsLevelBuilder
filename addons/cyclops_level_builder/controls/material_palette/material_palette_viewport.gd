@@ -29,6 +29,8 @@ class_name MaterialPaletteViewport
 
 @export var thumbnail_group:ThumbnailGroup
 
+var builder:CyclopsLevelBuilder
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print("MaterialPaletteViewport")
@@ -73,6 +75,7 @@ func update_thumbnails():
 	for path in material_list:
 		var res:Resource = preload("res://addons/cyclops_level_builder/controls/material_palette/material_thumbnail.tscn")
 		var thumbnail:MaterialThumbnail = res.instantiate()
+		thumbnail.builder = builder
 		thumbnail.material_path = path
 		thumbnail.group = thumbnail_group
 		
@@ -84,3 +87,9 @@ func update_thumbnails():
 			if child.material_path == cur_sel:
 				child.selected = true
 				break
+
+
+func _on_visibility_changed():
+	#Control freezes for some reason when hidden and then shown, so just regenereate it
+	if visible:
+		update_thumbnails()

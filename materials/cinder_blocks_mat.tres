@@ -3,4 +3,5 @@
 [ext_resource type="Texture2D" uid="uid://dywu7s8g76rch" path="res://art/textures/cinger_wall.png" id="1_lxctu"]
 
 [resource]
+vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("1_lxctu")

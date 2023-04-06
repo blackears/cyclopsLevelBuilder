@@ -3,5 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://bvteu236iv3do" path="res://art/textures/cinder_edge.png" id="1_u2cxe"]
 
 [resource]
+vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("1_u2cxe")
 uv1_scale = Vector3(0.25, 1, 1)

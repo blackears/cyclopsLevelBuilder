@@ -98,7 +98,7 @@ var faces:Array[FaceInfo] = []
 var bounds:AABB
 
 
-func init_block(block_bounds:AABB, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0):
+func init_block(block_bounds:AABB, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = -1):
 	var p000:Vector3 = block_bounds.position
 	var p111:Vector3 = block_bounds.end
 	var p001:Vector3 = Vector3(p000.x, p000.y, p111.z)
@@ -111,7 +111,7 @@ func init_block(block_bounds:AABB, uv_transform:Transform2D = Transform2D.IDENTI
 	init_prisim([p000, p001, p011, p010], p100 - p000, uv_transform, material_id)
 	
 
-func init_prisim(base_points:Array[Vector3], extrude_dir:Vector3, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0):
+func init_prisim(base_points:Array[Vector3], extrude_dir:Vector3, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = -1):
 	vertices = []
 	edges = []
 	faces = []
@@ -196,7 +196,7 @@ func init_from_convex_block_data(data:ConvexBlockData):
 	
 
 #Calc convex hull bouding points
-func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0):
+func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = -1):
 	vertices = []
 	edges = []
 	faces = []
@@ -268,6 +268,15 @@ func get_face_coincident_with_plane(plane:Plane)->FaceInfo:
 		if p.is_equal_approx(plane):
 			return f
 	return null
+
+
+func get_face_ids(selected_only:bool = false)->PackedInt32Array:
+	var result:PackedInt32Array
+	for f in faces:
+		if !selected_only || f.selected:
+			result.append(f.id)
+	return result
+
 
 func get_face_most_similar_to_plane(plane:Plane)->FaceInfo:
 	var best_dot:float = -1
@@ -429,11 +438,16 @@ func tristrip_vertex_range(num_verts:int)->PackedInt32Array:
 	
 	return result
 	
-func append_mesh(mesh:ImmediateMesh, material:Material, color:Color = Color.WHITE):
+func append_mesh(mesh:ImmediateMesh, material_list:Array[Material], default_material:Material, select_all:bool, selection_color:Color = Color.RED):
 #	if Engine.is_editor_hint():
 #		return
 
 	for face in faces:
+		var material = default_material
+		
+		if face.material_id >=0 && face.material_id < material_list.size():
+			material = material_list[face.material_id]
+		
 		mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, material)
 #		print("face %s" % face.index)
 		
@@ -442,7 +456,10 @@ func append_mesh(mesh:ImmediateMesh, material:Material, color:Color = Color.WHIT
 		for i in tristrip_vertex_range(face.vertex_indices.size()):
 			var v_idx:int = face.vertex_indices[i]
 			var p:Vector3 = vertices[v_idx].point
-			mesh.surface_set_color(color)
+			if face.selected:
+				mesh.surface_set_color(selection_color)
+			else:
+				mesh.surface_set_color(Color.WHITE)
 			
 			var uv:Vector2
 			var axis:MathUtil.Axis = MathUtil.get_longest_axis(face.normal)
@@ -461,7 +478,7 @@ func append_mesh(mesh:ImmediateMesh, material:Material, color:Color = Color.WHIT
 		mesh.surface_end()
 
 
-func append_mesh_wire(mesh:ImmediateMesh, material:Material, color:Color = Color.WHITE):
+func append_mesh_wire(mesh:ImmediateMesh, material:Material):
 #	if Engine.is_editor_hint():
 #		return
 

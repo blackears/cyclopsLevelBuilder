@@ -47,15 +47,15 @@ func do_it():
 	vol.init_from_convex_block_data(tracked_block_data)
 	
 	var points:PackedVector3Array = vol.get_points()
-	print("do_it")
-	print("old points %s " % points)
+	#print("do_it")
+	#print("old points %s " % points)
 	var new_points:PackedVector3Array
 	for p in points:
 		if !p.is_equal_approx(vertex_position):
 			new_points.append(p)
 	new_points.append(vertex_position + move_offset)
 
-	print("new points %s " % new_points)
+	#print("new points %s " % new_points)
 	
 	var new_vol:ConvexVolume = ConvexVolume.new()
 	new_vol.init_from_points(new_points)

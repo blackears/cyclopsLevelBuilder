@@ -41,6 +41,7 @@ var lock_uvs:bool = false
 
 var tool_uv_transform:Transform2D
 var tool_material_id:int
+var tool_material_path:String
 
 var handle_point_radius:float = .05
 
@@ -61,6 +62,7 @@ func _enter_tree():
 	add_autoload_singleton(AUTOLOAD_NAME, "res://addons/cyclops_level_builder/cyclops_global_scene.tscn")
 	
 	material_dock = preload("res://addons/cyclops_level_builder/controls/material_palette/material_palette_viewport.tscn").instantiate()
+	material_dock.builder = self
 	
 	toolbar = preload("menu/editor_toolbar.tscn").instantiate()
 	toolbar.editor_plugin = self
@@ -103,7 +105,7 @@ func update_activation():
 			active_node = blocks_root
 			if !activated:
 				add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, toolbar)
-				add_control_to_dock(DOCK_SLOT_LEFT_UL, material_dock)
+				add_control_to_dock(DOCK_SLOT_RIGHT_BL, material_dock)
 				activated = true
 		else:
 			if activated:

@@ -58,7 +58,7 @@ func undo_it():
 	var blocks_root:CyclopsBlocks = builder.get_node(blocks_root_path)
 	
 	for i in blocks_to_delete.size():
-		var block:CyclopsConvexBlock = preload("../controls/cyclops_convex_block.gd").new()
+		var block:CyclopsConvexBlock = preload("../nodes/cyclops_convex_block.gd").new()
 		block.block_data = tracked_block_data[i]
 		block.name = block_names[i]
 		block.selected = block_selected[i]

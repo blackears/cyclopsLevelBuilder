@@ -25,6 +25,10 @@
 extends Node3D
 class_name CyclopsGlobalScene
 
+@export var selection_color:Color = Color(1, .5, .5, 1)
+@export var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
+@export var outline_material:Material = preload("res://addons/cyclops_level_builder/materials/block_outline_material.tres")
+
 @export var tool_material:Material
 #@export var selected_material:Material
 var tool_mesh:ImmediateMesh

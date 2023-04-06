@@ -69,6 +69,8 @@ class_name MaterialThumbnail
 @export var theme_normal:Theme
 @export var theme_selected:Theme
 
+var builder:CyclopsLevelBuilder
+
 var tracked_material:Material
 
 # Called when the node enters the scene tree for the first time.
@@ -108,17 +110,47 @@ func _process(delta):
 #	else:
 #		$VBoxContainer/TextureRect.texture = null
 	
-func _gui_input(event):
+func _gui_input(event:InputEvent):
+#	if event.is_action("ui_select"):
+#		if event.
 	if event is InputEventMouseButton:
-		if event.is_pressed():
-			grab_focus()
-			if group:
-				group.select_thumbnail(self)
-		else:
-			selected = true
-		
-		get_viewport().set_input_as_handled()
+		var e:InputEventMouseButton = event
+		if e.pressed:
+			if e.double_click:
+				apply_material_to_selected()
+			else:
 
+				if group:
+					group.select_thumbnail(self)
+				else:
+					selected = true
+					
+				builder.tool_material_path = material_path
+				
+				get_viewport().set_input_as_handled()
+
+
+func apply_material_to_selected():
+	var cmd:CommandSetMaterial = CommandSetMaterial.new()
+	cmd.builder = builder
+	cmd.material_path = material_path
+	
+	var root_blocks:CyclopsBlocks = builder.active_node
+	for child in root_blocks.get_children():
+		print("child block %s %s" % [child.name, child.get_class()])
+#		if child.has_method("append_mesh_wire"):
+		if child is CyclopsConvexBlock:
+		#if !(child is MeshInstance3D):
+			print("setting child block %s" % child.name)
+			if child.selected:
+				cmd.add_target(child.get_path(), child.control_mesh.get_face_ids())
+			else:
+				var face_ids:PackedInt32Array = child.control_mesh.get_face_ids(true)
+				if !face_ids.is_empty():
+					cmd.add_target(child.get_path(), face_ids)
+	
+	var undo:EditorUndoRedoManager = builder.get_undo_redo()
+	cmd.add_to_undo_manager(undo)
 
 
 func _on_focus_entered():
@@ -132,4 +164,3 @@ func _on_focus_exited():
 func _on_tree_exiting():
 	if group != null:
 		group.remove_thumbnail(self)
-		

@@ -38,7 +38,7 @@ func _init():
 	command_name = "Add prism"
 
 func do_it():
-	var block:CyclopsConvexBlock = preload("../controls/cyclops_convex_block.gd").new()
+	var block:CyclopsConvexBlock = preload("../nodes/cyclops_convex_block.gd").new()
 	
 	var blocks_root = instance_from_id(blocks_root_inst_id)
 	blocks_root.add_child(block)

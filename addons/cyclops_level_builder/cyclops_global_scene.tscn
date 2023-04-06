@@ -4,28 +4,28 @@
 [ext_resource type="Shader" uid="uid://c33k8fbmgw46b" path="res://addons/cyclops_level_builder/shaders/tool_outline_shader.tres" id="2_p0427"]
 [ext_resource type="Shader" uid="uid://cc5tovf48xmg1" path="res://addons/cyclops_level_builder/shaders/outline_shader.tres" id="3_1dd0a"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hqkgk"]
-render_priority = 0
-shader = ExtResource("2_p0427")
-shader_parameter/ColorParameter = Color(1, 1, 0, 1)
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_r76v4"]
 render_priority = 0
 shader = ExtResource("3_1dd0a")
 shader_parameter/ColorParameter = Color(0, 0, 0, 1)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hqkgk"]
+render_priority = 0
+shader = ExtResource("2_p0427")
+shader_parameter/ColorParameter = Color(1, 1, 0, 1)
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_sl0cw"]
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_8vrq7"]
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_n34mf"]
 
 [node name="CyclopsGlobals" type="Node3D"]
 script = ExtResource("1_nu1d3")
-tool_material = SubResource("ShaderMaterial_hqkgk")
 outline_material = SubResource("ShaderMaterial_r76v4")
+tool_material = SubResource("ShaderMaterial_hqkgk")
 
 [node name="ControlMesh" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource("PlaneMesh_sl0cw")
 
 [node name="ToolInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("ImmediateMesh_8vrq7")
+mesh = SubResource("ImmediateMesh_n34mf")

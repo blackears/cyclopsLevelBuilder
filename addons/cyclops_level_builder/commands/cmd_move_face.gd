@@ -90,7 +90,7 @@ func do_it():
 
 func undo_it():
 	if deleted:
-		var block:CyclopsConvexBlock = preload("../controls/cyclops_convex_block.gd").new()
+		var block:CyclopsConvexBlock = preload("../nodes/cyclops_convex_block.gd").new()
 		
 		var blocks_root:CyclopsBlocks = builder.get_node(blocks_root_path)
 		blocks_root.add_child(block)
