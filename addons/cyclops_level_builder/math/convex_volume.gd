@@ -456,15 +456,17 @@ func append_mesh(mesh:ImmediateMesh, material_list:Array[Material], default_mate
 		for i in tristrip_vertex_range(face.vertex_indices.size()):
 			var v_idx:int = face.vertex_indices[i]
 			var p:Vector3 = vertices[v_idx].point
-			if face.selected:
+			if face.selected || select_all:
+				print("face selected %s" % selection_color)
 				mesh.surface_set_color(selection_color)
 			else:
+				print("face white")
 				mesh.surface_set_color(Color.WHITE)
 			
 			var uv:Vector2
 			var axis:MathUtil.Axis = MathUtil.get_longest_axis(face.normal)
 			if axis == MathUtil.Axis.X:
-				uv = Vector2(p.y, p.z)
+				uv = Vector2(p.z, p.y)
 			elif axis == MathUtil.Axis.Y:
 				uv = Vector2(p.x, p.z)
 			elif axis == MathUtil.Axis.Z:

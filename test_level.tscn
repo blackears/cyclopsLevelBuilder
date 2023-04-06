@@ -23,7 +23,7 @@ face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform
 face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_uevko"]
+[sub_resource type="Resource" id="Resource_o70mt"]
 script = ExtResource("4_yiqfy")
 vertex_points = PackedVector3Array(-29, 7, 11, -29, 7, 15, -29, 6, 15, -29, 6, 11, -24, 7, 11, -24, 7, 15, -24, 6, 15, -24, 6, 11)
 vertex_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0)
@@ -82,7 +82,7 @@ block_data = SubResource("Resource_d62qa")
 [node name="Block_1" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("3_534ho")
 materials = Array[Material]([ExtResource("6_mt25d")])
-block_data = SubResource("Resource_uevko")
+block_data = SubResource("Resource_o70mt")
 
 [node name="Block_2" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("3_534ho")

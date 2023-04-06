@@ -137,11 +137,11 @@ func apply_material_to_selected():
 	
 	var root_blocks:CyclopsBlocks = builder.active_node
 	for child in root_blocks.get_children():
-		print("child block %s %s" % [child.name, child.get_class()])
+#		print("child block %s %s" % [child.name, child.get_class()])
 #		if child.has_method("append_mesh_wire"):
 		if child is CyclopsConvexBlock:
 		#if !(child is MeshInstance3D):
-			print("setting child block %s" % child.name)
+#			print("setting child block %s" % child.name)
 			if child.selected:
 				cmd.add_target(child.get_path(), child.control_mesh.get_face_ids())
 			else:
