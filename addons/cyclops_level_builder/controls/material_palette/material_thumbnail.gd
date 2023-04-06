@@ -26,13 +26,33 @@ extends Control
 class_name MaterialThumbnail
 
 @export var selected:bool = false
-#@export_file("*.tres") var material_path:String
+
 @export_file("*.tres") var material_path:String:
 	get:
 		return material_path
 	set(value):
 		material_path = value
 		$VBoxContainer/MaterialName.text = value
+
+@export var group:ThumbnailGroup:
+	get:
+		return group
+	set(value):
+		if group == value:
+			return
+		
+		if group != null:
+			group.remove_thumbnail(self)
+		
+		group = value
+		
+		if group != null:
+			group.add_thumbnail(self)
+			
+			
+
+@export var theme_normal:Theme
+@export var theme_selected:Theme
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -41,5 +61,33 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	if selected:
+		theme = theme_selected
+	else:
+		theme = theme_normal
+	
+func _gui_input(event):
+	if event is InputEventMouseButton:
+		if event.is_pressed():
+			grab_focus()
+			if group:
+				group.select_thumbnail(self)
+		else:
+			selected = true
+		
+		get_viewport().set_input_as_handled()
 
+
+
+func _on_focus_entered():
+	pass # Replace with function body.
+
+
+func _on_focus_exited():
+	pass # Replace with function body.
+
+
+func _on_tree_exiting():
+	if group != null:
+		group.remove_thumbnail(self)
+		

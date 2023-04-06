@@ -1,8 +1,8 @@
-[gd_scene load_steps=31 format=3 uid="uid://4dp45a7mgexs"]
+[gd_scene load_steps=31 format=3 uid="uid://b618uemaoceba"]
 
 [ext_resource type="Script" path="res://test_level.gd" id="1_k5d46"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/cyclops_blocks.gd" id="1_p74uy"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/cyclops_convex_block.gd" id="3_udw3e"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/nodes/cyclops_blocks.gd" id="2_xtj55"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/nodes/cyclops_convex_block.gd" id="3_534ho"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/convex_block_data.gd" id="4_yiqfy"]
 
 [sub_resource type="Environment" id="Environment_b1nvb"]
@@ -326,98 +326,98 @@ transform = Transform3D(-0.00766267, -0.829678, 0.55819, -0.400001, 0.514145, 0.
 environment = SubResource("Environment_b1nvb")
 
 [node name="CyclopsBlocks" type="Node3D" parent="."]
-script = ExtResource("1_p74uy")
+script = ExtResource("2_xtj55")
 
 [node name="Block_0" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_c3p6s")
 
 [node name="Block_1" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_08jgh")
 
 [node name="Block_3" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_4pirx")
 
 [node name="Block_4" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_o8o4w")
 
 [node name="Block_5" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_r56g6")
 
 [node name="Block_6" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_pt7rt")
 
 [node name="Block_7" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_ax6fb")
 
 [node name="Block_8" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_aq31m")
 
 [node name="Block_2" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_76mmy")
 
 [node name="Block_9" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_bvbbl")
 
 [node name="Block_10" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_a8kvx")
 
 [node name="Block_11" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_r0b6b")
 
 [node name="Block_12" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_j8ild")
 
 [node name="Block_13" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_fxfgc")
 
 [node name="Block_14" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_d7b36")
 
 [node name="Block_15" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_s6jm6")
 
 [node name="Block_16" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_lbfgw")
 
 [node name="Block_17" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_fs7t6")
 
 [node name="Block_18" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_pqr4x")
 
 [node name="Block_19" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_kwqw4")
 
 [node name="Block_20" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_escrr")
 
 [node name="Block_21" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_1l4ot")
 
 [node name="Block_22" type="Node" parent="CyclopsBlocks"]
-script = ExtResource("3_udw3e")
+script = ExtResource("3_534ho")
 block_data = SubResource("Resource_oh4f3")
 
 [node name="Marker3D" type="Marker3D" parent="."]

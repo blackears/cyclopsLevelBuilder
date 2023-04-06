@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b4173ircb7rqb"]
+
+[ext_resource type="Texture2D" uid="uid://dywu7s8g76rch" path="res://art/textures/cinger_wall.png" id="1_lxctu"]
+
+[resource]
+albedo_texture = ExtResource("1_lxctu")

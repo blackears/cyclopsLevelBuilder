@@ -27,6 +27,8 @@ class_name MaterialPaletteViewport
 
 @export var material_list:Array[String] = []
 
+@export var thumbnail_group:ThumbnailGroup
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print("MaterialPaletteViewport")
@@ -39,7 +41,7 @@ func _process(delta):
 	pass
 
 func _can_drop_data(at_position:Vector2, data:Variant):
-	print("_can_drop_data %s" % data)
+#	print("_can_drop_data %s" % data)
 	return typeof(data) == TYPE_DICTIONARY and data.has("type") and data["type"] == "files"
 
 
@@ -62,7 +64,7 @@ func update_thumbnails():
 			cur_sel = child.material_path
 			break
 
-	for child in get_children():
+	for child in $ScrollContainer/HFlowContainer.get_children():
 		remove_child(child)
 		child.queue_free()
 
@@ -70,6 +72,10 @@ func update_thumbnails():
 		var res:Resource = preload("res://addons/cyclops_level_builder/controls/material_palette/material_thumbnail.tscn")
 		var thumbnail:MaterialThumbnail = res.instantiate()
 		thumbnail.material_path = path
+		thumbnail.group = thumbnail_group
+		
+		$ScrollContainer/HFlowContainer.add_child(thumbnail)
+		thumbnail.owner = self
 	
 	if cur_sel:
 		for child in get_children():
