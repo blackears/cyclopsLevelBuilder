@@ -54,6 +54,12 @@ var active_node:CyclopsBlocks:
 			active_node = value
 			active_node_changed.emit()
 
+func _get_plugin_name()->String:
+	return "CyclopsLevelBuilder"
+
+func _get_plugin_icon()->Texture2D:
+	return preload("res://icon.svg")
+
 func _enter_tree():
 	add_custom_type("CyclopsBlocks", "Node3D", preload("nodes/cyclops_blocks.gd"), preload("nodes/cyclops_blocks_icon.png"))
 	add_custom_type("CyclopsConvexBlock", "Node", preload("nodes/cyclops_convex_block.gd"), preload("nodes/cyclops_blocks_icon.png"))
@@ -149,6 +155,14 @@ func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent):
 		return EditorPlugin.AFTER_GUI_INPUT_STOP if result else EditorPlugin.AFTER_GUI_INPUT_PASS
 	
 	return EditorPlugin.AFTER_GUI_INPUT_PASS
+
+func _get_state()->Dictionary:
+	var state:Dictionary = {}
+	material_dock.save_state(state)
+	return state
+	
+func _set_state(state):
+	material_dock.load_state(state)
 
 func switch_to_tool(_tool:CyclopsTool):
 	if tool:

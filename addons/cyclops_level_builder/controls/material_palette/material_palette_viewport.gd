@@ -33,10 +33,9 @@ var builder:CyclopsLevelBuilder
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print("MaterialPaletteViewport")
+#	print("MaterialPaletteViewport")
+	
 	update_thumbnails()
-	pass # Replace with function body.
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -46,6 +45,25 @@ func _can_drop_data(at_position:Vector2, data:Variant):
 #	print("_can_drop_data %s" % data)
 	return typeof(data) == TYPE_DICTIONARY and data.has("type") and data["type"] == "files"
 
+func save_state(state:Dictionary):
+	var substate:Dictionary = {}
+	state["material_palette"] = substate
+	
+	substate["materials"] = material_list.duplicate()
+
+func load_state(state:Dictionary):
+	if state == null || !state.has("material_palette"):
+		return
+	
+	var substate:Dictionary = state["material_palette"]
+
+	material_list = []	
+	if substate.has("materials"):
+		for mat_path in substate["materials"]:
+			if ResourceLoader.exists(mat_path):
+				material_list.append(mat_path)
+	
+	update_thumbnails()
 
 func _drop_data(at_position, data):
 	var files = data["files"]
