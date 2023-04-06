@@ -1,15 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://po6huhbgyhvo"]
+[gd_scene format=3 uid="uid://tlwb22osuyno"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/material_palette/material_palette_viewport.gd" id="1_xyxg3"]
-
-[node name="material_palette_viewport" type="Control"]
+[node name="Control" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_xyxg3")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1
@@ -18,6 +15,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+metadata/_edit_lock_ = true
 
 [node name="HFlowContainer" type="HFlowContainer" parent="ScrollContainer"]
 layout_mode = 2
