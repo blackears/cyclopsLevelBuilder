@@ -65,7 +65,9 @@ func update_thumbnails():
 			break
 
 	for child in $ScrollContainer/HFlowContainer.get_children():
-		remove_child(child)
+		#print("removing %s" % child.get_class())
+		child.group = null
+		$ScrollContainer/HFlowContainer.remove_child(child)
 		child.queue_free()
 
 	for path in material_list:
