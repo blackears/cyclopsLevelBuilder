@@ -43,7 +43,7 @@ var min_drag_distance:float = 4
 
 #Keep a copy of move command here while we are building it
 var cmd_move_blocks:CommandMoveBlocks
-var cmd_move_face:CommandMoveFace
+var cmd_move_face:CommandMoveFacePlanar
 var move_face_origin:Vector3 #Kep track of the origin when moving a face
 
 func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
@@ -73,7 +73,7 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 		if e.shift_pressed:
 			drag_style = DragStyle.MOVE_FACE
 			
-			cmd_move_face = CommandMoveFace.new()
+			cmd_move_face = CommandMoveFacePlanar.new()
 			cmd_move_face.builder = builder
 			cmd_move_face.blocks_root_path = builder.active_node.get_path()
 			cmd_move_face.block_path = result.object.get_path()

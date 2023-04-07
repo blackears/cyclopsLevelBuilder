@@ -25,82 +25,51 @@
 class_name CommandMoveFace
 extends CyclopsCommand
 
-#Public data to set before activating command
-var blocks_root_path:NodePath
+#Public 
 var block_path:NodePath
-var move_dir_normal:Vector3
-var move_amount:float
-var face_id:int
+#var vertex_position:Vector3
+var face_index:int
+var move_offset:Vector3 = Vector3.ZERO
 var lock_uvs:bool = false
 
-
 #Private
-var block_name:String
-var block_selected:bool
 var tracked_block_data:ConvexBlockData
-
-var deleted:bool = false
-
 
 func _init():
 	command_name = "Move face"
 
-func move_to(offset:Vector3, intermediate:bool):
-#	print("move_to off %s faceid %s amount %s movedir %s" % [offset, face_id, move_amount, move_dir_normal])
-	if !tracked_block_data:
-		var block:CyclopsConvexBlock = builder.get_node(block_path)
-		
-		block_name = block.name
-		block_selected = block.selected
-		tracked_block_data = block.block_data
-	
-	var ctl_mesh:ConvexVolume = ConvexVolume.new()
-	ctl_mesh.init_from_convex_block_data(tracked_block_data)
-	#ctl_mesh.translate_face(face_id, offset, lock_uvs)
-	var new_mesh:ConvexVolume = ctl_mesh.translate_face_plane(face_id, offset, lock_uvs)
-
-	#print("offset %s" % offset)
-	#print("ctl_mesh %s" % ctl_mesh.get_points())
-
-
-	var block:CyclopsConvexBlock = builder.get_node(block_path)
-	
-#	if ctl_mesh.is_empty():
-	if new_mesh == null || new_mesh.is_empty():
-		#print("new_mesh  EMPTY")
-		block.block_data = null
-		if !intermediate:
-			block.queue_free()
-			deleted = true
-		return
-	
-	#ctl_mesh.remove_unused_planes()
-	#print("new_mesh %s" % new_mesh.get_points())
-	
-	var result_data:ConvexBlockData = new_mesh.to_convex_block_data()
-#	var result_data:ConvexBlockData = ctl_mesh.to_convex_block_data()
-	block.block_data = result_data
-
-	
-func do_it_intermediate():
-	move_to(move_dir_normal * move_amount, true)
 
 func do_it():
-	move_to(move_dir_normal * move_amount, false)
+	var block:CyclopsConvexBlock = builder.get_node(block_path)
+	
+	if !tracked_block_data:	
+		tracked_block_data = block.block_data
+		
+	var vol:ConvexVolume = ConvexVolume.new()
+	vol.init_from_convex_block_data(tracked_block_data)
+	
+	var moved_vert_indices:PackedInt32Array
+	var face:ConvexVolume.FaceInfo = vol.faces[face_index]
+	for v_idx in face.vertex_indices:
+		moved_vert_indices.append(v_idx)
+	
+	var new_points:PackedVector3Array
+	for i in vol.vertices.size():
+		var v:ConvexVolume.VertexInfo = vol.vertices[i]
+		if moved_vert_indices.has(i):
+			new_points.append(v.point + move_offset)
+		else:
+			new_points.append(v.point)
+		
+
+	#print("new points %s " % new_points)
+	
+	var new_vol:ConvexVolume = ConvexVolume.new()
+	new_vol.init_from_points(new_points)
+	
+	new_vol.copy_face_attributes(vol)
+	block.block_data = new_vol.to_convex_block_data()
 
 func undo_it():
-	if deleted:
-		var block:CyclopsConvexBlock = preload("../nodes/cyclops_convex_block.gd").new()
-		
-		var blocks_root:CyclopsBlocks = builder.get_node(blocks_root_path)
-		blocks_root.add_child(block)
-		block.owner = builder.get_editor_interface().get_edited_scene_root()
-		block.block_data = tracked_block_data
-		block.name = block_name
-		block.selected = block_selected
-		
-		deleted = false
-		return
-	
-	move_to(Vector3.ZERO, false)
-
+	var block:CyclopsConvexBlock = builder.get_node(block_path)
+	block.block_data = tracked_block_data

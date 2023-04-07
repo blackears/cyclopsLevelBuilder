@@ -53,7 +53,7 @@ func _ready():
 	$HBoxContainer/grid_size.add_item("8", 7)
 	$HBoxContainer/grid_size.add_item("16", 8)
 	
-	update_grid
+	update_grid()
 
 func update_grid():
 	if editor_plugin.active_node:
@@ -96,7 +96,7 @@ func _on_bn_edge_pressed():
 
 
 func _on_bn_face_pressed():
-	pass
+	editor_plugin.switch_to_tool(ToolEditFace.new())
 
 
 func _on_check_lock_uvs_toggled(button_pressed):

@@ -90,6 +90,14 @@ class FaceInfo extends RefCounted:
 		for i in vertex_indices:
 			result.append(mesh.vertices[i].point)
 		return result
+	
+	func get_centroid()->Vector3:
+		var points:PackedVector3Array = get_points()
+		var center:Vector3
+		for p in points:
+			center += p
+		center /= points.size()
+		return center
 		
 
 var vertices:Array[VertexInfo] = []

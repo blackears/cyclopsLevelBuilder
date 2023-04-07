@@ -45,15 +45,15 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Edge"
 
-[node name="check_lock_uvs" type="CheckBox" parent="HBoxContainer"]
-layout_mode = 2
-text = "Lock UVs"
-
 [node name="bn_face" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Face"
+
+[node name="check_lock_uvs" type="CheckBox" parent="HBoxContainer"]
+layout_mode = 2
+text = "Lock UVs"
 
 [node name="bn_flipX" type="Button" parent="HBoxContainer"]
 layout_mode = 2
@@ -70,14 +70,6 @@ text = "Flip Z"
 [node name="bn_duplicate" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 text = "Duplicate"
-
-[node name="bn_textureLock" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-text = "B"
-
-[node name="bn_uvLock" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-text = "B"
 
 [node name="grid_size" type="OptionButton" parent="HBoxContainer"]
 layout_mode = 2
@@ -114,6 +106,6 @@ popup/item_0/id = 0
 [connection signal="pressed" from="HBoxContainer/bn_clip" to="." method="_on_bn_clip_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_vertex" to="." method="_on_bn_vertex_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_edge" to="." method="_on_bn_edge_pressed"]
-[connection signal="toggled" from="HBoxContainer/check_lock_uvs" to="." method="_on_check_lock_uvs_toggled"]
 [connection signal="pressed" from="HBoxContainer/bn_face" to="." method="_on_bn_face_pressed"]
+[connection signal="toggled" from="HBoxContainer/check_lock_uvs" to="." method="_on_check_lock_uvs_toggled"]
 [connection signal="item_selected" from="HBoxContainer/grid_size" to="." method="_on_grid_size_item_selected"]
