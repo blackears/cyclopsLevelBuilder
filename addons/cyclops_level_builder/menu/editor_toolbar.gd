@@ -92,7 +92,7 @@ func _on_bn_vertex_pressed():
 
 
 func _on_bn_edge_pressed():
-	pass
+	editor_plugin.switch_to_tool(ToolEditEdge.new())
 
 
 func _on_bn_face_pressed():

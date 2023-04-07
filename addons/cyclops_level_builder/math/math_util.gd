@@ -42,6 +42,16 @@ static func closest_point_on_line(ray_origin:Vector3, ray_dir:Vector3, line_orig
 	var w_perp:Vector3 = ray_dir.cross(a)
 	return intersect_plane(line_origin, line_dir, ray_origin, w_perp)
 
+static func closest_point_on_segment(ray_origin:Vector3, ray_dir:Vector3, seg_start:Vector3, seg_end:Vector3)->Vector3:
+	var seg_span:Vector3 = seg_end - seg_start
+	var p:Vector3 = closest_point_on_line(ray_origin, ray_dir, seg_start, seg_span)
+	var offset:Vector3 = p - seg_start
+	if offset.dot(seg_span) < 0:
+		return seg_start
+	if offset.length_squared() > seg_span.length_squared():
+		return seg_end
+	return p
+
 #Shortest distance from point to given ray.  Returns NAN if point is behind origin of ray.
 static func distance_to_ray(ray_origin:Vector3, ray_dir:Vector3, point:Vector3):
 	var offset = point - ray_origin
@@ -180,17 +190,6 @@ static func bounding_polygon_3d(base_points:PackedVector3Array, normal:Vector3)-
 	if base_points.size() <= 2:
 		return base_points
 	
-	#var quat:Quaternion = Quaternion()
-#	var basis:Basis = Basis.IDENTITY
-	#Rotation to point along Z axis
-#	var axis = Vector3.FORWARD.cross(normal)
-#	if !axis.is_zero_approx():
-#		#Roy=tate normal onto forward axis
-#		quat.x = axis.x
-#		quat.y = axis.y
-#		quat.z = axis.z
-#		quat.w = 1 + Vector3.FORWARD.dot(normal)
-		
 	var quat:Quaternion = Quaternion(normal, Vector3.FORWARD)
 	
 #	var xform:Transform3D = Transform3D(Basis(quat), -base_points[0])
@@ -305,3 +304,21 @@ static func get_convex_hull_points_from_planes(planes:Array[Plane])->Array[Vecto
 				points.append(result)
 	
 	return points
+
+static func dist_to_segment_squared_2d(point:Vector2, seg_start:Vector2, seg_end:Vector2)->float:
+	var dist_sq_p0:float = point.distance_squared_to(seg_start)
+	var dist_sq_p1:float = point.distance_squared_to(seg_end)
+	var seg_span:Vector2 = seg_end - seg_start
+	
+	var offset:Vector2 = point - seg_start
+	var offset_proj:Vector2 = offset.project(seg_span)
+	var perp_dist_sq:float = (offset - offset_proj).length_squared()
+	
+	if seg_span.dot(offset) < 0:
+		return dist_sq_p0
+	elif offset_proj.length_squared() > seg_span.length_squared():
+		return dist_sq_p1
+	return perp_dist_sq
+	
+	
+	

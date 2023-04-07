@@ -45,6 +45,15 @@ func _ready():
 	$ToolInstance3D.mesh = tool_mesh
 
 
+func draw_line(p0:Vector3, p1:Vector3):
+	
+	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINES, tool_material)
+
+	tool_mesh.surface_add_vertex(p0)
+	tool_mesh.surface_add_vertex(p1)
+	
+	tool_mesh.surface_end()
+
 func draw_loop(points:PackedVector3Array, closed:bool = true):
 	for p in points:
 		draw_vertex(p)

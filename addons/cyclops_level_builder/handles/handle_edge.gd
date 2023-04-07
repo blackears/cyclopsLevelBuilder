@@ -23,13 +23,16 @@
 
 @tool
 extends RefCounted
-class_name HandleVertex
+class_name HandleEdge
 
-var position:Vector3
-#var id:int  #Label to link this vertex back to whatever is being tracked
-var initial_position:Vector3
+var edge_index:int
+var p0:Vector3
+var p1:Vector3
+var p0_init:Vector3
+var p1_init:Vector3
 var block_path:NodePath
 
 
 func _to_string():
-	return "%s init pos %s   pos %s" % [block_path, initial_position, position]
+#	return "%s init pos %s %s   pos %s %s" % [block_path, initial_p0, initial_p1, p0, p1]
+	return "edge %s " % [edge_index]

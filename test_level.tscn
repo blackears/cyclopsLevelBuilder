@@ -36,18 +36,18 @@ face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform
 face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_vfym5"]
+[sub_resource type="Resource" id="Resource_pehhf"]
 script = ExtResource("4_yiqfy")
-vertex_points = PackedVector3Array(-25, 11, 8, -25, 11, 10, -25, 7, 10, -25, 7, 8, -24, 11, 8, -24, 11, 10, -24, 7, 10, -24, 7, 8)
+vertex_points = PackedVector3Array(-23, 7, 9, -25, 7, 8, -25, 7, 10, -24, 7, 10, -26, 11, 12, -23, 12, 12, -21, 12, 9, -25, 11, 8)
 vertex_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0)
-edge_vertex_indices = PackedInt32Array(0, 1, 1, 2, 2, 3, 3, 0, 7, 6, 6, 5, 5, 4, 4, 7, 0, 4, 5, 1, 6, 2, 7, 3)
-edge_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
-face_vertex_indices = PackedInt32Array(0, 1, 2, 3, 7, 6, 5, 4, 1, 0, 4, 5, 2, 1, 5, 6, 3, 2, 6, 7, 0, 3, 7, 4)
-face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
-face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
-face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
-face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
+edge_vertex_indices = PackedInt32Array(0, 1, 1, 2, 2, 3, 3, 0, 2, 4, 4, 3, 1, 4, 5, 3, 4, 5, 0, 6, 6, 1, 0, 5, 5, 6, 7, 1, 6, 7, 7, 4, 7, 5)
+edge_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+face_vertex_count = PackedInt32Array(4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3)
+face_vertex_indices = PackedInt32Array(0, 1, 2, 3, 2, 4, 3, 2, 1, 4, 5, 3, 4, 0, 6, 1, 0, 5, 6, 0, 3, 5, 7, 1, 6, 7, 4, 1, 7, 5, 4, 7, 6, 5)
+face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
+face_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 
 [sub_resource type="BoxMesh" id="BoxMesh_dnvdv"]
 
@@ -87,7 +87,7 @@ block_data = SubResource("Resource_o70mt")
 [node name="Block_2" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("3_534ho")
 materials = Array[Material]([ExtResource("6_mt25d")])
-block_data = SubResource("Resource_vfym5")
+block_data = SubResource("Resource_pehhf")
 
 [node name="Marker3D" type="Marker3D" parent="."]
 transform = Transform3D(0.965926, -0.0669873, -0.25, 2.21068e-08, 0.965926, -0.258819, 0.258819, 0.25, 0.933013, -1.5, 6.5, -1)
