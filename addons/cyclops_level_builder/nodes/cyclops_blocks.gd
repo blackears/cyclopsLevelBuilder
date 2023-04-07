@@ -25,6 +25,8 @@
 extends Node3D
 class_name CyclopsBlocks
 
+signal blocks_changed
+
 @export var grid_size:int = 0
 @export var selection_color:Color = Color(1, .5, .5, 1)
 #@export var default_material:Material = StandardMaterial3D.new()
@@ -58,6 +60,7 @@ func _ready():
 	
 func on_child_mesh_changed():
 	dirty = true
+	blocks_changed.emit()
 	
 
 func on_child_entered_tree(node:Node):
@@ -85,11 +88,8 @@ func rebuild_mesh():
 		if child is CyclopsConvexBlock:
 			var block:CyclopsConvexBlock = child
 			block.append_mesh(mesh)
-			block.append_mesh_wire(mesh)
-#			if block.control_mesh:
-#				var color:Color = selection_color if block.selected else Color.WHITE
-#				block.control_mesh.append_mesh(mesh, default_material, color)
-#				block.control_mesh.append_mesh_wire(mesh_wire, outline_material, color)
+			if Engine.is_editor_hint():
+				block.append_mesh_wire(mesh)
 	
 	mesh_instance.mesh = mesh
 	mesh_wire_instance.mesh = mesh_wire

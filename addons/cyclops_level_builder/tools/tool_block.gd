@@ -148,7 +148,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 								if child is CyclopsConvexBlock:
 									var block:CyclopsConvexBlock = child
 									block.selected = block == result.object
-						pass
+					else:
+						for child in blocks_root.get_children():
+							if child is CyclopsConvexBlock:
+								var block:CyclopsConvexBlock = child
+								block.selected = false
 					
 					drag_style = DragStyle.NONE
 					

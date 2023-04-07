@@ -457,10 +457,10 @@ func append_mesh(mesh:ImmediateMesh, material_list:Array[Material], default_mate
 			var v_idx:int = face.vertex_indices[i]
 			var p:Vector3 = vertices[v_idx].point
 			if face.selected || select_all:
-				print("face selected %s" % selection_color)
+#				print("face selected %s" % selection_color)
 				mesh.surface_set_color(selection_color)
 			else:
-				print("face white")
+#				print("face white")
 				mesh.surface_set_color(Color.WHITE)
 			
 			var uv:Vector2

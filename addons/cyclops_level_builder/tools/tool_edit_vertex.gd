@@ -48,6 +48,9 @@ func setup_tool():
 	handles = []
 	
 	var blocks_root:CyclopsBlocks = builder.active_node
+	if blocks_root == null:
+		return
+		
 	for child in blocks_root.get_children():
 		if child is CyclopsConvexBlock:
 			var block:CyclopsConvexBlock = child
@@ -64,19 +67,25 @@ func setup_tool():
 					#print("adding handle %s" % handle)
 
 
-func pick_closest_handle(ray_origin:Vector3, ray_dir:Vector3, radius:float)->HandleVertex:
+func pick_closest_handle(blocks_root:CyclopsBlocks, viewport_camera:Camera3D, position:Vector2, radius:float)->HandleVertex:
 	var best_dist:float = INF
 	var best_handle:HandleVertex = null
 	
+	var origin:Vector3 = viewport_camera.project_ray_origin(position)
+	var dir:Vector3 = viewport_camera.project_ray_normal(position)
+	
 	for h in handles:
-		var offset = h.position - ray_origin
-		var parallel:Vector3 = offset.project(ray_dir)
-		var dist = parallel.dot(ray_dir)
-		if dist <= 0:
+		var h_world_pos:Vector3 = blocks_root.global_transform * h.position
+		var h_screen_pos:Vector2 = viewport_camera.unproject_position(h_world_pos)
+		if position.distance_squared_to(h_screen_pos) > radius * radius:
+			#Failed handle radius test
 			continue
 		
-		var perp:Vector3 = offset - parallel	
-		if perp.length_squared() > radius * radius:
+		var offset:Vector3 = h_world_pos - origin
+		var parallel:Vector3 = offset.project(dir)
+		var dist = parallel.dot(dir)
+		if dist <= 0:
+			#Behind camera
 			continue
 		
 		#print("h pos %s ray orig %s ray dir %s offset %s para %s dist %s perp %s" % [h.position, ray_origin, ray_dir, offset, parallel, dist, perp])
@@ -88,19 +97,45 @@ func pick_closest_handle(ray_origin:Vector3, ray_dir:Vector3, radius:float)->Han
 
 	return best_handle
 			
+var tracked_blocks_root:CyclopsBlocks
+
+func active_node_changed():
+	if tracked_blocks_root != null:
+		tracked_blocks_root.blocks_changed.disconnect(active_node_updated)
+		tracked_blocks_root = null
+		
+	setup_tool()
+	draw_tool()
+	
+	tracked_blocks_root = builder.active_node
+	if tracked_blocks_root:
+		tracked_blocks_root.blocks_changed.connect(active_node_updated)
 		
 	
+
+func active_node_updated():
+	setup_tool()
+	draw_tool()
+
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
 	
+	builder.active_node_changed.connect(active_node_changed)
+	
+	tracked_blocks_root = builder.active_node
+	if tracked_blocks_root:
+		tracked_blocks_root.blocks_changed.connect(active_node_updated)
+	
+	
 	setup_tool()
-
 	draw_tool()
 	
 	
-#func _deactivate():
-#	super._deactivate()
-#	pass
+func _deactivate():
+	super._deactivate()
+	builder.active_node_changed.disconnect(active_node_changed)
+	if tracked_blocks_root != null:
+		tracked_blocks_root.blocks_changed.disconnect(active_node_updated)
 
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
@@ -117,16 +152,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		if e.button_index == MOUSE_BUTTON_LEFT:
 
 			if e.is_pressed():
-				var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
-				var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
-
-				var start_pos:Vector3 = origin + builder.block_create_distance * dir
-				var w2l = blocks_root.global_transform.inverse()
-				var origin_local:Vector3 = w2l * origin
-				var dir_local:Vector3 = w2l.basis * dir
 				
 				if tool_state == ToolState.READY:
-					var handle:HandleVertex = pick_closest_handle(origin_local, dir_local, builder.handle_point_radius)
+					var handle:HandleVertex = pick_closest_handle(blocks_root, viewport_camera, e.position, builder.handle_screen_radius)
 					
 					#print("picked handle %s" % handle)
 					if handle:
