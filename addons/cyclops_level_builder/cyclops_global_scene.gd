@@ -212,6 +212,18 @@ func draw_sphere(xform:Transform3D = Transform3D.IDENTITY, segs_lat:int = 6, seg
 	unit_sphere.append_to_immediate_mesh(tool_mesh, tool_material, xform)
 	
 
+func draw_selected_blocks(viewport_camera:Camera3D):
+	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
+	#var mesh:ImmediateMesh = ImmediateMesh.new()
+	
+	var blocks_root:CyclopsBlocks = self.builder.active_node
+	for child in blocks_root.get_children():
+		if child is CyclopsConvexBlock:
+			var block:CyclopsConvexBlock = child
+			if block.selected:
+				block.append_mesh_outline(tool_mesh, viewport_camera)
+					
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 #	if Engine.is_editor_hint():

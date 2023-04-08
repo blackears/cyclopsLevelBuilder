@@ -35,6 +35,7 @@ class_name ConvexBlockData
 
 @export var edge_vertex_indices:PackedInt32Array
 @export var edge_selected:PackedByteArray
+@export var edge_face_indices:PackedInt32Array
 
 @export var face_vertex_count:PackedInt32Array #Number of verts in each face
 @export var face_vertex_indices:PackedInt32Array  #Vertex index per face

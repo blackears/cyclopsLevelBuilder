@@ -171,6 +171,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 					global_scene.clear_tool_mesh()
+					global_scene.draw_selected_blocks(viewport_camera)
 
 					var bounds:AABB = AABB(block_drag_p0_local, Vector3.ZERO)
 					bounds = bounds.expand(block_drag_p1_local)
@@ -239,13 +240,16 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					#var points:PackedVector3Array = block.control_mesh.get_face_points(face)
 					
 					global_scene.clear_tool_mesh()
+					global_scene.draw_selected_blocks(viewport_camera)
 					global_scene.draw_loop(points, true)
 					return true
 				else:
 					global_scene.clear_tool_mesh()
+					global_scene.draw_selected_blocks(viewport_camera)
 					
 			else:
 				global_scene.clear_tool_mesh()
+				global_scene.draw_selected_blocks(viewport_camera)
 			
 			return false
 				
@@ -281,6 +285,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				p10 = Vector3(block_drag_cur.x, block_drag_p0_local.y, block_drag_p0_local.z)
 
 			global_scene.clear_tool_mesh()				
+			global_scene.draw_selected_blocks(viewport_camera)
 			global_scene.draw_loop([block_drag_p0_local, p01, block_drag_cur, p10], true)
 
 			return true
@@ -293,6 +298,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
 
 			global_scene.clear_tool_mesh()			
+			global_scene.draw_selected_blocks(viewport_camera)
 			global_scene.draw_cube(block_drag_p0_local, block_drag_p1_local, block_drag_cur)
 
 			return true

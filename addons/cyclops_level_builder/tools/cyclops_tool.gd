@@ -86,9 +86,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 								viewport_camera.global_transform.basis.z * builder.block_create_distance
 							viewport_camera.global_transform.origin = new_cam_origin
 					return true
-			
-
-		
 	
 	return false
 
