@@ -183,6 +183,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						command.blocks_root_path = blocks_root.get_path()
 						command.block_name = GeneralUtil.find_unique_name(builder.active_node, "Block_")						
 						command.bounds = bounds
+						command.uv_transform = builder.tool_uv_transform
+						command.material_path = builder.tool_material_path
 
 						var undo:EditorUndoRedoManager = builder.get_undo_redo()
 

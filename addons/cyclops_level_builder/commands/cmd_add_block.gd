@@ -29,6 +29,8 @@ extends CyclopsCommand
 var blocks_root_path:NodePath
 var block_name:String
 var bounds:AABB
+var material_path:String
+var uv_transform:Transform2D = Transform2D.IDENTITY
 
 #Private data
 var block_path:NodePath
@@ -44,8 +46,16 @@ func do_it():
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
 	block.name = block_name
 	
+	var material_id:int = -1
+	if ResourceLoader.exists(material_path):
+		var mat = load(material_path)
+		if mat is Material:
+			material_id = 0
+			block.materials.append(mat)
+		
+	
 	var mesh:ConvexVolume = ConvexVolume.new()
-	mesh.init_block(bounds)
+	mesh.init_block(bounds, uv_transform, material_id)
 
 	block.block_data = mesh.to_convex_block_data()
 	block_path = block.get_path()

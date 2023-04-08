@@ -110,6 +110,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					command.block_owner = builder.get_editor_interface().get_edited_scene_root()
 					command.base_polygon = bounding_points
 					command.extrude = offset
+					command.uv_transform = builder.tool_uv_transform
+					command.material_path = builder.tool_material_path
 
 					var undo:EditorUndoRedoManager = builder.get_undo_redo()
 

@@ -28,11 +28,11 @@ extends CyclopsCommand
 var blocks_root_inst_id:int
 var block_name:String
 var block_owner:Node
-#var bounds:AABB
 var base_polygon:PackedVector3Array
 var extrude:Vector3
-#	var block:CyclopsBlock
 var block_inst_id:int
+var uv_transform:Transform2D
+var material_path:String
 
 func _init():
 	command_name = "Add prism"
@@ -44,9 +44,16 @@ func do_it():
 	blocks_root.add_child(block)
 	block.owner = block_owner
 	block.name = block_name
+
+	var material_id:int = -1
+	if ResourceLoader.exists(material_path):
+		var mat = load(material_path)
+		if mat is Material:
+			material_id = 0
+			block.materials.append(mat)
 	
 	var mesh:ConvexVolume = ConvexVolume.new()
-	mesh.init_prisim(base_polygon, extrude)
+	mesh.init_prisim(base_polygon, extrude, uv_transform, material_id)
 
 	block.block_data = mesh.to_convex_block_data()
 	block_inst_id = block.get_instance_id()
