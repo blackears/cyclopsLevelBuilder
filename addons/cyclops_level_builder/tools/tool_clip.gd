@@ -91,7 +91,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			cmd.block_path = clip_block.get_path()
 			cmd.block_sibling_name = GeneralUtil.find_unique_name(blocks_root, "Block_")
 			cmd.cut_plane = cut_plane
-			cmd.material_id = builder.tool_material_id
+			cmd.material_path = builder.tool_material_path
 			cmd.uv_transform = builder.tool_uv_transform
 			
 			var undo:EditorUndoRedoManager = builder.get_undo_redo()

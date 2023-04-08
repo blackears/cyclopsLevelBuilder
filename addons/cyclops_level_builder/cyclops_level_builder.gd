@@ -44,7 +44,7 @@ var tool_uv_transform:Transform2D
 var tool_material_path:String
 
 var handle_point_radius:float = .05
-var handle_screen_radius:float = 3
+var handle_screen_radius:float = 4
 
 #var _active_node:GeometryBrush
 var active_node:CyclopsBlocks:
