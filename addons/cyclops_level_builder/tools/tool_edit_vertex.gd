@@ -35,7 +35,7 @@ var drag_handle:HandleVertex
 var drag_mouse_start_pos:Vector2
 var drag_handle_start_pos:Vector3
 
-var cmd_move_vertex:CommandMoveVertex
+var cmd_move_vertex:CommandMoveVertices
 
 func draw_tool():
 	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
@@ -53,6 +53,7 @@ func draw_tool():
 	
 func setup_tool():
 	handles = []
+#	print("setup_tool")
 	
 	var blocks_root:CyclopsBlocks = builder.active_node
 	if blocks_root == null:
@@ -62,7 +63,7 @@ func setup_tool():
 		if child is CyclopsConvexBlock:
 			var block:CyclopsConvexBlock = child
 			if block.selected:
-				#var points:PackedVector3Array = block.control_mesh.get_points()
+#				print("block sel %s" % block.block_data.vertex_selected)
 
 				for v_idx in block.control_mesh.vertices.size():
 					var v:ConvexVolume.VertexInfo = block.control_mesh.vertices[v_idx]
@@ -168,6 +169,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				return true
 			else:
 				if tool_state == ToolState.READY:
+					#print("cmd select")
 					var handle:HandleVertex = pick_closest_handle(blocks_root, viewport_camera, drag_mouse_start_pos, builder.handle_screen_radius)
 
 					if handle:
@@ -190,12 +192,13 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 				elif tool_state == ToolState.DRAGGING:
 					#Finish drag
+					#print("cmd finish drag")
 					var undo:EditorUndoRedoManager = builder.get_undo_redo()
 
 					cmd_move_vertex.add_to_undo_manager(undo)
-									
+					
 					tool_state = ToolState.NONE
-					setup_tool()
+					#setup_tool()
 
 	elif event is InputEventMouseMotion:
 		var e:InputEventMouseMotion = event
@@ -212,10 +215,23 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					drag_handle_start_pos = handle.position
 					tool_state = ToolState.DRAGGING
 
-					cmd_move_vertex = CommandMoveVertex.new()
+					cmd_move_vertex = CommandMoveVertices.new()
 					cmd_move_vertex.builder = builder
-					cmd_move_vertex.block_path = handle.block_path
-					cmd_move_vertex.vertex_position = handle.initial_position
+#					cmd_move_vertex.block_path = handle.block_path
+#					cmd_move_vertex.vertex_position = handle.initial_position
+
+					var handle_block:CyclopsConvexBlock = builder.get_node(handle.block_path)
+					if handle_block.control_mesh.vertices[handle.vertex_index].selected:
+						for child in blocks_root.get_children():
+							if child is CyclopsConvexBlock:
+								var block:CyclopsConvexBlock = child
+								var vol:ConvexVolume = block.control_mesh
+								for v_idx in vol.vertices.size():
+									var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
+									if v.selected:
+										cmd_move_vertex.add_vertex(block.get_path(), v_idx)
+					else:
+						cmd_move_vertex.add_vertex(handle.block_path, handle.vertex_index)
 				
 			
 		elif tool_state == ToolState.DRAGGING:

@@ -25,9 +25,6 @@
 class_name CommandSelectVertices
 extends CyclopsCommand
 
-#class Record extends RefCounted:
-#	var vert_idx:int
-#	var block_path:NodePath
 class BlockVertexChanges extends RefCounted:
 	var block_path:NodePath
 	var vertex_indices:Array[int] = []
@@ -63,12 +60,13 @@ func _init():
 	command_name = "Select vertices"
 	
 func do_it():
-	print("sel vert do_it()")
-	for node_path in block_map.keys():
-		print("path %s" % node_path)
+	print("sel verts do_it")
+	#print("sel vert do_it()")
+	for block_path in block_map.keys():
+		#print("path %s" % node_path)
 		
-		var rec:BlockVertexChanges = block_map[node_path]
-		var block:CyclopsConvexBlock = builder.get_node(node_path)
+		var rec:BlockVertexChanges = block_map[block_path]
+		var block:CyclopsConvexBlock = builder.get_node(block_path)
 			
 		var vol:ConvexVolume = ConvexVolume.new()
 		vol.init_from_convex_block_data(rec.tracked_block_data)
@@ -94,12 +92,12 @@ func do_it():
 		block.block_data = vol.to_convex_block_data()
 
 func undo_it():
-	print("sel vert undo_it()")
-	for node_path in block_map.keys():
-		var rec:BlockVertexChanges = block_map[node_path]
-		var block:CyclopsConvexBlock = builder.get_node(node_path)
+	print("sel verts undo_it")
+	#print("sel vert undo_it()")
+	for block_path in block_map.keys():
+		var rec:BlockVertexChanges = block_map[block_path]
+		var block:CyclopsConvexBlock = builder.get_node(block_path)
 		block.block_data = rec.tracked_block_data
-	pass
 
 	
 	
