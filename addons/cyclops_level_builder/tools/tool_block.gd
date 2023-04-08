@@ -46,6 +46,8 @@ var cmd_move_blocks:CommandMoveBlocks
 var cmd_move_face:CommandMoveFacePlanar
 var move_face_origin:Vector3 #Kep track of the origin when moving a face
 
+
+
 func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 	var blocks_root:CyclopsBlocks = self.builder.active_node
 	var e:InputEventMouseButton = event

@@ -30,6 +30,7 @@ class VertexInfo extends RefCounted:
 	var mesh:ConvexVolume
 	#var index:int
 	var point:Vector3
+	var normal:Vector3
 	var edge_indices:Array[int] = []
 	var selected:bool
 	
@@ -160,6 +161,7 @@ func init_prisim(base_points:Array[Vector3], extrude_dir:Vector3, uv_transform:T
 		faces.append(f)
 	
 	build_edges()
+	calc_vertex_normals()
 	
 	bounds = calc_bounds()
 
@@ -199,6 +201,8 @@ func init_from_convex_block_data(data:ConvexBlockData):
 		faces.append(f)
 
 	
+	calc_vertex_normals()
+	
 	bounds = calc_bounds()
 	#print("init_from_convex_block_data %s" % format_faces_string())
 	
@@ -232,10 +236,21 @@ func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Tran
 	
 
 	build_edges()
+	calc_vertex_normals()
 	
 	bounds = calc_bounds()
 	
-
+func calc_vertex_normals():
+	for v_idx in vertices.size():
+		var v:VertexInfo = vertices[v_idx]
+		var weighted_normal:Vector3
+		
+		for face in faces:
+			if face.vertex_indices.has(v_idx):
+				weighted_normal += MathUtil.face_area_x2(face.get_points())
+		
+		v.normal = weighted_normal.normalized()
+				
 
 func get_edge(vert_idx0:int, vert_idx1:int)->EdgeInfo:
 	for e in edges:
@@ -445,6 +460,19 @@ func tristrip_vertex_range(num_verts:int)->PackedInt32Array:
 			result.append((i >> 1) + 1)
 	
 	return result
+
+func tristrip_vertex_range_reverse(num_verts:int)->PackedInt32Array:
+	var result:PackedInt32Array
+	
+	result.append(1)
+	result.append(0)
+	for i in range(2, num_verts):
+		if (i & 1) == 0:
+			result.append((i >> 1) + 1)
+		else:
+			result.append(num_verts - (i >> 1))
+	
+	return result
 	
 func append_mesh(mesh:ImmediateMesh, material_list:Array[Material], default_material:Material, select_all:bool, selection_color:Color = Color.RED):
 #	if Engine.is_editor_hint():
@@ -474,11 +502,11 @@ func append_mesh(mesh:ImmediateMesh, material_list:Array[Material], default_mate
 			var uv:Vector2
 			var axis:MathUtil.Axis = MathUtil.get_longest_axis(face.normal)
 			if axis == MathUtil.Axis.X:
-				uv = Vector2(p.z, p.y)
+				uv = Vector2(-p.z, -p.y)
 			elif axis == MathUtil.Axis.Y:
-				uv = Vector2(p.x, p.z)
+				uv = Vector2(-p.x, -p.z)
 			elif axis == MathUtil.Axis.Z:
-				uv = Vector2(p.x, p.y)
+				uv = Vector2(-p.x, -p.y)
 				
 			uv = face.uv_transform * uv
 			mesh.surface_set_uv(uv)
@@ -488,6 +516,29 @@ func append_mesh(mesh:ImmediateMesh, material_list:Array[Material], default_mate
 		mesh.surface_end()
 
 
+
+func append_mesh_outline(mesh:ImmediateMesh, material:Material, offset:float = .2):
+#	if Engine.is_editor_hint():
+#		return
+
+	for face in faces:
+		
+		mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, material)
+#		print("face %s" % face.index)
+		
+		mesh.surface_set_normal(face.normal)
+		
+#		for i in tristrip_vertex_range_reverse(face.vertex_indices.size()):
+		for i in tristrip_vertex_range_reverse(face.vertex_indices.size()):
+			var v_idx:int = face.vertex_indices[i]
+			var v:VertexInfo = vertices[v_idx]
+			var p:Vector3 = v.point + v.normal * offset
+			#var p:Vector3 = v.point + Vector3(.1, .1, .1)
+			
+			mesh.surface_add_vertex(p)
+	
+		mesh.surface_end()
+		
 func append_mesh_wire(mesh:ImmediateMesh, material:Material):
 #	if Engine.is_editor_hint():
 #		return
@@ -503,6 +554,7 @@ func append_mesh_wire(mesh:ImmediateMesh, material:Material):
 		mesh.surface_add_vertex(vertices[v_idx].point)
 
 		mesh.surface_end()	
+
 
 func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 	if bounds.intersects_ray(origin, dir) == null:

@@ -30,6 +30,7 @@ class_name CyclopsGlobalScene
 @export var outline_material:Material = preload("res://addons/cyclops_level_builder/materials/block_outline_material.tres")
 
 @export var tool_material:Material
+@export var tool_selected_material:Material
 #@export var selected_material:Material
 var tool_mesh:ImmediateMesh
 #var vertex_size:float = .05

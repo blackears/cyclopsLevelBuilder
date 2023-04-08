@@ -40,7 +40,6 @@ var tool:CyclopsTool = null
 var lock_uvs:bool = false
 
 var tool_uv_transform:Transform2D
-#var tool_material_id:int
 var tool_material_path:String
 
 var handle_point_radius:float = .05

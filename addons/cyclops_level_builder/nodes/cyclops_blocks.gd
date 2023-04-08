@@ -29,12 +29,12 @@ signal blocks_changed
 
 @export var grid_size:int = 0
 @export var selection_color:Color = Color(1, .5, .5, 1)
-#@export var default_material:Material = StandardMaterial3D.new()
 @export var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
 @export var outline_material:Material = preload("res://addons/cyclops_level_builder/materials/block_outline_material.tres")
 
 var mesh_instance:MeshInstance3D
 var mesh_wire_instance:MeshInstance3D
+var mesh_object_outline_instance:MeshInstance3D
 var dirty:bool = true
 
 # Called when the node enters the scene tree for the first time.
@@ -47,8 +47,11 @@ func _ready():
 	mesh_instance.name = "mesh"
 	add_child(mesh_instance)
 	mesh_wire_instance = MeshInstance3D.new()
-	mesh_instance.name = "mesh_wire"
+	mesh_wire_instance.name = "mesh_wire"
 	add_child(mesh_wire_instance)
+	mesh_object_outline_instance = MeshInstance3D.new()
+	mesh_object_outline_instance.name = "mesh_object_outline"
+	add_child(mesh_object_outline_instance)
 
 	for node in get_children():
 		if node is CyclopsConvexBlock:
@@ -79,10 +82,27 @@ func on_child_exiting_tree(node:Node):
 #		print("on_child_exited_tree %s" % node.name)
 		
 		dirty = true
+
+
+func draw_selected_object_outlines():
+	#var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
+	var mesh:ImmediateMesh = ImmediateMesh.new()
 	
+	for child in get_children():
+		if child is CyclopsConvexBlock:
+			var block:CyclopsConvexBlock = child
+			if block.selected:
+				block.append_mesh_outline(mesh)
+				#global_scene.draw_block_outline(block)
+
+	mesh_object_outline_instance.mesh = mesh
+					
 func rebuild_mesh():
 	var mesh:ImmediateMesh = ImmediateMesh.new()
 	var mesh_wire:ImmediateMesh = ImmediateMesh.new()
+	
+	if Engine.is_editor_hint():
+		draw_selected_object_outlines()
 	
 	for child in get_children():
 		if child is CyclopsConvexBlock:

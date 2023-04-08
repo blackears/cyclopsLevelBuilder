@@ -5,5 +5,5 @@ render_priority = 1
 transparency = 4
 albedo_color = Color(0, 0, 0, 1)
 emission_enabled = true
-emission = Color(1, 1, 0, 1)
+emission = Color(0.607843, 0.607843, 0.607843, 1)
 grow_amount = 0.1

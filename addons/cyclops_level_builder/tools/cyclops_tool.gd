@@ -93,6 +93,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	return false
 
 
+
 func to_local(point:Vector3, world_to_local:Transform3D, grid_step_size:float)->Vector3:
 	var p_local:Vector3 = world_to_local * point
 
