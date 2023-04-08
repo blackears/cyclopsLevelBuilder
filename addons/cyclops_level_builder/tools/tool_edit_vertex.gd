@@ -27,8 +27,9 @@ class_name ToolEditVertex
 
 var handles:Array[HandleVertex] = []
 
-enum ToolState { READY, DRAGGING }
-var tool_state:ToolState = ToolState.READY
+enum ToolState { NONE, READY, DRAGGING }
+var tool_state:ToolState = ToolState.NONE
+
 
 var drag_handle:HandleVertex
 var drag_mouse_start_pos:Vector2
@@ -40,9 +41,15 @@ func draw_tool():
 	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 	global_scene.clear_tool_mesh()
 	
-	var blocks_root:CyclopsBlocks = builder.active_node
+	#var blocks_root:CyclopsBlocks = builder.active_node
 	for h in handles:
-		global_scene.draw_vertex(h.position)
+		var block:CyclopsConvexBlock = builder.get_node(h.block_path)
+		var v:ConvexVolume.VertexInfo = block.control_mesh.vertices[h.vertex_index]
+		
+		var mat:Material = global_scene.tool_selected_material if v.selected else global_scene.tool_material
+		
+		#print("draw vert %s %s" % [h.vertex_index, v.selected])
+		global_scene.draw_vertex(h.position, v.selected)
 	
 func setup_tool():
 	handles = []
@@ -55,12 +62,14 @@ func setup_tool():
 		if child is CyclopsConvexBlock:
 			var block:CyclopsConvexBlock = child
 			if block.selected:
-				var points:PackedVector3Array = block.control_mesh.get_points()
+				#var points:PackedVector3Array = block.control_mesh.get_points()
 
-				for p in points:
+				for v_idx in block.control_mesh.vertices.size():
+					var v:ConvexVolume.VertexInfo = block.control_mesh.vertices[v_idx]
 					var handle:HandleVertex = HandleVertex.new()
-					handle.position = p
-					handle.initial_position = p
+					handle.position = v.point
+					handle.vertex_index = v_idx
+					handle.initial_position = v.point
 					handle.block_path = block.get_path()
 					handles.append(handle)
 					
@@ -126,7 +135,6 @@ func _activate(builder:CyclopsLevelBuilder):
 	if tracked_blocks_root:
 		tracked_blocks_root.blocks_changed.connect(active_node_updated)
 	
-	
 	setup_tool()
 	draw_tool()
 	
@@ -153,30 +161,40 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 			if e.is_pressed():
 				
-				if tool_state == ToolState.READY:
-					var handle:HandleVertex = pick_closest_handle(blocks_root, viewport_camera, e.position, builder.handle_screen_radius)
+				if tool_state == ToolState.NONE:
+					drag_mouse_start_pos = e.position
+					tool_state = ToolState.READY
 					
-					#print("picked handle %s" % handle)
-					if handle:
-						drag_handle = handle
-						drag_mouse_start_pos = e.position
-						drag_handle_start_pos = handle.position
-						tool_state = ToolState.DRAGGING
-
-						cmd_move_vertex = CommandMoveVertex.new()
-						cmd_move_vertex.builder = builder
-						cmd_move_vertex.block_path = handle.block_path
-						cmd_move_vertex.vertex_position = handle.initial_position
-						
 				return true
 			else:
-				if tool_state == ToolState.DRAGGING:
+				if tool_state == ToolState.READY:
+					var handle:HandleVertex = pick_closest_handle(blocks_root, viewport_camera, drag_mouse_start_pos, builder.handle_screen_radius)
+
+					if handle:
+						var block:CyclopsConvexBlock = builder.get_node(handle.block_path)
+						
+						var cmd:CommandSelectVertices = CommandSelectVertices.new()
+						cmd.builder = builder
+						
+						cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
+						cmd.add_vertex(handle.block_path, handle.vertex_index)
+						#print("selectibg %s" % handle.vertex_index)
+					
+						var undo:EditorUndoRedoManager = builder.get_undo_redo()
+
+						cmd.add_to_undo_manager(undo)
+					
+					
+					tool_state = ToolState.NONE
+					draw_tool()
+					
+				elif tool_state == ToolState.DRAGGING:
 					#Finish drag
 					var undo:EditorUndoRedoManager = builder.get_undo_redo()
 
 					cmd_move_vertex.add_to_undo_manager(undo)
 									
-					tool_state = ToolState.READY
+					tool_state = ToolState.NONE
 					setup_tool()
 
 	elif event is InputEventMouseMotion:
@@ -185,7 +203,22 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		if (e.button_mask & MOUSE_BUTTON_MASK_MIDDLE):
 			return false		
 			
-		if tool_state == ToolState.DRAGGING:
+		if tool_state == ToolState.READY:
+			if e.position.distance_squared_to(drag_mouse_start_pos) < 4 * 4:
+				var handle:HandleVertex = pick_closest_handle(blocks_root, viewport_camera, drag_mouse_start_pos, builder.handle_screen_radius)
+
+				if handle:
+					drag_handle = handle
+					drag_handle_start_pos = handle.position
+					tool_state = ToolState.DRAGGING
+
+					cmd_move_vertex = CommandMoveVertex.new()
+					cmd_move_vertex.builder = builder
+					cmd_move_vertex.block_path = handle.block_path
+					cmd_move_vertex.vertex_position = handle.initial_position
+				
+			
+		elif tool_state == ToolState.DRAGGING:
 
 			var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 			var dir:Vector3 = viewport_camera.project_ray_normal(e.position)

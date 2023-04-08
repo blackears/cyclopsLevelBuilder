@@ -74,6 +74,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						base_points.append(p)
 
 						global_scene.clear_tool_mesh()					
+						global_scene.draw_selected_blocks(viewport_camera)
 						global_scene.draw_loop(base_points, false)
 						return true
 						
@@ -84,6 +85,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						base_points.append(p)
 						
 						global_scene.clear_tool_mesh()
+						global_scene.draw_selected_blocks(viewport_camera)
 						global_scene.draw_loop(base_points, false)
 						return true
 						
@@ -97,6 +99,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
 					#print("bounding %s " % bounding_points)
 					global_scene.clear_tool_mesh()
+					global_scene.draw_selected_blocks(viewport_camera)
 					global_scene.draw_loop(bounding_points, true)
 					
 					return true
@@ -118,6 +121,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					command.add_to_undo_manager(undo)
 					
 					global_scene.clear_tool_mesh()
+					global_scene.draw_selected_blocks(viewport_camera)
 					
 					tool_state = ToolState.READY
 					return true

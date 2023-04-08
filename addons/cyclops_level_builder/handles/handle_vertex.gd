@@ -25,6 +25,7 @@
 extends RefCounted
 class_name HandleVertex
 
+var vertex_index:int
 var position:Vector3
 #var id:int  #Label to link this vertex back to whatever is being tracked
 var initial_position:Vector3

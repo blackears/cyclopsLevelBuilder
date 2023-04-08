@@ -25,3 +25,13 @@
 class_name Selection
 
 enum Type { REPLACE, ADD, SUBTRACT, TOGGLE }
+
+static func choose_type(shift_pressed:bool, ctrl_pressed)->Type:
+	if !shift_pressed and !ctrl_pressed:
+		return Type.REPLACE
+	elif shift_pressed and !ctrl_pressed:
+		return Type.TOGGLE
+	elif !shift_pressed and ctrl_pressed:
+		return Type.ADD
+	else:
+		return Type.SUBTRACT

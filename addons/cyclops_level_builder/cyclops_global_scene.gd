@@ -196,20 +196,16 @@ func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3):
 	
 	#$ToolInstance3D.mesh = mesh
 
-func draw_vertex(position:Vector3):
-	var xform:Transform3D = Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * builder.handle_point_radius), position)
-	draw_sphere(xform)
-
 func draw_points(points:PackedVector3Array):
 	for p in points:
 		draw_vertex(p)
 
-func draw_sphere(xform:Transform3D = Transform3D.IDENTITY, segs_lat:int = 6, segs_long:int = 8):
-#	var geo_mesh:GeometryMesh = MathGeometry.unit_sphere()
-#	geo_mesh = geo_mesh.transform(xform)
-#	geo_mesh.append_to_immediate_mesh(tool_mesh, tool_material, xform)
-	
-	unit_sphere.append_to_immediate_mesh(tool_mesh, tool_material, xform)
+func draw_vertex(position:Vector3, selected:bool = false):
+	var xform:Transform3D = Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * builder.handle_point_radius), position)
+	draw_sphere(xform, tool_selected_material if selected else tool_material)
+
+func draw_sphere(xform:Transform3D = Transform3D.IDENTITY, material:Material = null, segs_lat:int = 6, segs_long:int = 8):
+	unit_sphere.append_to_immediate_mesh(tool_mesh, material, xform)
 	
 
 func draw_selected_blocks(viewport_camera:Camera3D):
