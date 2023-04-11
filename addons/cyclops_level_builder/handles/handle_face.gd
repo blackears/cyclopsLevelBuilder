@@ -26,11 +26,11 @@ extends RefCounted
 class_name HandleFace
 
 var face_index:int
-var p0:Vector3
+var p0:Vector3 #Centroid
 var p0_init:Vector3
 var block_path:NodePath
 
 
 func _to_string():
 #	return "%s init pos %s %s   pos %s %s" % [block_path, initial_p0, initial_p1, p0, p1]
-	return "face %s " % [face_index]
+	return "face idx:%s centroid_init:%s" % [face_index, p0_init]
