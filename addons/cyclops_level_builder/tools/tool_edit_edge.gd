@@ -27,30 +27,28 @@ class_name ToolEditEdge
 
 var handles:Array[HandleEdge] = []
 
-enum ToolState { READY, DRAGGING }
-var tool_state:ToolState = ToolState.READY
+enum ToolState { NONE, READY, DRAGGING }
+var tool_state:ToolState = ToolState.NONE
 
 var drag_handle:HandleEdge
-#var drag_mouse_start_pos:Vector2
+var drag_mouse_start_pos:Vector2
 var drag_handle_start_pos:Vector3
 			
 var tracked_blocks_root:CyclopsBlocks
 
-var cmd_move_edge:CommandMoveEdge
+var cmd_move_edge:CommandMoveEdges
 
 func draw_tool():
 	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 	global_scene.clear_tool_mesh()
 	
-	var blocks_root:CyclopsBlocks = builder.active_node
+	
+	#var blocks_root:CyclopsBlocks = builder.active_node
 	for h in handles:
-		global_scene.draw_line(h.p0, h.p1)
-#		var block:CyclopsConvexBlock = builder.get_node(h.block_path)
-#		var ctl_mesh:ConvexVolume = block.control_mesh
-#		var edge:ConvexVolume.EdgeInfo = ctl_mesh.edges[h.edge_index]
-#		var p0:Vector3 = ctl_mesh.vertices[edge.start_index].point
-#		var p1:Vector3 = ctl_mesh.vertices[edge.end_index].point
-#		global_scene.draw_line(p0, p1)
+		var block:CyclopsConvexBlock = builder.get_node(h.block_path)
+		var e:ConvexVolume.EdgeInfo = block.control_mesh.edges[h.edge_index]
+#		var mat:Material = global_scene.tool_selected_material if e.selected else global_scene.tool_material
+		global_scene.draw_line(h.p0, h.p1, e.selected)
 	
 func setup_tool():
 	handles = []
@@ -93,8 +91,6 @@ func pick_closest_handle(blocks_root:CyclopsBlocks, viewport_camera:Camera3D, po
 		var block:CyclopsConvexBlock = builder.get_node(h.block_path)
 		var ctl_mesh:ConvexVolume = block.control_mesh
 		var edge:ConvexVolume.EdgeInfo = ctl_mesh.edges[h.edge_index]
-#		var p0:Vector3 = h.p0
-#		var p1:Vector3 = ctl_mesh.vertices[edge.end_index].point
 		
 		var p0_world:Vector3 = blocks_root.global_transform * h.p0
 		var p1_world:Vector3 = blocks_root.global_transform * h.p1
@@ -138,7 +134,6 @@ func active_node_changed():
 	if tracked_blocks_root:
 		tracked_blocks_root.blocks_changed.connect(active_node_updated)
 		
-	
 
 func active_node_updated():
 	setup_tool()
@@ -165,12 +160,6 @@ func _deactivate():
 		tracked_blocks_root.blocks_changed.disconnect(active_node_updated)
 
 
-#func get_handle_start_point(handle:HandleEdge)->Vector3:
-#	var block:CyclopsConvexBlock = builder.get_node(handle.block_path)
-#	var vol:ConvexVolume = block.control_mesh
-#	var edge:ConvexVolume.EdgeInfo = vol.edges[handle.edge_index]
-#	return vol.vertices[edge.start_index].point
-
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
 	var blocks_root:CyclopsBlocks = self.builder.active_node
 	var grid_step_size:float = pow(2, blocks_root.grid_size)
@@ -186,35 +175,46 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 			if e.is_pressed():
 				
-				if tool_state == ToolState.READY:
-					var handle:HandleEdge = pick_closest_handle(blocks_root, viewport_camera, e.position, builder.handle_screen_radius)
+				if tool_state == ToolState.NONE:
+					drag_mouse_start_pos = e.position
+					tool_state = ToolState.READY
 					
-					#print("picked handle %s" % handle)
-					if handle:
-						drag_handle = handle
-#						drag_mouse_start_pos = e.position
-#						drag_handle_start_pos = handle.position
-						tool_state = ToolState.DRAGGING
-
-						drag_handle_start_pos = handle.p0_init
-
-						cmd_move_edge = CommandMoveEdge.new()
-						cmd_move_edge.builder = builder
-						cmd_move_edge.block_path = handle.block_path
-						cmd_move_edge.edge_index = handle.edge_index
-#						cmd_move_edge.drag_start_position = handle.initial_position
-#						cmd_move_edge.vertex_position = handle.initial_position
-						
 				return true
 			else:
-				if tool_state == ToolState.DRAGGING:
+#				print("bn up: state %s" % tool_state)
+				if tool_state == ToolState.READY:
+					#print("cmd select")
+					var handle:HandleEdge = pick_closest_handle(blocks_root, viewport_camera, e.position, builder.handle_screen_radius)
+
+#					print("handle %s" % handle)
+
+					if handle:
+						var block:CyclopsConvexBlock = builder.get_node(handle.block_path)
+						
+						var cmd:CommandSelectEdges = CommandSelectEdges.new()
+						cmd.builder = builder
+						
+						cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
+						cmd.add_edge(handle.block_path, handle.edge_index)
+						#print("selectibg %s" % handle.vertex_index)
+					
+						var undo:EditorUndoRedoManager = builder.get_undo_redo()
+
+						cmd.add_to_undo_manager(undo)
+					
+					
+					tool_state = ToolState.NONE
+					draw_tool()
+					
+				elif tool_state == ToolState.DRAGGING:
 					#Finish drag
+					#print("cmd finish drag")
 					var undo:EditorUndoRedoManager = builder.get_undo_redo()
 
 					cmd_move_edge.add_to_undo_manager(undo)
-									
-					tool_state = ToolState.READY
-					setup_tool()
+					
+					tool_state = ToolState.NONE
+					#setup_tool()
 
 	elif event is InputEventMouseMotion:
 		var e:InputEventMouseMotion = event
@@ -222,7 +222,35 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		if (e.button_mask & MOUSE_BUTTON_MASK_MIDDLE):
 			return false		
 			
-		if tool_state == ToolState.DRAGGING:
+		if tool_state == ToolState.READY:
+			if e.position.distance_squared_to(drag_mouse_start_pos) < 4 * 4:
+				var handle:HandleEdge = pick_closest_handle(blocks_root, viewport_camera, drag_mouse_start_pos, builder.handle_screen_radius)
+
+				if handle:
+					drag_handle = handle
+					drag_handle_start_pos = handle.p0
+					tool_state = ToolState.DRAGGING
+
+					cmd_move_edge = CommandMoveEdges.new()
+					cmd_move_edge.builder = builder
+#					cmd_move_vertex.block_path = handle.block_path
+#					cmd_move_vertex.vertex_position = handle.initial_position
+
+					var handle_block:CyclopsConvexBlock = builder.get_node(handle.block_path)
+					if handle_block.control_mesh.edges[handle.edge_index].selected:
+						for child in blocks_root.get_children():
+							if child is CyclopsConvexBlock:
+								var block:CyclopsConvexBlock = child
+								var vol:ConvexVolume = block.control_mesh
+								for e_idx in vol.edges.size():
+									var edge:ConvexVolume.EdgeInfo = vol.edges[e_idx]
+									if edge.selected:
+										cmd_move_edge.add_edge(block.get_path(), e_idx)
+					else:
+						cmd_move_edge.add_edge(handle.block_path, handle.edge_index)
+				
+			
+		elif tool_state == ToolState.DRAGGING:
 
 			var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 			var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
@@ -239,16 +267,95 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				drag_to = MathUtil.intersect_plane(origin_local, dir_local, drag_handle_start_pos, Vector3.UP)
 			
 			drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
-			
-			var offset = drag_to - drag_handle.p0_init
-			drag_handle.p0 = drag_handle.p0_init + offset
+			drag_handle.p0 = drag_to
+			var offset:Vector3 = drag_to - drag_handle.p0_init
 			drag_handle.p1 = drag_handle.p1_init + offset
 			
-			cmd_move_edge.move_offset = offset
+			cmd_move_edge.move_offset = drag_to - drag_handle.p0_init
 			cmd_move_edge.do_it()
 
 			draw_tool()
 			return true
 		
 	return false
+
+#
+#func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
+#	var blocks_root:CyclopsBlocks = self.builder.active_node
+#	var grid_step_size:float = pow(2, blocks_root.grid_size)
+#	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
+#
+##	if event is InputEventKey:
+##		return true
+#
+#	if event is InputEventMouseButton:
+#
+#		var e:InputEventMouseButton = event
+#		if e.button_index == MOUSE_BUTTON_LEFT:
+#
+#			if e.is_pressed():
+#
+#				if tool_state == ToolState.READY:
+#					var handle:HandleEdge = pick_closest_handle(blocks_root, viewport_camera, e.position, builder.handle_screen_radius)
+#
+#					#print("picked handle %s" % handle)
+#					if handle:
+#						drag_handle = handle
+##						drag_mouse_start_pos = e.position
+##						drag_handle_start_pos = handle.position
+#						tool_state = ToolState.DRAGGING
+#
+#						drag_handle_start_pos = handle.p0_init
+#
+#						cmd_move_edge = CommandMoveEdges.new()
+#						cmd_move_edge.builder = builder
+#						cmd_move_edge.block_path = handle.block_path
+#						cmd_move_edge.edge_index = handle.edge_index
+#
+#				return true
+#			else:
+#				if tool_state == ToolState.DRAGGING:
+#					#Finish drag
+#					var undo:EditorUndoRedoManager = builder.get_undo_redo()
+#
+#					cmd_move_edge.add_to_undo_manager(undo)
+#
+#					tool_state = ToolState.READY
+#					setup_tool()
+#
+#	elif event is InputEventMouseMotion:
+#		var e:InputEventMouseMotion = event
+#
+#		if (e.button_mask & MOUSE_BUTTON_MASK_MIDDLE):
+#			return false		
+#
+#		if tool_state == ToolState.DRAGGING:
+#
+#			var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
+#			var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+#
+#			var start_pos:Vector3 = origin + builder.block_create_distance * dir
+#			var w2l = blocks_root.global_transform.inverse()
+#			var origin_local:Vector3 = w2l * origin
+#			var dir_local:Vector3 = w2l.basis * dir
+#
+#			var drag_to:Vector3
+#			if e.alt_pressed:
+#				drag_to = MathUtil.closest_point_on_line(origin_local, dir_local, drag_handle_start_pos, Vector3.UP)
+#			else:
+#				drag_to = MathUtil.intersect_plane(origin_local, dir_local, drag_handle_start_pos, Vector3.UP)
+#
+#			drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
+#
+#			var offset = drag_to - drag_handle.p0_init
+#			drag_handle.p0 = drag_handle.p0_init + offset
+#			drag_handle.p1 = drag_handle.p1_init + offset
+#
+#			cmd_move_edge.move_offset = offset
+#			cmd_move_edge.do_it()
+#
+#			draw_tool()
+#			return true
+#
+#	return false
 

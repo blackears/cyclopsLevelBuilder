@@ -37,6 +37,8 @@ var drag_handle_start_pos:Vector3
 
 var cmd_move_vertex:CommandMoveVertices
 
+var tracked_blocks_root:CyclopsBlocks
+
 func draw_tool():
 	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 	global_scene.clear_tool_mesh()
@@ -46,7 +48,7 @@ func draw_tool():
 		var block:CyclopsConvexBlock = builder.get_node(h.block_path)
 		var v:ConvexVolume.VertexInfo = block.control_mesh.vertices[h.vertex_index]
 		
-		var mat:Material = global_scene.tool_selected_material if v.selected else global_scene.tool_material
+#		var mat:Material = global_scene.tool_selected_material if v.selected else global_scene.tool_material
 		
 		#print("draw vert %s %s" % [h.vertex_index, v.selected])
 		global_scene.draw_vertex(h.position, v.selected)
@@ -107,8 +109,6 @@ func pick_closest_handle(blocks_root:CyclopsBlocks, viewport_camera:Camera3D, po
 
 	return best_handle
 			
-var tracked_blocks_root:CyclopsBlocks
-
 func active_node_changed():
 	if tracked_blocks_root != null:
 		tracked_blocks_root.blocks_changed.disconnect(active_node_updated)

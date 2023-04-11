@@ -22,12 +22,13 @@
 # SOFTWARE.
 
 @tool
-class_name CommandMoveVertices
+class_name CommandMoveEdges
 extends CyclopsCommand
 
-class BlockVertexChanges extends RefCounted:
+
+class BlockEdgeChanges extends RefCounted:
 	var block_path:NodePath
-	var vertex_indices:Array[int] = []
+	var edge_indices:Array[int] = []
 	var tracked_block_data:ConvexBlockData
 
 #Public 
@@ -36,64 +37,101 @@ var move_offset:Vector3 = Vector3.ZERO
 #Private
 var block_map:Dictionary = {}
 
+#Public 
+#var block_path:NodePath
+##var vertex_position:Vector3
+#var edge_index:int
+#var move_offset:Vector3 = Vector3.ZERO
+#
+##Private
+#var tracked_block_data:ConvexBlockData
 
-func add_vertex(block_path:NodePath, index:int):
-	var changes:BlockVertexChanges
+
+func add_edge(block_path:NodePath, index:int):
+	var changes:BlockEdgeChanges
 	if block_map.has(block_path):
 		changes = block_map[block_path]
 	else:
-		changes = BlockVertexChanges.new()
+		changes = BlockEdgeChanges.new()
 		changes.block_path = block_path
 		var block:CyclopsConvexBlock = builder.get_node(block_path)
 		changes.tracked_block_data = block.block_data
 		block_map[block_path] = changes
 
-	if !changes.vertex_indices.has(index):
-		changes.vertex_indices.append(index)
+	if !changes.edge_indices.has(index):
+		changes.edge_indices.append(index)
 			
 func _init():
-	command_name = "Move vertices"
+	command_name = "Move edges"
+
 
 func do_it():
-#	print("move verts do_it")
+#	print("cmd move edges- DO IT")
+	
 	for block_path in block_map.keys():
 		
+#		print("%s" % block_path)
+		
 		var block:CyclopsConvexBlock = builder.get_node(block_path)
-		var rec:BlockVertexChanges = block_map[block_path]
+		var rec:BlockEdgeChanges = block_map[block_path]
+		
+#		print("rec %s" % rec)
 		
 		var vol:ConvexVolume = ConvexVolume.new()
 		vol.init_from_convex_block_data(rec.tracked_block_data)
 
-#		print("rec.vertex_indices %s" % rec.vertex_indices)
-#		print("move_offset %s" % move_offset)
-		var selected_points:PackedVector3Array
+#		print("init done")
+
+		#var moved_vert_indices:PackedInt32Array
 		var new_points:PackedVector3Array
-		for v_idx in vol.vertices.size():
-			if rec.vertex_indices.has(v_idx):
-				var p:Vector3 = vol.vertices[v_idx].point + move_offset
-				new_points.append(p)
-				selected_points.append(p)
-			else:
-				new_points.append(vol.vertices[v_idx].point)
+		var new_sel_centroids:PackedVector3Array
+		var moved_indices:Array[int] = []
+		for edge_index in rec.edge_indices:
+			var e:ConvexVolume.EdgeInfo = vol.edges[edge_index]
+			var v0:ConvexVolume.VertexInfo = vol.vertices[e.start_index]
+			var v1:ConvexVolume.VertexInfo = vol.vertices[e.end_index]
+			if e.selected:
+				new_sel_centroids.append((v0.point + v1.point) / 2 + move_offset)
 				
+				if !moved_indices.has(e.start_index):
+					new_points.append(v0.point + move_offset)
+					moved_indices.append(e.start_index)
+				if !moved_indices.has(e.end_index):
+					new_points.append(v1.point + move_offset)
+					moved_indices.append(e.end_index)
+			else:
+				if !moved_indices.has(e.start_index):
+					new_points.append(v0.point + move_offset)
+					moved_indices.append(e.start_index)
+				if !moved_indices.has(e.end_index):
+					new_points.append(v1.point + move_offset)
+					moved_indices.append(e.end_index)
+		
+		for v_idx in vol.vertices.size():
+			if !moved_indices.has(v_idx):
+				new_points.append(vol.vertices[v_idx].point)
+		#print("new points_ %s" % new_points)
 		
 		var new_vol:ConvexVolume = ConvexVolume.new()
 		new_vol.init_from_points(new_points)
-		
-#		new_vol.copy_face_attributes(vol)
-		for v_idx in new_vol.vertices.size():
-			var v:ConvexVolume.VertexInfo = new_vol.vertices[v_idx]
-#			print ("vol point %s " % v1.point)
-			if selected_points.has(v.point):
-#				print("set sel")
-				v.selected = true
 
-		block.block_data = new_vol.to_convex_block_data()
+		#print("new init done")
+		
+		#Copy selection data
+		for e_idx in new_vol.edges.size():
+			var e_new:ConvexVolume.EdgeInfo = new_vol.edges[e_idx]
+			var centroid:Vector3 = (new_vol.vertices[e_new.start_index].point + new_vol.vertices[e_new.end_index].point) / 2
+#			print ("vol point %s " % v1.point)
+			if new_sel_centroids.has(centroid):
+#				print("set sel")
+				e_new.selected = true
+
+		block.block_data = new_vol.to_convex_block_data()			
 			
 	
+
 func undo_it():
-#	print("move verts undo_it")
 	for block_path in block_map.keys():
-		var rec:BlockVertexChanges = block_map[block_path]
+		var rec:BlockEdgeChanges = block_map[block_path]
 		var block:CyclopsConvexBlock = builder.get_node(block_path)
 		block.block_data = rec.tracked_block_data

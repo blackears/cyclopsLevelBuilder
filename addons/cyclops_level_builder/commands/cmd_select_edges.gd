@@ -22,12 +22,12 @@
 # SOFTWARE.
 
 @tool
-class_name CommandSelectVertices
+class_name CommandSelectEdges
 extends CyclopsCommand
 
-class BlockVertexChanges extends RefCounted:
+class BlockEdgeChanges extends RefCounted:
 	var block_path:NodePath
-	var vertex_indices:Array[int] = []
+	var edge_indices:Array[int] = []
 	var tracked_block_data:ConvexBlockData
 
 #Public
@@ -36,28 +36,24 @@ var selection_type:Selection.Type = Selection.Type.REPLACE
 #Private
 var block_map:Dictionary = {}
 
-#var record_list:Array[Record] = []
 
-
-#enum SelectType { REPLACE, ADD, SUBTRACT, TOGGLE }
-
-func add_vertex(block_path:NodePath, index:int):
-	var changes:BlockVertexChanges
+func add_edge(block_path:NodePath, index:int):
+	var changes:BlockEdgeChanges
 	if block_map.has(block_path):
 		changes = block_map[block_path]
 	else:
-		changes = BlockVertexChanges.new()
+		changes = BlockEdgeChanges.new()
 		changes.block_path = block_path
 		var block:CyclopsConvexBlock = builder.get_node(block_path)
 		changes.tracked_block_data = block.block_data
 		block_map[block_path] = changes
 
-	if !changes.vertex_indices.has(index):
-		changes.vertex_indices.append(index)
+	if !changes.edge_indices.has(index):
+		changes.edge_indices.append(index)
 	
 
 func _init():
-	command_name = "Select vertices"
+	command_name = "Select edges"
 	
 func do_it():
 #	print("sel verts do_it")
@@ -65,7 +61,7 @@ func do_it():
 	for block_path in block_map.keys():
 		#print("path %s" % node_path)
 		
-		var rec:BlockVertexChanges = block_map[block_path]
+		var rec:BlockEdgeChanges = block_map[block_path]
 		var block:CyclopsConvexBlock = builder.get_node(block_path)
 			
 		var vol:ConvexVolume = ConvexVolume.new()
@@ -73,21 +69,21 @@ func do_it():
 		
 		match selection_type:
 			Selection.Type.REPLACE:
-				for v_idx in vol.vertices.size():
-					var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
-					v.selected = rec.vertex_indices.has(v_idx)
+				for e_idx in vol.edges.size():
+					var e:ConvexVolume.EdgeInfo = vol.edges[e_idx]
+					e.selected = rec.edge_indices.has(e_idx)
 			Selection.Type.ADD:
-				for v_idx in rec.vertex_indices:
-					var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
-					v.selected = true
+				for e_idx in rec.edge_indices:
+					var e:ConvexVolume.EdgeInfo = vol.edges[e_idx]
+					e.selected = true
 			Selection.Type.SUBTRACT:
-				for v_idx in rec.vertex_indices:
-					var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
-					v.selected = false
+				for e_idx in rec.edge_indices:
+					var e:ConvexVolume.EdgeInfo = vol.edges[e_idx]
+					e.selected = false
 			Selection.Type.TOGGLE:
-				for v_idx in rec.vertex_indices:
-					var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
-					v.selected = !v.selected
+				for e_idx in rec.edge_indices:
+					var e:ConvexVolume.EdgeInfo = vol.edges[e_idx]
+					e.selected = !e.selected
 		
 		block.block_data = vol.to_convex_block_data()
 
@@ -95,7 +91,7 @@ func undo_it():
 #	print("sel verts undo_it")
 	#print("sel vert undo_it()")
 	for block_path in block_map.keys():
-		var rec:BlockVertexChanges = block_map[block_path]
+		var rec:BlockEdgeChanges = block_map[block_path]
 		var block:CyclopsConvexBlock = builder.get_node(block_path)
 		block.block_data = rec.tracked_block_data
 

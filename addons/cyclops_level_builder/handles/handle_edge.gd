@@ -35,4 +35,4 @@ var block_path:NodePath
 
 func _to_string():
 #	return "%s init pos %s %s   pos %s %s" % [block_path, initial_p0, initial_p1, p0, p1]
-	return "edge %s " % [edge_index]
+	return "edge %s e_idx:%s p0:%s p1:%s" % [block_path, edge_index, p0, p1]

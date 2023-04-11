@@ -46,9 +46,11 @@ func _ready():
 	$ToolInstance3D.mesh = tool_mesh
 
 
-func draw_line(p0:Vector3, p1:Vector3):
+func draw_line(p0:Vector3, p1:Vector3, selected:bool = false):
+
+	var mat:Material = tool_selected_material if selected else tool_material
 	
-	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINES, tool_material)
+	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINES, mat)
 
 	tool_mesh.surface_add_vertex(p0)
 	tool_mesh.surface_add_vertex(p1)
