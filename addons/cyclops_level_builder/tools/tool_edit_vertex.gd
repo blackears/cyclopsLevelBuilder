@@ -22,7 +22,7 @@
 # SOFTWARE.
 
 @tool
-extends CyclopsTool
+extends ToolEditBase
 class_name ToolEditVertex
 
 var handles:Array[HandleVertex] = []
@@ -51,7 +51,7 @@ func draw_tool():
 #		var mat:Material = global_scene.tool_selected_material if v.selected else global_scene.tool_material
 		
 		#print("draw vert %s %s" % [h.vertex_index, v.selected])
-		global_scene.draw_vertex(h.position, v.selected)
+		global_scene.draw_vertex(h.position, pick_material(global_scene, v.selected))
 	
 func setup_tool():
 	handles = []

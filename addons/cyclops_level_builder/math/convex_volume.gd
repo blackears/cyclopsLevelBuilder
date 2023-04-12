@@ -33,6 +33,7 @@ class VertexInfo extends RefCounted:
 	var normal:Vector3
 	var edge_indices:Array[int] = []
 	var selected:bool
+	var active:bool
 	
 	func _init(mesh:ConvexVolume, point:Vector3 = Vector3.ZERO):
 		self.mesh = mesh
@@ -52,6 +53,7 @@ class EdgeInfo extends RefCounted:
 	var end_index:int
 	var face_indices:Array[int] = []
 	var selected:bool
+	var active:bool
 	
 	func _init(mesh:ConvexVolume, start:int = 0, end:int = 0):
 		self.mesh = mesh
@@ -73,6 +75,7 @@ class FaceInfo extends RefCounted:
 	var material_id:int
 	var uv_transform:Transform2D
 	var selected:bool
+	var active:bool
 	var vertex_indices:Array[int]
 	
 	func _init(mesh:ConvexVolume, id:int, normal:Vector3, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0, selected:bool = false):

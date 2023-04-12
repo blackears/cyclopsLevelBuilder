@@ -27,10 +27,16 @@ class_name CyclopsGlobalScene
 
 @export var selection_color:Color = Color(1, .5, .5, 1)
 @export var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
-@export var outline_material:Material = preload("res://addons/cyclops_level_builder/materials/block_outline_material.tres")
+@export var tool_edit_active_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_edit_active_material.tres")
+@export var tool_edit_selected_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_edit_selected_material.tres")
+@export var tool_edit_unselected_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_edit_unselected_material.tres")
+@export var tool_object_active_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_object_active_material.tres")
+@export var tool_object_selected_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_object_selected_material.tres")
+#@export var outline_material:Material = preload("res://addons/cyclops_level_builder/materials/block_outline_material.tres")
 
-@export var tool_material:Material
-@export var tool_selected_material:Material
+@export var tool_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_material.tres")
+@export var outline_material:Material = preload("res://addons/cyclops_level_builder/materials/outline_material.tres")
+#@export var tool_selected_material:Material
 #@export var selected_material:Material
 var tool_mesh:ImmediateMesh
 #var vertex_size:float = .05
@@ -45,10 +51,9 @@ func _ready():
 	tool_mesh = ImmediateMesh.new()
 	$ToolInstance3D.mesh = tool_mesh
 
+func draw_line(p0:Vector3, p1:Vector3, mat:Material):
 
-func draw_line(p0:Vector3, p1:Vector3, selected:bool = false):
-
-	var mat:Material = tool_selected_material if selected else tool_material
+#	var mat:Material = tool_selected_material if selected else tool_material
 	
 	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINES, mat)
 
@@ -57,11 +62,11 @@ func draw_line(p0:Vector3, p1:Vector3, selected:bool = false):
 	
 	tool_mesh.surface_end()
 
-func draw_loop(points:PackedVector3Array, closed:bool = true):
+func draw_loop(points:PackedVector3Array, closed:bool = true, mat:Material = null):
 	for p in points:
 		draw_vertex(p)
 	
-	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, tool_material)
+	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, mat)
 
 	for p in points:
 		tool_mesh.surface_add_vertex(p)
@@ -72,13 +77,13 @@ func draw_loop(points:PackedVector3Array, closed:bool = true):
 	tool_mesh.surface_end()
 	
 
-func draw_prism(points:PackedVector3Array, extrude:Vector3):
+func draw_prism(points:PackedVector3Array, extrude:Vector3, mat:Material = null):
 	for p in points:
 		draw_vertex(p)
 		draw_vertex(p + extrude)
 	
 	#Bottom loop	
-	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, tool_material)
+	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, mat)
 
 	for p in points:
 		tool_mesh.surface_add_vertex(p)
@@ -88,7 +93,7 @@ func draw_prism(points:PackedVector3Array, extrude:Vector3):
 	tool_mesh.surface_end()
 
 	#Top loop	
-	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, tool_material)
+	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, mat)
 
 	for p in points:
 		tool_mesh.surface_add_vertex(p + extrude)
@@ -98,7 +103,7 @@ func draw_prism(points:PackedVector3Array, extrude:Vector3):
 	tool_mesh.surface_end()
 	
 	#Sides
-	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINES, tool_material)
+	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINES, mat)
 
 	for p in points:
 		tool_mesh.surface_add_vertex(p)
@@ -109,19 +114,19 @@ func draw_prism(points:PackedVector3Array, extrude:Vector3):
 	#$ToolInstance3D.mesh = mesh
 		
 
-func draw_rect(start:Vector3, end:Vector3):	
+func draw_rect(start:Vector3, end:Vector3, mat:Material = null):	
 	
 	var p0:Vector3 = start
 	var p2:Vector3 = end
 	var p1:Vector3 = Vector3(p0.x, p0.y, p2.z)
 	var p3:Vector3 = Vector3(p2.x, p0.y, p0.z)
 	
-	draw_vertex(p0)
-	draw_vertex(p1)
-	draw_vertex(p2)
-	draw_vertex(p3)
+	draw_vertex(p0, mat)
+	draw_vertex(p1, mat)
+	draw_vertex(p2, mat)
+	draw_vertex(p3, mat)
 	
-	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, tool_material)
+	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, mat)
 
 	tool_mesh.surface_add_vertex(p0)
 	tool_mesh.surface_add_vertex(p1)
@@ -139,7 +144,7 @@ func clear_tool_mesh():
 	tool_mesh.clear_surfaces()
 	
 
-func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3):	
+func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3, mat:Material = null):	
 #	print ("draw_cube %s %s %s" % [p0, p1, p2])
 	
 	var bounds:AABB = AABB(p0, Vector3.ZERO)
@@ -155,17 +160,17 @@ func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3):
 	var p101:Vector3 = Vector3(p111.x, p000.y, p111.z)
 	var p110:Vector3 = Vector3(p111.x, p111.y, p000.z)
 	
-	draw_vertex(p000)
-	draw_vertex(p001)
-	draw_vertex(p010)
-	draw_vertex(p011)
-	draw_vertex(p100)
-	draw_vertex(p101)
-	draw_vertex(p110)
-	draw_vertex(p111)
+	draw_vertex(p000, mat)
+	draw_vertex(p001, mat)
+	draw_vertex(p010, mat)
+	draw_vertex(p011, mat)
+	draw_vertex(p100, mat)
+	draw_vertex(p101, mat)
+	draw_vertex(p110, mat)
+	draw_vertex(p111, mat)
 	
 	
-	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINES, tool_material)
+	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINES, mat)
 
 	tool_mesh.surface_add_vertex(p000)
 	tool_mesh.surface_add_vertex(p001)
@@ -198,13 +203,13 @@ func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3):
 	
 	#$ToolInstance3D.mesh = mesh
 
-func draw_points(points:PackedVector3Array):
-	for p in points:
-		draw_vertex(p)
+#func draw_points(points:PackedVector3Array, mat:Material = null):
+#	for p in points:
+#		draw_vertex(p, false, mat)
 
-func draw_vertex(position:Vector3, selected:bool = false):
+func draw_vertex(position:Vector3, mat:Material = null):
 	var xform:Transform3D = Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * builder.handle_point_radius), position)
-	draw_sphere(xform, tool_selected_material if selected else tool_material)
+	draw_sphere(xform, mat)
 
 func draw_sphere(xform:Transform3D = Transform3D.IDENTITY, material:Material = null, segs_lat:int = 6, segs_long:int = 8):
 	unit_sphere.append_to_immediate_mesh(tool_mesh, material, xform)

@@ -22,7 +22,7 @@
 # SOFTWARE.
 
 @tool
-extends CyclopsTool
+extends ToolEditBase
 class_name ToolEditFace
 
 var handles:Array[HandleFace] = []
@@ -47,7 +47,7 @@ func draw_tool():
 		#print("draw face %s" % h)
 		var block:CyclopsConvexBlock = builder.get_node(h.block_path)
 		var f:ConvexVolume.FaceInfo = block.control_mesh.faces[h.face_index]
-		global_scene.draw_vertex(h.p_ref, f.selected)
+		global_scene.draw_vertex(h.p_ref, pick_material(global_scene, f.selected))
 	
 func setup_tool():
 	handles = []
@@ -292,65 +292,3 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		
 	return false				
 				
-#				if tool_state == ToolState.READY:
-#					var handle:HandleFace = pick_closest_handle(blocks_root, viewport_camera, e.position, builder.handle_screen_radius)
-#
-#					#print("picked handle %s" % handle)
-#					if handle:
-#						drag_handle = handle
-#						tool_state = ToolState.DRAGGING
-#
-#						drag_handle_start_pos = handle.p_ref_init
-#
-#						cmd_move_face = CommandMoveFace.new()
-#						cmd_move_face.builder = builder
-#						cmd_move_face.block_path = handle.block_path
-#						cmd_move_face.face_index = handle.face_index
-#						cmd_move_face.lock_uvs = builder.lock_uvs
-#
-#				return true
-#			else:
-#				if tool_state == ToolState.DRAGGING:
-#					#Finish drag
-#					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-#
-#					cmd_move_face.add_to_undo_manager(undo)
-#
-#					tool_state = ToolState.READY
-#					setup_tool()
-#
-#	elif event is InputEventMouseMotion:
-#		var e:InputEventMouseMotion = event
-#
-#		if (e.button_mask & MOUSE_BUTTON_MASK_MIDDLE):
-#			return false		
-#
-#		if tool_state == ToolState.DRAGGING:
-#
-#			var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
-#			var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
-#
-#			var start_pos:Vector3 = origin + builder.block_create_distance * dir
-#			var w2l = blocks_root.global_transform.inverse()
-#			var origin_local:Vector3 = w2l * origin
-#			var dir_local:Vector3 = w2l.basis * dir
-#
-#			var drag_to:Vector3
-#			if e.alt_pressed:
-#				drag_to = MathUtil.closest_point_on_line(origin_local, dir_local, drag_handle_start_pos, Vector3.UP)
-#			else:
-#				drag_to = MathUtil.intersect_plane(origin_local, dir_local, drag_handle_start_pos, Vector3.UP)
-#
-#			drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
-#
-#			var offset = drag_to - drag_handle.p_ref_init
-#			drag_handle.p_ref = drag_handle.p_ref_init + offset
-#
-#			cmd_move_face.move_offset = offset
-#			cmd_move_face.do_it()
-#
-#			draw_tool()
-#			return true
-#
-#	return false
-

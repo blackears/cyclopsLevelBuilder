@@ -41,7 +41,7 @@ func has_clip_point(point:Vector3)->bool:
 func draw_tool(global_scene:CyclopsGlobalScene):
 	global_scene.clear_tool_mesh()
 	if !clip_points.is_empty():
-		global_scene.draw_loop(clip_points, false)
+		global_scene.draw_loop(clip_points, false, global_scene.tool_material)
 	
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	

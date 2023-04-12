@@ -241,7 +241,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 					global_scene.clear_tool_mesh()
 					global_scene.draw_selected_blocks(viewport_camera)
-					global_scene.draw_loop(points, true)
+					global_scene.draw_loop(points, true, global_scene.tool_material)
 					return true
 				else:
 					global_scene.clear_tool_mesh()
@@ -286,12 +286,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 			global_scene.clear_tool_mesh()				
 			global_scene.draw_selected_blocks(viewport_camera)
-			global_scene.draw_loop([block_drag_p0_local, p01, block_drag_cur, p10], true)
+			global_scene.draw_loop([block_drag_p0_local, p01, block_drag_cur, p10], true, global_scene.tool_material)
 
 			return true
 
 		elif drag_style == DragStyle.BLOCK_HEIGHT:
-#			block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, Vector3.UP)
 			block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, block_drag_p1_local, drag_floor_normal)
 			
 			var grid_step_size:float = pow(2, blocks_root.grid_size)
@@ -299,7 +298,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 			global_scene.clear_tool_mesh()			
 			global_scene.draw_selected_blocks(viewport_camera)
-			global_scene.draw_cube(block_drag_p0_local, block_drag_p1_local, block_drag_cur)
+			global_scene.draw_cube(block_drag_p0_local, block_drag_p1_local, block_drag_cur, global_scene.tool_material)
 
 			return true
 

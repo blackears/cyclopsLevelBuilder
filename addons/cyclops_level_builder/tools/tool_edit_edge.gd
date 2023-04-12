@@ -22,7 +22,7 @@
 # SOFTWARE.
 
 @tool
-extends CyclopsTool
+extends ToolEditBase
 class_name ToolEditEdge
 
 var handles:Array[HandleEdge] = []
@@ -50,7 +50,7 @@ func draw_tool():
 		var p0:Vector3 = block.control_mesh.vertices[e.start_index].point
 		var p1:Vector3 = block.control_mesh.vertices[e.end_index].point
 
-		global_scene.draw_line(p0, p1, e.selected)
+		global_scene.draw_line(p0, p1, pick_material(global_scene, e.selected))
 	
 func setup_tool():
 	handles = []

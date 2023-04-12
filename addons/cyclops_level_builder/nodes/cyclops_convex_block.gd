@@ -40,6 +40,15 @@ var selected:bool = false:
 		selected = value
 		mesh_changed.emit()
 
+var active:bool:
+	get:
+		return active
+	set(value):
+		if value == active:
+			return
+		active = value
+		mesh_changed.emit()
+
 @export var block_data:ConvexBlockData:
 	get:
 		return block_data
@@ -77,6 +86,7 @@ func select_face(face_idx:int, select_type:Selection.Type = Selection.Type.REPLA
 	mesh_changed.emit()
 
 func append_mesh(mesh:ImmediateMesh):
+#	print("adding block mesh %s" % name)
 	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 
 	var select_all = CyclopsLevelBuilder.Mode.OBJECT && selected
@@ -91,13 +101,13 @@ func append_mesh_wire(mesh:ImmediateMesh):
 func append_mesh_backfacing(mesh:ImmediateMesh):
 	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 	
-	var mat:Material = global_scene.tool_material
+	var mat:Material = global_scene.tool_object_selected_material
 	control_mesh.append_mesh_backfacing(mesh, mat)
 
 func append_mesh_outline(mesh:ImmediateMesh, viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 	
-	var mat:Material = global_scene.tool_material
+	var mat:Material = global_scene.tool_object_selected_material
 	control_mesh.append_mesh_outline(mesh, viewport_camera, mat)
 
 # Called when the node enters the scene tree for the first time.

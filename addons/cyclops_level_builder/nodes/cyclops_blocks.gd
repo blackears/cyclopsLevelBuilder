@@ -30,7 +30,7 @@ signal blocks_changed
 @export var grid_size:int = 0
 @export var selection_color:Color = Color(1, .5, .5, 1)
 @export var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
-@export var outline_material:Material = preload("res://addons/cyclops_level_builder/materials/block_outline_material.tres")
+@export var outline_material:Material = preload("res://addons/cyclops_level_builder/materials/outline_material.tres")
 
 var mesh_instance:MeshInstance3D
 var mesh_wire_instance:MeshInstance3D
@@ -91,6 +91,7 @@ func rebuild_mesh():
 	
 #	if Engine.is_editor_hint():
 #		draw_selected_object_outlines()
+#	print("blocks rebuilding mesh ")
 	
 	for child in get_children():
 		if child is CyclopsConvexBlock:
