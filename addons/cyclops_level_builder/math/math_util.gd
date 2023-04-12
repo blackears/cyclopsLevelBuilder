@@ -350,16 +350,7 @@ class Segment2d extends RefCounted:
 	func _to_string():
 		return "[%s %s]" % [p0, p1]
 		
-	
-static func get_loop_from_segments_2d(segments:PackedVector2Array)->PackedVector2Array:
-	#print("segments %s" % segments)
-
-	var seg_stack:Array[Segment2d] = []
-	for i in range(0, segments.size(), 2):
-		seg_stack.append(Segment2d.new(segments[i], segments[i + 1]))
-	
-#	print("segs %s" % str(seg_stack))
-	
+static func extract_loop_2d(seg_stack:Array[Segment2d])->PackedVector2Array:
 	var segs_sorted:Array[Segment2d] = []
 	var prev_seg = seg_stack.pop_back()
 	segs_sorted.append(prev_seg)
@@ -386,7 +377,7 @@ static func get_loop_from_segments_2d(segments:PackedVector2Array)->PackedVector
 				break
 
 		if !found_seg:
-			push_warning("loop not continuous")
+#			push_warning("loop not continuous")
 			break
 
 #	print("segs_sorted %s" % str(segs_sorted))
@@ -395,7 +386,26 @@ static func get_loop_from_segments_2d(segments:PackedVector2Array)->PackedVector
 	for s in segs_sorted:
 		result.append(s.p0)
 	
-#	print("result %s" % str(result))
+	if face_area_x2_2d(result) < 0:
+		result.reverse()
+		
 	return result
+	
+static func get_loops_from_segments_2d(segments:PackedVector2Array)->Array[PackedVector2Array]:
+	#print("segments %s" % segments)
+	var loops:Array[PackedVector2Array] = []
+
+	var seg_stack:Array[Segment2d] = []
+	for i in range(0, segments.size(), 2):
+		seg_stack.append(Segment2d.new(segments[i], segments[i + 1]))
+	
+#	print("segs %s" % str(seg_stack))
+	
+	while !seg_stack.is_empty():
+		var loop:PackedVector2Array = extract_loop_2d(seg_stack)
+		loops.append(loop)
+	
+#	print("result %s" % str(result))
+	return loops
 	
 	

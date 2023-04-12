@@ -584,90 +584,85 @@ func append_mesh_outline(mesh:ImmediateMesh, viewport_camera:Camera3D, local_to_
 			segments.append(p0_screen)
 			segments.append(p1_screen)
 			
-	var loop_points:PackedVector2Array = MathUtil.get_loop_from_segments_2d(segments)
-	var area = MathUtil.face_area_x2_2d(loop_points)
-	if area < 0:
-		loop_points.reverse()
-	var out_dirs:PackedVector2Array
-	
-	for v_idx in loop_points.size():
-		var p0_screen:Vector2 = loop_points[wrap(v_idx - 1, 0, loop_points.size())]
-		var p1_screen:Vector2 = loop_points[v_idx]
-		var p2_screen:Vector2 = loop_points[wrap(v_idx + + 1, 0, loop_points.size())]
-		#var span:Vector2 = p2_screen - p1_screen
+	var loops:Array[PackedVector2Array] = MathUtil.get_loops_from_segments_2d(segments)
+	for loop_points in loops:
+		var out_dirs:PackedVector2Array
 		
-		var norm01:Vector2 = (p1_screen - p0_screen).normalized()
-		var norm12:Vector2 = (p2_screen - p1_screen).normalized()
-		
-		var out_dir1:Vector2 = (-norm01 + norm12).normalized()
-		var perp:Vector2 = out_dir1 - out_dir1.project(norm12)
-		#Check winding
-		if perp.x * norm12.y - perp.y * norm12.x < 0:
-			out_dir1 = -out_dir1
-		
-		out_dirs.append(out_dir1)
+		for v_idx in loop_points.size():
+			var p0_screen:Vector2 = loop_points[wrap(v_idx - 1, 0, loop_points.size())]
+			var p1_screen:Vector2 = loop_points[v_idx]
+			var p2_screen:Vector2 = loop_points[wrap(v_idx + + 1, 0, loop_points.size())]
+			#var span:Vector2 = p2_screen - p1_screen
 			
-	
-	mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, material)
-	for v_idx in loop_points.size() + 1:
-		var p_screen:Vector2 = loop_points[wrap(v_idx, 0, loop_points.size())]
-		var p_out_dir:Vector2 = out_dirs[wrap(v_idx, 0, loop_points.size())]
-		
-		var z_pos:float = (viewport_camera.near + viewport_camera.far) / 2
-		var p0:Vector3 = viewport_camera.project_position(p_screen, z_pos)
-		var p1:Vector3 = viewport_camera.project_position(p_screen + p_out_dir * thickness, z_pos)
-		
-		mesh.surface_add_vertex(p0)
-		mesh.surface_add_vertex(p1)
-		
-			######
-	mesh.surface_end()
-		
-#	cylinder.append_to_immediate_mesh(mesh, material, xform)
-			#mesh.surface_end()
-		
-func append_mesh_outline_2(mesh:ImmediateMesh, viewport_camera:Camera3D, material:Material, thickness:float = .1):
-#	var cam_dir:Vector3 = viewport_camera.global_transform.basis.z
-	var cam_orig:Vector3 = viewport_camera.global_transform.origin
-
-#	print("append_mesh_outline %s" % cam_dir)
-	#points along Z
-	var cylinder:GeometryMesh = MathGeometry.unit_cylinder(4, thickness, thickness, 0, -1)
-	
-	for edge in edges:
-		var has_front:bool = false
-		var has_back:bool = false
-		
-		for f_idx in edge.face_indices:
-			var face = faces[f_idx]
-			#print("face norm %s" % face.normal)
-			var point_on_plane:Vector3 = vertices[face.vertex_indices[0]].point
-			var to_plane:Vector3 = cam_orig - point_on_plane
+			var norm01:Vector2 = (p1_screen - p0_screen).normalized()
+			var norm12:Vector2 = (p2_screen - p1_screen).normalized()
 			
-			if face.normal.dot(to_plane) > 0:
-				has_front = true
-			elif face.normal.dot(to_plane) < 0:
-				has_back = true
-
-		#print("front %s back %s" % [has_front, has_back])
+			var out_dir1:Vector2 = (-norm01 + norm12).normalized()
+			var perp:Vector2 = out_dir1 - out_dir1.project(norm12)
+			#Check winding
+			if perp.x * norm12.y - perp.y * norm12.x < 0:
+				out_dir1 = -out_dir1
+			
+			out_dirs.append(out_dir1)
+				
 		
-		if has_front && has_back:
-			#print("drawing edge %s %s" % [edge.start_index, edge.end_index])
-			#Draw edge
-			var v0:VertexInfo = vertices[edge.start_index]
-			var v1:VertexInfo = vertices[edge.end_index]
-			var dir:Vector3 = v1.point - v0.point
-			#mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, material)
-			var xform:Transform3D
-			xform = xform.translated_local(v0.point)
-#			var basis:Basis = Basis.IDENTITY
-#			basis.looking_at(v1 - v0)
+		mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, material)
+		for v_idx in loop_points.size() + 1:
+			var p_screen:Vector2 = loop_points[wrap(v_idx, 0, loop_points.size())]
+			var p_out_dir:Vector2 = out_dirs[wrap(v_idx, 0, loop_points.size())]
 			
-			xform = xform.looking_at(v1.point, Vector3.UP if abs(dir.dot(Vector3.UP)) < abs(dir.dot(Vector3.LEFT)) else Vector3.LEFT)
-			xform = xform.scaled_local(Vector3(1, 1, dir.length()))
+			var z_pos:float = (viewport_camera.near + viewport_camera.far) / 2
+			var p0:Vector3 = viewport_camera.project_position(p_screen, z_pos)
+			var p1:Vector3 = viewport_camera.project_position(p_screen + p_out_dir * thickness, z_pos)
 			
-			cylinder.append_to_immediate_mesh(mesh, material, xform)
-			#mesh.surface_end()
+			mesh.surface_add_vertex(p0)
+			mesh.surface_add_vertex(p1)
+			
+		mesh.surface_end()
+		
+		
+#func append_mesh_outline_2(mesh:ImmediateMesh, viewport_camera:Camera3D, material:Material, thickness:float = .1):
+##	var cam_dir:Vector3 = viewport_camera.global_transform.basis.z
+#	var cam_orig:Vector3 = viewport_camera.global_transform.origin
+#
+##	print("append_mesh_outline %s" % cam_dir)
+#	#points along Z
+#	var cylinder:GeometryMesh = MathGeometry.unit_cylinder(4, thickness, thickness, 0, -1)
+#
+#	for edge in edges:
+#		var has_front:bool = false
+#		var has_back:bool = false
+#
+#		for f_idx in edge.face_indices:
+#			var face = faces[f_idx]
+#			#print("face norm %s" % face.normal)
+#			var point_on_plane:Vector3 = vertices[face.vertex_indices[0]].point
+#			var to_plane:Vector3 = cam_orig - point_on_plane
+#
+#			if face.normal.dot(to_plane) > 0:
+#				has_front = true
+#			elif face.normal.dot(to_plane) < 0:
+#				has_back = true
+#
+#		#print("front %s back %s" % [has_front, has_back])
+#
+#		if has_front && has_back:
+#			#print("drawing edge %s %s" % [edge.start_index, edge.end_index])
+#			#Draw edge
+#			var v0:VertexInfo = vertices[edge.start_index]
+#			var v1:VertexInfo = vertices[edge.end_index]
+#			var dir:Vector3 = v1.point - v0.point
+#			#mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, material)
+#			var xform:Transform3D
+#			xform = xform.translated_local(v0.point)
+##			var basis:Basis = Basis.IDENTITY
+##			basis.looking_at(v1 - v0)
+#
+#			xform = xform.looking_at(v1.point, Vector3.UP if abs(dir.dot(Vector3.UP)) < abs(dir.dot(Vector3.LEFT)) else Vector3.LEFT)
+#			xform = xform.scaled_local(Vector3(1, 1, dir.length()))
+#
+#			cylinder.append_to_immediate_mesh(mesh, material, xform)
+#			#mesh.surface_end()
 	
 		
 func append_mesh_wire(mesh:ImmediateMesh, material:Material):
