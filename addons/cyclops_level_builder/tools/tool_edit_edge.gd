@@ -47,8 +47,10 @@ func draw_tool():
 	for h in handles:
 		var block:CyclopsConvexBlock = builder.get_node(h.block_path)
 		var e:ConvexVolume.EdgeInfo = block.control_mesh.edges[h.edge_index]
-#		var mat:Material = global_scene.tool_selected_material if e.selected else global_scene.tool_material
-		global_scene.draw_line(h.p0, h.p1, e.selected)
+		var p0:Vector3 = block.control_mesh.vertices[e.start_index].point
+		var p1:Vector3 = block.control_mesh.vertices[e.end_index].point
+
+		global_scene.draw_line(p0, p1, e.selected)
 	
 func setup_tool():
 	handles = []
@@ -66,12 +68,10 @@ func setup_tool():
 					var e:ConvexVolume.EdgeInfo = ctl_mesh.edges[e_idx]
 
 					var handle:HandleEdge = HandleEdge.new()
-					handle.p0 = ctl_mesh.vertices[e.start_index].point
-					handle.p0_init = handle.p0
-					handle.p1 = ctl_mesh.vertices[e.end_index].point
-					handle.p1_init = handle.p1
-#					handle.cur_position = ctl_mesh.vertices[e.start_index].point
-#					handle.start_position = handle.p0
+					handle.p_ref = ctl_mesh.vertices[e.start_index].point
+					handle.p_ref_init = handle.p_ref
+#					handle.p1 = ctl_mesh.vertices[e.end_index].point
+#					handle.p1_init = handle.p1
 					handle.edge_index = e_idx
 					handle.block_path = block.get_path()
 					handles.append(handle)
@@ -91,9 +91,11 @@ func pick_closest_handle(blocks_root:CyclopsBlocks, viewport_camera:Camera3D, po
 		var block:CyclopsConvexBlock = builder.get_node(h.block_path)
 		var ctl_mesh:ConvexVolume = block.control_mesh
 		var edge:ConvexVolume.EdgeInfo = ctl_mesh.edges[h.edge_index]
-		
-		var p0_world:Vector3 = blocks_root.global_transform * h.p0
-		var p1_world:Vector3 = blocks_root.global_transform * h.p1
+
+		var p0 = ctl_mesh.vertices[edge.start_index].point
+		var p1 = ctl_mesh.vertices[edge.end_index].point
+		var p0_world:Vector3 = blocks_root.global_transform * p0
+		var p1_world:Vector3 = blocks_root.global_transform * p1
 		
 		var p0_screen:Vector2 = viewport_camera.unproject_position(p0_world)
 		var p1_screen:Vector2 = viewport_camera.unproject_position(p1_world)
@@ -142,6 +144,7 @@ func active_node_updated():
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
 	
+	builder.mode = CyclopsLevelBuilder.Mode.EDGE
 	builder.active_node_changed.connect(active_node_changed)
 	
 	tracked_blocks_root = builder.active_node
@@ -228,7 +231,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 				if handle:
 					drag_handle = handle
-					drag_handle_start_pos = handle.p0
+					drag_handle_start_pos = handle.p_ref
 					tool_state = ToolState.DRAGGING
 
 					cmd_move_edge = CommandMoveEdges.new()
@@ -266,12 +269,13 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			else:
 				drag_to = MathUtil.intersect_plane(origin_local, dir_local, drag_handle_start_pos, Vector3.UP)
 			
-			drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
-			drag_handle.p0 = drag_to
-			var offset:Vector3 = drag_to - drag_handle.p0_init
-			drag_handle.p1 = drag_handle.p1_init + offset
+			var offset:Vector3 = drag_to - drag_handle_start_pos
+			offset = MathUtil.snap_to_grid(offset, grid_step_size)
+			drag_to = drag_handle_start_pos + offset
+			drag_handle.p_ref = drag_to
+#			drag_handle.p1 = drag_handle.p1_init + offset
 			
-			cmd_move_edge.move_offset = drag_to - drag_handle.p0_init
+			cmd_move_edge.move_offset = offset
 			cmd_move_edge.do_it()
 
 			draw_tool()

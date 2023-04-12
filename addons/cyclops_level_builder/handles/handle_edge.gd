@@ -26,13 +26,15 @@ extends RefCounted
 class_name HandleEdge
 
 var edge_index:int
-var p0:Vector3
-var p1:Vector3
-var p0_init:Vector3
-var p1_init:Vector3
+#var p0:Vector3
+#var p1:Vector3
+#var p0_init:Vector3
+#var p1_init:Vector3
+var p_ref:Vector3 #Centroid
+var p_ref_init:Vector3
 var block_path:NodePath
 
 
 func _to_string():
 #	return "%s init pos %s %s   pos %s %s" % [block_path, initial_p0, initial_p1, p0, p1]
-	return "edge %s e_idx:%s p0:%s p1:%s" % [block_path, edge_index, p0, p1]
+	return "edge %s e_idx:%s p_ref:%s p_ref_init:%s" % [block_path, edge_index, p_ref, p_ref_init]

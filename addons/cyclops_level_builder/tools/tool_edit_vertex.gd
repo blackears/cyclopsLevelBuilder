@@ -130,6 +130,7 @@ func active_node_updated():
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
 	
+	builder.mode = CyclopsLevelBuilder.Mode.VERTEX
 	builder.active_node_changed.connect(active_node_changed)
 	
 	tracked_blocks_root = builder.active_node

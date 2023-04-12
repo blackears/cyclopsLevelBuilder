@@ -336,7 +336,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
-
+	
+	builder.mode = CyclopsLevelBuilder.Mode.OBJECT
 	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 	global_scene.clear_tool_mesh()
 

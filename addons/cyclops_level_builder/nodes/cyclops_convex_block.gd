@@ -78,8 +78,9 @@ func select_face(face_idx:int, select_type:Selection.Type = Selection.Type.REPLA
 
 func append_mesh(mesh:ImmediateMesh):
 	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
-	
-	control_mesh.append_mesh(mesh, materials, global_scene.default_material, selected, global_scene.selection_color)
+
+	var select_all = CyclopsLevelBuilder.Mode.OBJECT && selected
+	control_mesh.append_mesh(mesh, materials, global_scene.default_material, select_all, global_scene.selection_color)
 
 func append_mesh_wire(mesh:ImmediateMesh):
 	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")

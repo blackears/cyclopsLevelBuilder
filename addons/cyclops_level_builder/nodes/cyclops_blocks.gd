@@ -84,18 +84,6 @@ func on_child_exiting_tree(node:Node):
 		dirty = true
 
 
-#func draw_selected_object_outlines():
-#	#var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
-#	var mesh:ImmediateMesh = ImmediateMesh.new()
-#
-#	for child in get_children():
-#		if child is CyclopsConvexBlock:
-#			var block:CyclopsConvexBlock = child
-#			if block.selected:
-#				block.append_mesh_backfacing(mesh)
-#				#global_scene.draw_block_outline(block)
-#
-#	mesh_object_outline_instance.mesh = mesh
 					
 func rebuild_mesh():
 	var mesh:ImmediateMesh = ImmediateMesh.new()

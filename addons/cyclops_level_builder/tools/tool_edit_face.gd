@@ -47,7 +47,7 @@ func draw_tool():
 		#print("draw face %s" % h)
 		var block:CyclopsConvexBlock = builder.get_node(h.block_path)
 		var f:ConvexVolume.FaceInfo = block.control_mesh.faces[h.face_index]
-		global_scene.draw_vertex(h.p0, f.selected)
+		global_scene.draw_vertex(h.p_ref, f.selected)
 	
 func setup_tool():
 	handles = []
@@ -55,6 +55,7 @@ func setup_tool():
 	var blocks_root:CyclopsBlocks = builder.active_node
 	if blocks_root == null:
 		return
+#	var grid_step_size:float = pow(2, blocks_root.grid_size)
 		
 	for child in blocks_root.get_children():
 		if child is CyclopsConvexBlock:
@@ -67,8 +68,11 @@ func setup_tool():
 					var face:ConvexVolume.FaceInfo = ctl_mesh.faces[f_idx]
 
 					var handle:HandleFace = HandleFace.new()
-					handle.p0 = face.get_centroid()
-					handle.p0_init = handle.p0
+					
+					var p_start:Vector3 = face.get_centroid()
+#					p_start = MathUtil.snap_to_grid(p_start, grid_step_size)
+					handle.p_ref = p_start
+					handle.p_ref_init = p_start
 					
 					handle.face_index = f_idx
 					handle.block_path = block.get_path()
@@ -89,17 +93,31 @@ func pick_closest_handle(blocks_root:CyclopsBlocks, viewport_camera:Camera3D, po
 		var block:CyclopsConvexBlock = builder.get_node(h.block_path)
 		var ctl_mesh:ConvexVolume = block.control_mesh
 		var face:ConvexVolume.FaceInfo = ctl_mesh.faces[h.face_index]
-#		var p0:Vector3 = h.p0
+#		var p_ref:Vector3 = h.p_ref
 #		var p1:Vector3 = ctl_mesh.vertices[edge.end_index].point
 		
-		var p0_world:Vector3 = blocks_root.global_transform * h.p0
-		var p0_screen:Vector2 = viewport_camera.unproject_position(p0_world)
 		
-		if position.distance_squared_to(p0_screen) > radius * radius:
+#		var points:PackedVector3Array = face.get_points()
+#		for i in points.size():
+#			points[i] += offset
+#		var triangles:PackedVector3Array = MathUtil.trianglate_face(points, face.normal)
+#		for i in range(0, triangles.size(), 3):
+#			MathUtil.intersect_triangle(pick_origin, pick_dir, triangles[i * 3], triangles[i * 3 + 1], triangles[i * 3 + 2])
+#		var plane:Plane = face.get_plane()
+#		var result = plane.intersects_ray(pick_origin, pick_dir)
+#		if result != null:
+			
+		#####
+		
+		#Handle intersection
+		var p_ref_world:Vector3 = blocks_root.global_transform * h.p_ref
+		var p_ref_screen:Vector2 = viewport_camera.unproject_position(p_ref_world)
+		
+		if position.distance_squared_to(p_ref_screen) > radius * radius:
 			#Failed handle radius test
 			continue
 
-		var offset:Vector3 = p0_world - pick_origin
+		var offset:Vector3 = p_ref_world - pick_origin
 		var parallel:Vector3 = offset.project(pick_dir)
 		var dist = parallel.dot(pick_dir)
 		if dist <= 0:
@@ -136,6 +154,7 @@ func active_node_updated():
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
 	
+	builder.mode = CyclopsLevelBuilder.Mode.FACE
 	builder.active_node_changed.connect(active_node_changed)
 	
 	tracked_blocks_root = builder.active_node
@@ -221,7 +240,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 				if handle:
 					drag_handle = handle
-					drag_handle_start_pos = handle.p0
+					drag_handle_start_pos = handle.p_ref
 					tool_state = ToolState.DRAGGING
 
 					cmd_move_face = CommandMoveFaces.new()
@@ -259,10 +278,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			else:
 				drag_to = MathUtil.intersect_plane(origin_local, dir_local, drag_handle_start_pos, Vector3.UP)
 			
-			drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
-			drag_handle.p0 = drag_to
+			var offset = drag_to - drag_handle_start_pos
+			offset = MathUtil.snap_to_grid(offset, grid_step_size)
+			drag_to = drag_handle_start_pos + offset
+			drag_handle.p_ref = drag_to
 			
-			cmd_move_face.move_offset = drag_to - drag_handle.p0_init
+			cmd_move_face.move_offset = offset
 #			print("drag_offset %s" % cmd_move_face.move_offset)
 			cmd_move_face.do_it()
 
@@ -279,7 +300,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #						drag_handle = handle
 #						tool_state = ToolState.DRAGGING
 #
-#						drag_handle_start_pos = handle.p0_init
+#						drag_handle_start_pos = handle.p_ref_init
 #
 #						cmd_move_face = CommandMoveFace.new()
 #						cmd_move_face.builder = builder
@@ -322,8 +343,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #
 #			drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
 #
-#			var offset = drag_to - drag_handle.p0_init
-#			drag_handle.p0 = drag_handle.p0_init + offset
+#			var offset = drag_to - drag_handle.p_ref_init
+#			drag_handle.p_ref = drag_handle.p_ref_init + offset
 #
 #			cmd_move_face.move_offset = offset
 #			cmd_move_face.do_it()

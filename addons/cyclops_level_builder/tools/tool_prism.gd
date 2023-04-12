@@ -36,6 +36,7 @@ var block_drag_cur:Vector3
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
 
+	builder.mode = CyclopsLevelBuilder.Mode.OBJECT
 	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 	global_scene.clear_tool_mesh()
 	
