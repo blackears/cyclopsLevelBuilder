@@ -109,6 +109,21 @@ static func face_area_x2(points:PackedVector3Array)->Vector3:
 	
 	return result
 
+static func face_area_x2_2d(points:PackedVector2Array)->float:
+	if points.size() <= 1:
+		return 0
+	
+	var result:float
+	var p0:Vector2 = points[0]
+	
+	for i in range(1, points.size() - 1):
+		var p1:Vector2 = points[i]
+		var p2:Vector2 = points[i + 1]
+		
+		result += triange_area_2x_2d(p1 - p0, p2 - p0)
+	
+	return result
+
 static func fit_plane(points:PackedVector3Array)->Plane:
 	var normal:Vector3 = face_area_x2(points).normalized()
 	return Plane(normal, points[0])
@@ -321,5 +336,66 @@ static func dist_to_segment_squared_2d(point:Vector2, seg_start:Vector2, seg_end
 		return dist_sq_p1
 	return perp_dist_sq
 	
+class Segment2d extends RefCounted:
+	var p0:Vector2
+	var p1:Vector2
+	
+	func _init(p0:Vector2, p1:Vector2):
+		self.p0 = p0
+		self.p1 = p1
+		
+	func reverse()->Segment2d:
+		return Segment2d.new(p1, p0)
+		
+	func _to_string():
+		return "[%s %s]" % [p0, p1]
+		
+	
+static func get_loop_from_segments_2d(segments:PackedVector2Array)->PackedVector2Array:
+	#print("segments %s" % segments)
+
+	var seg_stack:Array[Segment2d] = []
+	for i in range(0, segments.size(), 2):
+		seg_stack.append(Segment2d.new(segments[i], segments[i + 1]))
+	
+#	print("segs %s" % str(seg_stack))
+	
+	var segs_sorted:Array[Segment2d] = []
+	var prev_seg = seg_stack.pop_back()
+	segs_sorted.append(prev_seg)
+	
+	while !seg_stack.is_empty():
+		var found_seg:bool = false
+		for s_idx in seg_stack.size():
+			var cur_seg:Segment2d = seg_stack[s_idx]
+			
+			if cur_seg.p0.is_equal_approx(prev_seg.p1):
+#				print("matching %s with %s" % [prev_seg, cur_seg])
+				segs_sorted.append(cur_seg)
+				seg_stack.remove_at(s_idx)
+				prev_seg = cur_seg
+				found_seg = true
+				break
+			elif cur_seg.p1.is_equal_approx(prev_seg.p1):
+#				print("matching %s with %s" % [prev_seg, cur_seg])
+				cur_seg = cur_seg.reverse()
+				segs_sorted.append(cur_seg)
+				seg_stack.remove_at(s_idx)
+				prev_seg = cur_seg
+				found_seg = true
+				break
+
+		if !found_seg:
+			push_warning("loop not continuous")
+			break
+
+#	print("segs_sorted %s" % str(segs_sorted))
+	
+	var result:PackedVector2Array
+	for s in segs_sorted:
+		result.append(s.p0)
+	
+#	print("result %s" % str(result))
+	return result
 	
 	

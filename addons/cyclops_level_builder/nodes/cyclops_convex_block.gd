@@ -104,11 +104,11 @@ func append_mesh_backfacing(mesh:ImmediateMesh):
 	var mat:Material = global_scene.tool_object_selected_material
 	control_mesh.append_mesh_backfacing(mesh, mat)
 
-func append_mesh_outline(mesh:ImmediateMesh, viewport_camera:Camera3D):
+func append_mesh_outline(mesh:ImmediateMesh, viewport_camera:Camera3D, local_to_world:Transform3D):
 	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 	
 	var mat:Material = global_scene.tool_object_selected_material
-	control_mesh.append_mesh_outline(mesh, viewport_camera, mat)
+	control_mesh.append_mesh_outline(mesh, viewport_camera, local_to_world, mat)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

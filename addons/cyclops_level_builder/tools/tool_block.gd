@@ -72,7 +72,7 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 
 		block_drag_p0_local = MathUtil.snap_to_grid(start_pos_local, grid_step_size)
 		
-		if e.shift_pressed:
+		if e.ctrl_pressed:
 			drag_style = DragStyle.MOVE_FACE
 			
 			cmd_move_face = CommandMoveFacePlanar.new()
@@ -143,7 +143,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var result:IntersectResults = blocks_root.intersect_ray_closest(origin, dir)
 					
 					if result:
-						if e.ctrl_pressed:
+						if e.shift_pressed:
 							result.object.selected = !result.object.selected
 						else:
 							for child in blocks_root.get_children():
@@ -227,7 +227,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			return super._gui_input(viewport_camera, event)
 		
 		if drag_style == DragStyle.NONE:
-			if e.shift_pressed:
+			if e.ctrl_pressed:
 				#block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
 				var result:IntersectResults = blocks_root.intersect_ray_closest(origin_local, dir_local)
 				if result:
