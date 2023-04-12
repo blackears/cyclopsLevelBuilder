@@ -84,6 +84,16 @@ func do_it():
 				for e_idx in rec.edge_indices:
 					var e:ConvexVolume.EdgeInfo = vol.edges[e_idx]
 					e.selected = !e.selected
+
+		#Synchronize vertex & face selection
+		var selected_verts:Array[int] = []
+		for e in vol.edges:
+			if e.selected:
+				for v_idx in [e.start_index, e.end_index]:
+					if !selected_verts.has(v_idx):
+						selected_verts.append(v_idx)
+		for v_idx in vol.vertices.size():
+			vol.vertices[v_idx].selected = selected_verts.has(v_idx)
 		
 		block.block_data = vol.to_convex_block_data()
 

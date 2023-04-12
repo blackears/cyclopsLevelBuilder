@@ -84,7 +84,18 @@ func do_it():
 				for f_idx in rec.face_indices:
 					var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
 					f.selected = !f.selected
+
+		#Synchronize edge & vertex selection
+		var selected_verts:Array[int] = []
+		for f in vol.faces:
+			if f.selected:
+				for v_idx in f.vertex_indices:
+					if !selected_verts.has(v_idx):
+						selected_verts.append(v_idx)
+		for v_idx in vol.vertices.size():
+			vol.vertices[v_idx].selected = selected_verts.has(v_idx)
 		
+		vol.update_edge_and_face_selection_from_vertices()
 		block.block_data = vol.to_convex_block_data()
 
 func undo_it():

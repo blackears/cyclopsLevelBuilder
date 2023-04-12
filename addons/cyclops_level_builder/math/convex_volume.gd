@@ -656,3 +656,16 @@ func format_faces_string()->String:
 		s = s + "],\n"
 	return s
 			
+func update_edge_and_face_selection_from_vertices():
+	for e in edges:
+		e.selected = vertices[e.start_index].selected && vertices[e.end_index].selected
+
+	for f in faces:
+		var all_sel:bool = true
+		for v_idx in f.vertex_indices:
+			if !vertices[v_idx].selected:
+				all_sel = false
+				break
+		f.selected = all_sel
+
+			

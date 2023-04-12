@@ -89,6 +89,7 @@ func do_it():
 					var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
 					v.selected = !v.selected
 		
+		vol.update_edge_and_face_selection_from_vertices()
 		block.block_data = vol.to_convex_block_data()
 
 func undo_it():
