@@ -25,6 +25,8 @@
 extends CyclopsTool
 class_name ToolBlock
 
+const TOOL_ID:String = "block"
+
 enum DragStyle { NONE, READY, BLOCK_BASE, BLOCK_HEIGHT, MOVE_BLOCK, MOVE_FACE }
 var drag_style:DragStyle = DragStyle.NONE
 #enum State { READY, DRAG_BASE }
@@ -47,6 +49,8 @@ var cmd_move_face:CommandMoveFacePlanar
 var move_face_origin:Vector3 #Kep track of the origin when moving a face
 
 
+func _get_tool_id()->String:
+	return TOOL_ID
 
 func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 	var blocks_root:CyclopsBlocks = self.builder.active_node

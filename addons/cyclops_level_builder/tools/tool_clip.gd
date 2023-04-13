@@ -25,12 +25,17 @@
 extends CyclopsTool
 class_name ToolClip
 
+const TOOL_ID:String = "clip"
+
 enum ToolState { READY, PICK_POINTS, PICK_SIDE }
 var tool_state:ToolState = ToolState.READY
 
 var clip_points:PackedVector3Array
 var clip_normals:PackedVector3Array
 var clip_block:CyclopsConvexBlock
+
+func _get_tool_id()->String:
+	return TOOL_ID
 
 func has_clip_point(point:Vector3)->bool:
 	for p in clip_points:

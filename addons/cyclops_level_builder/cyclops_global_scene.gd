@@ -29,6 +29,7 @@ class_name CyclopsGlobalScene
 @export var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
 @export var tool_edit_active_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_edit_active_material.tres")
 @export var tool_edit_selected_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_edit_selected_material.tres")
+@export var tool_edit_selected_fill_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_edit_selected_fill_material.tres")
 @export var tool_edit_unselected_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_edit_unselected_material.tres")
 @export var tool_object_active_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_object_active_material.tres")
 @export var tool_object_selected_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_object_selected_material.tres")
@@ -63,8 +64,8 @@ func draw_line(p0:Vector3, p1:Vector3, mat:Material):
 	tool_mesh.surface_end()
 
 func draw_loop(points:PackedVector3Array, closed:bool = true, mat:Material = null):
-	for p in points:
-		draw_vertex(p)
+#	for p in points:
+#		draw_vertex(p)
 	
 	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, mat)
 
@@ -114,6 +115,14 @@ func draw_prism(points:PackedVector3Array, extrude:Vector3, mat:Material = null)
 	#$ToolInstance3D.mesh = mesh
 		
 
+func draw_triangles(tri_points:PackedVector3Array, mat:Material = null):	
+	tool_mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES, mat)
+	
+	for p in tri_points:
+		tool_mesh.surface_add_vertex(p)
+	
+	tool_mesh.surface_end()
+	
 func draw_rect(start:Vector3, end:Vector3, mat:Material = null):	
 	
 	var p0:Vector3 = start

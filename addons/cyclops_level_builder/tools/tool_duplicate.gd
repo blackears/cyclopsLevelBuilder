@@ -25,12 +25,16 @@
 extends CyclopsTool
 class_name ToolDuplicate
 
+const TOOL_ID:String = "duplicate"
+
 var drag_start_point:Vector3
 var cmd_duplicate:CommandDuplicateBlocks
 
 enum ToolState { READY, DRAGGING, DONE }
 var tool_state:ToolState = ToolState.READY
 
+func _get_tool_id()->String:
+	return TOOL_ID
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
 	var blocks_root:CyclopsBlocks = self.builder.active_node

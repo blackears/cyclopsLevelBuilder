@@ -70,8 +70,15 @@ func _ready():
 	#test_planes()
 	#test_volume2()
 	#isect_test()
-	test_cut_plane()
+	#test_cut_plane()
 
+	var aaa = Material
+	var bbb = Material
+	
+	print("%s" % (aaa == bbb))
+#	print("%s" % (typeof(aaa)))
+	print(ToolPrism.TOOL_ID)
+	pass
 
 #	var points:PackedVector3Array
 #	points.append(Vector3(0, 0, 0))	

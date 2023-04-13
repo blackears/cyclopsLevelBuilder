@@ -25,13 +25,14 @@
 extends CyclopsTool
 class_name ToolPrism
 
+const TOOL_ID:String = "prism"
+
 enum ToolState { READY, BASE_POINTS, DRAG_HEIGHT }
 var tool_state:ToolState = ToolState.READY
 
 var floor_normal:Vector3
 var base_points:PackedVector3Array
 var block_drag_cur:Vector3
-
 
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)

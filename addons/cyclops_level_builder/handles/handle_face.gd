@@ -26,6 +26,7 @@ extends RefCounted
 class_name HandleFace
 
 var face_index:int
+var face_id:int
 var p_ref:Vector3 #Centroid
 var p_ref_init:Vector3
 var block_path:NodePath

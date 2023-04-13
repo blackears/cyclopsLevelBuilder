@@ -38,6 +38,8 @@ var block_map:Dictionary = {}
 
 
 func add_face(block_path:NodePath, index:int):
+#	print("Adding face %s %s" % [block_path, index])
+	
 	var changes:BlockFaceChanges
 	if block_map.has(block_path):
 		changes = block_map[block_path]

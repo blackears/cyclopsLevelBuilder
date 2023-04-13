@@ -25,6 +25,8 @@
 extends ToolEditBase
 class_name ToolEditFace
 
+const TOOL_ID:String = "edit_face"
+
 var handles:Array[HandleFace] = []
 
 enum ToolState { NONE, READY, DRAGGING }
@@ -38,6 +40,9 @@ var tracked_blocks_root:CyclopsBlocks
 
 var cmd_move_face:CommandMoveFaces
 
+func _get_tool_id()->String:
+	return TOOL_ID
+
 func draw_tool():
 	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 	global_scene.clear_tool_mesh()
@@ -47,7 +52,19 @@ func draw_tool():
 		#print("draw face %s" % h)
 		var block:CyclopsConvexBlock = builder.get_node(h.block_path)
 		var f:ConvexVolume.FaceInfo = block.control_mesh.faces[h.face_index]
-		global_scene.draw_vertex(h.p_ref, pick_material(global_scene, f.selected))
+		global_scene.draw_vertex(h.p_ref, pick_material(global_scene, f.selected, f.active))
+		
+		if f.selected:
+			var edge_loop:PackedVector3Array = f.get_points()
+			for p_idx in edge_loop.size():
+				edge_loop[p_idx] += f.normal * builder.tool_overlay_extrude
+			global_scene.draw_loop(edge_loop, true, pick_material(global_scene, f.selected, f.active))
+			
+			var tris:PackedVector3Array = f.get_trianges()
+			for p_idx in tris.size():
+				tris[p_idx] += f.normal * builder.tool_overlay_extrude
+			global_scene.draw_triangles(tris, global_scene.tool_edit_selected_fill_material)
+		
 	
 func setup_tool():
 	handles = []
@@ -62,7 +79,7 @@ func setup_tool():
 			var block:CyclopsConvexBlock = child
 			if block.selected:
 				for f_idx in block.control_mesh.faces.size():
-					#print("adding face %s" % f_idx)
+#					print("adding face hande %s %s" % [block.name, f_idx])
 					
 					var ctl_mesh:ConvexVolume = block.control_mesh
 					var face:ConvexVolume.FaceInfo = ctl_mesh.faces[f_idx]
@@ -75,63 +92,68 @@ func setup_tool():
 					handle.p_ref_init = p_start
 					
 					handle.face_index = f_idx
+					handle.face_id = face.id
 					handle.block_path = block.get_path()
 					handles.append(handle)
 					
 					
 					#print("adding handle %s" % handle)
 
-
-func pick_closest_handle(blocks_root:CyclopsBlocks, viewport_camera:Camera3D, position:Vector2, radius:float)->HandleFace:
-	var best_dist:float = INF
-	var best_handle:HandleFace = null
+func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:float)->HandleFace:
+	var blocks_root:CyclopsBlocks = builder.active_node
+	if blocks_root == null:
+		return
 	
 	var pick_origin:Vector3 = viewport_camera.project_ray_origin(position)
 	var pick_dir:Vector3 = viewport_camera.project_ray_normal(position)
 	
-	for h in handles:
-		var block:CyclopsConvexBlock = builder.get_node(h.block_path)
-		var ctl_mesh:ConvexVolume = block.control_mesh
-		var face:ConvexVolume.FaceInfo = ctl_mesh.faces[h.face_index]
-#		var p_ref:Vector3 = h.p_ref
-#		var p1:Vector3 = ctl_mesh.vertices[edge.end_index].point
-		
-		
-#		var points:PackedVector3Array = face.get_points()
-#		for i in points.size():
-#			points[i] += offset
-#		var triangles:PackedVector3Array = MathUtil.trianglate_face(points, face.normal)
-#		for i in range(0, triangles.size(), 3):
-#			MathUtil.intersect_triangle(pick_origin, pick_dir, triangles[i * 3], triangles[i * 3 + 1], triangles[i * 3 + 2])
-#		var plane:Plane = face.get_plane()
-#		var result = plane.intersects_ray(pick_origin, pick_dir)
-#		if result != null:
-			
-		#####
-		
-		#Handle intersection
-		var p_ref_world:Vector3 = blocks_root.global_transform * h.p_ref
-		var p_ref_screen:Vector2 = viewport_camera.unproject_position(p_ref_world)
-		
-		if position.distance_squared_to(p_ref_screen) > radius * radius:
-			#Failed handle radius test
-			continue
+	var best_dist:float = INF
+	var best_handle:HandleFace = null
+	
+	var result:IntersectResults = blocks_root.intersect_ray_closest(pick_origin, pick_dir)
+	if result:
+		for h in handles:
+			if h.block_path == result.object.get_path() && h.face_id == result.face_id:
+				return h
+	
+	return null	
+	
 
-		var offset:Vector3 = p_ref_world - pick_origin
-		var parallel:Vector3 = offset.project(pick_dir)
-		var dist = parallel.dot(pick_dir)
-		if dist <= 0:
-			#Behind camera
-			continue
-		
-		#print("h pos %s ray orig %s ray dir %s offset %s para %s dist %s perp %s" % [h.position, ray_origin, ray_dir, offset, parallel, dist, perp])
-		if dist >= best_dist:
-			continue
-		
-		best_dist = dist
-		best_handle = h
-
-	return best_handle
+#func pick_closest_handle_old(blocks_root:CyclopsBlocks, viewport_camera:Camera3D, position:Vector2, radius:float)->HandleFace:
+#	var best_dist:float = INF
+#	var best_handle:HandleFace = null
+#
+#	var pick_origin:Vector3 = viewport_camera.project_ray_origin(position)
+#	var pick_dir:Vector3 = viewport_camera.project_ray_normal(position)
+#
+#	for h in handles:
+#		var block:CyclopsConvexBlock = builder.get_node(h.block_path)
+#		var ctl_mesh:ConvexVolume = block.control_mesh
+#		var face:ConvexVolume.FaceInfo = ctl_mesh.faces[h.face_index]
+#
+#		#Handle intersection
+#		var p_ref_world:Vector3 = blocks_root.global_transform * h.p_ref
+#		var p_ref_screen:Vector2 = viewport_camera.unproject_position(p_ref_world)
+#
+#		if position.distance_squared_to(p_ref_screen) > radius * radius:
+#			#Failed handle radius test
+#			continue
+#
+#		var offset:Vector3 = p_ref_world - pick_origin
+#		var parallel:Vector3 = offset.project(pick_dir)
+#		var dist = parallel.dot(pick_dir)
+#		if dist <= 0:
+#			#Behind camera
+#			continue
+#
+#		#print("h pos %s ray orig %s ray dir %s offset %s para %s dist %s perp %s" % [h.position, ray_origin, ray_dir, offset, parallel, dist, perp])
+#		if dist >= best_dist:
+#			continue
+#
+#		best_dist = dist
+#		best_handle = h
+#
+#	return best_handle
 
 func active_node_changed():
 	if tracked_blocks_root != null:
@@ -196,7 +218,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #				print("bn up: state %s" % tool_state)
 				if tool_state == ToolState.READY:
 					#print("cmd select")
-					var handle:HandleFace = pick_closest_handle(blocks_root, viewport_camera, e.position, builder.handle_screen_radius)
+					var handle:HandleFace = pick_closest_handle(viewport_camera, e.position, builder.handle_screen_radius)
 
 					#print("handle %s" % handle)
 
@@ -236,7 +258,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 		if tool_state == ToolState.READY:
 			if e.position.distance_squared_to(drag_mouse_start_pos) < 4 * 4:
-				var handle:HandleFace = pick_closest_handle(blocks_root, viewport_camera, drag_mouse_start_pos, builder.handle_screen_radius)
+				var handle:HandleFace = pick_closest_handle(viewport_camera, drag_mouse_start_pos, builder.handle_screen_radius)
 
 				if handle:
 					drag_handle = handle
@@ -253,11 +275,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						for child in blocks_root.get_children():
 							if child is CyclopsConvexBlock:
 								var block:CyclopsConvexBlock = child
-								var vol:ConvexVolume = block.control_mesh
-								for f_idx in vol.faces.size():
-									var face:ConvexVolume.FaceInfo = vol.faces[f_idx]
-									if face.selected:
-										cmd_move_face.add_face(block.get_path(), f_idx)
+								if block.selected:
+									var vol:ConvexVolume = block.control_mesh
+									for f_idx in vol.faces.size():
+										var face:ConvexVolume.FaceInfo = vol.faces[f_idx]
+										if face.selected:
+											cmd_move_face.add_face(block.get_path(), f_idx)
 					else:
 						cmd_move_face.add_face(handle.block_path, handle.face_index)
 				

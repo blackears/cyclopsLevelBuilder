@@ -25,6 +25,8 @@
 extends ToolEditBase
 class_name ToolEditEdge
 
+const TOOL_ID:String = "edit_edge"
+
 var handles:Array[HandleEdge] = []
 
 enum ToolState { NONE, READY, DRAGGING }
@@ -37,6 +39,9 @@ var drag_handle_start_pos:Vector3
 var tracked_blocks_root:CyclopsBlocks
 
 var cmd_move_edge:CommandMoveEdges
+
+func _get_tool_id()->String:
+	return TOOL_ID
 
 func draw_tool():
 	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")

@@ -25,6 +25,8 @@
 extends ToolEditBase
 class_name ToolEditVertex
 
+const TOOL_ID:String = "edit_vertex"
+
 var handles:Array[HandleVertex] = []
 
 enum ToolState { NONE, READY, DRAGGING }
@@ -38,6 +40,9 @@ var drag_handle_start_pos:Vector3
 var cmd_move_vertex:CommandMoveVertices
 
 var tracked_blocks_root:CyclopsBlocks
+
+func _get_tool_id()->String:
+	return TOOL_ID
 
 func draw_tool():
 	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")

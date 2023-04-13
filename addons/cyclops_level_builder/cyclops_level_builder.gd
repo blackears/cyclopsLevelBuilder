@@ -38,6 +38,7 @@ var activated:bool = false
 var block_create_distance:float = 20
 var tool:CyclopsTool = null
 var lock_uvs:bool = false
+var tool_overlay_extrude:float = .01
 
 var tool_uv_transform:Transform2D
 var tool_material_path:String
