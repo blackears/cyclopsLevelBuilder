@@ -85,6 +85,42 @@ static func trianglate_face(points:PackedVector3Array, normal:Vector3)->PackedVe
 				break
 	
 	return result
+	
+static func trianglate_face_indices(points:PackedVector3Array, indices:Array[int], normal:Vector3)->Array[int]:
+	var result:Array[int] = []
+	
+#	print("trianglate_face_indices %s" % points)
+	
+	while (points.size() >= 3):
+		var num_points:int = points.size()
+		var added_point:bool = false
+
+		for i in range(0, num_points):
+			var idx0:int = i
+			var idx1:int = wrap(i + 1, 0, num_points)
+			var idx2:int = wrap(i + 2, 0, num_points)
+			var p0:Vector3 = points[idx0]
+			var p1:Vector3 = points[idx1]
+			var p2:Vector3 = points[idx2]
+		
+			#Godot uses clockwise winding
+			var tri_norm_dir:Vector3 = (p2 - p0).cross(p1 - p0)
+			if tri_norm_dir.dot(normal) > 0:
+				result.append(indices[idx0])
+				result.append(indices[idx1])
+				result.append(indices[idx2])
+				
+#				print("adding indices %s %s %s" % [indices[idx0], indices[idx1], indices[idx2]])
+				
+				points.remove_at(idx1)
+				indices.remove_at(idx1)
+				added_point = true
+				break
+		
+		assert(added_point, "failed to add point in triangulation")
+#	print("tri_done %s" % str(result))
+	
+	return result
 
 static func flip_plane(plane:Plane)->Plane:
 	return Plane(-plane.normal, plane.get_center())

@@ -77,6 +77,7 @@ class FaceInfo extends RefCounted:
 	var selected:bool
 	var active:bool
 	var vertex_indices:Array[int]
+	var triangulation_indices:Array[int]
 	
 	func _init(mesh:ConvexVolume, id:int, normal:Vector3, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0, selected:bool = false):
 		self.mesh = mesh
@@ -102,7 +103,35 @@ class FaceInfo extends RefCounted:
 			center += p
 		center /= points.size()
 		return center
+	
+	func get_triangulation()->Array[int]:		
+		if triangulation_indices .is_empty():
+			var points:PackedVector3Array
+			var indices:Array[int]
+			for v_idx in vertex_indices:
+				points.append(mesh.vertices[v_idx].point)
+				indices.append(v_idx)
+
+#			print("start points %s" % points)
+				
+			var normal:Vector3 = MathUtil.face_area_x2(points).normalized()
+#			print("normal %s" % normal)
+			triangulation_indices = MathUtil.trianglate_face_indices(points, indices, normal)
+#			print("triangulation %s" % str(triangulation_indices))
 		
+		return triangulation_indices
+		
+	func get_trianges()->PackedVector3Array:
+		var indices:Array[int] = get_triangulation()
+		var result:PackedVector3Array
+		
+		for i in indices:
+			result.append(mesh.vertices[i].point)
+
+#		print("triangules %s" % result)
+			
+		return result
+			
 
 var vertices:Array[VertexInfo] = []
 var edges:Array[EdgeInfo] = []
@@ -483,6 +512,7 @@ func tristrip_vertex_range_reverse(num_verts:int)->PackedInt32Array:
 func append_mesh(mesh:ImmediateMesh, material_list:Array[Material], default_material:Material, select_all:bool, selection_color:Color = Color.RED):
 #	if Engine.is_editor_hint():
 #		return
+#	print("num faces %s" % faces.size())
 
 	for face in faces:
 		var material = default_material
@@ -490,23 +520,22 @@ func append_mesh(mesh:ImmediateMesh, material_list:Array[Material], default_mate
 		if face.material_id >=0 && face.material_id < material_list.size():
 			material = material_list[face.material_id]
 		
-		mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, material)
-#		print("face %s" % face.index)
+		var triangles:PackedVector3Array = face.get_trianges()
+		
+#		mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, material)
+		mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES, material)
+#		print("face %s" % face.id)
 		
 		mesh.surface_set_normal(face.normal)
 		
-		for i in tristrip_vertex_range(face.vertex_indices.size()):
-			var v_idx:int = face.vertex_indices[i]
-			var p:Vector3 = vertices[v_idx].point
-			if face.selected || select_all:
-#				print("face selected %s" % selection_color)
-				mesh.surface_set_color(selection_color)
-			else:
-#				print("face white")
-				mesh.surface_set_color(Color.WHITE)
-			
-			var uv:Vector2
+		#for i in tristrip_vertex_range(face.vertex_indices.size()):
+		for i in triangles.size():
 			var axis:MathUtil.Axis = MathUtil.get_longest_axis(face.normal)
+			
+			#var v_idx:int = face.vertex_indices[i]
+			var p:Vector3 = triangles[i]
+						
+			var uv:Vector2
 			if axis == MathUtil.Axis.X:
 				uv = Vector2(-p.z, -p.y)
 			elif axis == MathUtil.Axis.Y:
@@ -692,7 +721,8 @@ func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 	var best_result:IntersectResults
 	
 	for face in faces:
-		var tris:PackedVector3Array = MathUtil.trianglate_face(face.get_points(), face.normal)
+#		var tris:PackedVector3Array = MathUtil.trianglate_face(face.get_points(), face.normal)
+		var tris:PackedVector3Array = face.get_trianges()
 		for i in range(0, tris.size(), 3):
 			var p0:Vector3 = tris[i]
 			var p1:Vector3 = tris[i + 1]
