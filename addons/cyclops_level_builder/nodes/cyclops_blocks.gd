@@ -83,7 +83,11 @@ func on_child_exiting_tree(node:Node):
 		
 		dirty = true
 
-
+func has_selected_blocks()->bool:
+	for child in get_children():
+		if child is CyclopsConvexBlock and child.selected:
+			return true
+	return false
 					
 func rebuild_mesh():
 	var mesh:ImmediateMesh = ImmediateMesh.new()

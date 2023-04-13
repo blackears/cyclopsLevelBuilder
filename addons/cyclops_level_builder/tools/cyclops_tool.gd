@@ -59,6 +59,15 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					cmd.add_to_undo_manager(undo)
 				
 				return true
+				
+			if e.keycode == KEY_D:
+				if e.shift_pressed:
+					
+					if builder.active_node and builder.active_node.has_selected_blocks():
+					
+						builder.switch_to_tool(ToolDuplicate.new())
+					
+					return true
 	
 	if event is InputEventMouseButton:
 		var e:InputEventMouseButton = event
