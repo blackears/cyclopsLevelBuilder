@@ -84,8 +84,6 @@ func _enter_tree():
 	var selection:EditorSelection = editor.get_selection()
 	selection.selection_changed.connect(on_selection_changed)
 	
-	var undo:EditorUndoRedoManager = get_undo_redo()
-	
 	update_activation()
 
 	#Wait until everything is loaded	
