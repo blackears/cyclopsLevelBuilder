@@ -35,7 +35,6 @@ var selection_type:Selection.Type = Selection.Type.REPLACE
 
 #Private
 var block_map:Dictionary = {}
-#var selected_blocks:Array[NodePath]
 
 func add_face(block_path:NodePath, index:int):
 	add_faces(block_path, [index])
