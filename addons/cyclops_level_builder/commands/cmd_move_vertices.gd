@@ -85,7 +85,8 @@ func do_it():
 		var new_vol:ConvexVolume = ConvexVolume.new()
 		new_vol.init_from_points(new_points)
 		
-#		new_vol.copy_face_attributes(vol)
+		new_vol.copy_face_attributes(vol)
+		
 		for v_idx in new_vol.vertices.size():
 			var v:ConvexVolume.VertexInfo = new_vol.vertices[v_idx]
 #			print ("vol point %s " % v.point)

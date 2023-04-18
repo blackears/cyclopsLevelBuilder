@@ -109,6 +109,7 @@ func do_it():
 		var new_vol:ConvexVolume = ConvexVolume.new()
 		new_vol.init_from_points(new_points)
 
+		new_vol.copy_face_attributes(vol)
 		#print("new init done")
 		
 		#Copy selection data
