@@ -31,24 +31,25 @@ class_name MaterialThumbnail
 	get:
 		return material_path
 	set(value):
+		if material_path == value:
+			return
+			
 		material_path = value
-		$VBoxContainer/MaterialName.text = material_path
+		#$VBoxContainer/MaterialName.text = material_path
 #		print("setting material path %s" % material_path)
 		
-		if material_path == null || material_path.is_empty():
-			tracked_material = null
-		else:
+		if ResourceLoader.exists(material_path):
 			var res:Resource = load(material_path)
 			#print("loaded res %s" % res)
-			
+
 			if res is Material:
 				tracked_material = res
 			else:
 				tracked_material = null
-			
-#			var mesh:MeshInstance3D = get_node("SubViewport/Node3D/MeshInstance3D")
-#			mesh.material_override = tracked_material
-#			$SubViewport/Node3D/MeshInstance3D.material_override = tracked_material
+		else:
+			tracked_material = null
+
+		material_thumbnail_dirty = true
 
 @export var group:ThumbnailGroup:
 	get:
@@ -72,15 +73,27 @@ class_name MaterialThumbnail
 var builder:CyclopsLevelBuilder
 
 var tracked_material:Material
+var material_thumbnail_dirty:bool = true
+
+var snapper:MaterialShapshot
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	snapper = preload("res://addons/cyclops_level_builder/controls/material_palette/material_snapshot.tscn").instantiate()
+	add_child(snapper)
+	
 #	var view_tex:ViewportTexture = ViewportTexture.new()
 #	view_tex.viewport_path = get_node("SubViewport").get_path()
 #	$VBoxContainer/TextureRect.texture = view_tex
 	
 	pass # Replace with function body.
 
+#func snapshot_material():
+#	var viewport:SubViewport = SubViewport.new()
+#	viewport.size = Vector2i(64, 64)
+#	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -89,20 +102,37 @@ func _process(delta):
 	else:
 		theme = theme_normal
 	
-	var mesh:MeshInstance3D = get_node("SubViewport/Node3D/MeshInstance3D")
-	mesh.material_override = tracked_material
+#	var mesh:MeshInstance3D = get_node("SubViewport/Node3D/MeshInstance3D")
+#	mesh.material_override = tracked_material
+	if material_thumbnail_dirty:
+		print("updating thumbnail")
+		material_thumbnail_dirty = false
+#		var snapper:MaterialShapshot = preload("res://addons/cyclops_level_builder/controls/material_palette/material_snapshot.tscn").instantiate()
+		#snapper.target_material = tracked_material
+		#var mi:MeshInstance3D = snapper.get_node("Node3D/MeshInstance3D")
+#		mi.material_override = tracked_material
+
+		#var res:Resource = load(material_path)
+		#print("loaded res %s" % res)
+
+		snapper.target_material = tracked_material
+
+		var tex:ImageTexture = await snapper.take_snapshot()
+		print("tex %s" % tex)
+		$VBoxContainer/TextureRect.texture = tex
 	
-	
-	if tracked_material:
-		var name:String = tracked_material.resource_name
-		if name.is_empty():
-			name = material_path.get_file()
-			var idx:int = name.rfind(".")
-			if idx != -1:
-				name = name.substr(0, idx)
-		$VBoxContainer/MaterialName.text = name
-	else:
-		$VBoxContainer/MaterialName.text = ""
+		if tracked_material:
+			var name:String = tracked_material.resource_name
+			if name.is_empty():
+				name = material_path.get_file()
+				var idx:int = name.rfind(".")
+				if idx != -1:
+					name = name.substr(0, idx)
+			$VBoxContainer/MaterialName.text = name
+		else:
+			$VBoxContainer/MaterialName.text = ""
+
+		print("thumbnail update done")
 		
 #	if tracked_material is StandardMaterial3D:
 #		var std:StandardMaterial3D = tracked_material
