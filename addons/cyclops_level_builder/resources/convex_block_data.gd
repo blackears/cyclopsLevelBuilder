@@ -25,10 +25,9 @@
 extends Resource
 class_name ConvexBlockData
 
-#@export var face_planes:Array[Plane]
-#@export var face_uv_transform:Array[Transform2D]
-#@export var face_material_indices:PackedInt32Array
-#@export var face_ids:PackedInt32Array
+@export var selected:bool = false
+@export var active:bool = false
+@export var collsion:bool = true
 
 @export var vertex_points:PackedVector3Array  #Per vertex
 @export var vertex_selected:PackedByteArray  #Per vertex

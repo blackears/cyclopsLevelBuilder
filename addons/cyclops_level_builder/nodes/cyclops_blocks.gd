@@ -32,10 +32,12 @@ signal blocks_changed
 @export var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
 @export var outline_material:Material = preload("res://addons/cyclops_level_builder/materials/outline_material.tres")
 
-var mesh_instance:MeshInstance3D
-var mesh_wire_instance:MeshInstance3D
-var mesh_object_outline_instance:MeshInstance3D
+#var mesh_instance:MeshInstance3D
+#var mesh_wire_instance:MeshInstance3D
+#var mesh_object_outline_instance:MeshInstance3D
 var dirty:bool = true
+
+var block_bodies:Node3D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -43,15 +45,19 @@ func _ready():
 	child_entered_tree.connect(on_child_entered_tree)
 	child_exiting_tree.connect(on_child_exiting_tree)
 	
-	mesh_instance = MeshInstance3D.new()
-	mesh_instance.name = "mesh"
-	add_child(mesh_instance)
-	mesh_wire_instance = MeshInstance3D.new()
-	mesh_wire_instance.name = "mesh_wire"
-	add_child(mesh_wire_instance)
-	mesh_object_outline_instance = MeshInstance3D.new()
-	mesh_object_outline_instance.name = "mesh_object_outline"
-	add_child(mesh_object_outline_instance)
+	block_bodies = Node3D.new()
+	block_bodies.name = "block_bodies"
+	add_child(block_bodies)
+	
+#	mesh_instance = MeshInstance3D.new()
+#	mesh_instance.name = "mesh"
+#	add_child(mesh_instance)
+#	mesh_wire_instance = MeshInstance3D.new()
+#	mesh_wire_instance.name = "mesh_wire"
+#	add_child(mesh_wire_instance)
+#	mesh_object_outline_instance = MeshInstance3D.new()
+#	mesh_object_outline_instance.name = "mesh_object_outline"
+#	add_child(mesh_object_outline_instance)
 
 	for node in get_children():
 		if node is CyclopsConvexBlock:
@@ -88,25 +94,39 @@ func has_selected_blocks()->bool:
 		if child is CyclopsConvexBlock and child.selected:
 			return true
 	return false
-					
+
+
 func rebuild_mesh():
-	var mesh:ImmediateMesh = ImmediateMesh.new()
-	var mesh_wire:ImmediateMesh = ImmediateMesh.new()
-	
-#	if Engine.is_editor_hint():
-#		draw_selected_object_outlines()
-#	print("blocks rebuilding mesh ")
-	
+	for child in block_bodies.get_children():
+		child.queue_free()
+
 	for child in get_children():
 		if child is CyclopsConvexBlock:
 			var block:CyclopsConvexBlock = child
-			block.append_mesh(mesh)
-			if Engine.is_editor_hint():
-				block.append_mesh_wire(mesh)
-	
-	mesh_instance.mesh = mesh
-	mesh_wire_instance.mesh = mesh_wire
+			
+#			var block_body:CyclopsConvexBlockBody = preload("res://addons/cyclops_level_builder/nodes/cyclops_convex_block_body.gd").instantiate()
+			var block_body:CyclopsConvexBlockBody = CyclopsConvexBlockBody.new()
+			block_body.materials = block.materials
+			block_body.block_data = block.block_data
+			block_bodies.add_child(block_body)
+
+		
 	dirty = false
+	
+#	var mesh:ImmediateMesh = ImmediateMesh.new()
+#	var mesh_wire:ImmediateMesh = ImmediateMesh.new()
+#
+#
+#	for child in get_children():
+#		if child is CyclopsConvexBlock:
+#			var block:CyclopsConvexBlock = child
+#			block.append_mesh(mesh)
+#			if Engine.is_editor_hint():
+#				block.append_mesh_wire(mesh)
+#
+#	mesh_instance.mesh = mesh
+#	mesh_wire_instance.mesh = mesh_wire
+#	dirty = false
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

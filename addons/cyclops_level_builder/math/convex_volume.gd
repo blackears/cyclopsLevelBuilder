@@ -509,7 +509,7 @@ func tristrip_vertex_range_reverse(num_verts:int)->PackedInt32Array:
 	
 	return result
 	
-func append_mesh(mesh:ImmediateMesh, material_list:Array[Material], default_material:Material, select_all:bool, selection_color:Color = Color.RED):
+func append_mesh(mesh:ImmediateMesh, material_list:Array[Material], default_material:Material, select_all:bool = false, selection_color:Color = Color.RED):
 #	if Engine.is_editor_hint():
 #		return
 #	print("num faces %s" % faces.size())

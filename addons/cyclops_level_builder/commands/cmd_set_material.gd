@@ -43,7 +43,7 @@ var target_list:Array[Target] = []
 var cache_list:Array[BlockCache] = []
 
 func add_target(block_path:NodePath, face_ids:PackedInt32Array):
-	print("add target %s %s" % [block_path, face_ids])
+#	print("add target %s %s" % [block_path, face_ids])
 	var target:Target = Target.new()
 	target.block_path = block_path
 	target.face_ids = face_ids
