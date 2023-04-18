@@ -48,6 +48,7 @@ var cmd_move_blocks:CommandMoveBlocks
 var cmd_move_face:CommandMoveFacePlanar
 var move_face_origin:Vector3 #Kep track of the origin when moving a face
 
+var base_points:PackedVector3Array
 
 func _get_tool_id()->String:
 	return TOOL_ID
@@ -123,8 +124,26 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 		#print("block_drag_start_local %s" % block_drag_start_local)
 	#print("set 1 drag_style %s" % drag_style)
 
+func _draw_tool(viewport_camera:Camera3D):
+	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
+	global_scene.clear_tool_mesh()
+	global_scene.draw_selected_blocks(viewport_camera)
+
+	if drag_style == DragStyle.BLOCK_BASE:
+		global_scene.draw_loop(base_points, true, global_scene.tool_material)
+		global_scene.draw_points(base_points, global_scene.tool_material)
+		
+	if drag_style == DragStyle.BLOCK_HEIGHT:
+		global_scene.draw_cube(block_drag_p0_local, block_drag_p1_local, block_drag_cur, global_scene.tool_material)
+
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
 	var blocks_root:CyclopsBlocks = self.builder.active_node
+
+	_draw_tool(viewport_camera)
+#	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
+#	global_scene.clear_tool_mesh()
+#	global_scene.draw_selected_blocks(viewport_camera)
+
 	
 	if event is InputEventMouseButton:
 		
@@ -173,9 +192,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					block_drag_p2_local = block_drag_cur
 					drag_style = DragStyle.NONE
 
-					var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
-					global_scene.clear_tool_mesh()
-					global_scene.draw_selected_blocks(viewport_camera)
+					#var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
+					#global_scene.clear_tool_mesh()
+					#global_scene.draw_selected_blocks(viewport_camera)
 
 					var bounds:AABB = AABB(block_drag_p0_local, Vector3.ZERO)
 					bounds = bounds.expand(block_drag_p1_local)
@@ -224,7 +243,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		var origin_local:Vector3 = w2l * origin
 		var dir_local:Vector3 = w2l.basis * dir
 	
-		var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
+#		var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 		
 		#print("drag_style %s" % drag_style)
 		if (e.button_mask & MOUSE_BUTTON_MASK_MIDDLE):
@@ -238,22 +257,22 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var block:CyclopsConvexBlock = result.object
 #					var convex_mesh:ConvexMesh = block.control_mesh.calc_mesh()
 					var convex_mesh:ConvexVolume = block.control_mesh
-					var points:PackedVector3Array = convex_mesh.get_face(result.face_id).get_points()
+					base_points = convex_mesh.get_face(result.face_id).get_points()
 #					var points:PackedVector3Array = convex_mesh.get_face_points(result.face_id)
 					#var face = block.control_mesh.faces[result.face_index]
 					#var points:PackedVector3Array = block.control_mesh.get_face_points(face)
 					
-					global_scene.clear_tool_mesh()
-					global_scene.draw_selected_blocks(viewport_camera)
-					global_scene.draw_loop(points, true, global_scene.tool_material)
+					#global_scene.clear_tool_mesh()
+					#global_scene.draw_selected_blocks(viewport_camera)
+#					global_scene.draw_loop(base_points, true, global_scene.tool_material)
 					return true
-				else:
-					global_scene.clear_tool_mesh()
-					global_scene.draw_selected_blocks(viewport_camera)
+#				else:
+					#global_scene.clear_tool_mesh()
+					#global_scene.draw_selected_blocks(viewport_camera)
 					
-			else:
-				global_scene.clear_tool_mesh()
-				global_scene.draw_selected_blocks(viewport_camera)
+#			else:
+#				global_scene.clear_tool_mesh()
+#				global_scene.draw_selected_blocks(viewport_camera)
 			
 			return false
 				
@@ -288,9 +307,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				p01 = Vector3(block_drag_p0_local.x, block_drag_cur.y, block_drag_p0_local.z)
 				p10 = Vector3(block_drag_cur.x, block_drag_p0_local.y, block_drag_p0_local.z)
 
-			global_scene.clear_tool_mesh()				
-			global_scene.draw_selected_blocks(viewport_camera)
-			global_scene.draw_loop([block_drag_p0_local, p01, block_drag_cur, p10], true, global_scene.tool_material)
+#			global_scene.clear_tool_mesh()				
+#			global_scene.draw_selected_blocks(viewport_camera)
+			base_points = [block_drag_p0_local, p01, block_drag_cur, p10]
+#			global_scene.draw_loop([block_drag_p0_local, p01, block_drag_cur, p10], true, global_scene.tool_material)
 
 			return true
 
@@ -300,9 +320,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var grid_step_size:float = pow(2, blocks_root.grid_size)
 			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
 
-			global_scene.clear_tool_mesh()			
-			global_scene.draw_selected_blocks(viewport_camera)
-			global_scene.draw_cube(block_drag_p0_local, block_drag_p1_local, block_drag_cur, global_scene.tool_material)
+#			global_scene.clear_tool_mesh()			
+#			global_scene.draw_selected_blocks(viewport_camera)
+#			global_scene.draw_cube(block_drag_p0_local, block_drag_p1_local, block_drag_cur, global_scene.tool_material)
 
 			return true
 

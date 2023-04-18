@@ -212,9 +212,9 @@ func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3, mat:Material = null):
 	
 	#$ToolInstance3D.mesh = mesh
 
-#func draw_points(points:PackedVector3Array, mat:Material = null):
-#	for p in points:
-#		draw_vertex(p, false, mat)
+func draw_points(points:PackedVector3Array, mat:Material = null):
+	for p in points:
+		draw_vertex(p, mat)
 
 func draw_vertex(position:Vector3, mat:Material = null):
 	var xform:Transform3D = Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * builder.handle_point_radius), position)

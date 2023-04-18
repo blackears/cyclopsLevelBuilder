@@ -43,10 +43,9 @@ var cmd_move_edge:CommandMoveEdges
 func _get_tool_id()->String:
 	return TOOL_ID
 
-func draw_tool():
+func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
-	global_scene.clear_tool_mesh()
-	
+	global_scene.clear_tool_mesh()	
 	
 	#var blocks_root:CyclopsBlocks = builder.active_node
 	for h in handles:
@@ -135,7 +134,7 @@ func active_node_changed():
 		tracked_blocks_root = null
 		
 	setup_tool()
-	draw_tool()
+#	draw_tool()
 	
 	tracked_blocks_root = builder.active_node
 	if tracked_blocks_root:
@@ -144,7 +143,7 @@ func active_node_changed():
 
 func active_node_updated():
 	setup_tool()
-	draw_tool()
+#	draw_tool()
 
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
@@ -158,7 +157,7 @@ func _activate(builder:CyclopsLevelBuilder):
 	
 	
 	setup_tool()
-	draw_tool()
+#	draw_tool()
 	
 	
 func _deactivate():
@@ -171,7 +170,8 @@ func _deactivate():
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
 	var blocks_root:CyclopsBlocks = self.builder.active_node
 	var grid_step_size:float = pow(2, blocks_root.grid_size)
-	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
+	#var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
+	_draw_tool(viewport_camera)
 
 #	if event is InputEventKey:
 #		return true
@@ -216,7 +216,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 					
 					tool_state = ToolState.NONE
-					draw_tool()
+#					draw_tool()
 					
 				elif tool_state == ToolState.DRAGGING:
 					#Finish drag
@@ -288,7 +288,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			cmd_move_edge.move_offset = offset
 			cmd_move_edge.do_it()
 
-			draw_tool()
+#			draw_tool()
 			return true
 		
 	return false

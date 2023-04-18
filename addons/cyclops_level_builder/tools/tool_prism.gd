@@ -33,6 +33,7 @@ var tool_state:ToolState = ToolState.READY
 var floor_normal:Vector3
 var base_points:PackedVector3Array
 var block_drag_cur:Vector3
+var drag_offset:Vector3
 
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
@@ -42,13 +43,34 @@ func _activate(builder:CyclopsLevelBuilder):
 	global_scene.clear_tool_mesh()
 	
 
+func _draw_tool(viewport_camera:Camera3D):
+	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
+	global_scene.clear_tool_mesh()
+	global_scene.draw_selected_blocks(viewport_camera)
+
+
+	if tool_state == ToolState.BASE_POINTS:
+		var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
+		global_scene.draw_loop(bounding_points, true, global_scene.tool_material)
+		global_scene.draw_points(bounding_points, global_scene.tool_material)
+
+	if tool_state == ToolState.DRAG_HEIGHT:		
+		var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
+		global_scene.draw_prism(bounding_points, drag_offset, global_scene.tool_material)
+	
+
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
 	var blocks_root:CyclopsBlocks = self.builder.active_node
 	var grid_step_size:float = pow(2, blocks_root.grid_size)
-	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
+#	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
+#	global_scene.clear_tool_mesh()
+#	global_scene.draw_selected_blocks(viewport_camera)
+
+	_draw_tool(viewport_camera)
 
 	if event is InputEventKey:
 		if tool_state == ToolState.BASE_POINTS:
+			drag_offset = Vector3.ZERO
 			tool_state = ToolState.DRAG_HEIGHT
 			return true
 	
@@ -75,9 +97,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #
 						base_points.append(p)
 
-						global_scene.clear_tool_mesh()					
-						global_scene.draw_selected_blocks(viewport_camera)
-						global_scene.draw_loop(base_points, false, global_scene.tool_material)
+#						global_scene.clear_tool_mesh()					
+#						global_scene.draw_selected_blocks(viewport_camera)
+#						global_scene.draw_loop(base_points, false, global_scene.tool_material)
 						return true
 						
 					else:
@@ -86,9 +108,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
 						base_points.append(p)
 						
-						global_scene.clear_tool_mesh()
-						global_scene.draw_selected_blocks(viewport_camera)
-						global_scene.draw_loop(base_points, false, global_scene.tool_material)
+#						global_scene.clear_tool_mesh()
+#						global_scene.draw_selected_blocks(viewport_camera)
+#						global_scene.draw_loop(base_points, false, global_scene.tool_material)
 						return true
 						
 				elif tool_state == ToolState.BASE_POINTS:
@@ -100,21 +122,22 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					#print("base %s " % base_points)
 					var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
 					#print("bounding %s " % bounding_points)
-					global_scene.clear_tool_mesh()
-					global_scene.draw_selected_blocks(viewport_camera)
-					global_scene.draw_loop(bounding_points, true, global_scene.tool_material)
+#					global_scene.clear_tool_mesh()
+#					global_scene.draw_selected_blocks(viewport_camera)
+#					global_scene.draw_loop(bounding_points, true, global_scene.tool_material)
 					
 					return true
 				elif tool_state == ToolState.DRAG_HEIGHT:
 					var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
-					var offset:Vector3 = block_drag_cur - base_points[0]
+					drag_offset = block_drag_cur - base_points[0]
+					#drag_offset = Vector3.ZERO
 
 					var command:CommandAddPrism = CommandAddPrism.new()
 					command.block_name = GeneralUtil.find_unique_name(builder.active_node, "Block_")
 					command.blocks_root_inst_id = blocks_root.get_instance_id()
 					command.block_owner = builder.get_editor_interface().get_edited_scene_root()
 					command.base_polygon = bounding_points
-					command.extrude = offset
+					command.extrude = drag_offset
 					command.uv_transform = builder.tool_uv_transform
 					command.material_path = builder.tool_material_path
 
@@ -122,8 +145,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					command.add_to_undo_manager(undo)
 					
-					global_scene.clear_tool_mesh()
-					global_scene.draw_selected_blocks(viewport_camera)
+#					global_scene.clear_tool_mesh()
+#					global_scene.draw_selected_blocks(viewport_camera)
 					
 					tool_state = ToolState.READY
 					return true
@@ -147,11 +170,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			block_drag_cur = to_local(block_drag_cur, blocks_root.global_transform.inverse(), grid_step_size)
 			
-			var offset:Vector3 = block_drag_cur - base_points[0]
+			drag_offset = block_drag_cur - base_points[0]
 			var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
 			
-			global_scene.clear_tool_mesh()
-			global_scene.draw_prism(bounding_points, offset, global_scene.tool_material)
+#			global_scene.clear_tool_mesh()
+#			global_scene.draw_prism(bounding_points, drag_offset, global_scene.tool_material)
 
 			return true
 

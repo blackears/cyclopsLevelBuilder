@@ -39,6 +39,9 @@ func _deactivate():
 func _get_tool_id()->String:
 	return ""
 
+func _draw_tool(viewport_camera:Camera3D):
+	pass
+
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	if event is InputEventKey:
 		var e:InputEventKey = event

@@ -43,10 +43,14 @@ func has_clip_point(point:Vector3)->bool:
 			return true
 	return false
 
-func draw_tool(global_scene:CyclopsGlobalScene):
+func _draw_tool(viewport_camera:Camera3D):
+	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 	global_scene.clear_tool_mesh()
+	global_scene.draw_selected_blocks(viewport_camera)
+
 	if !clip_points.is_empty():
 		global_scene.draw_loop(clip_points, false, global_scene.tool_material)
+		global_scene.draw_points(clip_points, global_scene.tool_material)
 	
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
@@ -54,26 +58,27 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	var grid_step_size:float = pow(2, blocks_root.grid_size)
 	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 
+	_draw_tool(viewport_camera)
+
 	if event is InputEventKey:
 		var e:InputEventKey = event
 
 		if e.keycode == KEY_BACKSPACE:
-			if !clip_points.is_empty():
-				var count:int = clip_points.size()
-				clip_points.remove_at(count - 1)
-				clip_normals.remove_at(count - 1)
-				if clip_points.is_empty():
-					clip_block = null
+			if e.is_pressed():
+				if !clip_points.is_empty():
+					var count:int = clip_points.size()
+					clip_points.remove_at(count - 1)
+					clip_normals.remove_at(count - 1)
+					if clip_points.is_empty():
+						clip_block = null
 					
-				draw_tool(global_scene)
-
 			return true
 			
 		elif e.keycode == KEY_ESCAPE:
 			clip_points.clear()
 			clip_normals.clear()
 			clip_block = null
-			draw_tool(global_scene)
+#			_draw_tool(viewport_camera)
 			return true
 			
 		elif e.keycode == KEY_ENTER:
@@ -107,7 +112,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			clip_normals.clear()
 			clip_block = null
 
-			draw_tool(global_scene)
+#			_draw_tool(viewport_camera)
 			
 			return true
 
@@ -141,7 +146,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 							clip_points[2] = p
 							clip_normals[2] = result.normal
 							
-						draw_tool(global_scene)
+#						_draw_tool(viewport_camera)
 						
 			return true
 
