@@ -35,8 +35,6 @@ class_name MaterialThumbnail
 			return
 			
 		material_path = value
-		#$VBoxContainer/MaterialName.text = material_path
-#		print("setting material path %s" % material_path)
 		
 		if ResourceLoader.exists(material_path):
 			var res:Resource = load(material_path)
@@ -82,18 +80,6 @@ func _ready():
 	snapper = preload("res://addons/cyclops_level_builder/controls/material_palette/material_snapshot.tscn").instantiate()
 	add_child(snapper)
 	
-#	var view_tex:ViewportTexture = ViewportTexture.new()
-#	view_tex.viewport_path = get_node("SubViewport").get_path()
-#	$VBoxContainer/TextureRect.texture = view_tex
-	
-	pass # Replace with function body.
-
-#func snapshot_material():
-#	var viewport:SubViewport = SubViewport.new()
-#	viewport.size = Vector2i(64, 64)
-#	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
-	
-	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -102,23 +88,12 @@ func _process(delta):
 	else:
 		theme = theme_normal
 	
-#	var mesh:MeshInstance3D = get_node("SubViewport/Node3D/MeshInstance3D")
-#	mesh.material_override = tracked_material
 	if material_thumbnail_dirty:
-		print("updating thumbnail")
 		material_thumbnail_dirty = false
-#		var snapper:MaterialShapshot = preload("res://addons/cyclops_level_builder/controls/material_palette/material_snapshot.tscn").instantiate()
-		#snapper.target_material = tracked_material
-		#var mi:MeshInstance3D = snapper.get_node("Node3D/MeshInstance3D")
-#		mi.material_override = tracked_material
-
-		#var res:Resource = load(material_path)
-		#print("loaded res %s" % res)
 
 		snapper.target_material = tracked_material
 
 		var tex:ImageTexture = await snapper.take_snapshot()
-		print("tex %s" % tex)
 		$VBoxContainer/TextureRect.texture = tex
 	
 		if tracked_material:
@@ -132,17 +107,8 @@ func _process(delta):
 		else:
 			$VBoxContainer/MaterialName.text = ""
 
-		print("thumbnail update done")
-		
-#	if tracked_material is StandardMaterial3D:
-#		var std:StandardMaterial3D = tracked_material
-#		$VBoxContainer/TextureRect.texture = std.albedo_texture
-#	else:
-#		$VBoxContainer/TextureRect.texture = null
 	
 func _gui_input(event:InputEvent):
-#	if event.is_action("ui_select"):
-#		if event.
 	if event is InputEventMouseButton:
 		var e:InputEventMouseButton = event
 		if e.pressed:
@@ -165,6 +131,8 @@ func apply_material_to_selected():
 	cmd.builder = builder
 	cmd.material_path = material_path
 	
+	var is_obj_mode:bool = builder.mode == CyclopsLevelBuilder.Mode.OBJECT
+	
 	var root_blocks:CyclopsBlocks = builder.active_node
 	for child in root_blocks.get_children():
 #		print("child block %s %s" % [child.name, child.get_class()])
@@ -173,11 +141,12 @@ func apply_material_to_selected():
 		#if !(child is MeshInstance3D):
 #			print("setting child block %s" % child.name)
 			if child.selected:
-				cmd.add_target(child.get_path(), child.control_mesh.get_face_ids())
-			else:
-				var face_ids:PackedInt32Array = child.control_mesh.get_face_ids(true)
-				if !face_ids.is_empty():
-					cmd.add_target(child.get_path(), face_ids)
+				if is_obj_mode:
+					cmd.add_target(child.get_path(), child.control_mesh.get_face_ids())
+				else:
+					var face_ids:PackedInt32Array = child.control_mesh.get_face_ids(true)
+					if !face_ids.is_empty():
+						cmd.add_target(child.get_path(), face_ids)
 	
 	var undo:EditorUndoRedoManager = builder.get_undo_redo()
 	cmd.add_to_undo_manager(undo)

@@ -31,7 +31,6 @@ class_name MaterialShapshot
 		return target_material
 	set(value):
 		target_material = value
-#		print("setting material %s" % target_material)
 		$Node3D/MeshInstance3D.material_override = target_material
 
 func take_snapshot()->ImageTexture:

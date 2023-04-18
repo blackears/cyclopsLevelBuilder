@@ -43,7 +43,7 @@ var target_list:Array[Target] = []
 var cache_list:Array[BlockCache] = []
 
 func add_target(block_path:NodePath, face_ids:PackedInt32Array):
-	#print("add target %s %s" % [block_path, face_ids])
+	print("add target %s %s" % [block_path, face_ids])
 	var target:Target = Target.new()
 	target.block_path = block_path
 	target.face_ids = face_ids
@@ -63,10 +63,13 @@ func make_cache():
 		
 		cache_list.append(cache)
 
+func _init():
+	command_name = "Set material"
+	
 func do_it():
 	make_cache()
 	
-	print("cmd set material")
+#	print("cmd set material")
 	for t in target_list:
 		var block:CyclopsConvexBlock = builder.get_node(t.block_path)
 		
