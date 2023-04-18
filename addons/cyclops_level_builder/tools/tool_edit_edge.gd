@@ -253,11 +253,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						for child in blocks_root.get_children():
 							if child is CyclopsConvexBlock:
 								var block:CyclopsConvexBlock = child
-								var vol:ConvexVolume = block.control_mesh
-								for e_idx in vol.edges.size():
-									var edge:ConvexVolume.EdgeInfo = vol.edges[e_idx]
-									if edge.selected:
-										cmd_move_edge.add_edge(block.get_path(), e_idx)
+								if block.selected:
+									var vol:ConvexVolume = block.control_mesh
+									for e_idx in vol.edges.size():
+										var edge:ConvexVolume.EdgeInfo = vol.edges[e_idx]
+										if edge.selected:
+											cmd_move_edge.add_edge(block.get_path(), e_idx)
 					else:
 						cmd_move_edge.add_edge(handle.block_path, handle.edge_index)
 				

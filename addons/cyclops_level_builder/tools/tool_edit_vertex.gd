@@ -229,19 +229,18 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					cmd_move_vertex = CommandMoveVertices.new()
 					cmd_move_vertex.builder = builder
-#					cmd_move_vertex.block_path = handle.block_path
-#					cmd_move_vertex.vertex_position = handle.initial_position
 
 					var handle_block:CyclopsConvexBlock = builder.get_node(handle.block_path)
 					if handle_block.control_mesh.vertices[handle.vertex_index].selected:
 						for child in blocks_root.get_children():
 							if child is CyclopsConvexBlock:
 								var block:CyclopsConvexBlock = child
-								var vol:ConvexVolume = block.control_mesh
-								for v_idx in vol.vertices.size():
-									var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
-									if v.selected:
-										cmd_move_vertex.add_vertex(block.get_path(), v_idx)
+								if block.selected:
+									var vol:ConvexVolume = block.control_mesh
+									for v_idx in vol.vertices.size():
+										var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
+										if v.selected:
+											cmd_move_vertex.add_vertex(block.get_path(), v_idx)
 					else:
 						cmd_move_vertex.add_vertex(handle.block_path, handle.vertex_index)
 				

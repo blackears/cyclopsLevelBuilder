@@ -38,6 +38,10 @@ var block_map:Dictionary = {}
 
 
 func add_vertex(block_path:NodePath, index:int):
+	add_vertices(block_path, [index])
+	
+func add_vertices(block_path:NodePath, indices:Array[int]):
+#	print("adding vertex %s %s" % [block_path, indices])
 	var changes:BlockVertexChanges
 	if block_map.has(block_path):
 		changes = block_map[block_path]
@@ -48,8 +52,9 @@ func add_vertex(block_path:NodePath, index:int):
 		changes.tracked_block_data = block.block_data
 		block_map[block_path] = changes
 
-	if !changes.vertex_indices.has(index):
-		changes.vertex_indices.append(index)
+	for index in indices:
+		if !changes.vertex_indices.has(index):
+			changes.vertex_indices.append(index)
 			
 func _init():
 	command_name = "Move vertices"
@@ -83,7 +88,7 @@ func do_it():
 #		new_vol.copy_face_attributes(vol)
 		for v_idx in new_vol.vertices.size():
 			var v:ConvexVolume.VertexInfo = new_vol.vertices[v_idx]
-#			print ("vol point %s " % v1.point)
+#			print ("vol point %s " % v.point)
 			if selected_points.has(v.point):
 #				print("set sel")
 				v.selected = true

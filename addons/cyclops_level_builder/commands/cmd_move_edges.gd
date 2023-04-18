@@ -37,8 +37,10 @@ var move_offset:Vector3 = Vector3.ZERO
 #Private
 var block_map:Dictionary = {}
 
-
 func add_edge(block_path:NodePath, index:int):
+	add_edges(block_path, [index])
+
+func add_edges(block_path:NodePath, indices:Array[int]):
 	var changes:BlockEdgeChanges
 	if block_map.has(block_path):
 		changes = block_map[block_path]
@@ -49,8 +51,9 @@ func add_edge(block_path:NodePath, index:int):
 		changes.tracked_block_data = block.block_data
 		block_map[block_path] = changes
 
-	if !changes.edge_indices.has(index):
-		changes.edge_indices.append(index)
+	for index in indices:
+		if !changes.edge_indices.has(index):
+			changes.edge_indices.append(index)
 
 func _init():
 	command_name = "Move edges"

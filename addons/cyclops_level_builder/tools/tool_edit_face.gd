@@ -186,7 +186,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var handle:HandleFace = pick_closest_handle(viewport_camera, e.position, builder.handle_screen_radius)
 
 					#print("handle %s" % handle)
-
 					
 					var cmd:CommandSelectFaces = CommandSelectFaces.new()
 					cmd.builder = builder
@@ -239,8 +238,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					cmd_move_face = CommandMoveFaces.new()
 					cmd_move_face.builder = builder
-#					cmd_move_vertex.block_path = handle.block_path
-#					cmd_move_vertex.vertex_position = handle.initial_position
 
 					var handle_block:CyclopsConvexBlock = builder.get_node(handle.block_path)
 					if handle_block.control_mesh.faces[handle.face_index].selected:
