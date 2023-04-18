@@ -35,9 +35,12 @@ var selection_type:Selection.Type = Selection.Type.REPLACE
 
 #Private
 var block_map:Dictionary = {}
-
+#var selected_blocks:Array[NodePath]
 
 func add_face(block_path:NodePath, index:int):
+	add_faces(block_path, [index])
+	
+func add_faces(block_path:NodePath, indices:Array[int]):
 	var changes:BlockFaceChanges
 	if block_map.has(block_path):
 		changes = block_map[block_path]
@@ -48,12 +51,45 @@ func add_face(block_path:NodePath, index:int):
 		changes.tracked_block_data = block.block_data
 		block_map[block_path] = changes
 
-	if !changes.face_indices.has(index):
-		changes.face_indices.append(index)
+	for index in indices:
+		if !changes.face_indices.has(index):
+			changes.face_indices.append(index)
 	
 
 func _init():
 	command_name = "Select faces"
+
+func will_change_anything()->bool:
+	for block_path in block_map.keys():
+		#print("path %s" % node_path)
+		
+		var rec:BlockFaceChanges = block_map[block_path]
+		var block:CyclopsConvexBlock = builder.get_node(block_path)
+			
+		var vol:ConvexVolume = ConvexVolume.new()
+		vol.init_from_convex_block_data(rec.tracked_block_data)
+		
+		match selection_type:
+			Selection.Type.REPLACE:
+				for f_idx in vol.faces.size():
+					var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
+					var in_list:bool = rec.face_indices.has(f_idx)
+					if (f.selected && !in_list) || (!f.selected && in_list):
+						return true
+			Selection.Type.ADD:
+				for f_idx in rec.face_indices:
+					var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
+					if !f.selected:
+						return true
+			Selection.Type.SUBTRACT:
+				for f_idx in rec.face_indices:
+					var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
+					if f.selected:
+						return false
+			Selection.Type.TOGGLE:
+				return true
+	
+	return false
 	
 func do_it():
 #	print("sel verts do_it")

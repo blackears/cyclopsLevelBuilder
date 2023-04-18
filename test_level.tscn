@@ -38,7 +38,7 @@ face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform
 face_selected = PackedByteArray(0, 0, 0, 0, 1, 0)
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_5g5v4"]
+[sub_resource type="Resource" id="Resource_kbtd3"]
 script = ExtResource("4_gj6gd")
 vertex_points = PackedVector3Array(-15.8594, 10, 32, -19.6719, 10, 22, -16.9219, 14, 22, -13.1094, 14, 32, 0.75, 14, 32, -3.0625, 14, 22, -1.8125, 10, 22, 2, 10, 32)
 vertex_selected = PackedByteArray(0, 1, 1, 0, 0, 1, 1, 0)
@@ -80,18 +80,18 @@ face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform
 face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_4ff2m"]
+[sub_resource type="Resource" id="Resource_y4a6m"]
 script = ExtResource("4_gj6gd")
 vertex_points = PackedVector3Array(-14, 14, 21, -14, 20, 21, -21, 20, 21, -21, 14, 21, -14, 20, 29, -21, 20, 29, -21, 14, 29, -14, 14, 29)
-vertex_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0)
+vertex_selected = PackedByteArray(1, 1, 1, 1, 1, 1, 0, 0)
 edge_vertex_indices = PackedInt32Array(0, 1, 1, 2, 2, 3, 3, 0, 4, 5, 5, 2, 1, 4, 6, 3, 5, 6, 6, 7, 7, 0, 4, 7)
-edge_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+edge_selected = PackedByteArray(1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0)
 edge_face_indices = PackedInt32Array(0, 5, 0, 1, 0, 2, 0, 3, 1, 4, 1, 2, 1, 5, 2, 3, 2, 4, 3, 4, 3, 5, 4, 5)
 face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
 face_vertex_indices = PackedInt32Array(0, 1, 2, 3, 4, 5, 2, 1, 6, 3, 2, 5, 0, 3, 6, 7, 4, 7, 6, 5, 4, 1, 0, 7)
-face_material_indices = PackedInt32Array(-1, -1, -1, -1, -1, -1)
+face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
 face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
-face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
+face_selected = PackedByteArray(1, 1, 0, 0, 0, 0)
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
 [sub_resource type="Resource" id="Resource_deyek"]
@@ -149,7 +149,7 @@ block_data = SubResource("Resource_fltip")
 [node name="Block_000" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("3_534ho")
 materials = Array[Material]([ExtResource("5_vwq7c"), ExtResource("4_kj410")])
-block_data = SubResource("Resource_5g5v4")
+block_data = SubResource("Resource_kbtd3")
 
 [node name="Block_1" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("3_534ho")
@@ -162,7 +162,8 @@ block_data = SubResource("Resource_v23y5")
 
 [node name="Block_3" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("3_534ho")
-block_data = SubResource("Resource_4ff2m")
+materials = Array[Material]([ExtResource("5_vwq7c")])
+block_data = SubResource("Resource_y4a6m")
 
 [node name="Block_4" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("3_534ho")

@@ -119,41 +119,6 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 	return null	
 	
 
-#func pick_closest_handle_old(blocks_root:CyclopsBlocks, viewport_camera:Camera3D, position:Vector2, radius:float)->HandleFace:
-#	var best_dist:float = INF
-#	var best_handle:HandleFace = null
-#
-#	var pick_origin:Vector3 = viewport_camera.project_ray_origin(position)
-#	var pick_dir:Vector3 = viewport_camera.project_ray_normal(position)
-#
-#	for h in handles:
-#		var block:CyclopsConvexBlock = builder.get_node(h.block_path)
-#		var ctl_mesh:ConvexVolume = block.control_mesh
-#		var face:ConvexVolume.FaceInfo = ctl_mesh.faces[h.face_index]
-#
-#		#Handle intersection
-#		var p_ref_world:Vector3 = blocks_root.global_transform * h.p_ref
-#		var p_ref_screen:Vector2 = viewport_camera.unproject_position(p_ref_world)
-#
-#		if position.distance_squared_to(p_ref_screen) > radius * radius:
-#			#Failed handle radius test
-#			continue
-#
-#		var offset:Vector3 = p_ref_world - pick_origin
-#		var parallel:Vector3 = offset.project(pick_dir)
-#		var dist = parallel.dot(pick_dir)
-#		if dist <= 0:
-#			#Behind camera
-#			continue
-#
-#		#print("h pos %s ray orig %s ray dir %s offset %s para %s dist %s perp %s" % [h.position, ray_origin, ray_dir, offset, parallel, dist, perp])
-#		if dist >= best_dist:
-#			continue
-#
-#		best_dist = dist
-#		best_handle = h
-#
-#	return best_handle
 
 func active_node_changed():
 	if tracked_blocks_root != null:
@@ -222,18 +187,25 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					#print("handle %s" % handle)
 
-					if handle:
-						var block:CyclopsConvexBlock = builder.get_node(handle.block_path)
-						
-						var cmd:CommandSelectFaces = CommandSelectFaces.new()
-						cmd.builder = builder
-						
-						cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
-						cmd.add_face(handle.block_path, handle.face_index)
-						#print("selectibg %s" % handle.face_index)
 					
+					var cmd:CommandSelectFaces = CommandSelectFaces.new()
+					cmd.builder = builder
+					
+					for child in builder.active_node.get_children():
+						if child is CyclopsConvexBlock:
+							var cur_block:CyclopsConvexBlock = child
+							if cur_block.selected:
+								cmd.add_faces(cur_block.get_path(), [])
+					
+#					var block:CyclopsConvexBlock = builder.get_node(handle.block_path)
+					cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
+						
+					if handle:
+						cmd.add_face(handle.block_path, handle.face_index)
+						#print("selecting %s" % handle.face_index)
+					
+					if cmd.will_change_anything():
 						var undo:EditorUndoRedoManager = builder.get_undo_redo()
-
 						cmd.add_to_undo_manager(undo)
 					
 					
