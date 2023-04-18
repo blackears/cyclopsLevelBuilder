@@ -36,12 +36,13 @@ var selection_type:Selection.Type = Selection.Type.REPLACE
 #Private
 var block_map:Dictionary = {}
 
-#var record_list:Array[Record] = []
 
 
-#enum SelectType { REPLACE, ADD, SUBTRACT, TOGGLE }
 
 func add_vertex(block_path:NodePath, index:int):
+	add_vertices(block_path, [index])
+	
+func add_vertices(block_path:NodePath, indices:Array[int]):
 	var changes:BlockVertexChanges
 	if block_map.has(block_path):
 		changes = block_map[block_path]
@@ -52,16 +53,50 @@ func add_vertex(block_path:NodePath, index:int):
 		changes.tracked_block_data = block.block_data
 		block_map[block_path] = changes
 
-	if !changes.vertex_indices.has(index):
-		changes.vertex_indices.append(index)
+	for index in indices:
+		if !changes.vertex_indices.has(index):
+			changes.vertex_indices.append(index)
 	
 
 func _init():
 	command_name = "Select vertices"
+
+
+func will_change_anything()->bool:
+	for block_path in block_map.keys():
+		#print("path %s" % node_path)
+		
+		var rec:BlockVertexChanges = block_map[block_path]
+		var block:CyclopsConvexBlock = builder.get_node(block_path)
+			
+		var vol:ConvexVolume = ConvexVolume.new()
+		vol.init_from_convex_block_data(rec.tracked_block_data)
+		
+		match selection_type:
+			Selection.Type.REPLACE:
+				for v_idx in vol.vertices.size():
+					var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
+					var in_list:bool = rec.vertex_indices.has(v_idx)
+					if (v.selected && !in_list) || (!v.selected && in_list):
+						return true
+			Selection.Type.ADD:
+				for v_idx in rec.vertex_indices:
+					var v:ConvexVolume.VertexInfo = vol.verteices[v_idx]
+					if !v.selected:
+						return true
+			Selection.Type.SUBTRACT:
+				for v_idx in rec.veretx_indices:
+					var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
+					if v.selected:
+						return false
+			Selection.Type.TOGGLE:
+				return true
+	
+	return false
+
 	
 func do_it():
 #	print("sel verts do_it")
-	#print("sel vert do_it()")
 	for block_path in block_map.keys():
 		#print("path %s" % node_path)
 		

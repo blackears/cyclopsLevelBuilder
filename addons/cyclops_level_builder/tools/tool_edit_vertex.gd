@@ -178,16 +178,22 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					#print("cmd select")
 					var handle:HandleVertex = pick_closest_handle(blocks_root, viewport_camera, drag_mouse_start_pos, builder.handle_screen_radius)
 
+					var cmd:CommandSelectVertices = CommandSelectVertices.new()
+					cmd.builder = builder
+
+					for child in builder.active_node.get_children():
+						if child is CyclopsConvexBlock:
+							var cur_block:CyclopsConvexBlock = child
+							if cur_block.selected:
+								cmd.add_vertices(cur_block.get_path(), [])
+
+					cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
+
 					if handle:
-						var block:CyclopsConvexBlock = builder.get_node(handle.block_path)
-						
-						var cmd:CommandSelectVertices = CommandSelectVertices.new()
-						cmd.builder = builder
-						
-						cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
 						cmd.add_vertex(handle.block_path, handle.vertex_index)
 						#print("selectibg %s" % handle.vertex_index)
 					
+					if cmd.will_change_anything():
 						var undo:EditorUndoRedoManager = builder.get_undo_redo()
 
 						cmd.add_to_undo_manager(undo)
