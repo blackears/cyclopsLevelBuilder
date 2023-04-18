@@ -154,6 +154,7 @@ func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent):
 	
 	if tool:
 		var result:bool = tool._gui_input(viewport_camera, event)
+		tool._draw_tool(viewport_camera)
 		return EditorPlugin.AFTER_GUI_INPUT_STOP if result else EditorPlugin.AFTER_GUI_INPUT_PASS
 	
 	return EditorPlugin.AFTER_GUI_INPUT_PASS

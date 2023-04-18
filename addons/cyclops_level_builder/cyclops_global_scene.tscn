@@ -4,7 +4,7 @@
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_sl0cw"]
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_oyoq2"]
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_ssirq"]
 
 [node name="CyclopsGlobals" type="Node3D"]
 script = ExtResource("1_nu1d3")
@@ -14,4 +14,4 @@ visible = false
 mesh = SubResource("PlaneMesh_sl0cw")
 
 [node name="ToolInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("ImmediateMesh_oyoq2")
+mesh = SubResource("ImmediateMesh_ssirq")

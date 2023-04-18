@@ -66,7 +66,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #	global_scene.clear_tool_mesh()
 #	global_scene.draw_selected_blocks(viewport_camera)
 
-	_draw_tool(viewport_camera)
+	#_draw_tool(viewport_camera)
 
 	if event is InputEventKey:
 		if tool_state == ToolState.BASE_POINTS:

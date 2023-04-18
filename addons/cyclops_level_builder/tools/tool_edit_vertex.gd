@@ -157,7 +157,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	var blocks_root:CyclopsBlocks = self.builder.active_node
 	var grid_step_size:float = pow(2, blocks_root.grid_size)
 	#var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
-	_draw_tool(viewport_camera)
+	#_draw_tool(viewport_camera)
 
 	if event is InputEventKey:
 		return true

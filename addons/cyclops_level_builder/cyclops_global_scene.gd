@@ -64,8 +64,8 @@ func draw_line(p0:Vector3, p1:Vector3, mat:Material):
 	tool_mesh.surface_end()
 
 func draw_loop(points:PackedVector3Array, closed:bool = true, mat:Material = null):
-#	for p in points:
-#		draw_vertex(p)
+	if points.is_empty():
+		return
 	
 	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, mat)
 
