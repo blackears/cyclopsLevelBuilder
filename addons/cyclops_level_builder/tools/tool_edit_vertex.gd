@@ -53,8 +53,6 @@ func _draw_tool(viewport_camera:Camera3D):
 		var block:CyclopsConvexBlock = builder.get_node(h.block_path)
 		var v:ConvexVolume.VertexInfo = block.control_mesh.vertices[h.vertex_index]
 		
-#		var mat:Material = global_scene.tool_selected_material if v.selected else global_scene.tool_material
-		
 		#print("draw vert %s %s" % [h.vertex_index, v.selected])
 		global_scene.draw_vertex(h.position, pick_material(global_scene, v.selected))
 	

@@ -139,11 +139,6 @@ func _draw_tool(viewport_camera:Camera3D):
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
 	var blocks_root:CyclopsBlocks = self.builder.active_node
 
-	#_draw_tool(viewport_camera)
-#	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
-#	global_scene.clear_tool_mesh()
-#	global_scene.draw_selected_blocks(viewport_camera)
-
 	
 	if event is InputEventMouseButton:
 		
@@ -165,19 +160,31 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					var result:IntersectResults = blocks_root.intersect_ray_closest(origin, dir)
 					
+					var cmd:CommandSelectBlocks = CommandSelectBlocks.new()
+					cmd.builder = builder
+					cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
+
 					if result:
-						if e.shift_pressed:
-							result.object.selected = !result.object.selected
-						else:
-							for child in blocks_root.get_children():
-								if child is CyclopsConvexBlock:
-									var block:CyclopsConvexBlock = child
-									block.selected = block == result.object
-					else:
-						for child in blocks_root.get_children():
-							if child is CyclopsConvexBlock:
-								var block:CyclopsConvexBlock = child
-								block.selected = false
+						cmd.block_paths.append(result.object.get_path())
+						
+					if cmd.will_change_anything():
+						var undo:EditorUndoRedoManager = builder.get_undo_redo()
+						cmd.add_to_undo_manager(undo)
+						
+####################					
+#					if result:
+#						if e.shift_pressed:
+#							result.object.selected = !result.object.selected
+#						else:
+#							for child in blocks_root.get_children():
+#								if child is CyclopsConvexBlock:
+#									var block:CyclopsConvexBlock = child
+#									block.selected = block == result.object
+#					else:
+#						for child in blocks_root.get_children():
+#							if child is CyclopsConvexBlock:
+#								var block:CyclopsConvexBlock = child
+#								block.selected = false
 					
 					drag_style = DragStyle.NONE
 					

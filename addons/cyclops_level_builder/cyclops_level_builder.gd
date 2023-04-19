@@ -30,6 +30,7 @@ signal active_node_changed
 const AUTOLOAD_NAME = "CyclopsAutoload"
 
 var material_dock:Control
+var uv_editor_dock:Control
 var top_toolbar:TopToolbar
 var toolbar:EditorToolbar
 var activated:bool = false
@@ -74,6 +75,9 @@ func _enter_tree():
 	material_dock = preload("res://addons/cyclops_level_builder/controls/material_palette/material_palette_viewport.tscn").instantiate()
 	material_dock.builder = self
 	
+	uv_editor_dock = preload("res://addons/cyclops_level_builder/controls/uv_editor/uv_editor_viewport.tscn").instantiate()
+	uv_editor_dock.builder = self
+	
 	toolbar = preload("menu/editor_toolbar.tscn").instantiate()
 	toolbar.editor_plugin = self
 
@@ -114,11 +118,13 @@ func update_activation():
 			if !activated:
 				add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, toolbar)
 				add_control_to_dock(DOCK_SLOT_RIGHT_BL, material_dock)
+				add_control_to_dock(DOCK_SLOT_RIGHT_BL, uv_editor_dock)
 				activated = true
 		else:
 			if activated:
 				remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, toolbar)
 				remove_control_from_docks(material_dock)
+				remove_control_from_docks(uv_editor_dock)
 				activated = false
 	else:
 		active_node = null
@@ -137,9 +143,11 @@ func _exit_tree():
 	
 	if activated:
 		remove_control_from_docks(material_dock)
+		remove_control_from_docks(uv_editor_dock)
 		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, toolbar)
 
 	material_dock.queue_free()
+	uv_editor_dock.queue_free()
 	toolbar.queue_free()
 
 func _handles(object:Object):
@@ -162,10 +170,12 @@ func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent):
 func _get_state()->Dictionary:
 	var state:Dictionary = {}
 	material_dock.save_state(state)
+	uv_editor_dock.save_state(state)
 	return state
 	
 func _set_state(state):
 	material_dock.load_state(state)
+	uv_editor_dock.load_state(state)
 
 func switch_to_tool(_tool:CyclopsTool):
 	if tool:
