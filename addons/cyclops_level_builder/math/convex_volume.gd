@@ -33,7 +33,7 @@ class VertexInfo extends RefCounted:
 	var normal:Vector3
 	var edge_indices:Array[int] = []
 	var selected:bool
-	var active:bool
+	#var active:bool
 	
 	func _init(mesh:ConvexVolume, point:Vector3 = Vector3.ZERO):
 		self.mesh = mesh
@@ -53,7 +53,7 @@ class EdgeInfo extends RefCounted:
 	var end_index:int
 	var face_indices:Array[int] = []
 	var selected:bool
-	var active:bool
+	#var active:bool
 	
 	func _init(mesh:ConvexVolume, start:int = 0, end:int = 0):
 		self.mesh = mesh
@@ -75,7 +75,7 @@ class FaceInfo extends RefCounted:
 	var material_id:int
 	var uv_transform:Transform2D
 	var selected:bool
-	var active:bool
+	#var active:bool
 	var vertex_indices:Array[int]
 	var triangulation_indices:Array[int]
 	
@@ -138,6 +138,9 @@ var edges:Array[EdgeInfo] = []
 var faces:Array[FaceInfo] = []
 var bounds:AABB
 
+var active_vertex:int = -1
+var active_edge:int = -1
+var active_face:int = -1
 
 func init_block(block_bounds:AABB, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = -1):
 	var p000:Vector3 = block_bounds.position
@@ -201,12 +204,16 @@ func init_from_convex_block_data(data:ConvexBlockData):
 	vertices = []
 	edges = []
 	faces = []
+
+	active_vertex = data.active_vertex
+	active_edge = data.active_edge
+	active_face = data.active_face
 	
 	for i in data.vertex_points.size():
 		var v:VertexInfo = VertexInfo.new(self, data.vertex_points[i])
 		vertices.append(v)
 		v.selected = data.vertex_selected[i]
-		v.active = data.vertex_active[i]
+		#v.active = data.vertex_active[i]
 
 	var num_edges:int = data.edge_vertex_indices.size() / 2
 	for i in num_edges:
@@ -215,7 +222,7 @@ func init_from_convex_block_data(data:ConvexBlockData):
 		edge.face_indices.append(data.edge_face_indices[i * 2])
 		edge.face_indices.append(data.edge_face_indices[i * 2 + 1])
 		edge.selected = data.edge_selected[i]
-		edge.active = data.edge_active[i]
+		#edge.active = data.edge_active[i]
 		
 	var face_vertex_count:int = 0
 	for face_idx in data.face_vertex_count.size():
@@ -232,7 +239,7 @@ func init_from_convex_block_data(data:ConvexBlockData):
 		var normal = MathUtil.face_area_x2(vert_points).normalized()
 		var f:FaceInfo = FaceInfo.new(self, data.face_ids[face_idx], normal, data.face_uv_transform[face_idx], data.face_material_indices[face_idx])
 		f.selected = data.face_selected[face_idx]
-		f.active = data.face_active[face_idx]
+		#f.active = data.face_active[face_idx]
 		f.vertex_indices = vert_indices
 		
 		faces.append(f)
@@ -361,16 +368,20 @@ func copy_face_attributes(ref_vol:ConvexVolume):
 func to_convex_block_data()->ConvexBlockData:
 	var result:ConvexBlockData = ConvexBlockData.new()
 	
+	result.active_vertex = active_vertex
+	result.active_edge = active_edge
+	result.active_face = active_face
+	
 	for v in vertices:
 		result.vertex_points.append(v.point)
 		result.vertex_selected.append(v.selected)
-		result.vertex_active.append(v.active)
+		#result.vertex_active.append(v.active)
 
 	for e in edges:
 		result.edge_vertex_indices.append_array([e.start_index, e.end_index])
 		result.edge_face_indices.append_array([e.face_indices[0], e.face_indices[1]])
 		result.edge_selected.append(e.selected)
-		result.edge_active.append(e.active)
+		#result.edge_active.append(e.active)
 
 	for face in faces:
 		var num_verts:int = face.vertex_indices.size()
@@ -378,7 +389,7 @@ func to_convex_block_data()->ConvexBlockData:
 		result.face_vertex_indices.append_array(face.vertex_indices)
 		result.face_ids.append(face.id)
 		result.face_selected.append(face.selected)
-		result.face_active.append(face.active)
+		#result.face_active.append(face.active)
 		result.face_material_indices.append(face.material_id)
 		result.face_uv_transform.append(face.uv_transform)
 	

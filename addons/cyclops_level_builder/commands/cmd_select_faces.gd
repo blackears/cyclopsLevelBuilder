@@ -68,9 +68,10 @@ func will_change_anything()->bool:
 		var vol:ConvexVolume = ConvexVolume.new()
 		vol.init_from_convex_block_data(rec.tracked_block_data)
 		
-		var active_idx:int = -1
+#		var active_idx:int = -1
 		if !rec.face_indices.is_empty():
-			active_idx = rec.face_indices[0]
+			if vol.active_face != rec.face_indices[0]:
+				return true
 			
 		match selection_type:
 			Selection.Type.REPLACE:
@@ -78,38 +79,18 @@ func will_change_anything()->bool:
 					var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
 					if f.selected != rec.face_indices.has(f_idx):
 						return true
-					if f.active != (f_idx == active_idx):
-						return true
-				
-#				for f_idx in vol.faces.size():
-#					var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
-#					var in_list:bool = rec.face_indices.has(f_idx)
-#					if (f.selected && !in_list) || (!f.selected && in_list):
-#						return true
 			Selection.Type.ADD:
 				for f_idx in vol.faces.size():
 					var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
 					if rec.face_indices.has(f_idx):
 						if !f.selected:
 							return true
-					if f.active != (f_idx == active_idx):
-						return true
-				
-#				for f_idx in rec.face_indices:
-#					var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
-#					if !f.selected:
-#						return true
 			Selection.Type.SUBTRACT:
 				for f_idx in vol.faces.size():
 					var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
 					if rec.face_indices.has(f_idx):
 						if f.selected:
 							return true
-				
-#				for f_idx in rec.face_indices:
-#					var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
-#					if f.selected:
-#						return false
 			Selection.Type.TOGGLE:
 				return true
 	
@@ -126,40 +107,47 @@ func do_it():
 			
 		var vol:ConvexVolume = ConvexVolume.new()
 		vol.init_from_convex_block_data(rec.tracked_block_data)
-		
-		var active_idx:int = -1
 		if !rec.face_indices.is_empty():
-			active_idx = rec.face_indices[0]
-		
-		print("face active index %s" % active_idx)
+			var active_index:int = rec.face_indices[0]
+			match selection_type:
+				Selection.Type.REPLACE:
+					vol.active_face = active_index
+				Selection.Type.ADD:
+					vol.active_face = active_index
+				Selection.Type.SUBTRACT:
+					if rec.face_indices.has(vol.active_face):
+						vol.active_face = -1
+				Selection.Type.TOGGLE:
+					if rec.face_indices.has(vol.active_face):
+						vol.active_face = -1
+					elif !vol.faces[active_index].selected:
+						vol.active_face = active_index
+
+
+#		print("face active index %s" % active_idx)
 		
 		match selection_type:
 			Selection.Type.REPLACE:
 				for f_idx in vol.faces.size():
 					var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
 					f.selected = rec.face_indices.has(f_idx)
-					f.active = f_idx == active_idx
-#					print("set face %s %s %s" % [f_idx, f.selected, f.active])
 
 			Selection.Type.ADD:
 				for f_idx in vol.faces.size():
 					var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
 					if rec.face_indices.has(f_idx):
 						f.selected = true
-					f.active = f_idx == active_idx
 					
 			Selection.Type.SUBTRACT:
 				for f_idx in vol.faces.size():
 					var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
 					if rec.face_indices.has(f_idx):
 						f.selected = false
-						f.active = false
 			Selection.Type.TOGGLE:
 				for f_idx in vol.faces.size():
 					var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
 					if rec.face_indices.has(f_idx):
 						f.selected = !f.selected
-					f.active = f.selected && f_idx == active_idx
 
 		#Synchronize edge & vertex selection
 		var selected_verts:Array[int] = []

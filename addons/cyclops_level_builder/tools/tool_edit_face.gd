@@ -52,23 +52,23 @@ func _draw_tool(viewport_camera:Camera3D):
 #		print("draw face %s" % h)
 		var block:CyclopsConvexBlock = builder.get_node(h.block_path)
 		var f:ConvexVolume.FaceInfo = block.control_mesh.faces[h.face_index]
-		global_scene.draw_vertex(h.p_ref, pick_material(global_scene, f.selected, f.active))
+
+		var active:bool = block.control_mesh.active_face == h.face_index		
+		global_scene.draw_vertex(h.p_ref, pick_material(global_scene, f.selected, active))
 		
-#		for ff in block.control_mesh.faces:
-#			print("face state %s %s" % [ff.selected, ff.active])
 		
 		if f.selected:
 			var edge_loop:PackedVector3Array = f.get_points()
 			for p_idx in edge_loop.size():
 				edge_loop[p_idx] += f.normal * builder.tool_overlay_extrude
-			global_scene.draw_loop(edge_loop, true, pick_material(global_scene, f.selected, f.active))
+			global_scene.draw_loop(edge_loop, true, pick_material(global_scene, f.selected, active))
 			
 			var tris:PackedVector3Array = f.get_trianges()
 			for p_idx in tris.size():
 				tris[p_idx] += f.normal * builder.tool_overlay_extrude
 			
 #			print("draw face %s %s %s" % [h.face_index, f.selected, f.active])
-			var mat:Material = global_scene.tool_edit_active_fill_material if f.active else global_scene.tool_edit_selected_fill_material
+			var mat:Material = global_scene.tool_edit_active_fill_material if active else global_scene.tool_edit_selected_fill_material
 			global_scene.draw_triangles(tris, mat)
 		
 	
