@@ -97,7 +97,7 @@ func will_change_anything()->bool:
 	return false
 	
 func do_it():
-	print("sel verts do_it")
+	#print("sel verts do_it")
 	#print("sel vert do_it()")
 	for block_path in block_map.keys():
 #		print("path %s" % block_path)
@@ -143,6 +143,7 @@ func do_it():
 					var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
 					if rec.face_indices.has(f_idx):
 						f.selected = false
+						
 			Selection.Type.TOGGLE:
 				for f_idx in vol.faces.size():
 					var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
@@ -150,16 +151,16 @@ func do_it():
 						f.selected = !f.selected
 
 		#Synchronize edge & vertex selection
-		var selected_verts:Array[int] = []
-		for f in vol.faces:
-			if f.selected:
-				for v_idx in f.vertex_indices:
-					if !selected_verts.has(v_idx):
-						selected_verts.append(v_idx)
-		for v_idx in vol.vertices.size():
-			vol.vertices[v_idx].selected = selected_verts.has(v_idx)
+#		var selected_verts:Array[int] = []
+#		for f in vol.faces:
+#			if f.selected:
+#				for v_idx in f.vertex_indices:
+#					if !selected_verts.has(v_idx):
+#						selected_verts.append(v_idx)
+#		for v_idx in vol.vertices.size():
+#			vol.vertices[v_idx].selected = selected_verts.has(v_idx)
+#		vol.update_edge_and_face_selection_from_vertices()
 		
-		vol.update_edge_and_face_selection_from_vertices()
 		block.block_data = vol.to_convex_block_data()
 
 func undo_it():
