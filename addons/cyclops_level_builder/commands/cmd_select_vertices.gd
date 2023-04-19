@@ -71,24 +71,29 @@ func will_change_anything()->bool:
 			
 		var vol:ConvexVolume = ConvexVolume.new()
 		vol.init_from_convex_block_data(rec.tracked_block_data)
-		
+
+		if !rec.vertex_indices.is_empty():
+			if vol.active_vertex != rec.vertex_indices[0]:
+				return true
+						
 		match selection_type:
 			Selection.Type.REPLACE:
 				for v_idx in vol.vertices.size():
 					var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
-					var in_list:bool = rec.vertex_indices.has(v_idx)
-					if (v.selected && !in_list) || (!v.selected && in_list):
+					if v.selected != rec.vertex_indices.has(v_idx):
 						return true
 			Selection.Type.ADD:
 				for v_idx in rec.vertex_indices:
-					var v:ConvexVolume.VertexInfo = vol.verteices[v_idx]
-					if !v.selected:
-						return true
-			Selection.Type.SUBTRACT:
-				for v_idx in rec.veretx_indices:
 					var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
-					if v.selected:
-						return false
+					if rec.vertex_indices.has(v_idx):
+						if !v.selected:
+							return true
+			Selection.Type.SUBTRACT:
+				for v_idx in rec.vertex_indices:
+					var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
+					if rec.vertex_indices.has(v_idx):
+						if v.selected:
+							return true
 			Selection.Type.TOGGLE:
 				return true
 	
@@ -106,23 +111,45 @@ func do_it():
 		var vol:ConvexVolume = ConvexVolume.new()
 		vol.init_from_convex_block_data(rec.tracked_block_data)
 		
+		if !rec.vertex_indices.is_empty():
+			var active_index:int = rec.vertex_indices[0]
+			match selection_type:
+				Selection.Type.REPLACE:
+					vol.active_vertex = active_index
+				Selection.Type.ADD:
+					vol.active_vertex = active_index
+				Selection.Type.SUBTRACT:
+					if rec.vertex_indices.has(vol.active_vertex):
+						vol.active_vertex = -1
+				Selection.Type.TOGGLE:
+					if rec.vertex_indices.has(vol.active_vertex):
+						vol.active_vertex = -1
+					elif !vol.vertices[active_index].selected:
+						vol.active_vertex = active_index
+		
 		match selection_type:
 			Selection.Type.REPLACE:
 				for v_idx in vol.vertices.size():
 					var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
 					v.selected = rec.vertex_indices.has(v_idx)
+					
 			Selection.Type.ADD:
-				for v_idx in rec.vertex_indices:
+				for v_idx in vol.vertices.size():
 					var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
-					v.selected = true
+					if rec.vertex_indices.has(v_idx):
+						v.selected = true
+						
 			Selection.Type.SUBTRACT:
-				for v_idx in rec.vertex_indices:
+				for v_idx in vol.vertices.size():
 					var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
-					v.selected = false
+					if rec.vertex_indices.has(v_idx):
+						v.selected = false
+						
 			Selection.Type.TOGGLE:
-				for v_idx in rec.vertex_indices:
+				for v_idx in vol.vertices.size():
 					var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
-					v.selected = !v.selected
+					if rec.vertex_indices.has(v_idx):
+						v.selected = !v.selected
 		
 		vol.update_edge_and_face_selection_from_vertices()
 		block.block_data = vol.to_convex_block_data()

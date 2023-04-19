@@ -78,24 +78,24 @@ func will_change_anything()->bool:
 				for e_idx in vol.edges.size():
 					var e:ConvexVolume.EdgeInfo = vol.edges[e_idx]
 					if e.selected != rec.edge_indices.has(e_idx):
-						print("will change SREP")
+						#print("will change SREP")
 						return true
 			Selection.Type.ADD:
 				for e_idx in rec.edge_indices:
 					var e:ConvexVolume.EdgeInfo = vol.edges[e_idx]
 					if rec.edge_indices.has(e_idx):
 						if !e.selected:
-							print("will change ADD")
+							#print("will change ADD")
 							return true
 			Selection.Type.SUBTRACT:
 				for e_idx in rec.edge_indices:
 					var e:ConvexVolume.EdgeInfo = vol.edges[e_idx]
 					if rec.edge_indices.has(e_idx):
 						if e.selected:
-							print("will change SUB")
+							#print("will change SUB")
 							return true
 			Selection.Type.TOGGLE:
-				print("will change TOG")
+				#print("will change TOG")
 				return true
 	
 	return false
@@ -150,7 +150,7 @@ func do_it():
 				for e_idx in vol.edges.size():
 					var e:ConvexVolume.EdgeInfo = vol.edges[e_idx]
 					if rec.edge_indices.has(e_idx):
-						print("flipping %s" % e.selected)
+						#print("flipping %s" % e.selected)
 						e.selected = !e.selected
 
 		#Synchronize vertex & face selection
