@@ -28,6 +28,7 @@ class_name CyclopsGlobalScene
 @export var selection_color:Color = Color(1, .5, .5, 1)
 @export var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
 @export var tool_edit_active_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_edit_active_material.tres")
+@export var tool_edit_active_fill_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_edit_active_fill_material.tres")
 @export var tool_edit_selected_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_edit_selected_material.tres")
 @export var tool_edit_selected_fill_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_edit_selected_fill_material.tres")
 @export var tool_edit_unselected_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_edit_unselected_material.tres")

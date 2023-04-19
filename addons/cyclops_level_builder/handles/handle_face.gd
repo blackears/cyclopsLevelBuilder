@@ -34,4 +34,4 @@ var block_path:NodePath
 
 func _to_string():
 #	return "%s init pos %s %s   pos %s %s" % [block_path, initial_p0, initial_p1, p0, p1]
-	return "face idx:%s ref_%s ref_init:%s" % [face_index, p_ref, p_ref_init]
+	return "face %s idx:%s ref_%s ref_init:%s" % [block_path.get_name(block_path.get_name_count() - 1), face_index, p_ref, p_ref_init]

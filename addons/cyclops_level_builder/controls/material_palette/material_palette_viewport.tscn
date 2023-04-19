@@ -6,7 +6,7 @@
 [sub_resource type="Resource" id="Resource_ljbow"]
 script = ExtResource("2_sg6yo")
 
-[node name="material_palette_viewport" type="Control"]
+[node name="Materials" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

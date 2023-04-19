@@ -2,7 +2,6 @@
 
 [resource]
 render_priority = 1
-transparency = 4
 albedo_color = Color(0, 0, 0, 1)
 emission_enabled = true
 emission = Color(1, 1, 1, 1)

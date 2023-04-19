@@ -31,9 +31,11 @@ class_name ConvexBlockData
 
 @export var vertex_points:PackedVector3Array  #Per vertex
 @export var vertex_selected:PackedByteArray  #Per vertex
+@export var vertex_active:PackedByteArray  #Per vertex
 
 @export var edge_vertex_indices:PackedInt32Array
 @export var edge_selected:PackedByteArray
+@export var edge_active:PackedByteArray
 @export var edge_face_indices:PackedInt32Array
 
 @export var face_vertex_count:PackedInt32Array #Number of verts in each face
@@ -41,5 +43,6 @@ class_name ConvexBlockData
 @export var face_material_indices:PackedInt32Array #Material index for each face
 @export var face_uv_transform:Array[Transform2D]
 @export var face_selected:PackedByteArray  #Per face
+@export var face_active:PackedByteArray  #Per face
 @export var face_ids:PackedInt32Array  #Per face
 

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/uv_editor/uv_editor_viewport.gd" id="1_rk116"]
 
-[node name="UvTransformEditor" type="Control"]
+[node name="UvXform" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
