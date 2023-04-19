@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://bvoe12f8r2huo"]
+
+[ext_resource type="Material" uid="uid://b4173ircb7rqb" path="res://materials/cinder_blocks_mat.tres" id="1_5eoio"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/uv_editor/uv_editor_preview.gd" id="1_57x0n"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_x3k8c"]
+
+[node name="UvPreview" type="SubViewport"]
+own_world_3d = true
+size = Vector2i(256, 256)
+render_target_update_mode = 4
+script = ExtResource("1_57x0n")
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
+mesh = SubResource("QuadMesh_x3k8c")
+surface_material_override/0 = ExtResource("1_5eoio")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0684279)

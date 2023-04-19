@@ -26,6 +26,7 @@ extends EditorPlugin
 class_name CyclopsLevelBuilder
 
 signal active_node_changed
+signal selection_changed
 
 const AUTOLOAD_NAME = "CyclopsAutoload"
 

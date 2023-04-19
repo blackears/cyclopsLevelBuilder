@@ -48,23 +48,12 @@ func _ready():
 	block_bodies = Node3D.new()
 	block_bodies.name = "block_bodies"
 	add_child(block_bodies)
-	
-#	mesh_instance = MeshInstance3D.new()
-#	mesh_instance.name = "mesh"
-#	add_child(mesh_instance)
-#	mesh_wire_instance = MeshInstance3D.new()
-#	mesh_wire_instance.name = "mesh_wire"
-#	add_child(mesh_wire_instance)
-#	mesh_object_outline_instance = MeshInstance3D.new()
-#	mesh_object_outline_instance.name = "mesh_object_outline"
-#	add_child(mesh_object_outline_instance)
 
 	for node in get_children():
 		if node is CyclopsConvexBlock:
 			var block:CyclopsConvexBlock = node
 			block.mesh_changed.connect(on_child_mesh_changed)
 			
-#			print("adding child %s" % node.name)
 	
 	
 func on_child_mesh_changed():
@@ -113,20 +102,13 @@ func rebuild_mesh():
 		
 	dirty = false
 	
-#	var mesh:ImmediateMesh = ImmediateMesh.new()
-#	var mesh_wire:ImmediateMesh = ImmediateMesh.new()
-#
-#
-#	for child in get_children():
-#		if child is CyclopsConvexBlock:
-#			var block:CyclopsConvexBlock = child
-#			block.append_mesh(mesh)
-#			if Engine.is_editor_hint():
-#				block.append_mesh_wire(mesh)
-#
-#	mesh_instance.mesh = mesh
-#	mesh_wire_instance.mesh = mesh_wire
-#	dirty = false
+func get_active_block()->CyclopsConvexBlock:
+	for child in get_children():
+		if child is CyclopsConvexBlock:
+			var block:CyclopsConvexBlock = child
+			if block.active:
+				return block
+	return null
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

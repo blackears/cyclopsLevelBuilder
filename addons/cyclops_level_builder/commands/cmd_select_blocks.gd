@@ -120,6 +120,8 @@ func do_it():
 						if !block.selected:
 							block.active = false
 				
+	builder.selection_changed.emit()
+				
 func undo_it():
 
 	for child in builder.active_node.get_children():
@@ -129,3 +131,5 @@ func undo_it():
 
 			block.selected = tracked_selected_blocks.has(path)
 			block.active = tracked_active_blocks.has(path)
+			
+	builder.selection_changed.emit()

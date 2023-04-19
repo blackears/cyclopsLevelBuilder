@@ -154,6 +154,8 @@ func do_it():
 		vol.update_edge_and_face_selection_from_vertices()
 		block.block_data = vol.to_convex_block_data()
 
+	builder.selection_changed.emit()
+
 func undo_it():
 #	print("sel verts undo_it")
 	#print("sel vert undo_it()")
@@ -162,7 +164,4 @@ func undo_it():
 		var block:CyclopsConvexBlock = builder.get_node(block_path)
 		block.block_data = rec.tracked_block_data
 
-	
-	
-	
-
+	builder.selection_changed.emit()

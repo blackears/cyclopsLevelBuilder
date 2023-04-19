@@ -25,17 +25,56 @@
 extends Control
 class_name UvEdtiorViewport
 
-var builder:CyclopsLevelBuilder
+var material_thumbnail_dirty:bool = true
+
+var target_material:Material
+var empty_material:Material
+
+var builder:CyclopsLevelBuilder:
+	get:
+		return builder
+	set(value):
+		if builder:
+			builder.selection_changed.disconnect(on_selection_changed)
+			
+		builder = value
+		
+		if builder:
+			builder.selection_changed.connect(on_selection_changed)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	empty_material = StandardMaterial3D.new()
+	empty_material.albedo_color = Color.BLACK
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+
+	if material_thumbnail_dirty:
+		material_thumbnail_dirty = false
+
+		$UvPreview.target_material = target_material
+
+		var tex:ImageTexture = await $UvPreview.take_snapshot()
+		$VBoxContainer/Preview.texture = tex	
 	pass
 
+func on_selection_changed():
+	material_thumbnail_dirty = true
+	target_material = empty_material
+	
+	if builder.active_node:
+		var block:CyclopsConvexBlock = builder.active_node.get_active_block()
+		if block:
+			var vol:ConvexVolume = block.control_mesh
+			if vol.active_face != -1:
+				var f:ConvexVolume.FaceInfo = vol.get_face(block.control_mesh.active_face)
+				if f.material_id != -1:
+					var mat:Material = block.materials[f.material_id]
+					target_material = mat
+					
+		
 
 func save_state(state:Dictionary):
 	var substate:Dictionary = {}
