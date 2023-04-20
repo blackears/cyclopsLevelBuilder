@@ -95,7 +95,7 @@ func will_change_anything()->bool:
 				return true
 	
 	return false
-	
+
 func do_it():
 	#print("sel verts do_it")
 	#print("sel vert do_it()")

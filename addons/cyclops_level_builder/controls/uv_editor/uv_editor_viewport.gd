@@ -42,11 +42,30 @@ var builder:CyclopsLevelBuilder:
 		if builder:
 			builder.selection_changed.connect(on_selection_changed)
 
+var spin_offset_x:NumbericLineEdit
+var spin_offset_y:NumbericLineEdit
+var spin_scale_x:NumbericLineEdit
+var spin_scale_y:NumbericLineEdit
+var spin_rotation:NumbericLineEdit
+var spin_skew:NumbericLineEdit
+
+#var  test_slider:EditorSpinSlider
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	empty_material = StandardMaterial3D.new()
 	empty_material.albedo_color = Color.BLACK
 
+	spin_offset_x = $VBoxContainer/GridContainer2/HBoxContainer2/offset_x
+	spin_offset_y = $VBoxContainer/GridContainer2/HBoxContainer/offset_y
+	spin_scale_x = $VBoxContainer/GridContainer3/HBoxContainer2/scale_x
+	spin_scale_y = $VBoxContainer/GridContainer3/HBoxContainer/scale_y
+	spin_rotation = $VBoxContainer/GridContainer4/HBoxContainer2/rotation
+	spin_skew = $VBoxContainer/GridContainer4/HBoxContainer/skew
+
+#	test_slider = EditorSpinSlider.new()
+#	test_slider.size_flags_horizontal = Control.SIZE_EXPAND
+#	$VBoxContainer.add_child(test_slider)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -70,6 +89,15 @@ func on_selection_changed():
 			var vol:ConvexVolume = block.control_mesh
 			if vol.active_face != -1:
 				var f:ConvexVolume.FaceInfo = vol.get_face(block.control_mesh.active_face)
+				
+				
+				spin_offset_x.value = f.uv_transform.origin.x
+				spin_offset_y.value = f.uv_transform.origin.y
+				spin_scale_x.value = f.uv_transform.get_scale().x
+				spin_scale_y.value = f.uv_transform.get_scale().y
+				spin_rotation.value = rad_to_deg(f.uv_transform.get_rotation())
+				spin_skew.value = rad_to_deg(f.uv_transform.get_skew())
+				
 				if f.material_id != -1:
 					var mat:Material = block.materials[f.material_id]
 					target_material = mat
@@ -88,10 +116,57 @@ func load_state(state:Dictionary):
 	
 	var substate:Dictionary = state["uv_editor_dock"]
 
-#	material_list = []	
-#	if substate.has("materials"):
-#		for mat_path in substate["materials"]:
-#			if ResourceLoader.exists(mat_path):
-#				material_list.append(mat_path)
-#
-#	update_thumbnails()
+
+func apply_uv_transform():
+	var xform:Transform2D = Transform2D(deg_to_rad(spin_rotation.value), \
+		Vector2(spin_scale_x.value, spin_scale_y.value), \
+		deg_to_rad(spin_skew.value), \
+		Vector2(spin_offset_x.value, spin_offset_y.value))
+		
+	var cmd:CommandSetUvTransform = CommandSetUvTransform.new()
+	cmd.builder = builder
+	cmd.uv_transform = xform
+	
+	print("setting xform %s " % xform)
+	
+	if builder.active_node:
+		for child in builder.active_node.get_children():
+			if child is CyclopsConvexBlock:
+				var block:CyclopsConvexBlock = child
+				if block.selected:
+					var vol:ConvexVolume = block.control_mesh
+					for f_idx in vol.faces.size():
+						var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
+						if f.selected:
+							cmd.add_face(block.get_path(), f_idx)
+	
+	
+	if cmd.will_change_anything():
+		var undo:EditorUndoRedoManager = builder.get_undo_redo()
+		cmd.add_to_undo_manager(undo)
+	
+
+func _on_offset_x_value_changed(value):
+	apply_uv_transform()
+
+
+func _on_offset_y_value_changed(value):
+	apply_uv_transform()
+
+
+func _on_scale_x_value_changed(value):
+	apply_uv_transform()
+
+
+func _on_scale_y_value_changed(value):
+	apply_uv_transform()
+
+
+func _on_rotation_value_changed(value):
+	apply_uv_transform()
+
+
+func _on_skew_value_changed(value):
+	apply_uv_transform()
+
+

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://diibmlqy1mpqb"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/numeric_line_edit.gd" id="1_u8bpo"]
+
+[node name="LineEdit" type="LineEdit"]
+offset_right = 346.0
+offset_bottom = 31.0
+text = "0"
+script = ExtResource("1_u8bpo")
+
+[connection signal="text_submitted" from="." to="." method="_on_text_submitted"]
