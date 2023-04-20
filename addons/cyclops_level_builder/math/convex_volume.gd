@@ -344,6 +344,14 @@ func get_face_ids(selected_only:bool = false)->PackedInt32Array:
 			result.append(f.id)
 	return result
 
+func get_face_indices(selected_only:bool = false)->PackedInt32Array:
+	var result:PackedInt32Array
+	for f_idx in faces.size():
+		var f:FaceInfo = faces[f_idx]
+		if !selected_only || f.selected:
+			result.append(f_idx)
+	return result
+
 
 func get_face_most_similar_to_plane(plane:Plane)->FaceInfo:
 	var best_dot:float = -1

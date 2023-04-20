@@ -142,14 +142,15 @@ func apply_material_to_selected():
 #			print("setting child block %s" % child.name)
 			if child.selected:
 				if is_obj_mode:
-					cmd.add_target(child.get_path(), child.control_mesh.get_face_ids())
+					cmd.add_target(child.get_path(), child.control_mesh.get_face_indices())
 				else:
-					var face_ids:PackedInt32Array = child.control_mesh.get_face_ids(true)
-					if !face_ids.is_empty():
-						cmd.add_target(child.get_path(), face_ids)
+					var face_indices:PackedInt32Array = child.control_mesh.get_face_indices(true)					
+					if !face_indices.is_empty():
+						cmd.add_target(child.get_path(), face_indices)
 	
-	var undo:EditorUndoRedoManager = builder.get_undo_redo()
-	cmd.add_to_undo_manager(undo)
+	if cmd.will_change_anything():
+		var undo:EditorUndoRedoManager = builder.get_undo_redo()
+		cmd.add_to_undo_manager(undo)
 
 
 func _on_focus_entered():

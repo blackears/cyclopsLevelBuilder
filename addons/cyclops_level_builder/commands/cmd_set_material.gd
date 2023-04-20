@@ -27,7 +27,7 @@ extends CyclopsCommand
 
 class Target extends RefCounted:
 	var block_path:NodePath
-	var face_ids:PackedInt32Array
+	var face_indices:PackedInt32Array
 
 class BlockCache extends RefCounted:
 	var path:NodePath
@@ -42,11 +42,11 @@ var target_list:Array[Target] = []
 
 var cache_list:Array[BlockCache] = []
 
-func add_target(block_path:NodePath, face_ids:PackedInt32Array):
-#	print("add target %s %s" % [block_path, face_ids])
+func add_target(block_path:NodePath, face_indices:PackedInt32Array):
+#	print("add target %s %s" % [block_path.get_name(block_path.get_name_count() - 1), face_indices])
 	var target:Target = Target.new()
 	target.block_path = block_path
-	target.face_ids = face_ids
+	target.face_indices = face_indices
 	
 	target_list.append(target)
 
@@ -63,13 +63,19 @@ func make_cache():
 		
 		cache_list.append(cache)
 
+func will_change_anything()->bool:
+	for t in target_list:
+		if !t.face_indices.is_empty():
+			return true
+	return false
+
 func _init():
 	command_name = "Set material"
 	
 func do_it():
 	make_cache()
 	
-#	print("cmd set material")
+#	print("cmd set material %s" % material_path)
 	for t in target_list:
 		var block:CyclopsConvexBlock = builder.get_node(t.block_path)
 		
@@ -100,10 +106,12 @@ func do_it():
 		var ctl_mesh:ConvexVolume = ConvexVolume.new()
 		ctl_mesh.init_from_convex_block_data(block.control_mesh.to_convex_block_data())
 			
-		for f in ctl_mesh.faces:
-			if t.face_ids.has(f.id):
+		for f_idx in ctl_mesh.faces.size():
+			var f:ConvexVolume.FaceInfo = ctl_mesh.faces[f_idx]
+			
+			if t.face_indices.has(f_idx):
 				remap_face_idx_to_mat.append(target_material)
-			elif f.id >= 0 && f.id < block.materials.size():
+			elif f.material_id >= 0 && f.material_id < block.materials.size():
 				remap_face_idx_to_mat.append(block.materials[f.material_id])
 			else:
 				remap_face_idx_to_mat.append(null)
@@ -113,28 +121,28 @@ func do_it():
 #			print("mat %s" % "?" if m == null else m.resource_path)
 		
 		#Reduce material list, discarding unused materials
-		var mat_reorder:Array[Material]
+		var mat_list_reduced:Array[Material]
 		for m in remap_face_idx_to_mat:
-			if m != null && !mat_reorder.has(m):
-				mat_reorder.append(m)
+			if m != null && !mat_list_reduced.has(m):
+				mat_list_reduced.append(m)
 
-#		print("mat reorder")
-#		for m in mat_reorder:
+#		print("mat_list_reduced")
+#		for m in mat_list_reduced:
 #			print("mat %s" % "?" if m == null else m.resource_path)
 		
 		#Set new face materials using new material ids
-		for face_idx in remap_face_idx_to_mat.size():
-#			print("face_idx %s" % face_idx)
-			var face:ConvexVolume.FaceInfo = ctl_mesh.faces[face_idx]
-			var mat = remap_face_idx_to_mat[face_idx]
-#			print("mat %s" % "?" if mat == null else mat.resource_path)
-#			print("has %s" % mat_reorder.has(mat))
-#			print("find %s" % mat_reorder.find(mat))
+		for f_idx in remap_face_idx_to_mat.size():
+			#print("face_idx %s" % f_idx)
+			var face:ConvexVolume.FaceInfo = ctl_mesh.faces[f_idx]
+			var mat = remap_face_idx_to_mat[f_idx]
+			#print("mat %s" % "?" if mat == null else mat.resource_path)
+			#print("has %s" % mat_list_reduced.has(mat))
+			#print("find %s" % mat_list_reduced.find(mat))
 			
-			face.material_id = -1 if mat == null else mat_reorder.find(mat)
-#			print("face.material_id %s" % face.material_id)
+			face.material_id = -1 if mat == null else mat_list_reduced.find(mat)
+			#print("face.material_id %s" % face.material_id)
 		
-		block.materials = mat_reorder
+		block.materials = mat_list_reduced
 		block.block_data = ctl_mesh.to_convex_block_data()
 
 func undo_it():
