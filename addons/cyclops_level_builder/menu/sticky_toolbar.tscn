@@ -1,0 +1,41 @@
+[gd_scene load_steps=8 format=3 uid="uid://c4smddvlwx54s"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/menu/sticky_toolbar.gd" id="1_52wtc"]
+[ext_resource type="Texture2D" uid="uid://d0krdms4l6ns4" path="res://addons/cyclops_level_builder/art/cyclops_3.png" id="2_0mx5n"]
+[ext_resource type="Texture2D" uid="uid://cg3yjatinkymb" path="res://addons/cyclops_level_builder/art/cyclops_4.png" id="3_5oy58"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h0l71"]
+
+[sub_resource type="Theme" id="Theme_dgoud"]
+PanelContainer/styles/panel = SubResource("StyleBoxEmpty_h0l71")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6pjef"]
+
+[sub_resource type="Theme" id="Theme_nckdr"]
+PanelContainer/styles/panel = SubResource("StyleBoxEmpty_6pjef")
+
+[node name="PanelContainer" type="PanelContainer"]
+offset_right = 70.0
+offset_bottom = 31.0
+theme = SubResource("Theme_dgoud")
+script = ExtResource("1_52wtc")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="CyclopsButton" type="TextureButton" parent="HBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("2_0mx5n")
+texture_pressed = ExtResource("3_5oy58")
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+theme = SubResource("Theme_nckdr")
+
+[node name="Button" type="Button" parent="HBoxContainer/PanelContainer"]
+layout_mode = 2
+text = "Block"
+
+[connection signal="toggled" from="HBoxContainer/CyclopsButton" to="." method="_on_texture_button_toggled"]

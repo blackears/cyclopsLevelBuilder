@@ -32,8 +32,8 @@ const AUTOLOAD_NAME = "CyclopsAutoload"
 
 var material_dock:Control
 var uv_editor_dock:Control
-var top_toolbar:TopToolbar
-var toolbar:EditorToolbar
+var sticky_toolbar:StickyToolbar
+var editor_toolbar:EditorToolbar
 var activated:bool = false
 
 
@@ -69,6 +69,7 @@ func _get_plugin_icon()->Texture2D:
 func _enter_tree():
 	add_custom_type("CyclopsBlocks", "Node3D", preload("nodes/cyclops_blocks.gd"), preload("nodes/cyclops_blocks_icon.png"))
 	add_custom_type("CyclopsConvexBlock", "Node", preload("nodes/cyclops_convex_block.gd"), preload("nodes/cyclops_blocks_icon.png"))
+	add_custom_type("CyclopsConvexBlockBody", "Node", preload("nodes/cyclops_convex_block_body.gd"), preload("nodes/cyclops_blocks_icon.png"))
 	#add_custom_type("GeometryBrush", "Node3D", preload("controls/geometry_brush.tscn"), preload("controls/geometryBrushIcon.png"))
 
 	add_autoload_singleton(AUTOLOAD_NAME, "res://addons/cyclops_level_builder/cyclops_global_scene.tscn")
@@ -79,17 +80,19 @@ func _enter_tree():
 	uv_editor_dock = preload("res://addons/cyclops_level_builder/controls/uv_editor/uv_editor_viewport.tscn").instantiate()
 	uv_editor_dock.builder = self
 	
-	toolbar = preload("menu/editor_toolbar.tscn").instantiate()
-	toolbar.editor_plugin = self
+	editor_toolbar = preload("menu/editor_toolbar.tscn").instantiate()
+	editor_toolbar.editor_plugin = self
 
-#	top_toolbar = preload("menu/top_toolbar.tscn").instantiate()
-#	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, top_toolbar)
+	sticky_toolbar = preload("menu/sticky_toolbar.tscn").instantiate()
+	sticky_toolbar.plugin = self
+	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, sticky_toolbar)
 	
 	var editor:EditorInterface = get_editor_interface()
 	var selection:EditorSelection = editor.get_selection()
 	selection.selection_changed.connect(on_selection_changed)
 	
 	update_activation()
+
 
 	#Wait until everything is loaded	
 	await get_tree().process_frame
@@ -117,13 +120,13 @@ func update_activation():
 		if blocks_root:
 			active_node = blocks_root
 			if !activated:
-				add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, toolbar)
+				add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
 				add_control_to_dock(DOCK_SLOT_RIGHT_BL, material_dock)
 				add_control_to_dock(DOCK_SLOT_RIGHT_BL, uv_editor_dock)
 				activated = true
 		else:
 			if activated:
-				remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, toolbar)
+				remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
 				remove_control_from_docks(material_dock)
 				remove_control_from_docks(uv_editor_dock)
 				activated = false
@@ -139,17 +142,18 @@ func _exit_tree():
 	
 	remove_custom_type("CyclopsBlocks")
 	remove_custom_type("CyclopsBlock")
+	remove_custom_type("CyclopsBlockBody")
 	
-	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, top_toolbar)
+	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, sticky_toolbar)
 	
 	if activated:
 		remove_control_from_docks(material_dock)
 		remove_control_from_docks(uv_editor_dock)
-		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, toolbar)
+		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
 
 	material_dock.queue_free()
 	uv_editor_dock.queue_free()
-	toolbar.queue_free()
+	editor_toolbar.queue_free()
 
 func _handles(object:Object):
 	return object is CyclopsBlocks or object is CyclopsConvexBlock
