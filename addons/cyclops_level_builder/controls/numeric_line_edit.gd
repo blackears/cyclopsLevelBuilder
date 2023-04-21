@@ -22,7 +22,7 @@
 # SOFTWARE.
 
 @tool
-extends LineEdit
+extends PanelContainer
 class_name NumbericLineEdit
 
 signal value_changed(value)
@@ -34,18 +34,81 @@ signal value_changed(value)
 		if value == v:
 			return
 		value = v
-		text = "%s" % value
+		dirty = true
 
-@export var step_size:float = 1
+@export var snap_size:float = 1
+var dirty:bool = true
+
+enum State{ IDLE, READY, DRAGGING, TEXT_EDIT }
+var state:State = State.IDLE
+
+var mouse_down_pos:Vector2
+var drag_start_radius:float = 4
+var value_start_drag:float
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 #	text = "%.4f" % value
-	text = "%s" % value
+#	$HBoxContainer/LineEdit.text = "%s" % value
+#	$HBoxContainer/Label.text = "%s" % value
+	$HBoxContainer/LineEdit.visible = false
+	pass
 
-func _on_text_submitted(new_text):
-	#print("text changed2 %s" % new_text)
+func  _process(delta):
+	if dirty:
+		$HBoxContainer/LineEdit.text = format_number(value)
+		$HBoxContainer/Label.text = format_number(value)
+		dirty = false
 	
+func format_number(val:float)->String:
+	var text:String = "%.5f" % val
+	var idx:int = text.findn(".")
+	if idx != -1:
+		text = text.rstrip("0")
+		if text.right(1) == ".":
+			text = text.left(-1)
+	return text
+	
+
+func _gui_input(event):
+	if event is InputEventMouseButton:
+		var e:InputEventMouseButton = event
+		if e.is_pressed():
+			if state == State.IDLE:
+				mouse_down_pos = e.position
+				state = State.READY
+		else:
+			if state == State.READY:
+				$HBoxContainer/LineEdit.visible = true
+				$HBoxContainer/Label.visible = false
+				state = State.TEXT_EDIT
+			elif state == State.DRAGGING:
+				state = State.IDLE
+				
+				
+		accept_event()
+			
+	elif event is InputEventMouseMotion:
+		var e:InputEventMouseMotion = event
+		if state == State.READY:
+			if e.position.distance_to(mouse_down_pos) >= drag_start_radius:
+				state = State.DRAGGING
+				value_start_drag = value
+				
+		elif state == State.DRAGGING:
+			var offset = e.position.x - mouse_down_pos.x
+			var new_value = value_start_drag + (offset * snap_size / 20.0)
+			#print("-new_value %s" % new_value)
+			new_value = ceil(new_value / snap_size) * snap_size
+			
+			#print("new_value %s" % new_value)
+			
+			if value != new_value:
+				value = new_value
+				value_changed.emit(value)
+				dirty = true
+
+func _on_line_edit_text_submitted(new_text):
 	var regex = RegEx.new()
 	regex.compile("^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$")
 	var result:RegExMatch = regex.search(new_text)
@@ -53,10 +116,10 @@ func _on_text_submitted(new_text):
 #		print("found match")
 		value = float(new_text)
 		value_changed.emit(value)
-
-	#var v:float = round(value * 1000) / 1000
-
-#	text = "%.4f" % v
-	#text = "%s" % v
-	text = "%s" % value
-	print("text changed2 %s" % text)
+		
+	dirty = true
+	state = State.IDLE
+	$HBoxContainer/LineEdit.visible = false
+	$HBoxContainer/Label.visible = true
+#	text = "%s" % value
+#	print("text changed2 %s" % text)
