@@ -30,6 +30,8 @@ var material_thumbnail_dirty:bool = true
 var target_material:Material
 var empty_material:Material
 
+var uv_transform:Transform2D = Transform2D.IDENTITY
+
 var builder:CyclopsLevelBuilder:
 	get:
 		return builder
@@ -74,6 +76,7 @@ func _process(delta):
 		material_thumbnail_dirty = false
 
 		$UvPreview.target_material = target_material
+		$UvPreview.uv_transform = uv_transform
 
 		var tex:ImageTexture = await $UvPreview.take_snapshot()
 		$VBoxContainer/Preview.texture = tex	
@@ -101,6 +104,8 @@ func on_selection_changed():
 				if f.material_id != -1:
 					var mat:Material = block.materials[f.material_id]
 					target_material = mat
+				
+				uv_transform = f.uv_transform
 					
 		
 
@@ -122,6 +127,8 @@ func apply_uv_transform():
 		Vector2(spin_scale_x.value, spin_scale_y.value), \
 		deg_to_rad(spin_skew.value), \
 		Vector2(spin_offset_x.value, spin_offset_y.value))
+		
+	uv_transform = xform
 		
 	var cmd:CommandSetUvTransform = CommandSetUvTransform.new()
 	cmd.builder = builder

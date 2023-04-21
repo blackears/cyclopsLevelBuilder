@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://byxlb60xaypdx"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/uv_editor/uv_editor_preview_studio.gd" id="1_38c8p"]
+[ext_resource type="Material" uid="uid://b4173ircb7rqb" path="res://materials/cinder_blocks_mat.tres" id="1_56xyy"]
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_aidts"]
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_38c8p")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+projection = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = ExtResource("1_56xyy")
+mesh = SubResource("ImmediateMesh_aidts")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0684279)

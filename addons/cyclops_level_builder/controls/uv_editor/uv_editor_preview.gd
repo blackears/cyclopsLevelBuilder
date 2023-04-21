@@ -32,7 +32,31 @@ class_name UvEditorPreview
 		return target_material
 	set(value):
 		target_material = value
-		$Node3D/MeshInstance3D.material_override = target_material
+		#$Node3D/MeshInstance3D.material_override = target_material
+		#dirty = true
+#		var studio:UvEditorPreviewStudio = get_node("UvPreviewStudio")
+#		studio.target_material = target_material
+#		if $UvPreviewStudio:
+#			$UvPreviewStudio.target_material = target_material
+		dirty = true
+
+@export var uv_transform:Transform2D = Transform2D.IDENTITY:
+	get:
+		return uv_transform
+	set(value):
+		if value == uv_transform:
+			return 
+		uv_transform = value
+#		dirty = true
+#		$UvPreviewStudio.uv_transform = uv_transform
+#		var studio:UvEditorPreviewStudio = get_node("UvPreviewStudio")
+#		studio.uv_transform = uv_transform
+#		if $UvPreviewStudio:
+#			$UvPreviewStudio.uv_transform = uv_transform
+		dirty = true
+
+var dirty:bool = true
+#var points:PackedVector3Array = [Vector3(0, 0, 0), Vector3(1, 1, 0), Vector3(1, 0, 0), Vector3(0, 1, 0)]
 
 func take_snapshot()->ImageTexture:
 	#print ("pre-grabbing image %s" % target_material.resource_path)
@@ -46,7 +70,27 @@ func take_snapshot()->ImageTexture:
 func _ready():
 	pass # Replace with function body.
 
+func _process(delta):
+	if dirty:
+		$UvPreviewStudio.target_material = target_material
+		$UvPreviewStudio.uv_transform = uv_transform
+		dirty = false
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+#func _process(delta):
+#	if dirty:
+#		var mesh:ImmediateMesh = ImmediateMesh.new()
+#
+#		mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, target_material)
+#
+#		mesh.surface_set_normal(Vector3(0, 0, 1))
+#		for p in points:		
+#			mesh.surface_set_uv(uv_transform * Vector2(p.x, p.y))
+#			mesh.surface_add_vertex(p)
+#
+#		mesh.surface_end()
+#
+#		print("Building preview mesh")
+#		$Node3D/MeshInstance3D.mesh = mesh
+#		dirty = false
