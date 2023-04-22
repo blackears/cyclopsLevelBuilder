@@ -32,7 +32,7 @@ const AUTOLOAD_NAME = "CyclopsAutoload"
 
 var material_dock:Control
 var uv_editor_dock:Control
-var sticky_toolbar:StickyToolbar
+#var sticky_toolbar:StickyToolbar
 var editor_toolbar:EditorToolbar
 var activated:bool = false
 
@@ -70,7 +70,6 @@ func _enter_tree():
 	add_custom_type("CyclopsBlocks", "Node3D", preload("nodes/cyclops_blocks.gd"), preload("nodes/cyclops_blocks_icon.png"))
 	add_custom_type("CyclopsConvexBlock", "Node", preload("nodes/cyclops_convex_block.gd"), preload("nodes/cyclops_blocks_icon.png"))
 	add_custom_type("CyclopsConvexBlockBody", "Node", preload("nodes/cyclops_convex_block_body.gd"), preload("nodes/cyclops_blocks_icon.png"))
-	#add_custom_type("GeometryBrush", "Node3D", preload("controls/geometry_brush.tscn"), preload("controls/geometryBrushIcon.png"))
 
 	add_autoload_singleton(AUTOLOAD_NAME, "res://addons/cyclops_level_builder/cyclops_global_scene.tscn")
 	
@@ -83,9 +82,9 @@ func _enter_tree():
 	editor_toolbar = preload("menu/editor_toolbar.tscn").instantiate()
 	editor_toolbar.editor_plugin = self
 
-	sticky_toolbar = preload("menu/sticky_toolbar.tscn").instantiate()
-	sticky_toolbar.plugin = self
-	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, sticky_toolbar)
+#	sticky_toolbar = preload("menu/sticky_toolbar.tscn").instantiate()
+#	sticky_toolbar.plugin = self
+#	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, sticky_toolbar)
 	
 	var editor:EditorInterface = get_editor_interface()
 	var selection:EditorSelection = editor.get_selection()
@@ -144,7 +143,7 @@ func _exit_tree():
 	remove_custom_type("CyclopsBlock")
 	remove_custom_type("CyclopsBlockBody")
 	
-	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, sticky_toolbar)
+#	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, sticky_toolbar)
 	
 	if activated:
 		remove_control_from_docks(material_dock)

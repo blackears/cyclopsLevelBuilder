@@ -69,11 +69,6 @@ func _process(delta):
 func _on_grid_size_item_selected(index):
 #	if Engine.is_editor_hint():
 	print("_on_grid_size_item_selected " + str(index))
-
-#	var iface:EditorInterface = editor_plugin.get_editor_interface()
-#	var settings:EditorSettings = iface.get_editor_settings()
-	
-#	settings.set_setting("editors/3d/grid_size", index)
 	
 	if editor_plugin.active_node:
 		editor_plugin.active_node.grid_size = index - 4
@@ -105,3 +100,17 @@ func _on_check_lock_uvs_toggled(button_pressed):
 
 func _on_bn_prism_pressed():
 	editor_plugin.switch_to_tool(ToolPrism.new())
+
+
+func _on_bn_duplicate_pressed():
+	editor_plugin.switch_to_tool(ToolDuplicate.new())
+
+
+func _on_bn_delete_pressed():
+	var blocks_root:CyclopsBlocks = editor_plugin.active_node
+	var cmd:CommandDeleteBlocks = CommandDeleteBlocks.new()
+	cmd.blocks_root_path = blocks_root.get_path()
+	cmd.builder = editor_plugin
+	if cmd.will_change_anything():
+		var undo:EditorUndoRedoManager = editor_plugin.get_undo_redo()
+		cmd.add_to_undo_manager(undo)

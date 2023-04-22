@@ -1,12 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://c3cl77r65dexu"]
+[gd_scene load_steps=5 format=3 uid="uid://c3cl77r65dexu"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/menu/editor_toolbar.gd" id="1_o71fd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o7kxq"]
+
+[sub_resource type="Theme" id="Theme_0hxey"]
+PanelContainer/styles/panel = SubResource("StyleBoxEmpty_o7kxq")
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_i8xwa"]
 
 [node name="PanelContainer" type="PanelContainer"]
-offset_right = 42.0
+offset_right = 739.0
 offset_bottom = 31.0
+theme = SubResource("Theme_0hxey")
 script = ExtResource("1_o71fd")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -14,7 +20,15 @@ layout_mode = 2
 
 [node name="bn_block" type="Button" parent="HBoxContainer"]
 layout_mode = 2
-tooltip_text = "Move"
+tooltip_text = "Click and drag in empty space or on unselected block to create a new block.
+
+Click and drag on a selected block to move it in the XZ plane.  Hold Alt to drag along the Y axis.
+
+Ctrl-click and drag on the face of a block to move the face along its normal.
+
+Click on block to select it.  Shift-Click toggles, Ctrl-Click adds and Shift-Ctrl Click subtracts.
+
+Click in empty space to clear selection."
 toggle_mode = true
 button_pressed = true
 button_group = SubResource("ButtonGroup_i8xwa")
@@ -22,31 +36,55 @@ text = "Block"
 
 [node name="bn_prism" type="Button" parent="HBoxContainer"]
 layout_mode = 2
-tooltip_text = "Draw"
+tooltip_text = "Click on surface of block or in empty space to begin creating base of prism.
+
+Click to add new point.  Backspace to remove the last point you added.
+
+Press Enter to extrude base.
+
+Press Enter again to finish extruding and create block."
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Prism"
 
 [node name="bn_clip" type="Button" parent="HBoxContainer"]
 layout_mode = 2
+tooltip_text = "Click on surface of block to place first cutting point.
+
+Click again to place second cutting point.  This will define the plane block will be cut along.
+
+If you press Enter at this point, the block will be cut.  The cutting plane will be defined by the cutting line you've drawn and the normal of the plane it is on.
+
+You can optionally place a third cutting point.  If you do, the three placed points will define the cutting plane when you press Enter.
+
+Press Backspace to delete the last cutting point you placed."
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Clip"
 
 [node name="bn_vertex" type="Button" parent="HBoxContainer"]
 layout_mode = 2
+tooltip_text = "Click on a vertex to select it.  Shift Click to toggle selecton, Ctrl Click to add to selection, Shift-Ctrl click to subtract from selection.
+
+Click and drag to move vertex in XZ plane.  Hold Alt to drag along Y axis.  Click and drag on a selected vertex to move all selected vertices."
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Vertex"
 
 [node name="bn_edge" type="Button" parent="HBoxContainer"]
 layout_mode = 2
+tooltip_text = "Click on an edge to select it.  Shift Click to toggle selecton, Ctrl Click to add to selection, Shift-Ctrl click to subtract from selection.
+
+Click and drag to move edge in XZ plane.  Hold Alt to drag along Y axis.  Click and drag on a selected edge to move all selected edges."
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Edge"
 
 [node name="bn_face" type="Button" parent="HBoxContainer"]
 layout_mode = 2
+tooltip_text = "Click on a face to select it.  Shift Click to toggle selecton, Ctrl Click to add to selection, Shift-Ctrl click to subtract from selection.
+
+Click and drag to move face in XZ plane.  Hold Alt to drag along Y axis.  Click and drag on a selected face to move all selected faces."
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Face"
@@ -69,10 +107,22 @@ text = "Flip Z"
 
 [node name="bn_duplicate" type="Button" parent="HBoxContainer"]
 layout_mode = 2
+tooltip_text = "Duplicate selected blocks.  Click to place the duplicates.
+
+This command can also be started by pressing Shfit-D."
 text = "Duplicate"
+
+[node name="bn_delete" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Delete selected blocks.
+
+Can also be done by pressing X key."
+text = "Delete
+"
 
 [node name="grid_size" type="OptionButton" parent="HBoxContainer"]
 layout_mode = 2
+tooltip_text = "Grid snapping size"
 item_count = 9
 selected = 0
 popup/item_0/text = "1/16"
@@ -95,6 +145,7 @@ popup/item_8/text = "16"
 popup/item_8/id = 8
 
 [node name="MenuButton" type="MenuButton" parent="HBoxContainer"]
+visible = false
 layout_mode = 2
 text = "Edit"
 item_count = 1
@@ -108,4 +159,6 @@ popup/item_0/id = 0
 [connection signal="pressed" from="HBoxContainer/bn_edge" to="." method="_on_bn_edge_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_face" to="." method="_on_bn_face_pressed"]
 [connection signal="toggled" from="HBoxContainer/check_lock_uvs" to="." method="_on_check_lock_uvs_toggled"]
+[connection signal="pressed" from="HBoxContainer/bn_duplicate" to="." method="_on_bn_duplicate_pressed"]
+[connection signal="pressed" from="HBoxContainer/bn_delete" to="." method="_on_bn_delete_pressed"]
 [connection signal="item_selected" from="HBoxContainer/grid_size" to="." method="_on_grid_size_item_selected"]

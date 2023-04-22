@@ -35,6 +35,7 @@ var lock_uvs:bool
 class BlockInfo extends RefCounted:
 	var new_block:CyclopsConvexBlock
 	var source_data:ConvexBlockData
+	#var materials:Array[Material]
 	
 	func _init(new_block:CyclopsConvexBlock, source_data:ConvexBlockData):
 		self.new_block = new_block
@@ -42,7 +43,8 @@ class BlockInfo extends RefCounted:
 
 var added_blocks:Array[BlockInfo]
 
-	
+func will_change_anything():
+	return !added_blocks.is_empty()
 
 func do_it():
 	if added_blocks.is_empty():
@@ -58,6 +60,7 @@ func do_it():
 			new_block.owner = builder.get_editor_interface().get_edited_scene_root()
 			
 			var info:BlockInfo = BlockInfo.new(new_block, source_block.block_data)
+			new_block.materials = source_block.materials
 			
 			added_blocks.append(info)
 

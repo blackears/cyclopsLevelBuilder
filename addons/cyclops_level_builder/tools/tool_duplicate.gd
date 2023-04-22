@@ -54,10 +54,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 			if !e.is_pressed():
 				if tool_state == ToolState.DRAGGING:
-					print("committing duplicate")
+					#print("committing duplicate")
 					var undo:EditorUndoRedoManager = builder.get_undo_redo()
 
-					cmd_duplicate.add_to_undo_manager(undo)
+					if cmd_duplicate.will_change_anything():
+						cmd_duplicate.add_to_undo_manager(undo)
 					
 					tool_state = ToolState.DONE
 					builder.switch_to_tool(ToolBlock.new())
