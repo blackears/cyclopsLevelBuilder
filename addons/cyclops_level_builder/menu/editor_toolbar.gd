@@ -65,7 +65,8 @@ func _ready():
 		ActionRotateZ180.new(editor_plugin),\
 		ActionMirrorSelectionX2.new(editor_plugin),\
 		ActionMirrorSelectionY2.new(editor_plugin),\
-		ActionMirrorSelectionZ.new(editor_plugin)])
+		ActionMirrorSelectionZ.new(editor_plugin),\
+		ActionSnapToGrid.new(editor_plugin)])
 	
 	update_grid()
 
