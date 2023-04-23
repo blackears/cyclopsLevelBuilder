@@ -27,8 +27,8 @@ extends CyclopsAction
 
 var scale:Vector3 = Vector3.ONE
 
-func _init(plugin:CyclopsLevelBuilder):
-	super._init(plugin)
+func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
+	super._init(plugin, name, accellerator)
 
 func _execute():
 	var blocks:Array[CyclopsConvexBlock] = plugin.get_selected_blocks()

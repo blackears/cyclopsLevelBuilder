@@ -53,6 +53,20 @@ func _ready():
 	$HBoxContainer/grid_size.add_item("8", 7)
 	$HBoxContainer/grid_size.add_item("16", 8)
 	
+	populate_menu($HBoxContainer/MenuButton.get_popup(), [\
+		ActionRotateX90Ccw.new(editor_plugin),\
+		ActionRotateX90Cw.new(editor_plugin),\
+		ActionRotateX180.new(editor_plugin),\
+		ActionRotateY90Ccw.new(editor_plugin),\
+		ActionRotateY90Cw.new(editor_plugin),\
+		ActionRotateY180.new(editor_plugin),\
+		ActionRotateZ90Ccw.new(editor_plugin),\
+		ActionRotateZ90Cw.new(editor_plugin),\
+		ActionRotateZ180.new(editor_plugin),\
+		ActionMirrorSelectionX2.new(editor_plugin),\
+		ActionMirrorSelectionY2.new(editor_plugin),\
+		ActionMirrorSelectionZ.new(editor_plugin)])
+	
 	update_grid()
 
 func update_grid():
@@ -117,7 +131,7 @@ func _on_bn_delete_pressed():
 
 
 func _on_bn_flip_x_pressed():
-	var action:ActionMirrorSelectionX = ActionMirrorSelectionX.new(editor_plugin)
+	var action:ActionMirrorSelectionX2 = ActionMirrorSelectionX2.new(editor_plugin)
 	action._execute()
 
 func _on_bn_flip_y_pressed():
@@ -128,3 +142,21 @@ func _on_bn_flip_y_pressed():
 func _on_bn_flip_z_pressed():
 	var action:ActionMirrorSelectionZ = ActionMirrorSelectionZ.new(editor_plugin)
 	action._execute()
+
+
+
+var action_map:Array[CyclopsAction]
+
+func populate_menu(menu:PopupMenu, actions:Array[CyclopsAction]):
+	
+	menu.clear()
+	action_map.clear()
+	
+	menu.id_pressed.connect(menu_item_called)
+	for action in actions:
+		menu.add_item(action.name, action_map.size(), action.accellerator)
+		action_map.append(action)
+	
+	
+func menu_item_called(id:int):
+	action_map[id]._execute()

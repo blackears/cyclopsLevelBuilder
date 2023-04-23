@@ -26,5 +26,5 @@ class_name ActionMirrorSelectionY2
 extends ActionScaleSelection
 
 func _init(plugin:CyclopsLevelBuilder):
-	super._init(plugin)
+	super._init(plugin, "Mirror Selection Y")
 	scale = Vector3(1, -1, 1)

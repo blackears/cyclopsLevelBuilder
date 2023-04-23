@@ -22,33 +22,34 @@
 # SOFTWARE.
 
 @tool
-class_name CyclopsAction
-extends RefCounted
+class_name ActionRotateSelection
+extends CyclopsAction
 
-var plugin:CyclopsLevelBuilder
-
-var name:String = ""
-var accellerator:Key = KEY_NONE
+var rotation_axis:Vector3 = Vector3.ONE
+var rotation_angle:float
 
 func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	self.plugin = plugin
-	self.name= name
-	self.accellerator = accellerator
+	super._init(plugin, name, accellerator)
 
 func _execute():
-	pass
+	var blocks:Array[CyclopsConvexBlock] = plugin.get_selected_blocks()
+	if blocks.is_empty():
+		return
+		
+	var pivot:Vector3 = calc_pivot_of_blocks(blocks)
 	
-func calc_pivot_of_blocks(blocks:Array[CyclopsConvexBlock])->Vector3:
-	var blocks_root:CyclopsBlocks = plugin.active_node
-	var grid_step_size:float = pow(2, blocks_root.grid_size)
+	var cmd:CommandTransformBlocks = CommandTransformBlocks.new()
+	cmd.builder = plugin
 	
-	var bounds:AABB = blocks[0].control_mesh.bounds
-	for idx in range(1, blocks.size()):
-		var block:CyclopsConvexBlock = blocks[idx]
-		bounds = bounds.merge(block.control_mesh.bounds)
+	for block in blocks:
+		cmd.add_block(block.get_path())
+		
+	var xform:Transform3D = Transform3D.IDENTITY
+	xform = xform.translated_local(pivot)
+	xform = xform.rotated_local(rotation_axis, rotation_angle)
+	xform = xform.translated_local(-pivot)
+	cmd.transform = xform
+	#print("cform %s" % xform)
 	
-	var center:Vector3 = bounds.get_center()
-	var pivot:Vector3 = MathUtil.snap_to_grid(center, grid_step_size)
-	
-	return pivot
-	
+	var undo:EditorUndoRedoManager = plugin.get_undo_redo()
+	cmd.add_to_undo_manager(undo)

@@ -89,22 +89,6 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Face"
 
-[node name="check_lock_uvs" type="CheckBox" parent="HBoxContainer"]
-layout_mode = 2
-text = "Lock UVs"
-
-[node name="bn_flipX" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-text = "Flip X"
-
-[node name="bn_flipY" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-text = "Flip Y"
-
-[node name="bn_flipZ" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-text = "Flip Z"
-
 [node name="bn_duplicate" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 tooltip_text = "Duplicate selected blocks.  Click to place the duplicates.
@@ -119,6 +103,39 @@ tooltip_text = "Delete selected blocks.
 Can also be done by pressing X key."
 text = "Delete
 "
+
+[node name="MenuButton" type="MenuButton" parent="HBoxContainer"]
+layout_mode = 2
+text = "Edit"
+item_count = 12
+popup/item_0/text = "Rotate 90 Ccw X"
+popup/item_0/id = 0
+popup/item_1/text = "Rotate 90 Cw X"
+popup/item_1/id = 1
+popup/item_2/text = "Rotate 180 X"
+popup/item_2/id = 2
+popup/item_3/text = "Rotate 90 Ccw Y"
+popup/item_3/id = 3
+popup/item_4/text = "Rotate 90 Cw Y"
+popup/item_4/id = 4
+popup/item_5/text = "Rotate 180 Y"
+popup/item_5/id = 5
+popup/item_6/text = "Rotate 90 Ccw Z"
+popup/item_6/id = 6
+popup/item_7/text = "Rotate 90 Cw Z"
+popup/item_7/id = 7
+popup/item_8/text = "Rotate 180 Z"
+popup/item_8/id = 8
+popup/item_9/text = "Mirror Selection X"
+popup/item_9/id = 9
+popup/item_10/text = "Mirror Selection Y"
+popup/item_10/id = 10
+popup/item_11/text = "Mirror Selection Z"
+popup/item_11/id = 11
+
+[node name="check_lock_uvs" type="CheckBox" parent="HBoxContainer"]
+layout_mode = 2
+text = "Lock UVs"
 
 [node name="grid_size" type="OptionButton" parent="HBoxContainer"]
 layout_mode = 2
@@ -144,24 +161,13 @@ popup/item_7/id = 7
 popup/item_8/text = "16"
 popup/item_8/id = 8
 
-[node name="MenuButton" type="MenuButton" parent="HBoxContainer"]
-visible = false
-layout_mode = 2
-text = "Edit"
-item_count = 1
-popup/item_0/text = "Item"
-popup/item_0/id = 0
-
 [connection signal="pressed" from="HBoxContainer/bn_block" to="." method="_on_bn_move_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_prism" to="." method="_on_bn_prism_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_clip" to="." method="_on_bn_clip_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_vertex" to="." method="_on_bn_vertex_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_edge" to="." method="_on_bn_edge_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_face" to="." method="_on_bn_face_pressed"]
-[connection signal="toggled" from="HBoxContainer/check_lock_uvs" to="." method="_on_check_lock_uvs_toggled"]
-[connection signal="pressed" from="HBoxContainer/bn_flipX" to="." method="_on_bn_flip_x_pressed"]
-[connection signal="pressed" from="HBoxContainer/bn_flipY" to="." method="_on_bn_flip_y_pressed"]
-[connection signal="pressed" from="HBoxContainer/bn_flipZ" to="." method="_on_bn_flip_z_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_duplicate" to="." method="_on_bn_duplicate_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_delete" to="." method="_on_bn_delete_pressed"]
+[connection signal="toggled" from="HBoxContainer/check_lock_uvs" to="." method="_on_check_lock_uvs_toggled"]
 [connection signal="item_selected" from="HBoxContainer/grid_size" to="." method="_on_grid_size_item_selected"]
