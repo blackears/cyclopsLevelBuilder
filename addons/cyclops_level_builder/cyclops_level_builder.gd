@@ -60,6 +60,18 @@ var active_node:CyclopsBlocks:
 			active_node = value
 			active_node_changed.emit()
 
+func get_selected_blocks()->Array[CyclopsConvexBlock]:
+	var result:Array[CyclopsConvexBlock]
+	
+	if active_node:
+		for child in active_node.get_children():
+			if child is CyclopsConvexBlock:
+				var block:CyclopsConvexBlock = child
+				if child.selected:
+					result.append(child)
+	
+	return result
+
 func _get_plugin_name()->String:
 	return "CyclopsLevelBuilder"
 

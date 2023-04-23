@@ -443,5 +443,14 @@ static func get_loops_from_segments_2d(segments:PackedVector2Array)->Array[Packe
 	
 #	print("result %s" % str(result))
 	return loops
+
+static func create_transform(translation:Vector3, rotation_axis:Vector3, rotation_angle:float, scale:Vector3, pivot:Vector3)->Transform3D:
+	var xform:Transform3D = Transform3D.IDENTITY
 	
+	xform = xform.translated_local(pivot + translation)
+	xform = xform.rotated_local(rotation_axis, rotation_angle)
+	xform = xform.scaled_local(scale)
+	xform = xform.translated_local(-pivot)
+	
+	return xform
 	

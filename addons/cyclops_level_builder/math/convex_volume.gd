@@ -105,7 +105,7 @@ class FaceInfo extends RefCounted:
 		return center
 	
 	func get_triangulation()->Array[int]:		
-		if triangulation_indices .is_empty():
+		if triangulation_indices.is_empty():
 			var points:PackedVector3Array
 			var indices:Array[int]
 			for v_idx in vertex_indices:
@@ -131,7 +131,11 @@ class FaceInfo extends RefCounted:
 #		print("triangules %s" % result)
 			
 		return result
-			
+	
+	func reverse():
+		normal = -normal
+		vertex_indices.reverse()
+		triangulation_indices.clear()
 
 var vertices:Array[VertexInfo] = []
 var edges:Array[EdgeInfo] = []
@@ -466,13 +470,19 @@ func translate_face_plane(face_id:int, offset:Vector3, lock_uvs:bool = false)->C
 	new_vol.copy_face_attributes(self)
 	
 	return new_vol
-		
+
 func translate(offset:Vector3, lock_uvs:bool = false):
-	var xform:Transform3D = Transform3D(Basis.IDENTITY, offset)
+	transform(Transform3D(Basis.IDENTITY, offset), lock_uvs)
 	
+
+func transform(xform:Transform3D, lock_uvs:bool = false):
 	for v in vertices:
 		v.point = xform * v.point
 	
+	if xform.basis.determinant() < 0:
+		for f in faces:
+			f.reverse()
+
 
 func unused_face_id()->int:
 	var idx = 0

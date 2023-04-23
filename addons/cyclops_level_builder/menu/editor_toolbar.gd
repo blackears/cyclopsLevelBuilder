@@ -114,3 +114,17 @@ func _on_bn_delete_pressed():
 	if cmd.will_change_anything():
 		var undo:EditorUndoRedoManager = editor_plugin.get_undo_redo()
 		cmd.add_to_undo_manager(undo)
+
+
+func _on_bn_flip_x_pressed():
+	var action:ActionMirrorSelectionX = ActionMirrorSelectionX.new(editor_plugin)
+	action._execute()
+
+func _on_bn_flip_y_pressed():
+	var action:ActionMirrorSelectionY2 = ActionMirrorSelectionY2.new(editor_plugin)
+	action._execute()
+
+
+func _on_bn_flip_z_pressed():
+	var action:ActionMirrorSelectionZ = ActionMirrorSelectionZ.new(editor_plugin)
+	action._execute()
