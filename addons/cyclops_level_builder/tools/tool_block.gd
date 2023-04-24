@@ -41,7 +41,7 @@ var block_drag_p2_local:Vector3
 
 var drag_floor_normal:Vector3
 
-var min_drag_distance:float = 4
+#var min_drag_distance:float = 4
 
 #Keep a copy of move command here while we are building it
 var cmd_move_blocks:CommandMoveBlocks
@@ -259,7 +259,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				
 		elif tool_state == ToolState.READY:
 			var offset:Vector2 = e.position - event_start.position
-			if offset.length() > min_drag_distance:
+			if offset.length_squared() > MathUtil.square(builder.drag_start_radius):
 				start_block_drag(viewport_camera_start, event_start)
 
 			return true
