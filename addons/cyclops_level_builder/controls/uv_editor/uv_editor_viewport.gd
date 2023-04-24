@@ -134,7 +134,7 @@ func apply_uv_transform():
 	cmd.builder = builder
 	cmd.uv_transform = xform
 	
-	print("setting xform %s " % xform)
+#	print("setting xform %s " % xform)
 	
 	if builder.active_node:
 		for child in builder.active_node.get_children():

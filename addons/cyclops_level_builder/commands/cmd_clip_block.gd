@@ -84,6 +84,7 @@ func do_it():
 	blocks_root.add_child(block_sibling)
 	block_sibling.owner = builder.get_editor_interface().get_edited_scene_root()
 	block_sibling.name = block_sibling_name
+	block_sibling.selected = block.selected
 	block_sibling_path = block_sibling.get_path()
 
 	block_sibling.block_data = vol1.to_convex_block_data()

@@ -62,6 +62,6 @@ func _process(delta):
 		
 		mesh.surface_end()
 		
-		print("Building preview mesh")
+#		print("Building preview mesh")
 		$MeshInstance3D.mesh = mesh
 		dirty = false
