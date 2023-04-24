@@ -72,7 +72,7 @@ func _ready():
 
 func update_grid():
 	if editor_plugin.active_node:
-		var size:int = editor_plugin.active_node.grid_size
+		var size:int = editor_plugin.get_global_scene().grid_size
 		$HBoxContainer/grid_size.select(size + 4)
 		
 
@@ -83,10 +83,10 @@ func _process(delta):
 
 func _on_grid_size_item_selected(index):
 #	if Engine.is_editor_hint():
-	print("_on_grid_size_item_selected " + str(index))
+	#print("_on_grid_size_item_selected " + str(index))
 	
-	if editor_plugin.active_node:
-		editor_plugin.active_node.grid_size = index - 4
+#	if editor_plugin.active_node:
+	editor_plugin.get_global_scene().grid_size = index - 4
 
 
 func _on_bn_move_pressed():

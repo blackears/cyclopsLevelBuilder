@@ -73,7 +73,7 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 		var w2l = blocks_root.global_transform.inverse()
 		var start_pos_local:Vector3 = w2l * start_pos
 
-		var grid_step_size:float = pow(2, blocks_root.grid_size)
+		var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
 		block_drag_p0_local = MathUtil.snap_to_grid(start_pos_local, grid_step_size)
 		
@@ -115,7 +115,7 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 		#print("start_pos %s" % start_pos)
 		#print("start_pos_local %s" % start_pos_local)
 		
-		var grid_step_size:float = pow(2, blocks_root.grid_size)
+		var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
 		
 		#print("start_pos_local %s" % start_pos_local)
@@ -270,7 +270,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			#print("block_drag_cur %s" % block_drag_cur)
 			
-			var grid_step_size:float = pow(2, blocks_root.grid_size)
+			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
 
 			#print("block_drag_cur snapped %s" % block_drag_cur)
@@ -298,7 +298,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		elif tool_state == ToolState.BLOCK_HEIGHT:
 			block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, block_drag_p1_local, drag_floor_normal)
 			
-			var grid_step_size:float = pow(2, blocks_root.grid_size)
+			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
 
 			return true
@@ -311,7 +311,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #				block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
 				block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, Vector3.UP)
 			
-			var grid_step_size:float = pow(2, blocks_root.grid_size)
+			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
 			
 			cmd_move_blocks.move_offset = block_drag_cur - block_drag_p0_local
@@ -322,7 +322,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		elif tool_state == ToolState.MOVE_FACE:			
 			var drag_to:Vector3 = MathUtil.closest_point_on_line(origin_local, dir_local, move_face_origin, cmd_move_face.move_dir_normal)
 			#print("move_face_origin %s norm %s" % [move_face_origin, cmd_move_face.move_dir_normal])
-			var grid_step_size:float = pow(2, blocks_root.grid_size)
+			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 			drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
 			
 			cmd_move_face.move_amount = (drag_to - move_face_origin).dot(cmd_move_face.move_dir_normal)

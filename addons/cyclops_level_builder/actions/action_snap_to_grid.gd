@@ -43,7 +43,7 @@ func _execute():
 		cmd.add_block(block.get_path())
 		
 	
-	cmd.grid_size = pow(2, plugin.active_node.grid_size)
+	cmd.grid_size = pow(2, plugin.get_global_scene().grid_size)
 	#print("cform %s" % xform)
 	
 	var undo:EditorUndoRedoManager = plugin.get_undo_redo()

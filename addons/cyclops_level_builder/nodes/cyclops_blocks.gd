@@ -27,10 +27,10 @@ class_name CyclopsBlocks
 
 signal blocks_changed
 
-@export var grid_size:int = 0
-@export var selection_color:Color = Color(1, .5, .5, 1)
-@export var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
-@export var outline_material:Material = preload("res://addons/cyclops_level_builder/materials/outline_material.tres")
+#@export var grid_size:int = 0
+#@export var selection_color:Color = Color(1, .5, .5, 1)
+#@export var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
+#@export var outline_material:Material = preload("res://addons/cyclops_level_builder/materials/outline_material.tres")
 
 #var mesh_instance:MeshInstance3D
 #var mesh_wire_instance:MeshInstance3D

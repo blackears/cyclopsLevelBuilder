@@ -39,8 +39,8 @@ func _execute():
 	pass
 	
 func calc_pivot_of_blocks(blocks:Array[CyclopsConvexBlock])->Vector3:
-	var blocks_root:CyclopsBlocks = plugin.active_node
-	var grid_step_size:float = pow(2, blocks_root.grid_size)
+#	var blocks_root:CyclopsBlocks = plugin.active_node
+	var grid_step_size:float = pow(2, plugin.get_global_scene().grid_size)
 	
 	var bounds:AABB = blocks[0].control_mesh.bounds
 	for idx in range(1, blocks.size()):

@@ -43,6 +43,8 @@ class_name CyclopsGlobalScene
 var tool_mesh:ImmediateMesh
 #var vertex_size:float = .05
 
+@export var grid_size:int = 0
+
 var unit_sphere:GeometryMesh
 var builder:CyclopsLevelBuilder
 

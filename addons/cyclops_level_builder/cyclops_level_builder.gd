@@ -205,4 +205,7 @@ func switch_to_tool(_tool:CyclopsTool):
 
 	if tool:
 		tool._activate(self)
-	
+
+func get_global_scene()->CyclopsGlobalScene:
+	var scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
+	return scene
