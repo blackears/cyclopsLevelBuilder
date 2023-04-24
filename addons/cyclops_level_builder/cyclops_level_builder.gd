@@ -156,8 +156,8 @@ func _exit_tree():
 	remove_autoload_singleton(AUTOLOAD_NAME)
 	
 	remove_custom_type("CyclopsBlocks")
-	remove_custom_type("CyclopsBlock")
-	remove_custom_type("CyclopsBlockBody")
+	remove_custom_type("CyclopsConvexBlock")
+	remove_custom_type("CyclopsConvexBlockBody")
 	
 #	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, sticky_toolbar)
 	

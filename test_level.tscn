@@ -592,7 +592,7 @@ face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
 active_face = -1
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_76r37"]
+[sub_resource type="Resource" id="Resource_7mupr"]
 script = ExtResource("4_qjut0")
 selected = false
 active = false
@@ -1972,7 +1972,7 @@ block_data = SubResource("Resource_35u8a")
 [node name="Block_20" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("3_s3g63")
 materials = Array[Material]([ExtResource("4_b0iic")])
-block_data = SubResource("Resource_76r37")
+block_data = SubResource("Resource_7mupr")
 
 [node name="Block_28" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("3_s3g63")
