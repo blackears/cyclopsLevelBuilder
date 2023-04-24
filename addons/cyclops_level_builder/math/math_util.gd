@@ -313,7 +313,7 @@ static func furthest_point_from_plane(plane:Plane, points:PackedVector3Array)->V
 	var best_distance:float = 0
 	
 	for p in points:
-		var dist = plane.distance_to(p)
+		var dist = abs(plane.distance_to(p))
 		if dist > best_distance:
 			best_point = p
 			best_distance = dist

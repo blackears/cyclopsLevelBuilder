@@ -86,7 +86,7 @@ class Facet extends RefCounted:
 		var best_distance:float = 0
 		
 		for p in over_points:
-			var dist = plane.distance_to(p)
+			var dist = abs(plane.distance_to(p))
 			if dist > best_distance:
 				best_point = p
 				best_distance = dist
@@ -203,18 +203,6 @@ static func merge_coplanar_facets(hull:Hull)->Hull:
 	
 	return new_hull
 	
-#	var facet_map:Dictionary = {}
-#
-#	for f in hull.facets:
-#		for i0 in f.points.size():
-#			var i1:int = wrap(i0 + 1, 0, f.points.size())
-#			var e:DirectedEdge = DirectedEdge.new(f.points[i0], f.points[i1])
-#			facet_map[e] = f
-#
-#		f.get_edges()
-#		hull.get_facet_with_edge()
-	
-			
 
 static func create_initial_simplex(points:PackedVector3Array)->Hull:
 	if points.size() < 4:
