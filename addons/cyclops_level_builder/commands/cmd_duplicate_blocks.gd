@@ -27,7 +27,7 @@ extends CyclopsCommand
 
 #Public
 var blocks_root_path:NodePath
-var blocks_to_move:Array[NodePath]
+var blocks_to_duplicate:Array[NodePath]
 var move_offset:Vector3
 var lock_uvs:bool
 
@@ -49,7 +49,7 @@ func will_change_anything():
 func do_it():
 	if added_blocks.is_empty():
 		#Create new blocks
-		for block_path in blocks_to_move:
+		for block_path in blocks_to_duplicate:
 			var new_block:CyclopsConvexBlock = preload("../nodes/cyclops_convex_block.gd").new()
 			
 			var source_block:CyclopsConvexBlock = builder.get_node(block_path)
@@ -61,8 +61,13 @@ func do_it():
 			
 			var info:BlockInfo = BlockInfo.new(new_block, source_block.block_data)
 			new_block.materials = source_block.materials
+			new_block.selected = true
 			
 			added_blocks.append(info)
+
+	for path in blocks_to_duplicate:
+		var block:CyclopsConvexBlock = builder.get_node(path)
+		block.selected = false
 
 	for info in added_blocks:
 		var vol:ConvexVolume = ConvexVolume.new()
@@ -75,4 +80,8 @@ func undo_it():
 	for block in added_blocks:
 		block.new_block.queue_free()
 	added_blocks = []
+
+	for path in blocks_to_duplicate:
+		var block:CyclopsConvexBlock = builder.get_node(path)
+		block.selected = true
 

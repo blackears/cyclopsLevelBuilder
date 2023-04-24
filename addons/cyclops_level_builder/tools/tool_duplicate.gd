@@ -118,7 +118,7 @@ func _activate(builder:CyclopsLevelBuilder):
 		if child is CyclopsConvexBlock:
 			var block:CyclopsConvexBlock = child
 			if block.selected:
-				cmd_duplicate.blocks_to_move.append(block.get_path())
+				cmd_duplicate.blocks_to_duplicate.append(block.get_path())
 				centroid += block.control_mesh.bounds.get_center()
 				count += 1
 	cmd_duplicate.lock_uvs = builder.lock_uvs
