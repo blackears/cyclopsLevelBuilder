@@ -69,12 +69,21 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	#_draw_tool(viewport_camera)
 
 	if event is InputEventKey:
-		if tool_state == ToolState.BASE_POINTS:
-			drag_offset = Vector3.ZERO
-			tool_state = ToolState.DRAG_HEIGHT
+		var e:InputEventKey = event
+		
+		if e.keycode == KEY_ENTER:
+			if e.is_pressed():
+				if tool_state == ToolState.BASE_POINTS:
+					drag_offset = Vector3.ZERO
+					tool_state = ToolState.DRAG_HEIGHT
+			return true
+			
+		elif e.keycode == KEY_ESCAPE:
+			if e.is_pressed():
+				tool_state = ToolState.READY
 			return true
 	
-	if event is InputEventMouseButton:
+	elif event is InputEventMouseButton:
 		
 		var e:InputEventMouseButton = event
 		if e.button_index == MOUSE_BUTTON_LEFT:
