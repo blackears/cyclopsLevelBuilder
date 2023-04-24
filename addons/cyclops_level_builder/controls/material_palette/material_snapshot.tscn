@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://c33bpxh6ykcoh"]
+[gd_scene load_steps=5 format=3 uid="uid://c33bpxh6ykcoh"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/material_palette/material_snapshot.gd" id="1_c0jsn"]
+[ext_resource type="Material" uid="uid://rdhrhgrb78ls" path="res://addons/cyclops_level_builder/materials/grid.tres" id="2_q7d7x"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_o8jeg"]
 
@@ -20,6 +21,7 @@ projection = 1
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
 mesh = SubResource("QuadMesh_o8jeg")
+surface_material_override/0 = ExtResource("2_q7d7x")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)

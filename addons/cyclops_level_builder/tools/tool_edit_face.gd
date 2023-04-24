@@ -147,7 +147,8 @@ func active_node_updated():
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
 	
-	builder.mode = CyclopsLevelBuilder.Mode.FACE
+	builder.mode = CyclopsLevelBuilder.Mode.EDIT
+	builder.edit_mode = CyclopsLevelBuilder.EditMode.FACE
 	builder.active_node_changed.connect(active_node_changed)
 	
 	tracked_blocks_root = builder.active_node

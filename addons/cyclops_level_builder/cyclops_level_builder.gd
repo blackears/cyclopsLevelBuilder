@@ -48,8 +48,10 @@ var tool_material_path:String
 var handle_point_radius:float = .05
 var handle_screen_radius:float = 4
 
-enum Mode { OBJECT, VERTEX, EDGE, FACE }
+enum Mode { OBJECT, EDIT }
 var mode:Mode = Mode.OBJECT
+enum EditMode { VERTEX, EDGE, FACE }
+var edit_mode:EditMode = EditMode.VERTEX
 
 #var _active_node:GeometryBrush
 var active_node:CyclopsBlocks:
