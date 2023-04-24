@@ -26,6 +26,9 @@ class_name  MathUtil
 
 enum Axis { X, Y, Z }
 
+static func square(value:float)->float:
+	return value * value
+
 static func snap_to_grid(pos:Vector3, cell_size:float)->Vector3:
 #	return floor(pos / cell_size) * cell_size
 	return floor((pos + Vector3(cell_size, cell_size, cell_size) / 2) / cell_size) * cell_size

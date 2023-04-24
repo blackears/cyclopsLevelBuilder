@@ -145,7 +145,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		if e.keycode == KEY_ESCAPE:
 			if e.is_pressed():
 				tool_state = ToolState.NONE
-		return true
+			return true
 		
 	
 	elif event is InputEventMouseButton:

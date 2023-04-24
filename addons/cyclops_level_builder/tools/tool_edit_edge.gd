@@ -238,7 +238,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			return false		
 			
 		if tool_state == ToolState.READY:
-			if e.position.distance_squared_to(drag_mouse_start_pos) < 4 * 4:
+			if e.position.distance_squared_to(drag_mouse_start_pos) > MathUtil.square(builder.drag_start_radius):
 				var handle:HandleEdge = pick_closest_handle(blocks_root, viewport_camera, drag_mouse_start_pos, builder.handle_screen_radius)
 
 				if handle:

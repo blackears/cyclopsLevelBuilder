@@ -48,7 +48,6 @@ func _draw_tool(viewport_camera:Camera3D):
 	global_scene.clear_tool_mesh()
 	global_scene.draw_selected_blocks(viewport_camera)
 
-
 	if tool_state == ToolState.BASE_POINTS:
 		var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
 		global_scene.draw_loop(bounding_points, true, global_scene.tool_material)
