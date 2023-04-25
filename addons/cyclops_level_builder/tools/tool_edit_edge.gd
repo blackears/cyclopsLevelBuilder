@@ -171,6 +171,10 @@ func _deactivate():
 
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
+	var gui_result = super._gui_input(viewport_camera, event)
+	if gui_result:
+		return true
+	
 	var blocks_root:CyclopsBlocks = self.builder.active_node
 	var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 	#var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")

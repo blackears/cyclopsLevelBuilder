@@ -32,6 +32,7 @@ var handles:Array[HandleVertex] = []
 enum ToolState { NONE, READY, DRAGGING }
 var tool_state:ToolState = ToolState.NONE
 
+#var mouse_hover_pos:Vector2
 
 var drag_handle:HandleVertex
 var drag_mouse_start_pos:Vector2
@@ -154,17 +155,46 @@ func _deactivate():
 
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
+	var gui_result = super._gui_input(viewport_camera, event)
+	if gui_result:
+		return true
+	
 	var blocks_root:CyclopsBlocks = self.builder.active_node
 	var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 	#var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 	#_draw_tool(viewport_camera)
 
-	if event is InputEventKey:
-		return true
+#	if event is InputEventKey:
+#		var e:InputEventKey = event
+#
+#		if e.keycode == KEY_Q && e.alt_pressed:
+#			if e.is_pressed():
+#				var origin:Vector3 = viewport_camera.project_ray_origin(mouse_hover_pos)
+#				var dir:Vector3 = viewport_camera.project_ray_normal(mouse_hover_pos)
+#
+#				var result:IntersectResults = blocks_root.intersect_ray_closest(origin, dir)
+#				if result:
+#					var cmd:CommandSelectBlocks = CommandSelectBlocks.new()
+#					cmd.builder = builder
+#					cmd.block_paths.append(result.object.get_path())
+#
+#					if cmd.will_change_anything():
+#						var undo:EditorUndoRedoManager = builder.get_undo_redo()
+#						cmd.add_to_undo_manager(undo)
+#
+#						_deactivate()
+#						_activate(builder)
+#
+#					pass
+#
+#			return true
+#
+#		return true
 
 	if event is InputEventMouseButton:
 		
 		var e:InputEventMouseButton = event
+		#mouse_hover_pos = e.position
 		if e.button_index == MOUSE_BUTTON_LEFT:
 
 			if e.is_pressed():
@@ -215,6 +245,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 	elif event is InputEventMouseMotion:
 		var e:InputEventMouseMotion = event
+		#mouse_hover_pos = e.position
 
 		if (e.button_mask & MOUSE_BUTTON_MASK_MIDDLE):
 			return false		
