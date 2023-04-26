@@ -116,11 +116,36 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 	var best_dist:float = INF
 	var best_handle:HandleFace = null
 	
-	var result:IntersectResults = blocks_root.intersect_ray_closest_selected_only(pick_origin, pick_dir)
-	if result:
+	if builder.display_mode == CyclopsLevelBuilder.DisplayMode.TEXTURED:
+		var result:IntersectResults = blocks_root.intersect_ray_closest_selected_only(pick_origin, pick_dir)
+		if result:
+			for h in handles:
+				if h.block_path == result.object.get_path() && h.face_id == result.face_id:
+					return h
+					
+	elif builder.display_mode == CyclopsLevelBuilder.DisplayMode.WIRE:
 		for h in handles:
-			if h.block_path == result.object.get_path() && h.face_id == result.face_id:
-				return h
+			var h_world_pos:Vector3 = blocks_root.global_transform * h.p_ref
+			var h_screen_pos:Vector2 = viewport_camera.unproject_position(h_world_pos)
+			if position.distance_squared_to(h_screen_pos) > radius * radius:
+				#Failed handle radius test
+				continue
+			
+			var offset:Vector3 = h_world_pos - pick_origin
+			var parallel:Vector3 = offset.project(pick_dir)
+			var dist = parallel.dot(pick_dir)
+			if dist <= 0:
+				#Behind camera
+				continue
+			
+			#print("h pos %s ray orig %s ray dir %s offset %s para %s dist %s perp %s" % [h.position, ray_origin, ray_dir, offset, parallel, dist, perp])
+			if dist >= best_dist:
+				continue
+			
+			best_dist = dist
+			best_handle = h
+		
+		return best_handle
 	
 	return null	
 	
