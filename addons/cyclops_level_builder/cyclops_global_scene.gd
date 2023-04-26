@@ -47,6 +47,9 @@ var tool_mesh:ImmediateMesh
 
 var unit_sphere:GeometryMesh
 var builder:CyclopsLevelBuilder
+#
+#enum DisplayMode { TEXTURED, WIRE }
+#var display_mode:DisplayMode = DisplayMode.TEXTURED
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

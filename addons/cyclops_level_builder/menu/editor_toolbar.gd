@@ -33,6 +33,8 @@ var editor_plugin:CyclopsLevelBuilder:
 		editor_plugin.active_node_changed.connect(on_active_node_changed)
 #var editor_plugin:CyclopsLevelBuilder
 
+var action_map:Array[CyclopsAction]
+
 func on_active_node_changed():
 	update_grid()
 	
@@ -74,6 +76,8 @@ func update_grid():
 	if editor_plugin.active_node:
 		var size:int = editor_plugin.get_global_scene().grid_size
 		$HBoxContainer/grid_size.select(size + 4)
+		
+		$HBoxContainer/display_mode.select(editor_plugin.display_mode)
 		
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -146,8 +150,6 @@ func _on_bn_flip_z_pressed():
 
 
 
-var action_map:Array[CyclopsAction]
-
 func populate_menu(menu:PopupMenu, actions:Array[CyclopsAction]):
 	
 	menu.clear()
@@ -161,3 +163,8 @@ func populate_menu(menu:PopupMenu, actions:Array[CyclopsAction]):
 	
 func menu_item_called(id:int):
 	action_map[id]._execute()
+
+
+
+func _on_display_mode_item_selected(index):
+	editor_plugin.display_mode = index

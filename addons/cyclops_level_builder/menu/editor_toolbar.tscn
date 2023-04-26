@@ -107,7 +107,7 @@ text = "Delete
 [node name="MenuButton" type="MenuButton" parent="HBoxContainer"]
 layout_mode = 2
 text = "Edit"
-item_count = 12
+item_count = 13
 popup/item_0/text = "Rotate 90 Ccw X"
 popup/item_0/id = 0
 popup/item_1/text = "Rotate 90 Cw X"
@@ -132,6 +132,8 @@ popup/item_10/text = "Mirror Selection Y"
 popup/item_10/id = 10
 popup/item_11/text = "Mirror Selection Z"
 popup/item_11/id = 11
+popup/item_12/text = "Snap to grid"
+popup/item_12/id = 12
 
 [node name="check_lock_uvs" type="CheckBox" parent="HBoxContainer"]
 layout_mode = 2
@@ -161,6 +163,15 @@ popup/item_7/id = 7
 popup/item_8/text = "16"
 popup/item_8/id = 8
 
+[node name="display_mode" type="OptionButton" parent="HBoxContainer"]
+layout_mode = 2
+item_count = 2
+selected = 1
+popup/item_0/text = "Wireframe"
+popup/item_0/id = 0
+popup/item_1/text = "Textured"
+popup/item_1/id = 1
+
 [connection signal="pressed" from="HBoxContainer/bn_block" to="." method="_on_bn_move_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_prism" to="." method="_on_bn_prism_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_clip" to="." method="_on_bn_clip_pressed"]
@@ -171,3 +182,4 @@ popup/item_8/id = 8
 [connection signal="pressed" from="HBoxContainer/bn_delete" to="." method="_on_bn_delete_pressed"]
 [connection signal="toggled" from="HBoxContainer/check_lock_uvs" to="." method="_on_check_lock_uvs_toggled"]
 [connection signal="item_selected" from="HBoxContainer/grid_size" to="." method="_on_grid_size_item_selected"]
+[connection signal="item_selected" from="HBoxContainer/display_mode" to="." method="_on_display_mode_item_selected"]

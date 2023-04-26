@@ -143,7 +143,7 @@ static func unit_sphere(segs_lat:int = 6, segs_long:int = 8)->GeometryMesh:
 			
 				mesh.normals.append(v00)
 				mesh.normals.append(v10)
-				mesh.normals.append(v11)
+				mesh.normals.append(v10)
 			
 				mesh.uvs.append(Vector2(lo / segs_long, la / segs_lat))
 				mesh.uvs.append(Vector2((lo + 1) / segs_long, la / segs_lat))
@@ -155,8 +155,8 @@ static func unit_sphere(segs_lat:int = 6, segs_long:int = 8)->GeometryMesh:
 				mesh.coords.append(v11)
 			
 				mesh.normals.append(v00)
-				mesh.normals.append(v11)
 				mesh.normals.append(v01)
+				mesh.normals.append(v11)
 				
 				mesh.uvs.append(Vector2(lo / segs_long, la / segs_lat))
 				mesh.uvs.append(Vector2((lo + 1) / segs_long, (la + 1) / segs_lat))

@@ -758,17 +758,33 @@ func append_mesh_wire(mesh:ImmediateMesh, material:Material):
 #	if Engine.is_editor_hint():
 #		return
 
-	for face in faces:
-		mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, material)
-#		print("face %s" % face.index)
-		
-		for i in face.vertex_indices.size():
-			var v_idx:int = face.vertex_indices[i]
-			mesh.surface_add_vertex(vertices[v_idx].point)
-		var v_idx:int = face.vertex_indices[0]
-		mesh.surface_add_vertex(vertices[v_idx].point)
+	mesh.surface_begin(Mesh.PRIMITIVE_LINES, material)
 
-		mesh.surface_end()	
+	for e in edges:
+		var v0:VertexInfo = vertices[e.start_index]
+		var v1:VertexInfo = vertices[e.end_index]
+
+		mesh.surface_add_vertex(v0.point)
+		mesh.surface_add_vertex(v1.point)
+
+	mesh.surface_end()	
+
+
+#	for face in faces:
+#		mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, material)
+#		#print("face %s" % face.id)
+#
+#		if face.vertex_indices.is_empty():
+#			continue
+#
+#		for i in face.vertex_indices.size():
+#			var v_idx:int = face.vertex_indices[i]
+#			print("add vertex %s" % v_idx)
+#			mesh.surface_add_vertex(vertices[v_idx].point)
+#		var v_idx:int = face.vertex_indices[0]
+#		mesh.surface_add_vertex(vertices[v_idx].point)
+#
+#		mesh.surface_end()	
 
 
 func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
