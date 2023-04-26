@@ -123,12 +123,21 @@ func _input(event):
 	pass
 
 func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
+	return intersect_ray_closest_filtered(origin, dir, func(block:CyclopsConvexBlock): return true)
+	
+func intersect_ray_closest_selected_only(origin:Vector3, dir:Vector3)->IntersectResults:
+	return intersect_ray_closest_filtered(origin, dir, func(block:CyclopsConvexBlock): return block.selected)
+	
+func intersect_ray_closest_filtered(origin:Vector3, dir:Vector3, filter:Callable)->IntersectResults:
 	var best_result:IntersectResults
 		
 	for child in get_children():
 		if child is CyclopsConvexBlock:
 			var result:IntersectResults = child.intersect_ray_closest(origin, dir)
 			if result:
+				if !filter.call(result.object):
+					continue
+				
 				if !best_result or result.distance_squared < best_result.distance_squared:
 					best_result = result			
 		

@@ -116,7 +116,7 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 	var best_dist:float = INF
 	var best_handle:HandleFace = null
 	
-	var result:IntersectResults = blocks_root.intersect_ray_closest(pick_origin, pick_dir)
+	var result:IntersectResults = blocks_root.intersect_ray_closest_selected_only(pick_origin, pick_dir)
 	if result:
 		for h in handles:
 			if h.block_path == result.object.get_path() && h.face_id == result.face_id:
