@@ -40,10 +40,9 @@ var dirty:bool = true
 
 
 @export var materials:Array[Material]
-#var init:bool = false
 
 var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
-var display_mode:CyclopsLevelBuilder.DisplayMode= CyclopsLevelBuilder.DisplayMode.TEXTURED
+var display_mode:DisplayMode.Type = DisplayMode.Type.TEXTURED
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -54,13 +53,10 @@ func _ready():
 	collision_shape = CollisionShape3D.new()
 	collision_body.add_child(collision_shape)
 	
-#	collision_shape = ConvexPolygonShape3D.new()
-#	init = true
 	build_from_block()
 
+
 func build_from_block():
-#	if !init:
-#		return
 		
 	dirty = false
 	
@@ -68,7 +64,8 @@ func build_from_block():
 	collision_shape.shape = null
 
 	if Engine.is_editor_hint():
-		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
+#		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
+		var global_scene = get_node("/root/CyclopsAutoload")
 		display_mode = global_scene.builder.display_mode
 	
 #	print("block_data %s" % block_data)
@@ -86,15 +83,17 @@ func build_from_block():
 	var mesh:ImmediateMesh = ImmediateMesh.new()
 
 	if Engine.is_editor_hint():
-		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
+#		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
+		var global_scene = get_node("/root/CyclopsAutoload")
 		vol.append_mesh_wire(mesh, global_scene.outline_material)
 		#print ("added wireframe")
-		
-		if display_mode == CyclopsLevelBuilder.DisplayMode.TEXTURED:
+
+		if display_mode == DisplayMode.Type.TEXTURED:
 			vol.append_mesh(mesh, materials, default_material)
 			#print ("added faces")
 	else:
 		vol.append_mesh(mesh, materials, default_material)
+#	vol.append_mesh(mesh, materials, default_material)
 	
 	mesh_instance.mesh = mesh
 	
@@ -110,15 +109,10 @@ func _process(delta):
 
 		
 	if Engine.is_editor_hint():
-		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
-		
+#		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
+		var global_scene = get_node("/root/CyclopsAutoload")
+
 		if display_mode != global_scene.builder.display_mode:
 			dirty = true
 			return
 		
-		
-#		global_scene.builder
-#		if global_scene.builder.display_mode == CyclopsLevelBuilder.DisplayMode.TEXTURED:
-#			mesh_instance.visible = true
-#		else:
-#			mesh_instance.visible = false

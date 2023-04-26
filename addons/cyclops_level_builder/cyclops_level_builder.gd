@@ -55,8 +55,7 @@ var mode:Mode = Mode.OBJECT
 enum EditMode { VERTEX, EDGE, FACE }
 var edit_mode:EditMode = EditMode.VERTEX
 
-enum DisplayMode { WIRE, TEXTURED }
-var display_mode:DisplayMode = DisplayMode.TEXTURED
+var display_mode:DisplayMode.Type = DisplayMode.Type.TEXTURED
 
 #var _active_node:GeometryBrush
 var active_node:CyclopsBlocks:

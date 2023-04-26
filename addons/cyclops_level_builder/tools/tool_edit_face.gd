@@ -116,14 +116,14 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 	var best_dist:float = INF
 	var best_handle:HandleFace = null
 	
-	if builder.display_mode == CyclopsLevelBuilder.DisplayMode.TEXTURED:
+	if builder.display_mode == DisplayMode.Type.TEXTURED:
 		var result:IntersectResults = blocks_root.intersect_ray_closest_selected_only(pick_origin, pick_dir)
 		if result:
 			for h in handles:
 				if h.block_path == result.object.get_path() && h.face_id == result.face_id:
 					return h
 					
-	elif builder.display_mode == CyclopsLevelBuilder.DisplayMode.WIRE:
+	elif builder.display_mode == DisplayMode.Type.WIRE:
 		for h in handles:
 			var h_world_pos:Vector3 = blocks_root.global_transform * h.p_ref
 			var h_screen_pos:Vector2 = viewport_camera.unproject_position(h_world_pos)
