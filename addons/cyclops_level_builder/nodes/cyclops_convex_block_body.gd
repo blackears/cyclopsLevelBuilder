@@ -29,7 +29,7 @@ var mesh_instance:MeshInstance3D
 var collision_body:StaticBody3D
 var collision_shape:CollisionShape3D
 
-var block_data:ConvexBlockData:
+@export var block_data:ConvexBlockData:
 	get:
 		return block_data
 	set(value):
@@ -39,6 +39,8 @@ var block_data:ConvexBlockData:
 
 @export var materials:Array[Material]
 var init:bool = false
+
+var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -53,7 +55,6 @@ func _ready():
 	init = true
 	build_from_block()
 
-
 func build_from_block():
 	if !init:
 		return
@@ -61,18 +62,23 @@ func build_from_block():
 	mesh_instance.mesh = null
 	collision_shape.shape = null
 	
+#	print("block_data %s" % block_data)
+#	print("vert points %s" % block_data.vertex_points)
 	if !block_data:
 		return
-		
-	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
+	
+#	print("got block data")		
 	
 	var vol:ConvexVolume = ConvexVolume.new()
 	vol.init_from_convex_block_data(block_data)
 	
+	#print("volume %s" % vol)
+	
 	var mesh:ImmediateMesh = ImmediateMesh.new()
 
-	vol.append_mesh(mesh, materials, global_scene.default_material)
+	vol.append_mesh(mesh, materials, default_material)
 	if Engine.is_editor_hint():
+		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 		vol.append_mesh_wire(mesh, global_scene.outline_material)
 	
 	mesh_instance.mesh = mesh

@@ -49,6 +49,9 @@ var active:bool:
 		active = value
 		mesh_changed.emit()
 
+
+var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
+
 @export var block_data:ConvexBlockData:
 	get:
 		return block_data
@@ -87,10 +90,9 @@ func select_face(face_idx:int, select_type:Selection.Type = Selection.Type.REPLA
 
 func append_mesh(mesh:ImmediateMesh):
 #	print("adding block mesh %s" % name)
-	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
+	#var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 
-	var select_all = CyclopsLevelBuilder.Mode.OBJECT && selected
-	control_mesh.append_mesh(mesh, materials, global_scene.default_material, select_all, global_scene.selection_color)
+	control_mesh.append_mesh(mesh, materials, default_material)
 
 func append_mesh_wire(mesh:ImmediateMesh):
 	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")

@@ -146,6 +146,13 @@ var active_vertex:int = -1
 var active_edge:int = -1
 var active_face:int = -1
 
+func _to_string()->String:
+	var result:String = ""
+	for v in vertices:
+		result += str(v.point) + ", "
+	return result
+	
+
 func init_block(block_bounds:AABB, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = -1):
 	var p000:Vector3 = block_bounds.position
 	var p111:Vector3 = block_bounds.end
@@ -605,7 +612,7 @@ func tristrip_vertex_range_reverse(num_verts:int)->PackedInt32Array:
 	
 	return result
 	
-func append_mesh(mesh:ImmediateMesh, material_list:Array[Material], default_material:Material, select_all:bool = false, selection_color:Color = Color.RED):
+func append_mesh(mesh:ImmediateMesh, material_list:Array[Material], default_material:Material):
 #	if Engine.is_editor_hint():
 #		return
 #	print("num faces %s" % faces.size())

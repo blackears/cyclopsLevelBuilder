@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dpoaquoridpp6"
 path.bptc="res://.godot/imported/grid_cell.png-608181fcff7b2e489ee715ed212734c5.bptc.ctex"
+path.astc="res://.godot/imported/grid_cell.png-608181fcff7b2e489ee715ed212734c5.astc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://addons/cyclops_level_builder/art/textures/grid_cell.png"
-dest_files=["res://.godot/imported/grid_cell.png-608181fcff7b2e489ee715ed212734c5.bptc.ctex"]
+dest_files=["res://.godot/imported/grid_cell.png-608181fcff7b2e489ee715ed212734c5.bptc.ctex", "res://.godot/imported/grid_cell.png-608181fcff7b2e489ee715ed212734c5.astc.ctex"]
 
 [params]
 
