@@ -40,6 +40,12 @@ var tracked_blocks_root:CyclopsBlocks
 
 var cmd_move_edge:CommandMoveEdges
 
+
+class PickHandleResult extends RefCounted:
+	var handle:HandleEdge
+	var position:Vector3
+	
+	
 func _get_tool_id()->String:
 	return TOOL_ID
 
@@ -85,10 +91,11 @@ func setup_tool():
 					
 					#print("adding handle %s" % handle)
 
-
-func pick_closest_handle(blocks_root:CyclopsBlocks, viewport_camera:Camera3D, position:Vector2, radius:float)->HandleEdge:
+	
+func pick_closest_handle(blocks_root:CyclopsBlocks, viewport_camera:Camera3D, position:Vector2, radius:float)->PickHandleResult:
 	var best_dist:float = INF
 	var best_handle:HandleEdge = null
+	var best_pick_position:Vector3
 	
 	var pick_origin:Vector3 = viewport_camera.project_ray_origin(position)
 	var pick_dir:Vector3 = viewport_camera.project_ray_normal(position)
@@ -125,10 +132,14 @@ func pick_closest_handle(blocks_root:CyclopsBlocks, viewport_camera:Camera3D, po
 		if dist >= best_dist:
 			continue
 		
+		best_pick_position = point_on_seg
 		best_dist = dist
 		best_handle = h
-
-	return best_handle
+	
+	var result:PickHandleResult = PickHandleResult.new()
+	result.handle = best_handle
+	result.position = best_pick_position
+	return result
 
 func active_node_changed():
 	if tracked_blocks_root != null:
@@ -199,7 +210,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #				print("bn up: state %s" % tool_state)
 				if tool_state == ToolState.READY:
 					#print("cmd select")
-					var handle:HandleEdge = pick_closest_handle(blocks_root, viewport_camera, e.position, builder.handle_screen_radius)
+					var res:PickHandleResult = pick_closest_handle(blocks_root, viewport_camera, e.position, builder.handle_screen_radius)
+					var handle:HandleEdge = res.handle
 
 #					print("handle %s" % handle)
 					var cmd:CommandSelectEdges = CommandSelectEdges.new()
@@ -243,11 +255,13 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 		if tool_state == ToolState.READY:
 			if e.position.distance_squared_to(drag_mouse_start_pos) > MathUtil.square(builder.drag_start_radius):
-				var handle:HandleEdge = pick_closest_handle(blocks_root, viewport_camera, drag_mouse_start_pos, builder.handle_screen_radius)
+				var res:PickHandleResult = pick_closest_handle(blocks_root, viewport_camera, drag_mouse_start_pos, builder.handle_screen_radius)
+				var handle:HandleEdge = res.handle
 
 				if handle:
 					drag_handle = handle
-					drag_handle_start_pos = handle.p_ref
+#					drag_handle_start_pos = handle.p_ref
+					drag_handle_start_pos = res.position
 					tool_state = ToolState.DRAGGING
 
 					cmd_move_edge = CommandMoveEdges.new()

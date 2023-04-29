@@ -40,6 +40,11 @@ var tracked_blocks_root:CyclopsBlocks
 
 var cmd_move_face:CommandMoveFaces
 
+
+class PickHandleResult extends RefCounted:
+	var handle:HandleFace
+	var position:Vector3
+	
 func _get_tool_id()->String:
 	return TOOL_ID
 
@@ -105,7 +110,7 @@ func setup_tool():
 					
 					#print("adding handle %s" % handle)
 
-func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:float)->HandleFace:
+func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:float)->PickHandleResult:
 	var blocks_root:CyclopsBlocks = builder.active_node
 	if blocks_root == null:
 		return
@@ -113,17 +118,22 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 	var pick_origin:Vector3 = viewport_camera.project_ray_origin(position)
 	var pick_dir:Vector3 = viewport_camera.project_ray_normal(position)
 	
-	var best_dist:float = INF
-	var best_handle:HandleFace = null
-	
 	if builder.display_mode == DisplayMode.Type.TEXTURED:
 		var result:IntersectResults = blocks_root.intersect_ray_closest_selected_only(pick_origin, pick_dir)
 		if result:
 			for h in handles:
 				if h.block_path == result.object.get_path() && h.face_id == result.face_id:
-					return h
+					var ret:PickHandleResult = PickHandleResult.new()
+					ret.handle = h
+					ret.position = result.position
+					return ret
 					
 	elif builder.display_mode == DisplayMode.Type.WIRE:
+		var best_dist:float = INF
+		var best_handle:HandleFace = null
+		var best_position:Vector3
+		
+		
 		for h in handles:
 			var h_world_pos:Vector3 = blocks_root.global_transform * h.p_ref
 			var h_screen_pos:Vector2 = viewport_camera.unproject_position(h_world_pos)
@@ -144,8 +154,12 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 			
 			best_dist = dist
 			best_handle = h
+			best_position = h_world_pos
 		
-		return best_handle
+		var result:PickHandleResult = PickHandleResult.new()
+		result.handle = best_handle
+		result.position = best_position
+		return result
 	
 	return null	
 	
@@ -220,7 +234,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #				print("bn up: state %s" % tool_state)
 				if tool_state == ToolState.READY:
 					#print("cmd select")
-					var handle:HandleFace = pick_closest_handle(viewport_camera, e.position, builder.handle_screen_radius)
+					var res:PickHandleResult = pick_closest_handle(viewport_camera, e.position, builder.handle_screen_radius)
+					var handle:HandleFace = res.handle
 
 					#print("handle %s" % handle)
 					
@@ -266,11 +281,13 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 		if tool_state == ToolState.READY:
 			if e.position.distance_squared_to(drag_mouse_start_pos) > MathUtil.square(builder.drag_start_radius):
-				var handle:HandleFace = pick_closest_handle(viewport_camera, drag_mouse_start_pos, builder.handle_screen_radius)
+				var res:PickHandleResult = pick_closest_handle(viewport_camera, drag_mouse_start_pos, builder.handle_screen_radius)
+				var handle:HandleFace = res.handle
 
 				if handle:
 					drag_handle = handle
-					drag_handle_start_pos = handle.p_ref
+#					drag_handle_start_pos = handle.p_ref
+					drag_handle_start_pos = res.position
 					tool_state = ToolState.DRAGGING
 
 					cmd_move_face = CommandMoveFaces.new()

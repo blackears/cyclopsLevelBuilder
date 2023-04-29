@@ -1812,12 +1812,12 @@ face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
 active_face = -1
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_tstik"]
+[sub_resource type="Resource" id="Resource_jy768"]
 script = ExtResource("4_qjut0")
 selected = false
 active = false
 collsion = true
-vertex_points = PackedVector3Array(-37, 29, 47, -35, 29, 47, -35, 29, 43, -37, 29, 43, -37, 34, 43, -35, 34, 43, -35, 34, 47, -37, 34, 47)
+vertex_points = PackedVector3Array(-37, 29, 48, -35, 29, 48, -35, 29, 43, -37, 29, 43, -37, 34, 43, -35, 34, 43, -35, 34, 48, -37, 34, 48)
 vertex_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0)
 active_vertex = -1
 edge_vertex_indices = PackedInt32Array(0, 1, 1, 2, 2, 3, 3, 0, 4, 3, 2, 5, 5, 4, 6, 5, 1, 6, 4, 7, 7, 0, 6, 7)
@@ -2299,7 +2299,7 @@ block_data = SubResource("Resource_clpxw")
 
 [node name="Block_90" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("3_s3g63")
-block_data = SubResource("Resource_tstik")
+block_data = SubResource("Resource_jy768")
 
 [node name="Marker3D" type="Marker3D" parent="."]
 transform = Transform3D(0.965926, -0.0669873, -0.25, 2.21068e-08, 0.965926, -0.258819, 0.258819, 0.25, 0.933013, -1.5, 6.5, -1)

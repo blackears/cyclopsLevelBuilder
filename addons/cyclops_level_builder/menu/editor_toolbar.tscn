@@ -66,7 +66,9 @@ text = "Clip"
 layout_mode = 2
 tooltip_text = "Click on a vertex to select it.  Shift Click to toggle selecton, Ctrl Click to add to selection, Shift-Ctrl click to subtract from selection.
 
-Click and drag to move vertex in XZ plane.  Hold Alt to drag along Y axis.  Click and drag on a selected vertex to move all selected vertices."
+Click and drag to move vertex in XZ plane.  Hold Alt to drag along Y axis.  Click and drag on a selected vertex to move all selected vertices.
+
+Hover the mouse over a different block and press Alt-Q to switch to editing that block."
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Vertex"
@@ -75,7 +77,9 @@ text = "Vertex"
 layout_mode = 2
 tooltip_text = "Click on an edge to select it.  Shift Click to toggle selecton, Ctrl Click to add to selection, Shift-Ctrl click to subtract from selection.
 
-Click and drag to move edge in XZ plane.  Hold Alt to drag along Y axis.  Click and drag on a selected edge to move all selected edges."
+Click and drag to move edge in XZ plane.  Hold Alt to drag along Y axis.  Click and drag on a selected edge to move all selected edges.
+
+Hover the mouse over a different block and press Alt-Q to switch to editing that block."
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Edge"
@@ -84,7 +88,9 @@ text = "Edge"
 layout_mode = 2
 tooltip_text = "Click on a face to select it.  Shift Click to toggle selecton, Ctrl Click to add to selection, Shift-Ctrl click to subtract from selection.
 
-Click and drag to move face in XZ plane.  Hold Alt to drag along Y axis.  Click and drag on a selected face to move all selected faces."
+Click and drag to move face in XZ plane.  Hold Alt to drag along Y axis.  Click and drag on a selected face to move all selected faces.
+
+Hover the mouse over a different block and press Alt-Q to switch to editing that block."
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Face"
