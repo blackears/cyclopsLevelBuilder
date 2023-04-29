@@ -136,6 +136,9 @@ func pick_closest_handle(blocks_root:CyclopsBlocks, viewport_camera:Camera3D, po
 		best_dist = dist
 		best_handle = h
 	
+	if !best_handle:
+		return null
+	
 	var result:PickHandleResult = PickHandleResult.new()
 	result.handle = best_handle
 	result.position = best_pick_position
@@ -211,27 +214,27 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				if tool_state == ToolState.READY:
 					#print("cmd select")
 					var res:PickHandleResult = pick_closest_handle(blocks_root, viewport_camera, e.position, builder.handle_screen_radius)
-					var handle:HandleEdge = res.handle
+					if res:
+						var handle:HandleEdge = res.handle
 
-#					print("handle %s" % handle)
-					var cmd:CommandSelectEdges = CommandSelectEdges.new()
-					cmd.builder = builder
-					
-					for child in builder.active_node.get_children():
-						if child is CyclopsConvexBlock:
-							var cur_block:CyclopsConvexBlock = child
-							if cur_block.selected:
-								cmd.add_edges(cur_block.get_path(), [])
+	#					print("handle %s" % handle)
+						var cmd:CommandSelectEdges = CommandSelectEdges.new()
+						cmd.builder = builder
+						
+						for child in builder.active_node.get_children():
+							if child is CyclopsConvexBlock:
+								var cur_block:CyclopsConvexBlock = child
+								if cur_block.selected:
+									cmd.add_edges(cur_block.get_path(), [])
 
-					cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
+						cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
 
-					if handle:
 						cmd.add_edge(handle.block_path, handle.edge_index)
 						#print("selectibg %s" % handle.vertex_index)
 
-					if cmd.will_change_anything():					
-						var undo:EditorUndoRedoManager = builder.get_undo_redo()
-						cmd.add_to_undo_manager(undo)
+						if cmd.will_change_anything():					
+							var undo:EditorUndoRedoManager = builder.get_undo_redo()
+							cmd.add_to_undo_manager(undo)
 					
 					
 					tool_state = ToolState.NONE
@@ -256,9 +259,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		if tool_state == ToolState.READY:
 			if e.position.distance_squared_to(drag_mouse_start_pos) > MathUtil.square(builder.drag_start_radius):
 				var res:PickHandleResult = pick_closest_handle(blocks_root, viewport_camera, drag_mouse_start_pos, builder.handle_screen_radius)
-				var handle:HandleEdge = res.handle
 
-				if handle:
+				if res:
+					var handle:HandleEdge = res.handle
 					drag_handle = handle
 #					drag_handle_start_pos = handle.p_ref
 					drag_handle_start_pos = res.position
