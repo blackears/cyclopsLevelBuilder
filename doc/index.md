@@ -44,7 +44,7 @@ There are several tools in the toolbar that let you create and edit blocks:
 * [Prism](tool_prism.md)
 * [Clip](tool_clip.md)
 * [Vertex](tool_vertex.md)
-* [Edge](tool_edit.md)
+* [Edge](tool_edge.md)
 * [Face](tool_face.md)
 * [Duplicate](tool_duplicate.md)
 
