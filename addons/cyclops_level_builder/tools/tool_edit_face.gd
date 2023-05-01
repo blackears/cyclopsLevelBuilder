@@ -234,30 +234,29 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #				print("bn up: state %s" % tool_state)
 				if tool_state == ToolState.READY:
 					#print("cmd select")
+
+					var cmd:CommandSelectFaces = CommandSelectFaces.new()
+					cmd.builder = builder
+					
+					for child in builder.active_node.get_children():
+						if child is CyclopsConvexBlock:
+							var cur_block:CyclopsConvexBlock = child
+							if cur_block.selected:
+								cmd.add_faces(cur_block.get_path(), [])
+
 					var res:PickHandleResult = pick_closest_handle(viewport_camera, e.position, builder.handle_screen_radius)
 					if res:
 						var handle:HandleFace = res.handle
-
 						#print("handle %s" % handle)
-						
-						var cmd:CommandSelectFaces = CommandSelectFaces.new()
-						cmd.builder = builder
-						
-						for child in builder.active_node.get_children():
-							if child is CyclopsConvexBlock:
-								var cur_block:CyclopsConvexBlock = child
-								if cur_block.selected:
-									cmd.add_faces(cur_block.get_path(), [])
-						
-	#					var block:CyclopsConvexBlock = builder.get_node(handle.block_path)
-						cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
 							
 						cmd.add_face(handle.block_path, handle.face_index)
 						#print("selecting %s" % handle.face_index)
 						
-						if cmd.will_change_anything():
-							var undo:EditorUndoRedoManager = builder.get_undo_redo()
-							cmd.add_to_undo_manager(undo)
+					cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
+						
+					if cmd.will_change_anything():
+						var undo:EditorUndoRedoManager = builder.get_undo_redo()
+						cmd.add_to_undo_manager(undo)
 					
 					
 					tool_state = ToolState.NONE

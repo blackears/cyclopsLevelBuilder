@@ -17,7 +17,7 @@ script = ExtResource("1_xyxg3")
 thumbnail_group = SubResource("Resource_ljbow")
 metadata/_edit_lock_ = true
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,9 +26,23 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_lock_ = true
 
-[node name="HFlowContainer" type="HFlowContainer" parent="ScrollContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="remove_all_materials" type="Button" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Remove All"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/_edit_lock_ = true
+
+[node name="HFlowContainer" type="HFlowContainer" parent="VBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/remove_all_materials" to="." method="_on_remove_all_materials_pressed"]

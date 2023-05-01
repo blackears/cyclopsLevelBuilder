@@ -101,10 +101,10 @@ func will_change_anything()->bool:
 	return false
 
 func do_it():
-#	print("sel verts do_it")
-	#print("sel vert do_it()")
+#	print("sel edges do_it")
+	
 	for block_path in block_map.keys():
-		#print("path %s" % node_path)
+#		print("path %s" % block_path)
 		
 		var rec:BlockEdgeChanges = block_map[block_path]
 		var block:CyclopsConvexBlock = builder.get_node(block_path)
@@ -152,6 +152,10 @@ func do_it():
 					if rec.edge_indices.has(e_idx):
 						#print("flipping %s" % e.selected)
 						e.selected = !e.selected
+
+		if vol.active_edge != -1:
+			if vol.active_edge >= vol.edges.size() || !vol.edges[vol.active_edge].selected:
+				vol.active_edge = -1
 
 		#Synchronize vertex & face selection
 		#print("synchronizing verts")

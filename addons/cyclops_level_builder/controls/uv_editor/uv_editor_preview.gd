@@ -77,20 +77,3 @@ func _process(delta):
 		dirty = false
 	
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	if dirty:
-#		var mesh:ImmediateMesh = ImmediateMesh.new()
-#
-#		mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, target_material)
-#
-#		mesh.surface_set_normal(Vector3(0, 0, 1))
-#		for p in points:		
-#			mesh.surface_set_uv(uv_transform * Vector2(p.x, p.y))
-#			mesh.surface_add_vertex(p)
-#
-#		mesh.surface_end()
-#
-#		print("Building preview mesh")
-#		$Node3D/MeshInstance3D.mesh = mesh
-#		dirty = false

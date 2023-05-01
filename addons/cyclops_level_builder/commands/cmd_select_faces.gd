@@ -150,6 +150,11 @@ func do_it():
 					if rec.face_indices.has(f_idx):
 						f.selected = !f.selected
 
+		if vol.active_face != -1:
+			if vol.active_face >= vol.faces.size() || !vol.faces[vol.active_face].selected:
+				vol.active_face = -1
+
+
 		#Synchronize edge & vertex selection
 #		var selected_verts:Array[int] = []
 #		for f in vol.faces:

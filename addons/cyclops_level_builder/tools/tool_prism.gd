@@ -77,6 +77,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					tool_state = ToolState.DRAG_HEIGHT
 			return true
 			
+		elif e.keycode == KEY_BACKSPACE:
+			if e.is_pressed():
+				base_points.remove_at(base_points.size() - 1)
+			return true
+			
 		elif e.keycode == KEY_ESCAPE:
 			if e.is_pressed():
 				tool_state = ToolState.READY
@@ -105,9 +110,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #
 						base_points.append(p)
 
-#						global_scene.clear_tool_mesh()					
-#						global_scene.draw_selected_blocks(viewport_camera)
-#						global_scene.draw_loop(base_points, false, global_scene.tool_material)
 						return true
 						
 					else:
@@ -116,9 +118,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
 						base_points.append(p)
 						
-#						global_scene.clear_tool_mesh()
-#						global_scene.draw_selected_blocks(viewport_camera)
-#						global_scene.draw_loop(base_points, false, global_scene.tool_material)
 						return true
 						
 				elif tool_state == ToolState.BASE_POINTS:
@@ -130,9 +129,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					#print("base %s " % base_points)
 					var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
 					#print("bounding %s " % bounding_points)
-#					global_scene.clear_tool_mesh()
-#					global_scene.draw_selected_blocks(viewport_camera)
-#					global_scene.draw_loop(bounding_points, true, global_scene.tool_material)
 					
 					return true
 				elif tool_state == ToolState.DRAG_HEIGHT:

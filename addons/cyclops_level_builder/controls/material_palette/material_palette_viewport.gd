@@ -79,15 +79,15 @@ func _drop_data(at_position, data):
 func update_thumbnails():
 	var cur_sel:String
 	
-	for child in $ScrollContainer/HFlowContainer.get_children():
+	for child in $VBoxContainer/ScrollContainer/HFlowContainer.get_children():
 		if child.selected:
 			cur_sel = child.material_path
 			break
 
-	for child in $ScrollContainer/HFlowContainer.get_children():
+	for child in $VBoxContainer/ScrollContainer/HFlowContainer.get_children():
 		#print("removing %s" % child.get_class())
 		child.group = null
-		$ScrollContainer/HFlowContainer.remove_child(child)
+		$VBoxContainer/ScrollContainer/HFlowContainer.remove_child(child)
 		child.queue_free()
 
 	for path in material_list:
@@ -97,11 +97,11 @@ func update_thumbnails():
 		thumbnail.material_path = path
 		thumbnail.group = thumbnail_group
 		
-		$ScrollContainer/HFlowContainer.add_child(thumbnail)
+		$VBoxContainer/ScrollContainer/HFlowContainer.add_child(thumbnail)
 		thumbnail.owner = self
 	
 	if cur_sel:
-		for child in $ScrollContainer/HFlowContainer.get_children():
+		for child in $VBoxContainer/ScrollContainer/HFlowContainer.get_children():
 			if child.material_path == cur_sel:
 				child.selected = true
 				break
@@ -111,3 +111,9 @@ func _on_visibility_changed():
 	#Control freezes for some reason when hidden and then shown, so just regenereate it
 	if visible:
 		update_thumbnails()
+
+
+
+func _on_remove_all_materials_pressed():
+	material_list.clear()
+	update_thumbnails()

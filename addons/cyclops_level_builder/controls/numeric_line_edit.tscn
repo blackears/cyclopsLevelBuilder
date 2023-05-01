@@ -15,11 +15,12 @@ layout_mode = 2
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
-text = "0.00000"
+text = "0"
+select_all_on_focus = true
 
 [node name="Label" type="Label" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "0.00000"
+text = "0"
 
 [connection signal="text_submitted" from="HBoxContainer/LineEdit" to="." method="_on_line_edit_text_submitted"]
