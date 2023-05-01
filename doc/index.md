@@ -143,7 +143,7 @@ The duplicate tool will duplicate the current selection.
 ![Duplicate block](duplicate block.gif)
 
 
-## Other menu features
+## Other toolbar features
 
 ### Delete
 
@@ -217,5 +217,10 @@ This dock gives you direct access to the uv transform of the face.  Make sure yo
 
 ![Using UV Transform dock](using_uv_transform_dock.gif)
 
+
+
+## Support
+
+If you found this software useful, please consider buying me a coffee on Kofi.  Every contribution helps me to make more software:
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Y8Y43J6OB)
