@@ -10,7 +10,7 @@ Edit the vertices of the block.
     * Vertex will be moved in the XZ plane.  Hold Alt to switch to moving along the Y axis.
 * Hover the mouse cursor over another block and press Alt-Q to switch to editing the vertices of that block.
 
-![Move vertices](move_verticse.gif)
+![Move vertices](move_vertices.gif)
 
 
 ## Support
