@@ -103,7 +103,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					var result:IntersectResults = blocks_root.intersect_ray_closest(origin, dir)
 					if result:
-#						floor_normal = MathUtil.snap_to_best_axis_normal(result.normal)
+						#print("init base point block")
 						floor_normal = result.normal
 
 						var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
@@ -113,14 +113,18 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						return true
 						
 					else:
+						#print("init base point empty space")
 						floor_normal = Vector3.UP
+
+						var start_pos:Vector3 = origin + builder.block_create_distance * dir
 						
-						var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
+						var p:Vector3 = to_local(start_pos, blocks_root.global_transform.inverse(), grid_step_size)
 						base_points.append(p)
 						
 						return true
 						
 				elif tool_state == ToolState.BASE_POINTS:
+					#print("add base point")
 					var p_isect:Vector3 = MathUtil.intersect_plane(origin, dir, base_points[0], floor_normal)
 
 					var p:Vector3 = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
