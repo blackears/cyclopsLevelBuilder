@@ -500,56 +500,35 @@ func transform(xform:Transform3D, lock_uvs:bool = false):
 			
 			match axis:
 				MathUtil.Axis.X:
-#					print ("x axis face")
-#					print("uv xform %s" % f.uv_transform)
+					var orig_p:Vector3 = xform.origin
+					var u_p:Vector3 = xform * Vector3(0, 0, 1) - orig_p
+					var v_p:Vector3 = xform * Vector3(0, 1, 0) - orig_p
+					var move_xform:Transform2D = Transform2D(Vector2(u_p.z, u_p.y), \
+						Vector2(v_p.z, v_p.y), \
+						Vector2(orig_p.z, orig_p.y))
 					
-					var orig:Vector3 = Vector3(0, f.uv_transform.origin.y, f.uv_transform.origin.x)
-					var u_axis:Vector3 = Vector3(0, f.uv_transform.x.y, f.uv_transform.x.x)
-					var v_axis:Vector3 = Vector3(0, f.uv_transform.y.y, f.uv_transform.y.x)
-					
-					var orig_new3:Vector3 = xform * orig
-					var u_axis_new3:Vector3 = xform.basis * u_axis
-					var v_axis_new3:Vector3 = xform.basis * v_axis
-					
-					var orig_new:Vector2 = Vector2(orig_new3.z, orig_new3.y)
-					var u_axis_new:Vector2 = Vector2(u_axis_new3.z, u_axis_new3.y)
-					var v_axis_new:Vector2 = Vector2(v_axis_new3.z, v_axis_new3.y)
-					
-					var uv_xform_new:Transform2D = Transform2D(u_axis_new, v_axis_new, orig_new)
-#					print("uv_xform_new %s" % uv_xform_new)
-					f.uv_transform = uv_xform_new
+					f.uv_transform = f.uv_transform * move_xform
 					
 				MathUtil.Axis.Y:
-					var orig:Vector3 = Vector3(f.uv_transform.origin.x, 0, f.uv_transform.origin.y)
-					var u_axis:Vector3 = Vector3(f.uv_transform.x.x, 0, f.uv_transform.x.y)
-					var v_axis:Vector3 = Vector3(f.uv_transform.y.x, 0, f.uv_transform.y.y)
+					var orig_p:Vector3 = xform.origin
+					var u_p:Vector3 = xform * Vector3(1, 0, 0) - orig_p
+					var v_p:Vector3 = xform * Vector3(0, 0, 1) - orig_p
+					var move_xform:Transform2D = Transform2D(Vector2(u_p.x, u_p.z), \
+						Vector2(v_p.x, v_p.z), \
+						Vector2(orig_p.x, orig_p.z))
 					
-					var orig_new3:Vector3 = xform * orig
-					var u_axis_new3:Vector3 = xform.basis * u_axis
-					var v_axis_new3:Vector3 = xform.basis * v_axis
-					
-					var orig_new:Vector2 = Vector2(orig_new3.x, orig_new3.z)
-					var u_axis_new:Vector2 = Vector2(u_axis_new3.x, u_axis_new3.z)
-					var v_axis_new:Vector2 = Vector2(v_axis_new3.x, v_axis_new3.z)
-					
-					var uv_xform_new:Transform2D = Transform2D(u_axis_new, v_axis_new, orig_new)
-					f.uv_transform = uv_xform_new
+					f.uv_transform = f.uv_transform * move_xform
 					
 				MathUtil.Axis.Z:
-					var orig:Vector3 = Vector3(f.uv_transform.origin.x, f.uv_transform.origin.y, 0)
-					var u_axis:Vector3 = Vector3(f.uv_transform.x.x, f.uv_transform.x.y, 0)
-					var v_axis:Vector3 = Vector3(f.uv_transform.y.x, f.uv_transform.y.y, 0)
+					#var xform_inv = xform.affine_inverse()
+					var orig_p:Vector3 = xform.origin
+					var u_p:Vector3 = xform * Vector3(1, 0, 0) - orig_p
+					var v_p:Vector3 = xform * Vector3(0, 1, 0) - orig_p
+					var move_xform:Transform2D = Transform2D(Vector2(u_p.x, u_p.y), \
+						Vector2(v_p.x, v_p.y), \
+						Vector2(orig_p.x, orig_p.y))
 					
-					var orig_new3:Vector3 = xform * orig
-					var u_axis_new3:Vector3 = xform.basis * u_axis
-					var v_axis_new3:Vector3 = xform.basis * v_axis
-					
-					var orig_new:Vector2 = Vector2(orig_new3.x, orig_new3.y)
-					var u_axis_new:Vector2 = Vector2(u_axis_new3.x, u_axis_new3.y)
-					var v_axis_new:Vector2 = Vector2(v_axis_new3.x, v_axis_new3.y)
-					
-					var uv_xform_new:Transform2D = Transform2D(u_axis_new, v_axis_new, orig_new)
-					f.uv_transform = uv_xform_new
+					f.uv_transform = f.uv_transform * move_xform
 		
 
 func unused_face_id()->int:
