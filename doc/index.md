@@ -1,5 +1,8 @@
 # Documentation
 
+[![Quick demo video](https://img.youtube.com/vi/UAqmm6WIWhA/0.jpg)](https://www.youtube.com/watch?v=UAqmm6WIWhA)
+
+
 ## Getting Started
 
 ### Create the CyclopsBlocks environment root
