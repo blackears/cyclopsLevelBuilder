@@ -136,8 +136,10 @@ func _draw_tool(viewport_camera:Camera3D):
 	if tool_state == ToolState.BLOCK_HEIGHT:
 		global_scene.draw_cube(block_drag_p0_local, block_drag_p1_local, block_drag_cur, global_scene.tool_material)
 
-func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
-	var blocks_root:CyclopsBlocks = self.builder.active_node
+func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
+	if !builder.active_node is CyclopsBlocks:
+		return false
+	var blocks_root:CyclopsBlocks = builder.active_node
 
 	if event is InputEventKey:
 		var e:InputEventKey = event

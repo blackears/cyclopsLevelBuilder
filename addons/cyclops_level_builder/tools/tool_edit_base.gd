@@ -28,6 +28,9 @@ class_name ToolEditBase
 var mouse_hover_pos:Vector2
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
+	if !builder.active_node is CyclopsBlocks:
+		return false
+		
 	var blocks_root:CyclopsBlocks = self.builder.active_node
 	
 	if event is InputEventKey:

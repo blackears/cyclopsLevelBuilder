@@ -59,6 +59,9 @@ func _draw_tool(viewport_camera:Camera3D):
 	
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
+	if !builder.active_node is CyclopsBlocks:
+		return false
+		
 	var blocks_root:CyclopsBlocks = self.builder.active_node
 	var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 #	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")

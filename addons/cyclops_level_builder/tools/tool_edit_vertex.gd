@@ -155,6 +155,9 @@ func _deactivate():
 
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
+	if !builder.active_node is CyclopsBlocks:
+		return false
+		
 	var gui_result = super._gui_input(viewport_camera, event)
 	if gui_result:
 		return true

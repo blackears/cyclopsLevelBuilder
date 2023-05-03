@@ -93,3 +93,6 @@ block_data = SubResource("Resource_3u68e")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.24602, 0, 0)
 script = ExtResource("5_hkosp")
 block_data = SubResource("Resource_6veas")
+
+[node name="CyclopsConvexBlock" type="Node" parent="."]
+script = ExtResource("3_vrp7a")
