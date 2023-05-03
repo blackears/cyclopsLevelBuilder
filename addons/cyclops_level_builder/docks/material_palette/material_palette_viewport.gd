@@ -91,7 +91,7 @@ func update_thumbnails():
 		child.queue_free()
 
 	for path in material_list:
-		var res:Resource = preload("res://addons/cyclops_level_builder/controls/material_palette/material_thumbnail.tscn")
+		var res:Resource = preload("res://addons/cyclops_level_builder/docks/material_palette/material_thumbnail.tscn")
 		var thumbnail:MaterialThumbnail = res.instantiate()
 		thumbnail.builder = builder
 		thumbnail.material_path = path

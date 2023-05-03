@@ -1,8 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://ykiv03ah1jv7"]
+[gd_scene load_steps=6 format=3]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/uv_editor/uv_editor_viewport.gd" id="1_rk116"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/docks/uv_editor/uv_editor_viewport.gd" id="1_rk116"]
 [ext_resource type="PackedScene" uid="uid://diibmlqy1mpqb" path="res://addons/cyclops_level_builder/controls/numeric_line_edit.tscn" id="2_cekit"]
-[ext_resource type="PackedScene" uid="uid://n0533dleqx4g" path="res://addons/cyclops_level_builder/controls/uv_editor/uv_editor_preview.tscn" id="2_kpj7h"]
+[ext_resource type="PackedScene" path="res://addons/cyclops_level_builder/docks/uv_editor/uv_editor_preview.tscn" id="2_kpj7h"]
 
 [sub_resource type="Image" id="Image_me1xa"]
 data = {

@@ -1,8 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://eu6jo61g0sfb"]
+[gd_scene load_steps=6 format=3]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/material_palette/material_thumbnail.gd" id="1_bk6mq"]
-[ext_resource type="Theme" uid="uid://c0gpl22e2g6ay" path="res://addons/cyclops_level_builder/controls/material_palette/thumbnail_selected_theme.tres" id="1_pvt6l"]
-[ext_resource type="Theme" uid="uid://bx26luxdhj3jq" path="res://addons/cyclops_level_builder/controls/material_palette/thumbnail_normal_theme.tres" id="3_a3d05"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/docks/material_palette/material_thumbnail.gd" id="1_bk6mq"]
+[ext_resource type="Theme" uid="uid://c0gpl22e2g6ay" path="res://addons/cyclops_level_builder/docks/material_palette/thumbnail_selected_theme.tres" id="1_pvt6l"]
+[ext_resource type="Theme" uid="uid://bx26luxdhj3jq" path="res://addons/cyclops_level_builder/docks/material_palette/thumbnail_normal_theme.tres" id="3_a3d05"]
 
 [sub_resource type="Image" id="Image_s62qo"]
 data = {

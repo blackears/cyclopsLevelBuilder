@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://c33bpxh6ykcoh"]
+[gd_scene load_steps=5 format=3]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/material_palette/material_snapshot.gd" id="1_c0jsn"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/docks/material_palette/material_snapshot.gd" id="1_c0jsn"]
 [ext_resource type="Material" uid="uid://rdhrhgrb78ls" path="res://addons/cyclops_level_builder/materials/grid.tres" id="2_q7d7x"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_o8jeg"]

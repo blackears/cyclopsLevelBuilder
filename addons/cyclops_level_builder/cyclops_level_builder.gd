@@ -91,10 +91,10 @@ func _enter_tree():
 
 	add_autoload_singleton(AUTOLOAD_NAME, "res://addons/cyclops_level_builder/cyclops_global_scene.tscn")
 	
-	material_dock = preload("res://addons/cyclops_level_builder/controls/material_palette/material_palette_viewport.tscn").instantiate()
+	material_dock = preload("res://addons/cyclops_level_builder/docks/material_palette/material_palette_viewport.tscn").instantiate()
 	material_dock.builder = self
 	
-	uv_editor_dock = preload("res://addons/cyclops_level_builder/controls/uv_editor/uv_editor_viewport.tscn").instantiate()
+	uv_editor_dock = preload("res://addons/cyclops_level_builder/docks/uv_editor/uv_editor_viewport.tscn").instantiate()
 	uv_editor_dock.builder = self
 	
 	editor_toolbar = preload("menu/editor_toolbar.tscn").instantiate()

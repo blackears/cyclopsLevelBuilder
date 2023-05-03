@@ -77,7 +77,7 @@ var snapper:MaterialShapshot
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	snapper = preload("res://addons/cyclops_level_builder/controls/material_palette/material_snapshot.tscn").instantiate()
+	snapper = preload("res://addons/cyclops_level_builder/docks/material_palette/material_snapshot.tscn").instantiate()
 	add_child(snapper)
 	
 
