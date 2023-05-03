@@ -128,16 +128,21 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						
 				elif tool_state == ToolState.BASE_POINTS:
 					#print("add base point")
+					if e.double_click:
+						if e.is_pressed():
+							drag_offset = Vector3.ZERO
+							tool_state = ToolState.DRAG_HEIGHT
+						return true
+
+					
 					var p_isect:Vector3 = MathUtil.intersect_plane(origin, dir, base_points[0], floor_normal)
 
 					var p:Vector3 = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
 					base_points.append(p)
 
-					#print("base %s " % base_points)
-					var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
-					#print("bounding %s " % bounding_points)
-					
+					var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)					
 					return true
+					
 				elif tool_state == ToolState.DRAG_HEIGHT:
 					var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
 					drag_offset = block_drag_cur - base_points[0]
