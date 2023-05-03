@@ -161,6 +161,17 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 					tool_state = ToolState.READY
 					return true
+
+		if e.button_index == MOUSE_BUTTON_RIGHT:
+			
+			if tool_state == ToolState.BASE_POINTS:
+				if e.is_pressed():
+					for p_idx in base_points.size():
+						var screem_pos:Vector2 = viewport_camera.unproject_position(base_points[p_idx])
+						if screem_pos.distance_to(e.position) < builder.handle_screen_radius:
+							base_points.remove_at(p_idx)
+							break
+				return true		
 			
 	elif event is InputEventMouseMotion:
 		var e:InputEventMouseMotion = event
