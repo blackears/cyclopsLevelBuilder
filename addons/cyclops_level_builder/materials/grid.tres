@@ -5,3 +5,5 @@
 [resource]
 vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("1_17wu6")
+roughness_texture = ExtResource("1_17wu6")
+texture_filter = 5
