@@ -34,6 +34,7 @@ var floor_normal:Vector3
 var base_points:PackedVector3Array
 var block_drag_cur:Vector3
 var drag_offset:Vector3
+var preview_point:Vector3
 
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
@@ -52,6 +53,8 @@ func _draw_tool(viewport_camera:Camera3D):
 		var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
 		global_scene.draw_loop(bounding_points, true, global_scene.tool_material)
 		global_scene.draw_points(bounding_points, global_scene.tool_material)
+
+		global_scene.draw_vertex(preview_point, global_scene.tool_material)
 
 	if tool_state == ToolState.DRAG_HEIGHT:		
 		var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
@@ -112,6 +115,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
 #
 						base_points.append(p)
+						preview_point = p
 
 						return true
 						
@@ -134,9 +138,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 							tool_state = ToolState.DRAG_HEIGHT
 						return true
 
-					
 					var p_isect:Vector3 = MathUtil.intersect_plane(origin, dir, base_points[0], floor_normal)
-
 					var p:Vector3 = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
 					base_points.append(p)
 
@@ -192,7 +194,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		var origin_local:Vector3 = w2l * origin
 		var dir_local:Vector3 = w2l.basis * dir
 
-		if tool_state == ToolState.DRAG_HEIGHT:
+		if tool_state == ToolState.BASE_POINTS:
+			var p_isect:Vector3 = MathUtil.intersect_plane(origin, dir, base_points[0], floor_normal)
+			preview_point = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
+			
+
+		elif tool_state == ToolState.DRAG_HEIGHT:
 			block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, base_points[0], floor_normal)
 			
 			block_drag_cur = to_local(block_drag_cur, blocks_root.global_transform.inverse(), grid_step_size)
