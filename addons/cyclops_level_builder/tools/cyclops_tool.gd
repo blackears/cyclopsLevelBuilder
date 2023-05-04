@@ -42,27 +42,15 @@ func _get_tool_id()->String:
 func _draw_tool(viewport_camera:Camera3D):
 	pass
 
+func _get_tool_properties_editor()->Control:
+	return null
+
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	if event is InputEventKey:
 		var e:InputEventKey = event
 
 		if e.is_pressed():
 			if e.keycode == KEY_X:
-#				var blocks_root:CyclopsBlocks = builder.active_node
-#
-#				var cmd:CommandDeleteBlocks = CommandDeleteBlocks.new()
-#				cmd.blocks_root_path = blocks_root.get_path()
-#				cmd.builder = builder
-#
-#				for child in blocks_root.get_children():
-#					if child is CyclopsConvexBlock:
-#						var block:CyclopsConvexBlock = child
-#						if block.selected:
-#							cmd.add_block(block.get_path())
-#
-#				if cmd.blocks_to_delete.size() > 0:
-#					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-#					cmd.add_to_undo_manager(undo)
 
 				var blocks_root:CyclopsBlocks = builder.active_node
 				var cmd:CommandDeleteBlocks = CommandDeleteBlocks.new()

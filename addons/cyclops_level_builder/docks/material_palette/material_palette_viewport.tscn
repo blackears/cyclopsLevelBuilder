@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=4 format=3 uid="uid://o1efx0qxc4n3"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/docks/material_palette/material_palette_viewport.gd" id="1_xyxg3"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/docks/material_palette/thumbnail_group.gd" id="2_sg6yo"]
