@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://c3cl77r65dexu"]
+[gd_scene load_steps=6 format=3 uid="uid://c3cl77r65dexu"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/menu/editor_toolbar.gd" id="1_o71fd"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/menu/action_popup_menu.gd" id="2_ni0c8"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o7kxq"]
 
@@ -110,36 +111,46 @@ Can also be done by pressing X key."
 text = "Delete
 "
 
-[node name="MenuButton" type="MenuButton" parent="HBoxContainer"]
+[node name="MenuBar" type="MenuBar" parent="HBoxContainer"]
 layout_mode = 2
-text = "Edit"
-item_count = 13
-popup/item_0/text = "Rotate 90 Ccw X"
-popup/item_0/id = 0
-popup/item_1/text = "Rotate 90 Cw X"
-popup/item_1/id = 1
-popup/item_2/text = "Rotate 180 X"
-popup/item_2/id = 2
-popup/item_3/text = "Rotate 90 Ccw Y"
-popup/item_3/id = 3
-popup/item_4/text = "Rotate 90 Cw Y"
-popup/item_4/id = 4
-popup/item_5/text = "Rotate 180 Y"
-popup/item_5/id = 5
-popup/item_6/text = "Rotate 90 Ccw Z"
-popup/item_6/id = 6
-popup/item_7/text = "Rotate 90 Cw Z"
-popup/item_7/id = 7
-popup/item_8/text = "Rotate 180 Z"
-popup/item_8/id = 8
-popup/item_9/text = "Mirror Selection X"
-popup/item_9/id = 9
-popup/item_10/text = "Mirror Selection Y"
-popup/item_10/id = 10
-popup/item_11/text = "Mirror Selection Z"
-popup/item_11/id = 11
-popup/item_12/text = "Snap to grid"
-popup/item_12/id = 12
+
+[node name="Edit" type="PopupMenu" parent="HBoxContainer/MenuBar"]
+item_count = 16
+item_0/text = "Snap to grid"
+item_0/id = 0
+item_1/text = ""
+item_1/id = -1
+item_1/separator = true
+item_2/text = "Rotate 90 Ccw X"
+item_2/id = 1
+item_3/text = "Rotate 90 Cw X"
+item_3/id = 2
+item_4/text = "Rotate 180 X"
+item_4/id = 3
+item_5/text = "Mirror Selection X"
+item_5/id = 4
+item_6/text = "Rotate 90 Ccw Y"
+item_6/id = 5
+item_7/text = "Rotate 90 Cw Y"
+item_7/id = 6
+item_8/text = "Rotate 180 Y"
+item_8/id = 7
+item_9/text = "Mirror Selection Y"
+item_9/id = 8
+item_10/text = "Rotate 90 Ccw Z"
+item_10/id = 9
+item_11/text = "Rotate 90 Cw Z"
+item_11/id = 10
+item_12/text = "Rotate 180 Z"
+item_12/id = 11
+item_13/text = "Mirror Selection Z"
+item_13/id = 12
+item_14/text = "Snap to grid"
+item_14/id = 1000
+item_15/text = ""
+item_15/id = -1
+item_15/separator = true
+script = ExtResource("2_ni0c8")
 
 [node name="check_lock_uvs" type="CheckBox" parent="HBoxContainer"]
 layout_mode = 2

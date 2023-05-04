@@ -33,14 +33,11 @@ var editor_plugin:CyclopsLevelBuilder:
 		editor_plugin.active_node_changed.connect(on_active_node_changed)
 #var editor_plugin:CyclopsLevelBuilder
 
-var action_map:Array[CyclopsAction]
+#var action_map:Array[CyclopsAction]
 
 func on_active_node_changed():
 	update_grid()
 	
-
-#enum Tool { MOVE, DRAW, CLIP, VERTEX, EDGE, FACE }
-#var tool:Tool = Tool.MOVE
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -55,24 +52,46 @@ func _ready():
 	$HBoxContainer/grid_size.add_item("8", 7)
 	$HBoxContainer/grid_size.add_item("16", 8)
 	
-	populate_menu($HBoxContainer/MenuButton.get_popup(), [\
-		ActionRotateX90Ccw.new(editor_plugin),\
-		ActionRotateX90Cw.new(editor_plugin),\
-		ActionRotateX180.new(editor_plugin),\
-		ActionRotateY90Ccw.new(editor_plugin),\
-		ActionRotateY90Cw.new(editor_plugin),\
-		ActionRotateY180.new(editor_plugin),\
-		ActionRotateZ90Ccw.new(editor_plugin),\
-		ActionRotateZ90Cw.new(editor_plugin),\
-		ActionRotateZ180.new(editor_plugin),\
-		ActionMirrorSelectionX2.new(editor_plugin),\
-		ActionMirrorSelectionY2.new(editor_plugin),\
-		ActionMirrorSelectionZ.new(editor_plugin),\
-		ActionSnapToGrid.new(editor_plugin)])
+#	populate_menu($HBoxContainer/MenuButton.get_popup(), [\
+#		ActionRotateX90Ccw.new(editor_plugin),\
+#		ActionRotateX90Cw.new(editor_plugin),\
+#		ActionRotateX180.new(editor_plugin),\
+#		ActionRotateY90Ccw.new(editor_plugin),\
+#		ActionRotateY90Cw.new(editor_plugin),\
+#		ActionRotateY180.new(editor_plugin),\
+#		ActionRotateZ90Ccw.new(editor_plugin),\
+#		ActionRotateZ90Cw.new(editor_plugin),\
+#		ActionRotateZ180.new(editor_plugin),\
+#		ActionMirrorSelectionX2.new(editor_plugin),\
+#		ActionMirrorSelectionY2.new(editor_plugin),\
+#		ActionMirrorSelectionZ.new(editor_plugin),\
+#		ActionSnapToGrid.new(editor_plugin)])
+	
+	print("Populatin menu")
+	$HBoxContainer/MenuBar/Edit.clear()
+	$HBoxContainer/MenuBar/Edit.add_action_item(ActionSnapToGrid.new(editor_plugin))
+	$HBoxContainer/MenuBar/Edit.add_separator()
+	$HBoxContainer/MenuBar/Edit.add_action_item(ActionRotateX90Ccw.new(editor_plugin))
+	$HBoxContainer/MenuBar/Edit.add_action_item(ActionRotateX90Cw.new(editor_plugin))
+	$HBoxContainer/MenuBar/Edit.add_action_item(ActionRotateX180.new(editor_plugin))
+	$HBoxContainer/MenuBar/Edit.add_action_item(ActionMirrorSelectionX2.new(editor_plugin))
+	$HBoxContainer/MenuBar/Edit.add_separator()
+	$HBoxContainer/MenuBar/Edit.add_action_item(ActionRotateY90Ccw.new(editor_plugin))
+	$HBoxContainer/MenuBar/Edit.add_action_item(ActionRotateY90Cw.new(editor_plugin))
+	$HBoxContainer/MenuBar/Edit.add_action_item(ActionRotateY180.new(editor_plugin))
+	$HBoxContainer/MenuBar/Edit.add_action_item(ActionMirrorSelectionY2.new(editor_plugin))
+	$HBoxContainer/MenuBar/Edit.add_separator()
+	$HBoxContainer/MenuBar/Edit.add_action_item(ActionRotateZ90Ccw.new(editor_plugin))
+	$HBoxContainer/MenuBar/Edit.add_action_item(ActionRotateZ90Cw.new(editor_plugin))
+	$HBoxContainer/MenuBar/Edit.add_action_item(ActionRotateZ180.new(editor_plugin))
+	$HBoxContainer/MenuBar/Edit.add_action_item(ActionMirrorSelectionZ.new(editor_plugin))
 	
 	update_grid()
 
 func update_grid():
+	if !editor_plugin:
+		return
+		
 	if editor_plugin.active_node:
 		var size:int = editor_plugin.get_global_scene().grid_size
 		$HBoxContainer/grid_size.select(size + 4)
@@ -150,19 +169,19 @@ func _on_bn_flip_z_pressed():
 
 
 
-func populate_menu(menu:PopupMenu, actions:Array[CyclopsAction]):
+#func populate_menu(menu:PopupMenu, actions:Array[CyclopsAction]):
+#
+#	menu.clear()
+#	action_map.clear()
+#
+#	menu.id_pressed.connect(menu_item_called)
+#	for action in actions:
+#		menu.add_item(action.name, action_map.size(), action.accellerator)
+#		action_map.append(action)
 	
-	menu.clear()
-	action_map.clear()
 	
-	menu.id_pressed.connect(menu_item_called)
-	for action in actions:
-		menu.add_item(action.name, action_map.size(), action.accellerator)
-		action_map.append(action)
-	
-	
-func menu_item_called(id:int):
-	action_map[id]._execute()
+#func menu_item_called(id:int):
+#	action_map[id]._execute()
 
 
 
