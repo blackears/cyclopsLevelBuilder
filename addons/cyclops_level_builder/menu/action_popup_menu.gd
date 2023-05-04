@@ -31,7 +31,6 @@ func _ready():
 	id_pressed.connect(on_id_pressed)
 
 func add_action_item(action:CyclopsAction):
-	print("Adding action %s" % action.name)
 #	var id:int = action_map.size()
 	var id:int = action_map.size() + 1000
 	add_item(action.name, id, action.accellerator)

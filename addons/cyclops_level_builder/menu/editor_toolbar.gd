@@ -52,22 +52,6 @@ func _ready():
 	$HBoxContainer/grid_size.add_item("8", 7)
 	$HBoxContainer/grid_size.add_item("16", 8)
 	
-#	populate_menu($HBoxContainer/MenuButton.get_popup(), [\
-#		ActionRotateX90Ccw.new(editor_plugin),\
-#		ActionRotateX90Cw.new(editor_plugin),\
-#		ActionRotateX180.new(editor_plugin),\
-#		ActionRotateY90Ccw.new(editor_plugin),\
-#		ActionRotateY90Cw.new(editor_plugin),\
-#		ActionRotateY180.new(editor_plugin),\
-#		ActionRotateZ90Ccw.new(editor_plugin),\
-#		ActionRotateZ90Cw.new(editor_plugin),\
-#		ActionRotateZ180.new(editor_plugin),\
-#		ActionMirrorSelectionX2.new(editor_plugin),\
-#		ActionMirrorSelectionY2.new(editor_plugin),\
-#		ActionMirrorSelectionZ.new(editor_plugin),\
-#		ActionSnapToGrid.new(editor_plugin)])
-	
-	print("Populatin menu")
 	$HBoxContainer/MenuBar/Edit.clear()
 	$HBoxContainer/MenuBar/Edit.add_action_item(ActionSnapToGrid.new(editor_plugin))
 	$HBoxContainer/MenuBar/Edit.add_separator()

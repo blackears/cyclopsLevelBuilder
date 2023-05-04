@@ -28,6 +28,7 @@ class_name CyclopsConvexBlockBody
 var mesh_instance:MeshInstance3D
 var collision_body:StaticBody3D
 var collision_shape:CollisionShape3D
+var occluder:OccluderInstance3D
 
 var dirty:bool = true
 
@@ -48,10 +49,14 @@ var display_mode:DisplayMode.Type = DisplayMode.Type.TEXTURED
 func _ready():
 	mesh_instance = MeshInstance3D.new()
 	add_child(mesh_instance)
+	
 	collision_body = StaticBody3D.new()
 	add_child(collision_body)
 	collision_shape = CollisionShape3D.new()
 	collision_body.add_child(collision_shape)
+
+	occluder = OccluderInstance3D.new()
+	add_child(occluder)
 	
 	build_from_block()
 
@@ -101,6 +106,10 @@ func build_from_block():
 	shape.points = vol.get_points()
 	collision_shape.shape = shape
 	
+	var occluder_object:ArrayOccluder3D = ArrayOccluder3D.new()
+	occluder_object.vertices = vol.get_points()
+	occluder_object.indices = vol.get_trimesh_indices()
+	occluder.occluder = occluder_object
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

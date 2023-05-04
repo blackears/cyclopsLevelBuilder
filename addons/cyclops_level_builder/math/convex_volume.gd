@@ -363,6 +363,13 @@ func get_face_indices(selected_only:bool = false)->PackedInt32Array:
 			result.append(f_idx)
 	return result
 
+func get_trimesh_indices()->PackedInt32Array:
+	var result:PackedInt32Array
+	
+	for f in faces:
+		result.append_array(f.get_triangulation())
+	
+	return result
 
 func get_face_most_similar_to_plane(plane:Plane)->FaceInfo:
 	var best_dot:float = -1

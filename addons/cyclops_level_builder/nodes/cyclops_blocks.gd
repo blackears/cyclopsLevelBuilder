@@ -27,14 +27,13 @@ class_name CyclopsBlocks
 
 signal blocks_changed
 
-#@export var grid_size:int = 0
-#@export var selection_color:Color = Color(1, .5, .5, 1)
-#@export var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
-#@export var outline_material:Material = preload("res://addons/cyclops_level_builder/materials/outline_material.tres")
+@export var occluder_vertex_offset:float = 0:
+	get:
+		return occluder_vertex_offset
+	set(value):
+		occluder_vertex_offset = value
+		dirty = true
 
-#var mesh_instance:MeshInstance3D
-#var mesh_wire_instance:MeshInstance3D
-#var mesh_object_outline_instance:MeshInstance3D
 var dirty:bool = true
 
 var block_bodies:Node3D
