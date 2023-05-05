@@ -457,3 +457,23 @@ static func create_transform(translation:Vector3, rotation_axis:Vector3, rotatio
 	
 	return xform
 	
+static func create_circle_points(center:Vector3, normal:Vector3, radius:float, num_segments:int)->PackedVector3Array:
+	var result:PackedVector3Array
+	
+	var axis:Axis = get_longest_axis(normal)
+	var perp_normal:Vector3
+	match axis:
+		Axis.X:
+			perp_normal = normal.cross(Vector3.UP)
+		Axis.Y:
+			perp_normal = normal.cross(Vector3.FORWARD)
+		Axis.Z:
+			perp_normal = normal.cross(Vector3.UP)
+
+	var angle_incrment = (PI * 2 / num_segments)
+	for i in num_segments:
+		var offset:Vector3 = perp_normal.rotated(normal, i * angle_incrment)
+		result.append(offset * radius + center)
+	
+	return result
+	

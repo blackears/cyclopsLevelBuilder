@@ -46,7 +46,7 @@ func _get_tool_id()->String:
 	return TOOL_ID
 
 func _draw_tool(viewport_camera:Camera3D):
-	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
+	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
 	
 	#var blocks_root:CyclopsBlocks = builder.active_node

@@ -23,10 +23,58 @@
 
 @tool
 extends Control
-class_name ToolPropertiesDock
+class_name ResourceInspector
 
-var builder:CyclopsLevelBuilder
+@export var target:Resource:
+	get:
+		return target
+	set(value):
+		target = value
+		build()
 
+func add_label(name:String):
+	var label:Label = Label.new()
+	label.text = name
+	$GridContainer.add_child(label)
+
+func build():
+	for child in $GridContainer.get_children():
+		$GridContainer.remove_child(child)
+		
+	if !target:
+		return
+		
+	for prop_dict in target.get_property_list():
+		var prop_name:String = prop_dict["name"]
+#		prop_dict["class_name"]
+		
+		var type:Variant.Type = prop_dict["type"]
+		match type:
+			TYPE_BOOL:
+				add_label(prop_name)
+				
+				var editor:LineEditorBool = preload("res://addons/cyclops_level_builder/controls/resource_inspector/line_editor_bool.tscn").instantiate()
+				editor.resource = target
+				editor.prop_name = name
+				$GridContainer.add_child(editor)
+				
+			TYPE_INT:
+				add_label(prop_name)
+				
+				var editor:LineEditorInt = preload("res://addons/cyclops_level_builder/controls/resource_inspector/line_editor_int.tscn").instantiate()
+				editor.resource = target
+				editor.prop_name = name
+				$GridContainer.add_child(editor)
+				
+			TYPE_FLOAT:
+				add_label(prop_name)
+				
+				var editor:LineEditorFloat = preload("res://addons/cyclops_level_builder/controls/resource_inspector/line_editor_float.tscn").instantiate()
+				editor.resource = target
+				editor.prop_name = name
+				$GridContainer.add_child(editor)
+		
+		pass
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -36,21 +84,3 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
-
-func set_editor(control:Control):
-	for child in $ScrollContainer.get_children():
-		$ScrollContainer.remove_child(child)
-	
-	if control:
-		$ScrollContainer.add_child(control)
-
-func save_state(state:Dictionary):
-	var substate:Dictionary = {}
-	state["tool_properties"] = substate
-	
-
-func load_state(state:Dictionary):
-	if state == null || !state.has("tool_properties"):
-		return
-	
-	var substate:Dictionary = state["tool_properties"]

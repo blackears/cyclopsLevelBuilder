@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://dpncabeqiv1xo"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/resource_inspector/line_editor_bool.gd" id="1_sn3qq"]
+
+[node name="CheckBox" type="CheckBox"]
+offset_right = 24.0
+offset_bottom = 24.0
+script = ExtResource("1_sn3qq")
+
+[connection signal="toggled" from="." to="." method="_on_toggled"]

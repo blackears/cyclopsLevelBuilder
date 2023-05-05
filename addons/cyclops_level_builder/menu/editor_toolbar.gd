@@ -123,6 +123,8 @@ func _on_check_lock_uvs_toggled(button_pressed):
 func _on_bn_prism_pressed():
 	editor_plugin.switch_to_tool(ToolPrism.new())
 
+func _on_bn_cylinder_pressed():
+	editor_plugin.switch_to_tool(ToolCylinder.new())
 
 func _on_bn_duplicate_pressed():
 	editor_plugin.switch_to_tool(ToolDuplicate.new())
@@ -171,3 +173,5 @@ func _on_bn_flip_z_pressed():
 
 func _on_display_mode_item_selected(index):
 	editor_plugin.display_mode = index
+
+

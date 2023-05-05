@@ -48,6 +48,19 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Prism"
 
+[node name="bn_cylinder" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Click on surface of block or in empty space to begin creating base of prism.
+
+Click to add new point.  Backspace to remove the last point you added.
+
+Press Enter to extrude base.
+
+Press Enter again to finish extruding and create block."
+toggle_mode = true
+button_group = SubResource("ButtonGroup_i8xwa")
+text = "Cylinder"
+
 [node name="bn_clip" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 tooltip_text = "Click on surface of block to place first cutting point.
@@ -117,39 +130,40 @@ layout_mode = 2
 [node name="Edit" type="PopupMenu" parent="HBoxContainer/MenuBar"]
 item_count = 16
 item_0/text = "Snap to grid"
-item_0/id = 0
+item_0/id = 1000
 item_1/text = ""
 item_1/id = -1
 item_1/separator = true
 item_2/text = "Rotate 90 Ccw X"
-item_2/id = 1
+item_2/id = 1001
 item_3/text = "Rotate 90 Cw X"
-item_3/id = 2
+item_3/id = 1002
 item_4/text = "Rotate 180 X"
-item_4/id = 3
+item_4/id = 1003
 item_5/text = "Mirror Selection X"
-item_5/id = 4
-item_6/text = "Rotate 90 Ccw Y"
-item_6/id = 5
-item_7/text = "Rotate 90 Cw Y"
-item_7/id = 6
-item_8/text = "Rotate 180 Y"
-item_8/id = 7
-item_9/text = "Mirror Selection Y"
-item_9/id = 8
-item_10/text = "Rotate 90 Ccw Z"
-item_10/id = 9
-item_11/text = "Rotate 90 Cw Z"
-item_11/id = 10
-item_12/text = "Rotate 180 Z"
-item_12/id = 11
-item_13/text = "Mirror Selection Z"
-item_13/id = 12
-item_14/text = "Snap to grid"
-item_14/id = 1000
-item_15/text = ""
-item_15/id = -1
-item_15/separator = true
+item_5/id = 1004
+item_6/text = ""
+item_6/id = -1
+item_6/separator = true
+item_7/text = "Rotate 90 Ccw Y"
+item_7/id = 1005
+item_8/text = "Rotate 90 Cw Y"
+item_8/id = 1006
+item_9/text = "Rotate 180 Y"
+item_9/id = 1007
+item_10/text = "Mirror Selection Y"
+item_10/id = 1008
+item_11/text = ""
+item_11/id = -1
+item_11/separator = true
+item_12/text = "Rotate 90 Ccw Z"
+item_12/id = 1009
+item_13/text = "Rotate 90 Cw Z"
+item_13/id = 1010
+item_14/text = "Rotate 180 Z"
+item_14/id = 1011
+item_15/text = "Mirror Selection Z"
+item_15/id = 1012
 script = ExtResource("2_ni0c8")
 
 [node name="check_lock_uvs" type="CheckBox" parent="HBoxContainer"]
@@ -191,6 +205,7 @@ popup/item_1/id = 1
 
 [connection signal="pressed" from="HBoxContainer/bn_block" to="." method="_on_bn_move_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_prism" to="." method="_on_bn_prism_pressed"]
+[connection signal="pressed" from="HBoxContainer/bn_cylinder" to="." method="_on_bn_cylinder_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_clip" to="." method="_on_bn_clip_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_vertex" to="." method="_on_bn_vertex_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_edge" to="." method="_on_bn_edge_pressed"]

@@ -37,7 +37,7 @@ func _get_tool_id()->String:
 	return TOOL_ID
 
 func _draw_tool(viewport_camera:Camera3D):
-	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
+	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
 	global_scene.draw_selected_blocks(viewport_camera)
 
@@ -107,7 +107,7 @@ func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
 
 	#builder.mode = CyclopsLevelBuilder.Mode.OBJECT
-	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
+	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
 	
 	#Invoke command immediately

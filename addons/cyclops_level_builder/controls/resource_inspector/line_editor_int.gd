@@ -22,11 +22,30 @@
 # SOFTWARE.
 
 @tool
-extends Control
-class_name ToolPropertiesDock
+extends SpinBox
+class_name LineEditorInt
 
-var builder:CyclopsLevelBuilder
+var resource:Resource:
+	get:
+		return resource
+	set(value):
+		resource = value
+		dirty = true
+		
+var prop_name:String:
+	get:
+		return prop_name
+	set(value):
+		prop_name = value
+		dirty = true
 
+var dirty = true
+
+func update_from_resource():
+	if resource:
+		var result = resource.get(prop_name)
+		if result != null:
+			value = result
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -35,22 +54,11 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	if dirty:
+		update_from_resource()
+		dirty = false
 
-func set_editor(control:Control):
-	for child in $ScrollContainer.get_children():
-		$ScrollContainer.remove_child(child)
-	
-	if control:
-		$ScrollContainer.add_child(control)
 
-func save_state(state:Dictionary):
-	var substate:Dictionary = {}
-	state["tool_properties"] = substate
-	
-
-func load_state(state:Dictionary):
-	if state == null || !state.has("tool_properties"):
-		return
-	
-	var substate:Dictionary = state["tool_properties"]
+func _on_value_changed(value):
+	if resource:
+		resource.set(prop_name, value)

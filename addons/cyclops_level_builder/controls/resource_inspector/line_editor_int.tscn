@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://dh6frljlp7oqe"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/resource_inspector/line_editor_int.gd" id="1_ryygx"]
+
+[node name="SpinBox" type="SpinBox"]
+offset_right = 83.0625
+offset_bottom = 40.0
+script = ExtResource("1_ryygx")
+
+[connection signal="value_changed" from="." to="." method="_on_value_changed"]

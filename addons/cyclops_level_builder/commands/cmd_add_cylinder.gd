@@ -22,24 +22,29 @@
 # SOFTWARE.
 
 @tool
-class_name CommandAddPrism
+class_name CommandAddCylinder
 extends CyclopsCommand
 
-#var blocks_root_inst_id:int
+#Public data to set before activating command
 var blocks_root_path:NodePath
 var block_name:String
-#var block_owner:Node
-var base_polygon:PackedVector3Array
-var extrude:Vector3
-#var block_inst_id:int
-var uv_transform:Transform2D
-var material_path:String
+var origin:Vector3
+var axis_normal:Vector3
+var height:float
+var radius_inner:float
+var radius_outer:float
+var segments:int
+var tube:bool = false
 
-#Private
+var material_path:String
+var uv_transform:Transform2D = Transform2D.IDENTITY
+
+#Private data
 var block_path:NodePath
 
 func _init():
-	command_name = "Add prism"
+	command_name = "Add cylinder"
+
 
 func do_it():
 	var block:CyclopsConvexBlock = preload("../nodes/cyclops_convex_block.gd").new()
@@ -47,8 +52,12 @@ func do_it():
 	var blocks_root:CyclopsBlocks = builder.get_node(blocks_root_path)
 	blocks_root.add_child(block)
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
-#	block.owner = block_owner
 	block.name = block_name
+
+	#print("radius_outer %s" % radius_outer)
+
+	var bounding_points:PackedVector3Array = MathUtil.create_circle_points(origin, axis_normal, radius_outer, segments)
+	#print("cyl base %s" % bounding_points)
 
 	var material_id:int = -1
 	if ResourceLoader.exists(material_path):
@@ -56,9 +65,12 @@ func do_it():
 		if mat is Material:
 			material_id = 0
 			block.materials.append(mat)
+
+	#print("axis_normal %s" % axis_normal)
+	#print("height %s" % height)
 	
 	var mesh:ConvexVolume = ConvexVolume.new()
-	mesh.init_prisim(base_polygon, extrude, uv_transform, material_id)
+	mesh.init_prisim(bounding_points, axis_normal * height, uv_transform, material_id)
 
 	block.block_data = mesh.to_convex_block_data()
 	block_path = block.get_path()
@@ -68,5 +80,3 @@ func do_it():
 func undo_it():
 	var block:CyclopsConvexBlock = builder.get_node(block_path)
 	block.queue_free()
-
-#	print("AddBlockCommand undo_it()")
