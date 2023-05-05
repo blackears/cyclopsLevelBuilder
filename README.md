@@ -6,7 +6,7 @@ Cyclops Level Builder lets you quickly build environments in the Godot viewport.
 
 ## Installation
 
-* Download the latest release and unzip it.
+* [Download the latest release](https://github.com/blackears/cyclopsLevelBuilder/releases) from the releases page.  Unzip it into a temporary directory.
 * Copy the /addons folder and everything in it into the root of the project you want to use Cyclops Level Builder in.
 * Click on Project/Project Settings.  Select the Plugins tab and check Enable next to the Cyclops Level Builder entry.
 
@@ -19,6 +19,11 @@ Cyclops Level Builder lets you quickly build environments in the Godot viewport.
 ## Design
 
 [An overview of the architecture of Cyclops Level Builder](doc/design.md) for those who want to dive into the code.
+
+
+## Contributing 
+
+Please open small issues.  PRs are welcome for small fixes.  Broader ideas can be opened for discussions in the [Discussions](https://github.com/blackears/cyclopsLevelBuilder/discussions) forum.
 
 ## Roadmap
 
