@@ -30,8 +30,9 @@ const TOOL_ID:String = "cylinder"
 enum ToolState { READY, FIRST_RING, SECOND_RING, DRAG_HEIGHT }
 var tool_state:ToolState = ToolState.READY
 
-@export var segments:int = 16
-@export var tube:bool = false
+#@export var segments:int = 16
+#@export var tube:bool = false
+var settings:ToolCylinderSettings = ToolCylinderSettings.new()
 
 var floor_normal:Vector3
 var base_center:Vector3
@@ -40,6 +41,8 @@ var drag_offset:Vector3
 var first_ring_radius:float
 var second_ring_radius:float
 
+
+
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
 
@@ -47,28 +50,35 @@ func _activate(builder:CyclopsLevelBuilder):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
 
+func _get_tool_properties_editor()->Control:
+	var res_insp:ResourceInspector = preload("res://addons/cyclops_level_builder/controls/resource_inspector/resource_inspector.tscn").instantiate()
+	
+	res_insp.target = settings
+	
+	return res_insp
+
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
 	global_scene.draw_selected_blocks(viewport_camera)
 
 	if tool_state == ToolState.FIRST_RING:
-		var bounding_points:PackedVector3Array = MathUtil.create_circle_points(base_center, floor_normal, first_ring_radius, segments)
+		var bounding_points:PackedVector3Array = MathUtil.create_circle_points(base_center, floor_normal, first_ring_radius, settings.segments)
 		global_scene.draw_loop(bounding_points, true, global_scene.tool_material)
 		global_scene.draw_points(bounding_points, global_scene.tool_material)
 		
 	elif tool_state == ToolState.SECOND_RING:
 		for radius in [first_ring_radius, second_ring_radius]:
-			var bounding_points:PackedVector3Array = MathUtil.create_circle_points(base_center, floor_normal, radius, segments)
+			var bounding_points:PackedVector3Array = MathUtil.create_circle_points(base_center, floor_normal, radius, settings.segments)
 			global_scene.draw_loop(bounding_points, true, global_scene.tool_material)
 			global_scene.draw_points(bounding_points, global_scene.tool_material)
 
 	elif tool_state == ToolState.DRAG_HEIGHT:	
-		var bounding_points:PackedVector3Array = MathUtil.create_circle_points(base_center, floor_normal, first_ring_radius, segments)
+		var bounding_points:PackedVector3Array = MathUtil.create_circle_points(base_center, floor_normal, first_ring_radius, settings.segments)
 		global_scene.draw_prism(bounding_points, drag_offset, global_scene.tool_material)
 		
-		if tube:
-			bounding_points = MathUtil.create_circle_points(base_center, floor_normal, second_ring_radius, segments)
+		if settings.tube:
+			bounding_points = MathUtil.create_circle_points(base_center, floor_normal, second_ring_radius, settings.segments)
 			global_scene.draw_prism(bounding_points, drag_offset, global_scene.tool_material)
 		
 	
@@ -127,7 +137,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						return true	
 			else:
 				if tool_state == ToolState.FIRST_RING:
-					if tube:
+					if settings.tube:
 						tool_state = ToolState.SECOND_RING
 					else:
 						tool_state = ToolState.DRAG_HEIGHT
@@ -144,17 +154,17 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					cmd.builder = builder
 					cmd.block_name = GeneralUtil.find_unique_name(builder.active_node, "Block_")
 					cmd.blocks_root_path = blocks_root.get_path()
-					cmd.tube = tube
+					cmd.tube = settings.tube
 					cmd.origin = base_center
 					cmd.axis_normal = floor_normal
 					cmd.height = drag_offset.length()
-					if tube:
+					if settings.tube:
 						cmd.radius_inner = min(first_ring_radius, second_ring_radius)
 						cmd.radius_outer = max(first_ring_radius, second_ring_radius)
 					else:
 						cmd.radius_inner = first_ring_radius
 						cmd.radius_outer = first_ring_radius
-					cmd.segments = segments
+					cmd.segments = settings.segments
 					cmd.uv_transform = builder.tool_uv_transform
 					cmd.material_path = builder.tool_material_path
 
@@ -173,12 +183,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 		elif e.button_index == MOUSE_BUTTON_WHEEL_UP:
 			if tool_state == ToolState.FIRST_RING || tool_state == ToolState.SECOND_RING || tool_state == ToolState.DRAG_HEIGHT:
-				segments += 1
+				settings.segments += 1
 				return true
 					
 		elif e.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			if tool_state == ToolState.FIRST_RING || tool_state == ToolState.SECOND_RING || tool_state == ToolState.DRAG_HEIGHT:
-				segments = max(segments - 1, 3)
+				settings.segments = max(settings.segments - 1, 3)
 				return true
 
 	elif event is InputEventMouseMotion:

@@ -22,50 +22,9 @@
 # SOFTWARE.
 
 @tool
-extends SpinBox
-class_name LineEditorInt
+extends Resource
+class_name ToolCylinderSettings
 
-var resource:Resource:
-	get:
-		return resource
-	set(value):
-		resource = value
-		dirty = true
-		
-var prop_name:String:
-	get:
-		return prop_name
-	set(value):
-		prop_name = value
-		dirty = true
+@export var segments:int = 16
+@export var tube:bool = false
 
-var dirty = true
-
-func update_from_resource():
-	#print("update_from_resource()")
-	if resource:
-		#print("resource %s" % resource)
-		#print("prop_name %s" % prop_name)
-		var result = resource.get(prop_name)
-		#print("result %s" % result)
-		if result != null:
-			value = result
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	if dirty:
-		update_from_resource()
-		dirty = false
-
-
-func _on_value_changed(value):
-	print("_on_value_changed(value)")
-	if resource:
-		print("prop_name %s" % prop_name)
-		print("value %s" % value)
-		resource.set(prop_name, value)

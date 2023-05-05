@@ -40,43 +40,62 @@ var material_path:String
 var uv_transform:Transform2D = Transform2D.IDENTITY
 
 #Private data
-var block_path:NodePath
+var block_paths:Array[NodePath]
 
 func _init():
 	command_name = "Add cylinder"
 
-
-func do_it():
+func create_block(blocks_root:CyclopsBlocks, mat:Material)->CyclopsConvexBlock:
 	var block:CyclopsConvexBlock = preload("../nodes/cyclops_convex_block.gd").new()
-	
-	var blocks_root:CyclopsBlocks = builder.get_node(blocks_root_path)
 	blocks_root.add_child(block)
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
 	block.name = block_name
 
-	#print("radius_outer %s" % radius_outer)
+	if mat:
+		block.materials.append(mat)
+			
+	return block
 
-	var bounding_points:PackedVector3Array = MathUtil.create_circle_points(origin, axis_normal, radius_outer, segments)
-	#print("cyl base %s" % bounding_points)
 
+func do_it():
+	var blocks_root:CyclopsBlocks = builder.get_node(blocks_root_path)
+	
+	var material:Material
 	var material_id:int = -1
 	if ResourceLoader.exists(material_path):
 		var mat = load(material_path)
 		if mat is Material:
 			material_id = 0
-			block.materials.append(mat)
-
-	#print("axis_normal %s" % axis_normal)
-	#print("height %s" % height)
+			material = mat
 	
-	var mesh:ConvexVolume = ConvexVolume.new()
-	mesh.init_prisim(bounding_points, axis_normal * height, uv_transform, material_id)
+	if tube:
+		var bounding_points_inner:PackedVector3Array = MathUtil.create_circle_points(origin, axis_normal, radius_inner, segments)
+		var bounding_points_outer:PackedVector3Array = MathUtil.create_circle_points(origin, axis_normal, radius_outer, segments)
+		
+		for p_idx0 in bounding_points_inner.size():
+			var p_idx1:int = wrap(p_idx0 + 1, 0, bounding_points_inner.size())
+			
+			var block:CyclopsConvexBlock = create_block(blocks_root, material)
+			
+			var mesh:ConvexVolume = ConvexVolume.new()
+			var base_points:PackedVector3Array = [bounding_points_inner[p_idx0], bounding_points_inner[p_idx1], bounding_points_outer[p_idx1], bounding_points_outer[p_idx0]]
+			
+			mesh.init_prisim(base_points, axis_normal * height, uv_transform, material_id)
 
-	block.block_data = mesh.to_convex_block_data()
-	block_path = block.get_path()
+			block.block_data = mesh.to_convex_block_data()
+			block_paths.append(block.get_path())
+		
+	else:
+		var block:CyclopsConvexBlock = create_block(blocks_root, material)
+		
+		var bounding_points:PackedVector3Array = MathUtil.create_circle_points(origin, axis_normal, radius_outer, segments)
+		var mesh:ConvexVolume = ConvexVolume.new()
+		mesh.init_prisim(bounding_points, axis_normal * height, uv_transform, material_id)
 
-#	print("AddBlockCommand do_it() %s %s" % [block_inst_id, bounds])
-	
+		block.block_data = mesh.to_convex_block_data()
+		block_paths.append(block.get_path())
+
 func undo_it():
-	var block:CyclopsConvexBlock = builder.get_node(block_path)
-	block.queue_free()
+	for path in block_paths:
+		var block:CyclopsConvexBlock = builder.get_node(path)
+		block.queue_free()

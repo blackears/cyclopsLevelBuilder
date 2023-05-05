@@ -55,7 +55,7 @@ func build():
 				
 				var editor:LineEditorBool = preload("res://addons/cyclops_level_builder/controls/resource_inspector/line_editor_bool.tscn").instantiate()
 				editor.resource = target
-				editor.prop_name = name
+				editor.prop_name = prop_name
 				$GridContainer.add_child(editor)
 				
 			TYPE_INT:
@@ -63,7 +63,7 @@ func build():
 				
 				var editor:LineEditorInt = preload("res://addons/cyclops_level_builder/controls/resource_inspector/line_editor_int.tscn").instantiate()
 				editor.resource = target
-				editor.prop_name = name
+				editor.prop_name = prop_name
 				$GridContainer.add_child(editor)
 				
 			TYPE_FLOAT:
@@ -71,7 +71,7 @@ func build():
 				
 				var editor:LineEditorFloat = preload("res://addons/cyclops_level_builder/controls/resource_inspector/line_editor_float.tscn").instantiate()
 				editor.resource = target
-				editor.prop_name = name
+				editor.prop_name = prop_name
 				$GridContainer.add_child(editor)
 		
 		pass
