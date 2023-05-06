@@ -58,7 +58,7 @@ func do_it():
 			block.materials.append(mat)
 	
 	var mesh:ConvexVolume = ConvexVolume.new()
-	mesh.init_prisim(base_polygon, extrude, uv_transform, material_id)
+	mesh.init_prism(base_polygon, extrude, uv_transform, material_id)
 
 	block.block_data = mesh.to_convex_block_data()
 	block_path = block.get_path()

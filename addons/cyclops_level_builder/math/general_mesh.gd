@@ -136,10 +136,10 @@ func init_block(block_bounds:AABB):
 	var p101:Vector3 = Vector3(p111.x, p000.y, p111.z)
 	var p110:Vector3 = Vector3(p111.x, p111.y, p000.z)
 	
-	init_prisim([p000, p001, p011, p010], p100 - p000)
+	init_prism([p000, p001, p011, p010], p100 - p000)
 	
 
-func init_prisim(base_points:Array[Vector3], extrude_dir:Vector3):
+func init_prism(base_points:Array[Vector3], extrude_dir:Vector3):
 	
 	var verts:PackedVector3Array
 	for p in base_points:

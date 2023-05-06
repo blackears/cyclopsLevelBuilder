@@ -5,7 +5,7 @@ extends Node2D
 func _ready():
 	var vol:ConvexVolume = ConvexVolume.new()
 #	vol.init_block(AABB(Vector3(0, 0, 0), Vector3(1, 1, 1)))
-	vol.init_prisim([\
+	vol.init_prism([\
 		Vector3(1, 0, 3),
 		Vector3(1, 0, 4),
 		Vector3(0, 0, 3),

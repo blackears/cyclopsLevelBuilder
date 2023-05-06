@@ -163,10 +163,10 @@ func init_block(block_bounds:AABB, uv_transform:Transform2D = Transform2D.IDENTI
 	var p101:Vector3 = Vector3(p111.x, p000.y, p111.z)
 	var p110:Vector3 = Vector3(p111.x, p111.y, p000.z)
 	
-	init_prisim([p000, p001, p011, p010], p100 - p000, uv_transform, material_id)
+	init_prism([p000, p001, p011, p010], p100 - p000, uv_transform, material_id)
 	
 
-func init_prisim(base_points:Array[Vector3], extrude_dir:Vector3, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = -1):
+func init_prism(base_points:Array[Vector3], extrude_dir:Vector3, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = -1):
 	vertices = []
 	edges = []
 	faces = []

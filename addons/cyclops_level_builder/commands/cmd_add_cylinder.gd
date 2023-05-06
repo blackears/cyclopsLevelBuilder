@@ -80,7 +80,7 @@ func do_it():
 			var mesh:ConvexVolume = ConvexVolume.new()
 			var base_points:PackedVector3Array = [bounding_points_inner[p_idx0], bounding_points_inner[p_idx1], bounding_points_outer[p_idx1], bounding_points_outer[p_idx0]]
 			
-			mesh.init_prisim(base_points, axis_normal * height, uv_transform, material_id)
+			mesh.init_prism(base_points, axis_normal * height, uv_transform, material_id)
 
 			block.block_data = mesh.to_convex_block_data()
 			block_paths.append(block.get_path())
@@ -90,7 +90,7 @@ func do_it():
 		
 		var bounding_points:PackedVector3Array = MathUtil.create_circle_points(origin, axis_normal, radius_outer, segments)
 		var mesh:ConvexVolume = ConvexVolume.new()
-		mesh.init_prisim(bounding_points, axis_normal * height, uv_transform, material_id)
+		mesh.init_prism(bounding_points, axis_normal * height, uv_transform, material_id)
 
 		block.block_data = mesh.to_convex_block_data()
 		block_paths.append(block.get_path())
