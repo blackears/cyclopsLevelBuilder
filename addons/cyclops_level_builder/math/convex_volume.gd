@@ -597,7 +597,17 @@ func tristrip_vertex_range_reverse(num_verts:int)->PackedInt32Array:
 			result.append(num_verts - (i >> 1))
 	
 	return result
+
+func calc_lightmap_uvs()->PackedVector2Array:
+	var result:PackedVector2Array
 	
+	for face in faces:
+		face.vertex_indices
+		var points:PackedVector3Array = face.get_points()
+		face.normal
+	
+	return result
+
 func append_mesh(mesh:ImmediateMesh, material_list:Array[Material], default_material:Material):
 #	if Engine.is_editor_hint():
 #		return
@@ -754,23 +764,6 @@ func append_mesh_wire(mesh:ImmediateMesh, material:Material):
 		mesh.surface_add_vertex(v1.point)
 
 	mesh.surface_end()	
-
-
-#	for face in faces:
-#		mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, material)
-#		#print("face %s" % face.id)
-#
-#		if face.vertex_indices.is_empty():
-#			continue
-#
-#		for i in face.vertex_indices.size():
-#			var v_idx:int = face.vertex_indices[i]
-#			print("add vertex %s" % v_idx)
-#			mesh.surface_add_vertex(vertices[v_idx].point)
-#		var v_idx:int = face.vertex_indices[0]
-#		mesh.surface_add_vertex(vertices[v_idx].point)
-#
-#		mesh.surface_end()	
 
 
 func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:

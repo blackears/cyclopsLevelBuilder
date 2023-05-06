@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://doqt1lyc6lscr"]
+
+[ext_resource type="Script" path="res://experiments/test_uv2_map.gd" id="1_d1c1j"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_d1c1j")
+
+[node name="Line2D" type="Line2D" parent="."]
