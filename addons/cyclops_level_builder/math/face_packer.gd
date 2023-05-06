@@ -204,10 +204,10 @@ func pack_faces(faces:Array[FaceTracker])->FaceTree:
 	for f in faces:
 		tree.add_face(f)
 	
-	print(tree)
+	#print(tree)
 	return tree
 
-func build_faces(vol:ConvexVolume)->FaceTree:
+func build_faces(vol:ConvexVolume, margin:float)->FaceTree:
 	var faces:Array[FaceTracker]
 	
 	for face in vol.faces:
@@ -241,6 +241,9 @@ func build_faces(vol:ConvexVolume)->FaceTree:
 		#print("after rot %s" % tracker.points)
 		tracker.fit_initial_rect()
 		#print("after fit %s" % tracker.points)
+		for p_idx in tracker.points.size():
+			tracker.points[p_idx] += Vector2(margin, margin)
+		tracker.bounds.size += Vector2(margin, margin) * 2
 	
 	return pack_faces(faces)
 	

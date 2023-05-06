@@ -15,7 +15,7 @@ func _ready():
 		], Vector3(0, 1, 0))
 	
 	var packer:FacePacker = FacePacker.new()
-	var tree:FacePacker.FaceTree =  packer.build_faces(vol)
+	var tree:FacePacker.FaceTree =  packer.build_faces(vol, .1)
 	
 	for f in tree.face_list:
 		var line:Line2D = Line2D.new()
