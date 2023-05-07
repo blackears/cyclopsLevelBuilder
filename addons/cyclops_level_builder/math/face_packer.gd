@@ -123,6 +123,7 @@ class FaceTracker extends RefCounted:
 	var points:PackedVector2Array
 	var indices:PackedInt32Array
 	var bounds:Rect2
+	var face_index:int
 
 	func _to_string()->String:
 		var res:String = "["
@@ -210,7 +211,8 @@ func pack_faces(faces:Array[FaceTracker])->FaceTree:
 func build_faces(vol:ConvexVolume, margin:float)->FaceTree:
 	var faces:Array[FaceTracker]
 	
-	for face in vol.faces:
+	for f_idx in vol.faces.size():
+		var face:ConvexVolume.FaceInfo = vol.faces[f_idx]
 		var axis:MathUtil.Axis = MathUtil.get_longest_axis(face.normal)
 		
 		var cross_vec:Vector3
@@ -227,6 +229,7 @@ func build_faces(vol:ConvexVolume, margin:float)->FaceTree:
 		var xz_xform:Transform3D = xform.affine_inverse()
 		
 		var tracker:FaceTracker = FaceTracker.new()
+		tracker.face_index = f_idx
 		faces.append(tracker)
 		
 		for v_idx in face.vertex_indices:

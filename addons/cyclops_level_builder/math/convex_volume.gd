@@ -78,6 +78,7 @@ class FaceInfo extends RefCounted:
 	#var active:bool
 	var vertex_indices:Array[int]
 	var triangulation_indices:Array[int]
+	var lightmap_uvs:PackedVector2Array
 	
 	func _init(mesh:ConvexVolume, id:int, normal:Vector3, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0, selected:bool = false):
 		self.mesh = mesh
@@ -104,19 +105,34 @@ class FaceInfo extends RefCounted:
 		center /= points.size()
 		return center
 	
+#	func get_triangulation()->Array[int]:		
+#		if triangulation_indices.is_empty():
+#			var points:PackedVector3Array
+#			var indices:Array[int]
+#			for v_idx in vertex_indices:
+#				points.append(mesh.vertices[v_idx].point)
+#				indices.append(v_idx)
+#
+##			print("start points %s" % points)
+#
+#			var normal:Vector3 = MathUtil.face_area_x2(points).normalized()
+##			print("normal %s" % normal)
+#			triangulation_indices = MathUtil.trianglate_face_indices(points, indices, normal)
+##			print("triangulation %s" % str(triangulation_indices))
+#
+#		return triangulation_indices
+	
 	func get_triangulation()->Array[int]:		
 		if triangulation_indices.is_empty():
 			var points:PackedVector3Array
-			var indices:Array[int]
 			for v_idx in vertex_indices:
 				points.append(mesh.vertices[v_idx].point)
-				indices.append(v_idx)
 
 #			print("start points %s" % points)
 				
 			var normal:Vector3 = MathUtil.face_area_x2(points).normalized()
 #			print("normal %s" % normal)
-			triangulation_indices = MathUtil.trianglate_face_indices(points, indices, normal)
+			triangulation_indices = MathUtil.trianglate_face_vertex_indices(points, normal)
 #			print("triangulation %s" % str(triangulation_indices))
 		
 		return triangulation_indices
@@ -124,12 +140,13 @@ class FaceInfo extends RefCounted:
 	func get_trianges()->PackedVector3Array:
 		var indices:Array[int] = get_triangulation()
 		var result:PackedVector3Array
-		
-		for i in indices:
-			result.append(mesh.vertices[i].point)
+
+		for fv_idx in indices:
+			var v_idx:int = vertex_indices[fv_idx]
+			result.append(mesh.vertices[v_idx].point)
 
 #		print("triangules %s" % result)
-			
+
 		return result
 	
 	func reverse():
@@ -137,10 +154,18 @@ class FaceInfo extends RefCounted:
 		vertex_indices.reverse()
 		triangulation_indices.clear()
 
+#class FaceVertexInfo extends RefCounted:
+#	var vert_idx:int
+#	var face_idx:int
+	
+
+
 var vertices:Array[VertexInfo] = []
 var edges:Array[EdgeInfo] = []
 var faces:Array[FaceInfo] = []
 var bounds:AABB
+
+var lightmap_uvs_dirty = true
 
 var active_vertex:int = -1
 var active_edge:int = -1
@@ -210,6 +235,7 @@ func init_prism(base_points:Array[Vector3], extrude_dir:Vector3, uv_transform:Tr
 	calc_vertex_normals()
 	
 	bounds = calc_bounds()
+	calc_lightmap_uvs()
 
 func init_from_convex_block_data(data:ConvexBlockData):
 	vertices = []
@@ -259,6 +285,7 @@ func init_from_convex_block_data(data:ConvexBlockData):
 	calc_vertex_normals()
 	
 	bounds = calc_bounds()
+	calc_lightmap_uvs()
 	#print("init_from_convex_block_data %s" % format_faces_string())
 	
 
@@ -294,6 +321,7 @@ func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Tran
 	calc_vertex_normals()
 	
 	bounds = calc_bounds()
+	calc_lightmap_uvs()
 	
 func calc_vertex_normals():
 	for v_idx in vertices.size():
@@ -367,7 +395,9 @@ func get_trimesh_indices()->PackedInt32Array:
 	var result:PackedInt32Array
 	
 	for f in faces:
-		result.append_array(f.get_triangulation())
+		for fv_idx in f.get_triangulation():
+			var v_idx:int = f.vertex_indices[fv_idx]
+			result.append(f.vertex_indices[v_idx])
 	
 	return result
 
@@ -427,7 +457,8 @@ func get_face(face_id:int)->FaceInfo:
 			return face
 	return null
 
-#enum PlaneSide { OVER, ON, UNDER }
+# Creates a new volume that is equal to the portion of this volume on the top 
+# side of the passed plane.  Does not modify the geometry of this volume.
 func cut_with_plane(plane:Plane, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0)->ConvexVolume:
 #
 	var planes:Array[Plane]
@@ -459,6 +490,9 @@ func cut_with_plane(plane:Plane, uv_transform:Transform2D = Transform2D.IDENTITY
 func is_empty():
 	return bounds.size.is_zero_approx()
 
+# Returns a new ConvexVolume equal to this volume after the plane of the 
+# indicated face has been translated the given offset.  Does not modify the
+# geometry of this volume.
 func translate_face_plane(face_id:int, offset:Vector3, lock_uvs:bool = false)->ConvexVolume:
 	var xform:Transform3D = Transform3D(Basis.IDENTITY, -offset)
 
@@ -537,6 +571,7 @@ func transform(xform:Transform3D, lock_uvs:bool = false):
 					
 					f.uv_transform = f.uv_transform * move_xform
 		
+	#calc_lightmap_uvs()
 
 func unused_face_id()->int:
 	var idx = 0
@@ -598,15 +633,18 @@ func tristrip_vertex_range_reverse(num_verts:int)->PackedInt32Array:
 	
 	return result
 
-func calc_lightmap_uvs()->PackedVector2Array:
-	var result:PackedVector2Array
-	
-	for face in faces:
-		face.vertex_indices
-		var points:PackedVector3Array = face.get_points()
-		face.normal
-	
-	return result
+func calc_lightmap_uvs():
+	var packer:FacePacker = FacePacker.new()
+	var max_dim:float = max(bounds.size.x, bounds.size.y, bounds.size.z)
+	var tree:FacePacker.FaceTree = packer.build_faces(self, max_dim * .1)
+
+	var xform:Transform2D = Transform2D.IDENTITY
+	xform = xform.scaled(tree.bounds.size)
+	var xform_inv = xform.affine_inverse()
+
+	for ft in tree.face_list:
+		var face:FaceInfo = faces[ft.face_index]
+		face.lightmap_uvs = xform_inv * ft.points
 
 func append_mesh(mesh:ImmediateMesh, material_list:Array[Material], default_material:Material):
 #	if Engine.is_editor_hint():
@@ -619,7 +657,8 @@ func append_mesh(mesh:ImmediateMesh, material_list:Array[Material], default_mate
 		if face.material_id >=0 && face.material_id < material_list.size():
 			material = material_list[face.material_id]
 		
-		var triangles:PackedVector3Array = face.get_trianges()
+		#var triangles:PackedVector3Array = face.get_trianges()
+		var fv_trianglation:Array[int] = face.get_triangulation()
 		
 #		mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, material)
 		mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES, material)
@@ -628,11 +667,13 @@ func append_mesh(mesh:ImmediateMesh, material_list:Array[Material], default_mate
 		mesh.surface_set_normal(face.normal)
 		
 		#for i in tristrip_vertex_range(face.vertex_indices.size()):
-		for i in triangles.size():
+#		for i in triangles.size():
+		for fv_idx in fv_trianglation:
 			var axis:MathUtil.Axis = MathUtil.get_longest_axis(face.normal)
 			
-			#var v_idx:int = face.vertex_indices[i]
-			var p:Vector3 = triangles[i]
+			var v_idx:int = face.vertex_indices[fv_idx]
+#			var p:Vector3 = triangles[i]
+			var p:Vector3 = vertices[v_idx].point
 						
 			var uv:Vector2
 			if axis == MathUtil.Axis.X:
@@ -767,9 +808,6 @@ func append_mesh_wire(mesh:ImmediateMesh, material:Material):
 
 
 func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
-	if bounds.intersects_ray(origin, dir) == null:
-		return null
-
 	if bounds.intersects_ray(origin, dir) == null:
 		return null
 	
