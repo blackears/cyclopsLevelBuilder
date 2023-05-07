@@ -397,7 +397,7 @@ func get_trimesh_indices()->PackedInt32Array:
 	for f in faces:
 		for fv_idx in f.get_triangulation():
 			var v_idx:int = f.vertex_indices[fv_idx]
-			result.append(f.vertex_indices[v_idx])
+			result.append(v_idx)
 	
 	return result
 
@@ -685,6 +685,7 @@ func append_mesh(mesh:ImmediateMesh, material_list:Array[Material], default_mate
 				
 			uv = face.uv_transform * uv
 			mesh.surface_set_uv(uv)
+			mesh.surface_set_uv2(face.lightmap_uvs[fv_idx])
 			
 			mesh.surface_add_vertex(p)
 	

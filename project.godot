@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Cyclops Level Builder"
-run/main_scene="res://experiments/test_intersect_ray.tscn"
+run/main_scene="res://test_level.tscn"
 config/features=PackedStringArray("4.0", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -32,7 +32,7 @@ enabled=PackedStringArray("res://addons/cyclops_level_builder/plugin.cfg")
 
 [rendering]
 
-renderer/rendering_method="gl_compatibility"
+renderer/rendering_method="mobile"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
 occlusion_culling/use_occlusion_culling=true
