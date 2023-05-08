@@ -297,10 +297,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				p01 = Vector3(block_drag_p0_local.x, block_drag_cur.y, block_drag_p0_local.z)
 				p10 = Vector3(block_drag_cur.x, block_drag_p0_local.y, block_drag_p0_local.z)
 
-#			global_scene.clear_tool_mesh()				
-#			global_scene.draw_selected_blocks(viewport_camera)
 			base_points = [block_drag_p0_local, p01, block_drag_cur, p10]
-#			global_scene.draw_loop([block_drag_p0_local, p01, block_drag_cur, p10], true, global_scene.tool_material)
 
 			return true
 

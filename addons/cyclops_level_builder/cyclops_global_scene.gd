@@ -158,7 +158,7 @@ func clear_tool_mesh():
 	#$ToolInstance3D.mesh = tool_mesh
 	tool_mesh.clear_surfaces()
 	
-
+# Draws the bounding box for the points [p0, p1, p2]
 func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3, mat:Material = null):	
 #	print ("draw_cube %s %s %s" % [p0, p1, p2])
 	

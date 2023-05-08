@@ -27,7 +27,8 @@ extends CyclopsCommand
 
 #Public data to set before activating command
 var blocks_root_path:NodePath
-var block_name:String
+#var block_name:String
+var block_name_prefix:String = "Block_"
 var origin:Vector3
 var axis_normal:Vector3
 var height:float
@@ -49,7 +50,7 @@ func create_block(blocks_root:CyclopsBlocks, mat:Material)->CyclopsConvexBlock:
 	var block:CyclopsConvexBlock = preload("../nodes/cyclops_convex_block.gd").new()
 	blocks_root.add_child(block)
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
-	block.name = block_name
+	block.name = GeneralUtil.find_unique_name(builder.active_node, block_name_prefix)
 
 	if mat:
 		block.materials.append(mat)

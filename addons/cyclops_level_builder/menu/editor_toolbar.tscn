@@ -61,6 +61,19 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Cylinder"
 
+[node name="bn_stairs" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Click on surface of block or in empty space to begin creating base of prism.
+
+Click to add new point.  Backspace to remove the last point you added.
+
+Press Enter to extrude base.
+
+Press Enter again to finish extruding and create block."
+toggle_mode = true
+button_group = SubResource("ButtonGroup_i8xwa")
+text = "Stairs"
+
 [node name="bn_clip" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 tooltip_text = "Click on surface of block to place first cutting point.
@@ -206,6 +219,7 @@ popup/item_1/id = 1
 [connection signal="pressed" from="HBoxContainer/bn_block" to="." method="_on_bn_move_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_prism" to="." method="_on_bn_prism_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_cylinder" to="." method="_on_bn_cylinder_pressed"]
+[connection signal="pressed" from="HBoxContainer/bn_stairs" to="." method="_on_bn_stairs_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_clip" to="." method="_on_bn_clip_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_vertex" to="." method="_on_bn_vertex_pressed"]
 [connection signal="pressed" from="HBoxContainer/bn_edge" to="." method="_on_bn_edge_pressed"]

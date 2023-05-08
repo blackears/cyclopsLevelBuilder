@@ -126,6 +126,9 @@ func _on_bn_prism_pressed():
 func _on_bn_cylinder_pressed():
 	editor_plugin.switch_to_tool(ToolCylinder.new())
 
+func _on_bn_stairs_pressed():
+	editor_plugin.switch_to_tool(ToolStairs.new())
+
 func _on_bn_duplicate_pressed():
 	editor_plugin.switch_to_tool(ToolDuplicate.new())
 
