@@ -112,10 +112,14 @@ func _draw_tool(viewport_camera:Camera3D):
 			v_span = -v_span
 		
 		#Stairs should ascend along v axis
+		global_scene.draw_cube(drag_origin, base_drag_cur, block_drag_cur, global_scene.tool_material)
+		
 		var height_offset = block_drag_cur - base_drag_cur
+		if height_offset.dot(floor_normal) < 0:
+			return
 		var num_steps:int = min(v_span.length() / settings.step_depth, height_offset.length() / settings.step_height)
 
-		global_scene.draw_cube(drag_origin, base_drag_cur, block_drag_cur, global_scene.tool_material)
+		var max_height:float = floor(height_offset.length() / settings.step_height) * settings.step_height
 
 		var step_span:Vector3 = v_normal * settings.step_depth
 		for i in num_steps:
@@ -123,7 +127,9 @@ func _draw_tool(viewport_camera:Camera3D):
 				stairs_origin + u_span + step_span * i, \
 				stairs_origin + u_span + step_span * (i + 1), \
 				stairs_origin + step_span * (i + 1)]
-			global_scene.draw_prism(base_points, floor_normal * settings.step_height * (i + 1), global_scene.tool_material)
+			global_scene.draw_prism(base_points, \
+				floor_normal * (max_height - settings.step_height * i), \
+				global_scene.tool_material)
 		
 #		global_scene.draw_cube(drag_origin, base_drag_cur, block_drag_cur, global_scene.tool_material)
 
@@ -218,7 +224,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				if e.pressed:
 					if e.ctrl_pressed:
 						if e.shift_pressed:
-							var size = log(settings.step_height) / log(2)
+							var size = log(settings.step_depth) / log(2)
 							settings.step_depth = pow(2, size + 1)
 						else:
 							var size = log(settings.step_height) / log(2)
@@ -232,7 +238,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				if e.pressed:
 					if e.ctrl_pressed:
 						if e.shift_pressed:
-							var size = log(settings.step_height) / log(2)
+							var size = log(settings.step_depth) / log(2)
 							settings.step_depth = pow(2, size - 1)
 						else:
 							var size = log(settings.step_height) / log(2)
