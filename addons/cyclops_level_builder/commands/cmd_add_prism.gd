@@ -25,13 +25,10 @@
 class_name CommandAddPrism
 extends CyclopsCommand
 
-#var blocks_root_inst_id:int
 var blocks_root_path:NodePath
 var block_name:String
-#var block_owner:Node
 var base_polygon:PackedVector3Array
 var extrude:Vector3
-#var block_inst_id:int
 var uv_transform:Transform2D
 var material_path:String
 

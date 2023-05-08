@@ -36,9 +36,6 @@ var floor_normal:Vector3
 var drag_origin:Vector3
 var base_drag_cur:Vector3
 var block_drag_cur:Vector3
-#var drag_offset:Vector3
-#var first_ring_radius:float
-#var second_ring_radius:float
 
 
 func _activate(builder:CyclopsLevelBuilder):
@@ -130,8 +127,6 @@ func _draw_tool(viewport_camera:Camera3D):
 			global_scene.draw_prism(base_points, \
 				floor_normal * (max_height - settings.step_height * i), \
 				global_scene.tool_material)
-		
-#		global_scene.draw_cube(drag_origin, base_drag_cur, block_drag_cur, global_scene.tool_material)
 
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
@@ -187,28 +182,23 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				elif tool_state == ToolState.DRAG_HEIGHT:
 					#Create shape
 
-#					var cmd:CommandAddStairs = CommandAddStairs.new()
-#					cmd.builder = builder
-#					#cmd.block_name = GeneralUtil.find_unique_name(builder.active_node, "Block_")
-#					cmd.block_name_prefix = "Block_"
-#					cmd.blocks_root_path = blocks_root.get_path()
-#					cmd.tube = settings.tube
-#					cmd.origin = base_center
-#					cmd.axis_normal = floor_normal
-#					cmd.height = drag_offset.length()
-#					if settings.tube:
-#						cmd.radius_inner = min(first_ring_radius, second_ring_radius)
-#						cmd.radius_outer = max(first_ring_radius, second_ring_radius)
-#					else:
-#						cmd.radius_inner = first_ring_radius
-#						cmd.radius_outer = first_ring_radius
-#					cmd.segments = settings.segments
-#					cmd.uv_transform = builder.tool_uv_transform
-#					cmd.material_path = builder.tool_material_path
-#
-#					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-#
-#					cmd.add_to_undo_manager(undo)
+					var cmd:CommandAddStairs = CommandAddStairs.new()
+					cmd.builder = builder
+					cmd.blocks_root_path = blocks_root.get_path()
+					cmd.block_name_prefix = "Block_"
+					cmd.floor_normal = floor_normal
+					cmd.drag_origin = drag_origin
+					cmd.base_drag_cur = base_drag_cur
+					cmd.block_drag_cur = block_drag_cur
+					cmd.step_height = settings.step_height
+					cmd.step_depth = settings.step_depth
+					cmd.direction = settings.direction
+					cmd.uv_transform = builder.tool_uv_transform
+					cmd.material_path = builder.tool_material_path
+
+					var undo:EditorUndoRedoManager = builder.get_undo_redo()
+
+					cmd.add_to_undo_manager(undo)
 										
 					tool_state = ToolState.READY
 					return true
