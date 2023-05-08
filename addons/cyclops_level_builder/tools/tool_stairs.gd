@@ -82,7 +82,50 @@ func _draw_tool(viewport_camera:Camera3D):
 		global_scene.draw_points(base_points, global_scene.tool_material)
 		
 	if tool_state == ToolState.DRAG_HEIGHT:
+		var tan_bi:Array[Vector3] = MathUtil.get_axis_aligned_tangent_and_binormal(floor_normal)
+		var u_normal:Vector3 = tan_bi[0]
+		var v_normal:Vector3 = tan_bi[1]
+
+		#Rotate ccw by 90 degree increments
+		match settings.direction:
+			1:
+				var tmp:Vector3 = u_normal
+				u_normal = -v_normal
+				v_normal = tmp
+			2:
+				u_normal = -u_normal
+				v_normal = -v_normal
+			3:
+				var tmp:Vector3 = -u_normal
+				u_normal = v_normal
+				v_normal = tmp
+		
+		var u_span:Vector3 = (base_drag_cur - drag_origin).project(u_normal)
+		var v_span:Vector3 = (base_drag_cur - drag_origin).project(v_normal)
+		
+		var stairs_origin:Vector3 = drag_origin
+		if u_span.dot(u_normal) < 0:
+			stairs_origin += u_span
+			u_span = -u_span
+		if v_span.dot(v_normal) < 0:
+			stairs_origin += v_span
+			v_span = -v_span
+		
+		#Stairs should ascend along v axis
+		var height_offset = block_drag_cur - base_drag_cur
+		var num_steps:int = min(v_span.length() / settings.step_depth, height_offset.length() / settings.step_height)
+
 		global_scene.draw_cube(drag_origin, base_drag_cur, block_drag_cur, global_scene.tool_material)
+
+		var step_span:Vector3 = v_normal * settings.step_depth
+		for i in num_steps:
+			var base_points:PackedVector3Array = [stairs_origin + step_span * i, \
+				stairs_origin + u_span + step_span * i, \
+				stairs_origin + u_span + step_span * (i + 1), \
+				stairs_origin + step_span * (i + 1)]
+			global_scene.draw_prism(base_points, floor_normal * settings.step_height * (i + 1), global_scene.tool_material)
+		
+#		global_scene.draw_cube(drag_origin, base_drag_cur, block_drag_cur, global_scene.tool_material)
 
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
@@ -172,28 +215,30 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 		elif e.button_index == MOUSE_BUTTON_WHEEL_UP:
 			if tool_state == ToolState.DRAG_BASE || tool_state == ToolState.DRAG_HEIGHT:
-				if e.ctrl_pressed:
-					if e.shift_pressed:
-						var size = log(settings.step_height) / log(2)
-						settings.step_depth = pow(2, size + 1)
+				if e.pressed:
+					if e.ctrl_pressed:
+						if e.shift_pressed:
+							var size = log(settings.step_height) / log(2)
+							settings.step_depth = pow(2, size + 1)
+						else:
+							var size = log(settings.step_height) / log(2)
+							settings.step_height = pow(2, size + 1)
 					else:
-						var size = log(settings.step_height) / log(2)
-						settings.step_height = pow(2, size + 1)
-				else:
-					settings.direction = clamp(settings.direction + 1, 0, 4)
+						settings.direction = wrap(settings.direction + 1, 0, 4)
 				return true
 					
 		elif e.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			if tool_state == ToolState.DRAG_BASE || tool_state == ToolState.DRAG_HEIGHT:
-				if e.ctrl_pressed:
-					if e.shift_pressed:
-						var size = log(settings.step_height) / log(2)
-						settings.step_depth = pow(2, size - 1)
+				if e.pressed:
+					if e.ctrl_pressed:
+						if e.shift_pressed:
+							var size = log(settings.step_height) / log(2)
+							settings.step_depth = pow(2, size - 1)
+						else:
+							var size = log(settings.step_height) / log(2)
+							settings.step_height = pow(2, size - 1)
 					else:
-						var size = log(settings.step_height) / log(2)
-						settings.step_height = pow(2, size - 1)
-				else:
-					settings.direction = clamp(settings.direction - 1, 0, 4)
+						settings.direction = wrap(settings.direction - 1, 0, 4)
 				return true
 				
 

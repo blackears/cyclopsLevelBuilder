@@ -183,12 +183,14 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 		elif e.button_index == MOUSE_BUTTON_WHEEL_UP:
 			if tool_state == ToolState.FIRST_RING || tool_state == ToolState.SECOND_RING || tool_state == ToolState.DRAG_HEIGHT:
-				settings.segments += 1
+				if e.pressed:
+					settings.segments += 1
 				return true
 					
 		elif e.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			if tool_state == ToolState.FIRST_RING || tool_state == ToolState.SECOND_RING || tool_state == ToolState.DRAG_HEIGHT:
-				settings.segments = max(settings.segments - 1, 3)
+				if e.pressed:
+					settings.segments = max(settings.segments - 1, 3)
 				return true
 
 	elif event is InputEventMouseMotion:
