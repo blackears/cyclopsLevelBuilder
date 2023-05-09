@@ -53,3 +53,8 @@ static func format_planes_string(planes:Array[Plane])->String:
 		result = result + "(%s, %s, %s, %s)," % [p.x, p.y, p.z, p.d]
 	return result
 	
+
+static func dump_properties(obj):
+	for prop in obj.get_property_list():
+		var name:String =  prop["name"]
+		print ("%s:   %s" % [name, str(obj.get(name))])

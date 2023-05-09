@@ -646,50 +646,101 @@ func calc_lightmap_uvs():
 		var face:FaceInfo = faces[ft.face_index]
 		face.lightmap_uvs = xform_inv * ft.points
 
-func append_mesh(mesh:ImmediateMesh, material_list:Array[Material], default_material:Material):
+func create_mesh(material_list:Array[Material], default_material:Material)->ArrayMesh:
 #	if Engine.is_editor_hint():
 #		return
 #	print("num faces %s" % faces.size())
+#	print("-creating mesh")
 
-	for face in faces:
-		var material = default_material
+	var mesh:ArrayMesh = ArrayMesh.new()
+	mesh.blend_shape_mode = Mesh.BLEND_SHAPE_MODE_NORMALIZED
+	mesh.lightmap_size_hint = Vector2(1000, 1000)
+
+	var shadow_mesh:ArrayMesh = ArrayMesh.new()
+	shadow_mesh.blend_shape_mode = Mesh.BLEND_SHAPE_MODE_NORMALIZED
+
+	var face_dict:Dictionary = {}
+	for f_idx in faces.size():
+#		print("check F_idx %s" % f_idx)
+		var face:FaceInfo = faces[f_idx]
+		if face_dict.has(face.material_id):
+			var arr = face_dict[face.material_id]
+			arr.append(f_idx)
+#			print("arr %s" % [arr])
+			face_dict[face.material_id] = arr
+#			print("append %s to %s" % [f_idx, face.material_id])
+		else:
+			face_dict[face.material_id] = [f_idx]
+#			print("starting %s to %s" % [f_idx, face.material_id])
+
+	var surface_idx:int = 0
+	for mat_id in face_dict.keys():
+#		print("surface mat grp %s" % mat_id)
 		
-		if face.material_id >=0 && face.material_id < material_list.size():
-			material = material_list[face.material_id]
+		var points:PackedVector3Array
+		var normals:PackedVector3Array
+		var uv1s:PackedVector2Array
+		var uv2s:PackedVector2Array
+
+		var material = default_material		
+		if mat_id >= 0 && mat_id < material_list.size():
+			material = material_list[mat_id]
 		
-		#var triangles:PackedVector3Array = face.get_trianges()
-		var fv_trianglation:Array[int] = face.get_triangulation()
-		
-#		mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, material)
-		mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES, material)
-#		print("face %s" % face.id)
-		
-		mesh.surface_set_normal(face.normal)
-		
-		#for i in tristrip_vertex_range(face.vertex_indices.size()):
-#		for i in triangles.size():
-		for fv_idx in fv_trianglation:
+		for f_idx in face_dict[mat_id]:
+#			print("f_idx %s" % f_idx)
+
+			var face:FaceInfo = faces[f_idx]
+			
+			
 			var axis:MathUtil.Axis = MathUtil.get_longest_axis(face.normal)
 			
-			var v_idx:int = face.vertex_indices[fv_idx]
-#			var p:Vector3 = triangles[i]
-			var p:Vector3 = vertices[v_idx].point
-						
-			var uv:Vector2
-			if axis == MathUtil.Axis.X:
-				uv = Vector2(-p.z, -p.y)
-			elif axis == MathUtil.Axis.Y:
-				uv = Vector2(-p.x, -p.z)
-			elif axis == MathUtil.Axis.Z:
-				uv = Vector2(-p.x, -p.y)
-				
-			uv = face.uv_transform * uv
-			mesh.surface_set_uv(uv)
-			mesh.surface_set_uv2(face.lightmap_uvs[fv_idx])
+			var fv_trianglation:Array[int] = face.get_triangulation()
 			
-			mesh.surface_add_vertex(p)
+			for fv_idx in fv_trianglation:
+				
+				var v_idx:int = face.vertex_indices[fv_idx]
+	#			var p:Vector3 = triangles[i]
+				var p:Vector3 = vertices[v_idx].point
+							
+				var uv:Vector2
+				if axis == MathUtil.Axis.X:
+					uv = Vector2(-p.z, -p.y)
+				elif axis == MathUtil.Axis.Y:
+					uv = Vector2(-p.x, -p.z)
+				elif axis == MathUtil.Axis.Z:
+					uv = Vector2(-p.x, -p.y)
+					
+				uv = face.uv_transform * uv
+				uv1s.append(uv)
+				uv2s.append(face.lightmap_uvs[fv_idx])
+				
+				normals.append(face.normal)
+				
+				points.append(p)
+		
+		var arrays:Array = []
+		arrays.resize(Mesh.ARRAY_MAX)
+		arrays[Mesh.ARRAY_VERTEX] = points
+		arrays[Mesh.ARRAY_NORMAL] = normals
+		arrays[Mesh.ARRAY_TEX_UV] = uv1s
+		arrays[Mesh.ARRAY_TEX_UV2] = uv2s
+			
+		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+		mesh.surface_set_material(surface_idx, material)
+
+		var shadow_arrays:Array = []
+		shadow_arrays.resize(Mesh.ARRAY_MAX)
+		shadow_arrays[Mesh.ARRAY_VERTEX] = points
+
+		shadow_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, shadow_arrays)
+		shadow_mesh.surface_set_material(surface_idx, material)
+
+		surface_idx += 1
 	
-		mesh.surface_end()
+	mesh.shadow_mesh = shadow_mesh
+#	var err = mesh.lightmap_unwrap(Transform3D.IDENTITY, 10)
+#	print("Lightmap unwrap Error: %s" % err)
+	return mesh
 
 
 
@@ -792,9 +843,10 @@ func append_mesh_outline(mesh:ImmediateMesh, viewport_camera:Camera3D, local_to_
 		
 		
 		
-func append_mesh_wire(mesh:ImmediateMesh, material:Material):
+func create_mesh_wire(material:Material)->ImmediateMesh:
 #	if Engine.is_editor_hint():
 #		return
+	var mesh:ImmediateMesh = ImmediateMesh.new()
 
 	mesh.surface_begin(Mesh.PRIMITIVE_LINES, material)
 
@@ -805,7 +857,9 @@ func append_mesh_wire(mesh:ImmediateMesh, material:Material):
 		mesh.surface_add_vertex(v0.point)
 		mesh.surface_add_vertex(v1.point)
 
-	mesh.surface_end()	
+	mesh.surface_end()
+	
+	return mesh
 
 
 func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
