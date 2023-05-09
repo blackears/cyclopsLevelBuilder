@@ -49,8 +49,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	if event is InputEventKey:
 		var e:InputEventKey = event
 
-		if e.is_pressed():
-			if e.keycode == KEY_X:
+		if e.keycode == KEY_X:
+			if e.is_pressed():
 
 				var blocks_root:CyclopsBlocks = builder.active_node
 				var cmd:CommandDeleteBlocks = CommandDeleteBlocks.new()
@@ -60,16 +60,17 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var undo:EditorUndoRedoManager = builder.get_undo_redo()
 					cmd.add_to_undo_manager(undo)
 				
-				return true
+			return true
 				
-			if e.keycode == KEY_D:
-				if e.shift_pressed:
+		if e.keycode == KEY_D:
+			if e.is_pressed():
+				if e.shift_pressed && !Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 					
 					if builder.active_node and builder.active_node.has_selected_blocks():
 					
 						builder.switch_to_tool(ToolDuplicate.new())
 					
-					return true
+			return true
 	
 	if event is InputEventMouseButton:
 		var e:InputEventMouseButton = event
