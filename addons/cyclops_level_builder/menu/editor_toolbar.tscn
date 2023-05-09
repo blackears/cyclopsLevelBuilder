@@ -27,6 +27,8 @@ Click and drag on a selected block to move it in the XZ plane.  Hold Alt to drag
 
 Ctrl-click and drag on the face of a block to move the face along its normal.
 
+Escape or right click to cancel drawing the block.
+
 Click on block to select it.  Shift-Click toggles, Ctrl-Click adds and Shift-Ctrl Click subtracts.
 
 Click in empty space to clear selection."
@@ -37,9 +39,9 @@ text = "Block"
 
 [node name="bn_prism" type="Button" parent="HBoxContainer"]
 layout_mode = 2
-tooltip_text = "Click on surface of block or in empty space to begin creating base of prism.
+tooltip_text = "Click on surface of block or in empty space to begin creating base of a prism.
 
-Click to add new point.  Backspace to remove the last point you added.
+Click to add new point.  Backspace to remove the last point you added.  You can also right click on a point to remove it.
 
 Press Enter to extrude base.
 
@@ -50,26 +52,22 @@ text = "Prism"
 
 [node name="bn_cylinder" type="Button" parent="HBoxContainer"]
 layout_mode = 2
-tooltip_text = "Click on surface of block or in empty space to begin creating base of prism.
+tooltip_text = "Click on surface of block or in empty space to begin creating base of a cylinder.
 
-Click to add new point.  Backspace to remove the last point you added.
+Release the mouse to enter height drawing mode.  If you have the tube option selected, you will draw the second ring instead.
 
-Press Enter to extrude base.
-
-Press Enter again to finish extruding and create block."
+Use the mouse wheel to change the number of sides of the cylinder while drawing."
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Cylinder"
 
 [node name="bn_stairs" type="Button" parent="HBoxContainer"]
 layout_mode = 2
-tooltip_text = "Click on surface of block or in empty space to begin creating base of prism.
+tooltip_text = "Click on surface of block or in empty space to begin creating base of a stair case.
 
-Click to add new point.  Backspace to remove the last point you added.
+Release mouse button and drag upwards to adjust the height of the stairs.
 
-Press Enter to extrude base.
-
-Press Enter again to finish extruding and create block."
+Use the mouse wheel to change the direction the stairs face.  Ctrl-Wheel to change the height of each step, Ctrl-Shift-Wheel to change the depth of each step."
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Stairs"
