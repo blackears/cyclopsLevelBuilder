@@ -28,11 +28,20 @@ metadata/_edit_lock_ = true
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 0
 
-[node name="remove_all_materials" type="Button" parent="VBoxContainer/PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="remove_all_materials" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Remove All"
+
+[node name="remove_sel" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Press X to removeselected material."
+text = "Remove Selected"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -45,4 +54,5 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/remove_all_materials" to="." method="_on_remove_all_materials_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/remove_all_materials" to="." method="_on_remove_all_materials_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/remove_sel" to="." method="_on_remove_sel_pressed"]

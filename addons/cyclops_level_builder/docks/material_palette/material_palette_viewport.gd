@@ -30,10 +30,12 @@ class_name MaterialPaletteViewport
 @export var thumbnail_group:ThumbnailGroup
 
 var builder:CyclopsLevelBuilder
+#var undo_manager:UndoRedo
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 #	print("MaterialPaletteViewport")
+	#undo_manager = UndoRedo.new()
 	
 	update_thumbnails()
 
@@ -44,6 +46,33 @@ func _process(delta):
 func _can_drop_data(at_position:Vector2, data:Variant):
 #	print("_can_drop_data %s" % data)
 	return typeof(data) == TYPE_DICTIONARY and data.has("type") and data["type"] == "files"
+
+func _unhandled_input(event):
+	if event is InputEventKey:
+		#print("key event %s" % str(event))
+		var e:InputEventKey = event
+#			if e.keycode == KEY_DELETE:
+		if e.keycode == KEY_X:
+			if e.pressed:
+				remove_selected_material()
+				
+			accept_event()
+
+func remove_selected_material():
+	var cmd:CommandMaterialDockRemoveMaterials = CommandMaterialDockRemoveMaterials.new()
+	cmd.builder = builder
+	
+	for child in $VBoxContainer/ScrollContainer/HFlowContainer.get_children():
+		if child.selected:
+			cmd.res_path_list.append(child.material_path)
+
+	var undo_manager:EditorUndoRedoManager = builder.get_undo_redo()
+	cmd.add_to_undo_manager(undo_manager)
+
+func set_materials(res_path_list:Array[String]):
+	material_list = res_path_list
+	update_thumbnails()
+	
 
 func save_state(state:Dictionary):
 	var substate:Dictionary = {}
@@ -68,13 +97,26 @@ func load_state(state:Dictionary):
 func _drop_data(at_position, data):
 	var files = data["files"]
 	#print("--drop")
+	var add_list:Array[String]
 	for f in files:
 #		print("Dropping %s" % f)
 		var res:Resource = load(f)
 		if res is Material:
 			if !material_list.has(f):
-				material_list.append(f)
-	update_thumbnails()
+				add_list.append(f)
+#				material_list.append(f)
+#	update_thumbnails()
+	
+	
+	var cmd:CommandMaterialDockAddMaterials = CommandMaterialDockAddMaterials.new()
+	cmd.builder = builder
+	
+	cmd.res_path_list = add_list
+
+	var undo_manager:EditorUndoRedoManager = builder.get_undo_redo()
+	cmd.add_to_undo_manager(undo_manager)
+	
+	material_list.clear()
 		
 func update_thumbnails():
 	var cur_sel:String
@@ -115,5 +157,15 @@ func _on_visibility_changed():
 
 
 func _on_remove_all_materials_pressed():
-	material_list.clear()
-	update_thumbnails()
+	var cmd:CommandMaterialDockRemoveMaterials = CommandMaterialDockRemoveMaterials.new()
+	cmd.builder = builder
+	
+	cmd.res_path_list = material_list.duplicate()
+
+	var undo_manager:EditorUndoRedoManager = builder.get_undo_redo()
+	cmd.add_to_undo_manager(undo_manager)
+	
+
+
+func _on_remove_sel_pressed():
+	remove_selected_material()
