@@ -1,9 +1,10 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://rdhrhgrb78ls"]
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://rdhrhgrb78ls"]
 
 [ext_resource type="Texture2D" uid="uid://bnlqi20ay4vs1" path="res://addons/cyclops_level_builder/art/textures/grid_cell2.png" id="1_17wu6"]
+[ext_resource type="Texture2D" uid="uid://b78mg60xhic6n" path="res://addons/cyclops_level_builder/art/textures/checkerboard.png" id="1_ldry2"]
 
 [resource]
 vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("1_17wu6")
+albedo_texture = ExtResource("1_ldry2")
 roughness_texture = ExtResource("1_17wu6")
 texture_filter = 5
