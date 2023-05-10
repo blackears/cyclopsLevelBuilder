@@ -53,6 +53,8 @@ func _ready():
 	$HBoxContainer/grid_size.add_item("16", 8)
 	
 	$HBoxContainer/MenuBar/Edit.clear()
+	$HBoxContainer/MenuBar/Edit.add_action_item(ActionToolDuplicate.new(editor_plugin))
+	$HBoxContainer/MenuBar/Edit.add_action_item(ActionDeleteSelectedBlocks.new(editor_plugin))
 	$HBoxContainer/MenuBar/Edit.add_action_item(ActionSnapToGrid.new(editor_plugin))
 	$HBoxContainer/MenuBar/Edit.add_separator()
 	$HBoxContainer/MenuBar/Edit.add_action_item(ActionRotateX90Ccw.new(editor_plugin))
@@ -155,23 +157,6 @@ func _on_bn_flip_y_pressed():
 func _on_bn_flip_z_pressed():
 	var action:ActionMirrorSelectionZ = ActionMirrorSelectionZ.new(editor_plugin)
 	action._execute()
-
-
-
-#func populate_menu(menu:PopupMenu, actions:Array[CyclopsAction]):
-#
-#	menu.clear()
-#	action_map.clear()
-#
-#	menu.id_pressed.connect(menu_item_called)
-#	for action in actions:
-#		menu.add_item(action.name, action_map.size(), action.accellerator)
-#		action_map.append(action)
-	
-	
-#func menu_item_called(id:int):
-#	action_map[id]._execute()
-
 
 
 func _on_display_mode_item_selected(index):

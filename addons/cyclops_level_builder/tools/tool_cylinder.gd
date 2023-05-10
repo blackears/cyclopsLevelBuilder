@@ -157,7 +157,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					cmd.tube = settings.tube
 					cmd.origin = base_center
 					cmd.axis_normal = floor_normal
-					cmd.height = drag_offset.length()
+					cmd.height = drag_offset.length() if drag_offset.dot(floor_normal) > 0 else - drag_offset.length()
 					if settings.tube:
 						cmd.radius_inner = min(first_ring_radius, second_ring_radius)
 						cmd.radius_outer = max(first_ring_radius, second_ring_radius)

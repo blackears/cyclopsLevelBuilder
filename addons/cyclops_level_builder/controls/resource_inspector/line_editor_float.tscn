@@ -5,6 +5,7 @@
 [node name="SpinBox" type="SpinBox"]
 offset_right = 83.0625
 offset_bottom = 31.0
+step = 0.001
 script = ExtResource("1_o1hmb")
 
 [connection signal="value_changed" from="." to="." method="_on_value_changed"]

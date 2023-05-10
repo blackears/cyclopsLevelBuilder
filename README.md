@@ -23,7 +23,7 @@ Cyclops Level Builder lets you quickly build environments in the Godot viewport.
 
 ## Contributing 
 
-Please open small issues.  PRs are welcome for small fixes.  Broader ideas can be opened for discussions in the [Discussions](https://github.com/blackears/cyclopsLevelBuilder/discussions) forum.
+Please open small issues.  PRs are welcome for small fixes.  Broader ideas can be opened for discussion in the [Discussions](https://github.com/blackears/cyclopsLevelBuilder/discussions) forum.
 
 ## Roadmap
 

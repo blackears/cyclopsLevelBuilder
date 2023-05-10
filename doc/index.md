@@ -45,6 +45,8 @@ There are several tools in the toolbar that let you create and edit blocks:
 
 * [Block](tool_block.md)
 * [Prism](tool_prism.md)
+* [Cylinder](tool_cylinder.md)
+* [Stairs](tool_stairs.md)
 * [Clip](tool_clip.md)
 * [Vertex](tool_vertex.md)
 * [Edge](tool_edge.md)
@@ -111,6 +113,7 @@ When the CyclopsBlocks object is selected, extra docked windows will appear to g
 
 * [Material](dock_material.md)
 * [UV Transform](dock_uv_transform.md)
+* [Tool Properties](dock_tool_properties.md)
 
 
 ## Support
