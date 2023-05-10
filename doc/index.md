@@ -63,9 +63,9 @@ Delete currently selected blocks.
 
 * Pressing X in Block mode will also delete selected blocks.
 
-### Edit Menu
+### Menu
 
-![Edit menu](edit_menu.jpg)
+![Menu](edit_menu.jpg)
 
 The menu has a number of useful commands.
 
