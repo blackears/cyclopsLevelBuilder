@@ -67,21 +67,26 @@ Delete currently selected blocks.
 
 ![Edit menu](edit_menu.jpg)
 
-The edit menu has a number of useful commands.
+The menu has a number of useful commands.
+
+* Duplicate Selected Blocks - Duplicates selected blocks.  Click with mouse to place duplication.
+* Delete Selected Blocks - Delete all currently selected blocks.
+* Snap to Grid - Snaps all vertices to the grid, just in case some are misaligned.
 
 * Rotate 90 Ccw X - Rotate 90 degrees counter clockwise around the X axis
 * Rotate 90 Cw X - Rotate 90 degrees clockwise around the X axis
 * Rotate 180 X - Rotate 180 degrees around the X axis
+* Mirror Selection X - Mirror the selection in the X axis
+
 * Rotate 90 Ccw Y - Rotate 90 degrees counter clockwise around the Y axis
 * Rotate 90 Cw Y - Rotate 90 degrees clockwise around the Y axis
 * Rotate 180 Y - Rotate 180 degrees around the Y axis
+* Mirror Selection Y - Mirror the selection in the Y axis
+
 * Rotate 90 Ccw Z - Rotate 90 degrees counter clockwise around the Z axis
 * Rotate 90 Cw Z - Rotate 90 degrees clockwise around the Z axis
 * Rotate 180 Z - Rotate 180 degrees around the Z axis
-* Mirror Selection X - Mirror the selection in the X axis
-* Mirror Selection Y - Mirror the selection in the Y axis
 * Mirror Selection Z - Mirror the selection in the Z axis
-* Snap to Grid - Snaps all vertices to the grid, just in case some are misaligned.
 
 ### Lock UVs
 
