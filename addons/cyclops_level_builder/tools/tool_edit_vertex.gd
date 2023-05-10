@@ -29,7 +29,7 @@ const TOOL_ID:String = "edit_vertex"
 
 var handles:Array[HandleVertex] = []
 
-enum ToolState { NONE, READY, DRAGGING }
+enum ToolState { NONE, READY, DRAGGING, DRAGGING_ADD }
 var tool_state:ToolState = ToolState.NONE
 
 #var mouse_hover_pos:Vector2
@@ -37,8 +37,10 @@ var tool_state:ToolState = ToolState.NONE
 var drag_handle:HandleVertex
 var drag_mouse_start_pos:Vector2
 var drag_handle_start_pos:Vector3
+var added_point_pos:Vector3
 
 var cmd_move_vertex:CommandMoveVertices
+var cmd_add_vertex:CommandAddVertices
 
 var tracked_blocks_root:CyclopsBlocks
 
@@ -120,7 +122,6 @@ func active_node_changed():
 		tracked_blocks_root = null
 		
 	setup_tool()
-#	draw_tool()
 	
 	tracked_blocks_root = builder.active_node
 	if tracked_blocks_root:
@@ -130,7 +131,6 @@ func active_node_changed():
 
 func active_node_updated():
 	setup_tool()
-#	draw_tool()
 
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
@@ -144,7 +144,6 @@ func _activate(builder:CyclopsLevelBuilder):
 		tracked_blocks_root.blocks_changed.connect(active_node_updated)
 	
 	setup_tool()
-#	draw_tool()
 	
 	
 func _deactivate():
@@ -168,7 +167,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	if event is InputEventMouseButton:
 		
 		var e:InputEventMouseButton = event
-		#mouse_hover_pos = e.position
 		if e.button_index == MOUSE_BUTTON_LEFT:
 
 			if e.is_pressed():
@@ -205,7 +203,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 					
 					tool_state = ToolState.NONE
-#					draw_tool()
+					cmd_move_vertex = null
 					
 				elif tool_state == ToolState.DRAGGING:
 					#Finish drag
@@ -215,7 +213,16 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					cmd_move_vertex.add_to_undo_manager(undo)
 					
 					tool_state = ToolState.NONE
-					#setup_tool()
+					
+				elif tool_state == ToolState.DRAGGING_ADD:
+					#Finish drag
+					#print("cmd finish drag add")
+					var undo:EditorUndoRedoManager = builder.get_undo_redo()
+
+					cmd_add_vertex.add_to_undo_manager(undo)
+					
+					tool_state = ToolState.NONE
+					cmd_add_vertex = null
 
 	elif event is InputEventMouseMotion:
 		var e:InputEventMouseMotion = event
@@ -249,7 +256,28 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 											cmd_move_vertex.add_vertex(block.get_path(), v_idx)
 					else:
 						cmd_move_vertex.add_vertex(handle.block_path, handle.vertex_index)
-				
+						
+					return true
+						
+				else:
+					if e.ctrl_pressed:
+						var pick_origin:Vector3 = viewport_camera.project_ray_origin(e.position)
+						var pick_dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+						var result:IntersectResults = blocks_root.intersect_ray_closest_selected_only(pick_origin, pick_dir)
+						if result:
+							#print("start drag add")
+							drag_handle_start_pos = result.position
+							added_point_pos = result.position
+							tool_state = ToolState.DRAGGING_ADD
+
+							cmd_add_vertex = CommandAddVertices.new()
+							cmd_add_vertex.builder = builder
+
+							cmd_add_vertex.block_path = result.object.get_path()
+							cmd_add_vertex.points_to_add = [added_point_pos]
+							#print("init point %s" % added_point_pos)
+						
+						return true
 			
 		elif tool_state == ToolState.DRAGGING:
 
@@ -275,6 +303,30 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 #			draw_tool()
 			return true
-		
+
+		elif tool_state == ToolState.DRAGGING_ADD:
+
+			var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
+			var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+
+			var start_pos:Vector3 = origin + builder.block_create_distance * dir
+			var w2l = blocks_root.global_transform.inverse()
+			var origin_local:Vector3 = w2l * origin
+			var dir_local:Vector3 = w2l.basis * dir
+			
+			var drag_to:Vector3
+			if e.alt_pressed:
+				drag_to = MathUtil.closest_point_on_line(origin_local, dir_local, drag_handle_start_pos, Vector3.UP)
+			else:
+				drag_to = MathUtil.intersect_plane(origin_local, dir_local, drag_handle_start_pos, Vector3.UP)
+
+			drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
+			
+			added_point_pos = drag_to
+			#print("drag point to %s" % drag_to)
+
+			cmd_add_vertex.points_to_add = [drag_to]
+			cmd_add_vertex.do_it()
+					
 	return false
 
