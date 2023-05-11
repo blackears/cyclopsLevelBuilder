@@ -36,6 +36,8 @@ func _init():
 	command_name = "Remove materials"
 
 func do_it():
+#	print("Remove Materials do_it")
+	
 	var mat_dock:MaterialPaletteViewport = builder.material_dock
 	old_res_path_list = mat_dock.material_list.duplicate()
 

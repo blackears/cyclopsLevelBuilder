@@ -32,6 +32,8 @@ class_name MaterialPaletteViewport
 var builder:CyclopsLevelBuilder
 #var undo_manager:UndoRedo
 
+var has_mouse_focus:bool = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 #	print("MaterialPaletteViewport")
@@ -48,14 +50,18 @@ func _can_drop_data(at_position:Vector2, data:Variant):
 	return typeof(data) == TYPE_DICTIONARY and data.has("type") and data["type"] == "files"
 
 func _unhandled_input(event):
+	if !has_mouse_focus:
+		return
+	
 	if event is InputEventKey:
 		#print("key event %s" % str(event))
 		var e:InputEventKey = event
 #			if e.keycode == KEY_DELETE:
 		if e.keycode == KEY_X:
 			if e.pressed:
+#				print("mat pal X")
 				remove_selected_material()
-				
+
 			accept_event()
 
 func remove_selected_material():
@@ -71,6 +77,7 @@ func remove_selected_material():
 
 func set_materials(res_path_list:Array[String]):
 	material_list = res_path_list
+#	print("set mat list %s" % str(material_list))
 	update_thumbnails()
 	
 
@@ -86,7 +93,8 @@ func load_state(state:Dictionary):
 	
 	var substate:Dictionary = state["material_palette"]
 
-	material_list = []	
+#	print("load_state()")
+	material_list = []
 	if substate.has("materials"):
 		for mat_path in substate["materials"]:
 			if ResourceLoader.exists(mat_path):
@@ -104,8 +112,6 @@ func _drop_data(at_position, data):
 		if res is Material:
 			if !material_list.has(f):
 				add_list.append(f)
-#				material_list.append(f)
-#	update_thumbnails()
 	
 	
 	var cmd:CommandMaterialDockAddMaterials = CommandMaterialDockAddMaterials.new()
@@ -116,9 +122,11 @@ func _drop_data(at_position, data):
 	var undo_manager:EditorUndoRedoManager = builder.get_undo_redo()
 	cmd.add_to_undo_manager(undo_manager)
 	
-	material_list.clear()
+	#print("drop data clear")
+	#material_list.clear()
 		
 func update_thumbnails():
+#	print("update_thumbnails()")
 	var cur_sel:String
 	
 	for child in $VBoxContainer/ScrollContainer/HFlowContainer.get_children():
@@ -138,6 +146,8 @@ func update_thumbnails():
 		thumbnail.builder = builder
 		thumbnail.material_path = path
 		thumbnail.group = thumbnail_group
+#		print("adding mat %s" % path)
+		
 		
 		$VBoxContainer/ScrollContainer/HFlowContainer.add_child(thumbnail)
 		thumbnail.owner = self
@@ -169,3 +179,13 @@ func _on_remove_all_materials_pressed():
 
 func _on_remove_sel_pressed():
 	remove_selected_material()
+
+
+func _on_h_flow_container_mouse_entered():
+	has_mouse_focus = true
+#	print("_on_h_flow_container_mouse_entered()")
+
+
+func _on_h_flow_container_mouse_exited():
+	has_mouse_focus = false
+#	print("_on_h_flow_container_mouse_exited()")

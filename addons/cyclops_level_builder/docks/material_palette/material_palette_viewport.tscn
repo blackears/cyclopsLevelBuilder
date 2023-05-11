@@ -56,3 +56,5 @@ size_flags_vertical = 3
 [connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/remove_all_materials" to="." method="_on_remove_all_materials_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/remove_sel" to="." method="_on_remove_sel_pressed"]
+[connection signal="mouse_entered" from="VBoxContainer/ScrollContainer/HFlowContainer" to="." method="_on_h_flow_container_mouse_entered"]
+[connection signal="mouse_exited" from="VBoxContainer/ScrollContainer/HFlowContainer" to="." method="_on_h_flow_container_mouse_exited"]

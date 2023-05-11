@@ -36,13 +36,18 @@ func _init():
 	command_name = "Add materials"
 
 func do_it():
+#	print("Add Materials do_it")
 	var mat_dock:MaterialPaletteViewport = builder.material_dock
 	old_res_path_list = mat_dock.material_list.duplicate()
+
+#	print("old mat list %s" % str(old_res_path_list))
 
 	var new_list:Array[String] = old_res_path_list.duplicate()
 	for mat in res_path_list:
 		if !new_list.has(mat):
 			new_list.append(mat)
+
+#	print("new mat list %s" % str(new_list))
 			
 	mat_dock.set_materials(new_list)
 
