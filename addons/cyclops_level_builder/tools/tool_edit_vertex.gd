@@ -37,6 +37,7 @@ var tool_state:ToolState = ToolState.NONE
 var drag_handle:HandleVertex
 var drag_mouse_start_pos:Vector2
 var drag_handle_start_pos:Vector3
+var drag_handle_int:Vector3
 var added_point_pos:Vector3
 
 var cmd_move_vertex:CommandMoveVertices
@@ -238,6 +239,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				if handle:
 					drag_handle = handle
 					drag_handle_start_pos = handle.position
+					drag_handle_int = drag_handle_start_pos
 					tool_state = ToolState.DRAGGING
 
 					cmd_move_vertex = CommandMoveVertices.new()
@@ -267,6 +269,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						if result:
 							#print("start drag add")
 							drag_handle_start_pos = result.position
+							drag_handle_int = drag_handle_start_pos
 							added_point_pos = result.position
 							tool_state = ToolState.DRAGGING_ADD
 
@@ -291,9 +294,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			var drag_to:Vector3
 			if e.alt_pressed:
-				drag_to = MathUtil.closest_point_on_line(origin_local, dir_local, drag_handle_start_pos, Vector3.UP)
+				drag_to = MathUtil.closest_point_on_line(origin_local, dir_local, drag_handle_int, Vector3.UP)
 			else:
-				drag_to = MathUtil.intersect_plane(origin_local, dir_local, drag_handle_start_pos, Vector3.UP)
+				drag_to = MathUtil.intersect_plane(origin_local, dir_local, drag_handle_int, Vector3.UP)
+			drag_handle_int = drag_to
 			
 			drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
 			drag_handle.position = drag_to
@@ -316,9 +320,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			var drag_to:Vector3
 			if e.alt_pressed:
-				drag_to = MathUtil.closest_point_on_line(origin_local, dir_local, drag_handle_start_pos, Vector3.UP)
+				drag_to = MathUtil.closest_point_on_line(origin_local, dir_local, drag_handle_int, Vector3.UP)
 			else:
-				drag_to = MathUtil.intersect_plane(origin_local, dir_local, drag_handle_start_pos, Vector3.UP)
+				drag_to = MathUtil.intersect_plane(origin_local, dir_local, drag_handle_int, Vector3.UP)
+			drag_handle_int = drag_to
 
 			drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
 			

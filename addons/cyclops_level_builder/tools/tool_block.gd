@@ -312,10 +312,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		elif tool_state == ToolState.MOVE_BLOCK:
 			if e.alt_pressed:
 #				block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
-				block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, block_drag_p0_local, Vector3.UP)
+				block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, block_drag_cur, Vector3.UP)
 			else:
 #				block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
-				block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, Vector3.UP)
+				block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_cur, Vector3.UP)
 			
 			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)

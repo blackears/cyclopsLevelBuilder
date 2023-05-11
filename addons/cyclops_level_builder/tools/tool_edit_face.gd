@@ -35,6 +35,7 @@ var tool_state:ToolState = ToolState.NONE
 var drag_handle:HandleFace
 var drag_mouse_start_pos:Vector2
 var drag_handle_start_pos:Vector3
+var drag_handle_int:Vector3
 			
 var tracked_blocks_root:CyclopsBlocks
 
@@ -290,6 +291,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					drag_handle = handle
 #					drag_handle_start_pos = handle.p_ref
 					drag_handle_start_pos = res.position
+					drag_handle_int = drag_handle_start_pos
 					tool_state = ToolState.DRAGGING
 
 					cmd_move_face = CommandMoveFaces.new()
@@ -322,9 +324,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			var drag_to:Vector3
 			if e.alt_pressed:
-				drag_to = MathUtil.closest_point_on_line(origin_local, dir_local, drag_handle_start_pos, Vector3.UP)
+				drag_to = MathUtil.closest_point_on_line(origin_local, dir_local, drag_handle_int, Vector3.UP)
 			else:
-				drag_to = MathUtil.intersect_plane(origin_local, dir_local, drag_handle_start_pos, Vector3.UP)
+				drag_to = MathUtil.intersect_plane(origin_local, dir_local, drag_handle_int, Vector3.UP)
+			drag_handle_int = drag_to
 			
 			var offset = drag_to - drag_handle_start_pos
 			offset = MathUtil.snap_to_grid(offset, grid_step_size)
