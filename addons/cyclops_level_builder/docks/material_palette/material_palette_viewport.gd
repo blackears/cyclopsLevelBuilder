@@ -34,6 +34,10 @@ var builder:CyclopsLevelBuilder
 
 var has_mouse_focus:bool = false
 
+var drag_pressed:bool = false
+var drag_start_pos:Vector2
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 #	print("MaterialPaletteViewport")
@@ -48,6 +52,28 @@ func _process(delta):
 func _can_drop_data(at_position:Vector2, data:Variant):
 #	print("_can_drop_data %s" % data)
 	return typeof(data) == TYPE_DICTIONARY and data.has("type") and data["type"] == "files"
+
+func _gui_input(event):
+	if event is InputEventMouseButton:
+		var e:InputEventMouseButton = event
+		
+		if e.button_index == MOUSE_BUTTON_MIDDLE:
+			drag_pressed = e.pressed
+			drag_start_pos = e.position
+
+	elif event is InputEventMouseMotion:
+		if drag_pressed:
+			var e:InputEventMouseMotion = event
+			var offset:Vector2 = e.position - drag_start_pos
+			
+			#print("min max %s %s" % [v_scroll.min_value, v_scroll.max_value])
+			var h_scroll:HScrollBar = $VBoxContainer/ScrollContainer.get_h_scroll_bar()
+			h_scroll.value = clamp(h_scroll.value - offset.x, h_scroll.min_value, h_scroll.max_value)
+
+			var v_scroll:VScrollBar = $VBoxContainer/ScrollContainer.get_v_scroll_bar()
+			v_scroll.value = clamp(v_scroll.value - offset.y, v_scroll.min_value, v_scroll.max_value)
+		
+		
 
 func _unhandled_input(event):
 	if !has_mouse_focus:
