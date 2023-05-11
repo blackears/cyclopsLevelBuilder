@@ -88,7 +88,7 @@ func do_it():
 
 func undo_it():
 	#print("undoing delete")
-	print("undoing delete %s" % blocks_root_path)
+	#print("undoing delete %s" % blocks_root_path)
 	var blocks_root:CyclopsBlocks = builder.get_node(blocks_root_path)
 	
 	for i in blocks_to_delete.size():
