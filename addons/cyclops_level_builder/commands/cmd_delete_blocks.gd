@@ -58,7 +58,7 @@ func will_change_anything():
 
 
 func do_it():
-	print("Delete do_it")
+	#print("Delete do_it")
 	
 	if tracked_blocks.is_empty():
 		var points:PackedVector3Array
@@ -75,7 +75,7 @@ func do_it():
 
 
 func undo_it():
-	print("Delete undo_it")
+	#print("Delete undo_it")
 	for tracked in tracked_blocks:
 		var parent = builder.get_node(tracked.path_parent)
 		

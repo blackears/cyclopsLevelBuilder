@@ -48,10 +48,53 @@ var block_name_prefix:String = "Block_"
 #Private
 var tracked_blocks:Array[TrackedBlock]
 var merged_block_data:ConvexBlockData
+var merged_mat_list:Array[Material]
 var merged_block_path:NodePath
 			
 func _init():
 	command_name = "Merge blocks"
+
+func get_best_face(centroid:Vector3, ref_list:Array[NodePath])->Array:
+	var best_face:ConvexVolume.FaceInfo
+	var best_dist:float = INF
+	var best_block:CyclopsConvexBlock
+	
+	for block_path in ref_list:
+		var block:CyclopsConvexBlock = builder.get_node(block_path)
+		var vol:ConvexVolume = block.control_mesh
+		for f in vol.faces:
+			var face_center:Vector3 = f.get_centroid()
+			var offset:float = centroid.distance_squared_to(face_center)
+			if offset < best_dist:
+				best_dist = offset
+				best_face = f
+				best_block = block
+				
+	if best_face.material_id == -1:
+		return [best_face, null]
+	return [best_face, best_block.materials[best_face.material_id]]
+
+func copy_face_attributes(target:ConvexVolume, ref_list:Array[NodePath])->Array[Material]:
+	var mat_list:Array[Material]
+	
+	for f in target.faces:
+		var centroid:Vector3 = f.get_centroid()
+		var res:Array = get_best_face(centroid, ref_list)
+		var ref_face:ConvexVolume.FaceInfo = res[0]
+		var material:Material = res[1]
+		
+		var mat_idx:int = -1
+		if material != null:
+			mat_idx = mat_list.find(material)
+			if mat_idx == -1:
+				mat_idx = mat_list.size()
+				mat_list.append(material)
+		
+		f.material_id = mat_idx
+		f.uv_transform = ref_face.uv_transform
+		f.selected = ref_face.selected
+		
+	return mat_list
 
 func do_it():
 	if tracked_blocks.is_empty():
@@ -66,7 +109,9 @@ func do_it():
 			
 		var merged_vol:ConvexVolume = ConvexVolume.new()
 		merged_vol.init_from_points(points)
+		merged_mat_list = copy_face_attributes(merged_vol, block_paths)
 		merged_block_data = merged_vol.to_convex_block_data()
+
 
 	#Delete source blocks
 	for block_path in block_paths:
@@ -80,6 +125,7 @@ func do_it():
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
 	block.name = GeneralUtil.find_unique_name(parent, block_name_prefix)
 	block.block_data = merged_block_data
+	block.materials = merged_mat_list
 	#block.materials
 	
 	merged_block_path = block.get_path()
