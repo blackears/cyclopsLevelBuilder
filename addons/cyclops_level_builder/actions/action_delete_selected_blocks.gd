@@ -30,10 +30,17 @@ func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_
 	super._init(plugin, "Delete Selected Blocks")
 
 func _execute():
-	var blocks_root:CyclopsBlocks = plugin.active_node
+	var blocks:Array[CyclopsConvexBlock] = plugin.get_selected_blocks()
+	if blocks.is_empty():
+		return
+		
 	var cmd:CommandDeleteBlocks = CommandDeleteBlocks.new()
-	cmd.blocks_root_path = blocks_root.get_path()
 	cmd.builder = plugin
-	if cmd.will_change_anything():
-		var undo:EditorUndoRedoManager = plugin.get_undo_redo()
-		cmd.add_to_undo_manager(undo)
+	
+	for block in blocks:
+		cmd.block_paths.append(block.get_path())
+		
+	
+	var undo:EditorUndoRedoManager = plugin.get_undo_redo()
+	cmd.add_to_undo_manager(undo)
+	

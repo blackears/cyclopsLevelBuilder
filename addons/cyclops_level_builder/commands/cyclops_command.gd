@@ -29,7 +29,7 @@ var command_name:String = ""
 var builder:CyclopsLevelBuilder
 
 func add_to_undo_manager(undo_manager:EditorUndoRedoManager):
-	undo_manager.create_action("Move blocks", UndoRedo.MERGE_DISABLE)
+	undo_manager.create_action(command_name, UndoRedo.MERGE_DISABLE)
 	undo_manager.add_do_method(self, "do_it")
 	undo_manager.add_undo_method(self, "undo_it")
 

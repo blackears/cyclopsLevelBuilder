@@ -51,14 +51,17 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 		if e.keycode == KEY_X:
 			if e.is_pressed():
+				print("delete keypress")
+				var action:ActionDeleteSelectedBlocks = ActionDeleteSelectedBlocks.new(builder)
+				action._execute()
 
-				var blocks_root:CyclopsBlocks = builder.active_node
-				var cmd:CommandDeleteBlocks = CommandDeleteBlocks.new()
-				cmd.blocks_root_path = blocks_root.get_path()
-				cmd.builder = builder
-				if cmd.will_change_anything():
-					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-					cmd.add_to_undo_manager(undo)
+#				var blocks_root:CyclopsBlocks = builder.active_node
+#				var cmd:CommandDeleteBlocks = CommandDeleteBlocks.new()
+#				cmd.blocks_root_path = blocks_root.get_path()
+#				cmd.builder = builder
+#				if cmd.will_change_anything():
+#					var undo:EditorUndoRedoManager = builder.get_undo_redo()
+#					cmd.add_to_undo_manager(undo)
 				
 			return true
 				

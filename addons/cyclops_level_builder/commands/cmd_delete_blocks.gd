@@ -27,78 +27,65 @@ extends CyclopsCommand
 
 class TrackedBlock extends RefCounted:
 	var path:NodePath
+	var path_parent:NodePath
 	var data:ConvexBlockData
 	var materials:Array[Material]
+	var selected:bool
+	var name:String
 
 	func _init(block:CyclopsConvexBlock):
 		path = block.get_path()
+		path_parent = block.get_parent().get_path()
+		name = block.name
 		data = block.block_data.duplicate()
+		selected = block.selected
 		materials = block.materials
 
-#Public data to set before activating command
-var blocks_root_path:NodePath
+#Public 
+var block_paths:Array[NodePath]
 
 #Private
-var blocks_to_delete:Array[NodePath]
 var tracked_blocks:Array[TrackedBlock]
-var block_names:Array[String]
-var block_selected:Array[bool]
 
 func _init():
 	command_name = "Delete blocks"
 
 func will_change_anything():
-	if !blocks_to_delete.is_empty():
+	if !block_paths.is_empty():
 		return true
 
-	var blocks_root:CyclopsBlocks = builder.active_node
-	for child in blocks_root.get_children():
-		if child is CyclopsConvexBlock:
-			var block:CyclopsConvexBlock = child
-			if block.selected:
-				return true
-	
 	return false
 
-#Add blocks to be moved here
-func add_block(block_path:NodePath):
-	blocks_to_delete.append(block_path)
-	
-	var block:CyclopsConvexBlock = builder.get_node(block_path)
-	block_names.append(block.name)
-	block_selected.append(block.selected)
-	tracked_blocks.append(TrackedBlock.new(block))
 
 func do_it():
-	var delete_set:Array[NodePath] = blocks_to_delete
-	if blocks_to_delete.is_empty():
-		var blocks_root:CyclopsBlocks = builder.active_node
-		
-		for child in blocks_root.get_children():
-			if child is CyclopsConvexBlock:
-				var block:CyclopsConvexBlock = child
-				if block.selected:
-					add_block(block.get_path())
-		
+	print("Delete do_it")
 	
-	#print("doing delete")
-	for block_path in blocks_to_delete:
-		var block:CyclopsConvexBlock = builder.get_node(block_path)
-		block.queue_free()
+	if tracked_blocks.is_empty():
+		var points:PackedVector3Array
+		
+		for path in block_paths:
+			var block:CyclopsConvexBlock = builder.get_node(path)
+			var tracker:TrackedBlock = TrackedBlock.new(block)
+			tracked_blocks.append(tracker)
+	
+	#Delete source blocks
+	for block_path in block_paths:
+		var del_block:CyclopsConvexBlock = builder.get_node(block_path)
+		del_block.queue_free()
+
 
 func undo_it():
-	#print("undoing delete")
-	#print("undoing delete %s" % blocks_root_path)
-	var blocks_root:CyclopsBlocks = builder.get_node(blocks_root_path)
-	
-	for i in blocks_to_delete.size():
-		var block:CyclopsConvexBlock = preload("../nodes/cyclops_convex_block.gd").new()
-		block.block_data = tracked_blocks[i].data
-		block.materials = tracked_blocks[i].materials
-		block.name = block_names[i]
-		block.selected = block_selected[i]
+	print("Delete undo_it")
+	for tracked in tracked_blocks:
+		var parent = builder.get_node(tracked.path_parent)
 		
-		blocks_root.add_child(block)
+		var block:CyclopsConvexBlock = preload("../nodes/cyclops_convex_block.gd").new()
+		block.block_data = tracked.data
+		block.materials = tracked.materials
+		block.name = tracked.name
+		block.selected = tracked.selected
+		
+		parent.add_child(block)
 		block.owner = builder.get_editor_interface().get_edited_scene_root()
 		
 
