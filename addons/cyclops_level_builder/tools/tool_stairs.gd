@@ -136,7 +136,15 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	var blocks_root:CyclopsBlocks = self.builder.active_node
 	var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
-	if event is InputEventMouseButton:
+	if event is InputEventKey:
+		var e:InputEventKey = event
+		
+		if e.keycode == KEY_ESCAPE:
+			if e.is_pressed():
+				tool_state = ToolState.READY
+			return true
+			
+	elif event is InputEventMouseButton:
 		
 		var e:InputEventMouseButton = event
 		if e.button_index == MOUSE_BUTTON_LEFT:

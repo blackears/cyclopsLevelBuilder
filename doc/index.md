@@ -1,6 +1,7 @@
 # Documentation
 
 [![Quick demo video](https://img.youtube.com/vi/UAqmm6WIWhA/0.jpg)](https://www.youtube.com/watch?v=UAqmm6WIWhA)
+[![Version 1.0.1 updates](https://img.youtube.com/vi/AoG6olKg2_8/0.jpg)](https://www.youtube.com/watch?v=AoG6olKg2_8)
 
 
 ## Getting Started
@@ -70,6 +71,7 @@ Delete currently selected blocks.
 The menu has a number of useful commands.
 
 * Duplicate Selected Blocks - Duplicates selected blocks.  Click with mouse to place duplication.
+* Merge Selected Blocks - Combine all selected blocks into a single convex shape.
 * Delete Selected Blocks - Delete all currently selected blocks.
 * Snap to Grid - Snaps all vertices to the grid, just in case some are misaligned.
 
