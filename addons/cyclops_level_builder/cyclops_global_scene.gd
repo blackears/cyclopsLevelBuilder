@@ -27,6 +27,7 @@ class_name CyclopsGlobalScene
 
 @export var selection_color:Color = Color(1, .5, .5, 1)
 @export var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
+@export var selection_rect_material:Material = preload("res://addons/cyclops_level_builder/materials/selection_rect_material.tres")
 @export var tool_edit_active_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_edit_active_material.tres")
 @export var tool_edit_active_fill_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_edit_active_fill_material.tres")
 @export var tool_edit_selected_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_edit_selected_material.tres")
@@ -243,8 +244,28 @@ func draw_selected_blocks(viewport_camera:Camera3D):
 					block.append_mesh_outline(tool_mesh, viewport_camera, blocks_root.global_transform)
 					
 
+func draw_screen_rect(viewport_camera:Camera3D, p00:Vector2, p11:Vector2, material:Material):
+	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
+
+	var p01:Vector2 = Vector2(p00.x, p11.y)
+	var p10:Vector2 = Vector2(p11.x, p00.y)
+	var z_pos:float = (viewport_camera.near + viewport_camera.far) / 2
+#	print("z_pos %s" % z_pos)
+#	print("p00 %s" % p00)
+#	print("p01 %s" % p01)
+#	print("p10 %s" % p10)
+#	print("p11 %s" % p11)
+	
+	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, material)
+	
+	for p in [p00, p01, p11, p10, p00]:
+		var p_proj:Vector3 = viewport_camera.project_position(p, z_pos)
+#		print("p_proj %s" % p_proj)
+		
+		tool_mesh.surface_add_vertex(p_proj)
+	
+	tool_mesh.surface_end()
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-#	if Engine.is_editor_hint():
-#		rebuild_mesh()
 	pass

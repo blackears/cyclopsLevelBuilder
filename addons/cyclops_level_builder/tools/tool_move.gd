@@ -37,7 +37,8 @@ var event_start:InputEventMouseButton
 var block_drag_cur:Vector3
 var block_drag_p0_local:Vector3
 
-var drag_sel_start_pos:Vector2
+var drag_select_start_pos:Vector2
+var drag_select_to_pos:Vector2
 
 #Keep a copy of move command here while we are building it
 var cmd_move_blocks:CommandMoveBlocks
@@ -47,7 +48,7 @@ var base_points:PackedVector3Array
 func _get_tool_id()->String:
 	return TOOL_ID
 
-func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
+func start_drag(viewport_camera:Camera3D, event:InputEvent):
 	var blocks_root:CyclopsBlocks = self.builder.active_node
 	var e:InputEventMouseButton = event
 	
@@ -79,7 +80,8 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 		
 	else:
 		tool_state = ToolState.DRAG_SELECTION
-		drag_sel_start_pos = e.position
+		drag_select_start_pos = e.position
+		drag_select_to_pos = e.position
 
 
 func _draw_tool(viewport_camera:Camera3D):
@@ -87,6 +89,9 @@ func _draw_tool(viewport_camera:Camera3D):
 	global_scene.clear_tool_mesh()
 	global_scene.draw_selected_blocks(viewport_camera)
 
+	if tool_state == ToolState.DRAG_SELECTION:
+		#print("draw sel %s " % drag_select_to_pos)
+		global_scene.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	if !builder.active_node is CyclopsBlocks:
@@ -148,6 +153,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					cmd_move_blocks.add_to_undo_manager(undo)
 					
 					tool_state = ToolState.NONE
+
+				elif tool_state == ToolState.DRAG_SELECTION:
+					tool_state = ToolState.NONE
 				
 			return true
 		
@@ -173,7 +181,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		if tool_state == ToolState.READY:
 			var offset:Vector2 = e.position - event_start.position
 			if offset.length_squared() > MathUtil.square(builder.drag_start_radius):
-				start_block_drag(viewport_camera, event_start)
+				start_drag(viewport_camera, event_start)
 
 			return true
 			
@@ -189,6 +197,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			cmd_move_blocks.move_offset = block_drag_cur - block_drag_p0_local
 			cmd_move_blocks.do_it()
 
+			return true
+
+		elif tool_state == ToolState.DRAG_SELECTION:
+			drag_select_to_pos = e.position
 			return true
 			
 	

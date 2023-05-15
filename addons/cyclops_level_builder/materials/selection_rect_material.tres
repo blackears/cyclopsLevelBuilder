@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://c4vils431vd0v"]
+
+[resource]
+cull_mode = 2
+depth_draw_mode = 2
+no_depth_test = true
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission = Color(0.380392, 0.764706, 0.87451, 1)
