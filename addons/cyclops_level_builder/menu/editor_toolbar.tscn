@@ -1,7 +1,15 @@
-[gd_scene load_steps=6 format=3 uid="uid://c3cl77r65dexu"]
+[gd_scene load_steps=14 format=3 uid="uid://c3cl77r65dexu"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/menu/editor_toolbar.gd" id="1_o71fd"]
+[ext_resource type="Texture2D" uid="uid://bwasqbq4iqkn6" path="res://addons/cyclops_level_builder/art/icons/block.svg" id="2_1skyu"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/menu/action_popup_menu.gd" id="2_ni0c8"]
+[ext_resource type="Texture2D" uid="uid://cbmwkjbju75er" path="res://addons/cyclops_level_builder/art/icons/create_prism.svg" id="3_bhn6f"]
+[ext_resource type="Texture2D" uid="uid://0vye3ue3ayvf" path="res://addons/cyclops_level_builder/art/icons/create_cylinder.svg" id="4_vjnos"]
+[ext_resource type="Texture2D" uid="uid://bwq4w4vf8um1f" path="res://addons/cyclops_level_builder/art/icons/create_stairs.svg" id="5_6xjjh"]
+[ext_resource type="Texture2D" uid="uid://bos2j51dp4j1s" path="res://addons/cyclops_level_builder/art/icons/edit_clip.svg" id="6_moar6"]
+[ext_resource type="Texture2D" uid="uid://cwn58lev5oopd" path="res://addons/cyclops_level_builder/art/icons/select_vertex.svg" id="7_uywnu"]
+[ext_resource type="Texture2D" uid="uid://d2da2j8ve48rt" path="res://addons/cyclops_level_builder/art/icons/select_edge.svg" id="8_7ymeh"]
+[ext_resource type="Texture2D" uid="uid://bi27fw31w4ssi" path="res://addons/cyclops_level_builder/art/icons/select_face.svg" id="9_vxbsd"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o7kxq"]
 
@@ -43,6 +51,7 @@ Click in empty space to clear selection."
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Block"
+icon = ExtResource("2_1skyu")
 
 [node name="bn_prism" type="Button" parent="HBoxContainer"]
 layout_mode = 2
@@ -56,6 +65,7 @@ Press Enter again to finish extruding and create block."
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Prism"
+icon = ExtResource("3_bhn6f")
 
 [node name="bn_cylinder" type="Button" parent="HBoxContainer"]
 layout_mode = 2
@@ -67,6 +77,7 @@ Use the mouse wheel to change the number of sides of the cylinder while drawing.
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Cylinder"
+icon = ExtResource("4_vjnos")
 
 [node name="bn_stairs" type="Button" parent="HBoxContainer"]
 layout_mode = 2
@@ -78,6 +89,7 @@ Use the mouse wheel to change the direction the stairs face.  Ctrl-Wheel to chan
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Stairs"
+icon = ExtResource("5_6xjjh")
 
 [node name="bn_clip" type="Button" parent="HBoxContainer"]
 layout_mode = 2
@@ -93,6 +105,7 @@ Press Backspace to delete the last cutting point you placed."
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Clip"
+icon = ExtResource("6_moar6")
 
 [node name="bn_vertex" type="Button" parent="HBoxContainer"]
 layout_mode = 2
@@ -104,6 +117,7 @@ Hover the mouse over a different block and press Alt-Q to switch to editing that
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Vertex"
+icon = ExtResource("7_uywnu")
 
 [node name="bn_edge" type="Button" parent="HBoxContainer"]
 layout_mode = 2
@@ -115,6 +129,7 @@ Hover the mouse over a different block and press Alt-Q to switch to editing that
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Edge"
+icon = ExtResource("8_7ymeh")
 
 [node name="bn_face" type="Button" parent="HBoxContainer"]
 layout_mode = 2
@@ -126,6 +141,7 @@ Hover the mouse over a different block and press Alt-Q to switch to editing that
 toggle_mode = true
 button_group = SubResource("ButtonGroup_i8xwa")
 text = "Face"
+icon = ExtResource("9_vxbsd")
 
 [node name="MenuBar" type="MenuBar" parent="HBoxContainer"]
 layout_mode = 2
