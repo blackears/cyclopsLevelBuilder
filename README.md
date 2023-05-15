@@ -2,6 +2,8 @@
 
 Cyclops Level Builder lets you quickly build environments in the Godot viewport.  Click and drag to create and edit blocks.  Use the material editor to assign materials.  All blocks have collision, so you will be able to interact with them right away.
 
+Cyclops Level Builder works with Godot version 4 and later.  There are no plans to backport it to 3 since there have been a lot of changes to both GDScript and Godot objects between the two and such a port would not be easy to do.
+
 [![Quick demo video](https://img.youtube.com/vi/ASE--0uBsk8/0.jpg)](https://www.youtube.com/watch?v=ASE--0uBsk8)
 
 ## Installation
