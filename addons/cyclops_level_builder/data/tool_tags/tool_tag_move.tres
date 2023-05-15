@@ -9,5 +9,13 @@ id = "move"
 name = "Move"
 tooltip = "Move
 
-"
+Click and drag on a selected block to move it in the XZ plane.  Hold Alt to drag along the Y axis.
+
+Click and drag anywhere else to drag a rectangular selection region.
+
+Escape or right click to cancel movement.
+
+Click on a block to select it.  Shift-Click toggles, Ctrl-Click adds and Shift-Ctrl Click subtracts.
+
+Click in empty space to clear selection."
 tool_script = ExtResource("2_16d6f")

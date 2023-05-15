@@ -31,6 +31,8 @@ var editor_plugin:CyclopsLevelBuilder:
 	set(value):
 		editor_plugin = value
 		editor_plugin.active_node_changed.connect(on_active_node_changed)
+		
+		build_ui()
 #var editor_plugin:CyclopsLevelBuilder
 
 #var action_map:Array[CyclopsAction]
@@ -74,6 +76,32 @@ func _ready():
 	$HBoxContainer/MenuBar/Menu.add_action_item(ActionMirrorSelectionZ.new(editor_plugin))
 	
 	update_grid()
+
+var tool_button_group = ButtonGroup.new()
+
+func build_ui():
+#	print("build_ui()")
+	for child in $HBoxContainer/ToolButtonContainer.get_children():
+		$HBoxContainer/ToolButtonContainer.remove_child(child)
+	
+	if !editor_plugin:
+		return
+		
+	var config:CyclopsConfig = editor_plugin.config
+	for tag in config.tool_tags:
+#		print("adding tag %s" % tag.name)
+		var bn:Button = Button.new()
+		if tag.icon:
+			bn.icon = tag.icon
+		else:
+			bn.text = tag.name
+		bn.tooltip_text = tag.tooltip
+		bn.pressed.connect(func():tag._activate(editor_plugin))
+		
+		$HBoxContainer/ToolButtonContainer.add_child(bn)
+		
+	$HBoxContainer/display_mode.select(editor_plugin.display_mode)
+	pass
 
 func update_grid():
 	if !editor_plugin:

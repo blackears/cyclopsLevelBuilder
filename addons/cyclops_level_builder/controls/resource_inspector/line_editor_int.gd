@@ -64,8 +64,8 @@ func _process(delta):
 
 
 func _on_value_changed(value):
-	print("_on_value_changed(value)")
+#	print("_on_value_changed(value)")
 	if resource:
-		print("prop_name %s" % prop_name)
-		print("value %s" % value)
+#		print("prop_name %s" % prop_name)
+#		print("value %s" % value)
 		resource.set(prop_name, value)

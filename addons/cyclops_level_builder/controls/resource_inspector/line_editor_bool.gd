@@ -61,6 +61,6 @@ func _process(delta):
 
 func _on_toggled(button_pressed):
 	if resource:
-		print("prop_name %s" % prop_name)
-		print("button_pressed %s" % button_pressed)
+#		print("prop_name %s" % prop_name)
+#		print("button_pressed %s" % button_pressed)
 		resource.set(prop_name, button_pressed)

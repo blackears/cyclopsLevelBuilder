@@ -30,6 +30,8 @@ signal selection_changed
 
 const AUTOLOAD_NAME = "CyclopsAutoload"
 
+var config:CyclopsConfig = preload("res://addons/cyclops_level_builder/data/configuration.tres")
+
 var material_dock:Control
 var uv_editor_dock:Control
 var tool_properties_dock:Control

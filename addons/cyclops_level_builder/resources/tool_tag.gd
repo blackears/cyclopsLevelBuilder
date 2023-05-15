@@ -31,4 +31,15 @@ class_name ToolTag
 @export var icon:Texture2D
 @export var tool_script:Script
 
+var tool:CyclopsTool
 
+func _activate(plugin:CyclopsLevelBuilder):
+	if !tool_script:
+		return
+	
+	if !tool:
+		tool = tool_script.new()
+		
+	
+#	print("Activating %s" % name)
+	plugin.switch_to_tool(tool)

@@ -1,22 +1,12 @@
-[gd_scene load_steps=14 format=3 uid="uid://c3cl77r65dexu"]
+[gd_scene load_steps=5 format=3 uid="uid://c3cl77r65dexu"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/menu/editor_toolbar.gd" id="1_o71fd"]
-[ext_resource type="Texture2D" uid="uid://bwasqbq4iqkn6" path="res://addons/cyclops_level_builder/art/icons/block.svg" id="2_1skyu"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/menu/action_popup_menu.gd" id="2_ni0c8"]
-[ext_resource type="Texture2D" uid="uid://cbmwkjbju75er" path="res://addons/cyclops_level_builder/art/icons/create_prism.svg" id="3_bhn6f"]
-[ext_resource type="Texture2D" uid="uid://0vye3ue3ayvf" path="res://addons/cyclops_level_builder/art/icons/create_cylinder.svg" id="4_vjnos"]
-[ext_resource type="Texture2D" uid="uid://bwq4w4vf8um1f" path="res://addons/cyclops_level_builder/art/icons/create_stairs.svg" id="5_6xjjh"]
-[ext_resource type="Texture2D" uid="uid://bos2j51dp4j1s" path="res://addons/cyclops_level_builder/art/icons/edit_clip.svg" id="6_moar6"]
-[ext_resource type="Texture2D" uid="uid://cwn58lev5oopd" path="res://addons/cyclops_level_builder/art/icons/select_vertex.svg" id="7_uywnu"]
-[ext_resource type="Texture2D" uid="uid://d2da2j8ve48rt" path="res://addons/cyclops_level_builder/art/icons/select_edge.svg" id="8_7ymeh"]
-[ext_resource type="Texture2D" uid="uid://bi27fw31w4ssi" path="res://addons/cyclops_level_builder/art/icons/select_face.svg" id="9_vxbsd"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o7kxq"]
 
 [sub_resource type="Theme" id="Theme_0hxey"]
 PanelContainer/styles/panel = SubResource("StyleBoxEmpty_o7kxq")
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_i8xwa"]
 
 [node name="PanelContainer" type="PanelContainer"]
 offset_right = 739.0
@@ -28,120 +18,8 @@ script = ExtResource("1_o71fd")
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="bn_move" type="Button" parent="HBoxContainer"]
+[node name="ToolButtonContainer" type="HBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
-toggle_mode = true
-button_pressed = true
-button_group = SubResource("ButtonGroup_i8xwa")
-text = "Move"
-
-[node name="bn_block" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-tooltip_text = "Click and drag in empty space or on unselected block to create a new block.
-
-Click and drag on a selected block to move it in the XZ plane.  Hold Alt to drag along the Y axis.
-
-Ctrl-click and drag on the face of a block to move the face along its normal.
-
-Escape or right click to cancel drawing the block.
-
-Click on block to select it.  Shift-Click toggles, Ctrl-Click adds and Shift-Ctrl Click subtracts.
-
-Click in empty space to clear selection."
-toggle_mode = true
-button_group = SubResource("ButtonGroup_i8xwa")
-text = "Block"
-icon = ExtResource("2_1skyu")
-
-[node name="bn_prism" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-tooltip_text = "Click on surface of block or in empty space to begin creating base of a prism.
-
-Click to add new point.  Backspace to remove the last point you added.  You can also right click on a point to remove it.
-
-Press Enter to extrude base.
-
-Press Enter again to finish extruding and create block."
-toggle_mode = true
-button_group = SubResource("ButtonGroup_i8xwa")
-text = "Prism"
-icon = ExtResource("3_bhn6f")
-
-[node name="bn_cylinder" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-tooltip_text = "Click on surface of block or in empty space to begin creating base of a cylinder.
-
-Release the mouse to enter height drawing mode.  If you have the tube option selected, you will draw the second ring instead.
-
-Use the mouse wheel to change the number of sides of the cylinder while drawing."
-toggle_mode = true
-button_group = SubResource("ButtonGroup_i8xwa")
-text = "Cylinder"
-icon = ExtResource("4_vjnos")
-
-[node name="bn_stairs" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-tooltip_text = "Click on surface of block or in empty space to begin creating base of a stair case.
-
-Release mouse button and drag upwards to adjust the height of the stairs.
-
-Use the mouse wheel to change the direction the stairs face.  Ctrl-Wheel to change the height of each step, Ctrl-Shift-Wheel to change the depth of each step."
-toggle_mode = true
-button_group = SubResource("ButtonGroup_i8xwa")
-text = "Stairs"
-icon = ExtResource("5_6xjjh")
-
-[node name="bn_clip" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-tooltip_text = "Click on surface of block to place first cutting point.
-
-Click again to place second cutting point.  This will define the plane block will be cut along.
-
-If you press Enter at this point, the block will be cut.  The cutting plane will be defined by the cutting line you've drawn and the normal of the plane it is on.
-
-You can optionally place a third cutting point.  If you do, the three placed points will define the cutting plane when you press Enter.
-
-Press Backspace to delete the last cutting point you placed."
-toggle_mode = true
-button_group = SubResource("ButtonGroup_i8xwa")
-text = "Clip"
-icon = ExtResource("6_moar6")
-
-[node name="bn_vertex" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-tooltip_text = "Click on a vertex to select it.  Shift Click to toggle selecton, Ctrl Click to add to selection, Shift-Ctrl click to subtract from selection.
-
-Click and drag to move vertex in XZ plane.  Hold Alt to drag along Y axis.  Click and drag on a selected vertex to move all selected vertices.
-
-Hover the mouse over a different block and press Alt-Q to switch to editing that block."
-toggle_mode = true
-button_group = SubResource("ButtonGroup_i8xwa")
-text = "Vertex"
-icon = ExtResource("7_uywnu")
-
-[node name="bn_edge" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-tooltip_text = "Click on an edge to select it.  Shift Click to toggle selecton, Ctrl Click to add to selection, Shift-Ctrl click to subtract from selection.
-
-Click and drag to move edge in XZ plane.  Hold Alt to drag along Y axis.  Click and drag on a selected edge to move all selected edges.
-
-Hover the mouse over a different block and press Alt-Q to switch to editing that block."
-toggle_mode = true
-button_group = SubResource("ButtonGroup_i8xwa")
-text = "Edge"
-icon = ExtResource("8_7ymeh")
-
-[node name="bn_face" type="Button" parent="HBoxContainer"]
-layout_mode = 2
-tooltip_text = "Click on a face to select it.  Shift Click to toggle selecton, Ctrl Click to add to selection, Shift-Ctrl click to subtract from selection.
-
-Click and drag to move face in XZ plane.  Hold Alt to drag along Y axis.  Click and drag on a selected face to move all selected faces.
-
-Hover the mouse over a different block and press Alt-Q to switch to editing that block."
-toggle_mode = true
-button_group = SubResource("ButtonGroup_i8xwa")
-text = "Face"
-icon = ExtResource("9_vxbsd")
 
 [node name="MenuBar" type="MenuBar" parent="HBoxContainer"]
 layout_mode = 2
@@ -228,15 +106,6 @@ popup/item_0/id = 0
 popup/item_1/text = "Textured"
 popup/item_1/id = 1
 
-[connection signal="pressed" from="HBoxContainer/bn_move" to="." method="_on_bn_move_pressed"]
-[connection signal="pressed" from="HBoxContainer/bn_block" to="." method="_on_bn_block_pressed"]
-[connection signal="pressed" from="HBoxContainer/bn_prism" to="." method="_on_bn_prism_pressed"]
-[connection signal="pressed" from="HBoxContainer/bn_cylinder" to="." method="_on_bn_cylinder_pressed"]
-[connection signal="pressed" from="HBoxContainer/bn_stairs" to="." method="_on_bn_stairs_pressed"]
-[connection signal="pressed" from="HBoxContainer/bn_clip" to="." method="_on_bn_clip_pressed"]
-[connection signal="pressed" from="HBoxContainer/bn_vertex" to="." method="_on_bn_vertex_pressed"]
-[connection signal="pressed" from="HBoxContainer/bn_edge" to="." method="_on_bn_edge_pressed"]
-[connection signal="pressed" from="HBoxContainer/bn_face" to="." method="_on_bn_face_pressed"]
 [connection signal="toggled" from="HBoxContainer/check_lock_uvs" to="." method="_on_check_lock_uvs_toggled"]
 [connection signal="item_selected" from="HBoxContainer/grid_size" to="." method="_on_grid_size_item_selected"]
 [connection signal="item_selected" from="HBoxContainer/display_mode" to="." method="_on_display_mode_item_selected"]
