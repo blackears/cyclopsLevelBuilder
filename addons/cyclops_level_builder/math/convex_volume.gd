@@ -925,4 +925,22 @@ func update_edge_and_face_selection_from_vertices():
 				break
 		f.selected = all_sel
 
+func intersects_frustum(frustum:Array[Plane])->bool:
+
+	for face in faces:
+		var points:PackedVector3Array = face.get_points()
+		if MathUtil.polygon_intersects_frustum(points, frustum):
+			return true
+		
+#		var tris:PackedVector3Array = face.get_trianges()
+#		for i in range(0, tris.size(), 3):
+#			var p0:Vector3 = tris[i]
+#			var p1:Vector3 = tris[i + 1]
+#			var p2:Vector3 = tris[i + 2]
+#
+#			if MathUtil.polygon_intersects_frustum([p0, p1, p2], frustum):
+#				return true
+	
+	return false
+	
 			

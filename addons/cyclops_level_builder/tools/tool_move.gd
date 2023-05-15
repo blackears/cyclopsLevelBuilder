@@ -155,6 +155,26 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					tool_state = ToolState.NONE
 
 				elif tool_state == ToolState.DRAG_SELECTION:
+					
+					var frustum:Array[Plane] = MathUtil.calc_frustum_camera_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos)
+					
+					var result:Array[CyclopsConvexBlock] = blocks_root.intersect_frustum_all(frustum)
+					
+					if !result.is_empty():
+#						for v in result:
+#							print("selected %s" % v.name)
+						
+						var cmd:CommandSelectBlocks = CommandSelectBlocks.new()
+						cmd.builder = builder
+						cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
+
+						for r in result:
+							cmd.block_paths.append(r.get_path())
+							
+						if cmd.will_change_anything():
+							var undo:EditorUndoRedoManager = builder.get_undo_redo()
+							cmd.add_to_undo_manager(undo)
+					
 					tool_state = ToolState.NONE
 				
 			return true

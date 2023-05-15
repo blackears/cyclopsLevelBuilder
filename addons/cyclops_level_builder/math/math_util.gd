@@ -534,4 +534,80 @@ static func get_axis_aligned_tangent_and_binormal(normal:Vector3)->Array[Vector3
 
 	return []
 			
+#Returns the planes of a frustum for the rectangular region on the camera's near 
+# plane with all planes pointing toward the interior of the frustum
+static func calc_frustum_camera_rect(cam:Camera3D, p0:Vector2, p1:Vector2)->Array[Plane]:
+	
+	var x0 = min(p0.x, p1.x)
+	var x1 = max(p0.x, p1.x)
+	var y0 = min(p0.y, p1.y)
+	var y1 = max(p0.y, p1.y)
+	
+	var p00:Vector2 = Vector2(x0, y0)
+	var p01:Vector2 = Vector2(x0, y1)
+	var p10:Vector2 = Vector2(x1, y0)
+	var p11:Vector2 = Vector2(x1, y1)
+	
+#	print("cam rect %s" % str([p00, p11]))
+	
+	#Cam project_position does not work if we set distance to far plane, so back off a bit
+	var far_scalar:float = .95
+	
+	var p000:Vector3 = cam.project_position(p00, cam.near)
+	var p100:Vector3 = cam.project_position(p10, cam.near)
+	var p010:Vector3 = cam.project_position(p01, cam.near)
+	var p110:Vector3 = cam.project_position(p11, cam.near)
+	var p001:Vector3 = cam.project_position(p00, cam.far * far_scalar)
+	var p101:Vector3 = cam.project_position(p10, cam.far * far_scalar)
+	var p011:Vector3 = cam.project_position(p01, cam.far * far_scalar)
+	var p111:Vector3 = cam.project_position(p11, cam.far * far_scalar)
+	
+#	print("points %s" % str([p000, p100, p010, p110, p001, p101, p011, p111, ]))
+	
+	var plane_left:Plane = Plane(p001, p011, p010)
+	var plane_right:Plane = Plane(p101, p110, p111)
+	var plane_top:Plane = Plane(p011, p111, p110)
+	var plane_bottom:Plane = Plane(p001, p100, p101)
+	var plane_near:Plane = Plane(p000, p110, p100)
+	var plane_far:Plane = Plane(p001, p111, p011)
+	
+	return [plane_left, plane_right, plane_top, plane_bottom, plane_near, plane_far]
+
+static func clip_polygon(points:PackedVector3Array, plane:Plane)->PackedVector3Array:
+	var result:PackedVector3Array
+
+	#Cut at planr intersection
+	var points_on_or_over:PackedVector3Array
+	
+	for p_idx0 in points.size():
+		var p_idx1:int = wrap(p_idx0 + 1, 0, points.size())
+		
+		var p0:Vector3 = points[p_idx0]
+		var p1:Vector3 = points[p_idx1]
+		
+		var on0:bool = plane.has_point(p0)
+		var over0:bool = plane.is_point_over(p0)
+		var under0:bool = !on0 && !over0
+		var on1:bool = plane.has_point(p1)
+		var over1:bool = plane.is_point_over(p1)
+		var under1:bool = !on1 && !over1
+		
+		if on0 || over0:
+			points_on_or_over.append(p0)
+		
+		if (under0 && over1) || (over0 && under1):
+			points_on_or_over.append(plane.intersects_segment(p0, p1))
+
+	return points_on_or_over
+	
+
+static func polygon_intersects_frustum(points:PackedVector3Array, frustum:Array[Plane])->bool:
+	var points_i:PackedVector3Array = points
+	
+	for plane in frustum:
+		points_i = clip_polygon(points_i, plane)
+		if points_i.is_empty():
+			return false
+	
+	return true
 	

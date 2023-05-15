@@ -141,3 +141,15 @@ func intersect_ray_closest_filtered(origin:Vector3, dir:Vector3, filter:Callable
 					best_result = result			
 		
 	return best_result
+	
+func intersect_frustum_all(frustum:Array[Plane])->Array[CyclopsConvexBlock]:
+	var result:Array[CyclopsConvexBlock] = []
+	
+	for child in get_children():
+		if child is CyclopsConvexBlock:
+			var block:CyclopsConvexBlock = child
+			var vol:ConvexVolume = block.control_mesh
+			if vol.intersects_frustum(frustum):
+				result.append(block)
+	
+	return result
