@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333336"
+   version="1.1"
+   id="svg8"
+   xml:space="preserve"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"><defs
+     id="defs2"><filter
+       id="selectable_hidder_filter"
+       width="1"
+       height="1"
+       x="0"
+       y="0"
+       style="color-interpolation-filters:sRGB;"><feComposite
+         id="boolops_hidder_primitive"
+         result="composite1"
+         operator="arithmetic"
+         in2="SourceGraphic"
+         in="BackgroundImage" /></filter><clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath874"><g
+         id="use876"
+         style="stroke-width:1.5"><rect
+           style="fill:#0e0421;stroke:#488bd4;stroke-width:0.396874;-inkscape-stroke:none;paint-order:stroke fill markers;stop-color:#000000"
+           id="rect1"
+           width="508"
+           height="285.75"
+           x="0"
+           y="11.249975" /></g></clipPath></defs><metadata
+     id="metadata5"><rdf:RDF><cc:Work
+         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><g
+     id="layer1"
+     transform="translate(0,-11.249975)"><g
+       id="g31"
+       transform="translate(-16.811652,-0.06692131)"><path
+         id="path19"
+         style="color:#000000;fill:#5fff97;fill-opacity:1;stroke-width:1;-inkscape-stroke:none"
+         d="m 20.694344,11.541947 -3.53105,0.726054 v 5.16e-4 l -0.001,1.647962 3.183785,1.4087 z m -0.453675,0.617016 -0.338888,2.274819 -2.23184,-0.868186 V 12.70415 Z" /><path
+         id="path21"
+         style="fill:#5fff97;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 18.520851,12.754701 1.296654,0.415917 -0.03446,0.228507 -1.636982,-0.572245 z" /></g></g></svg>
