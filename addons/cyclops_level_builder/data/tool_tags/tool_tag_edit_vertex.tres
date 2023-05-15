@@ -8,6 +8,12 @@
 script = ExtResource("2_yi1sl")
 id = "edit_vertex"
 name = "Vertex"
-tooltip = ""
+tooltip = "Vertex
+
+Click on a vertex to select it.  Shift Click to toggle selecton, Ctrl Click to add to selection, Shift-Ctrl click to subtract from selection.
+
+Click and drag to move vertex in XZ plane.  Hold Alt to drag along Y axis.  Click and drag on a selected vertex to move all selected vertices.
+
+Hover the mouse over a different block and press Alt-Q to switch to editing that block."
 icon = ExtResource("1_i5cb7")
 tool_script = ExtResource("3_3wsge")

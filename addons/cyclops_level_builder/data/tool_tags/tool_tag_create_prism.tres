@@ -8,6 +8,14 @@
 script = ExtResource("1_oalyb")
 id = "prism"
 name = "Prism"
-tooltip = ""
+tooltip = "Prism
+
+Click on surface of block or in empty space to begin creating base of a prism.
+
+Click to add new point.  Backspace to remove the last point you added.  You can also right click on a point to remove it.
+
+Press Enter to extrude base.
+
+Press Enter again to finish extruding and create block."
 icon = ExtResource("1_gxivr")
 tool_script = ExtResource("3_oagna")

@@ -60,28 +60,31 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 	
 	if result:
 
-		var start_pos:Vector3 = result.position
-		var w2l = blocks_root.global_transform.inverse()
-		var start_pos_local:Vector3 = w2l * start_pos
-
-		var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
-
-		block_drag_p0_local = MathUtil.snap_to_grid(start_pos_local, grid_step_size)
-		
 		if result.object.selected:
-			tool_state = ToolState.MOVE_BLOCK
+
+			var start_pos:Vector3 = result.position
+			var w2l = blocks_root.global_transform.inverse()
+			var start_pos_local:Vector3 = w2l * start_pos
+
+			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
+
+			block_drag_p0_local = MathUtil.snap_to_grid(start_pos_local, grid_step_size)
 			
-			cmd_move_blocks = CommandMoveBlocks.new()
-			cmd_move_blocks.builder = builder
-			cmd_move_blocks.lock_uvs = builder.lock_uvs
-			for child in blocks_root.get_children():
-				if child is CyclopsConvexBlock and child.selected:
-					cmd_move_blocks.add_block(child.get_path())
+			if result.object.selected:
+				tool_state = ToolState.MOVE_BLOCK
+				
+				cmd_move_blocks = CommandMoveBlocks.new()
+				cmd_move_blocks.builder = builder
+				cmd_move_blocks.lock_uvs = builder.lock_uvs
+				for child in blocks_root.get_children():
+					if child is CyclopsConvexBlock and child.selected:
+						cmd_move_blocks.add_block(child.get_path())
+				
+				return
 		
-	else:
-		tool_state = ToolState.DRAG_SELECTION
-		drag_select_start_pos = e.position
-		drag_select_to_pos = e.position
+	tool_state = ToolState.DRAG_SELECTION
+	drag_select_start_pos = e.position
+	drag_select_to_pos = e.position
 
 
 func _draw_tool(viewport_camera:Camera3D):

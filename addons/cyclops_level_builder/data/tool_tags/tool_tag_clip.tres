@@ -8,6 +8,16 @@
 script = ExtResource("2_4grct")
 id = "clip"
 name = "Clip"
-tooltip = ""
+tooltip = "Clip
+
+Click on surface of block to place first cutting point.
+
+Click again to place second cutting point.  This will define the plane block will be cut along.
+
+If you press Enter at this point, the block will be cut.  The cutting plane will be defined by the cutting line you've drawn and the normal of the plane it is on.
+
+You can optionally place a third cutting point.  If you do, the three placed points will define the cutting plane when you press Enter.
+
+Press Backspace to delete the last cutting point you placed."
 icon = ExtResource("1_oaury")
 tool_script = ExtResource("3_xt387")

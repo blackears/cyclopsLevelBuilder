@@ -8,6 +8,12 @@
 script = ExtResource("2_8mpiw")
 id = "cylinder"
 name = "Cylinder"
-tooltip = ""
+tooltip = "Cylinder
+
+Click on surface of block or in empty space to begin creating base of a cylinder.
+
+Release the mouse to enter height drawing mode.  If you have the tube option selected, you will draw the second ring instead.
+
+Use the mouse wheel to change the number of sides of the cylinder while drawing."
 icon = ExtResource("1_a3871")
 tool_script = ExtResource("3_2hl37")

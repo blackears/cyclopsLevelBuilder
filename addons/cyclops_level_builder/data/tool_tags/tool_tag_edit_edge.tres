@@ -8,6 +8,12 @@
 script = ExtResource("1_w2hsk")
 id = "edit_edge"
 name = "Edge"
-tooltip = ""
+tooltip = "Edge
+
+Click on an edge to select it.  Shift Click to toggle selecton, Ctrl Click to add to selection, Shift-Ctrl click to subtract from selection.
+
+Click and drag to move edge in XZ plane.  Hold Alt to drag along Y axis.  Click and drag on a selected edge to move all selected edges.
+
+Hover the mouse over a different block and press Alt-Q to switch to editing that block."
 icon = ExtResource("1_6o0d8")
 tool_script = ExtResource("3_6rili")
