@@ -47,9 +47,9 @@ var tool_uv_transform:Transform2D
 var tool_material_path:String
 
 var handle_point_radius:float = .05
-var handle_screen_radius:float = 4
+var handle_screen_radius:float = 6
 
-var drag_start_radius:float = 4
+var drag_start_radius:float = 6
 
 enum Mode { OBJECT, EDIT }
 var mode:Mode = Mode.OBJECT
@@ -120,7 +120,7 @@ func _enter_tree():
 	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 	global_scene.builder = self
 	
-	switch_to_tool(ToolBlock.new())
+	switch_to_tool(ToolMove.new())
 
 func find_blocks_root(node:Node)->CyclopsBlocks:
 	if node is CyclopsBlocks:

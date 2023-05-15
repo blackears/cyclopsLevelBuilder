@@ -100,8 +100,10 @@ func _on_grid_size_item_selected(index):
 
 
 func _on_bn_move_pressed():
-	editor_plugin.switch_to_tool(ToolBlock.new())
+	editor_plugin.switch_to_tool(ToolMove.new())
 
+func _on_bn_block_pressed():
+	editor_plugin.switch_to_tool(ToolBlock.new())
 
 func _on_bn_clip_pressed():
 	editor_plugin.switch_to_tool(ToolClip.new())
@@ -162,5 +164,7 @@ func _on_bn_flip_z_pressed():
 
 func _on_display_mode_item_selected(index):
 	editor_plugin.display_mode = index
+
+
 
 
