@@ -40,7 +40,7 @@ var editor_toolbar:EditorToolbar
 var activated:bool = false
 
 
-var block_create_distance:float = 20
+var block_create_distance:float = 10
 var tool:CyclopsTool = null
 var lock_uvs:bool = false
 var tool_overlay_extrude:float = .01

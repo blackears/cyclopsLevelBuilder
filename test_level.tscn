@@ -12,7 +12,7 @@
 [sub_resource type="Environment" id="Environment_b1nvb"]
 ambient_light_color = Color(0.784314, 0.784314, 0.784314, 1)
 
-[sub_resource type="Resource" id="Resource_7y4fg"]
+[sub_resource type="Resource" id="Resource_2poyl"]
 script = ExtResource("4_qjut0")
 selected = false
 active = false
@@ -28,8 +28,8 @@ face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
 face_vertex_indices = PackedInt32Array(0, 1, 2, 3, 4, 3, 2, 5, 6, 5, 2, 1, 0, 3, 4, 7, 6, 7, 4, 5, 0, 7, 6, 1)
 face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
 face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(0.999999, 0, 0, 0.999999, 1, 1), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(0.999999, 0, 0, 0.999999, 1, 1)])
-face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
-active_face = -1
+face_selected = PackedByteArray(0, 0, 0, 1, 0, 0)
+active_face = 3
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
 [sub_resource type="Resource" id="Resource_jiaap"]
@@ -1817,7 +1817,7 @@ script = ExtResource("2_xtj55")
 [node name="Block_0" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("3_s3g63")
 materials = Array[Material]([ExtResource("4_b0iic")])
-block_data = SubResource("Resource_7y4fg")
+block_data = SubResource("Resource_2poyl")
 
 [node name="Block_3" type="Node" parent="CyclopsBlocks"]
 script = ExtResource("3_s3g63")
