@@ -39,7 +39,10 @@ func _activate(plugin:CyclopsLevelBuilder):
 	
 	if !tool:
 		tool = tool_script.new()
-		
+	
+	
+#	print("Activating %s" % tool_script.resource_path)
+#	print("tool id %s" % tool._get_tool_id())
 	
 #	print("Activating %s" % name)
 	plugin.switch_to_tool(tool)

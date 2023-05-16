@@ -97,6 +97,7 @@ func build_ui():
 			bn.text = tag.name
 		bn.tooltip_text = tag.tooltip
 		bn.pressed.connect(func():tag._activate(editor_plugin))
+#		print("adding bn %s" % tag.name)
 		
 		$HBoxContainer/ToolButtonContainer.add_child(bn)
 		
@@ -120,74 +121,13 @@ func _process(delta):
 
 
 func _on_grid_size_item_selected(index):
-#	if Engine.is_editor_hint():
-	#print("_on_grid_size_item_selected " + str(index))
-	
-#	if editor_plugin.active_node:
 	editor_plugin.get_global_scene().grid_size = index - 4
 
-
-func _on_bn_move_pressed():
-	editor_plugin.switch_to_tool(ToolMove.new())
-
-func _on_bn_block_pressed():
-	editor_plugin.switch_to_tool(ToolBlock.new())
-
-func _on_bn_clip_pressed():
-	editor_plugin.switch_to_tool(ToolClip.new())
-
-
-func _on_bn_vertex_pressed():
-	editor_plugin.switch_to_tool(ToolEditVertex.new())
-
-
-func _on_bn_edge_pressed():
-	editor_plugin.switch_to_tool(ToolEditEdge.new())
-
-
-func _on_bn_face_pressed():
-	editor_plugin.switch_to_tool(ToolEditFace.new())
 
 
 func _on_check_lock_uvs_toggled(button_pressed):
 	editor_plugin.lock_uvs = button_pressed
 
-
-func _on_bn_prism_pressed():
-	editor_plugin.switch_to_tool(ToolPrism.new())
-
-func _on_bn_cylinder_pressed():
-	editor_plugin.switch_to_tool(ToolCylinder.new())
-
-func _on_bn_stairs_pressed():
-	editor_plugin.switch_to_tool(ToolStairs.new())
-
-func _on_bn_duplicate_pressed():
-	editor_plugin.switch_to_tool(ToolDuplicate.new())
-
-
-func _on_bn_delete_pressed():
-	var blocks_root:CyclopsBlocks = editor_plugin.active_node
-	var cmd:CommandDeleteBlocks = CommandDeleteBlocks.new()
-	cmd.blocks_root_path = blocks_root.get_path()
-	cmd.builder = editor_plugin
-	if cmd.will_change_anything():
-		var undo:EditorUndoRedoManager = editor_plugin.get_undo_redo()
-		cmd.add_to_undo_manager(undo)
-
-
-func _on_bn_flip_x_pressed():
-	var action:ActionMirrorSelectionX2 = ActionMirrorSelectionX2.new(editor_plugin)
-	action._execute()
-
-func _on_bn_flip_y_pressed():
-	var action:ActionMirrorSelectionY2 = ActionMirrorSelectionY2.new(editor_plugin)
-	action._execute()
-
-
-func _on_bn_flip_z_pressed():
-	var action:ActionMirrorSelectionZ = ActionMirrorSelectionZ.new(editor_plugin)
-	action._execute()
 
 
 func _on_display_mode_item_selected(index):

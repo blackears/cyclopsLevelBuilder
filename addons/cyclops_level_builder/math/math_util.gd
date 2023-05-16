@@ -599,6 +599,66 @@ static func clip_polygon(points:PackedVector3Array, plane:Plane)->PackedVector3A
 			points_on_or_over.append(plane.intersects_segment(p0, p1))
 
 	return points_on_or_over
+
+
+static func clip_polygon_separate(points:PackedVector3Array, plane:Plane)->Array[PackedVector3Array]:
+	
+	#Clip points to plane.
+	var clipped_points:PackedVector3Array = clip_polygon(points, plane)
+	
+	#Every point should now be on or above the plane
+	var is_over:Array[bool]
+	var all_over:bool = true
+	var none_over:bool = true
+	for p in clipped_points:
+		var is_on:bool = plane.has_point(p)
+		if is_on:
+			all_over = false
+		else:
+			none_over = false
+			
+		is_over.append(!is_on)
+	
+	if all_over:
+		return [clipped_points]
+		
+	if none_over:
+		return []
+	
+	var start_idx:int = -1
+	for p_idx0 in clipped_points.size():
+		var p_idx1:int = wrap(p_idx0 + 1, 0, clipped_points.size())
+		
+		var over0:bool = is_over[p_idx0]
+		var over1:bool = is_over[p_idx1]
+		
+		if !over0 && over1:
+			start_idx = p_idx0
+			break
+
+	#If you think of the clipped_points as a string where every point on the plane is
+	# represented by the character 'n' and every point over the plane is the character 
+	# 'v', then every sub polygon will be a string that can be represented by the 
+	# regular expression "(nv+n)"
+	var results:Array[PackedVector3Array]= []
+	
+	var writing_shape:bool = true
+	var sub_poly:PackedVector3Array
+	for i in clipped_points.size():
+		var p_idx0:int = wrap(i + start_idx, 0, clipped_points.size())
+		var p_idx1:int = wrap(i + start_idx + 1, 0, clipped_points.size())
+		
+		if is_over[p_idx1]:
+			sub_poly.append(clipped_points[p_idx0])
+			
+		elif is_over[p_idx0]:
+			sub_poly.append(clipped_points[p_idx0])
+			sub_poly.append(clipped_points[p_idx1])
+			
+			results.append(sub_poly.duplicate())
+			sub_poly.clear()
+	
+	return results
 	
 
 static func polygon_intersects_frustum(points:PackedVector3Array, frustum:Array[Plane])->bool:
