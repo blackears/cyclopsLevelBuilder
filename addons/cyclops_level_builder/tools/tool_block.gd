@@ -27,7 +27,8 @@ class_name ToolBlock
 
 const TOOL_ID:String = "block"
 
-enum ToolState { NONE, READY, BLOCK_BASE, BLOCK_HEIGHT, MOVE_BLOCK, MOVE_FACE }
+#enum ToolState { NONE, READY, BLOCK_BASE, BLOCK_HEIGHT, MOVE_BLOCK, MOVE_FACE }
+enum ToolState { NONE, READY, BLOCK_BASE, BLOCK_HEIGHT, MOVE_FACE }
 var tool_state:ToolState = ToolState.NONE
 #enum State { READY, DRAG_BASE }
 #var dragging:bool = false
@@ -44,7 +45,7 @@ var drag_floor_normal:Vector3
 #var min_drag_distance:float = 4
 
 #Keep a copy of move command here while we are building it
-var cmd_move_blocks:CommandMoveBlocks
+#var cmd_move_blocks:CommandMoveBlocks
 var cmd_move_face:CommandMoveFacePlanar
 var move_face_origin:Vector3 #Kep track of the origin when moving a face
 
@@ -90,15 +91,6 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 
 			move_face_origin = result.position
 			
-		elif result.object.selected:
-			tool_state = ToolState.MOVE_BLOCK
-			
-			cmd_move_blocks = CommandMoveBlocks.new()
-			cmd_move_blocks.builder = builder
-			cmd_move_blocks.lock_uvs = builder.lock_uvs
-			for child in blocks_root.get_children():
-				if child is CyclopsConvexBlock and child.selected:
-					cmd_move_blocks.add_block(child.get_path())
 		else:
 			tool_state = ToolState.BLOCK_BASE
 
@@ -165,22 +157,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			else:
 				if tool_state == ToolState.READY:
 					
-					var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
-					var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
-
-					var result:IntersectResults = blocks_root.intersect_ray_closest(origin, dir)
-					
-					var cmd:CommandSelectBlocks = CommandSelectBlocks.new()
-					cmd.builder = builder
-					cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
-
-					if result:
-						cmd.block_paths.append(result.object.get_path())
-						
-					if cmd.will_change_anything():
-						var undo:EditorUndoRedoManager = builder.get_undo_redo()
-						cmd.add_to_undo_manager(undo)
-					
 					tool_state = ToolState.NONE
 					
 				elif tool_state == ToolState.BLOCK_BASE:
@@ -214,13 +190,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 						command.add_to_undo_manager(undo)
 
-				elif tool_state == ToolState.MOVE_BLOCK:
-
-					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-					cmd_move_blocks.add_to_undo_manager(undo)
-					
-					tool_state = ToolState.NONE			
-				
 				elif tool_state == ToolState.MOVE_FACE:
 
 					var undo:EditorUndoRedoManager = builder.get_undo_redo()
@@ -309,22 +278,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 			return true
 
-		elif tool_state == ToolState.MOVE_BLOCK:
-			if e.alt_pressed:
-#				block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
-				block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, block_drag_p0_local, Vector3.UP)
-			else:
-#				block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
-				block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, Vector3.UP)
-			
-			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
-			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
-			
-			cmd_move_blocks.move_offset = block_drag_cur - block_drag_p0_local
-			cmd_move_blocks.do_it()
-
-			return true
-			
 		elif tool_state == ToolState.MOVE_FACE:			
 			var drag_to:Vector3 = MathUtil.closest_point_on_line(origin_local, dir_local, move_face_origin, cmd_move_face.move_dir_normal)
 			#print("move_face_origin %s norm %s" % [move_face_origin, cmd_move_face.move_dir_normal])
