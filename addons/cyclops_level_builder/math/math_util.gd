@@ -671,3 +671,20 @@ static func polygon_intersects_frustum(points:PackedVector3Array, frustum:Array[
 	
 	return true
 	
+
+func plane_intesects_point_cloud(points:PackedVector3Array, plane:Plane)->bool:
+	
+	var is_over:bool = false
+	var is_under:bool = false
+	for p in points:
+		if plane.has_point(p):
+			continue
+		
+		if plane.is_point_over(p):
+			is_over = true
+		else:
+			is_under = true
+		if is_over && is_under:
+			return true
+			
+	return false

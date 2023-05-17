@@ -25,22 +25,6 @@
 class_name CommandMergeBlocks
 extends CyclopsCommand
 
-class TrackedBlock extends RefCounted:
-	var path:NodePath
-	var path_parent:NodePath
-	var data:ConvexBlockData
-	var materials:Array[Material]
-	var selected:bool
-	var name:String
-
-	func _init(block:CyclopsConvexBlock):
-		path = block.get_path()
-		path_parent = block.get_parent().get_path()
-		name = block.name
-		data = block.block_data.duplicate()
-		selected = block.selected
-		materials = block.materials
-
 #Public 
 var block_paths:Array[NodePath]
 var block_name_prefix:String = "Block_"

@@ -925,6 +925,66 @@ func update_edge_and_face_selection_from_vertices():
 				break
 		f.selected = all_sel
 
+
+func intersects_plane(plane:Plane)->bool:
+	
+	var is_over:bool = false
+	var is_under:bool = false
+	
+	for v in vertices:
+		var p:Vector3 = v.point
+		
+		if plane.has_point(p):
+			continue
+		
+		if plane.is_point_over(p):
+			is_over = true
+		else:
+			is_under = true
+			
+		if is_over && is_under:
+			return true
+			
+	return false
+
+func subtract(subtrahend:ConvexVolume)->Array[ConvexVolume]:
+	var result_list:Array[ConvexVolume]
+	
+	var split_vol:ConvexVolume = self
+	
+	for face in subtrahend.faces:
+		var p:Plane = face.get_plane()
+		
+		if !split_vol.intersects_plane(p):
+			continue
+			
+		var vol_over:ConvexVolume = split_vol.cut_with_plane(p)
+		var vol_under:ConvexVolume = split_vol.cut_with_plane(MathUtil.flip_plane(p))
+		
+		result_list.append(vol_over)
+		split_vol = vol_under
+
+#	result_list.append(split_vol)
+	
+	return result_list
+
+func is_over_or_on_plane(plane:Plane)->bool:
+	for v in vertices:
+		if !plane.is_point_over(v.point) && !plane.has_point(v.point):
+			return false
+	
+	return true
+
+func intersects_convex_volume(vol:ConvexVolume)->bool:
+	#Look for plane of separtion between two volumes
+	for f in vol.faces:
+		var p:Plane = f.get_plane()
+		if is_over_or_on_plane(p):
+			return false
+	
+	return true
+	
+
 func intersects_frustum(frustum:Array[Plane])->bool:
 
 	for face in faces:
@@ -932,15 +992,6 @@ func intersects_frustum(frustum:Array[Plane])->bool:
 		if MathUtil.polygon_intersects_frustum(points, frustum):
 			return true
 		
-#		var tris:PackedVector3Array = face.get_trianges()
-#		for i in range(0, tris.size(), 3):
-#			var p0:Vector3 = tris[i]
-#			var p1:Vector3 = tris[i + 1]
-#			var p2:Vector3 = tris[i + 2]
-#
-#			if MathUtil.polygon_intersects_frustum([p0, p1, p2], frustum):
-#				return true
-	
 	return false
-	
-			
+
+

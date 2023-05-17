@@ -22,39 +22,30 @@
 # SOFTWARE.
 
 @tool
-class_name CyclopsCommand
-extends RefCounted
-
-var command_name:String = ""
-var builder:CyclopsLevelBuilder
-
-class TrackedBlock extends RefCounted:
-	var path:NodePath
-	var path_parent:NodePath
-	var data:ConvexBlockData
-	var materials:Array[Material]
-	var selected:bool
-	var name:String
-
-	func _init(block:CyclopsConvexBlock):
-		path = block.get_path()
-		path_parent = block.get_parent().get_path()
-		name = block.name
-		data = block.block_data.duplicate()
-		selected = block.selected
-		materials = block.materials
+class_name ActionSubtractBlock
+extends CyclopsAction
 
 
-func add_to_undo_manager(undo_manager:EditorUndoRedoManager):
-	undo_manager.create_action(command_name, UndoRedo.MERGE_DISABLE)
-	undo_manager.add_do_method(self, "do_it")
-	undo_manager.add_undo_method(self, "undo_it")
+func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
+	super._init(plugin, "Subtract Block")
 
-	undo_manager.commit_action()
-
-func do_it()->void:
-	pass
-
-func undo_it()->void:
-	pass
-
+func _execute():
+	var blocks:Array[CyclopsConvexBlock] = plugin.get_selected_blocks()
+	if blocks.size() < 2:
+		return
+		
+	var cmd:CommandSubtractBlock = CommandSubtractBlock.new()
+	cmd.builder = plugin
+	
+	for block in blocks:
+		if block.active:
+			cmd.block_to_subtract_path = block.get_path()
+		else:
+			cmd.block_paths.append(block.get_path())
+	
+	if cmd.block_to_subtract_path.is_empty():
+		return
+	
+	if cmd.will_change_anything():
+		var undo:EditorUndoRedoManager = plugin.get_undo_redo()
+		cmd.add_to_undo_manager(undo)

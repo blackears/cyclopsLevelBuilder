@@ -57,6 +57,7 @@ func _ready():
 	$HBoxContainer/MenuBar/Menu.clear()
 	$HBoxContainer/MenuBar/Menu.add_action_item(ActionToolDuplicate.new(editor_plugin))
 	$HBoxContainer/MenuBar/Menu.add_action_item(ActionMergeSelectedBlocks.new(editor_plugin))
+	$HBoxContainer/MenuBar/Menu.add_action_item(ActionSubtractBlock.new(editor_plugin))
 	$HBoxContainer/MenuBar/Menu.add_action_item(ActionDeleteSelectedBlocks.new(editor_plugin))
 	$HBoxContainer/MenuBar/Menu.add_action_item(ActionSnapToGrid.new(editor_plugin))
 	$HBoxContainer/MenuBar/Menu.add_separator()
