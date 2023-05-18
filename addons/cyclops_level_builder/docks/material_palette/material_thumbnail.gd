@@ -127,30 +127,31 @@ func _gui_input(event:InputEvent):
 
 
 func apply_material_to_selected():
-	var cmd:CommandSetMaterial = CommandSetMaterial.new()
-	cmd.builder = builder
-	cmd.material_path = material_path
-	
-	var is_obj_mode:bool = builder.mode == CyclopsLevelBuilder.Mode.OBJECT
-	
-	var root_blocks:CyclopsBlocks = builder.active_node
-	for child in root_blocks.get_children():
-#		print("child block %s %s" % [child.name, child.get_class()])
-#		if child.has_method("append_mesh_wire"):
-		if child is CyclopsConvexBlock:
-		#if !(child is MeshInstance3D):
-#			print("setting child block %s" % child.name)
-			if child.selected:
-				if is_obj_mode:
-					cmd.add_target(child.get_path(), child.control_mesh.get_face_indices())
-				else:
-					var face_indices:PackedInt32Array = child.control_mesh.get_face_indices(true)					
-					if !face_indices.is_empty():
-						cmd.add_target(child.get_path(), face_indices)
-	
-	if cmd.will_change_anything():
-		var undo:EditorUndoRedoManager = builder.get_undo_redo()
-		cmd.add_to_undo_manager(undo)
+	pass
+#	var cmd:CommandSetMaterial = CommandSetMaterial.new()
+#	cmd.builder = builder
+#	cmd.material_path = material_path
+#
+#	var is_obj_mode:bool = builder.mode == CyclopsLevelBuilder.Mode.OBJECT
+#
+#	var root_blocks:CyclopsBlocks = builder.active_node
+#	for child in root_blocks.get_children():
+##		print("child block %s %s" % [child.name, child.get_class()])
+##		if child.has_method("append_mesh_wire"):
+#		if child is CyclopsConvexBlock:
+#		#if !(child is MeshInstance3D):
+##			print("setting child block %s" % child.name)
+#			if child.selected:
+#				if is_obj_mode:
+#					cmd.add_target(child.get_path(), child.control_mesh.get_face_indices())
+#				else:
+#					var face_indices:PackedInt32Array = child.control_mesh.get_face_indices(true)					
+#					if !face_indices.is_empty():
+#						cmd.add_target(child.get_path(), face_indices)
+#
+#	if cmd.will_change_anything():
+#		var undo:EditorUndoRedoManager = builder.get_undo_redo()
+#		cmd.add_to_undo_manager(undo)
 
 
 func _on_focus_entered():

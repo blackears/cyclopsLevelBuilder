@@ -133,27 +133,25 @@ func apply_uv_transform():
 		
 	uv_transform = xform
 		
-	var cmd:CommandSetUvTransform = CommandSetUvTransform.new()
-	cmd.builder = builder
-	cmd.uv_transform = xform
-	
-#	print("setting xform %s " % xform)
-	
-	if builder.active_node:
-		for child in builder.active_node.get_children():
-			if child is CyclopsConvexBlock:
-				var block:CyclopsConvexBlock = child
-				if block.selected:
-					var vol:ConvexVolume = block.control_mesh
-					for f_idx in vol.faces.size():
-						var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
-						if f.selected:
-							cmd.add_face(block.get_path(), f_idx)
-	
-	
-	if cmd.will_change_anything():
-		var undo:EditorUndoRedoManager = builder.get_undo_redo()
-		cmd.add_to_undo_manager(undo)
+#	var cmd:CommandSetUvTransform = CommandSetUvTransform.new()
+#	cmd.builder = builder
+#	cmd.uv_transform = xform
+#
+#	if builder.active_node:
+#		for child in builder.active_node.get_children():
+#			if child is CyclopsConvexBlock:
+#				var block:CyclopsConvexBlock = child
+#				if block.selected:
+#					var vol:ConvexVolume = block.control_mesh
+#					for f_idx in vol.faces.size():
+#						var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
+#						if f.selected:
+#							cmd.add_face(block.get_path(), f_idx)
+#
+#
+#	if cmd.will_change_anything():
+#		var undo:EditorUndoRedoManager = builder.get_undo_redo()
+#		cmd.add_to_undo_manager(undo)
 	
 
 func _on_offset_x_value_changed(value):
