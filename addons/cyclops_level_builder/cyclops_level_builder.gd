@@ -122,7 +122,7 @@ func _enter_tree():
 	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 	global_scene.builder = self
 	
-	switch_to_tool(ToolMove.new())
+	switch_to_tool(ToolBlock.new())
 
 func find_blocks_root(node:Node)->CyclopsBlocks:
 	if node is CyclopsBlocks:

@@ -64,7 +64,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 					if builder.active_node and builder.active_node.has_selected_blocks():
 					
-						builder.switch_to_tool(ToolDuplicate.new())
+						#builder.switch_to_tool(ToolDuplicate.new())
+						pass
 					
 			return true
 	
