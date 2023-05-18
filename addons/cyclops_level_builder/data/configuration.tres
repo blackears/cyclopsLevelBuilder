@@ -1,16 +1,8 @@
-[gd_resource type="Resource" script_class="CyclopsConfig" load_steps=11 format=3 uid="uid://b54ok0creqhnb"]
+[gd_resource type="Resource" script_class="CyclopsConfig" load_steps=3 format=3 uid="uid://b54ok0creqhnb"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/cyclops_config.gd" id="1_jrivp"]
-[ext_resource type="Resource" uid="uid://rskdanqaqt1y" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_move.tres" id="2_qxxjr"]
 [ext_resource type="Resource" uid="uid://c648hs1r46mat" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_create_block.tres" id="3_fxuvh"]
-[ext_resource type="Resource" uid="uid://cihxgriu32oxb" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_create_prism.tres" id="4_u5403"]
-[ext_resource type="Resource" uid="uid://wm5lu7jdndym" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_create_cylinder.tres" id="5_iumqb"]
-[ext_resource type="Resource" uid="uid://16f1nwimgn0p" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_create_stairs.tres" id="6_x1q56"]
-[ext_resource type="Resource" uid="uid://buod6sdg7c12l" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_clip.tres" id="7_g517y"]
-[ext_resource type="Resource" uid="uid://ctj35x0jfg7ej" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_edit_vertex.tres" id="8_46k7f"]
-[ext_resource type="Resource" uid="uid://dub6oyal5fxly" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_edit_edge.tres" id="9_4tvla"]
-[ext_resource type="Resource" uid="uid://cmdgd8wmfdo4a" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_edit_face.tres" id="10_wrv52"]
 
 [resource]
 script = ExtResource("1_jrivp")
-tool_tags = Array[Resource("res://addons/cyclops_level_builder/resources/tool_tag.gd")]([ExtResource("2_qxxjr"), ExtResource("3_fxuvh"), ExtResource("4_u5403"), ExtResource("5_iumqb"), ExtResource("6_x1q56"), ExtResource("7_g517y"), ExtResource("8_46k7f"), ExtResource("9_4tvla"), ExtResource("10_wrv52")])
+tool_tags = Array[Resource("res://addons/cyclops_level_builder/resources/tool_tag.gd")]([ExtResource("3_fxuvh")])
