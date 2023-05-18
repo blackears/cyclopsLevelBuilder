@@ -52,8 +52,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		if e.keycode == KEY_X:
 			if e.is_pressed():
 				#print("cyc tool X")
-				var action:ActionDeleteSelectedBlocks = ActionDeleteSelectedBlocks.new(builder)
-				action._execute()
+#				var action:ActionDeleteSelectedBlocks = ActionDeleteSelectedBlocks.new(builder)
+#				action._execute()
+				pass
 			
 			return true
 				
