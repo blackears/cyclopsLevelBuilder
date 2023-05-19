@@ -88,6 +88,7 @@ func _get_plugin_icon()->Texture2D:
 	return preload("res://addons/cyclops_level_builder/art/cyclops.svg")
 
 func _enter_tree():
+	add_custom_type("CyclopsBlock", "Node3D", preload("nodes/cyclops_block.gd"), preload("nodes/cyclops_blocks_icon.png"))
 	add_custom_type("CyclopsBlocks", "Node3D", preload("nodes/cyclops_blocks.gd"), preload("nodes/cyclops_blocks_icon.png"))
 	add_custom_type("CyclopsConvexBlock", "Node", preload("nodes/cyclops_convex_block.gd"), preload("nodes/cyclops_blocks_icon.png"))
 	add_custom_type("CyclopsConvexBlockBody", "Node", preload("nodes/cyclops_convex_block_body.gd"), preload("nodes/cyclops_blocks_icon.png"))
@@ -165,6 +166,7 @@ func _exit_tree():
 	# Clean-up of the plugin goes here.
 	remove_autoload_singleton(AUTOLOAD_NAME)
 	
+	remove_custom_type("CyclopsBlock")
 	remove_custom_type("CyclopsBlocks")
 	remove_custom_type("CyclopsConvexBlock")
 	remove_custom_type("CyclopsConvexBlockBody")
