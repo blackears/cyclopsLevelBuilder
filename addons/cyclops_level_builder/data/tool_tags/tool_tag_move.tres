@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ToolTag" load_steps=4 format=3 uid="uid://rskdanqaqt1y"]
+
+[ext_resource type="Texture2D" uid="uid://cqy2x1s41ypbt" path="res://addons/cyclops_level_builder/art/icons/move.svg" id="1_g0ofo"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/tool_tag.gd" id="1_skypg"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_move.gd" id="2_16d6f"]
+
+[resource]
+script = ExtResource("1_skypg")
+id = "move"
+name = "Move"
+tooltip = "Move
+
+Click and drag on a selected block to move it in the XZ plane.  Hold Alt to drag along the Y axis.
+
+Click and drag anywhere else to drag a rectangular selection region.
+
+Escape or right click to cancel movement.
+
+Click on a block to select it.  Shift-Click toggles, Ctrl-Click adds and Shift-Ctrl Click subtracts.
+
+Click in empty space to clear selection."
+icon = ExtResource("1_g0ofo")
+tool_script = ExtResource("2_16d6f")

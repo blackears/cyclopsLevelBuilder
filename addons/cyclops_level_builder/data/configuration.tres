@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="CyclopsConfig" load_steps=3 format=3 uid="uid://b54ok0creqhnb"]
+[gd_resource type="Resource" script_class="CyclopsConfig" load_steps=4 format=3 uid="uid://b54ok0creqhnb"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/cyclops_config.gd" id="1_jrivp"]
+[ext_resource type="Resource" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_move.tres" id="2_mkeje"]
 [ext_resource type="Resource" uid="uid://c648hs1r46mat" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_create_block.tres" id="3_fxuvh"]
 
 [resource]
 script = ExtResource("1_jrivp")
-tool_tags = Array[Resource("res://addons/cyclops_level_builder/resources/tool_tag.gd")]([ExtResource("3_fxuvh")])
+tool_tags = Array[Resource("res://addons/cyclops_level_builder/resources/tool_tag.gd")]([ExtResource("2_mkeje"), ExtResource("3_fxuvh")])

@@ -86,30 +86,30 @@ func on_selection_changed():
 	material_thumbnail_dirty = true
 	target_material = empty_material
 	
-	if builder.active_node:
-		var block:CyclopsConvexBlock = builder.active_node.get_active_block()
-		if block:
-			var vol:ConvexVolume = block.control_mesh
-			var face_idx = vol.active_face if vol.active_face != -1 else 0
-			
-			var f:ConvexVolume.FaceInfo = vol.get_face(face_idx)
-			
-			
-			spin_offset_x.value = f.uv_transform.origin.x
-			spin_offset_y.value = f.uv_transform.origin.y
-			spin_scale_x.value = f.uv_transform.get_scale().x
-			spin_scale_y.value = f.uv_transform.get_scale().y
-			spin_rotation.value = rad_to_deg(f.uv_transform.get_rotation())
-			spin_skew.value = rad_to_deg(f.uv_transform.get_skew())
-			
-			if f.material_id != -1:
-				var mat:Material = block.materials[f.material_id]
-				target_material = mat
-			else:
-				target_material = null
-			
-			uv_transform = f.uv_transform
-					
+	
+	var block:CyclopsBlock = builder.get_active_block()
+	if block:
+		var vol:ConvexVolume = block.control_mesh
+		var face_idx = vol.active_face if vol.active_face != -1 else 0
+		
+		var f:ConvexVolume.FaceInfo = vol.get_face(face_idx)
+		
+		
+		spin_offset_x.value = f.uv_transform.origin.x
+		spin_offset_y.value = f.uv_transform.origin.y
+		spin_scale_x.value = f.uv_transform.get_scale().x
+		spin_scale_y.value = f.uv_transform.get_scale().y
+		spin_rotation.value = rad_to_deg(f.uv_transform.get_rotation())
+		spin_skew.value = rad_to_deg(f.uv_transform.get_skew())
+		
+		if f.material_id != -1:
+			var mat:Material = block.materials[f.material_id]
+			target_material = mat
+		else:
+			target_material = null
+		
+		uv_transform = f.uv_transform
+				
 		
 
 func save_state(state:Dictionary):

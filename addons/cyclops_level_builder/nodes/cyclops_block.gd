@@ -32,6 +32,8 @@ var mesh_wire:MeshInstance3D
 var collision_body:StaticBody3D
 var collision_shape:CollisionShape3D
 var occluder:OccluderInstance3D
+var selected:bool
+var active:bool
 
 var dirty:bool = true
 

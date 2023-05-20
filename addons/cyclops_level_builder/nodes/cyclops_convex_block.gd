@@ -70,7 +70,8 @@ func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 	
 	var result:IntersectResults = control_mesh.intersect_ray_closest(origin, dir)
 	if result:
-		result.object = self
+#		result.object = self
+		result.object = null
 		
 	return result
 

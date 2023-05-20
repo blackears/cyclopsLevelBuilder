@@ -36,7 +36,7 @@ var lock_uvs:bool = false
 
 #Private
 var block_name:String
-#var block_selected:bool
+var block_selected:bool
 var tracked_block_data:ConvexBlockData
 
 var deleted:bool = false
@@ -51,7 +51,7 @@ func move_to(offset:Vector3, intermediate:bool):
 		var block:CyclopsBlock = builder.get_node(block_path)
 		
 		block_name = block.name
-		#block_selected = block.selected
+		block_selected = block.selected
 		tracked_block_data = block.block_data
 	
 	var ctl_mesh:ConvexVolume = ConvexVolume.new()
@@ -95,7 +95,7 @@ func undo_it():
 		block.owner = builder.get_editor_interface().get_edited_scene_root()
 		block.block_data = tracked_block_data
 		block.name = block_name
-		#block.selected = block_selected
+		block.selected = block_selected
 		
 		deleted = false
 		return

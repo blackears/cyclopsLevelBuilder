@@ -132,22 +132,32 @@ func _enter_tree():
 #		return find_blocks_root(node.get_parent())
 #	return null
 
+func get_blocks()->Array[CyclopsBlock]:
+	return get_blocks_recursive(get_editor_interface().get_edited_scene_root())
+
+func get_blocks_recursive(node:Node)->Array[CyclopsBlock]:
+	var result:Array[CyclopsBlock]
+	
+	if node is CyclopsBlock:
+		result.append(node)
+	for child in node.get_children():
+		result.append_array(get_blocks_recursive(child))
+	return result
+
 func get_active_block()->CyclopsBlock:
-	var selection:EditorSelection = get_editor_interface().get_selection()
-	var nodes:Array = selection.get_selected_nodes()
-	for n in nodes:
-		if n is CyclopsBlock:
-			return n
+	var blocks:Array[CyclopsBlock] = get_blocks()
+	for block in blocks:
+		if block.active:
+			return block
 	return null
 
 func get_selected_blocks()->Array[CyclopsBlock]:
 	var result:Array[CyclopsBlock]
-	
-	var selection:EditorSelection = get_editor_interface().get_selection()
-	var nodes:Array = selection.get_selected_nodes()
-	for n in nodes:
-		if n is CyclopsBlock:
-			result.append(n)
+
+	var blocks:Array[CyclopsBlock] = get_blocks()
+	for block in blocks:
+		if block.selected:
+			result.append(block)
 	
 	return result
 
@@ -260,30 +270,23 @@ func get_global_scene()->CyclopsGlobalScene:
 	return scene
 
 
-var ray_best_result:IntersectResults
 
 func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
-	ray_best_result = null
-	return intersect_ray_closest_recursive(get_editor_interface().get_edited_scene_root(), origin, dir)
-	
-func intersect_ray_closest_recursive(node:Node, origin:Vector3, dir:Vector3)->IntersectResults:
-	#var best_result:IntersectResults
+	var best_result:IntersectResults
 
-#	TreeVisitor.visit(get_editor_interface().get_edited_scene_root(), func(): pass)
-	TreeVisitor.visit(get_editor_interface().get_edited_scene_root(), func(node:Node): 
-#		print("visiting %s" % node.name)
-		if node is CyclopsBlock:
-			var result:IntersectResults = node.intersect_ray_closest(origin, dir)
+	var blocks:Array[CyclopsBlock] = get_blocks()
+
+	for block in blocks:
+		var result:IntersectResults = block.intersect_ray_closest(origin, dir)
 #			print("isect %s %s" % [node.name, result])
-			if result:
-				if !ray_best_result or result.distance_squared < ray_best_result.distance_squared:
-					print("setting best result %s" % node.name)
-					ray_best_result = result
-					print("best_result %s" % ray_best_result)
-		)
+		if result:
+			if !best_result or result.distance_squared < best_result.distance_squared:
+#				print("setting best result %s" % node.name)
+				best_result = result
+#				print("best_result %s" % ray_best_result)
 		
-	print("returning best result %s" % ray_best_result)
-	return ray_best_result
+#	print("returning best result %s" % ray_best_result)
+	return best_result
 
 #func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 #	return intersect_ray_closest_filtered(origin, dir, func(block:CyclopsBlock): return true)
@@ -323,20 +326,11 @@ func intersect_ray_closest_selected_only(origin:Vector3, dir:Vector3)->Intersect
 func intersect_frustum_all(frustum:Array[Plane])->Array[CyclopsBlock]:
 	var result:Array[CyclopsBlock] = []
 	
-	TreeVisitor.visit(get_editor_interface().get_edited_scene_root(), func(node:Node): 
-		if node is CyclopsBlock:
-			var block:CyclopsBlock = node
-			var vol:ConvexVolume = block.control_mesh
-			if vol.intersects_frustum(frustum):
-				result.append(block)
-		)
-	
-#	for child in get_children():
-#		if child is CyclopsBlock:
-#			var block:CyclopsBlock = child
-#			var vol:ConvexVolume = block.control_mesh
-#			if vol.intersects_frustum(frustum):
-#				result.append(block)
+	var blocks:Array[CyclopsBlock] = get_blocks()
+	for block in blocks:
+		var vol:ConvexVolume = block.control_mesh
+		if vol.intersects_frustum(frustum):
+			result.append(block)
 	
 	return result
 
