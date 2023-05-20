@@ -328,6 +328,7 @@ func intersect_frustum_all(frustum:Array[Plane])->Array[CyclopsBlock]:
 	
 	var blocks:Array[CyclopsBlock] = get_blocks()
 	for block in blocks:
+		#print("intersect_frustum_all block %s" % block.get_path())
 		var vol:ConvexVolume = block.control_mesh
 		if vol.intersects_frustum(frustum):
 			result.append(block)

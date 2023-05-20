@@ -1,12 +1,13 @@
-[gd_resource type="Resource" script_class="CyclopsConfig" load_steps=7 format=3 uid="uid://b54ok0creqhnb"]
+[gd_resource type="Resource" script_class="CyclopsConfig" load_steps=8 format=3 uid="uid://b54ok0creqhnb"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/cyclops_config.gd" id="1_jrivp"]
 [ext_resource type="Resource" uid="uid://rskdanqaqt1y" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_move.tres" id="2_mkeje"]
 [ext_resource type="Resource" uid="uid://c648hs1r46mat" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_create_block.tres" id="3_fxuvh"]
-[ext_resource type="Resource" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_create_prism.tres" id="4_utowl"]
-[ext_resource type="Resource" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_create_cylinder.tres" id="5_yyi6p"]
-[ext_resource type="Resource" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_create_stairs.tres" id="6_pr2fs"]
+[ext_resource type="Resource" uid="uid://cihxgriu32oxb" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_create_prism.tres" id="4_utowl"]
+[ext_resource type="Resource" uid="uid://wm5lu7jdndym" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_create_cylinder.tres" id="5_yyi6p"]
+[ext_resource type="Resource" uid="uid://16f1nwimgn0p" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_create_stairs.tres" id="6_pr2fs"]
+[ext_resource type="Resource" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_clip.tres" id="7_pbu8d"]
 
 [resource]
 script = ExtResource("1_jrivp")
-tool_tags = Array[Resource("res://addons/cyclops_level_builder/resources/tool_tag.gd")]([ExtResource("2_mkeje"), ExtResource("3_fxuvh"), ExtResource("4_utowl"), ExtResource("5_yyi6p"), ExtResource("6_pr2fs")])
+tool_tags = Array[Resource("res://addons/cyclops_level_builder/resources/tool_tag.gd")]([ExtResource("2_mkeje"), ExtResource("3_fxuvh"), ExtResource("4_utowl"), ExtResource("5_yyi6p"), ExtResource("6_pr2fs"), ExtResource("7_pbu8d")])
