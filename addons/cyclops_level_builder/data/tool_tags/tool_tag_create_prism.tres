@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ToolTag" load_steps=4 format=3 uid="uid://cihxgriu32oxb"]
+
+[ext_resource type="Texture2D" uid="uid://cbmwkjbju75er" path="res://addons/cyclops_level_builder/art/icons/create_prism.svg" id="1_gxivr"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/tool_tag.gd" id="1_oalyb"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_prism.gd" id="3_oagna"]
+
+[resource]
+script = ExtResource("1_oalyb")
+id = "prism"
+name = "Prism"
+tooltip = "Prism
+
+Click on surface of block or in empty space to begin creating base of a prism.
+
+Click to add new point.  Backspace to remove the last point you added.  You can also right click on a point to remove it.
+
+Press Enter to extrude base.
+
+Press Enter again to finish extruding and create block."
+icon = ExtResource("1_gxivr")
+tool_script = ExtResource("3_oagna")

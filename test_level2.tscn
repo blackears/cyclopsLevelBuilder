@@ -179,3 +179,6 @@ block_data = SubResource("Resource_5msiq")
 [node name="Block_0" type="Node3D" parent="Node3D"]
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_j4ao6")
+
+[node name="@@20243" type="Node3D" parent="Node3D"]
+script = ExtResource("1_xfayt")

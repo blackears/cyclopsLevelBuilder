@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ToolTag" load_steps=4 format=3 uid="uid://wm5lu7jdndym"]
+
+[ext_resource type="Texture2D" uid="uid://0vye3ue3ayvf" path="res://addons/cyclops_level_builder/art/icons/create_cylinder.svg" id="1_a3871"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/tool_tag.gd" id="2_8mpiw"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_cylinder.gd" id="3_2hl37"]
+
+[resource]
+script = ExtResource("2_8mpiw")
+id = "cylinder"
+name = "Cylinder"
+tooltip = "Cylinder
+
+Click on surface of block or in empty space to begin creating base of a cylinder.
+
+Release the mouse to enter height drawing mode.  If you have the tube option selected, you will draw the second ring instead.
+
+Use the mouse wheel to change the number of sides of the cylinder while drawing."
+icon = ExtResource("1_a3871")
+tool_script = ExtResource("3_2hl37")

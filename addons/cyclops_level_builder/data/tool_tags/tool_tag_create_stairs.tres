@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ToolTag" load_steps=4 format=3 uid="uid://16f1nwimgn0p"]
+
+[ext_resource type="Texture2D" uid="uid://bwq4w4vf8um1f" path="res://addons/cyclops_level_builder/art/icons/create_stairs.svg" id="1_4iod6"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/tool_tag.gd" id="1_kdc1t"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_stairs.gd" id="3_5ju43"]
+
+[resource]
+script = ExtResource("1_kdc1t")
+id = "stairs"
+name = "Stairs"
+tooltip = "Click on surface of block or in empty space to begin creating base of a stair case.
+
+Release mouse button and drag upwards to adjust the height of the stairs.
+
+Use the mouse wheel to change the direction the stairs face.  Ctrl-Wheel to change the height of each step, Ctrl-Shift-Wheel to change the depth of each step."
+icon = ExtResource("1_4iod6")
+tool_script = ExtResource("3_5ju43")
