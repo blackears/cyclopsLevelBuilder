@@ -22,7 +22,14 @@
 # SOFTWARE.
 
 @tool
-class_name DisplayMode
+extends RefCounted
+class_name TreeVisitor
 
-enum Type { WIRE, TEXTURED }
+static func visit(root:Node, callback:Callable):
+	visit_recursive(root, callback)
 
+static func visit_recursive(node:Node, callback:Callable):
+	callback.call(node)
+	
+	for child in node.get_children():
+		visit_recursive(child, callback)

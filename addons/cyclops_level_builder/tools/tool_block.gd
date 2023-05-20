@@ -27,11 +27,9 @@ class_name ToolBlock
 
 const TOOL_ID:String = "block"
 
-#enum ToolState { NONE, READY, BLOCK_BASE, BLOCK_HEIGHT, MOVE_BLOCK, MOVE_FACE }
 enum ToolState { NONE, READY, BLOCK_BASE, BLOCK_HEIGHT, MOVE_FACE }
 var tool_state:ToolState = ToolState.NONE
-#enum State { READY, DRAG_BASE }
-#var dragging:bool = false
+
 var viewport_camera_start:Camera3D
 var event_start:InputEventMouseButton
 
@@ -41,8 +39,6 @@ var block_drag_p1_local:Vector3
 var block_drag_p2_local:Vector3
 
 var drag_floor_normal:Vector3
-
-#var min_drag_distance:float = 4
 
 #Keep a copy of move command here while we are building it
 #var cmd_move_blocks:CommandMoveBlocks
@@ -55,7 +51,7 @@ func _get_tool_id()->String:
 	return TOOL_ID
 
 func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
-	var blocks_root:CyclopsBlocks = self.builder.active_node
+	var blocks_root:Node = builder.get_block_add_parent()
 	var e:InputEventMouseButton = event
 	
 	var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
@@ -63,7 +59,7 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 
 #					print("origin %s  dir %s" % [origin, dir])
 
-	var result:IntersectResults = blocks_root.intersect_ray_closest(origin, dir)
+	var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 #					print("result %s" % result)
 	
 	if result:
@@ -83,7 +79,7 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 			
 			cmd_move_face = CommandMoveFacePlanar.new()
 			cmd_move_face.builder = builder
-			cmd_move_face.blocks_root_path = builder.active_node.get_path()
+			cmd_move_face.blocks_root_path = builder.get_block_add_parent().get_path()
 			cmd_move_face.block_path = result.object.get_path()
 			cmd_move_face.face_id = result.face_id
 			cmd_move_face.lock_uvs = builder.lock_uvs
@@ -129,9 +125,11 @@ func _draw_tool(viewport_camera:Camera3D):
 		global_scene.draw_cube(block_drag_p0_local, block_drag_p1_local, block_drag_cur, global_scene.tool_material)
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
-	if !builder.active_node is CyclopsBlocks:
-		return false
-	var blocks_root:CyclopsBlocks = builder.active_node
+	#print("tool_block gui_input %s" % event)
+	
+#	if !builder.active_node is CyclopsBlocks:
+#		return false
+	var blocks_root:Node = builder.get_block_add_parent()
 
 	if event is InputEventKey:
 		var e:InputEventKey = event
@@ -181,7 +179,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						
 						command.builder = builder
 						command.blocks_root_path = blocks_root.get_path()
-						command.block_name = GeneralUtil.find_unique_name(builder.active_node, "Block_")						
+						command.block_name = GeneralUtil.find_unique_name(blocks_root, "Block_")						
 						command.bounds = bounds
 						command.uv_transform = builder.tool_uv_transform
 						command.material_path = builder.tool_material_path
@@ -226,9 +224,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		if tool_state == ToolState.NONE:
 			if e.ctrl_pressed:
 				#block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
-				var result:IntersectResults = blocks_root.intersect_ray_closest(origin_local, dir_local)
+				var result:IntersectResults = builder.intersect_ray_closest(origin_local, dir_local)
+				print("picked result %s" % result)
 				if result:
-					var block:CyclopsConvexBlock = result.object
+					var block:CyclopsBlock = result.object
 					var convex_mesh:ConvexVolume = block.control_mesh
 					base_points = convex_mesh.get_face(result.face_id).get_points()
 					return true

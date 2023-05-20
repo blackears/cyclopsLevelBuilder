@@ -25,6 +25,7 @@
 extends Node3D
 class_name CyclopsBlock
 
+signal mesh_changed
 
 var mesh_instance:MeshInstance3D
 var mesh_wire:MeshInstance3D
@@ -34,13 +35,20 @@ var occluder:OccluderInstance3D
 
 var dirty:bool = true
 
+var control_mesh:ConvexVolume
+
 @export var block_data:ConvexBlockData:
 	get:
 		return block_data
 	set(value):
-		block_data = value
-		dirty = true
-
+		if block_data != value:
+			block_data = value
+			control_mesh = ConvexVolume.new()
+			control_mesh.init_from_convex_block_data(block_data)
+			
+			dirty = true
+			mesh_changed.emit()
+	
 @export var materials:Array[Material]
 
 var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
@@ -133,4 +141,41 @@ func _process(delta):
 		if display_mode != global_scene.builder.display_mode:
 			dirty = true
 			return
-			
+
+func append_mesh_outline(mesh:ImmediateMesh, viewport_camera:Camera3D, local_to_world:Transform3D, mat:Material):
+	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
+	
+#	var mat:Material = global_scene.tool_object_active_material if active else global_scene.tool_object_selected_material
+	control_mesh.append_mesh_outline(mesh, viewport_camera, local_to_world, mat)
+
+
+func append_mesh_wire(mesh:ImmediateMesh):
+	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
+	
+	var mat:Material = global_scene.outline_material
+	control_mesh.append_mesh_wire(mesh, mat)
+
+
+func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
+	if !block_data:
+		return null
+	
+	var result:IntersectResults = control_mesh.intersect_ray_closest(origin, dir)
+	if result:
+		result.object = self
+		
+	return result
+
+
+func select_face(face_idx:int, select_type:Selection.Type = Selection.Type.REPLACE):
+	if select_type == Selection.Type.REPLACE:
+		for f in control_mesh.faces:
+			f.selected = f.index == face_idx
+	elif select_type == Selection.Type.ADD:
+		control_mesh.faces[face_idx].selected = true
+	elif select_type == Selection.Type.SUBTRACT:
+		control_mesh.faces[face_idx].selected = true
+	elif select_type == Selection.Type.TOGGLE:
+		control_mesh.faces[face_idx].selected = !control_mesh.faces[face_idx].selected
+
+	mesh_changed.emit()

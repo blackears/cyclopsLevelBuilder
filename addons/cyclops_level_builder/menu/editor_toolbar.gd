@@ -109,11 +109,10 @@ func update_grid():
 	if !editor_plugin:
 		return
 		
-	if editor_plugin.active_node:
-		var size:int = editor_plugin.get_global_scene().grid_size
-		$HBoxContainer/grid_size.select(size + 4)
-		
-		$HBoxContainer/display_mode.select(editor_plugin.display_mode)
+	var size:int = editor_plugin.get_global_scene().grid_size
+	$HBoxContainer/grid_size.select(size + 4)
+	
+	$HBoxContainer/display_mode.select(editor_plugin.display_mode)
 		
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

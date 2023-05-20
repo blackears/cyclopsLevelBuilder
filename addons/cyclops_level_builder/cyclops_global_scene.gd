@@ -235,14 +235,14 @@ func draw_selected_blocks(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 	#var mesh:ImmediateMesh = ImmediateMesh.new()
 
-	if builder.active_node is CyclopsBlocks:
-		var blocks_root:CyclopsBlocks = builder.active_node
-		for child in blocks_root.get_children():
-			if child is CyclopsConvexBlock:
-				var block:CyclopsConvexBlock = child
-				if block.selected:
-					block.append_mesh_outline(tool_mesh, viewport_camera, blocks_root.global_transform)
-					
+#	var blocks_root:CyclopsBlocks = builder.get_editor_interface().get_edited_scene_root()
+	var blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+	for block in blocks:
+		var active:bool = block == blocks[0]
+		var mat:Material = global_scene.tool_object_active_material if active else global_scene.tool_object_selected_material
+		
+		block.append_mesh_outline(tool_mesh, viewport_camera, block.global_transform, mat)
+
 
 func draw_screen_rect(viewport_camera:Camera3D, p00:Vector2, p11:Vector2, material:Material):
 	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")

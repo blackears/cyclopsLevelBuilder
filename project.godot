@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Cyclops Level Builder"
-run/main_scene="res://test_level.tscn"
+run/main_scene="res://test_level2.tscn"
 config/features=PackedStringArray("4.0", "GL Compatibility")
 config/icon="res://icon.svg"
 

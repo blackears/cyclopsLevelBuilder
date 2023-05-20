@@ -39,9 +39,10 @@ func _init():
 	command_name = "Add block"
 
 func do_it():
-	var block:CyclopsConvexBlock = preload("../nodes/cyclops_convex_block.gd").new()
-	
-	var blocks_root:CyclopsBlocks = builder.get_node(blocks_root_path)
+	var block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
+		
+	var blocks_root:Node = builder.get_block_add_parent()
+	#var blocks_root:CyclopsBlocks = builder.get_node(blocks_root_path)
 	blocks_root.add_child(block)
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
 	block.name = block_name
@@ -63,7 +64,7 @@ func do_it():
 #	print("AddBlockCommand do_it() %s %s" % [block_inst_id, bounds])
 	
 func undo_it():
-	var block:CyclopsConvexBlock = builder.get_node(block_path)
+	var block:CyclopsBlock = builder.get_node(block_path)
 	block.queue_free()
 
 #	print("AddBlockCommand undo_it()")

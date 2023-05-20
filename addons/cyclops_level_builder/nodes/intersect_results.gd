@@ -25,7 +25,7 @@
 extends RefCounted
 class_name IntersectResults
 
-var object:CyclopsConvexBlock
+var object:CyclopsBlock
 var face_id:int
 var position:Vector3
 var normal:Vector3
