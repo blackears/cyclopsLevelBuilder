@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ToolTag" load_steps=3 format=3 uid="uid://ryja8b4fr8bb"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/tool_tag.gd" id="1_cii1q"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_duplicate.gd" id="2_ml6st"]
+
+[resource]
+script = ExtResource("1_cii1q")
+id = "duplicate"
+name = "Duplicate"
+tooltip = ""
+tool_script = ExtResource("2_ml6st")

@@ -62,10 +62,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			if e.is_pressed():
 				if e.shift_pressed && !Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 					
-					if builder.active_node and builder.active_node.has_selected_blocks():
-					
-						#builder.switch_to_tool(ToolDuplicate.new())
-						pass
+					var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+					if !sel_blocks.is_empty():
+											
+						builder.switch_to_tool(ToolDuplicate.new())
 					
 			return true
 	

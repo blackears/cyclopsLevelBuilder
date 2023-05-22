@@ -232,6 +232,10 @@ mesh = SubResource("BoxMesh_hni5p")
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_gnykt")
 
+[node name="Block_6" type="Node3D" parent="Node3D"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_gnykt")
+
 [node name="Block_3" type="Node3D" parent="Node3D"]
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_5msiq")
