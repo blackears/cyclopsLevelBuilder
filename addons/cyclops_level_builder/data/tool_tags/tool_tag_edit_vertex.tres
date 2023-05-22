@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ToolTag" load_steps=4 format=3 uid="uid://ctj35x0jfg7ej"]
+
+[ext_resource type="Texture2D" uid="uid://cwn58lev5oopd" path="res://addons/cyclops_level_builder/art/icons/select_vertex.svg" id="1_i5cb7"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/tool_tag.gd" id="2_yi1sl"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_edit_vertex.gd" id="3_3wsge"]
+
+[resource]
+script = ExtResource("2_yi1sl")
+id = "edit_vertex"
+name = "Vertex"
+tooltip = "Vertex
+
+Click on a vertex to select it.  Shift Click to toggle selecton, Ctrl Click to add to selection, Shift-Ctrl click to subtract from selection.
+
+Click and drag to move vertex in XZ plane.  Hold Alt to drag along Y axis.  Click and drag on a selected vertex to move all selected vertices.
+
+Hover the mouse over a different block and press Alt-Q to switch to editing that block."
+icon = ExtResource("1_i5cb7")
+tool_script = ExtResource("3_3wsge")
