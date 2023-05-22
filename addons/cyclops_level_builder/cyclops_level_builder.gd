@@ -125,13 +125,6 @@ func _enter_tree():
 	
 	switch_to_tool(ToolBlock.new())
 
-#func find_blocks_root(node:Node)->CyclopsBlocks:
-#	if node is CyclopsBlocks:
-#		return node
-#	if node is CyclopsConvexBlock:
-#		return find_blocks_root(node.get_parent())
-#	return null
-
 func get_blocks()->Array[CyclopsBlock]:
 	return get_blocks_recursive(get_editor_interface().get_edited_scene_root())
 
