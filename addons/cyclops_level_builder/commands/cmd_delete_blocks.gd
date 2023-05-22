@@ -22,11 +22,8 @@
 # SOFTWARE.
 
 @tool
-class_name CyclopsCommand
-extends RefCounted
-
-var command_name:String = ""
-var builder:CyclopsLevelBuilder
+class_name CommandDeleteBlocks
+extends CyclopsCommand
 
 class TrackedBlock extends RefCounted:
 	var path:NodePath
@@ -44,17 +41,53 @@ class TrackedBlock extends RefCounted:
 		selected = block.selected
 		materials = block.materials
 
+#Public 
+var block_paths:Array[NodePath]
 
-func add_to_undo_manager(undo_manager:EditorUndoRedoManager):
-	undo_manager.create_action(command_name, UndoRedo.MERGE_DISABLE)
-	undo_manager.add_do_method(self, "do_it")
-	undo_manager.add_undo_method(self, "undo_it")
+#Private
+var tracked_blocks:Array[TrackedBlock]
 
-	undo_manager.commit_action()
+func _init():
+	command_name = "Delete blocks"
 
-func do_it()->void:
-	pass
+func will_change_anything():
+	if !block_paths.is_empty():
+		return true
 
-func undo_it()->void:
-	pass
+	return false
 
+
+func do_it():
+	#print("Delete do_it")
+	
+	if tracked_blocks.is_empty():
+		var points:PackedVector3Array
+		
+		for path in block_paths:
+			var block:CyclopsBlock = builder.get_node(path)
+			var tracker:TrackedBlock = TrackedBlock.new(block)
+			tracked_blocks.append(tracker)
+	
+	#Delete source blocks
+	for block_path in block_paths:
+		var del_block:CyclopsBlock = builder.get_node(block_path)
+		del_block.queue_free()
+
+
+func undo_it():
+	#print("Delete undo_it")
+	for tracked in tracked_blocks:
+		var parent = builder.get_node(tracked.path_parent)
+		
+		var block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
+		block.block_data = tracked.data
+		block.materials = tracked.materials
+		block.name = tracked.name
+		block.selected = tracked.selected
+		
+		parent.add_child(block)
+		block.owner = builder.get_editor_interface().get_edited_scene_root()
+		
+
+		
+	
