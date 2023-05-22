@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ToolTag" load_steps=4 format=3 uid="uid://dub6oyal5fxly"]
+
+[ext_resource type="Texture2D" uid="uid://d2da2j8ve48rt" path="res://addons/cyclops_level_builder/art/icons/select_edge.svg" id="1_6o0d8"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/tool_tag.gd" id="1_w2hsk"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_edit_edge.gd" id="3_6rili"]
+
+[resource]
+script = ExtResource("1_w2hsk")
+id = "edit_edge"
+name = "Edge"
+tooltip = "Edge
+
+Click on an edge to select it.  Shift Click to toggle selecton, Ctrl Click to add to selection, Shift-Ctrl click to subtract from selection.
+
+Click and drag to move edge in XZ plane.  Hold Alt to drag along Y axis.  Click and drag on a selected edge to move all selected edges.
+
+Hover the mouse over a different block and press Alt-Q to switch to editing that block."
+icon = ExtResource("1_6o0d8")
+tool_script = ExtResource("3_6rili")

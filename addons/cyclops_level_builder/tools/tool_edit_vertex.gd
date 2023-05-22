@@ -42,7 +42,7 @@ var added_point_pos:Vector3
 var cmd_move_vertex:CommandMoveVertices
 var cmd_add_vertex:CommandAddVertices
 
-var tracked_blocks_root:CyclopsBlocks
+#var tracked_blocks_root:CyclopsBlocks
 
 func _get_tool_id()->String:
 	return TOOL_ID
