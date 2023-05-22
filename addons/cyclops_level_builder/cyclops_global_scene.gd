@@ -238,7 +238,7 @@ func draw_selected_blocks(viewport_camera:Camera3D):
 #	var blocks_root:CyclopsBlocks = builder.get_editor_interface().get_edited_scene_root()
 	var blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
 	for block in blocks:
-		var active:bool = block == blocks[0]
+		var active:bool = block.active
 		var mat:Material = global_scene.tool_object_active_material if active else global_scene.tool_object_selected_material
 		
 		block.append_mesh_outline(tool_mesh, viewport_camera, block.global_transform, mat)

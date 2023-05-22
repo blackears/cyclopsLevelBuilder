@@ -22,33 +22,31 @@
 # SOFTWARE.
 
 @tool
-class_name CyclopsAction
-extends RefCounted
+class_name ActionSnapToGrid
+extends CyclopsAction
 
-var plugin:CyclopsLevelBuilder
+func _init(plugin:CyclopsLevelBuilder):
+	super._init(plugin, "Snap to grid")
 
-var name:String = ""
-var accellerator:Key = KEY_NONE
-
-func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	self.plugin = plugin
-	self.name= name
-	self.accellerator = accellerator
 
 func _execute():
-	pass
+	var blocks:Array[CyclopsBlock] = plugin.get_selected_blocks()
+	if blocks.is_empty():
+		return
+		
+	var pivot:Vector3 = calc_pivot_of_blocks(blocks)
 	
-func calc_pivot_of_blocks(blocks:Array[CyclopsBlock])->Vector3:
-#	var blocks_root:CyclopsBlocks = plugin.active_node
-	var grid_step_size:float = pow(2, plugin.get_global_scene().grid_size)
+	var cmd:CommandSnapToGrid = CommandSnapToGrid.new()
+	cmd.builder = plugin
 	
-	var bounds:AABB = blocks[0].control_mesh.bounds
-	for idx in range(1, blocks.size()):
-		var block:CyclopsBlock = blocks[idx]
-		bounds = bounds.merge(block.control_mesh.bounds)
+	for block in blocks:
+		cmd.add_block(block.get_path())
+		
 	
-	var center:Vector3 = bounds.get_center()
-	var pivot:Vector3 = MathUtil.snap_to_grid(center, grid_step_size)
+	cmd.grid_size = pow(2, plugin.get_global_scene().grid_size)
+	#print("cform %s" % xform)
 	
-	return pivot
-	
+	var undo:EditorUndoRedoManager = plugin.get_undo_redo()
+	cmd.add_to_undo_manager(undo)
+
+

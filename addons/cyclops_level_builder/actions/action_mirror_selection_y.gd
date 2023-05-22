@@ -22,33 +22,9 @@
 # SOFTWARE.
 
 @tool
-class_name CyclopsAction
-extends RefCounted
+class_name ActionMirrorSelectionY2
+extends ActionScaleSelection
 
-var plugin:CyclopsLevelBuilder
-
-var name:String = ""
-var accellerator:Key = KEY_NONE
-
-func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	self.plugin = plugin
-	self.name= name
-	self.accellerator = accellerator
-
-func _execute():
-	pass
-	
-func calc_pivot_of_blocks(blocks:Array[CyclopsBlock])->Vector3:
-#	var blocks_root:CyclopsBlocks = plugin.active_node
-	var grid_step_size:float = pow(2, plugin.get_global_scene().grid_size)
-	
-	var bounds:AABB = blocks[0].control_mesh.bounds
-	for idx in range(1, blocks.size()):
-		var block:CyclopsBlock = blocks[idx]
-		bounds = bounds.merge(block.control_mesh.bounds)
-	
-	var center:Vector3 = bounds.get_center()
-	var pivot:Vector3 = MathUtil.snap_to_grid(center, grid_step_size)
-	
-	return pivot
-	
+func _init(plugin:CyclopsLevelBuilder):
+	super._init(plugin, "Mirror Selection Y")
+	scale = Vector3(1, -1, 1)

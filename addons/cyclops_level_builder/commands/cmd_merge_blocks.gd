@@ -41,10 +41,10 @@ func _init():
 func get_best_face(centroid:Vector3, ref_list:Array[NodePath])->Array:
 	var best_face:ConvexVolume.FaceInfo
 	var best_dist:float = INF
-	var best_block:CyclopsConvexBlock
+	var best_block:CyclopsBlock
 	
 	for block_path in ref_list:
-		var block:CyclopsConvexBlock = builder.get_node(block_path)
+		var block:CyclopsBlock = builder.get_node(block_path)
 		var vol:ConvexVolume = block.control_mesh
 		for f in vol.faces:
 			var face_center:Vector3 = f.get_centroid()
@@ -85,7 +85,7 @@ func do_it():
 		var points:PackedVector3Array
 		
 		for path in block_paths:
-			var block:CyclopsConvexBlock = builder.get_node(path)
+			var block:CyclopsBlock = builder.get_node(path)
 			var tracker:TrackedBlock = TrackedBlock.new(block)
 			tracked_blocks.append(tracker)
 			
@@ -99,11 +99,11 @@ func do_it():
 
 	#Delete source blocks
 	for block_path in block_paths:
-		var del_block:CyclopsConvexBlock = builder.get_node(block_path)
+		var del_block:CyclopsBlock = builder.get_node(block_path)
 		del_block.queue_free()
 
 	#Create block	
-	var block:CyclopsConvexBlock = preload("../nodes/cyclops_convex_block.gd").new()
+	var block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
 	var parent:Node = builder.get_node(tracked_blocks[0].path_parent)
 	parent.add_child(block)
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
@@ -116,14 +116,14 @@ func do_it():
 	
 func undo_it():
 #	var blocks_root:CyclopsBlocks = builder.get_node(blocks_root_path)
-	var merged_block:CyclopsConvexBlock = builder.get_node(merged_block_path)
+	var merged_block:CyclopsBlock = builder.get_node(merged_block_path)
 	merged_block.queue_free()
 	
 #	for i in blocks_to_merge.size():
 	for tracked in tracked_blocks:
 		var parent = builder.get_node(tracked.path_parent)
 		
-		var block:CyclopsConvexBlock = preload("../nodes/cyclops_convex_block.gd").new()
+		var block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
 		block.block_data = tracked.data
 		block.materials = tracked.materials
 		block.name = tracked.name

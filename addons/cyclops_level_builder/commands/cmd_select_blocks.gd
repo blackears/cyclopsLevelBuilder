@@ -43,6 +43,7 @@ func will_change_anything()->bool:
 	var active_path:NodePath
 	if !block_paths.is_empty():
 		active_path = block_paths[0]
+#	print("will change active %s" % active_path)
 
 	for child in builder.get_blocks():
 		if child is CyclopsBlock:
@@ -73,6 +74,7 @@ func will_change_anything()->bool:
 					if !block_paths.is_empty():
 						return true
 				
+#	print("will chage anything false")
 	return false
 	
 
@@ -87,14 +89,18 @@ func do_it():
 		var block:CyclopsBlock = child
 		if block.selected:
 			tracked_selected_blocks.append(block.get_path())
+#			print("do_it sel %s" % block.get_path())
 		if block.active:
 			tracked_active_blocks.append(block.get_path())
+#			print("do_it active %s" % block.name)
 
 	#Do selection
 	var active_path:NodePath
 	if !block_paths.is_empty():
 		active_path = block_paths[0]
 	
+	#print("do_it active %s" % active_path)
+#	print("Setting active %s" % active_path)
 	for child in builder.get_blocks():
 		if child is CyclopsBlock:
 			var block:CyclopsBlock = child
@@ -113,11 +119,23 @@ func do_it():
 						block.selected = false
 						block.active = false
 				Selection.Type.TOGGLE:
-					block.active = path == active_path
-					if block_paths.has(path):
-						block.selected = !block.selected
-						if !block.selected:
+					#print("Check block %s" % path)
+					#print("act %s  sel %s" % [block.active, block.selected])
+					if path == active_path:
+						#print("Match active")
+						if !block.active:
+							#print("Setting active %s" % block.name)
+							block.active = true
+							block.selected = true
+						else:
+							#print("Clearing active %s" % block.name)
 							block.active = false
+							block.selected = false
+					else:					
+						if block_paths.has(path):
+							#print("Setting sel")
+							block.selected = !block.selected
+						block.active = false
 				
 	builder.selection_changed.emit()
 				
