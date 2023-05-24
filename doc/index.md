@@ -26,7 +26,7 @@ Make sure the Block button is pressed, then click and drag in the viewport to st
 
 ### Design considerations
 
-Cyclops LeveL Builder uses convex blocks to build scenes.  This is means that no block in your scene can have indentations or inside corners.  You can still create scenes that have holes, arches and other concave architecture, but you will need to build them out of convex pieces.  Using the Clip tool can be very helpful to carve holes and empty spaces into convex blocks.
+Cyclops Level Builder uses convex blocks to build scenes.  This is means that no block in your scene can have indentations or inside corners.  You can still create scenes that have holes, arches and other concave architecture, but you will need to build them out of convex pieces.  Using the Clip tool can be very helpful to carve holes and empty spaces into convex blocks.
 
 This is in the tradition of level design techniques from early 3D games such as Quake.  The advantages of using convex blocks is that it keeps things clean and convex collision detection is very fast.  However, it is less expressive and I might change this to use a general mesh in future updates to this project. 
 
@@ -92,7 +92,7 @@ The menu has a number of useful commands.
 
 ### Lock UVs
 
-Cyclops Level Builder uses triplanar mapping to provide UVs to materials.  This means that if you move a block, the UVs will be updated to match where the block is in the world, which is generally what you want when building levels.  However, sometimes you want the texture to remain fixed when you move a block.  If Lock Uvs is checked, the UV layout will travel with the block instead of updating based on the world position of the block.
+Cyclops Level Builder uses triplanar mapping to provide UVs to materials.  This means that if you move a block, the UVs will be updated to match where the block is in the world, which is generally what you want when building levels.  However, sometimes you want the texture to remain fixed when you move a block.  If Lock UVs is checked, the UV layout will travel with the block instead of updating based on the world position of the block.
 
 ### Grid Snapping Size
 
