@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://cbo80g1hbom2"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/docks/cyclops_console/cyclops_console.gd" id="1_f4kro"]
+
+[node name="PanelContainer" type="PanelContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_f4kro")
+
+[node name="enable_cyclops" type="CheckBox" parent="."]
+layout_mode = 2
+text = "Enable Cyclops"
+
+[connection signal="toggled" from="enable_cyclops" to="." method="_on_enable_cyclops_toggled"]

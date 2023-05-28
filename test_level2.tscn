@@ -1,4 +1,4 @@
-[gd_scene load_steps=459 format=3 uid="uid://bgsf4v5wtqhqu"]
+[gd_scene load_steps=460 format=3 uid="uid://bgsf4v5wtqhqu"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/nodes/cyclops_block.gd" id="1_xfayt"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/convex_block_data.gd" id="2_akor5"]
@@ -5102,6 +5102,30 @@ shadow_mesh = SubResource("ArrayMesh_c6d4h")
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_mili6"]
 points = PackedVector3Array(-13, 28, 65, -13, 28, 64, -24, 28, 64, -24, 28, 65, -13, 34, 64, -13, 34, 65, -24, 34, 65, -24, 34, 64)
 
+[sub_resource type="Resource" id="Resource_bpboo"]
+script = ExtResource("2_akor5")
+selected = false
+active = false
+collsion = true
+physics_layer = 0
+physics_mask = 0
+vertex_points = PackedVector3Array(11, 33, 59, 11, 26, 59, 11, 26, 58, 11, 33, 58, 31, 26, 58, 31, 33, 58, 31, 26, 59, 31, 33, 59)
+vertex_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0)
+active_vertex = -1
+edge_vertex_indices = PackedInt32Array(0, 1, 1, 2, 2, 3, 3, 0, 4, 5, 5, 3, 2, 4, 6, 4, 1, 6, 7, 0, 5, 7, 6, 7)
+edge_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+active_edge = -1
+edge_face_indices = PackedInt32Array(0, 5, 0, 2, 0, 1, 0, 3, 1, 4, 1, 3, 1, 2, 2, 4, 2, 5, 3, 5, 3, 4, 4, 5)
+face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
+face_vertex_indices = PackedInt32Array(0, 1, 2, 3, 4, 5, 3, 2, 6, 4, 2, 1, 7, 0, 3, 5, 7, 5, 4, 6, 7, 6, 1, 0)
+face_material_indices = PackedInt32Array(-1, -1, -1, -1, -1, -1)
+face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
+face_color = PackedColorArray()
+face_hidden = PackedByteArray()
+face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
+active_face = -1
+face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
+
 [node name="Node3D" type="Node3D"]
 
 [node name="Camera3D" type="Camera3D" parent="."]
@@ -5132,6 +5156,7 @@ block_data = SubResource("Resource_aphjb")
 materials = Array[Material]([ExtResource("3_02243")])
 
 [node name="CyclopsBlocks" type="Node3D" parent="."]
+visible = false
 script = ExtResource("4_mg1qq")
 
 [node name="Block_0" type="Node" parent="CyclopsBlocks"]
@@ -7150,3 +7175,434 @@ mesh = SubResource("ImmediateMesh_os8o8")
 shape = SubResource("ConvexPolygonShape3D_mili6")
 
 [node name="39827" type="OccluderInstance3D" parent="CyclopsBlocks/block_bodies/39822"]
+
+[node name="CyclopsBlocks_upgraded" type="Node3D" parent="."]
+
+[node name="Block_0" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_5ob0x")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_3" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_rdstn")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_4" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_6jlwq")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_5" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_7kpv2")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_6" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_nm4rk")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_7" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_p75v4")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_9" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_mh5ep")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_11" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_jmcc6")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_12" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_lohvl")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_13" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_mmrs8")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_14" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_7ywwp")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_15" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_bya2u")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_17" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_8ropl")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_18" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_v8d8q")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_19" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_1px4j")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_21" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_2yiym")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_22" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_b021u")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_24" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_qck14")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_26" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_eswmc")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_27" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_a1idp")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_29" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_12wja")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_30" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_ggs70")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_33" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_u1w0w")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_34" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_fvjqm")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_35" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_61dra")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_8" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_p18lm")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_10" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_2taax")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_28" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_chqne")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_16" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_7cv75")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_25" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_5nxmv")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_31" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_m1skv")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_32" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_gq6ni")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_36" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_yjqvf")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_37" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_mthpb")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_38" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_xoopy")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_39" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_g5mdp")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_40" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_ywhuj")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_1" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_v3deg")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_41" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_tgurc")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_42" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_qbnl5")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_43" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_i44ho")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_48" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_nq0rk")
+
+[node name="Block_49" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_fsubv")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_50" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_s8q1a")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_51" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_a3bar")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_52" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_rot3g")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_53" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_4u0kk")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_54" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_56s4f")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_55" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_og0l6")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_56" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_qtvbq")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_57" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_pu5v7")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_44" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_s7683")
+
+[node name="Block_45" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_qdwt6")
+
+[node name="Block_46" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_h7aq3")
+
+[node name="Block_47" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_6etdw")
+
+[node name="Block_58" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_hb6m1")
+
+[node name="Block_59" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_gk380")
+
+[node name="Block_60" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_unw5p")
+
+[node name="Block_61" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_i77oq")
+
+[node name="Block_63" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_y48gq")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_64" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_fw4ln")
+
+[node name="Block_65" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_a5hfc")
+
+[node name="Block_66" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_k7mmk")
+
+[node name="Block_67" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_ptafm")
+materials = Array[Material]([ExtResource("7_b6lpw")])
+
+[node name="Block_68" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_qcvxj")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_69" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_p8i7g")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_71" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_brxyc")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_70" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_nbanl")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_73" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_yic6s")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_74" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_762wl")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_72" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_ult7b")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_75" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_s8x3v")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_76" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_2cs53")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_77" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_bmjki")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_78" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_00mep")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_79" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_1q6fw")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_80" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_od6vj")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_81" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_gbi2r")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_82" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_okv0b")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_83" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_wrpmy")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_62" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_vnc1f")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_84" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_ygadk")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_85" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_bpboo")
+
+[node name="Block_86" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_wyq6a")
+
+[node name="Block_87" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_mftxq")
+
+[node name="Block_88" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_1end4")
+
+[node name="Block_2" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_30w78")
+materials = Array[Material]([ExtResource("6_8wdyo")])
+
+[node name="Block_20" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_ki54q")
+materials = Array[Material]([ExtResource("3_02243")])
+
+[node name="Block_23" type="Node3D" parent="CyclopsBlocks_upgraded"]
+script = ExtResource("1_xfayt")
+block_data = SubResource("Resource_ikqp1")
+materials = Array[Material]([ExtResource("3_02243")])

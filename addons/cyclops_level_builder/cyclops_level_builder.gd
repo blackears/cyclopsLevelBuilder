@@ -34,7 +34,8 @@ var config:CyclopsConfig = preload("res://addons/cyclops_level_builder/data/conf
 
 var material_dock:Control
 var uv_editor_dock:Control
-var tool_properties_dock:Control
+var tool_properties_dock:ToolPropertiesDock
+var cyclops_console_dock:CyclopsConsole
 #var sticky_toolbar:StickyToolbar
 var editor_toolbar:EditorToolbar
 var upgrade_cyclops_blocks_toolbar:UpgradeCyclopsBlocksToolbar
@@ -105,6 +106,9 @@ func _enter_tree():
 	tool_properties_dock = preload("res://addons/cyclops_level_builder/docks/tool_properties/tool_properties_dock.tscn").instantiate()
 	tool_properties_dock.builder = self
 	
+	cyclops_console_dock = preload("res://addons/cyclops_level_builder/docks/cyclops_console/cyclops_console.tscn").instantiate()
+	cyclops_console_dock.editor_plugin = self
+	
 	editor_toolbar = preload("menu/editor_toolbar.tscn").instantiate()
 	editor_toolbar.editor_plugin = self
 
@@ -114,6 +118,7 @@ func _enter_tree():
 #	sticky_toolbar = preload("menu/sticky_toolbar.tscn").instantiate()
 #	sticky_toolbar.plugin = self
 #	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, sticky_toolbar)
+	add_control_to_bottom_panel(cyclops_console_dock, "Cyclops")
 	
 	var editor:EditorInterface = get_editor_interface()
 	var selection:EditorSelection = editor.get_selection()
@@ -182,14 +187,14 @@ func update_activation():
 #			active_node = blocks_root
 			if !activated:
 				add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
-				add_control_to_dock(DOCK_SLOT_RIGHT_BL, material_dock)
+				add_control_to_bottom_panel(material_dock, "Materials")
 				add_control_to_dock(DOCK_SLOT_RIGHT_BL, uv_editor_dock)
 				add_control_to_dock(DOCK_SLOT_RIGHT_BL, tool_properties_dock)
 				activated = true
 		else:
 			if activated:
 				remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
-				remove_control_from_docks(material_dock)
+				remove_control_from_bottom_panel(material_dock)
 				remove_control_from_docks(uv_editor_dock)
 				remove_control_from_docks(tool_properties_dock)
 				activated = false
@@ -218,11 +223,13 @@ func _exit_tree():
 	remove_custom_type("CyclopsConvexBlockBody")
 	
 #	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, sticky_toolbar)
+	remove_control_from_bottom_panel(cyclops_console_dock)
 	
 	if activated:
 		remove_control_from_docks(material_dock)
 		remove_control_from_docks(uv_editor_dock)
 		remove_control_from_docks(tool_properties_dock)
+		remove_control_from_docks(cyclops_console_dock)
 		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
 
 	if upgrade_cyclops_blocks_toolbar.activated:		
@@ -231,6 +238,7 @@ func _exit_tree():
 	material_dock.queue_free()
 	uv_editor_dock.queue_free()
 	tool_properties_dock.queue_free()
+	cyclops_console_dock.queue_free()
 	editor_toolbar.queue_free()
 	upgrade_cyclops_blocks_toolbar.queue_free()
 
@@ -257,12 +265,14 @@ func _get_state()->Dictionary:
 	material_dock.save_state(state)
 	uv_editor_dock.save_state(state)
 	tool_properties_dock.save_state(state)
+	cyclops_console_dock.save_state(state)
 	return state
 	
 func _set_state(state):
 	material_dock.load_state(state)
 	uv_editor_dock.load_state(state)
 	tool_properties_dock.load_state(state)
+	cyclops_console_dock.load_state(state)
 
 func switch_to_tool(_tool:CyclopsTool):
 	if tool:

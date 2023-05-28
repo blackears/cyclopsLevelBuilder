@@ -225,7 +225,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			if e.ctrl_pressed:
 				#block_drag_cur = MathUtil.intersect_plane(origin_local, dir_local, block_drag_p0_local, drag_floor_normal)
 				var result:IntersectResults = builder.intersect_ray_closest(origin_local, dir_local)
-				print("picked result %s" % result)
+				#print("picked result %s" % result)
 				if result:
 					var block:CyclopsBlock = result.object
 					var convex_mesh:ConvexVolume = block.control_mesh

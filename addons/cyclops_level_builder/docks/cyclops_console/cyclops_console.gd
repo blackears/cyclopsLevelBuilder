@@ -22,12 +22,10 @@
 # SOFTWARE.
 
 @tool
-extends PanelContainer
-class_name UpgradeCyclopsBlocksToolbar
+extends Control
+class_name CyclopsConsole
 
 var editor_plugin:CyclopsLevelBuilder
-
-var activated:bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -39,37 +37,16 @@ func _process(delta):
 	pass
 
 
-func _on_bn_upgrade_pressed():
-	var ed_iface:EditorInterface = editor_plugin.get_editor_interface()
-	var nodes:Array = ed_iface.get_selection().get_selected_nodes()
+func save_state(state:Dictionary):
+	var substate:Dictionary = {}
+	state["cyclops_console"] = substate
 	
-	if nodes.is_empty():
-		return
-		
-	if !(nodes[0] is CyclopsBlocks):
-		return
-		
-		
-	var root:CyclopsBlocks = nodes[0]
-	var parent:Node = root.get_parent()
-	var index:int = root.get_index()
-	
-	var new_root:Node3D = Node3D.new()
-	root.add_sibling(new_root)
-	new_root.name = root.name + "_upgraded"
-	new_root.owner = ed_iface.get_edited_scene_root()
-	
-	root.visible = false
-	
-	for child in root.get_children():
-		if child is CyclopsConvexBlock:
-			var old_block:CyclopsConvexBlock = child
 
-			var new_block:CyclopsBlock = CyclopsBlock.new()
-			new_root.add_child(new_block)
-			new_block.owner = ed_iface.get_edited_scene_root()
-
-			new_block.name = old_block.name
-			new_block.materials = old_block.materials
-			new_block.block_data = old_block.block_data
+func load_state(state:Dictionary):
+	if state == null || !state.has("cyclops_console"):
+		return
 	
+	var substate:Dictionary = state["cyclops_console"]
+
+func _on_enable_cyclops_toggled(button_pressed):
+	pass # Replace with function body.
