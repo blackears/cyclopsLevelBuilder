@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://u52a8gflbktl"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/menu/upgrade_cyclops_blocks_toolbar.gd" id="1_pbwhi"]
+
+[node name="PanelContainer" type="PanelContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_pbwhi")
+
+[node name="bn_upgrade" type="Button" parent="."]
+layout_mode = 2
+text = "Upgrade CyclopsBlocks"
+
+[connection signal="pressed" from="bn_upgrade" to="." method="_on_bn_upgrade_pressed"]

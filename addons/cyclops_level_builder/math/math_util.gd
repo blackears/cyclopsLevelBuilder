@@ -124,7 +124,7 @@ static func trianglate_face_indices(points:PackedVector3Array, indices:Array[int
 #	print("tri_done %s" % str(result))
 	
 	return result
-	
+
 static func trianglate_face_vertex_indices(points:PackedVector3Array, normal:Vector3)->Array[int]:
 	var result:Array[int] = []
 	var fv_indices:Array = range(0, points.size())

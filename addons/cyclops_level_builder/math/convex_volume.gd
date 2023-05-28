@@ -105,24 +105,7 @@ class FaceInfo extends RefCounted:
 		center /= points.size()
 		return center
 	
-#	func get_triangulation()->Array[int]:		
-#		if triangulation_indices.is_empty():
-#			var points:PackedVector3Array
-#			var indices:Array[int]
-#			for v_idx in vertex_indices:
-#				points.append(mesh.vertices[v_idx].point)
-#				indices.append(v_idx)
-#
-##			print("start points %s" % points)
-#
-#			var normal:Vector3 = MathUtil.face_area_x2(points).normalized()
-##			print("normal %s" % normal)
-#			triangulation_indices = MathUtil.trianglate_face_indices(points, indices, normal)
-##			print("triangulation %s" % str(triangulation_indices))
-#
-#		return triangulation_indices
-	
-	func get_triangulation()->Array[int]:		
+	func get_triangulation()->Array[int]:
 		if triangulation_indices.is_empty():
 			var points:PackedVector3Array
 			for v_idx in vertex_indices:
@@ -154,10 +137,6 @@ class FaceInfo extends RefCounted:
 		vertex_indices.reverse()
 		triangulation_indices.clear()
 
-#class FaceVertexInfo extends RefCounted:
-#	var vert_idx:int
-#	var face_idx:int
-	
 
 
 var vertices:Array[VertexInfo] = []

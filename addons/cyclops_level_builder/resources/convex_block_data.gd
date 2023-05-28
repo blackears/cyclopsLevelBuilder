@@ -28,6 +28,8 @@ class_name ConvexBlockData
 @export var selected:bool = false
 @export var active:bool = false
 @export var collsion:bool = true
+@export_flags_3d_physics var physics_layer:int
+@export_flags_3d_physics var physics_mask:int
 
 @export var vertex_points:PackedVector3Array  #Per vertex
 @export var vertex_selected:PackedByteArray  #Per vertex
@@ -44,6 +46,8 @@ class_name ConvexBlockData
 @export var face_vertex_indices:PackedInt32Array  #Vertex index per face
 @export var face_material_indices:PackedInt32Array #Material index for each face
 @export var face_uv_transform:Array[Transform2D]
+@export var face_color:PackedColorArray
+@export var face_hidden:PackedByteArray
 @export var face_selected:PackedByteArray  #Per face
 #@export var face_active:PackedByteArray  #Per face
 @export var active_face:int

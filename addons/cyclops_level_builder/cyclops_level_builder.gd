@@ -37,6 +37,7 @@ var uv_editor_dock:Control
 var tool_properties_dock:Control
 #var sticky_toolbar:StickyToolbar
 var editor_toolbar:EditorToolbar
+var upgrade_cyclops_blocks_toolbar:UpgradeCyclopsBlocksToolbar
 var activated:bool = false
 
 
@@ -106,6 +107,9 @@ func _enter_tree():
 	
 	editor_toolbar = preload("menu/editor_toolbar.tscn").instantiate()
 	editor_toolbar.editor_plugin = self
+
+	upgrade_cyclops_blocks_toolbar = preload("res://addons/cyclops_level_builder/menu/upgrade_cyclops_blocks_toolbar.tscn").instantiate()
+	upgrade_cyclops_blocks_toolbar.editor_plugin = self
 
 #	sticky_toolbar = preload("menu/sticky_toolbar.tscn").instantiate()
 #	sticky_toolbar.plugin = self
@@ -189,6 +193,15 @@ func update_activation():
 				remove_control_from_docks(uv_editor_dock)
 				remove_control_from_docks(tool_properties_dock)
 				activated = false
+		
+		if nodes[0] is CyclopsBlocks:
+			if !upgrade_cyclops_blocks_toolbar.activated:
+				add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, upgrade_cyclops_blocks_toolbar)
+				upgrade_cyclops_blocks_toolbar.activated = true
+		else:
+			if upgrade_cyclops_blocks_toolbar.activated:
+				remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, upgrade_cyclops_blocks_toolbar)
+				upgrade_cyclops_blocks_toolbar.activated = false
 #	else:
 #		active_node = null
 
@@ -212,14 +225,18 @@ func _exit_tree():
 		remove_control_from_docks(tool_properties_dock)
 		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
 
+	if upgrade_cyclops_blocks_toolbar.activated:		
+		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, upgrade_cyclops_blocks_toolbar)
+
 	material_dock.queue_free()
 	uv_editor_dock.queue_free()
 	tool_properties_dock.queue_free()
-	editor_toolbar.queue_free()	
+	editor_toolbar.queue_free()
+	upgrade_cyclops_blocks_toolbar.queue_free()
 
 func _handles(object:Object):
 #	return object is CyclopsBlocks or object is CyclopsConvexBlock
-	return object is CyclopsBlock
+	return object is CyclopsBlock or object is CyclopsBlocks
 
 func _forward_3d_draw_over_viewport(viewport_control:Control):
 	#Draw on top of viweport here
