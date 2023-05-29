@@ -137,7 +137,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 					
-					#print("Invokke select")
+					#print("Invokke select %s" % result)
 					var cmd:CommandSelectBlocks = CommandSelectBlocks.new()
 					cmd.builder = builder
 					cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)

@@ -27,6 +27,7 @@ extends CyclopsCommand
 
 #Public data to set before activating command
 var blocks_root_path:NodePath
+var origin:Vector3
 var block_name:String
 var bounds:AABB
 var material_path:String
@@ -57,13 +58,16 @@ func do_it():
 		
 	
 	#print("Block root %s" % block)
-	print("Create bounds %s" % bounds)
+	#print("Create bounds %s" % bounds)
+	#var parent_xform:Transform3D = node_global_transform(block_parent)
+	var vol_xform:Transform3D = Transform3D(Basis(), -origin)
+	
 	var mesh:ConvexVolume = ConvexVolume.new()
-	var parent_xform:Transform3D = node_global_transform(block_parent)
-	mesh.init_block(bounds, parent_xform.affine_inverse(), uv_transform, material_id)
+	mesh.init_block(bounds, vol_xform, uv_transform, material_id)
 
 	block.block_data = mesh.to_convex_block_data()
 	block_path = block.get_path()
+	block.global_transform = Transform3D(Basis(), origin)
 
 #	print("AddBlockCommand do_it() %s %s" % [block_inst_id, bounds])
 	

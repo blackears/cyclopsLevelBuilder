@@ -57,13 +57,13 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 	var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 	var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 
-	print("origin %s  dir %s" % [origin, dir])
+	#print("origin %s  dir %s" % [origin, dir])
 
 	var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
-	print("result %s" % result)
+	#print("result %s" % result)
 	
 	if result:
-		print("Hit! %s" % result)
+		#print("Hit! %s" % result)
 		drag_floor_normal = MathUtil.snap_to_best_axis_normal(result.normal)
 
 		var start_pos:Vector3 = result.position
@@ -92,7 +92,7 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 
 		
 	else:
-		print("Miss")
+		#print("Miss")
 		drag_floor_normal = Vector3.UP
 		
 		tool_state = ToolState.BLOCK_BASE
@@ -100,7 +100,7 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 #		var w2l = blocks_root.global_transform.inverse()
 #		var start_pos:Vector3 = w2l * start_pos
 
-		print("start_pos %s" % start_pos)
+		#print("start_pos %s" % start_pos)
 #		print("start_pos %s" % start_pos)
 		
 		var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
@@ -108,8 +108,8 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 		
 		block_drag_p0 = MathUtil.snap_to_grid(start_pos, grid_step_size)
 		
-		print("block_drag_p0 %s" % block_drag_p0)
-	print("set tool_state %s" % tool_state)
+		#print("block_drag_p0 %s" % block_drag_p0)
+	#print("set tool_state %s" % tool_state)
 
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
@@ -180,6 +180,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						command.blocks_root_path = blocks_root.get_path()
 						command.block_name = GeneralUtil.find_unique_name(blocks_root, "Block_")						
 						command.bounds = bounds
+						command.origin = block_drag_p0
 						command.uv_transform = builder.tool_uv_transform
 						command.material_path = builder.tool_material_path
 

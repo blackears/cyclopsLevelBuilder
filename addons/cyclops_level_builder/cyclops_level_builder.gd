@@ -331,9 +331,15 @@ func intersect_frustum_all(frustum:Array[Plane])->Array[CyclopsBlock]:
 	
 	var blocks:Array[CyclopsBlock] = get_blocks()
 	for block in blocks:
+		var xform:Transform3D = block.global_transform.affine_inverse()
+		
+		var frustum_local:Array[Plane]
+		for p in frustum:
+			frustum_local.append(xform * p)
+		
 		#print("intersect_frustum_all block %s" % block.get_path())
 		var vol:ConvexVolume = block.control_mesh
-		if vol.intersects_frustum(frustum):
+		if vol.intersects_frustum(frustum_local):
 			result.append(block)
 	
 	return result
