@@ -22,7 +22,7 @@
 # SOFTWARE.
 
 @tool
-class_name CommandAddBlock2
+class_name CommandAddBlock
 extends CyclopsCommand
 
 #Public data to set before activating command
@@ -41,9 +41,10 @@ func _init():
 func do_it():
 	var block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
 		
-	var blocks_root:Node = builder.get_block_add_parent()
-	#var blocks_root:CyclopsBlocks = builder.get_node(blocks_root_path)
-	blocks_root.add_child(block)
+	#var blocks_root:Node = builder.get_block_add_parent()
+	var block_parent:Node = builder.get_node(blocks_root_path)
+
+	block_parent.add_child(block)
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
 	block.name = block_name
 	
@@ -55,8 +56,11 @@ func do_it():
 			block.materials.append(mat)
 		
 	
+	#print("Block root %s" % block)
+	print("Create bounds %s" % bounds)
 	var mesh:ConvexVolume = ConvexVolume.new()
-	mesh.init_block(bounds, uv_transform, material_id)
+	var parent_xform:Transform3D = node_global_transform(block_parent)
+	mesh.init_block(bounds, parent_xform.affine_inverse(), uv_transform, material_id)
 
 	block.block_data = mesh.to_convex_block_data()
 	block_path = block.get_path()

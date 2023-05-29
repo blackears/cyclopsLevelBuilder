@@ -52,6 +52,16 @@ func add_to_undo_manager(undo_manager:EditorUndoRedoManager):
 
 	undo_manager.commit_action()
 
+func node_global_transform(node:Node)->Transform3D:
+	var node_parent:Node3D
+	while node:
+		if node is Node3D:
+			node_parent = node
+			break
+		node = node.get_parent()
+		
+	return node_parent.global_transform if node_parent else Transform3D.IDENTITY
+
 func do_it()->void:
 	pass
 

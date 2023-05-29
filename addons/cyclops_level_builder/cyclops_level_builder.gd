@@ -41,6 +41,13 @@ var editor_toolbar:EditorToolbar
 var upgrade_cyclops_blocks_toolbar:UpgradeCyclopsBlocksToolbar
 var activated:bool = false
 
+var always_on:bool = false:
+	get:
+		return always_on
+	set(value):
+		always_on = value
+		#print("always_on %s" % always_on)
+		update_activation()
 
 var block_create_distance:float = 10
 var tool:CyclopsTool = null
@@ -61,27 +68,6 @@ enum EditMode { VERTEX, EDGE, FACE }
 var edit_mode:EditMode = EditMode.VERTEX
 
 var display_mode:DisplayMode.Type = DisplayMode.Type.TEXTURED
-
-#var _active_node:GeometryBrush
-#var active_node:CyclopsBlocks:
-#	get:
-#		return active_node
-#	set(value):
-#		if active_node != value:
-#			active_node = value
-#			active_node_changed.emit()
-#
-#func get_selected_blocks()->Array[CyclopsConvexBlock]:
-#	var result:Array[CyclopsConvexBlock]
-#
-#	if active_node:
-#		for child in active_node.get_children():
-#			if child is CyclopsConvexBlock:
-#				var block:CyclopsConvexBlock = child
-#				if child.selected:
-#					result.append(child)
-#
-#	return result
 
 func _get_plugin_name()->String:
 	return "CyclopsLevelBuilder"
@@ -177,38 +163,35 @@ func update_activation():
 	var editor:EditorInterface = get_editor_interface()
 	var selection:EditorSelection = editor.get_selection()
 	var nodes:Array[Node] = selection.get_selected_nodes()
+	
+	var node:Node = null
 	if !nodes.is_empty():
-		var node:Node = nodes[0]
+		node = nodes[0]
 		
-#		var blocks_root:CyclopsBlocks = find_blocks_root(node)
-		
-#		if blocks_root:
-		if nodes[0] is CyclopsBlock:
-#			active_node = blocks_root
-			if !activated:
-				add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
-				add_control_to_bottom_panel(material_dock, "Materials")
-				add_control_to_dock(DOCK_SLOT_RIGHT_BL, uv_editor_dock)
-				add_control_to_dock(DOCK_SLOT_RIGHT_BL, tool_properties_dock)
-				activated = true
-		else:
-			if activated:
-				remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
-				remove_control_from_bottom_panel(material_dock)
-				remove_control_from_docks(uv_editor_dock)
-				remove_control_from_docks(tool_properties_dock)
-				activated = false
-		
-		if nodes[0] is CyclopsBlocks:
-			if !upgrade_cyclops_blocks_toolbar.activated:
-				add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, upgrade_cyclops_blocks_toolbar)
-				upgrade_cyclops_blocks_toolbar.activated = true
-		else:
-			if upgrade_cyclops_blocks_toolbar.activated:
-				remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, upgrade_cyclops_blocks_toolbar)
-				upgrade_cyclops_blocks_toolbar.activated = false
-#	else:
-#		active_node = null
+	if node is CyclopsBlock || always_on:
+		#print("updarting activation")
+		if !activated:
+			add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
+			add_control_to_bottom_panel(material_dock, "Materials")
+			add_control_to_dock(DOCK_SLOT_RIGHT_BL, uv_editor_dock)
+			add_control_to_dock(DOCK_SLOT_RIGHT_BL, tool_properties_dock)
+			activated = true
+	else:
+		if activated:
+			remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
+			remove_control_from_bottom_panel(material_dock)
+			remove_control_from_docks(uv_editor_dock)
+			remove_control_from_docks(tool_properties_dock)
+			activated = false
+	
+	if node is CyclopsBlocks:
+		if !upgrade_cyclops_blocks_toolbar.activated:
+			add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, upgrade_cyclops_blocks_toolbar)
+			upgrade_cyclops_blocks_toolbar.activated = true
+	else:
+		if upgrade_cyclops_blocks_toolbar.activated:
+			remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, upgrade_cyclops_blocks_toolbar)
+			upgrade_cyclops_blocks_toolbar.activated = false
 
 func on_selection_changed():
 	update_activation()
@@ -244,7 +227,7 @@ func _exit_tree():
 
 func _handles(object:Object):
 #	return object is CyclopsBlocks or object is CyclopsConvexBlock
-	return object is CyclopsBlock or object is CyclopsBlocks
+	return object is CyclopsBlock or object is CyclopsBlocks or always_on
 
 func _forward_3d_draw_over_viewport(viewport_control:Control):
 	#Draw on top of viweport here

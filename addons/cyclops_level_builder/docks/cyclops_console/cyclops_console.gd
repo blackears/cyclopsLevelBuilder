@@ -49,4 +49,4 @@ func load_state(state:Dictionary):
 	var substate:Dictionary = state["cyclops_console"]
 
 func _on_enable_cyclops_toggled(button_pressed):
-	pass # Replace with function body.
+	editor_plugin.always_on = button_pressed
