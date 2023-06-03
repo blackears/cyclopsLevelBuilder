@@ -755,12 +755,7 @@ func append_mesh_backfacing(mesh:ImmediateMesh, material:Material, offset:float 
 		mesh.surface_end()
 		
 func append_mesh_outline(mesh:ImmediateMesh, viewport_camera:Camera3D, local_to_world:Transform3D, material:Material, thickness:float = 4):
-#	var cam_dir:Vector3 = viewport_camera.global_transform.basis.z
 	var cam_orig:Vector3 = viewport_camera.global_transform.origin
-
-#	print("append_mesh_outline %s" % cam_dir)
-	#points along Z
-#	var cylinder:GeometryMesh = MathGeometry.unit_cylinder(4, thickness, thickness, 0, -1)
 
 	var segments:PackedVector2Array
 	
@@ -770,13 +765,13 @@ func append_mesh_outline(mesh:ImmediateMesh, viewport_camera:Camera3D, local_to_
 		
 		for f_idx in edge.face_indices:
 			var face = faces[f_idx]
-			#print("face norm %s" % face.normal)
-			var point_on_plane:Vector3 = vertices[face.vertex_indices[0]].point
-			var to_plane:Vector3 = cam_orig - point_on_plane
 			
-			if face.normal.dot(to_plane) > 0:
+			var plane = face.get_plane()
+			plane = local_to_world * plane
+			
+			if plane.is_point_over(cam_orig):
 				has_front = true
-			elif face.normal.dot(to_plane) < 0:
+			else:
 				has_back = true
 
 		#print("front %s back %s" % [has_front, has_back])

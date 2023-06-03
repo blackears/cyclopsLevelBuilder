@@ -250,11 +250,6 @@ func draw_screen_rect(viewport_camera:Camera3D, p00:Vector2, p11:Vector2, materi
 	var p01:Vector2 = Vector2(p00.x, p11.y)
 	var p10:Vector2 = Vector2(p11.x, p00.y)
 	var z_pos:float = (viewport_camera.near + viewport_camera.far) / 2
-#	print("z_pos %s" % z_pos)
-#	print("p00 %s" % p00)
-#	print("p01 %s" % p01)
-#	print("p10 %s" % p10)
-#	print("p11 %s" % p11)
 	
 	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, material)
 	

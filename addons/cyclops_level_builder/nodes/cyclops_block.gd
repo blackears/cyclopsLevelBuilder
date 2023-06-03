@@ -62,6 +62,8 @@ func _ready():
 	add_child(mesh_instance)
 	mesh_instance.gi_mode = GeometryInstance3D.GI_MODE_STATIC
 
+	#print("block owner path %s" % owner.get_path())
+
 	if Engine.is_editor_hint():
 		mesh_wire = MeshInstance3D.new()
 		add_child(mesh_wire)

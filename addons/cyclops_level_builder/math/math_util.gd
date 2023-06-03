@@ -601,7 +601,65 @@ static func clip_polygon(points:PackedVector3Array, plane:Plane)->PackedVector3A
 	return points_on_or_over
 
 
-static func clip_polygon_separate(points:PackedVector3Array, plane:Plane)->Array[PackedVector3Array]:
+#Snaps point to a point appearing in the list if distance to it is <= radius. Otherwise appends 
+# point to point list
+static func snap_point_to_point_list_or_append(point:Vector3, list:PackedVector3Array, radius:float = .005):
+	for p in list:
+		if p.distance_squared_to(point) < radius * radius:
+			return p
+	list.append(point)
+	return point
+	
+
+static func create_loop_from_directed_segments(segs:Array[Segment3], snap_radius:float = .005)->PackedVector3Array:
+	var snap_list:PackedVector3Array
+	for seg in segs:
+		seg.p0 = snap_point_to_point_list_or_append(seg.p0, snap_list, snap_radius)
+		seg.p1 = snap_point_to_point_list_or_append(seg.p1, snap_list, snap_radius)
+		
+	
+	var seg_stack:Array[Segment3]
+	var sorted_segs:Array[Segment3]
+	
+	for s in segs:
+		if !is_zero_approx(s.length_squared()):
+			seg_stack.append(s)
+
+	
+	sorted_segs.append(seg_stack.pop_back())
+	while !seg_stack.is_empty():
+		var found_seg:bool = false
+		var min_dist:float = 10000
+		for i in seg_stack.size():
+			var s:Segment3 = seg_stack[i]
+			
+#			if s.p0.is_equal_approx(sorted_segs.back().p1):
+			var dist:float = s.p0.distance_to(sorted_segs.back().p1)
+			min_dist = min(min_dist, dist)
+			
+			if dist < .005:
+#			if s.p0.is_equal_approx(sorted_segs.back().p1):
+				sorted_segs.append(s)
+				seg_stack.remove_at(i)
+				found_seg = true
+				break
+#			if s.p1.is_equal_approx(sorted_segs.back().p1):
+#				sorted_segs.append(s.reversed())
+#				seg_stack.remove_at(i)
+#				found_seg = true
+#				break
+
+		if !found_seg:
+			print("Error: could not form loop")
+			return []
+	
+	var result:PackedVector3Array
+	for s in sorted_segs:
+		result.append(s.p0)
+		
+	return result
+
+static func clip_polygon_separate(points:PackedVector3Array, plane:Plane)->ClipPolyResult:
 	
 	#Clip points to plane.
 	var clipped_points:PackedVector3Array = clip_polygon(points, plane)
@@ -620,10 +678,10 @@ static func clip_polygon_separate(points:PackedVector3Array, plane:Plane)->Array
 		is_over.append(!is_on)
 	
 	if all_over:
-		return [clipped_points]
+		return ClipPolyResult.new([clipped_points])
 		
 	if none_over:
-		return []
+		return ClipPolyResult.new()
 	
 	var start_idx:int = -1
 	for p_idx0 in clipped_points.size():
@@ -641,6 +699,7 @@ static func clip_polygon_separate(points:PackedVector3Array, plane:Plane)->Array
 	# 'v', then every sub polygon will be a string that can be represented by the 
 	# regular expression "(nv+n)"
 	var results:Array[PackedVector3Array]= []
+	var cut_segments:Array[Segment3]
 	
 	var writing_shape:bool = true
 	var sub_poly:PackedVector3Array
@@ -655,10 +714,12 @@ static func clip_polygon_separate(points:PackedVector3Array, plane:Plane)->Array
 			sub_poly.append(clipped_points[p_idx0])
 			sub_poly.append(clipped_points[p_idx1])
 			
+			cut_segments.append(Segment3.new(sub_poly[sub_poly.size() - 1], sub_poly[0]))
 			results.append(sub_poly.duplicate())
 			sub_poly.clear()
 	
-	return results
+	return ClipPolyResult.new(results, cut_segments)
+
 	
 
 static func polygon_intersects_frustum(points:PackedVector3Array, frustum:Array[Plane])->bool:
