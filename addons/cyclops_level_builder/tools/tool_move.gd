@@ -63,7 +63,7 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 
 		if result.object.selected:
 
-			var start_pos:Vector3 = result.position
+			var start_pos:Vector3 = result.get_world_position()
 #			var w2l = blocks_root.global_transform.inverse()
 #			var start_pos_local:Vector3 = w2l * start_pos
 
@@ -98,10 +98,6 @@ func _draw_tool(viewport_camera:Camera3D):
 		global_scene.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
-#	if !builder.active_node is CyclopsBlocks:
-#		return false
-	
-	#var blocks_root:Node = builder.active_node
 
 	if event is InputEventKey:
 		var e:InputEventKey = event
@@ -124,7 +120,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			if e.is_pressed():
 				if tool_state == ToolState.NONE:
 					event_start = event
-#					viewport_camera_start = viewport_camera
 					
 					tool_state = ToolState.READY
 				
@@ -166,8 +161,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var result:Array[CyclopsBlock] = builder.intersect_frustum_all(frustum)
 					
 					if !result.is_empty():
-#						for v in result:
-#							print("selected %s" % v.name)
 						
 						var cmd:CommandSelectBlocks = CommandSelectBlocks.new()
 						cmd.builder = builder

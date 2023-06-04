@@ -32,6 +32,7 @@ class TrackedBlock extends RefCounted:
 	var path:NodePath
 	var path_parent:NodePath
 	var data:ConvexBlockData
+	var world_xform:Transform3D
 	var materials:Array[Material]
 	var selected:bool
 	var name:String
@@ -41,6 +42,7 @@ class TrackedBlock extends RefCounted:
 		path_parent = block.get_parent().get_path()
 		name = block.name
 		data = block.block_data.duplicate()
+		world_xform = block.global_transform
 		selected = block.selected
 		materials = block.materials
 

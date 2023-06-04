@@ -30,35 +30,59 @@ var move_offset:Vector3
 var lock_uvs:bool = false
 
 #Private
-var blocks_to_move:Array[NodePath]
-var tracked_block_data:Array[ConvexBlockData]
+#var blocks_to_move:Array[NodePath]
+#var tracked_block_data:Array[ConvexBlockData]
+var tracked_blocks:Array[TrackedBlock]
 
 func _init():
 	command_name = "Move blocks"
 
 #Add blocks to be moved here
 func add_block(block_path:NodePath):
-	blocks_to_move.append(block_path)
+	#blocks_to_move.append(block_path)
 	
 	var block:CyclopsBlock = builder.get_node(block_path)
+	var tracked:TrackedBlock = TrackedBlock.new(block)
+	tracked_blocks.append(tracked)
 	#tracked_blocks.append(block)
-	tracked_block_data.append(block.block_data.duplicate())
+#	tracked_block_data.append(block.block_data.duplicate())
 
 #Moves all blocks from the start position by this amount
 func move_to(offset:Vector3):
-	for i in blocks_to_move.size():
-		var block:CyclopsBlock = builder.get_node(blocks_to_move[i])
+	for tracked in tracked_blocks:
+		var block:CyclopsBlock = builder.get_node(tracked.path)
+		var w_init_xform:Transform3D = tracked.world_xform
 		
-		var ctl_mesh:ConvexVolume = ConvexVolume.new()
-		ctl_mesh.init_from_convex_block_data(tracked_block_data[i])
-		ctl_mesh.translate(offset, lock_uvs)
-		var result_data:ConvexBlockData = ctl_mesh.to_convex_block_data()
-		block.block_data = result_data
+		var new_w_xform:Transform3D = w_init_xform.translated(offset)
+		block.global_transform = new_w_xform
+		
+		
+	
+	
+#	for i in blocks_to_move.size():
+#		var block:CyclopsBlock = builder.get_node(blocks_to_move[i])
+#		var w2l = block.global_transform.affine_inverse()
+#		var offset_local:Vector3 = w2l * offset
+#
+#		var ctl_mesh:ConvexVolume = ConvexVolume.new()
+#		ctl_mesh.init_from_convex_block_data(tracked_block_data[i])
+#		ctl_mesh.translate(offset_local, lock_uvs)
+#		var result_data:ConvexBlockData = ctl_mesh.to_convex_block_data()
+#		block.block_data = result_data
 		#tracked_blocks[block_idx].block_data = result_data
 
 func do_it():
-	move_to(move_offset)
+	for tracked in tracked_blocks:
+		var block:CyclopsBlock = builder.get_node(tracked.path)
+		var w_init_xform:Transform3D = tracked.world_xform
+		
+		var new_w_xform:Transform3D = w_init_xform.translated_local(move_offset)
+		#print("move_offset %s" % move_offset)
+		#var new_w_xform:Transform3D = w_init_xform
+		block.global_transform = new_w_xform
 
 func undo_it():
-	move_to(Vector3.ZERO)
+	for tracked in tracked_blocks:
+		var block:CyclopsBlock = builder.get_node(tracked.path)
+		block.global_transform = tracked.world_xform
 	
