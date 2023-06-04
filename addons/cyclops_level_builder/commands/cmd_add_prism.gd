@@ -29,6 +29,7 @@ var blocks_root_path:NodePath
 var block_name:String
 var base_polygon:PackedVector3Array
 var extrude:Vector3
+var local_transform:Transform3D
 var uv_transform:Transform2D
 var material_path:String
 
@@ -44,8 +45,8 @@ func do_it():
 	var blocks_root:Node = builder.get_node(blocks_root_path)
 	blocks_root.add_child(block)
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
-#	block.owner = block_owner
 	block.name = block_name
+	block.transform = local_transform
 
 	var material_id:int = -1
 	if ResourceLoader.exists(material_path):

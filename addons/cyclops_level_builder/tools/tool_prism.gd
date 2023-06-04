@@ -104,23 +104,27 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 					if result:
-						print("init base point block")
-						floor_normal = result.normal
+						#print("init base point block")
+						
+#						floor_normal = result.normal
+						floor_normal = result.get_world_normal()
 
-						var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
-#
+						var p:Vector3 = MathUtil.snap_to_grid(result.get_world_position(), grid_step_size)
+						#var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
+
 						base_points.append(p)
 						preview_point = p
 
 						return true
 						
 					else:
-						print("init base point empty space")
+						#print("init base point empty space")
 						floor_normal = Vector3.UP
 
 						var start_pos:Vector3 = origin + builder.block_create_distance * dir
 						
-						var p:Vector3 = to_local(start_pos, blocks_root.global_transform.inverse(), grid_step_size)
+						var p:Vector3 = MathUtil.snap_to_grid(start_pos, grid_step_size)
+						#var p:Vector3 = to_local(start_pos, blocks_root.global_transform.inverse(), grid_step_size)
 						base_points.append(p)
 						
 						return true
@@ -134,7 +138,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						return true
 
 					var p_isect:Vector3 = MathUtil.intersect_plane(origin, dir, base_points[0], floor_normal)
-					var p:Vector3 = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
+					var p:Vector3 = MathUtil.snap_to_grid(p_isect, grid_step_size)
+					#var p:Vector3 = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
 					base_points.append(p)
 
 					var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)					
@@ -143,14 +148,20 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				elif tool_state == ToolState.DRAG_HEIGHT:
 					var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
 					drag_offset = block_drag_cur - base_points[0]
-					#drag_offset = Vector3.ZERO
+
+					var pivot_xform:Transform3D = Transform3D(Basis.IDENTITY, -bounding_points[0])
+					var local_points = pivot_xform * bounding_points
+					var local_xform = blocks_root.global_transform.inverse() * pivot_xform.inverse()
+					
+					print("bounding_points %s " % bounding_points)
+					print("local_points %s " % local_points)
 
 					var cmd:CommandAddPrism = CommandAddPrism.new()
 					cmd.builder = builder
 					cmd.block_name = GeneralUtil.find_unique_name(blocks_root, "Block_")
 					cmd.blocks_root_path = blocks_root.get_path()
-#					command.block_owner = builder.get_editor_interface().get_edited_scene_root()
-					cmd.base_polygon = bounding_points
+					cmd.base_polygon = local_points
+					cmd.local_transform = local_xform
 					cmd.extrude = drag_offset
 					cmd.uv_transform = builder.tool_uv_transform
 					cmd.material_path = builder.tool_material_path
@@ -192,13 +203,15 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 		if tool_state == ToolState.BASE_POINTS:
 			var p_isect:Vector3 = MathUtil.intersect_plane(origin, dir, base_points[0], floor_normal)
-			preview_point = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
+			preview_point = MathUtil.snap_to_grid(p_isect, grid_step_size)
+			#preview_point = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
 			
 
 		elif tool_state == ToolState.DRAG_HEIGHT:
 			block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, base_points[0], floor_normal)
 			
-			block_drag_cur = to_local(block_drag_cur, blocks_root.global_transform.inverse(), grid_step_size)
+			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
+			#block_drag_cur = to_local(block_drag_cur, blocks_root.global_transform.inverse(), grid_step_size)
 			
 			drag_offset = block_drag_cur - base_points[0]
 			var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
