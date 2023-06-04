@@ -29,7 +29,7 @@ var blocks_root_path:NodePath
 var block_name:String
 var base_polygon:PackedVector3Array
 var extrude:Vector3
-var local_transform:Transform3D
+#var local_transform:Transform3D
 var uv_transform:Transform2D
 var material_path:String
 
@@ -46,7 +46,7 @@ func do_it():
 	blocks_root.add_child(block)
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
 	block.name = block_name
-	block.transform = local_transform
+	#block.transform = local_transform
 
 	var material_id:int = -1
 	if ResourceLoader.exists(material_path):
@@ -55,12 +55,16 @@ func do_it():
 			material_id = 0
 			block.materials.append(mat)
 	
+	var set_pivot_xform:Transform3D = Transform3D(Basis.IDENTITY, -base_polygon[0])
+	
 	var mesh:ConvexVolume = ConvexVolume.new()
 	mesh.init_prism(base_polygon, extrude, uv_transform, material_id)
+	mesh.transform(set_pivot_xform)
 
 	block.block_data = mesh.to_convex_block_data()
 	block_path = block.get_path()
 
+	block.global_transform = set_pivot_xform.affine_inverse()
 #	print("AddBlockCommand do_it() %s %s" % [block_inst_id, bounds])
 	
 func undo_it():

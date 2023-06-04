@@ -149,19 +149,19 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
 					drag_offset = block_drag_cur - base_points[0]
 
-					var pivot_xform:Transform3D = Transform3D(Basis.IDENTITY, -bounding_points[0])
-					var local_points = pivot_xform * bounding_points
-					var local_xform = blocks_root.global_transform.inverse() * pivot_xform.inverse()
+#					var pivot_xform:Transform3D = Transform3D(Basis.IDENTITY, -bounding_points[0])
+#					var local_points = pivot_xform * bounding_points
+#					var local_xform = blocks_root.global_transform.inverse() * pivot_xform.inverse()
 					
-					print("bounding_points %s " % bounding_points)
-					print("local_points %s " % local_points)
+#					print("bounding_points %s " % bounding_points)
+#					print("local_points %s " % local_points)
 
 					var cmd:CommandAddPrism = CommandAddPrism.new()
 					cmd.builder = builder
 					cmd.block_name = GeneralUtil.find_unique_name(blocks_root, "Block_")
 					cmd.blocks_root_path = blocks_root.get_path()
-					cmd.base_polygon = local_points
-					cmd.local_transform = local_xform
+					cmd.base_polygon = bounding_points
+					#cmd.local_transform = local_xform
 					cmd.extrude = drag_offset
 					cmd.uv_transform = builder.tool_uv_transform
 					cmd.material_path = builder.tool_material_path
