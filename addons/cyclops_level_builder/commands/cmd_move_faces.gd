@@ -60,8 +60,6 @@ func add_faces(block_path:NodePath, indices:Array[int]):
 func _init():
 	command_name = "Move faces"
 
-
-
 func do_it():
 #	print("cmd move edges- DO IT")
 	
@@ -72,6 +70,8 @@ func do_it():
 		var block:CyclopsBlock = builder.get_node(block_path)
 		var rec:BlockFaceChanges = block_map[block_path]
 		
+		var w2l:Transform3D = block.global_transform.affine_inverse()
+		var move_offset_local:Vector3 = w2l.basis * move_offset
 #		print("rec %s" % rec)
 		
 		var vol:ConvexVolume = ConvexVolume.new()
@@ -89,16 +89,16 @@ func do_it():
 #			var v0:ConvexVolume.VertexInfo = vol.vertices[e.start_index]
 #			var v1:ConvexVolume.VertexInfo = vol.vertices[e.end_index]
 			if f.selected:
-				new_sel_centroids.append(centroid + move_offset)
+				new_sel_centroids.append(centroid + move_offset_local)
 				
 				for v_idx in f.vertex_indices:
 					if !moved_vert_indices.has(v_idx):
-						new_points.append(vol.vertices[v_idx].point + move_offset)
+						new_points.append(vol.vertices[v_idx].point + move_offset_local)
 						moved_vert_indices.append(v_idx)
 			else:
 				for v_idx in f.vertex_indices:
 					if !moved_vert_indices.has(v_idx):
-						new_points.append(vol.vertices[v_idx].point + move_offset)
+						new_points.append(vol.vertices[v_idx].point + move_offset_local)
 						moved_vert_indices.append(v_idx)
 		
 		for v_idx in vol.vertices.size():

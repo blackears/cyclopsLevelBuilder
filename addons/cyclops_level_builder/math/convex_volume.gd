@@ -851,7 +851,8 @@ func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 	
 	var best_result:IntersectResults
 	
-	for face in faces:
+	for f_idx in faces.size():
+		var face:FaceInfo = faces[f_idx]
 #		var tris:PackedVector3Array = MathUtil.trianglate_face(face.get_points(), face.normal)
 		var tris:PackedVector3Array = face.get_trianges()
 		for i in range(0, tris.size(), 3):
@@ -879,6 +880,7 @@ func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 			
 				var result:IntersectResults = IntersectResults.new()
 				result.face_id = face.id
+				result.face_index = f_idx
 				result.normal = face.normal
 				result.position = p_hit
 				result.distance_squared = dist_sq

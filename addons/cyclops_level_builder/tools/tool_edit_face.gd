@@ -59,14 +59,16 @@ func _draw_tool(viewport_camera:Camera3D):
 		var f:ConvexVolume.FaceInfo = block.control_mesh.faces[h.face_index]
 
 		var active:bool = block.control_mesh.active_face == h.face_index		
-		global_scene.draw_vertex(h.p_ref, pick_material(global_scene, f.selected, active))
+		global_scene.draw_vertex(h.p_center, pick_material(global_scene, f.selected, active))
 		
+		var l2w:Transform3D = block.global_transform
+		#var w2l:Transform3D = block.global_transform.affine_inverse()
 		
 		if f.selected:
 			var edge_loop:PackedVector3Array = f.get_points()
 			for p_idx in edge_loop.size():
 				edge_loop[p_idx] += f.normal * builder.tool_overlay_extrude
-			global_scene.draw_loop(edge_loop, true, pick_material(global_scene, f.selected, active))
+			global_scene.draw_loop(l2w * edge_loop, true, pick_material(global_scene, f.selected, active))
 			
 			var tris:PackedVector3Array = f.get_trianges()
 			for p_idx in tris.size():
@@ -74,19 +76,18 @@ func _draw_tool(viewport_camera:Camera3D):
 			
 #			print("draw face %s %s %s" % [h.face_index, f.selected, f.active])
 			var mat:Material = global_scene.tool_edit_active_fill_material if active else global_scene.tool_edit_selected_fill_material
-			global_scene.draw_triangles(tris, mat)
+			global_scene.draw_triangles(l2w * tris, mat)
 		
 	
 func setup_tool():
 	handles = []
-	
-#	var blocks_root:CyclopsBlocks = builder.active_node
-#	if blocks_root == null:
-#		return
-#	var grid_step_size:float = pow(2, blocks_root.grid_size)
+	#print("setup_tool")
 	
 	var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
 	for block in sel_blocks:
+		var l2w:Transform3D = block.global_transform
+		#var w2l:Transform3D = block.global_transform.affine_inverse()
+		
 		for f_idx in block.control_mesh.faces.size():
 #					print("adding face hande %s %s" % [block.name, f_idx])
 			
@@ -95,45 +96,19 @@ func setup_tool():
 
 			var handle:HandleFace = HandleFace.new()
 			
-			var p_start:Vector3 = face.get_centroid()
-#					p_start = MathUtil.snap_to_grid(p_start, grid_step_size)
-			handle.p_ref = p_start
-			handle.p_ref_init = p_start
+			var p_start:Vector3 = l2w * face.get_centroid()
+			#print("p_start %s" % p_start)
+
+			handle.p_center = p_start
+#			handle.p_ref = p_start
+#			handle.p_ref_init = p_start
 			
 			handle.face_index = f_idx
-			handle.face_id = face.id
+#			handle.face_id = face.id
 			handle.block_path = block.get_path()
 			handles.append(handle)
 	
-#	for child in blocks_root.get_children():
-#		if child is CyclopsConvexBlock:
-#			var block:CyclopsConvexBlock = child
-#			if block.selected:
-#				for f_idx in block.control_mesh.faces.size():
-##					print("adding face hande %s %s" % [block.name, f_idx])
-#
-#					var ctl_mesh:ConvexVolume = block.control_mesh
-#					var face:ConvexVolume.FaceInfo = ctl_mesh.faces[f_idx]
-#
-#					var handle:HandleFace = HandleFace.new()
-#
-#					var p_start:Vector3 = face.get_centroid()
-##					p_start = MathUtil.snap_to_grid(p_start, grid_step_size)
-#					handle.p_ref = p_start
-#					handle.p_ref_init = p_start
-#
-#					handle.face_index = f_idx
-#					handle.face_id = face.id
-#					handle.block_path = block.get_path()
-#					handles.append(handle)
-					
-					
-					#print("adding handle %s" % handle)
-
 func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:float)->PickHandleResult:
-#	var blocks_root:CyclopsBlocks = builder.active_node
-#	if blocks_root == null:
-#		return
 	
 	var pick_origin:Vector3 = viewport_camera.project_ray_origin(position)
 	var pick_dir:Vector3 = viewport_camera.project_ray_normal(position)
@@ -142,10 +117,10 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 		var result:IntersectResults = builder.intersect_ray_closest_selected_only(pick_origin, pick_dir)
 		if result:
 			for h in handles:
-				if h.block_path == result.object.get_path() && h.face_id == result.face_id:
+				if h.block_path == result.object.get_path() && h.face_index == result.face_index:
 					var ret:PickHandleResult = PickHandleResult.new()
 					ret.handle = h
-					ret.position = result.position
+					ret.position = result.get_world_position()
 					return ret
 					
 	elif builder.display_mode == DisplayMode.Type.WIRE:
@@ -156,7 +131,7 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 		
 		for h in handles:
 #			var h_world_pos:Vector3 = blocks_root.global_transform * h.p_ref
-			var h_world_pos:Vector3 = h.p_ref
+			var h_world_pos:Vector3 = h.p_center
 			var h_screen_pos:Vector2 = viewport_camera.unproject_position(h_world_pos)
 			if position.distance_squared_to(h_screen_pos) > radius * radius:
 				#Failed handle radius test
@@ -266,16 +241,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					for block in sel_blocks:
 						cmd.add_faces(block.get_path(), [])
 					
-#					for child in builder.active_node.get_children():
-#						if child is CyclopsConvexBlock:
-#							var cur_block:CyclopsConvexBlock = child
-#							if cur_block.selected:
-#								cmd.add_faces(cur_block.get_path(), [])
-
 					var res:PickHandleResult = pick_closest_handle(viewport_camera, e.position, builder.handle_screen_radius)
 					if res:
 						var handle:HandleFace = res.handle
-						#print("handle %s" % handle)
+						#print("pick handle %s" % handle)
 							
 						cmd.add_face(handle.block_path, handle.face_index)
 						#print("selecting %s" % handle.face_index)
@@ -288,11 +257,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 					
 					tool_state = ToolState.NONE
-#					draw_tool()
 					
 				elif tool_state == ToolState.DRAGGING:
 					#Finish drag
-					#print("cmd finish drag")
 					var undo:EditorUndoRedoManager = builder.get_undo_redo()
 
 					cmd_move_face.add_to_undo_manager(undo)
@@ -311,10 +278,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				var res:PickHandleResult = pick_closest_handle(viewport_camera, drag_mouse_start_pos, builder.handle_screen_radius)
 
 				if res:
+					#print("pick handle %s" % res.handle)
+					
 					var handle:HandleFace = res.handle
 					drag_handle = handle
-#					drag_handle_start_pos = handle.p_ref
 					drag_handle_start_pos = res.position
+					#print("drag_handle_start_pos %s" % drag_handle_start_pos)
 					tool_state = ToolState.DRAGGING
 
 					cmd_move_face = CommandMoveFaces.new()
@@ -329,16 +298,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 								var face:ConvexVolume.FaceInfo = vol.faces[f_idx]
 								if face.selected:
 									cmd_move_face.add_face(block.get_path(), f_idx)
-						
-#						for child in blocks_root.get_children():
-#							if child is CyclopsConvexBlock:
-#								var block:CyclopsConvexBlock = child
-#								if block.selected:
-#									var vol:ConvexVolume = block.control_mesh
-#									for f_idx in vol.faces.size():
-#										var face:ConvexVolume.FaceInfo = vol.faces[f_idx]
-#										if face.selected:
-#											cmd_move_face.add_face(block.get_path(), f_idx)
+
 					else:
 						cmd_move_face.add_face(handle.block_path, handle.face_index)
 				
@@ -348,27 +308,24 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 			var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 
-#			var start_pos:Vector3 = origin + builder.block_create_distance * dir
-#			var w2l = blocks_root.global_transform.inverse()
-#			var origin_local:Vector3 = w2l * origin
-#			var dir_local:Vector3 = w2l.basis * dir
+			#print("drag_handle_start_pos %s" % drag_handle_start_pos)
 			
 			var drag_to:Vector3
 			if e.alt_pressed:
 				drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, Vector3.UP)
 			else:
 				drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, Vector3.UP)
+
+			#print("drag_to %s" % drag_to)
 			
 			var offset = drag_to - drag_handle_start_pos
 			offset = MathUtil.snap_to_grid(offset, grid_step_size)
-			drag_to = drag_handle_start_pos + offset
-			drag_handle.p_ref = drag_to
+
+			#print("offset %s" % offset)
 			
 			cmd_move_face.move_offset = offset
-#			print("drag_offset %s" % cmd_move_face.move_offset)
 			cmd_move_face.do_it()
 
-#			draw_tool()
 			setup_tool()
 			return true
 		
