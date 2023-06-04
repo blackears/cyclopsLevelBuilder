@@ -53,12 +53,11 @@ func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()	
 	
-	#var blocks_root:CyclopsBlocks = builder.active_node
 	for h in handles:
 		var block:CyclopsBlock = builder.get_node(h.block_path)
 		var e:ConvexVolume.EdgeInfo = block.control_mesh.edges[h.edge_index]
-		var p0:Vector3 = block.control_mesh.vertices[e.start_index].point
-		var p1:Vector3 = block.control_mesh.vertices[e.end_index].point
+		var p0:Vector3 = block.global_transform * block.control_mesh.vertices[e.start_index].point
+		var p1:Vector3 = block.global_transform * block.control_mesh.vertices[e.end_index].point
 
 		var active:bool = block.control_mesh.active_edge == h.edge_index		
 		global_scene.draw_vertex((p0 + p1) / 2, pick_material(global_scene, e.selected, active))
@@ -66,10 +65,6 @@ func _draw_tool(viewport_camera:Camera3D):
 	
 func setup_tool():
 	handles = []
-	
-#	var blocks_root:CyclopsBlocks = builder.active_node
-#	if blocks_root == null:
-#		return
 		
 	var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
 	for block in sel_blocks:
@@ -78,34 +73,12 @@ func setup_tool():
 			var e:ConvexVolume.EdgeInfo = ctl_mesh.edges[e_idx]
 
 			var handle:HandleEdge = HandleEdge.new()
-			handle.p_ref = ctl_mesh.vertices[e.start_index].point
-			handle.p_ref_init = handle.p_ref
-#					handle.p1 = ctl_mesh.vertices[e.end_index].point
-#					handle.p1_init = handle.p1
+#			handle.p_ref = block.global_transform * ctl_mesh.vertices[e.start_index].point
+#			handle.p_ref_init = handle.p_ref
 			handle.edge_index = e_idx
 			handle.block_path = block.get_path()
 			handles.append(handle)
 	
-#	for child in blocks_root.get_children():
-#		if child is CyclopsConvexBlock:
-#			var block:CyclopsConvexBlock = child
-#			if block.selected:
-#				for e_idx in block.control_mesh.edges.size():
-#					var ctl_mesh:ConvexVolume = block.control_mesh
-#					var e:ConvexVolume.EdgeInfo = ctl_mesh.edges[e_idx]
-#
-#					var handle:HandleEdge = HandleEdge.new()
-#					handle.p_ref = ctl_mesh.vertices[e.start_index].point
-#					handle.p_ref_init = handle.p_ref
-##					handle.p1 = ctl_mesh.vertices[e.end_index].point
-##					handle.p1_init = handle.p1
-#					handle.edge_index = e_idx
-#					handle.block_path = block.get_path()
-#					handles.append(handle)
-					
-					
-					#print("adding handle %s" % handle)
-
 	
 func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:float)->PickHandleResult:
 	var best_dist:float = INF
@@ -122,10 +95,8 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 
 		var p0 = ctl_mesh.vertices[edge.start_index].point
 		var p1 = ctl_mesh.vertices[edge.end_index].point
-#		var p0_world:Vector3 = blocks_root.global_transform * p0
-#		var p1_world:Vector3 = blocks_root.global_transform * p1
-		var p0_world:Vector3 = p0
-		var p1_world:Vector3 = p1
+		var p0_world:Vector3 = block.global_transform * p0
+		var p1_world:Vector3 = block.global_transform * p1
 		
 		var p0_screen:Vector2 = viewport_camera.unproject_position(p0_world)
 		var p1_screen:Vector2 = viewport_camera.unproject_position(p1_world)
@@ -293,8 +264,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					cmd_move_edge = CommandMoveEdges.new()
 					cmd_move_edge.builder = builder
-#					cmd_move_vertex.block_path = handle.block_path
-#					cmd_move_vertex.vertex_position = handle.initial_position
 
 					var handle_block:CyclopsBlock = builder.get_node(handle.block_path)
 					if handle_block.control_mesh.edges[handle.edge_index].selected:
@@ -305,16 +274,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 								var edge:ConvexVolume.EdgeInfo = vol.edges[e_idx]
 								if edge.selected:
 									cmd_move_edge.add_edge(block.get_path(), e_idx)
-						
-#						for child in blocks_root.get_children():
-#							if child is CyclopsConvexBlock:
-#								var block:CyclopsConvexBlock = child
-#								if block.selected:
-#									var vol:ConvexVolume = block.control_mesh
-#									for e_idx in vol.edges.size():
-#										var edge:ConvexVolume.EdgeInfo = vol.edges[e_idx]
-#										if edge.selected:
-#											cmd_move_edge.add_edge(block.get_path(), e_idx)
 					else:
 						cmd_move_edge.add_edge(handle.block_path, handle.edge_index)
 				
@@ -323,11 +282,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 			var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 			var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
-
-#			var start_pos:Vector3 = origin + builder.block_create_distance * dir
-#			var w2l = blocks_root.global_transform.inverse()
-#			var origin_local:Vector3 = w2l * origin
-#			var dir_local:Vector3 = w2l.basis * dir
 			
 			var drag_to:Vector3
 			if e.alt_pressed:
@@ -338,8 +292,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var offset:Vector3 = drag_to - drag_handle_start_pos
 			offset = MathUtil.snap_to_grid(offset, grid_step_size)
 			drag_to = drag_handle_start_pos + offset
-			drag_handle.p_ref = drag_to
-#			drag_handle.p1 = drag_handle.p1_init + offset
+#			drag_handle.p_ref = drag_to
 			
 			cmd_move_edge.move_offset = offset
 			cmd_move_edge.do_it()

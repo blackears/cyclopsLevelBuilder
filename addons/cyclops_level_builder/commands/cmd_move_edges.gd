@@ -75,6 +75,8 @@ func do_it():
 		vol.init_from_convex_block_data(rec.tracked_block_data)
 
 #		print("init done")
+		var w2l:Transform3D = block.global_transform.affine_inverse()
+		var move_offset_local = w2l.basis * move_offset
 
 		#var moved_vert_indices:PackedInt32Array
 		var new_points:PackedVector3Array
@@ -85,20 +87,20 @@ func do_it():
 			var v0:ConvexVolume.VertexInfo = vol.vertices[e.start_index]
 			var v1:ConvexVolume.VertexInfo = vol.vertices[e.end_index]
 			if e.selected:
-				new_sel_centroids.append((v0.point + v1.point) / 2 + move_offset)
+				new_sel_centroids.append((v0.point + v1.point) / 2 + move_offset_local)
 				
 				if !moved_indices.has(e.start_index):
-					new_points.append(v0.point + move_offset)
+					new_points.append(v0.point + move_offset_local)
 					moved_indices.append(e.start_index)
 				if !moved_indices.has(e.end_index):
-					new_points.append(v1.point + move_offset)
+					new_points.append(v1.point + move_offset_local)
 					moved_indices.append(e.end_index)
 			else:
 				if !moved_indices.has(e.start_index):
-					new_points.append(v0.point + move_offset)
+					new_points.append(v0.point + move_offset_local)
 					moved_indices.append(e.start_index)
 				if !moved_indices.has(e.end_index):
-					new_points.append(v1.point + move_offset)
+					new_points.append(v1.point + move_offset_local)
 					moved_indices.append(e.end_index)
 		
 		for v_idx in vol.vertices.size():
