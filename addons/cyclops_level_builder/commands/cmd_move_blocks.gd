@@ -30,8 +30,6 @@ var move_offset:Vector3
 var lock_uvs:bool = false
 
 #Private
-#var blocks_to_move:Array[NodePath]
-#var tracked_block_data:Array[ConvexBlockData]
 var tracked_blocks:Array[TrackedBlock]
 
 func _init():
@@ -57,20 +55,6 @@ func move_to(offset:Vector3):
 		block.global_transform = new_w_xform
 		
 		
-	
-	
-#	for i in blocks_to_move.size():
-#		var block:CyclopsBlock = builder.get_node(blocks_to_move[i])
-#		var w2l = block.global_transform.affine_inverse()
-#		var offset_local:Vector3 = w2l * offset
-#
-#		var ctl_mesh:ConvexVolume = ConvexVolume.new()
-#		ctl_mesh.init_from_convex_block_data(tracked_block_data[i])
-#		ctl_mesh.translate(offset_local, lock_uvs)
-#		var result_data:ConvexBlockData = ctl_mesh.to_convex_block_data()
-#		block.block_data = result_data
-		#tracked_blocks[block_idx].block_data = result_data
-
 func do_it():
 	for tracked in tracked_blocks:
 		var block:CyclopsBlock = builder.get_node(tracked.path)
