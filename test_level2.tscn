@@ -545,7 +545,7 @@ face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
 active_face = -1
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_6fbc6"]
+[sub_resource type="Resource" id="Resource_6urxn"]
 script = ExtResource("2_akor5")
 selected = false
 active = false
@@ -6011,7 +6011,7 @@ block_data = SubResource("Resource_0g8yb")
 [node name="Block_18" type="Node3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33, 44, 51)
 script = ExtResource("1_xfayt")
-block_data = SubResource("Resource_6fbc6")
+block_data = SubResource("Resource_6urxn")
 
 [node name="Block_19" type="Node3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29, 47, 49)

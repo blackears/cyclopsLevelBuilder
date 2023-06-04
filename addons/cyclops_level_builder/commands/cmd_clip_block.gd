@@ -69,10 +69,13 @@ func do_it():
 	
 	var new_mat_list1:Array[Material] = new_mat_list0.duplicate()
 	
-	var cut_plane_reverse:Plane = Plane(-cut_plane.normal, cut_plane.get_center())
+	#var cut_plane_reverse:Plane = Plane(-cut_plane.normal, cut_plane.get_center())
 
-	var vol0:ConvexVolume = block.control_mesh.cut_with_plane(cut_plane, uv_transform, cut_mat_idx)
-	var vol1:ConvexVolume = block.control_mesh.cut_with_plane(MathUtil.flip_plane(cut_plane), uv_transform, cut_mat_idx)
+	var w2l:Transform3D = block.global_transform.affine_inverse()
+	var cut_plane_local:Plane = w2l * cut_plane
+
+	var vol0:ConvexVolume = block.control_mesh.cut_with_plane(cut_plane_local, uv_transform, cut_mat_idx)
+	var vol1:ConvexVolume = block.control_mesh.cut_with_plane(MathUtil.flip_plane(cut_plane_local), uv_transform, cut_mat_idx)
 
 	#Set data of existing block
 	block.block_data = vol0.to_convex_block_data()
@@ -84,6 +87,7 @@ func do_it():
 	blocks_root.add_child(block_sibling)
 	block_sibling.owner = builder.get_editor_interface().get_edited_scene_root()
 	block_sibling.name = block_sibling_name
+	block_sibling.global_transform = block.global_transform
 	block_sibling.selected = block.selected
 	block_sibling_path = block_sibling.get_path()
 

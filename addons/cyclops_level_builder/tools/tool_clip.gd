@@ -136,7 +136,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 				
 				if result:
-					var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
+					#var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
+					var p:Vector3 = MathUtil.snap_to_grid(result.get_world_position(), grid_step_size)
 					
 					if !has_clip_point(p):
 						if clip_points.is_empty():
