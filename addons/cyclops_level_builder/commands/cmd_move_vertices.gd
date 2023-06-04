@@ -64,6 +64,12 @@ func do_it():
 	for block_path in block_map.keys():
 		
 		var block:CyclopsBlock = builder.get_node(block_path)
+		var w2l:Transform3D = block.global_transform
+		var move_offset_local:Vector3 = w2l.basis * move_offset
+		
+#		print("move offset %s" % move_offset)
+#		print("move offset local %s" % move_offset_local)
+		
 		var rec:BlockVertexChanges = block_map[block_path]
 		
 		var vol:ConvexVolume = ConvexVolume.new()
@@ -75,7 +81,7 @@ func do_it():
 		var new_points:PackedVector3Array
 		for v_idx in vol.vertices.size():
 			if rec.vertex_indices.has(v_idx):
-				var p:Vector3 = vol.vertices[v_idx].point + move_offset
+				var p:Vector3 = vol.vertices[v_idx].point + move_offset_local
 				new_points.append(p)
 				selected_points.append(p)
 			else:

@@ -53,7 +53,8 @@ func do_it():
 	vol.init_from_convex_block_data(tracked_block_data)
 	
 	var point_list:PackedVector3Array = vol.get_points()
-	point_list.append_array(points_to_add)
+	var local_points = block.global_transform.affine_inverse() * points_to_add
+	point_list.append_array(local_points)
 
 	var new_vol:ConvexVolume = ConvexVolume.new()
 	new_vol.init_from_points(point_list)

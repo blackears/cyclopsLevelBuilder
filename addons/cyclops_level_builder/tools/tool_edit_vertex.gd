@@ -64,24 +64,18 @@ func setup_tool():
 	handles = []
 #	print("setup_tool")
 	
-	#var blocks_root:CyclopsBlocks = builder.active_node
 	var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
-#	if blocks_root == null:
-#		return
-		
-#	for child in blocks_root.get_children():
-#		if child is CyclopsBlock:
-#			var block:CyclopsBlock = child
-#			if block.selected:
+
 	for block in sel_blocks:
 #		print("block sel %s" % block.block_data.vertex_selected)
+		var l2w:Transform3D = block.global_transform
 
 		for v_idx in block.control_mesh.vertices.size():
 			var v:ConvexVolume.VertexInfo = block.control_mesh.vertices[v_idx]
 			var handle:HandleVertex = HandleVertex.new()
-			handle.position = v.point
+			handle.position = l2w * v.point
+			handle.initial_position = handle.position
 			handle.vertex_index = v_idx
-			handle.initial_position = v.point
 			handle.block_path = block.get_path()
 			handles.append(handle)
 			
@@ -151,7 +145,7 @@ func _activate(builder:CyclopsLevelBuilder):
 	
 func _deactivate():
 	super._deactivate()
-#	builder.active_node_changed.disconnect(active_node_changed)
+	builder.active_node_changed.disconnect(active_node_changed)
 #	if tracked_blocks_root != null:
 #		tracked_blocks_root.blocks_changed.disconnect(active_node_updated)
 
@@ -259,16 +253,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 								var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
 								if v.selected:
 									cmd_move_vertex.add_vertex(block.get_path(), v_idx)
-							
-#						for child in blocks_root.get_children():
-#							if child is CyclopsBlock:
-#								var block:CyclopsBlock = child
-#								if block.selected:
-#									var vol:ConvexVolume = block.control_mesh
-#									for v_idx in vol.vertices.size():
-#										var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
-#										if v.selected:
-#											cmd_move_vertex.add_vertex(block.get_path(), v_idx)
 					else:
 						cmd_move_vertex.add_vertex(handle.block_path, handle.vertex_index)
 						
@@ -281,8 +265,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						var result:IntersectResults = builder.intersect_ray_closest_selected_only(pick_origin, pick_dir)
 						if result:
 							#print("start drag add")
-							drag_handle_start_pos = result.position
-							added_point_pos = result.position
+							drag_handle_start_pos = result.get_world_position()
+							added_point_pos = result.get_world_position()
 							tool_state = ToolState.DRAGGING_ADD
 
 							cmd_add_vertex = CommandAddVertices.new()
