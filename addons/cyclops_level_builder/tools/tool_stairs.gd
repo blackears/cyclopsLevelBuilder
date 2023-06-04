@@ -161,9 +161,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 					if result:
 						#print("init base point block")
-						floor_normal = result.normal
+						floor_normal = result.get_world_normal()
 
-						var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
+						#var p:Vector3 = to_local(result.get_world_position(), blocks_root.global_transform.inverse(), grid_step_size)
+						var p:Vector3 = MathUtil.snap_to_grid(result.get_world_position(), grid_step_size)
 						drag_origin = p
 						base_drag_cur = p
 
@@ -175,7 +176,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 						var start_pos:Vector3 = origin + builder.block_create_distance * dir
 						
-						var p:Vector3 = to_local(start_pos, blocks_root.global_transform.inverse(), grid_step_size)
+#						var p:Vector3 = to_local(start_pos, blocks_root.global_transform.inverse(), grid_step_size)
+						var p:Vector3 = MathUtil.snap_to_grid(start_pos, grid_step_size)
 						drag_origin = p
 						base_drag_cur = p
 						
@@ -256,21 +258,23 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 
 		var start_pos:Vector3 = origin + builder.block_create_distance * dir
-		var w2l = blocks_root.global_transform.inverse()
-		var origin_local:Vector3 = w2l * origin
-		var dir_local:Vector3 = w2l.basis * dir
+#		var w2l = blocks_root.global_transform.inverse()
+#		var origin_local:Vector3 = w2l * origin
+#		var dir_local:Vector3 = w2l.basis * dir
 
 		if tool_state == ToolState.DRAG_BASE:
 			var p_isect:Vector3 = MathUtil.intersect_plane(origin, dir, drag_origin, floor_normal)
-			var p_snapped = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
+			#var p_snapped = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
+			var p_snapped:Vector3 = MathUtil.snap_to_grid(p_isect, grid_step_size)
 			base_drag_cur = p_snapped
 
 			return true
 			
 		elif tool_state == ToolState.DRAG_HEIGHT:
-			block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, base_drag_cur, floor_normal)
+			block_drag_cur = MathUtil.closest_point_on_line(origin, dir, base_drag_cur, floor_normal)
 			
-			block_drag_cur = to_local(block_drag_cur, blocks_root.global_transform.inverse(), grid_step_size)
+			#block_drag_cur = to_local(block_drag_cur, blocks_root.global_transform.inverse(), grid_step_size)
+			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
 			
 #			drag_offset = block_drag_cur - base_drag_cur
 

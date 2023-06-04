@@ -111,37 +111,20 @@ func do_it():
 			stairs_origin + u_span + step_span * i, \
 			stairs_origin + u_span + step_span * (i + 1), \
 			stairs_origin + step_span * (i + 1)]
-			
+		
+		var pivot_xform:Transform3D = Transform3D(Basis.IDENTITY, -base_points[0])
+		
 		var mesh:ConvexVolume = ConvexVolume.new()
 		mesh.init_prism(base_points, \
 			floor_normal * (max_height - step_height * i), \
 			uv_transform, material_id)
+		mesh.transform(pivot_xform)
 
 		var block:CyclopsBlock = create_block(blocks_root, material)
 
 		block.block_data = mesh.to_convex_block_data()
+		block.global_transform = pivot_xform.affine_inverse()
 		block_paths.append(block.get_path())
-			
-#		global_scene.draw_prism(base_points, \
-#			floor_normal * (max_height - step_height * i), \
-#			global_scene.tool_material)
-	
-	
-#	var bounding_points_inner:PackedVector3Array = MathUtil.create_circle_points(origin, axis_normal, radius_inner, segments)
-#	var bounding_points_outer:PackedVector3Array = MathUtil.create_circle_points(origin, axis_normal, radius_outer, segments)
-#
-#	for p_idx0 in bounding_points_inner.size():
-#		var p_idx1:int = wrap(p_idx0 + 1, 0, bounding_points_inner.size())
-#
-#		var block:CyclopsConvexBlock = create_block(blocks_root, material)
-#
-#		var mesh:ConvexVolume = ConvexVolume.new()
-#		var base_points:PackedVector3Array = [bounding_points_inner[p_idx0], bounding_points_inner[p_idx1], bounding_points_outer[p_idx1], bounding_points_outer[p_idx0]]
-#
-#		mesh.init_prism(base_points, axis_normal * height, uv_transform, material_id)
-#
-#		block.block_data = mesh.to_convex_block_data()
-#		block_paths.append(block.get_path())
 		
 
 func undo_it():
