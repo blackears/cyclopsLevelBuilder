@@ -109,8 +109,6 @@ var bounds:AABB
 #var points:PackedVector3Array
 
 func _init():
-#	init_block(Vector3.ZERO, Vector3.LEFT + Vector3.FORWARD, Vector3.UP)
-#	dump()
 	pass
 
 func get_face_indices()->PackedInt32Array:

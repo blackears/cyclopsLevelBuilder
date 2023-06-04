@@ -64,11 +64,9 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 	
 	if result:
 		#print("Hit! %s" % result)
-		drag_floor_normal = MathUtil.snap_to_best_axis_normal(result.normal)
+		drag_floor_normal = MathUtil.snap_to_best_axis_normal(result.get_world_normal())
 
-		var start_pos:Vector3 = result.position
-#		var w2l = blocks_root.global_transform.inverse()
-#		var start_pos:Vector3 = w2l * start_pos
+		var start_pos:Vector3 = result.get_world_position()
 
 		var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
@@ -97,11 +95,6 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 		
 		tool_state = ToolState.BLOCK_BASE
 		var start_pos:Vector3 = origin + builder.block_create_distance * dir
-#		var w2l = blocks_root.global_transform.inverse()
-#		var start_pos:Vector3 = w2l * start_pos
-
-		#print("start_pos %s" % start_pos)
-#		print("start_pos %s" % start_pos)
 		
 		var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
@@ -180,7 +173,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						command.blocks_root_path = blocks_root.get_path()
 						command.block_name = GeneralUtil.find_unique_name(blocks_root, "Block_")						
 						command.bounds = bounds
-						command.origin = block_drag_p0
+#						command.origin = block_drag_p0
 						command.uv_transform = builder.tool_uv_transform
 						command.material_path = builder.tool_material_path
 
@@ -211,11 +204,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 		
 		var start_pos:Vector3 = origin + builder.block_create_distance * dir
-#		var w2l = blocks_root.global_transform.inverse()
-#		var origin_local:Vector3 = w2l * origin
-#		var dir_local:Vector3 = w2l.basis * dir
-	
-#		var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 		
 		#print("tool_state %s" % tool_state)
 		if (e.button_mask & MOUSE_BUTTON_MASK_MIDDLE):

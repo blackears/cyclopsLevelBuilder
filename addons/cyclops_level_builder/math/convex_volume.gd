@@ -157,7 +157,7 @@ func _to_string()->String:
 	return result
 	
 
-func init_block(block_bounds:AABB, xform:Transform3D = Transform3D.IDENTITY, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = -1):
+func init_block(block_bounds:AABB, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = -1):
 	var p000:Vector3 = block_bounds.position
 	var p111:Vector3 = block_bounds.end
 	var p001:Vector3 = Vector3(p000.x, p000.y, p111.z)
@@ -166,15 +166,6 @@ func init_block(block_bounds:AABB, xform:Transform3D = Transform3D.IDENTITY, uv_
 	var p100:Vector3 = Vector3(p111.x, p000.y, p000.z)
 	var p101:Vector3 = Vector3(p111.x, p000.y, p111.z)
 	var p110:Vector3 = Vector3(p111.x, p111.y, p000.z)
-	
-	p000 = xform * p000
-	p001 = xform * p001
-	p010 = xform * p010
-	p011 = xform * p011
-	p100 = xform * p100
-	p101 = xform * p101
-	p110 = xform * p110
-	p111 = xform * p111
 	
 	init_prism([p000, p001, p011, p010], p100 - p000, uv_transform, material_id)
 	
