@@ -46,11 +46,12 @@ var block_paths:Array[NodePath]
 func _init():
 	command_name = "Add cylinder"
 
-func create_block(blocks_root:Node, mat:Material)->CyclopsBlock:
+func create_block(blocks_root:Node, set_pivot_xform:Transform3D, mat:Material)->CyclopsBlock:
 	var block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
 	blocks_root.add_child(block)
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
 	block.name = GeneralUtil.find_unique_name(blocks_root, block_name_prefix)
+	block.global_transform = set_pivot_xform.affine_inverse()
 
 	if mat:
 		block.materials.append(mat)
@@ -70,6 +71,8 @@ func do_it():
 			material_id = 0
 			material = mat
 	
+	var set_pivot_xform:Transform3D = Transform3D(Basis.IDENTITY, -origin)
+	
 	if tube:
 		var bounding_points_inner:PackedVector3Array = MathUtil.create_circle_points(origin, axis_normal, radius_inner, segments)
 		var bounding_points_outer:PackedVector3Array = MathUtil.create_circle_points(origin, axis_normal, radius_outer, segments)
@@ -77,22 +80,24 @@ func do_it():
 		for p_idx0 in bounding_points_inner.size():
 			var p_idx1:int = wrap(p_idx0 + 1, 0, bounding_points_inner.size())
 			
-			var block:CyclopsBlock = create_block(blocks_root, material)
+			var block:CyclopsBlock = create_block(blocks_root, set_pivot_xform, material)
 			
 			var mesh:ConvexVolume = ConvexVolume.new()
 			var base_points:PackedVector3Array = [bounding_points_inner[p_idx0], bounding_points_inner[p_idx1], bounding_points_outer[p_idx1], bounding_points_outer[p_idx0]]
 			
 			mesh.init_prism(base_points, axis_normal * height, uv_transform, material_id)
+			mesh.transform(set_pivot_xform)
 
 			block.block_data = mesh.to_convex_block_data()
 			block_paths.append(block.get_path())
 		
 	else:
-		var block:CyclopsBlock = create_block(blocks_root, material)
+		var block:CyclopsBlock = create_block(blocks_root, set_pivot_xform, material)
 		
 		var bounding_points:PackedVector3Array = MathUtil.create_circle_points(origin, axis_normal, radius_outer, segments)
 		var mesh:ConvexVolume = ConvexVolume.new()
 		mesh.init_prism(bounding_points, axis_normal * height, uv_transform, material_id)
+		mesh.transform(set_pivot_xform)
 
 		block.block_data = mesh.to_convex_block_data()
 		block_paths.append(block.get_path())

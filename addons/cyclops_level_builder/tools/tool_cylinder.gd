@@ -117,9 +117,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 					if result:
 						#print("init base point block")
-						floor_normal = result.normal
+#						floor_normal = result.normal
+						floor_normal = result.get_world_normal()
 
-						var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
+#						var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
+						var p:Vector3 = MathUtil.snap_to_grid(result.get_world_position(), grid_step_size)
 						base_center = p
 
 						return true
@@ -130,7 +132,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 						var start_pos:Vector3 = origin + builder.block_create_distance * dir
 						
-						var p:Vector3 = to_local(start_pos, blocks_root.global_transform.inverse(), grid_step_size)
+						#var p:Vector3 = to_local(start_pos, blocks_root.global_transform.inverse(), grid_step_size)
+						var p:Vector3 = MathUtil.snap_to_grid(start_pos, grid_step_size)
 						base_center = p
 						
 						return true	
@@ -151,7 +154,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					var cmd:CommandAddCylinder = CommandAddCylinder.new()
 					cmd.builder = builder
-					#cmd.block_name = GeneralUtil.find_unique_name(builder.active_node, "Block_")
 					cmd.block_name_prefix = "Block_"
 					cmd.blocks_root_path = blocks_root.get_path()
 					cmd.tube = settings.tube
@@ -203,28 +205,31 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 
 		var start_pos:Vector3 = origin + builder.block_create_distance * dir
-		var w2l = blocks_root.global_transform.inverse()
-		var origin_local:Vector3 = w2l * origin
-		var dir_local:Vector3 = w2l.basis * dir
+#		var w2l = blocks_root.global_transform.inverse()
+#		var origin_local:Vector3 = w2l * origin
+#		var dir_local:Vector3 = w2l.basis * dir
 
 		if tool_state == ToolState.FIRST_RING:
 			var p_isect:Vector3 = MathUtil.intersect_plane(origin, dir, base_center, floor_normal)
-			var p_snapped = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
+			#var p_snapped = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
+			var p_snapped = MathUtil.snap_to_grid(p_isect, grid_step_size)
 			first_ring_radius = (p_snapped - base_center).length()
 
 			return true
 			
 		elif tool_state == ToolState.SECOND_RING:
 			var p_isect:Vector3 = MathUtil.intersect_plane(origin, dir, base_center, floor_normal)
-			var p_snapped = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
+			#var p_snapped = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
+			var p_snapped = MathUtil.snap_to_grid(p_isect, grid_step_size)
 			second_ring_radius = (p_snapped - base_center).length()
 
 			return true
 			
 		elif tool_state == ToolState.DRAG_HEIGHT:
-			block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, base_center, floor_normal)
+			block_drag_cur = MathUtil.closest_point_on_line(origin, dir, base_center, floor_normal)
 			
-			block_drag_cur = to_local(block_drag_cur, blocks_root.global_transform.inverse(), grid_step_size)
+			#block_drag_cur = to_local(block_drag_cur, blocks_root.global_transform.inverse(), grid_step_size)
+			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
 			
 			drag_offset = block_drag_cur - base_center
 #			var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
