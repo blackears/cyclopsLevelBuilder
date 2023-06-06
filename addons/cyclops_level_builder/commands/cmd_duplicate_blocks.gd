@@ -35,11 +35,13 @@ var lock_uvs:bool
 class BlockInfo extends RefCounted:
 	var new_block:CyclopsBlock
 	var source_data:ConvexBlockData
+	var source_global_transform:Transform3D
 	#var materials:Array[Material]
 	
-	func _init(new_block:CyclopsBlock, source_data:ConvexBlockData):
+	func _init(new_block:CyclopsBlock, source_data:ConvexBlockData, source_global_transform:Transform3D):
 		self.new_block = new_block
 		self.source_data = source_data
+		self.source_global_transform = source_global_transform
 
 var added_blocks:Array[BlockInfo]
 
@@ -58,8 +60,10 @@ func do_it():
 			new_block.name = GeneralUtil.find_unique_name(blocks_root, source_block.name)
 			blocks_root.add_child(new_block)
 			new_block.owner = builder.get_editor_interface().get_edited_scene_root()
+			new_block.global_transform = source_block.global_transform
+			new_block.block_data = source_block.block_data.duplicate()
 			
-			var info:BlockInfo = BlockInfo.new(new_block, source_block.block_data)
+			var info:BlockInfo = BlockInfo.new(new_block, source_block.block_data, source_block.global_transform)
 			new_block.materials = source_block.materials
 			new_block.selected = true
 			
@@ -70,10 +74,13 @@ func do_it():
 		block.selected = false
 
 	for info in added_blocks:
-		var vol:ConvexVolume = ConvexVolume.new()
-		vol.init_from_convex_block_data(info.source_data)
-		vol.translate(move_offset, lock_uvs)
-		info.new_block.block_data = vol.to_convex_block_data()
+#		var vol:ConvexVolume = ConvexVolume.new()
+#		vol.init_from_convex_block_data(info.source_data)
+#		vol.translate(move_offset, lock_uvs)
+#		info.new_block.block_data = vol.to_convex_block_data()
+		
+		var new_xform:Transform3D = info.source_global_transform.translated_local(move_offset)
+		info.new_block.global_transform = new_xform
 
 
 func undo_it():

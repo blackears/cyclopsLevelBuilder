@@ -42,15 +42,7 @@ func _draw_tool(viewport_camera:Camera3D):
 	global_scene.draw_selected_blocks(viewport_camera)
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
-#	if !builder.active_node is CyclopsBlocks:
-#		return false
-		
-#	var blocks_root:CyclopsBlocks = self.builder.active_node
-#	var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
-	#var block_root = sel_blocks[0].get_parent()
 	var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
-#	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
-	#_draw_tool(viewport_camera)
 	
 	if event is InputEventMouseButton:
 		
@@ -79,11 +71,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 		var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 		
-#		var start_pos:Vector3 = origin + builder.block_create_distance * dir
-#		var w2l = blocks_root.global_transform.inverse()
-#		var origin_local:Vector3 = w2l * origin
-#		var dir_local:Vector3 = w2l.basis * dir
-	
 		if tool_state == ToolState.DRAGGING:
 			var drag_to:Vector3
 			if e.alt_pressed:
@@ -93,6 +80,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			var offset:Vector3 = drag_to - drag_start_point
 			offset = MathUtil.snap_to_grid(offset, grid_step_size)
+			#print("drag offseat %s" % offset)
 
 			#print("duplicate drag by %s" % offset)
 			
@@ -124,16 +112,9 @@ func _activate(builder:CyclopsLevelBuilder):
 	for block in sel_blocks:
 		if block.selected:
 			cmd_duplicate.blocks_to_duplicate.append(block.get_path())
-			centroid += block.control_mesh.bounds.get_center()
+			centroid += block.global_transform * block.control_mesh.bounds.get_center()
 			count += 1
 	
-#	for child in blocks_root.get_children():
-#		if child is CyclopsBlock:
-#			var block:CyclopsBlock = child
-#			if block.selected:
-#				cmd_duplicate.blocks_to_duplicate.append(block.get_path())
-#				centroid += block.control_mesh.bounds.get_center()
-#				count += 1
 	cmd_duplicate.lock_uvs = builder.lock_uvs
 	
 	centroid /= count

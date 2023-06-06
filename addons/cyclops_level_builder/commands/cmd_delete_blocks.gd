@@ -25,21 +25,21 @@
 class_name CommandDeleteBlocks
 extends CyclopsCommand
 
-class TrackedBlock extends RefCounted:
-	var path:NodePath
-	var path_parent:NodePath
-	var data:ConvexBlockData
-	var materials:Array[Material]
-	var selected:bool
-	var name:String
-
-	func _init(block:CyclopsBlock):
-		path = block.get_path()
-		path_parent = block.get_parent().get_path()
-		name = block.name
-		data = block.block_data.duplicate()
-		selected = block.selected
-		materials = block.materials
+#class TrackedBlock extends RefCounted:
+#	var path:NodePath
+#	var path_parent:NodePath
+#	var data:ConvexBlockData
+#	var materials:Array[Material]
+#	var selected:bool
+#	var name:String
+#
+#	func _init(block:CyclopsBlock):
+#		path = block.get_path()
+#		path_parent = block.get_parent().get_path()
+#		name = block.name
+#		data = block.block_data.duplicate()
+#		selected = block.selected
+#		materials = block.materials
 
 #Public 
 var block_paths:Array[NodePath]
@@ -87,6 +87,7 @@ func undo_it():
 		
 		parent.add_child(block)
 		block.owner = builder.get_editor_interface().get_edited_scene_root()
+		block.global_transform = tracked.world_xform
 		
 
 		
