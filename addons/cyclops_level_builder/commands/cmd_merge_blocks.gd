@@ -34,6 +34,7 @@ var tracked_blocks:Array[TrackedBlock]
 var merged_block_data:ConvexBlockData
 var merged_mat_list:Array[Material]
 var merged_block_path:NodePath
+var world_pivot:Vector3
 			
 func _init():
 	command_name = "Merge blocks"
@@ -81,20 +82,29 @@ func copy_face_attributes(target:ConvexVolume, ref_list:Array[NodePath])->Array[
 	return mat_list
 
 func do_it():
+	
 	if tracked_blocks.is_empty():
 		var points:PackedVector3Array
+		
+		var first_block:CyclopsBlock = builder.get_node(block_paths[0])
+		world_pivot = first_block.global_transform.origin
 		
 		for path in block_paths:
 			var block:CyclopsBlock = builder.get_node(path)
 			var tracker:TrackedBlock = TrackedBlock.new(block)
 			tracked_blocks.append(tracker)
 			
-			points.append_array(block.control_mesh.get_points())
+			var world_block:ConvexVolume = ConvexVolume.new()
+			world_block.init_from_convex_block_data(block.control_mesh.to_convex_block_data())
+			world_block.transform(block.global_transform)
+			points.append_array(world_block.get_points())
 			
 		var merged_vol:ConvexVolume = ConvexVolume.new()
 		merged_vol.init_from_points(points)
 		merged_mat_list = copy_face_attributes(merged_vol, block_paths)
+		merged_vol.translate(-world_pivot)
 		merged_block_data = merged_vol.to_convex_block_data()
+		
 
 
 	#Delete source blocks
@@ -110,6 +120,7 @@ func do_it():
 	block.name = GeneralUtil.find_unique_name(parent, block_name_prefix)
 	block.block_data = merged_block_data
 	block.materials = merged_mat_list
+	block.global_transform = Transform3D.IDENTITY.translated(world_pivot)
 	#block.materials
 	
 	merged_block_path = block.get_path()
@@ -128,6 +139,7 @@ func undo_it():
 		block.materials = tracked.materials
 		block.name = tracked.name
 		block.selected = tracked.selected
+		block.global_transform = tracked.world_xform
 		
 		parent.add_child(block)
 		block.owner = builder.get_editor_interface().get_edited_scene_root()
