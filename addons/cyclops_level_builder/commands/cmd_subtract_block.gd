@@ -29,6 +29,7 @@ class NewBlockInfo extends RefCounted:
 	var data:ConvexBlockData
 	var materials:Array[Material]
 	var path:NodePath
+	var centroid:Vector3
 
 #Public 
 var block_paths:Array[NodePath]
@@ -46,7 +47,7 @@ var added_blocks:Array[NewBlockInfo]
 #var merged_block_path:NodePath
 
 func _init():
-	command_name = "Subtract block"
+	command_name = "Subtract blocks"
 
 func restore_tracked_block(tracked:TrackedBlock)->CyclopsBlock:
 	var parent = builder.get_node(tracked.path_parent)
@@ -56,6 +57,7 @@ func restore_tracked_block(tracked:TrackedBlock)->CyclopsBlock:
 	block.materials = tracked.materials
 	block.name = tracked.name
 	block.selected = tracked.selected
+	block.global_transform = tracked.world_xform
 	
 	parent.add_child(block)
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
@@ -65,6 +67,7 @@ func restore_tracked_block(tracked:TrackedBlock)->CyclopsBlock:
 func will_change_anything()->bool:
 	var subtrahend_block:CyclopsBlock = builder.get_node(block_to_subtract_path)
 	var subtrahend_vol:ConvexVolume = subtrahend_block.control_mesh
+	subtrahend_vol = subtrahend_vol.transformed(subtrahend_block.global_transform)
 	
 	if block_paths.is_empty():
 		return false
@@ -72,6 +75,7 @@ func will_change_anything()->bool:
 	for minuend_path in block_paths:
 		var minuend_block:CyclopsBlock = builder.get_node(minuend_path)
 		var minuend_vol:ConvexVolume = minuend_block.control_mesh
+		minuend_vol = minuend_vol.transformed(minuend_block.global_transform)
 		
 		if minuend_vol.intersects_convex_volume(subtrahend_vol):
 			return true
@@ -80,15 +84,18 @@ func will_change_anything()->bool:
 
 func do_it():
 	var subtrahend_block:CyclopsBlock = builder.get_node(block_to_subtract_path)
+	var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 	
 	if start_blocks.is_empty():
 		var subtrahend_vol:ConvexVolume = subtrahend_block.control_mesh
 		subtracted_block_cache = TrackedBlock.new(subtrahend_block)
+		subtrahend_vol = subtrahend_vol.transformed(subtrahend_block.global_transform)
 		
 		for path in block_paths:
 			var block:CyclopsBlock = builder.get_node(path)
 			
 			var minuend_vol:ConvexVolume = block.control_mesh
+			minuend_vol = minuend_vol.transformed(block.global_transform)
 			if !minuend_vol.intersects_convex_volume(subtrahend_vol):
 				continue
 			
@@ -99,10 +106,14 @@ func do_it():
 			
 			for f in fragments:
 				f.copy_face_attributes(minuend_vol)
+				var centroid:Vector3 = f.get_centroid()
+				centroid = MathUtil.snap_to_grid(centroid, grid_step_size)
+				f.translate(-centroid)
 				
 				var block_info:NewBlockInfo = NewBlockInfo.new()
 				block_info.data = f.to_convex_block_data()
 				block_info.materials = block.materials
+				block_info.centroid = centroid
 				added_blocks.append(block_info)
 
 	#Delete source blocks
@@ -121,6 +132,7 @@ func do_it():
 		block.name = GeneralUtil.find_unique_name(parent, block_name_prefix)
 		block.block_data = info.data
 		block.materials = info.materials
+		block.global_transform = Transform3D.IDENTITY.translated(info.centroid)
 		
 		info.path = block.get_path()
 

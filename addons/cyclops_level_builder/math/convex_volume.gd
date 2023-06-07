@@ -436,6 +436,13 @@ func get_face(face_id:int)->FaceInfo:
 			return face
 	return null
 
+func get_centroid()->Vector3:
+	var points:PackedVector3Array = get_points()
+	var sum:Vector3
+	for p in points:
+		sum += p
+	return sum / points.size()
+
 # Creates a new volume that is equal to the portion of this volume on the top 
 # side of the passed plane.  Does not modify the geometry of this volume.
 func cut_with_plane(plane:Plane, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0)->ConvexVolume:
@@ -498,9 +505,17 @@ func translate_face_plane(face_id:int, offset:Vector3, lock_uvs:bool = false)->C
 	
 	return new_vol
 
+func translated(offset:Vector3, lock_uvs:bool = false)->ConvexVolume:
+	return transformed(Transform3D(Basis.IDENTITY, offset), lock_uvs)
+
 func translate(offset:Vector3, lock_uvs:bool = false):
 	transform(Transform3D(Basis.IDENTITY, offset), lock_uvs)
 	
+func transformed(xform:Transform3D, lock_uvs:bool = false)->ConvexVolume:
+	var new_vol:ConvexVolume = ConvexVolume.new()
+	new_vol.init_from_convex_block_data(to_convex_block_data())
+	new_vol.transform(xform)
+	return new_vol
 
 func transform(xform:Transform3D, lock_uvs:bool = false):
 	for v in vertices:
