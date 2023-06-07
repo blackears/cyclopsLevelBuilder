@@ -133,57 +133,34 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 	return result
 
 func active_node_changed():
-#	if tracked_blocks_root != null:
-#		tracked_blocks_root.blocks_changed.disconnect(active_node_updated)
-#		tracked_blocks_root = null
 		
 	setup_tool()
-#	draw_tool()
-	
-#	tracked_blocks_root = builder.active_node
-#	if tracked_blocks_root:
-#		tracked_blocks_root.blocks_changed.connect(active_node_updated)
 		
 
 func active_node_updated():
 	setup_tool()
-#	draw_tool()
 
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
 	
 	builder.mode = CyclopsLevelBuilder.Mode.EDIT
 	builder.edit_mode = CyclopsLevelBuilder.EditMode.EDGE
-#	builder.active_node_changed.connect(active_node_changed)
-	
-#	tracked_blocks_root = builder.active_node
-#	if tracked_blocks_root:
-#		tracked_blocks_root.blocks_changed.connect(active_node_updated)
 	
 	
 	setup_tool()
-#	draw_tool()
 	
 	
 func _deactivate():
 	super._deactivate()
-#	builder.active_node_changed.disconnect(active_node_changed)
-#	if tracked_blocks_root != null:
-#		tracked_blocks_root.blocks_changed.disconnect(active_node_updated)
 
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
-#	if !builder.active_node is CyclopsBlocks:
-#		return false
 		
 	var gui_result = super._gui_input(viewport_camera, event)
 	if gui_result:
 		return true
 	
-#	var blocks_root:CyclopsBlocks = self.builder.active_node
 	var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
-	#var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
-	#_draw_tool(viewport_camera)
 
 #	if event is InputEventKey:
 #		return true

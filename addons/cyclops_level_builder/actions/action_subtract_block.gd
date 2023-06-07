@@ -32,13 +32,19 @@ func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_
 func _execute():
 	var blocks:Array[CyclopsBlock] = plugin.get_selected_blocks()
 	if blocks.size() < 2:
+		plugin.log("Not enough objects selected")
+		return
+
+	var active:CyclopsBlock = plugin.get_active_block()
+	if !active:
+		plugin.log("No active object selected")
 		return
 		
 	var cmd:CommandSubtractBlock = CommandSubtractBlock.new()
 	cmd.builder = plugin
-	
+
 	for block in blocks:
-		if block.active:
+		if plugin.is_active_block(block):
 			cmd.block_to_subtract_path = block.get_path()
 		else:
 			cmd.block_paths.append(block.get_path())

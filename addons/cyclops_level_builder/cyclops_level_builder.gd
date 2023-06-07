@@ -32,6 +32,8 @@ const AUTOLOAD_NAME = "CyclopsAutoload"
 
 var config:CyclopsConfig = preload("res://addons/cyclops_level_builder/data/configuration.tres")
 
+var logger:Logger = Logger.new()
+
 var material_dock:Control
 var uv_editor_dock:Control
 var tool_properties_dock:ToolPropertiesDock
@@ -68,6 +70,8 @@ enum EditMode { VERTEX, EDGE, FACE }
 var edit_mode:EditMode = EditMode.VERTEX
 
 var display_mode:DisplayMode.Type = DisplayMode.Type.TEXTURED
+
+var cached_viewport_camera:Camera3D
 
 func _get_plugin_name()->String:
 	return "CyclopsLevelBuilder"
@@ -120,6 +124,9 @@ func _enter_tree():
 	
 	switch_to_tool(ToolBlock.new())
 
+func log(message:String, level:Logger.Level = Logger.Level.ERROR):
+	logger.log(message, level)
+
 func get_blocks()->Array[CyclopsBlock]:
 	return get_blocks_recursive(get_editor_interface().get_edited_scene_root())
 
@@ -132,20 +139,40 @@ func get_blocks_recursive(node:Node)->Array[CyclopsBlock]:
 		result.append_array(get_blocks_recursive(child))
 	return result
 
+func is_active_block(block:CyclopsBlock)->bool:
+	var selection:EditorSelection = get_editor_interface().get_selection()
+	var nodes:Array[Node] = selection.get_selected_nodes()
+	
+	return !nodes.is_empty() && nodes.back() == block
+	
 func get_active_block()->CyclopsBlock:
-	var blocks:Array[CyclopsBlock] = get_blocks()
-	for block in blocks:
-		if block.active:
-			return block
+	var selection:EditorSelection = get_editor_interface().get_selection()
+	var nodes:Array[Node] = selection.get_selected_nodes()
+	
+	var back:Node = nodes.back()
+	if back is CyclopsBlock:
+		return back
 	return null
+	
+#	var blocks:Array[CyclopsBlock] = get_blocks()
+#	for block in blocks:
+#		if block.active:
+#			return block
+#	return null
 
+#Blocks listed in order of selection with last block being the most recent (ie, active) one
 func get_selected_blocks()->Array[CyclopsBlock]:
 	var result:Array[CyclopsBlock]
 
-	var blocks:Array[CyclopsBlock] = get_blocks()
-	for block in blocks:
-		if block.selected:
-			result.append(block)
+	var selection:EditorSelection = get_editor_interface().get_selection()
+	for node in selection.get_selected_nodes():
+		if node is CyclopsBlock:
+			result.append(node)
+
+#	var blocks:Array[CyclopsBlock] = get_blocks()
+#	for block in blocks:
+#		if block.selected:
+#			result.append(block)
 	
 	return result
 
@@ -164,6 +191,7 @@ func update_activation():
 	var selection:EditorSelection = editor.get_selection()
 	var nodes:Array[Node] = selection.get_selected_nodes()
 	
+	#Node list ordered in order of selection with most recently sdelected at end
 	var node:Node = null
 	if !nodes.is_empty():
 		node = nodes[0]
@@ -195,6 +223,17 @@ func update_activation():
 
 func on_selection_changed():
 	update_activation()
+	
+#	var editor:EditorInterface = get_editor_interface()
+#	var selection:EditorSelection = editor.get_selection()
+#	var nodes:Array[Node] = selection.get_selected_nodes()
+#
+#	print("on_selection_changed()")
+#	for node in nodes:
+#		print("node %s" % node.name)
+	
+	if cached_viewport_camera:
+		tool._draw_tool(cached_viewport_camera)
 
 func _exit_tree():
 	# Clean-up of the plugin goes here.
@@ -235,6 +274,7 @@ func _forward_3d_draw_over_viewport(viewport_control:Control):
 
 func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent):
 	#print("plugin: " + event.as_text())
+	cached_viewport_camera = viewport_camera
 	
 	if tool:
 		var result:bool = tool._gui_input(viewport_camera, event)

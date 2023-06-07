@@ -149,7 +149,6 @@ func _process(delta):
 func append_mesh_outline(mesh:ImmediateMesh, viewport_camera:Camera3D, local_to_world:Transform3D, mat:Material):
 	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 	
-#	var mat:Material = global_scene.tool_object_active_material if active else global_scene.tool_object_selected_material
 	control_mesh.append_mesh_outline(mesh, viewport_camera, local_to_world, mat)
 
 

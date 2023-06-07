@@ -49,7 +49,6 @@ func _get_tool_id()->String:
 	return TOOL_ID
 
 func start_drag(viewport_camera:Camera3D, event:InputEvent):
-#	var blocks_root:CyclopsBlocks = self.builder.active_node
 	var blocks_root:Node = builder.get_block_add_parent()
 	var e:InputEventMouseButton = event
 	

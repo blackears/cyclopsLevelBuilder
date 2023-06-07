@@ -28,12 +28,10 @@ class_name ConvexVolume
 
 class VertexInfo extends RefCounted:
 	var mesh:ConvexVolume
-	#var index:int
 	var point:Vector3
 	var normal:Vector3
 	var edge_indices:Array[int] = []
 	var selected:bool
-	#var active:bool
 	
 	func _init(mesh:ConvexVolume, point:Vector3 = Vector3.ZERO):
 		self.mesh = mesh
@@ -53,7 +51,6 @@ class EdgeInfo extends RefCounted:
 	var end_index:int
 	var face_indices:Array[int] = []
 	var selected:bool
-	#var active:bool
 	
 	func _init(mesh:ConvexVolume, start:int = 0, end:int = 0):
 		self.mesh = mesh
@@ -75,7 +72,6 @@ class FaceInfo extends RefCounted:
 	var material_id:int
 	var uv_transform:Transform2D
 	var selected:bool
-	#var active:bool
 	var vertex_indices:Array[int]
 	var triangulation_indices:Array[int]
 	var lightmap_uvs:PackedVector2Array
@@ -229,7 +225,6 @@ func init_from_convex_block_data(data:ConvexBlockData):
 		var v:VertexInfo = VertexInfo.new(self, data.vertex_points[i])
 		vertices.append(v)
 		v.selected = data.vertex_selected[i]
-		#v.active = data.vertex_active[i]
 
 	var num_edges:int = data.edge_vertex_indices.size() / 2
 	for i in num_edges:

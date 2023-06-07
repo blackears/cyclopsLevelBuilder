@@ -51,7 +51,6 @@ func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
 	
-	#var blocks_root:CyclopsBlocks = builder.active_node
 	for h in handles:
 		var block:CyclopsBlock = builder.get_node(h.block_path)
 		var v:ConvexVolume.VertexInfo = block.control_mesh.vertices[h.vertex_index]

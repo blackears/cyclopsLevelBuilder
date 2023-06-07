@@ -74,17 +74,17 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		if e.button_index == MOUSE_BUTTON_MIDDLE:
 			if e.alt_pressed:
 				if e.is_pressed():
-					if builder.active_node:
+					if builder.get_active_block():
 
 						var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 						var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 						
-						var start_pos:Vector3 = origin + builder.block_create_distance * dir
-						var w2l = builder.active_node.global_transform.inverse()
-						var origin_local:Vector3 = w2l * origin
-						var dir_local:Vector3 = w2l.basis * dir
+#						var start_pos:Vector3 = origin + builder.block_create_distance * dir
+#						var w2l = builder.active_node.global_transform.inverse()
+#						var origin_local:Vector3 = w2l * origin
+#						var dir_local:Vector3 = w2l.basis * dir
 						
-						var result:IntersectResults = builder.active_node.intersect_ray_closest(origin_local, dir_local)
+						var result:IntersectResults = builder.active_node.intersect_ray_closest(origin, dir)
 						if result:
 							var ed_iface:EditorInterface = builder.get_editor_interface()
 							var base_control:Control = ed_iface.get_base_control()
