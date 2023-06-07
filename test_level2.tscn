@@ -5126,7 +5126,7 @@ face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
 active_face = -1
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_6yivi"]
+[sub_resource type="Resource" id="Resource_1emxb"]
 script = ExtResource("4_q38fu")
 selected = false
 active = false
@@ -5150,7 +5150,7 @@ face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
 active_face = -1
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_kjc8n"]
+[sub_resource type="Resource" id="Resource_og6v7"]
 script = ExtResource("4_q38fu")
 selected = false
 active = false
@@ -5174,7 +5174,7 @@ face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
 active_face = -1
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_01wfe"]
+[sub_resource type="Resource" id="Resource_vbydc"]
 script = ExtResource("4_q38fu")
 selected = false
 active = false
@@ -7693,14 +7693,14 @@ script = ExtResource("1_xfayt")
 [node name="Block_2" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 36, 54)
 script = ExtResource("1_xfayt")
-block_data = SubResource("Resource_6yivi")
+block_data = SubResource("Resource_1emxb")
 
 [node name="Block_3" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 27, 57)
 script = ExtResource("1_xfayt")
-block_data = SubResource("Resource_kjc8n")
+block_data = SubResource("Resource_og6v7")
 
 [node name="Block_4" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 38, 49)
 script = ExtResource("1_xfayt")
-block_data = SubResource("Resource_01wfe")
+block_data = SubResource("Resource_vbydc")

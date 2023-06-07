@@ -61,11 +61,12 @@ func do_it():
 		var points_new:PackedVector3Array
 		for v_idx in vol.vertices.size():
 			var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
-			var p_snap:Vector3 = MathUtil.snap_to_grid(v.point, grid_size)
+			var p_snap:Vector3 = MathUtil.snap_to_grid(block.global_transform * v.point, grid_size)
 			points_new.append(p_snap)
 			
 		var new_vol:ConvexVolume = ConvexVolume.new()
 		new_vol.init_from_points(points_new)
+		new_vol.transform(block.global_transform.affine_inverse())
 		
 
 		new_vol.copy_face_attributes(vol)
