@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://ggqxsj8244bb"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/vertex_billboard.gd" id="1_cman8"]
+[ext_resource type="Material" uid="uid://dtsiwplkkascy" path="res://addons/cyclops_level_builder/shaders/vertex_shader.tres" id="2_vhug6"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_5jfb0"]
+
+[node name="vertex_billboard" type="Node3D"]
+script = ExtResource("1_cman8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = ExtResource("2_vhug6")
+mesh = SubResource("QuadMesh_5jfb0")
