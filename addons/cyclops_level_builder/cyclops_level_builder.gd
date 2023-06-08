@@ -139,6 +139,14 @@ func get_blocks_recursive(node:Node)->Array[CyclopsBlock]:
 		result.append_array(get_blocks_recursive(child))
 	return result
 
+func  is_selected(node:Node)->bool:
+	var selection:EditorSelection = get_editor_interface().get_selection()
+	for n in selection.get_selected_nodes():
+		if n == node:
+			return true
+	return false
+	
+
 func is_active_block(block:CyclopsBlock)->bool:
 	var selection:EditorSelection = get_editor_interface().get_selection()
 	var nodes:Array[Node] = selection.get_selected_nodes()

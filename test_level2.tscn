@@ -7691,7 +7691,7 @@ script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_1iq1q")
 
 [node name="Block_4" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 38, 49)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 38, 49)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_ol2g5")
 

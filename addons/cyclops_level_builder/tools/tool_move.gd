@@ -56,31 +56,27 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 	var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 
 	var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
-#					print("result %s" % result)
+#	print("result %s" % result)
 	
 	if result:
 
-		if result.object.selected:
+		var start_pos:Vector3 = result.get_world_position()			
+		var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
-			var start_pos:Vector3 = result.get_world_position()
-#			var w2l = blocks_root.global_transform.inverse()
-#			var start_pos_local:Vector3 = w2l * start_pos
+		block_drag_p0 = MathUtil.snap_to_grid(start_pos, grid_step_size)
 
-			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
-
-			block_drag_p0 = MathUtil.snap_to_grid(start_pos, grid_step_size)
+#		print("res obj %s" % result.object.get_path())
+		if builder.is_selected(result.object):
 			
-			if result.object.selected:
-				tool_state = ToolState.MOVE_BLOCK
-				
-				cmd_move_blocks = CommandMoveBlocks.new()
-				cmd_move_blocks.builder = builder
-				cmd_move_blocks.lock_uvs = builder.lock_uvs
-				for child in builder.get_blocks():
-					if child.selected:
-						cmd_move_blocks.add_block(child.get_path())
-				
-				return
+			tool_state = ToolState.MOVE_BLOCK
+			
+			cmd_move_blocks = CommandMoveBlocks.new()
+			cmd_move_blocks.builder = builder
+			cmd_move_blocks.lock_uvs = builder.lock_uvs
+			for child in builder.get_selected_blocks():
+				cmd_move_blocks.add_block(child.get_path())
+			
+			return
 		
 	tool_state = ToolState.DRAG_SELECTION
 	drag_select_start_pos = e.position
@@ -186,7 +182,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 		var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 		
-		var start_pos:Vector3 = origin + builder.block_create_distance * dir
+#		var start_pos:Vector3 = origin + builder.block_create_distance * dir
 #		var w2l = blocks_root.global_transform.affine_inverse()
 #		var origin_local:Vector3 = w2l * origin
 #		var dir_local:Vector3 = w2l.basis * dir
