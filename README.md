@@ -20,6 +20,8 @@ It is strongly recommended that you make a backup of your project before you upg
 
 You may notice a lot of errors being thrown when you first open your project after upgrading to a newer version of Cyclops.  This is due to a problem with the way the Godot editor keeps track of class names.  If a class is renamed or moved, Godot can become confused and no longer be able to find it which can cause a lot of error messages or even a crash.  Godot also saves this information, so the problem can persist even if you close and reopen Godot.  Fortunately, closing and reopening your project twice can usually cause Godot to rebuild its name cache.  If you notice error messages after changing to a different version of Cyclops, please close and reopen your project in the editor twice to allow Godot to recalculate its name index.
 
+If you're upgrading your project from Cyclops v1.0, v1.0.1 or an earlier development version of v1.0.2, you will need to upgrade your CyclopsBlocks object.  To do this, simply select your CyclopsBlocks object in the Scene outliner and click the Upgrade button that appears in the toolbar.  This will create a new subtree in your scene where the CyclopsConvexBlock objects are replaced with the new CyclopsBlock object.  Your old CyclopsBlocks will still be there, but with its visibility turned off.  You can now delete the CyclopsBlocks object if you no longer require it.
+
 ## Usage
 
 [Documentation for using Cyclops Level Builder is available here.](doc/index.md)
