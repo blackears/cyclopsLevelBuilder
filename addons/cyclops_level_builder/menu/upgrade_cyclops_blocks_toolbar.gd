@@ -60,10 +60,18 @@ func _on_bn_upgrade_pressed():
 	new_root.owner = ed_iface.get_edited_scene_root()
 	
 	root.visible = false
+
+	var grid_step_size:float = pow(2, editor_plugin.get_global_scene().grid_size)
 	
 	for child in root.get_children():
 		if child is CyclopsConvexBlock:
 			var old_block:CyclopsConvexBlock = child
+
+			var vol:ConvexVolume = ConvexVolume.new()
+			vol.init_from_convex_block_data(old_block.block_data)
+			var centroid:Vector3 = vol.get_centroid()
+			centroid = MathUtil.snap_to_grid(centroid, grid_step_size)
+			vol.translate(-centroid)
 
 			var new_block:CyclopsBlock = CyclopsBlock.new()
 			new_root.add_child(new_block)
@@ -71,5 +79,6 @@ func _on_bn_upgrade_pressed():
 
 			new_block.name = old_block.name
 			new_block.materials = old_block.materials
-			new_block.block_data = old_block.block_data
+			new_block.block_data = vol.to_convex_block_data()
+			new_block.global_transform = Transform3D.IDENTITY.translated(centroid)
 	
