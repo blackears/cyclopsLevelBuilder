@@ -4,6 +4,7 @@ This dock will display properties of the currently selected tool.  Not all tools
 
 ![Tool Properties Dock](dock_tool_properties.png)
 
+Note that your side panel might not be large enough to display the tool properties tab, so use the arrows to scroll to the right.
 
 ## Support
 
