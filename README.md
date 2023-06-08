@@ -14,6 +14,12 @@ Cyclops Level Builder works with Godot version 4 and later.  There are no plans 
 
 ![Enable addon](doc/enable_addon.jpg)
 
+## Upgrading
+
+It is strongly recommended that you make a backup of your project before you upgrade or change your version of Cyclops Level Builder.
+
+You may notice a lot of errors being thrown when you first open your project after upgrading to a newer version of Cyclops.  This is due to a problem with the way the Godot editor keeps track of class names.  If a class is renamed or moved, Godot can become confused and no longer be able to find it which can cause a lot of error messages or even a crash.  Godot also saves this information, so the problem can persist even if you close and reopen Godot.  Fortunately, closing and reopening your project twice can usually cause Godot to rebuild its name cache.  If you notice error messages after changing to a different version of Cyclops, please close and reopen your project in the editor twice to allow Godot to recalculate its name index.
+
 ## Usage
 
 [Documentation for using Cyclops Level Builder is available here.](doc/index.md)
