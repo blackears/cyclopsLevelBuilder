@@ -1,4 +1,4 @@
-[gd_scene load_steps=551 format=3 uid="uid://bgsf4v5wtqhqu"]
+[gd_scene load_steps=552 format=3 uid="uid://bgsf4v5wtqhqu"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/nodes/cyclops_block.gd" id="1_xfayt"]
 [ext_resource type="Material" uid="uid://b4173ircb7rqb" path="res://materials/cinder_blocks_mat.tres" id="3_02243"]
@@ -9,11 +9,13 @@
 [ext_resource type="Material" uid="uid://bhy8pl86sah72" path="res://materials/cinder_edge_mat.tres" id="7_b6lpw"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/nodes/cyclops_convex_block_body.gd" id="8_fus6x"]
 [ext_resource type="Material" uid="uid://rdhrhgrb78ls" path="res://addons/cyclops_level_builder/materials/grid.tres" id="9_plirf"]
+[ext_resource type="PackedScene" uid="uid://ggqxsj8244bb" path="res://addons/cyclops_level_builder/controls/vertex_billboard.tscn" id="10_ip7pw"]
 
 [sub_resource type="Environment" id="Environment_d7ubx"]
 ambient_light_color = Color(0.784314, 0.784314, 0.784314, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_i388h"]
+size = Vector3(1, 1, 1.75366)
 
 [sub_resource type="BoxMesh" id="BoxMesh_hni5p"]
 
@@ -7325,6 +7327,7 @@ transform = Transform3D(0.887238, 0.424789, 0.179899, -0.400001, 0.514145, 0.758
 environment = SubResource("Environment_d7ubx")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
+visible = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("BoxShape3D_i388h")
@@ -9900,3 +9903,6 @@ block_data = SubResource("Resource_7c8po")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 32, 54)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_hr4ua")
+
+[node name="vertex_billboard" parent="." instance=ExtResource("10_ip7pw")]
+radius = 6.0

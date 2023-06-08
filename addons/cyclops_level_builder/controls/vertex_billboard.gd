@@ -25,7 +25,21 @@
 extends Node3D
 class_name VertexBillboard
 
-@export var radius:float = 6
+@export var radius:float = 4:
+	get:
+		return radius
+	set(value):
+		radius = value
+		dirty = true
+		
+@export var color:Color = Color.WHITE:
+	get:
+		return color
+	set(value):
+		color = value
+		dirty = true
+
+var dirty:bool = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -34,4 +48,9 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	if dirty:
+		var mat:ShaderMaterial = $MeshInstance3D.get_active_material(0)
+		#print("active mat %s" % mat)
+		mat.set_shader_parameter("radius", radius)
+		mat.set_shader_parameter("emission", color)
+		dirty = false

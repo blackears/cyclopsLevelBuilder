@@ -7,34 +7,17 @@ code = "// NOTE: Shader automatically converted from Godot Engine 4.0.2.stable's
 
 shader_type spatial;
 render_mode blend_mix,depth_draw_never,cull_disabled,diffuse_burley,specular_schlick_ggx,ambient_light_disabled,alpha_to_coverage;
-uniform float radius = 6;
-uniform vec4 albedo : source_color;
-uniform sampler2D texture_albedo : source_color,filter_linear_mipmap,repeat_enable;
-uniform float alpha_scissor_threshold;
-uniform float alpha_antialiasing_edge;
-uniform ivec2 albedo_texture_size;
-uniform float point_size : hint_range(0,128);
-uniform float roughness : hint_range(0,1);
-uniform sampler2D texture_metallic : hint_default_white,filter_linear_mipmap,repeat_enable;
-uniform vec4 metallic_texture_channel;
-uniform sampler2D texture_roughness : hint_roughness_r,filter_linear_mipmap,repeat_enable;
-uniform float specular;
-uniform float metallic;
+uniform float radius = 4;
+
 uniform sampler2D texture_emission : source_color, hint_default_black,filter_linear_mipmap,repeat_enable;
 uniform vec4 emission : source_color;
 uniform float emission_energy;
-uniform vec3 uv1_scale;
-uniform vec3 uv1_offset;
-uniform vec3 uv2_scale;
-uniform vec3 uv2_offset;
 
-//	vec4 vertex_pos_world = MODEL_MATRIX[3];
-//	vec4 cam_origin_world = INV_VIEW_MATRIX[3];
-//	vec4 vertex_center_dir = vertex_pos_world - cam_origin_world;
-//	float scale = length(vertex_center_dir.xyz);
+uniform float alpha_scissor_threshold;
+uniform float alpha_antialiasing_edge;
 
 void vertex() {
-	UV=UV*uv1_scale.xy+uv1_offset.xy;
+	//UV=UV*uv1_scale.xy+uv1_offset.xy;
 	
 	vec4 model_pos_world = MODEL_MATRIX[3];
 	vec4 cam_origin_world = INV_VIEW_MATRIX[3];
@@ -54,47 +37,28 @@ void vertex() {
 
 
 
-
-
-
 void fragment() {
 	vec2 base_uv = UV;
-	vec4 albedo_tex = texture(texture_albedo,base_uv);
-	albedo_tex *= COLOR;
-	ALBEDO = albedo.rgb * albedo_tex.rgb;
-	float metallic_tex = dot(texture(texture_metallic,base_uv),metallic_texture_channel);
-	METALLIC = metallic_tex * metallic;
-	vec4 roughness_texture_channel = vec4(1.0,0.0,0.0,0.0);
-	float roughness_tex = dot(texture(texture_roughness,base_uv),roughness_texture_channel);
-	ROUGHNESS = roughness_tex * roughness;
-	SPECULAR = specular;
-	vec3 emission_tex = texture(texture_emission,base_uv).rgb;
-	EMISSION = (emission.rgb+emission_tex)*emission_energy;
-	ALPHA *= albedo.a * albedo_tex.a;
+	vec4 emission_tex = texture(texture_emission, base_uv);
+	emission_tex *= COLOR * emission;
+	
+	ALBEDO = vec3(0.0, 0.0, 0.0);
+	EMISSION = emission_tex.xyz;
+	
+	ALPHA = emission_tex.a;
 	ALPHA_SCISSOR_THRESHOLD = alpha_scissor_threshold;
 	ALPHA_ANTIALIASING_EDGE = alpha_antialiasing_edge;
-	ALPHA_TEXTURE_COORDINATE = UV * vec2(albedo_texture_size);
+	ALPHA_TEXTURE_COORDINATE = UV;
 }
+
 "
 
 [resource]
 render_priority = 0
 shader = SubResource("Shader_4xxoh")
-shader_parameter/radius = 6.0
-shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/radius = 4.0
+shader_parameter/emission = Color(0.788235, 0, 0, 1)
+shader_parameter/emission_energy = 1.0
 shader_parameter/alpha_scissor_threshold = 0.5
 shader_parameter/alpha_antialiasing_edge = 0.3
-shader_parameter/albedo_texture_size = Vector2i(32, 32)
-shader_parameter/point_size = 1.0
-shader_parameter/roughness = 1.0
-shader_parameter/metallic_texture_channel = Plane(1, 0, 0, 0)
-shader_parameter/specular = 0.5
-shader_parameter/metallic = 0.0
-shader_parameter/emission = Color(1, 0, 0, 1)
-shader_parameter/emission_energy = 1.0
-shader_parameter/uv1_scale = Vector3(1, 1, 1)
-shader_parameter/uv1_offset = Vector3(0, 0, 0)
-shader_parameter/uv2_scale = Vector3(1, 1, 1)
-shader_parameter/uv2_offset = Vector3(0, 0, 0)
-shader_parameter/texture_albedo = ExtResource("1_813y7")
 shader_parameter/texture_emission = ExtResource("1_813y7")
