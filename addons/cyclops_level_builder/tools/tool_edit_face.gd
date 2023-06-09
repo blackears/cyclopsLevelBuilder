@@ -59,7 +59,7 @@ func _draw_tool(viewport_camera:Camera3D):
 		var f:ConvexVolume.FaceInfo = block.control_mesh.faces[h.face_index]
 
 		var active:bool = block.control_mesh.active_face == h.face_index		
-		global_scene.draw_vertex(h.p_center, pick_material(global_scene, f.selected, active))
+		global_scene.draw_vertex(h.p_center, pick_vertex_material(global_scene, f.selected, active))
 		
 		var l2w:Transform3D = block.global_transform
 		#var w2l:Transform3D = block.global_transform.affine_inverse()

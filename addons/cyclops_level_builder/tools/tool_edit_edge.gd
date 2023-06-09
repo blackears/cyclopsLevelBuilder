@@ -60,7 +60,7 @@ func _draw_tool(viewport_camera:Camera3D):
 		var p1:Vector3 = block.global_transform * block.control_mesh.vertices[e.end_index].point
 
 		var active:bool = block.control_mesh.active_edge == h.edge_index		
-		global_scene.draw_vertex((p0 + p1) / 2, pick_material(global_scene, e.selected, active))
+		global_scene.draw_vertex((p0 + p1) / 2, pick_vertex_material(global_scene, e.selected, active))
 		global_scene.draw_line(p0, p1, pick_material(global_scene, e.selected, active))
 	
 func setup_tool():

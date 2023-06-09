@@ -73,6 +73,13 @@ func pick_material(global_scene:CyclopsGlobalScene, selected:bool = false, activ
 	if selected:
 		return global_scene.tool_edit_selected_material
 	return global_scene.tool_edit_unselected_material
+
+func pick_vertex_material(global_scene:CyclopsGlobalScene, selected:bool = false, active = false)->Material:
+	if active:
+		return global_scene.vertex_active_material
+	if selected:
+		return global_scene.vertex_selected_material
+	return global_scene.vertex_unselected_material
 	
 	
 	

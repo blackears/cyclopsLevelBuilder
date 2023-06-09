@@ -1,6 +1,8 @@
-[gd_resource type="Shader" format=3 uid="uid://dewb6ohh2wxv0"]
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://2bf7tgpdqjl6"]
 
-[resource]
+[ext_resource type="Texture2D" uid="uid://dsvcm4kvcqlru" path="res://addons/cyclops_level_builder/art/textures/vertex.png" id="1_hjim8"]
+
+[sub_resource type="Shader" id="Shader_4xxoh"]
 code = "// NOTE: Shader automatically converted from Godot Engine 4.0.2.stable's StandardMaterial3D.
 
 shader_type spatial;
@@ -50,3 +52,13 @@ void fragment() {
 }
 
 "
+
+[resource]
+render_priority = 0
+shader = SubResource("Shader_4xxoh")
+shader_parameter/radius = 2.0
+shader_parameter/emission = Color(0, 0, 0, 1)
+shader_parameter/emission_energy = 1.0
+shader_parameter/alpha_scissor_threshold = 0.5
+shader_parameter/alpha_antialiasing_edge = 0.3
+shader_parameter/texture_emission = ExtResource("1_hjim8")

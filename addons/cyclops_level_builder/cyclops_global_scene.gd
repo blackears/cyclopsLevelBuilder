@@ -35,7 +35,10 @@ class_name CyclopsGlobalScene
 @export var tool_edit_unselected_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_edit_unselected_material.tres")
 @export var tool_object_active_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_object_active_material.tres")
 @export var tool_object_selected_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_object_selected_material.tres")
-#@export var outline_material:Material = preload("res://addons/cyclops_level_builder/materials/block_outline_material.tres")
+@export var vertex_unselected_material:Material = preload("res://addons/cyclops_level_builder/materials/vertex_unselected_material.tres")
+@export var vertex_selected_material:Material = preload("res://addons/cyclops_level_builder/materials/vertex_selected_material.tres")
+@export var vertex_active_material:Material = preload("res://addons/cyclops_level_builder/materials/vertex_active_material.tres")
+@export var vertex_tool_material:Material = preload("res://addons/cyclops_level_builder/materials/vertex_tool_material.tres")
 
 @export var tool_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_material.tres")
 @export var outline_material:Material = preload("res://addons/cyclops_level_builder/materials/outline_material.tres")
@@ -85,10 +88,10 @@ func draw_loop(points:PackedVector3Array, closed:bool = true, mat:Material = nul
 	tool_mesh.surface_end()
 	
 
-func draw_prism(points:PackedVector3Array, extrude:Vector3, mat:Material = null):
+func draw_prism(points:PackedVector3Array, extrude:Vector3, mat:Material = null, vertex_mat = null):
 	for p in points:
-		draw_vertex(p)
-		draw_vertex(p + extrude)
+		draw_vertex(p, vertex_mat)
+		draw_vertex(p + extrude, vertex_mat)
 	
 	#Bottom loop	
 	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, mat)
@@ -130,17 +133,17 @@ func draw_triangles(tri_points:PackedVector3Array, mat:Material = null):
 	
 	tool_mesh.surface_end()
 	
-func draw_rect(start:Vector3, end:Vector3, mat:Material = null):	
+func draw_rect(start:Vector3, end:Vector3, mat:Material = null, vertex_mat:Material = null):	
 	
 	var p0:Vector3 = start
 	var p2:Vector3 = end
 	var p1:Vector3 = Vector3(p0.x, p0.y, p2.z)
 	var p3:Vector3 = Vector3(p2.x, p0.y, p0.z)
 	
-	draw_vertex(p0, mat)
-	draw_vertex(p1, mat)
-	draw_vertex(p2, mat)
-	draw_vertex(p3, mat)
+	draw_vertex(p0, vertex_mat)
+	draw_vertex(p1, vertex_mat)
+	draw_vertex(p2, vertex_mat)
+	draw_vertex(p3, vertex_mat)
 	
 	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, mat)
 
@@ -159,8 +162,13 @@ func clear_tool_mesh():
 	#$ToolInstance3D.mesh = tool_mesh
 	tool_mesh.clear_surfaces()
 	
+	for child in $VertexGroup.get_children():
+		$VertexGroup.remove_child(child)
+		child.queue_free()
+		
+	
 # Draws the bounding box for the points [p0, p1, p2]
-func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3, mat:Material = null):	
+func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3, mat:Material = null, vertex_mat:Material = null):	
 #	print ("draw_cube %s %s %s" % [p0, p1, p2])
 	
 	var bounds:AABB = AABB(p0, Vector3.ZERO)
@@ -176,14 +184,14 @@ func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3, mat:Material = null):
 	var p101:Vector3 = Vector3(p111.x, p000.y, p111.z)
 	var p110:Vector3 = Vector3(p111.x, p111.y, p000.z)
 	
-	draw_vertex(p000, mat)
-	draw_vertex(p001, mat)
-	draw_vertex(p010, mat)
-	draw_vertex(p011, mat)
-	draw_vertex(p100, mat)
-	draw_vertex(p101, mat)
-	draw_vertex(p110, mat)
-	draw_vertex(p111, mat)
+	draw_vertex(p000, vertex_mat)
+	draw_vertex(p001, vertex_mat)
+	draw_vertex(p010, vertex_mat)
+	draw_vertex(p011, vertex_mat)
+	draw_vertex(p100, vertex_mat)
+	draw_vertex(p101, vertex_mat)
+	draw_vertex(p110, vertex_mat)
+	draw_vertex(p111, vertex_mat)
 	
 	
 	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINES, mat)
@@ -219,13 +227,29 @@ func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3, mat:Material = null):
 	
 	#$ToolInstance3D.mesh = mesh
 
-func draw_points(points:PackedVector3Array, mat:Material = null):
+func draw_points(points:PackedVector3Array, vertex_mat:Material = null):
 	for p in points:
-		draw_vertex(p, mat)
+		draw_vertex(p, vertex_mat)
 
 func draw_vertex(position:Vector3, mat:Material = null):
-	var xform:Transform3D = Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * builder.handle_point_radius), position)
-	draw_sphere(xform, mat)
+#	var vert_obj:VertexBillboard = preload("res://addons/cyclops_level_builder/controls/vertex_billboard.tscn").instantiate()
+#	$VertexGroup.add_child(vert_obj)
+
+#	var xform:Transform3D = vert_obj.global_transform
+#	xform.origin = position
+#	vert_obj.global_transform = xform
+	
+	var mesh_inst:MeshInstance3D = MeshInstance3D.new()
+	mesh_inst.mesh = QuadMesh.new()
+	mesh_inst.material_override = mat
+	$VertexGroup.add_child(mesh_inst)
+	
+	var xform:Transform3D = mesh_inst.global_transform
+	xform.origin = position
+	mesh_inst.global_transform = xform
+	
+#	var xform:Transform3D = Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * builder.handle_point_radius), position)
+#	draw_sphere(xform, mat)
 
 func draw_sphere(xform:Transform3D = Transform3D.IDENTITY, material:Material = null, segs_lat:int = 6, segs_long:int = 8):
 	unit_sphere.append_to_immediate_mesh(tool_mesh, material, xform)

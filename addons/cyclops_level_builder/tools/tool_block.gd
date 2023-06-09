@@ -111,10 +111,10 @@ func _draw_tool(viewport_camera:Camera3D):
 
 	if tool_state == ToolState.BLOCK_BASE:
 		global_scene.draw_loop(base_points, true, global_scene.tool_material)
-		global_scene.draw_points(base_points, global_scene.tool_material)
+		global_scene.draw_points(base_points, global_scene.vertex_tool_material)
 		
 	if tool_state == ToolState.BLOCK_HEIGHT:
-		global_scene.draw_cube(block_drag_p0, block_drag_p1, block_drag_cur, global_scene.tool_material)
+		global_scene.draw_cube(block_drag_p0, block_drag_p1, block_drag_cur, global_scene.tool_material, global_scene.vertex_tool_material)
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	#print("tool_block gui_input %s" % event)

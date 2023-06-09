@@ -65,21 +65,21 @@ func _draw_tool(viewport_camera:Camera3D):
 	if tool_state == ToolState.FIRST_RING:
 		var bounding_points:PackedVector3Array = MathUtil.create_circle_points(base_center, floor_normal, first_ring_radius, settings.segments)
 		global_scene.draw_loop(bounding_points, true, global_scene.tool_material)
-		global_scene.draw_points(bounding_points, global_scene.tool_material)
+		global_scene.draw_points(bounding_points, global_scene.vertex_tool_material)
 		
 	elif tool_state == ToolState.SECOND_RING:
 		for radius in [first_ring_radius, second_ring_radius]:
 			var bounding_points:PackedVector3Array = MathUtil.create_circle_points(base_center, floor_normal, radius, settings.segments)
 			global_scene.draw_loop(bounding_points, true, global_scene.tool_material)
-			global_scene.draw_points(bounding_points, global_scene.tool_material)
+			global_scene.draw_points(bounding_points, global_scene.vertex_tool_material)
 
 	elif tool_state == ToolState.DRAG_HEIGHT:	
 		var bounding_points:PackedVector3Array = MathUtil.create_circle_points(base_center, floor_normal, first_ring_radius, settings.segments)
-		global_scene.draw_prism(bounding_points, drag_offset, global_scene.tool_material)
+		global_scene.draw_prism(bounding_points, drag_offset, global_scene.tool_material, global_scene.vertex_tool_material)
 		
 		if settings.tube:
 			bounding_points = MathUtil.create_circle_points(base_center, floor_normal, second_ring_radius, settings.segments)
-			global_scene.draw_prism(bounding_points, drag_offset, global_scene.tool_material)
+			global_scene.draw_prism(bounding_points, drag_offset, global_scene.tool_material, global_scene.vertex_tool_material)
 		
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
