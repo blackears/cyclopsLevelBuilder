@@ -1,61 +1,11 @@
 [gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://dtsiwplkkascy"]
 
+[ext_resource type="Shader" uid="uid://dewb6ohh2wxv0" path="res://addons/cyclops_level_builder/shaders/vertex_shader.tres" id="1_74x5v"]
 [ext_resource type="Texture2D" uid="uid://dsvcm4kvcqlru" path="res://addons/cyclops_level_builder/art/textures/vertex.png" id="1_y1rug"]
-
-[sub_resource type="Shader" id="Shader_4xxoh"]
-code = "// NOTE: Shader automatically converted from Godot Engine 4.0.2.stable's StandardMaterial3D.
-
-shader_type spatial;
-render_mode blend_mix,depth_draw_never,cull_disabled,diffuse_burley,specular_schlick_ggx,ambient_light_disabled,alpha_to_coverage;
-uniform float radius = 4;
-
-uniform sampler2D texture_emission : source_color, hint_default_black,filter_linear_mipmap,repeat_enable;
-uniform vec4 emission : source_color;
-uniform float emission_energy;
-
-uniform float alpha_scissor_threshold;
-uniform float alpha_antialiasing_edge;
-
-void vertex() {
-	//UV=UV*uv1_scale.xy+uv1_offset.xy;
-	
-	vec4 model_pos_world = MODEL_MATRIX[3];
-	vec4 cam_origin_world = INV_VIEW_MATRIX[3];
-	
-	vec4 model_center_dir = model_pos_world - cam_origin_world;
-	float scale = length(model_center_dir.xyz) * radius * 5.0 / VIEWPORT_SIZE.y;
-	
-	mat4 SCALE = mat4(vec4(scale, 0.0, 0.0, 0.0), 
-		vec4(0.0, scale, 0.0, 0.0), 
-		vec4(0.0, 0.0, scale, 0.0), 
-		vec4(0.0, 0.0, 0.0, 1.0));
-	
-	MODELVIEW_MATRIX = VIEW_MATRIX * mat4(INV_VIEW_MATRIX[0], INV_VIEW_MATRIX[1], INV_VIEW_MATRIX[2], MODEL_MATRIX[3]) * SCALE;
-	
-	MODELVIEW_NORMAL_MATRIX = mat3(MODELVIEW_MATRIX);
-}
-
-
-
-void fragment() {
-	vec2 base_uv = UV;
-	vec4 emission_tex = texture(texture_emission, base_uv);
-	emission_tex *= COLOR * emission;
-	
-	ALBEDO = vec3(0.0, 0.0, 0.0);
-	EMISSION = emission_tex.xyz;
-	
-	ALPHA = emission_tex.a;
-	ALPHA_SCISSOR_THRESHOLD = alpha_scissor_threshold;
-	ALPHA_ANTIALIASING_EDGE = alpha_antialiasing_edge;
-	ALPHA_TEXTURE_COORDINATE = UV;
-}
-
-"
 
 [resource]
 render_priority = 0
-shader = SubResource("Shader_4xxoh")
+shader = ExtResource("1_74x5v")
 shader_parameter/radius = 2.0
 shader_parameter/emission = Color(1, 1, 1, 1)
 shader_parameter/emission_energy = 1.0

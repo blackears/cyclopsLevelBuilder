@@ -18,10 +18,18 @@ void vertex() {
 	//UV=UV*uv1_scale.xy+uv1_offset.xy;
 	
 	vec4 model_pos_world = MODEL_MATRIX[3];
-	vec4 cam_origin_world = INV_VIEW_MATRIX[3];
-	
-	vec4 model_center_dir = model_pos_world - cam_origin_world;
-	float scale = length(model_center_dir.xyz) * radius * 5.0 / VIEWPORT_SIZE.y;
+//	vec4 cam_origin_world = INV_VIEW_MATRIX[3];
+	vec4 model_origin_cam_space = VIEW_MATRIX * model_pos_world;
+	vec4 model_origin_proj_space = PROJECTION_MATRIX * VIEW_MATRIX * model_pos_world;
+	model_origin_proj_space /= model_origin_proj_space.w;
+	vec4 offset_proj_space = model_origin_proj_space + vec4(0.0, radius / VIEWPORT_SIZE.y, 0.0, 0.0);
+	vec4 offset_cam_space = INV_PROJECTION_MATRIX * offset_proj_space;
+	offset_cam_space /= offset_cam_space.w;
+
+	vec4 radius_offset_cam_space = offset_cam_space - model_origin_cam_space;
+
+//	float scale = length(model_origin_cam_space.xyz) * radius * 5.0 / VIEWPORT_SIZE.y;
+	float scale = length(radius_offset_cam_space.xy) * 10.0;
 	
 	mat4 SCALE = mat4(vec4(scale, 0.0, 0.0, 0.0), 
 		vec4(0.0, scale, 0.0, 0.0), 
