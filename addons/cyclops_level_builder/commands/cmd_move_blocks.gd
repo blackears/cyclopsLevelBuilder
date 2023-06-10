@@ -59,6 +59,16 @@ func do_it():
 		
 		var new_w_xform:Transform3D = w_init_xform.translated_local(move_offset)
 		block.global_transform = new_w_xform
+		
+		if !lock_uvs:
+			var vol:ConvexVolume = ConvexVolume.new()
+			vol.init_from_convex_block_data(tracked.data)
+			
+			var uv_xform:Transform3D = Transform3D.IDENTITY.translated(move_offset)
+			uv_xform = uv_xform.affine_inverse()
+			vol.transform_uvs(uv_xform)
+			
+			block.block_data = vol.to_convex_block_data()
 
 func undo_it():
 	for tracked in tracked_blocks:

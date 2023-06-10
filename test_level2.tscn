@@ -7288,7 +7288,7 @@ face_selected = PackedByteArray(0, 0, 0, 0, 1, 0)
 active_face = 4
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_0qhfn"]
+[sub_resource type="Resource" id="Resource_pkd5u"]
 script = ExtResource("4_q38fu")
 selected = false
 active = false
@@ -7304,8 +7304,8 @@ active_edge = -1
 edge_face_indices = PackedInt32Array(0, 6, 0, 2, 0, 1, 0, 7, 1, 3, 1, 2, 1, 4, 2, 4, 2, 6, 3, 5, 3, 7, 4, 5, 5, 6, 6, 7)
 face_vertex_count = PackedInt32Array(4, 4, 4, 3, 3, 3, 4, 3)
 face_vertex_indices = PackedInt32Array(0, 1, 2, 3, 4, 3, 2, 5, 6, 5, 2, 1, 4, 7, 3, 6, 4, 5, 6, 7, 4, 0, 7, 6, 1, 0, 3, 7)
-face_material_indices = PackedInt32Array(-1, -1, -1, -1, -1, -1, -1, -1)
-face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
+face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0)
+face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0.5, 0), Transform2D(1, 0, 0, 1, 0.5, 1.75), Transform2D(1, 0, 0, 1, 1.75, 0), Transform2D(1, 0, 0, 1, 1.75, 0), Transform2D(1, 0, 0, 1, 0.5, 0), Transform2D(1, 0, 0, 1, 0.5, 0), Transform2D(1, 0, 0, 1, 0.5, 1.75), Transform2D(1, 0, 0, 1, 1.75, 0)])
 face_color = PackedColorArray()
 face_hidden = PackedByteArray()
 face_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0)
@@ -9924,9 +9924,10 @@ script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_utkbn")
 
 [node name="Block_0" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 32, 54)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 32, 52)
 script = ExtResource("1_xfayt")
-block_data = SubResource("Resource_0qhfn")
+block_data = SubResource("Resource_pkd5u")
+materials = Array[Material]([ExtResource("3_02243")])
 
 [node name="vertex_billboard" parent="." instance=ExtResource("10_ip7pw")]
 radius = 6.0

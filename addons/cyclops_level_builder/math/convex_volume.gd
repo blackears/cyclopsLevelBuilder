@@ -512,6 +512,46 @@ func transformed(xform:Transform3D, lock_uvs:bool = false)->ConvexVolume:
 	new_vol.transform(xform)
 	return new_vol
 
+
+func transform_uvs(xform:Transform3D):
+#	var xform:Transform3D = obj_xform.affine_inverse()
+	
+	for f in faces:
+		var axis:MathUtil.Axis = MathUtil.get_longest_axis(f.normal)
+		
+		match axis:
+			MathUtil.Axis.X:
+				var orig_p:Vector3 = xform.origin
+				var u_p:Vector3 = xform * Vector3(0, 0, 1) - orig_p
+				var v_p:Vector3 = xform * Vector3(0, 1, 0) - orig_p
+				var move_xform:Transform2D = Transform2D(Vector2(u_p.z, u_p.y), \
+					Vector2(v_p.z, v_p.y), \
+					Vector2(orig_p.z, orig_p.y))
+				
+				f.uv_transform = f.uv_transform * move_xform
+				
+			MathUtil.Axis.Y:
+				var orig_p:Vector3 = xform.origin
+				var u_p:Vector3 = xform * Vector3(1, 0, 0) - orig_p
+				var v_p:Vector3 = xform * Vector3(0, 0, 1) - orig_p
+				var move_xform:Transform2D = Transform2D(Vector2(u_p.x, u_p.z), \
+					Vector2(v_p.x, v_p.z), \
+					Vector2(orig_p.x, orig_p.z))
+				
+				f.uv_transform = f.uv_transform * move_xform
+				
+			MathUtil.Axis.Z:
+				#var xform_inv = xform.affine_inverse()
+				var orig_p:Vector3 = xform.origin
+				var u_p:Vector3 = xform * Vector3(1, 0, 0) - orig_p
+				var v_p:Vector3 = xform * Vector3(0, 1, 0) - orig_p
+				var move_xform:Transform2D = Transform2D(Vector2(u_p.x, u_p.y), \
+					Vector2(v_p.x, v_p.y), \
+					Vector2(orig_p.x, orig_p.y))
+				
+				f.uv_transform = f.uv_transform * move_xform
+	pass
+
 func transform(xform:Transform3D, lock_uvs:bool = false):
 	for v in vertices:
 		v.point = xform * v.point

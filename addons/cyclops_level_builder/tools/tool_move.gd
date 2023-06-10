@@ -182,13 +182,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 		var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 		
-#		var start_pos:Vector3 = origin + builder.block_create_distance * dir
-#		var w2l = blocks_root.global_transform.affine_inverse()
-#		var origin_local:Vector3 = w2l * origin
-#		var dir_local:Vector3 = w2l.basis * dir
-	
-#		var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
-		
 		#print("tool_state %s" % tool_state)
 				
 		if tool_state == ToolState.READY:
