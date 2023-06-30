@@ -994,6 +994,27 @@ func subtract(subtrahend:ConvexVolume)->Array[ConvexVolume]:
 	
 	return result_list
 
+
+func intersect(subtrahend:ConvexVolume)->ConvexVolume:
+	var result_list:Array[ConvexVolume]
+	
+	var split_vol:ConvexVolume = self
+	
+	for face in subtrahend.faces:
+		var p:Plane = face.get_plane()
+		
+		if !split_vol.intersects_plane(p):
+			continue
+			
+		var vol_over:ConvexVolume = split_vol.cut_with_plane(p)
+		var vol_under:ConvexVolume = split_vol.cut_with_plane(MathUtil.flip_plane(p))
+		
+		result_list.append(vol_over)
+		split_vol = vol_under
+
+	return split_vol
+	
+
 func is_over_or_on_plane(plane:Plane)->bool:
 	for v in vertices:
 		if !plane.is_point_over(v.point) && !plane.has_point(v.point):

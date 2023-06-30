@@ -162,11 +162,6 @@ func get_active_block()->CyclopsBlock:
 		return back
 	return null
 	
-#	var blocks:Array[CyclopsBlock] = get_blocks()
-#	for block in blocks:
-#		if block.active:
-#			return block
-#	return null
 
 #Blocks listed in order of selection with last block being the most recent (ie, active) one
 func get_selected_blocks()->Array[CyclopsBlock]:
@@ -176,11 +171,6 @@ func get_selected_blocks()->Array[CyclopsBlock]:
 	for node in selection.get_selected_nodes():
 		if node is CyclopsBlock:
 			result.append(node)
-
-#	var blocks:Array[CyclopsBlock] = get_blocks()
-#	for block in blocks:
-#		if block.selected:
-#			result.append(block)
 	
 	return result
 
@@ -231,14 +221,6 @@ func update_activation():
 
 func on_selection_changed():
 	update_activation()
-	
-#	var editor:EditorInterface = get_editor_interface()
-#	var selection:EditorSelection = editor.get_selection()
-#	var nodes:Array[Node] = selection.get_selected_nodes()
-#
-#	print("on_selection_changed()")
-#	for node in nodes:
-#		print("node %s" % node.name)
 	
 	if cached_viewport_camera:
 		tool._draw_tool(cached_viewport_camera)
