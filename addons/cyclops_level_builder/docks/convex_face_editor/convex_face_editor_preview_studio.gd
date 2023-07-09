@@ -23,7 +23,7 @@
 
 @tool
 extends Node3D
-class_name UvEditorPreviewStudio
+class_name ConvexFaceEditorPreviewStudio
 
 
 @export var target_material:Material:

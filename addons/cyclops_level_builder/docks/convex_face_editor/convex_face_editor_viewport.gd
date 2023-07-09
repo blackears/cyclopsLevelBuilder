@@ -23,7 +23,7 @@
 
 @tool
 extends Control
-class_name UvEdtiorViewport
+class_name ConvexFaceEdtiorViewport
 
 var material_thumbnail_dirty:bool = true
 

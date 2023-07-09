@@ -23,7 +23,7 @@
 
 @tool
 extends SubViewport
-class_name UvEditorPreview
+class_name ConvexFaceEditorPreview
 
 
 

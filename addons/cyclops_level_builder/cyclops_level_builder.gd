@@ -35,7 +35,7 @@ var config:CyclopsConfig = preload("res://addons/cyclops_level_builder/data/conf
 var logger:Logger = Logger.new()
 
 var material_dock:Control
-var uv_editor_dock:Control
+var convex_face_editor_dock:Control
 var tool_properties_dock:ToolPropertiesDock
 var cyclops_console_dock:CyclopsConsole
 #var sticky_toolbar:StickyToolbar
@@ -90,8 +90,8 @@ func _enter_tree():
 	material_dock = preload("res://addons/cyclops_level_builder/docks/material_palette/material_palette_viewport.tscn").instantiate()
 	material_dock.builder = self
 	
-	uv_editor_dock = preload("res://addons/cyclops_level_builder/docks/uv_editor/uv_editor_viewport.tscn").instantiate()
-	uv_editor_dock.builder = self
+	convex_face_editor_dock = preload("res://addons/cyclops_level_builder/docks/convex_face_editor/convex_face_editor_viewport.tscn").instantiate()
+	convex_face_editor_dock.builder = self
 	
 	tool_properties_dock = preload("res://addons/cyclops_level_builder/docks/tool_properties/tool_properties_dock.tscn").instantiate()
 	tool_properties_dock.builder = self
@@ -199,14 +199,14 @@ func update_activation():
 		if !activated:
 			add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
 			add_control_to_bottom_panel(material_dock, "Materials")
-			add_control_to_dock(DOCK_SLOT_RIGHT_BL, uv_editor_dock)
+			add_control_to_dock(DOCK_SLOT_RIGHT_BL, convex_face_editor_dock)
 			add_control_to_dock(DOCK_SLOT_RIGHT_BL, tool_properties_dock)
 			activated = true
 	else:
 		if activated:
 			remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
 			remove_control_from_bottom_panel(material_dock)
-			remove_control_from_docks(uv_editor_dock)
+			remove_control_from_docks(convex_face_editor_dock)
 			remove_control_from_docks(tool_properties_dock)
 			activated = false
 	
@@ -239,7 +239,7 @@ func _exit_tree():
 	
 	if activated:
 		remove_control_from_docks(material_dock)
-		remove_control_from_docks(uv_editor_dock)
+		remove_control_from_docks(convex_face_editor_dock)
 		remove_control_from_docks(tool_properties_dock)
 		remove_control_from_docks(cyclops_console_dock)
 		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
@@ -248,7 +248,7 @@ func _exit_tree():
 		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, upgrade_cyclops_blocks_toolbar)
 
 	material_dock.queue_free()
-	uv_editor_dock.queue_free()
+	convex_face_editor_dock.queue_free()
 	tool_properties_dock.queue_free()
 	cyclops_console_dock.queue_free()
 	editor_toolbar.queue_free()
@@ -276,14 +276,14 @@ func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent):
 func _get_state()->Dictionary:
 	var state:Dictionary = {}
 	material_dock.save_state(state)
-	uv_editor_dock.save_state(state)
+	convex_face_editor_dock.save_state(state)
 	tool_properties_dock.save_state(state)
 	cyclops_console_dock.save_state(state)
 	return state
 	
 func _set_state(state):
 	material_dock.load_state(state)
-	uv_editor_dock.load_state(state)
+	convex_face_editor_dock.load_state(state)
 	tool_properties_dock.load_state(state)
 	cyclops_console_dock.load_state(state)
 
