@@ -26,11 +26,13 @@ theme = SubResource("Theme_pvimd")
 layout_mode = 2
 
 [node name="check_flatten" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
 text = "Flatten"
 
 [node name="check_markers" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
 text = "Markers"
