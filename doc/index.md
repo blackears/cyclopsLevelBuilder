@@ -72,8 +72,12 @@ The menu has a number of useful commands.
 
 * Duplicate Selected Blocks - Duplicates selected blocks.  Click with mouse to place duplication.
 * Merge Selected Blocks - Combine all selected blocks into a single convex shape.
+* Subtract Block - Subtract active block from all selected blocks
+* Intersect Blocks - Replaces all selected blocks with their intersection
 * Delete Selected Blocks - Delete all currently selected blocks.
 * Snap to Grid - Snaps all vertices to the grid, just in case some are misaligned.
+
+* Export As Gltf... - Generates a gltf file based on the current blocks in the scene.
 
 * Rotate 90 Ccw X - Rotate 90 degrees counter clockwise around the X axis
 * Rotate 90 Cw X - Rotate 90 degrees clockwise around the X axis

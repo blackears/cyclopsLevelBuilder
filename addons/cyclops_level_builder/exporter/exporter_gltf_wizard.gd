@@ -142,7 +142,6 @@ func clean_flat(node:Node3D)->Node3D:
 	
 
 func _on_bn_okay_pressed():
-	var exporter:CyclopsExporterGltf = CyclopsExporterGltf.new()
 	
 	var path:String = save_path
 	if !save_path.to_lower().ends_with(".gltf") && !save_path.to_lower().ends_with(".glb"):

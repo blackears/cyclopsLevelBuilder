@@ -27,7 +27,7 @@ extends CyclopsAction
 
 
 func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	super._init(plugin, "Intersect Block")
+	super._init(plugin, "Intersect Blocks")
 
 func _execute():
 	var blocks:Array[CyclopsBlock] = plugin.get_selected_blocks()
