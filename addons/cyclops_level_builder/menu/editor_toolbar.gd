@@ -62,6 +62,8 @@ func _ready():
 	$HBoxContainer/MenuBar/Menu.add_action_item(ActionDeleteSelectedBlocks.new(editor_plugin))
 	$HBoxContainer/MenuBar/Menu.add_action_item(ActionSnapToGrid.new(editor_plugin))
 	$HBoxContainer/MenuBar/Menu.add_separator()
+	$HBoxContainer/MenuBar/Menu.add_action_item(ActionExportAsGltf.new(editor_plugin))
+	$HBoxContainer/MenuBar/Menu.add_separator()
 	$HBoxContainer/MenuBar/Menu.add_action_item(ActionRotateX90Ccw.new(editor_plugin))
 	$HBoxContainer/MenuBar/Menu.add_action_item(ActionRotateX90Cw.new(editor_plugin))
 	$HBoxContainer/MenuBar/Menu.add_action_item(ActionRotateX180.new(editor_plugin))
