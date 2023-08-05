@@ -171,7 +171,7 @@ func get_selected_blocks()->Array[CyclopsBlock]:
 	for node in selection.get_selected_nodes():
 		if node is CyclopsBlock:
 			result.append(node)
-	
+
 	return result
 
 func get_block_add_parent()->Node:

@@ -132,6 +132,7 @@ func apply_uv_transform():
 		Vector2(spin_offset_x.value, spin_offset_y.value))
 		
 	uv_transform = xform
+	#print("apply_uv_transform ", uv_transform)
 		
 	var cmd:CommandSetUvTransform = CommandSetUvTransform.new()
 	cmd.builder = builder
@@ -139,23 +140,13 @@ func apply_uv_transform():
 
 	var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
 	for block in sel_blocks:
-		if block.selected:
-			var vol:ConvexVolume = block.control_mesh
-			for f_idx in vol.faces.size():
-				var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
-				if f.selected:
-					cmd.add_face(block.get_path(), f_idx)
+#		print("sel block %s" % block.name)
 
-#	if builder.active_node:
-#		for child in builder.active_node.get_children():
-#			if child is CyclopsConvexBlock:
-#				var block:CyclopsConvexBlock = child
-#				if block.selected:
-#					var vol:ConvexVolume = block.control_mesh
-#					for f_idx in vol.faces.size():
-#						var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
-#						if f.selected:
-#							cmd.add_face(block.get_path(), f_idx)
+		var vol:ConvexVolume = block.control_mesh
+		for f_idx in vol.faces.size():
+			var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
+			if f.selected:
+				cmd.add_face(block.get_path(), f_idx)
 
 
 	if cmd.will_change_anything():

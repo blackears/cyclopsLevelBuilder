@@ -55,6 +55,9 @@ func _draw_tool(viewport_camera:Camera3D):
 	#var blocks_root:CyclopsBlocks = builder.active_node
 	for h in handles:
 #		print("draw face %s" % h)
+		if Engine.is_editor_hint() && !builder.has_node(h.block_path):
+			continue
+			
 		var block:CyclopsBlock = builder.get_node(h.block_path)
 		var f:ConvexVolume.FaceInfo = block.control_mesh.faces[h.face_index]
 

@@ -40,6 +40,7 @@ func add_face(block_path:NodePath, index:int):
 	add_faces(block_path, [index])
 	
 func add_faces(block_path:NodePath, indices:Array[int]):
+#	print("adding_face %s %s" % [block_path, indices])
 	var changes:BlockFaceChanges
 	if block_map.has(block_path):
 		changes = block_map[block_path]
@@ -59,12 +60,12 @@ func _init():
 	command_name = "Set Uv Transform"
 
 func will_change_anything()->bool:
+#	print("CommandSetUvTransform will_change_anything")
 	for block_path in block_map.keys():
 
 		var rec:BlockFaceChanges = block_map[block_path]
 		var block:CyclopsBlock = builder.get_node(block_path)
 			
-#		print("face active index %s" % active_idx)
 		var vol:ConvexVolume = ConvexVolume.new()
 		vol.init_from_convex_block_data(rec.tracked_block_data)
 
@@ -79,19 +80,20 @@ func will_change_anything()->bool:
 	
 func do_it():
 	#print("sel verts do_it")
-	#print("sel vert do_it()")
+#	print("sel uv_transform do_it()")
 	for block_path in block_map.keys():
 #		print("path %s" % block_path)
 		
 		var rec:BlockFaceChanges = block_map[block_path]
 		var block:CyclopsBlock = builder.get_node(block_path)
 			
-#		print("face active index %s" % active_idx)
+#		print("block_path %s" % block_path)
 		var vol:ConvexVolume = ConvexVolume.new()
 		vol.init_from_convex_block_data(rec.tracked_block_data)
 
 		for f_idx in vol.faces.size():
 			if rec.face_indices.has(f_idx):
+#				print("face_idx %s" % f_idx)
 				var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
 				f.uv_transform = uv_transform
 
