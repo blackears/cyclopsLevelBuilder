@@ -27,9 +27,16 @@ class_name CyclopsBlock
 
 signal mesh_changed
 
+@export var collision_type:Collision.Type = Collision.Type.STATIC:
+	get:
+		return collision_type
+	set(value):
+		collision_type = value
+		update_physics_body()
+
 var mesh_instance:MeshInstance3D
 var mesh_wire:MeshInstance3D
-var collision_body:StaticBody3D
+var collision_body:PhysicsBody3D
 var collision_shape:CollisionShape3D
 var occluder:OccluderInstance3D
 var selected:bool
@@ -68,16 +75,39 @@ func _ready():
 		mesh_wire = MeshInstance3D.new()
 		add_child(mesh_wire)
 	
-	collision_body = StaticBody3D.new()
-	add_child(collision_body)
+#	collision_body = StaticBody3D.new()
+#	add_child(collision_body)
 	collision_shape = CollisionShape3D.new()
-	collision_body.add_child(collision_shape)
+	#collision_body.add_child(collision_shape)
 
 	occluder = OccluderInstance3D.new()
 	add_child(occluder)
 	
 	build_from_block()
+	update_physics_body()
 
+func update_physics_body():
+	if name == "Block_6":
+		pass
+	
+	if collision_body:
+		collision_body.remove_child(collision_shape)
+		collision_body.queue_free()
+		collision_body = null
+	
+	match collision_type:
+		Collision.Type.STATIC:
+			collision_body = StaticBody3D.new()
+		Collision.Type.KINEMATIC:
+			collision_body = CharacterBody3D.new()
+		Collision.Type.RIGID:
+			collision_body = RigidBody3D.new()
+			
+	if collision_body:
+		add_child(collision_body)
+		
+		collision_body.add_child(collision_shape)
+	
 
 func build_from_block():
 		
