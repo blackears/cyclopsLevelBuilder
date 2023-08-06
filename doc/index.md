@@ -38,6 +38,16 @@ Most of the tools support pressing the Escape key to cancel the current operatio
 
 
 
+## CyclopsBlock object
+
+Each block you create is encapsulated in a CyclopsBlock object.  There is a limited number of properties on it that you can change.
+
+* Collision Type - Affects the type of collision generated for the object
+    * None - No collision
+    * Static - A StaticBody3D will be used for collision
+    * Kinematic - A CharacterBody3D will be used for collision
+    * Rigid - A RigidBody3D will be used for collision
+
 ## Tools
 
 There are several tools in the toolbar that let you create and edit blocks:
@@ -123,7 +133,7 @@ The display mode lets you switch between drawing blocks with materials and drawi
 When the CyclopsBlocks object is selected, extra docked windows will appear to give you further editng options:
 
 * [Material](dock_material.md)
-* [UV Transform](dock_uv_transform.md)
+* [Face Properties](dock_face_properties.md)
 * [Tool Properties](dock_tool_properties.md)
 
 
