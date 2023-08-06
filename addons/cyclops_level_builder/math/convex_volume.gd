@@ -71,18 +71,22 @@ class FaceInfo extends RefCounted:
 	var normal:Vector3 #Face normal points in direction of interior
 	var material_id:int
 	var uv_transform:Transform2D
+	var color:Color
+	var visible:bool
 	var selected:bool
 	var vertex_indices:Array[int]
 	var triangulation_indices:Array[int]
 	var lightmap_uvs:PackedVector2Array
 	
-	func _init(mesh:ConvexVolume, id:int, normal:Vector3, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0, selected:bool = false):
+	func _init(mesh:ConvexVolume, id:int, normal:Vector3, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0, visible:bool = true, color:Color = Color.WHITE, selected:bool = false):
 		self.mesh = mesh
 		self.id = id
 		self.normal = normal
 		self.material_id = material_id
 		self.uv_transform = uv_transform
 		self.selected = selected
+		self.visible = visible
+		self.color = color
 	
 	func get_plane()->Plane:
 		return Plane(normal, mesh.vertices[vertex_indices[0]].point)
@@ -153,7 +157,7 @@ func _to_string()->String:
 	return result
 	
 
-func init_block(block_bounds:AABB, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = -1):
+func init_block(block_bounds:AABB, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = -1, visible:bool = true, color:Color = Color.WHITE):
 	var p000:Vector3 = block_bounds.position
 	var p111:Vector3 = block_bounds.end
 	var p001:Vector3 = Vector3(p000.x, p000.y, p111.z)
@@ -163,10 +167,10 @@ func init_block(block_bounds:AABB, uv_transform:Transform2D = Transform2D.IDENTI
 	var p101:Vector3 = Vector3(p111.x, p000.y, p111.z)
 	var p110:Vector3 = Vector3(p111.x, p111.y, p000.z)
 	
-	init_prism([p000, p001, p011, p010], p100 - p000, uv_transform, material_id)
+	init_prism([p000, p001, p011, p010], p100 - p000, uv_transform, material_id, visible, color)
 	
 
-func init_prism(base_points:Array[Vector3], extrude_dir:Vector3, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = -1):
+func init_prism(base_points:Array[Vector3], extrude_dir:Vector3, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = -1, visible:bool = true, color:Color = Color.WHITE):
 	vertices = []
 	edges = []
 	faces = []
@@ -183,11 +187,11 @@ func init_prism(base_points:Array[Vector3], extrude_dir:Vector3, uv_transform:Tr
 		var v:VertexInfo = VertexInfo.new(self, p + extrude_dir)
 		vertices.append(v)
 	
-	var f0:FaceInfo = FaceInfo.new(self, faces.size(), base_normal, uv_transform, material_id)
+	var f0:FaceInfo = FaceInfo.new(self, faces.size(), base_normal, uv_transform, material_id, visible, color)
 	f0.vertex_indices = []
 	f0.vertex_indices.append_array(range(base_points.size()))
 	faces.append(f0)
-	var f1:FaceInfo = FaceInfo.new(self, faces.size(), -base_normal, uv_transform, material_id)
+	var f1:FaceInfo = FaceInfo.new(self, faces.size(), -base_normal, uv_transform, material_id, visible, color)
 	f1.vertex_indices = []
 	f1.vertex_indices.append_array(range(base_points.size(), base_points.size() * 2))
 	f1.vertex_indices.reverse()
@@ -202,7 +206,7 @@ func init_prism(base_points:Array[Vector3], extrude_dir:Vector3, uv_transform:Tr
 		var v1:VertexInfo = vertices[p_idx1]
 		
 		var normal = base_normal.cross(v1.point - v0.point).normalized()
-		var f:FaceInfo = FaceInfo.new(self, faces.size(), normal, uv_transform, material_id)
+		var f:FaceInfo = FaceInfo.new(self, faces.size(), normal, uv_transform, material_id, visible, color)
 		f.vertex_indices = [p_idx1, p_idx0, p_idx0 + base_points.size(), p_idx1 + base_points.size()]
 		faces.append(f)
 	
@@ -216,6 +220,8 @@ func init_from_convex_block_data(data:ConvexBlockData):
 	vertices = []
 	edges = []
 	faces = []
+	
+	data.validate_arrays()
 
 	active_vertex = data.active_vertex
 	active_edge = data.active_edge
@@ -248,7 +254,13 @@ func init_from_convex_block_data(data:ConvexBlockData):
 			face_vertex_count += 1
 		
 		var normal = MathUtil.face_area_x2(vert_points).normalized()
-		var f:FaceInfo = FaceInfo.new(self, data.face_ids[face_idx], normal, data.face_uv_transform[face_idx], data.face_material_indices[face_idx])
+		
+		var face_id:int = data.face_ids[face_idx]
+		var face_uv_transform:Transform2D = data.face_uv_transform[face_idx]
+		var face_mat_index:int = data.face_material_indices[face_idx]
+		var face_visible:int = data.face_visible[face_idx]
+		var face_color:Color = data.face_color[face_idx]
+		var f:FaceInfo = FaceInfo.new(self, face_id, normal, face_uv_transform, face_mat_index, face_visible, face_color)
 		f.selected = data.face_selected[face_idx]
 		#f.active = data.face_active[face_idx]
 		f.vertex_indices = vert_indices
@@ -264,7 +276,7 @@ func init_from_convex_block_data(data:ConvexBlockData):
 	
 
 #Calc convex hull bouding points
-func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = -1):
+func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = -1, visible:bool = true, color:Color = Color.WHITE):
 	vertices = []
 	edges = []
 	faces = []
@@ -286,7 +298,7 @@ func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Tran
 			var vert_idx:int = hull_points.find(p)
 			vert_indices.append(vert_idx)
 		
-		var f:FaceInfo = FaceInfo.new(self, faces.size(), plane.normal, uv_transform, material_id)
+		var f:FaceInfo = FaceInfo.new(self, faces.size(), plane.normal, uv_transform, material_id, visible, color)
 		f.vertex_indices = vert_indices
 		faces.append(f)
 	
@@ -393,6 +405,8 @@ func copy_face_attributes(ref_vol:ConvexVolume):
 		
 		fl.material_id = ref_face.material_id
 		fl.uv_transform = ref_face.uv_transform
+		fl.visible = ref_face.visible
+		fl.color = ref_face.color
 		fl.selected = ref_face.selected
 
 func to_convex_block_data()->ConvexBlockData:
@@ -422,6 +436,8 @@ func to_convex_block_data()->ConvexBlockData:
 		#result.face_active.append(face.active)
 		result.face_material_indices.append(face.material_id)
 		result.face_uv_transform.append(face.uv_transform)
+		result.face_visible.append(face.visible)
+		result.face_color.append(face.color)
 	
 	return result
 
@@ -708,6 +724,7 @@ func create_mesh(material_list:Array[Material], default_material:Material)->Arra
 		
 		var points:PackedVector3Array
 		var normals:PackedVector3Array
+		var colors:PackedColorArray
 		var uv1s:PackedVector2Array
 		var uv2s:PackedVector2Array
 
@@ -719,7 +736,8 @@ func create_mesh(material_list:Array[Material], default_material:Material)->Arra
 #			print("f_idx %s" % f_idx)
 
 			var face:FaceInfo = faces[f_idx]
-			
+			if !face.visible:
+				continue
 			
 			var axis:MathUtil.Axis = MathUtil.get_longest_axis(face.normal)
 			
@@ -744,6 +762,7 @@ func create_mesh(material_list:Array[Material], default_material:Material)->Arra
 				uv2s.append(face.lightmap_uvs[fv_idx])
 				
 				normals.append(face.normal)
+				colors.append(face.color)
 				
 				points.append(p)
 		
@@ -753,6 +772,7 @@ func create_mesh(material_list:Array[Material], default_material:Material)->Arra
 		arrays[Mesh.ARRAY_NORMAL] = normals
 		arrays[Mesh.ARRAY_TEX_UV] = uv1s
 		arrays[Mesh.ARRAY_TEX_UV2] = uv2s
+		arrays[Mesh.ARRAY_COLOR] = colors
 			
 		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 		mesh.surface_set_material(surface_idx, material)

@@ -22,7 +22,7 @@
 # SOFTWARE.
 
 @tool
-class_name CommandSetUvTransform
+class_name CommandSetFaceVisible
 extends CyclopsCommand
 
 
@@ -31,7 +31,7 @@ class BlockFaceChanges extends RefCounted:
 	var face_indices:Array[int] = []
 	var tracked_block_data:ConvexBlockData
 
-var uv_transform:Transform2D = Transform2D.IDENTITY
+var visible:bool = true
 
 #Private
 var block_map:Dictionary = {}
@@ -57,7 +57,7 @@ func add_faces(block_path:NodePath, indices:Array[int]):
 	
 
 func _init():
-	command_name = "Set Uv Transform"
+	command_name = "Set Face Properties"
 
 func will_change_anything()->bool:
 #	print("CommandSetUvTransform will_change_anything")
@@ -72,7 +72,7 @@ func will_change_anything()->bool:
 		for f_idx in vol.faces.size():
 			if rec.face_indices.has(f_idx):
 				var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
-				if f.uv_transform != uv_transform:
+				if f.visible != visible:
 					return true
 
 	return false
@@ -95,7 +95,7 @@ func do_it():
 			if rec.face_indices.has(f_idx):
 #				print("face_idx %s" % f_idx)
 				var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
-				f.uv_transform = uv_transform
+				f.visible = visible
 
 		block.block_data = vol.to_convex_block_data()
 	builder.selection_changed.emit()

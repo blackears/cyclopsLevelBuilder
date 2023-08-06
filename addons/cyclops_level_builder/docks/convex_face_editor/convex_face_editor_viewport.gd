@@ -101,6 +101,8 @@ func on_selection_changed():
 		spin_scale_y.value = f.uv_transform.get_scale().y
 		spin_rotation.value = rad_to_deg(f.uv_transform.get_rotation())
 		spin_skew.value = rad_to_deg(f.uv_transform.get_skew())
+		%check_face_visible.button_pressed = f.visible
+		%color_picker_face.color = f.color
 		
 		if f.material_id != -1:
 			var mat:Material = block.materials[f.material_id]
@@ -134,7 +136,7 @@ func apply_uv_transform():
 	uv_transform = xform
 	#print("apply_uv_transform ", uv_transform)
 		
-	var cmd:CommandSetUvTransform = CommandSetUvTransform.new()
+	var cmd:CommandSetFaceUvTransform = CommandSetFaceUvTransform.new()
 	cmd.builder = builder
 	cmd.uv_transform = xform
 
@@ -152,7 +154,55 @@ func apply_uv_transform():
 	if cmd.will_change_anything():
 		var undo:EditorUndoRedoManager = builder.get_undo_redo()
 		cmd.add_to_undo_manager(undo)
-	
+
+func apply_visible():
+	var face_visible:bool = %check_face_visible.button_pressed
+		
+	#print("apply_uv_transform ", uv_transform)
+		
+	var cmd:CommandSetFaceVisible = CommandSetFaceVisible.new()
+	cmd.builder = builder
+	cmd.visible = face_visible
+
+	var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+	for block in sel_blocks:
+#		print("sel block %s" % block.name)
+
+		var vol:ConvexVolume = block.control_mesh
+		for f_idx in vol.faces.size():
+			var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
+			if f.selected:
+				cmd.add_face(block.get_path(), f_idx)
+
+
+	if cmd.will_change_anything():
+		var undo:EditorUndoRedoManager = builder.get_undo_redo()
+		cmd.add_to_undo_manager(undo)
+
+
+func apply_color():
+	var face_color:Color = %color_picker_face.color
+		
+	#print("apply_uv_transform ", uv_transform)
+		
+	var cmd:CommandSetFaceColor = CommandSetFaceColor.new()
+	cmd.builder = builder
+	cmd.color = face_color
+
+	var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+	for block in sel_blocks:
+#		print("sel block %s" % block.name)
+
+		var vol:ConvexVolume = block.control_mesh
+		for f_idx in vol.faces.size():
+			var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
+			if f.selected:
+				cmd.add_face(block.get_path(), f_idx)
+
+
+	if cmd.will_change_anything():
+		var undo:EditorUndoRedoManager = builder.get_undo_redo()
+		cmd.add_to_undo_manager(undo)
 
 func _on_offset_x_value_changed(value):
 	apply_uv_transform()
@@ -178,3 +228,11 @@ func _on_skew_value_changed(value):
 	apply_uv_transform()
 
 
+
+
+func _on_color_picker_face_color_changed(color):
+	apply_color()
+
+
+func _on_check_face_visible_toggled(button_pressed):
+	apply_visible()
