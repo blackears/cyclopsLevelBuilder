@@ -32,12 +32,6 @@ class_name ConvexFaceEditorPreview
 		return target_material
 	set(value):
 		target_material = value
-		#$Node3D/MeshInstance3D.material_override = target_material
-		#dirty = true
-#		var studio:UvEditorPreviewStudio = get_node("UvPreviewStudio")
-#		studio.target_material = target_material
-#		if $UvPreviewStudio:
-#			$UvPreviewStudio.target_material = target_material
 		dirty = true
 
 @export var uv_transform:Transform2D = Transform2D.IDENTITY:
@@ -47,12 +41,15 @@ class_name ConvexFaceEditorPreview
 		if value == uv_transform:
 			return 
 		uv_transform = value
-#		dirty = true
-#		$UvPreviewStudio.uv_transform = uv_transform
-#		var studio:UvEditorPreviewStudio = get_node("UvPreviewStudio")
-#		studio.uv_transform = uv_transform
-#		if $UvPreviewStudio:
-#			$UvPreviewStudio.uv_transform = uv_transform
+		dirty = true
+
+@export var color:Color = Color.WHITE:
+	get:
+		return color
+	set(value):
+		if value == color:
+			return 
+		color = value
 		dirty = true
 
 var dirty:bool = true
@@ -74,6 +71,7 @@ func _process(delta):
 	if dirty:
 		$UvPreviewStudio.target_material = target_material
 		$UvPreviewStudio.uv_transform = uv_transform
+		$UvPreviewStudio.color = color
 		dirty = false
 	
 

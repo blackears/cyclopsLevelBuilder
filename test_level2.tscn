@@ -5087,7 +5087,7 @@ shadow_mesh = SubResource("ArrayMesh_66qfp")
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_18cso"]
 points = PackedVector3Array(-13, 28, 65, -13, 28, 64, -24, 28, 64, -24, 28, 65, -13, 34, 64, -13, 34, 65, -24, 34, 65, -24, 34, 64)
 
-[sub_resource type="Resource" id="Resource_igkpm"]
+[sub_resource type="Resource" id="Resource_vdbgb"]
 script = ExtResource("4_q38fu")
 selected = false
 active = false
@@ -5107,8 +5107,8 @@ face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
 face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(0.999999, 0, 0, 0.999999, 1, 1), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(0.999999, 0, 0, 0.999999, 1, 1)])
 face_visible = PackedByteArray(1, 1, 1, 1, 1, 1)
 face_color = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
-face_selected = PackedByteArray(0, 0, 0, 1, 1, 1)
-active_face = 3
+face_selected = PackedByteArray(0, 0, 0, 0, 0, 1)
+active_face = 5
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
 [sub_resource type="Resource" id="Resource_82crk"]
@@ -9427,7 +9427,7 @@ shape = SubResource("ConvexPolygonShape3D_18cso")
 [node name="Block_0" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 25, 19)
 script = ExtResource("1_xfayt")
-block_data = SubResource("Resource_igkpm")
+block_data = SubResource("Resource_vdbgb")
 materials = Array[Material]([ExtResource("3_02243")])
 
 [node name="Block_3" type="Node3D" parent="CyclopsBlocks_upgraded"]

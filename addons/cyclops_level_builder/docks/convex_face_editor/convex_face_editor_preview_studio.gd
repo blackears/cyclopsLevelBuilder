@@ -43,6 +43,15 @@ class_name ConvexFaceEditorPreviewStudio
 		uv_transform = value
 		dirty = true
 
+@export var color:Color = Color.WHITE:
+	get:
+		return color
+	set(value):
+		if value == color:
+			return 
+		color = value
+		dirty = true
+
 var dirty:bool = true
 var points:PackedVector3Array = [Vector3(-1, 1, 0), Vector3(1, 1, 0), Vector3(-1, -1, 0), Vector3(1, -1, 0)]
 
@@ -58,6 +67,7 @@ func _process(delta):
 		mesh.surface_set_normal(Vector3(0, 0, 1))
 		for p in points:		
 			mesh.surface_set_uv(uv_transform * Vector2(p.x, -p.y))
+			mesh.surface_set_color(color)
 			mesh.surface_add_vertex(p)
 		
 		mesh.surface_end()

@@ -31,6 +31,7 @@ var target_material:Material
 var empty_material:Material
 
 var uv_transform:Transform2D = Transform2D.IDENTITY
+var color:Color = Color.WHITE
 
 var builder:CyclopsLevelBuilder:
 	get:
@@ -77,6 +78,7 @@ func _process(delta):
 
 		$UvPreview.target_material = target_material
 		$UvPreview.uv_transform = uv_transform
+		$UvPreview.color = color
 
 		var tex:ImageTexture = await $UvPreview.take_snapshot()
 		$VBoxContainer/Preview.texture = tex	
@@ -182,6 +184,7 @@ func apply_visible():
 
 func apply_color():
 	var face_color:Color = %color_picker_face.color
+	color = face_color
 		
 	#print("apply_uv_transform ", uv_transform)
 		

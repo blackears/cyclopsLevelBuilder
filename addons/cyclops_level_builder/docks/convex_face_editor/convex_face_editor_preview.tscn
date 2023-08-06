@@ -10,6 +10,7 @@ size = Vector2i(256, 256)
 render_target_update_mode = 4
 script = ExtResource("1_bjhau")
 target_material = ExtResource("2_t8xtu")
+color = null
 
 [node name="UvPreviewStudio" parent="." instance=ExtResource("3_jtspd")]
 target_material = ExtResource("2_t8xtu")

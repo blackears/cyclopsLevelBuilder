@@ -87,8 +87,6 @@ func _ready():
 	update_physics_body()
 
 func update_physics_body():
-	if name == "Block_6":
-		pass
 	
 	if collision_body:
 		collision_body.remove_child(collision_shape)
