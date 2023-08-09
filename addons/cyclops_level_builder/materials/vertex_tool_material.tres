@@ -1,14 +1,13 @@
-[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://dnnbmtstxps1v"]
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://slp88hyjpj6v"]
 
-[ext_resource type="Texture2D" uid="uid://dsvcm4kvcqlru" path="res://addons/cyclops_level_builder/art/textures/vertex.png" id="1_6fiar"]
-[ext_resource type="Shader" uid="uid://dewb6ohh2wxv0" path="res://addons/cyclops_level_builder/shaders/vertex_shader.tres" id="1_mkd2j"]
+[ext_resource type="Texture2D" uid="uid://dsvcm4kvcqlru" path="res://addons/cyclops_level_builder/art/textures/vertex.png" id="1_m6fsr"]
 
 [resource]
-render_priority = 0
-shader = ExtResource("1_mkd2j")
-shader_parameter/radius = 2.0
-shader_parameter/emission = Color(1, 1, 0, 1)
-shader_parameter/emission_energy = 1.0
-shader_parameter/alpha_scissor_threshold = 0.5
-shader_parameter/alpha_antialiasing_edge = 0.3
-shader_parameter/texture_emission = ExtResource("1_6fiar")
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+shading_mode = 0
+albedo_color = Color(1, 1, 0, 1)
+albedo_texture = ExtResource("1_m6fsr")
+use_point_size = true
+point_size = 8.0

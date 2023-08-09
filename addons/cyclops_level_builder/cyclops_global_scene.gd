@@ -232,24 +232,34 @@ func draw_points(points:PackedVector3Array, vertex_mat:Material = null):
 		draw_vertex(p, vertex_mat)
 
 func draw_vertex(position:Vector3, mat:Material = null):
-#	var vert_obj:VertexBillboard = preload("res://addons/cyclops_level_builder/controls/vertex_billboard.tscn").instantiate()
-#	$VertexGroup.add_child(vert_obj)
+	var vertices = PackedVector3Array()
+	vertices.push_back(position)
+	
+	var arr_mesh = ArrayMesh.new()
+	var arrays = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
 
-#	var xform:Transform3D = vert_obj.global_transform
-#	xform.origin = position
-#	vert_obj.global_transform = xform
-	
-	var mesh_inst:MeshInstance3D = MeshInstance3D.new()
-	mesh_inst.mesh = QuadMesh.new()
+	arr_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_POINTS, arrays)
+	var mesh_inst = MeshInstance3D.new()
+	mesh_inst.mesh = arr_mesh
+
 	mesh_inst.material_override = mat
+
 	$VertexGroup.add_child(mesh_inst)
+
+#####################
 	
-	var xform:Transform3D = mesh_inst.global_transform
-	xform.origin = position
-	mesh_inst.global_transform = xform
 	
-#	var xform:Transform3D = Transform3D(Basis.IDENTITY.scaled(Vector3.ONE * builder.handle_point_radius), position)
-#	draw_sphere(xform, mat)
+#	var mesh_inst:MeshInstance3D = MeshInstance3D.new()
+#	mesh_inst.mesh = QuadMesh.new()
+#	mesh_inst.material_override = mat
+#	$VertexGroup.add_child(mesh_inst)
+#
+#	var xform:Transform3D = mesh_inst.global_transform
+#	xform.origin = position
+#	mesh_inst.global_transform = xform
+	
 
 func draw_sphere(xform:Transform3D = Transform3D.IDENTITY, material:Material = null, segs_lat:int = 6, segs_long:int = 8):
 	unit_sphere.append_to_immediate_mesh(tool_mesh, material, xform)
