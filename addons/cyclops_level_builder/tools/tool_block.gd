@@ -93,15 +93,48 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 		
 	else:
 		#print("Miss")
+		var base_plane_origin:Vector3 = Vector3.ZERO
 		drag_floor_normal = Vector3.UP
-		
-		tool_state = ToolState.BLOCK_BASE
-		var start_pos:Vector3 = origin + builder.block_create_distance * dir
-		
+
+		var angle_y_axis:float = acos(dir.dot(Vector3.UP))
+		if angle_y_axis > PI / 2 - drag_angle_limit && angle_y_axis < PI / 2 + drag_angle_limit:
+			#Nearly parallel with ground plane
+			if abs(dir.z) > abs(dir.x):
+				drag_floor_normal = Vector3.FORWARD
+			else:
+				drag_floor_normal = Vector3.LEFT
+
+		#print("base_plane_normal ", base_plane_normal)
+
+		var hit_base:Vector3 = MathUtil.intersect_plane(origin, dir, base_plane_origin, drag_floor_normal)
+		#print("hit_base 1 ", hit_base)
+
+		if (hit_base - origin).dot(dir) < 0:
+			#Hit point is behind camera
+			var plane_offset:Vector3 = origin.project(drag_floor_normal)
+			base_plane_origin += plane_offset * 2
+			hit_base = MathUtil.intersect_plane(origin, dir, base_plane_origin, drag_floor_normal)
+
+		#print("base_plane_origin ", base_plane_origin)
+		#print("hit_base ", hit_base)
+
 		var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
+		block_drag_p0 = MathUtil.snap_to_grid(hit_base, grid_step_size)
+
+		tool_state = ToolState.BLOCK_BASE
 		
-		block_drag_p0 = MathUtil.snap_to_grid(start_pos, grid_step_size)
+		
+		#############
+#		drag_floor_normal = Vector3.UP
+#
+#		tool_state = ToolState.BLOCK_BASE
+#		var start_pos:Vector3 = origin + builder.block_create_distance * dir
+#
+#		var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
+#
+#
+#		block_drag_p0 = MathUtil.snap_to_grid(start_pos, grid_step_size)
 		
 		#print("block_drag_p0 %s" % block_drag_p0)
 	#print("set tool_state %s" % tool_state)
@@ -117,6 +150,7 @@ func _draw_tool(viewport_camera:Camera3D):
 		
 	if tool_state == ToolState.BLOCK_HEIGHT:
 		global_scene.draw_cube(block_drag_p0, block_drag_p1, block_drag_cur, global_scene.tool_material, global_scene.vertex_tool_material)
+
 
 func create_block():
 	block_drag_p2 = block_drag_cur
@@ -142,6 +176,7 @@ func create_block():
 		var undo:EditorUndoRedoManager = builder.get_undo_redo()
 
 		command.add_to_undo_manager(undo)
+
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	#print("tool_block gui_input %s" % event)
@@ -177,12 +212,17 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				elif tool_state == ToolState.BLOCK_BASE:
 					block_drag_p1 = block_drag_cur
 					
-					var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
-					var angle_with_base:float = acos(drag_floor_normal.dot(dir))
-					if angle_with_base < drag_angle_limit || angle_with_base > PI * 2 - drag_angle_limit:
+					var camera_dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+					var angle_with_base:float = acos(drag_floor_normal.dot(camera_dir))
+#					print("drag_floor_normal ", drag_floor_normal)
+#					print("camera_dir ", camera_dir)
+#					print("angle_with_base ", angle_with_base)
+#					print("drag_angle_limit ", drag_angle_limit)
+					if angle_with_base < drag_angle_limit || angle_with_base > PI - drag_angle_limit:
 						block_drag_cur = block_drag_p1 + drag_floor_normal
 						
 						create_block()
+#						print("create block ")
 						
 						tool_state = ToolState.NONE
 					else:
