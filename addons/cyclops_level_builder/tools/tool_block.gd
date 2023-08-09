@@ -30,6 +30,8 @@ const TOOL_ID:String = "block"
 enum ToolState { NONE, READY, BLOCK_BASE, BLOCK_HEIGHT, MOVE_FACE }
 var tool_state:ToolState = ToolState.NONE
 
+var drag_angle_limit:float = deg_to_rad(5)
+
 var viewport_camera_start:Camera3D
 var event_start:InputEventMouseButton
 
@@ -116,6 +118,31 @@ func _draw_tool(viewport_camera:Camera3D):
 	if tool_state == ToolState.BLOCK_HEIGHT:
 		global_scene.draw_cube(block_drag_p0, block_drag_p1, block_drag_cur, global_scene.tool_material, global_scene.vertex_tool_material)
 
+func create_block():
+	block_drag_p2 = block_drag_cur
+#	print("Adding block %s %s %s" % [block_drag_p0, block_drag_p1, block_drag_p2])
+
+	var bounds:AABB = AABB(block_drag_p0, Vector3.ZERO)
+	bounds = bounds.expand(block_drag_p1)
+	bounds = bounds.expand(block_drag_p2)
+	
+	if bounds.has_volume():
+		var blocks_root:Node = builder.get_block_add_parent()
+	
+		var command:CommandAddBlock = CommandAddBlock.new()
+		
+		command.builder = builder
+		command.blocks_root_path = blocks_root.get_path()
+		command.block_name = GeneralUtil.find_unique_name(blocks_root, "Block_")						
+		command.bounds = bounds
+#						command.origin = block_drag_p0
+		command.uv_transform = builder.tool_uv_transform
+		command.material_path = builder.tool_material_path
+
+		var undo:EditorUndoRedoManager = builder.get_undo_redo()
+
+		command.add_to_undo_manager(undo)
+
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	#print("tool_block gui_input %s" % event)
 	
@@ -149,35 +176,26 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 				elif tool_state == ToolState.BLOCK_BASE:
 					block_drag_p1 = block_drag_cur
-					tool_state = ToolState.BLOCK_HEIGHT
+					
+					var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+					var angle_with_base:float = acos(drag_floor_normal.dot(dir))
+					if angle_with_base < drag_angle_limit || angle_with_base > PI * 2 - drag_angle_limit:
+						block_drag_cur = block_drag_p1 + drag_floor_normal
+						
+						create_block()
+						
+						tool_state = ToolState.NONE
+					else:
+					
+						tool_state = ToolState.BLOCK_HEIGHT
 					
 					#print("set 2 tool_state %s" % tool_state)
 					
 				elif tool_state == ToolState.BLOCK_HEIGHT:
-#					print("Adding block %s %s %s" % [block_drag_p0, block_drag_p1, block_drag_p2])
-					block_drag_p2 = block_drag_cur
+					create_block()
+
 					tool_state = ToolState.NONE
 
-					var bounds:AABB = AABB(block_drag_p0, Vector3.ZERO)
-					bounds = bounds.expand(block_drag_p1)
-					bounds = bounds.expand(block_drag_p2)
-					
-#					print("AABB %s" % bounds)
-					
-					if bounds.has_volume():
-						var command:CommandAddBlock = CommandAddBlock.new()
-						
-						command.builder = builder
-						command.blocks_root_path = blocks_root.get_path()
-						command.block_name = GeneralUtil.find_unique_name(blocks_root, "Block_")						
-						command.bounds = bounds
-#						command.origin = block_drag_p0
-						command.uv_transform = builder.tool_uv_transform
-						command.material_path = builder.tool_material_path
-
-						var undo:EditorUndoRedoManager = builder.get_undo_redo()
-
-						command.add_to_undo_manager(undo)
 
 				elif tool_state == ToolState.MOVE_FACE:
 
