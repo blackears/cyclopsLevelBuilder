@@ -171,9 +171,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						
 					else:
 						#print("init base point empty space")
-						floor_normal = Vector3.UP
+						var hit_result = calc_hit_point_empty_space(origin, dir)
+						var start_pos:Vector3 = hit_result[0]
+						floor_normal = hit_result[1]
+#						floor_normal = Vector3.UP
 
-						var start_pos:Vector3 = origin + builder.block_create_distance * dir
+#						var start_pos:Vector3 = origin + builder.block_create_distance * dir
 						
 #						var p:Vector3 = to_local(start_pos, blocks_root.global_transform.inverse(), grid_step_size)
 						var p:Vector3 = MathUtil.snap_to_grid(start_pos, grid_step_size)

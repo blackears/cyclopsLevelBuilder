@@ -52,13 +52,13 @@ func _draw_tool(viewport_camera:Camera3D):
 	if tool_state == ToolState.BASE_POINTS:
 		var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
 		global_scene.draw_loop(bounding_points, true, global_scene.tool_material)
-		global_scene.draw_points(bounding_points, global_scene.tool_material)
+		global_scene.draw_points(bounding_points, global_scene.vertex_tool_material)
 
-		global_scene.draw_vertex(preview_point, global_scene.tool_material)
+		global_scene.draw_vertex(preview_point, global_scene.vertex_tool_material)
 
 	if tool_state == ToolState.DRAG_HEIGHT:		
 		var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
-		global_scene.draw_prism(bounding_points, drag_offset, global_scene.tool_material)
+		global_scene.draw_prism(bounding_points, drag_offset, global_scene.tool_material, global_scene.vertex_tool_material)
 	
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
@@ -117,9 +117,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						
 					else:
 						#print("init base point empty space")
-						floor_normal = Vector3.UP
-
-						var start_pos:Vector3 = origin + builder.block_create_distance * dir
+						var hit_result = calc_hit_point_empty_space(origin, dir)
+						var start_pos:Vector3 = hit_result[0]
+						floor_normal = hit_result[1]
+						
 						
 						var p:Vector3 = MathUtil.snap_to_grid(start_pos, grid_step_size)
 						#var p:Vector3 = to_local(start_pos, blocks_root.global_transform.inverse(), grid_step_size)
