@@ -162,7 +162,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						#print("init base point block")
 						floor_normal = result.get_world_normal()
 
-						#var p:Vector3 = to_local(result.get_world_position(), blocks_root.global_transform.inverse(), grid_step_size)
 						var p:Vector3 = MathUtil.snap_to_grid(result.get_world_position(), grid_step_size)
 						drag_origin = p
 						base_drag_cur = p
@@ -174,11 +173,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						var hit_result = calc_hit_point_empty_space(origin, dir)
 						var start_pos:Vector3 = hit_result[0]
 						floor_normal = hit_result[1]
-#						floor_normal = Vector3.UP
 
-#						var start_pos:Vector3 = origin + builder.block_create_distance * dir
-						
-#						var p:Vector3 = to_local(start_pos, blocks_root.global_transform.inverse(), grid_step_size)
 						var p:Vector3 = MathUtil.snap_to_grid(start_pos, grid_step_size)
 						drag_origin = p
 						base_drag_cur = p
@@ -187,30 +182,41 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 			else:
 				if tool_state == ToolState.DRAG_BASE:
-					tool_state = ToolState.DRAG_HEIGHT
-					block_drag_cur = base_drag_cur
+					var camera_dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+					var angle_with_base:float = acos(floor_normal.dot(camera_dir))
+					var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
+					if angle_with_base < drag_angle_limit || angle_with_base > PI - drag_angle_limit:
+						block_drag_cur = base_drag_cur + floor_normal
+						
+						create_block()
+						
+						tool_state = ToolState.READY
+					else:
+						tool_state = ToolState.DRAG_HEIGHT
+						block_drag_cur = base_drag_cur
 					return true
 				
 				elif tool_state == ToolState.DRAG_HEIGHT:
 					#Create shape
+					create_block()
 
-					var cmd:CommandAddStairs = CommandAddStairs.new()
-					cmd.builder = builder
-					cmd.blocks_root_path = blocks_root.get_path()
-					cmd.block_name_prefix = "Block_"
-					cmd.floor_normal = floor_normal
-					cmd.drag_origin = drag_origin
-					cmd.base_drag_cur = base_drag_cur
-					cmd.block_drag_cur = block_drag_cur
-					cmd.step_height = settings.step_height
-					cmd.step_depth = settings.step_depth
-					cmd.direction = settings.direction
-					cmd.uv_transform = builder.tool_uv_transform
-					cmd.material_path = builder.tool_material_path
-
-					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-
-					cmd.add_to_undo_manager(undo)
+#					var cmd:CommandAddStairs = CommandAddStairs.new()
+#					cmd.builder = builder
+#					cmd.blocks_root_path = blocks_root.get_path()
+#					cmd.block_name_prefix = "Block_"
+#					cmd.floor_normal = floor_normal
+#					cmd.drag_origin = drag_origin
+#					cmd.base_drag_cur = base_drag_cur
+#					cmd.block_drag_cur = block_drag_cur
+#					cmd.step_height = settings.step_height
+#					cmd.step_depth = settings.step_depth
+#					cmd.direction = settings.direction
+#					cmd.uv_transform = builder.tool_uv_transform
+#					cmd.material_path = builder.tool_material_path
+#
+#					var undo:EditorUndoRedoManager = builder.get_undo_redo()
+#
+#					cmd.add_to_undo_manager(undo)
 										
 					tool_state = ToolState.READY
 					return true
@@ -283,4 +289,24 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			return true
 				
 	return super._gui_input(viewport_camera, event)		
+
+func create_block():
+	var blocks_root:Node = builder.get_block_add_parent()
 	
+	var cmd:CommandAddStairs = CommandAddStairs.new()
+	cmd.builder = builder
+	cmd.blocks_root_path = blocks_root.get_path()
+	cmd.block_name_prefix = "Block_"
+	cmd.floor_normal = floor_normal
+	cmd.drag_origin = drag_origin
+	cmd.base_drag_cur = base_drag_cur
+	cmd.block_drag_cur = block_drag_cur
+	cmd.step_height = settings.step_height
+	cmd.step_depth = settings.step_depth
+	cmd.direction = settings.direction
+	cmd.uv_transform = builder.tool_uv_transform
+	cmd.material_path = builder.tool_material_path
+
+	var undo:EditorUndoRedoManager = builder.get_undo_redo()
+
+	cmd.add_to_undo_manager(undo)
