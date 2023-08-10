@@ -30,7 +30,7 @@ const TOOL_ID:String = "block"
 enum ToolState { NONE, READY, BLOCK_BASE, BLOCK_HEIGHT, MOVE_FACE }
 var tool_state:ToolState = ToolState.NONE
 
-var drag_angle_limit:float = deg_to_rad(5)
+#var drag_angle_limit:float = deg_to_rad(5)
 
 var viewport_camera_start:Camera3D
 var event_start:InputEventMouseButton
@@ -93,51 +93,75 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 		
 	else:
 		#print("Miss")
-		var base_plane_origin:Vector3 = Vector3.ZERO
-		drag_floor_normal = Vector3.UP
-
-		var angle_y_axis:float = acos(dir.dot(Vector3.UP))
-		if angle_y_axis > PI / 2 - drag_angle_limit && angle_y_axis < PI / 2 + drag_angle_limit:
-			#Nearly parallel with ground plane
-			if abs(dir.z) > abs(dir.x):
-				drag_floor_normal = Vector3.FORWARD
-			else:
-				drag_floor_normal = Vector3.LEFT
-
-		#print("base_plane_normal ", base_plane_normal)
-
-		var hit_base:Vector3 = MathUtil.intersect_plane(origin, dir, base_plane_origin, drag_floor_normal)
-		#print("hit_base 1 ", hit_base)
-
-		if (hit_base - origin).dot(dir) < 0:
-			#Hit point is behind camera
-			var plane_offset:Vector3 = origin.project(drag_floor_normal)
-			base_plane_origin += plane_offset * 2
-			hit_base = MathUtil.intersect_plane(origin, dir, base_plane_origin, drag_floor_normal)
-
-		#print("base_plane_origin ", base_plane_origin)
-		#print("hit_base ", hit_base)
-
-		var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
-
-		block_drag_p0 = MathUtil.snap_to_grid(hit_base, grid_step_size)
-
-		tool_state = ToolState.BLOCK_BASE
+		var hit_result = calc_hit_point_empty_space(origin, dir)
+		block_drag_p0 = hit_result[0]
+		drag_floor_normal = hit_result[1]
 		
-		
-		#############
+#		var base_plane_origin:Vector3 = Vector3.ZERO
 #		drag_floor_normal = Vector3.UP
+#		var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
 #
-#		tool_state = ToolState.BLOCK_BASE
-#		var start_pos:Vector3 = origin + builder.block_create_distance * dir
+#		var angle_y_axis:float = acos(dir.dot(Vector3.UP))
+#		if angle_y_axis > PI / 2 - drag_angle_limit && angle_y_axis < PI / 2 + drag_angle_limit:
+#			#Nearly parallel with ground plane
+#			if abs(dir.z) > abs(dir.x):
+#				drag_floor_normal = Vector3.FORWARD
+#			else:
+#				drag_floor_normal = Vector3.LEFT
+#
+#		#print("base_plane_normal ", base_plane_normal)
+#
+#		var hit_base:Vector3 = MathUtil.intersect_plane(origin, dir, base_plane_origin, drag_floor_normal)
+#		#print("hit_base 1 ", hit_base)
+#
+#		if (hit_base - origin).dot(dir) < 0:
+#			#Hit point is behind camera
+#			var plane_offset:Vector3 = origin.project(drag_floor_normal)
+#			base_plane_origin += plane_offset * 2
+#			hit_base = MathUtil.intersect_plane(origin, dir, base_plane_origin, drag_floor_normal)
+#
+#		#print("base_plane_origin ", base_plane_origin)
+#		#print("hit_base ", hit_base)
 #
 #		var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 #
+#		block_drag_p0 = MathUtil.snap_to_grid(hit_base, grid_step_size)
+
+		tool_state = ToolState.BLOCK_BASE
+
+#func calc_hit_point_empty_space(origin:Vector3, dir:Vector3):
+#		#print("Miss")
+#		var base_plane_origin:Vector3 = Vector3.ZERO
+#		drag_floor_normal = Vector3.UP
+#		var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
 #
-#		block_drag_p0 = MathUtil.snap_to_grid(start_pos, grid_step_size)
-		
-		#print("block_drag_p0 %s" % block_drag_p0)
-	#print("set tool_state %s" % tool_state)
+#		var angle_y_axis:float = acos(dir.dot(Vector3.UP))
+#		if angle_y_axis > PI / 2 - drag_angle_limit && angle_y_axis < PI / 2 + drag_angle_limit:
+#			#Nearly parallel with ground plane
+#			if abs(dir.z) > abs(dir.x):
+#				drag_floor_normal = Vector3.FORWARD
+#			else:
+#				drag_floor_normal = Vector3.LEFT
+#
+#		#print("base_plane_normal ", base_plane_normal)
+#
+#		var hit_base:Vector3 = MathUtil.intersect_plane(origin, dir, base_plane_origin, drag_floor_normal)
+#		#print("hit_base 1 ", hit_base)
+#
+#		if (hit_base - origin).dot(dir) < 0:
+#			#Hit point is behind camera
+#			var plane_offset:Vector3 = origin.project(drag_floor_normal)
+#			base_plane_origin += plane_offset * 2
+#			hit_base = MathUtil.intersect_plane(origin, dir, base_plane_origin, drag_floor_normal)
+#
+#		#print("base_plane_origin ", base_plane_origin)
+#		#print("hit_base ", hit_base)
+#
+#		var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
+#
+#		block_drag_p0 = MathUtil.snap_to_grid(hit_base, grid_step_size)
+#
+#		return [block_drag_p0, drag_floor_normal]
 
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
@@ -214,22 +238,17 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 					var camera_dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 					var angle_with_base:float = acos(drag_floor_normal.dot(camera_dir))
-#					print("drag_floor_normal ", drag_floor_normal)
-#					print("camera_dir ", camera_dir)
-#					print("angle_with_base ", angle_with_base)
-#					print("drag_angle_limit ", drag_angle_limit)
+
+					var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
 					if angle_with_base < drag_angle_limit || angle_with_base > PI - drag_angle_limit:
 						block_drag_cur = block_drag_p1 + drag_floor_normal
 						
 						create_block()
-#						print("create block ")
 						
 						tool_state = ToolState.NONE
 					else:
 					
 						tool_state = ToolState.BLOCK_HEIGHT
-					
-					#print("set 2 tool_state %s" % tool_state)
 					
 				elif tool_state == ToolState.BLOCK_HEIGHT:
 					create_block()

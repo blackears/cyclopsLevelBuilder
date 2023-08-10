@@ -48,6 +48,8 @@ var tool_mesh:ImmediateMesh
 #var vertex_size:float = .05
 
 @export var grid_size:int = 0
+@export var drag_angle_limit:float = deg_to_rad(5)
+
 
 var unit_sphere:GeometryMesh
 var builder:CyclopsLevelBuilder
@@ -228,13 +230,12 @@ func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3, mat:Material = null, vertex_m
 	#$ToolInstance3D.mesh = mesh
 
 func draw_points(points:PackedVector3Array, vertex_mat:Material = null):
-	for p in points:
-		draw_vertex(p, vertex_mat)
+	draw_vertices(points, vertex_mat)
 
 func draw_vertex(position:Vector3, mat:Material = null):
-	var vertices = PackedVector3Array()
-	vertices.push_back(position)
+	draw_vertices([position], mat)
 	
+func draw_vertices(vertices:PackedVector3Array, mat:Material = null):
 	var arr_mesh = ArrayMesh.new()
 	var arrays = []
 	arrays.resize(Mesh.ARRAY_MAX)
@@ -248,17 +249,6 @@ func draw_vertex(position:Vector3, mat:Material = null):
 
 	$VertexGroup.add_child(mesh_inst)
 
-#####################
-	
-	
-#	var mesh_inst:MeshInstance3D = MeshInstance3D.new()
-#	mesh_inst.mesh = QuadMesh.new()
-#	mesh_inst.material_override = mat
-#	$VertexGroup.add_child(mesh_inst)
-#
-#	var xform:Transform3D = mesh_inst.global_transform
-#	xform.origin = position
-#	mesh_inst.global_transform = xform
 	
 
 func draw_sphere(xform:Transform3D = Transform3D.IDENTITY, material:Material = null, segs_lat:int = 6, segs_long:int = 8):
