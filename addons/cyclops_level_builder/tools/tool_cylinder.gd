@@ -143,37 +143,60 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					if settings.tube:
 						tool_state = ToolState.SECOND_RING
 					else:
-						tool_state = ToolState.DRAG_HEIGHT
+						var camera_dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+						var angle_with_base:float = acos(floor_normal.dot(camera_dir))
+						var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
+						if angle_with_base < drag_angle_limit || angle_with_base > PI - drag_angle_limit:
+							block_drag_cur = base_center + floor_normal
+							
+							create_block()
+							
+							tool_state = ToolState.READY
+						else:
+							tool_state = ToolState.DRAG_HEIGHT
 					return true
 				
 				elif tool_state == ToolState.SECOND_RING:
-					tool_state = ToolState.DRAG_HEIGHT
+					var camera_dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+					var angle_with_base:float = acos(floor_normal.dot(camera_dir))
+					var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
+					if angle_with_base < drag_angle_limit || angle_with_base > PI - drag_angle_limit:
+						block_drag_cur = base_center + floor_normal
+						
+						create_block()
+						
+						tool_state = ToolState.READY
+					else:
+					
+						tool_state = ToolState.DRAG_HEIGHT
 					return true
 
 				elif tool_state == ToolState.DRAG_HEIGHT:
 					#Create shape
 
-					var cmd:CommandAddCylinder = CommandAddCylinder.new()
-					cmd.builder = builder
-					cmd.block_name_prefix = "Block_"
-					cmd.blocks_root_path = blocks_root.get_path()
-					cmd.tube = settings.tube
-					cmd.origin = base_center
-					cmd.axis_normal = floor_normal
-					cmd.height = drag_offset.length() if drag_offset.dot(floor_normal) > 0 else - drag_offset.length()
-					if settings.tube:
-						cmd.radius_inner = min(first_ring_radius, second_ring_radius)
-						cmd.radius_outer = max(first_ring_radius, second_ring_radius)
-					else:
-						cmd.radius_inner = first_ring_radius
-						cmd.radius_outer = first_ring_radius
-					cmd.segments = settings.segments
-					cmd.uv_transform = builder.tool_uv_transform
-					cmd.material_path = builder.tool_material_path
-
-					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-
-					cmd.add_to_undo_manager(undo)
+#					var cmd:CommandAddCylinder = CommandAddCylinder.new()
+#					cmd.builder = builder
+#					cmd.block_name_prefix = "Block_"
+#					cmd.blocks_root_path = blocks_root.get_path()
+#					cmd.tube = settings.tube
+#					cmd.origin = base_center
+#					cmd.axis_normal = floor_normal
+#					cmd.height = drag_offset.length() if drag_offset.dot(floor_normal) > 0 else - drag_offset.length()
+#					if settings.tube:
+#						cmd.radius_inner = min(first_ring_radius, second_ring_radius)
+#						cmd.radius_outer = max(first_ring_radius, second_ring_radius)
+#					else:
+#						cmd.radius_inner = first_ring_radius
+#						cmd.radius_outer = first_ring_radius
+#					cmd.segments = settings.segments
+#					cmd.uv_transform = builder.tool_uv_transform
+#					cmd.material_path = builder.tool_material_path
+#
+#					var undo:EditorUndoRedoManager = builder.get_undo_redo()
+#
+#					cmd.add_to_undo_manager(undo)
+					
+					create_block()
 										
 					tool_state = ToolState.READY
 					return true
@@ -242,4 +265,27 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 	return super._gui_input(viewport_camera, event)		
 
+func create_block():
+	var blocks_root:Node = builder.get_block_add_parent()
+	
+	var cmd:CommandAddCylinder = CommandAddCylinder.new()
+	cmd.builder = builder
+	cmd.block_name_prefix = "Block_"
+	cmd.blocks_root_path = blocks_root.get_path()
+	cmd.tube = settings.tube
+	cmd.origin = base_center
+	cmd.axis_normal = floor_normal
+	cmd.height = drag_offset.length() if drag_offset.dot(floor_normal) > 0 else - drag_offset.length()
+	if settings.tube:
+		cmd.radius_inner = min(first_ring_radius, second_ring_radius)
+		cmd.radius_outer = max(first_ring_radius, second_ring_radius)
+	else:
+		cmd.radius_inner = first_ring_radius
+		cmd.radius_outer = first_ring_radius
+	cmd.segments = settings.segments
+	cmd.uv_transform = builder.tool_uv_transform
+	cmd.material_path = builder.tool_material_path
 
+	var undo:EditorUndoRedoManager = builder.get_undo_redo()
+
+	cmd.add_to_undo_manager(undo)
