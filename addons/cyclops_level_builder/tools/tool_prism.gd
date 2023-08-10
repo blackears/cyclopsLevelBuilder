@@ -72,8 +72,20 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		if e.keycode == KEY_ENTER:
 			if e.is_pressed():
 				if tool_state == ToolState.BASE_POINTS:
-					drag_offset = Vector3.ZERO
-					tool_state = ToolState.DRAG_HEIGHT
+					var camera_dir:Vector3 = viewport_camera.global_transform.basis.z
+					var angle_with_base:float = acos(floor_normal.dot(camera_dir))
+					var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
+					if angle_with_base < drag_angle_limit || angle_with_base > PI - drag_angle_limit:
+						drag_offset = floor_normal
+						block_drag_cur = base_points[0] + floor_normal
+						
+						create_block()
+						
+						tool_state = ToolState.READY
+					else:
+					
+						drag_offset = Vector3.ZERO
+						tool_state = ToolState.DRAG_HEIGHT
 			return true
 			
 		elif e.keycode == KEY_BACKSPACE:
@@ -102,13 +114,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 					if result:
-						#print("init base point block")
-						
-#						floor_normal = result.normal
 						floor_normal = result.get_world_normal()
 
 						var p:Vector3 = MathUtil.snap_to_grid(result.get_world_position(), grid_step_size)
-						#var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
 
 						base_points.append(p)
 						preview_point = p
@@ -123,7 +131,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						
 						
 						var p:Vector3 = MathUtil.snap_to_grid(start_pos, grid_step_size)
-						#var p:Vector3 = to_local(start_pos, blocks_root.global_transform.inverse(), grid_step_size)
 						base_points.append(p)
 						
 						return true
@@ -132,8 +139,19 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					#print("add base point")
 					if e.double_click:
 						if e.is_pressed():
-							drag_offset = Vector3.ZERO
-							tool_state = ToolState.DRAG_HEIGHT
+							var camera_dir:Vector3 = viewport_camera.global_transform.basis.z
+							var angle_with_base:float = acos(floor_normal.dot(camera_dir))
+							var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
+							if angle_with_base < drag_angle_limit || angle_with_base > PI - drag_angle_limit:
+								drag_offset = floor_normal
+								block_drag_cur = base_points[0] + floor_normal
+								
+								create_block()
+								
+								tool_state = ToolState.READY
+							else:
+								drag_offset = Vector3.ZERO
+								tool_state = ToolState.DRAG_HEIGHT
 						return true
 
 					var p_isect:Vector3 = MathUtil.intersect_plane(origin, dir, base_points[0], floor_normal)
@@ -145,32 +163,24 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					return true
 					
 				elif tool_state == ToolState.DRAG_HEIGHT:
-					var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
-					drag_offset = block_drag_cur - base_points[0]
-
-#					var pivot_xform:Transform3D = Transform3D(Basis.IDENTITY, -bounding_points[0])
-#					var local_points = pivot_xform * bounding_points
-#					var local_xform = blocks_root.global_transform.inverse() * pivot_xform.inverse()
+					create_block()
 					
-#					print("bounding_points %s " % bounding_points)
-#					print("local_points %s " % local_points)
-
-					var cmd:CommandAddPrism = CommandAddPrism.new()
-					cmd.builder = builder
-					cmd.block_name = GeneralUtil.find_unique_name(blocks_root, "Block_")
-					cmd.blocks_root_path = blocks_root.get_path()
-					cmd.base_polygon = bounding_points
-					#cmd.local_transform = local_xform
-					cmd.extrude = drag_offset
-					cmd.uv_transform = builder.tool_uv_transform
-					cmd.material_path = builder.tool_material_path
-
-					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-
-					cmd.add_to_undo_manager(undo)
-					
-#					global_scene.clear_tool_mesh()
-#					global_scene.draw_selected_blocks(viewport_camera)
+#					var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
+#					drag_offset = block_drag_cur - base_points[0]
+#
+#					var cmd:CommandAddPrism = CommandAddPrism.new()
+#					cmd.builder = builder
+#					cmd.block_name = GeneralUtil.find_unique_name(blocks_root, "Block_")
+#					cmd.blocks_root_path = blocks_root.get_path()
+#					cmd.base_polygon = bounding_points
+#					#cmd.local_transform = local_xform
+#					cmd.extrude = drag_offset
+#					cmd.uv_transform = builder.tool_uv_transform
+#					cmd.material_path = builder.tool_material_path
+#
+#					var undo:EditorUndoRedoManager = builder.get_undo_redo()
+#
+#					cmd.add_to_undo_manager(undo)
 					
 					tool_state = ToolState.READY
 					return true
@@ -222,4 +232,22 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 	return super._gui_input(viewport_camera, event)		
 
+func create_block():
+	var blocks_root:Node = builder.get_block_add_parent()
+	
+	var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
+	drag_offset = block_drag_cur - base_points[0]
 
+	var cmd:CommandAddPrism = CommandAddPrism.new()
+	cmd.builder = builder
+	cmd.block_name = GeneralUtil.find_unique_name(blocks_root, "Block_")
+	cmd.blocks_root_path = blocks_root.get_path()
+	cmd.base_polygon = bounding_points
+	#cmd.local_transform = local_xform
+	cmd.extrude = drag_offset
+	cmd.uv_transform = builder.tool_uv_transform
+	cmd.material_path = builder.tool_material_path
+
+	var undo:EditorUndoRedoManager = builder.get_undo_redo()
+
+	cmd.add_to_undo_manager(undo)
