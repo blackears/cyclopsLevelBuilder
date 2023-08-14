@@ -1,0 +1,99 @@
+[gd_scene load_steps=9 format=3 uid="uid://2pi622xycrd6"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/gizmos/gizmo_translate.gd" id="1_fyqe0"]
+[ext_resource type="PackedScene" uid="uid://ujq3kes2sdfu" path="res://addons/cyclops_level_builder/art/gizmos/gizmo_translate.glb" id="1_ljs46"]
+[ext_resource type="Material" uid="uid://bv4k8o22vl6ub" path="res://addons/cyclops_level_builder/materials/gizmo_axis_y_material.tres" id="3_tsii4"]
+[ext_resource type="Material" uid="uid://divsg4lq712rw" path="res://addons/cyclops_level_builder/materials/gizmo_axis_z_material.tres" id="4_0qd8v"]
+[ext_resource type="Material" uid="uid://drodm0wf41vin" path="res://addons/cyclops_level_builder/materials/gizmo_axis_x_material.tres" id="5_xvd3e"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_pi1jn"]
+
+[sub_resource type="Shader" id="Shader_0kdbq"]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.1.stable's StandardMaterial3D.
+
+shader_type spatial;
+render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
+uniform vec4 albedo : source_color;
+uniform sampler2D texture_albedo : source_color,filter_linear_mipmap,repeat_enable;
+uniform float point_size : hint_range(0,128);
+uniform float roughness : hint_range(0,1);
+uniform sampler2D texture_metallic : hint_default_white,filter_linear_mipmap,repeat_enable;
+uniform vec4 metallic_texture_channel;
+uniform sampler2D texture_roughness : hint_roughness_r,filter_linear_mipmap,repeat_enable;
+uniform float specular;
+uniform float metallic;
+uniform vec3 uv1_scale;
+uniform vec3 uv1_offset;
+uniform vec3 uv2_scale;
+uniform vec3 uv2_offset;
+
+
+void vertex() {
+	UV=UV*uv1_scale.xy+uv1_offset.xy;
+	if (PROJECTION_MATRIX[3][3] != 0.0) {
+		float h = abs(1.0 / (2.0 * PROJECTION_MATRIX[1][1]));
+		float sc = (h * 2.0); //consistent with Y-fov
+		MODELVIEW_MATRIX[0]*=sc;
+		MODELVIEW_MATRIX[1]*=sc;
+		MODELVIEW_MATRIX[2]*=sc;
+	} else {
+		float sc = -(MODELVIEW_MATRIX)[3].z;
+		MODELVIEW_MATRIX[0]*=sc;
+		MODELVIEW_MATRIX[1]*=sc;
+		MODELVIEW_MATRIX[2]*=sc;
+	}
+}
+
+
+
+
+
+
+void fragment() {
+	vec2 base_uv = UV;
+	vec4 albedo_tex = texture(texture_albedo,base_uv);
+	ALBEDO = albedo.rgb * albedo_tex.rgb;
+	float metallic_tex = dot(texture(texture_metallic,base_uv),metallic_texture_channel);
+	METALLIC = metallic_tex * metallic;
+	vec4 roughness_texture_channel = vec4(1.0,0.0,0.0,0.0);
+	float roughness_tex = dot(texture(texture_roughness,base_uv),roughness_texture_channel);
+	ROUGHNESS = roughness_tex * roughness;
+	SPECULAR = specular;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k7ks0"]
+render_priority = 0
+shader = SubResource("Shader_0kdbq")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = null
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+
+[node name="gizmo_translate" type="Node3D"]
+script = ExtResource("1_fyqe0")
+
+[node name="gizmo_translate" parent="." instance=ExtResource("1_ljs46")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+
+[node name="axis_y" parent="gizmo_translate" index="0"]
+surface_material_override/0 = ExtResource("3_tsii4")
+
+[node name="axis_z" parent="gizmo_translate" index="1"]
+surface_material_override/0 = ExtResource("4_0qd8v")
+
+[node name="axis_x" parent="gizmo_translate" index="2"]
+surface_material_override/0 = ExtResource("5_xvd3e")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("BoxMesh_pi1jn")
+surface_material_override/0 = SubResource("ShaderMaterial_k7ks0")
+
+[editable path="gizmo_translate"]

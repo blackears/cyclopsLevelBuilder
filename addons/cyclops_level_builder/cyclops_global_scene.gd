@@ -42,10 +42,7 @@ class_name CyclopsGlobalScene
 
 @export var tool_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_material.tres")
 @export var outline_material:Material = preload("res://addons/cyclops_level_builder/materials/outline_material.tres")
-#@export var tool_selected_material:Material
-#@export var selected_material:Material
 var tool_mesh:ImmediateMesh
-#var vertex_size:float = .05
 
 @export var grid_size:int = 0
 @export var drag_angle_limit:float = deg_to_rad(5)
@@ -53,9 +50,6 @@ var tool_mesh:ImmediateMesh
 
 var unit_sphere:GeometryMesh
 var builder:CyclopsLevelBuilder
-#
-#enum DisplayMode { TEXTURED, WIRE }
-#var display_mode:DisplayMode = DisplayMode.TEXTURED
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -65,8 +59,6 @@ func _ready():
 	$ToolInstance3D.mesh = tool_mesh
 
 func draw_line(p0:Vector3, p1:Vector3, mat:Material):
-
-#	var mat:Material = tool_selected_material if selected else tool_material
 	
 	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINES, mat)
 
@@ -124,8 +116,6 @@ func draw_prism(points:PackedVector3Array, extrude:Vector3, mat:Material = null,
 	
 	tool_mesh.surface_end()
 	
-	#$ToolInstance3D.mesh = mesh
-		
 
 func draw_triangles(tri_points:PackedVector3Array, mat:Material = null):	
 	tool_mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES, mat)
@@ -157,15 +147,13 @@ func draw_rect(start:Vector3, end:Vector3, mat:Material = null, vertex_mat:Mater
 	
 	tool_mesh.surface_end()
 	
-	#$ToolInstance3D.mesh = tool_mesh
-
 func clear_tool_mesh():
 	#tool_mesh = ImmediateMesh.new()
 	#$ToolInstance3D.mesh = tool_mesh
 	tool_mesh.clear_surfaces()
 	
-	for child in $VertexGroup.get_children():
-		$VertexGroup.remove_child(child)
+	for child in %VertexGroup.get_children():
+		%VertexGroup.remove_child(child)
 		child.queue_free()
 		
 	
@@ -247,7 +235,7 @@ func draw_vertices(vertices:PackedVector3Array, mat:Material = null):
 
 	mesh_inst.material_override = mat
 
-	$VertexGroup.add_child(mesh_inst)
+	%VertexGroup.add_child(mesh_inst)
 
 	
 
@@ -285,6 +273,16 @@ func draw_screen_rect(viewport_camera:Camera3D, p00:Vector2, p11:Vector2, materi
 		tool_mesh.surface_add_vertex(p_proj)
 	
 	tool_mesh.surface_end()
+	
+func set_custom_gizmo(gizmo:Node3D):
+	for child in %GizmoControl.get_children():
+		%GizmoControl.remove_child(child)
+	
+	if gizmo:
+		print("Setting gizmo")
+		%GizmoControl.add_child(gizmo)
+	
+	
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

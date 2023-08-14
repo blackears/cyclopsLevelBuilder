@@ -45,8 +45,50 @@ var cmd_move_blocks:CommandMoveBlocks
 
 var base_points:PackedVector3Array
 
+var gizmo_translate:Node3D
+
 func _get_tool_id()->String:
 	return TOOL_ID
+
+func draw_gizmo(viewport_camera:Camera3D):
+	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
+	if !gizmo_translate:
+		gizmo_translate = preload("res://addons/cyclops_level_builder/tools/gizmos/gizmo_translate.tscn").instantiate()
+	
+	var blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+	if blocks.is_empty():
+		global_scene.set_custom_gizmo(null)
+	else:
+		var origin:Vector3
+		for block in blocks:
+			origin += block.global_transform.origin
+		origin /= blocks.size()
+		global_scene.set_custom_gizmo(gizmo_translate)
+		gizmo_translate.global_transform.origin = origin
+	
+	#var gizmo_translate:Mesh = preload("res://addons/cyclops_level_builder/art/gizmos/gizmo_translate.obj")
+	#var gizmo_translate = preload("res://addons/cyclops_level_builder/art/gizmos/gizmo_translate.glb")
+
+#	var gltf := GLTFDocument.new()
+#	var gltf_state := GLTFState.new()
+#
+#	gltf.append_from_file("res://addons/cyclops_level_builder/art/gizmos/gizmo_translate.glb", gltf_state)
+#	var node = gltf.generate_scene(gltf_state)
+	
+	pass
+
+func _draw_tool(viewport_camera:Camera3D):
+	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
+	global_scene.clear_tool_mesh()
+	global_scene.draw_selected_blocks(viewport_camera)
+
+	if tool_state == ToolState.DRAG_SELECTION:
+		#print("draw sel %s " % drag_select_to_pos)
+		global_scene.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
+
+	draw_gizmo(viewport_camera)
+	
+
 
 func start_drag(viewport_camera:Camera3D, event:InputEvent):
 	var blocks_root:Node = builder.get_block_add_parent()
@@ -82,15 +124,6 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 	drag_select_start_pos = e.position
 	drag_select_to_pos = e.position
 
-
-func _draw_tool(viewport_camera:Camera3D):
-	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
-	global_scene.clear_tool_mesh()
-	global_scene.draw_selected_blocks(viewport_camera)
-
-	if tool_state == ToolState.DRAG_SELECTION:
-		#print("draw sel %s " % drag_select_to_pos)
-		global_scene.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 

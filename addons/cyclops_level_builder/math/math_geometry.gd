@@ -29,7 +29,6 @@ class_name MathGeometry
 static func unit_cylinder(segs:int = 16, radius0:float = 1, radius1:float = 1, top_height:float = 1, bottom_height:float = -1, bottom_cap:bool = false, top_cap:bool = false)->GeometryMesh:
 	var mesh:GeometryMesh = GeometryMesh.new()
 
-
 	var vc0:Vector3 = Vector3(0, 0, -1)
 	var vc1:Vector3 = Vector3(0, 0, 1)
 	var uvc:Vector2 = Vector2(.5, .5)

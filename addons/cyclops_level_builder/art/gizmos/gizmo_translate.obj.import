@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://cuuxumssbvx"
+path="res://.godot/imported/gizmo_translate.obj-dfe1041d0008a76a601d3c2537af97e5.mesh"
+
+[deps]
+
+files=["res://.godot/imported/gizmo_translate.obj-dfe1041d0008a76a601d3c2537af97e5.mesh"]
+
+source_file="res://addons/cyclops_level_builder/art/gizmos/gizmo_translate.obj"
+dest_files=["res://.godot/imported/gizmo_translate.obj-dfe1041d0008a76a601d3c2537af97e5.mesh", "res://.godot/imported/gizmo_translate.obj-dfe1041d0008a76a601d3c2537af97e5.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
