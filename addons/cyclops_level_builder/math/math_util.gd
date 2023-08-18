@@ -40,6 +40,23 @@ static func intersect_plane(ray_origin:Vector3, ray_dir:Vector3, plane_origin:Ve
 	var s:float = (plane_origin - ray_origin).dot(plane_perp_dir) / ray_dir.dot(plane_perp_dir)
 	return ray_origin + ray_dir * s
 
+static func intersects_triangle(ray_origin:Vector3, ray_dir:Vector3, p0:Vector3, p1:Vector3, p2:Vector3)->bool:
+	#Godot uses clockwise winding
+	var tri_area_x2:Vector3 = MathUtil.triangle_area_x2(p0, p1, p2)
+	
+	var p_hit:Vector3 = MathUtil.intersect_plane(ray_origin, ray_dir, p0, tri_area_x2)
+	if !p_hit.is_finite():
+		return false
+	
+	if MathUtil.triangle_area_x2(p_hit, p0, p1).dot(tri_area_x2) < 0:
+		return false
+	if MathUtil.triangle_area_x2(p_hit, p1, p2).dot(tri_area_x2) < 0:
+		return false
+	if MathUtil.triangle_area_x2(p_hit, p2, p0).dot(tri_area_x2) < 0:
+		return false
+		
+	return true
+	
 #Returns the closest point on the line to the ray
 static func closest_point_on_line(ray_origin:Vector3, ray_dir:Vector3, line_origin:Vector3, line_dir:Vector3)->Vector3:
 	var a:Vector3 = ray_dir.cross(line_dir)

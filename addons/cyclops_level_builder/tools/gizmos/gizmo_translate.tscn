@@ -91,6 +91,15 @@ surface_material_override/0 = ExtResource("4_0qd8v")
 [node name="axis_x" parent="gizmo_translate" index="2"]
 surface_material_override/0 = ExtResource("5_xvd3e")
 
+[node name="plane_xz" parent="gizmo_translate" index="3"]
+surface_material_override/0 = ExtResource("3_tsii4")
+
+[node name="plane_yz" parent="gizmo_translate" index="4"]
+surface_material_override/0 = ExtResource("5_xvd3e")
+
+[node name="plane_xy" parent="gizmo_translate" index="5"]
+surface_material_override/0 = ExtResource("4_0qd8v")
+
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource("BoxMesh_pi1jn")

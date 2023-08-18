@@ -87,6 +87,8 @@ func test_cut_plane():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	var gizmo_translate = preload("res://addons/cyclops_level_builder/art/gizmos/gizmo_translate.glb")
+
 	
 	await get_tree().process_frame
 
