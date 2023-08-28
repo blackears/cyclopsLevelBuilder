@@ -5231,7 +5231,7 @@ face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
 active_face = -1
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_wrbnt"]
+[sub_resource type="Resource" id="Resource_wab5p"]
 script = ExtResource("4_q38fu")
 selected = false
 active = false
@@ -5303,7 +5303,7 @@ face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
 active_face = -1
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_8q6oo"]
+[sub_resource type="Resource" id="Resource_0b5mm"]
 script = ExtResource("4_q38fu")
 selected = false
 active = false
@@ -5320,7 +5320,7 @@ edge_face_indices = PackedInt32Array(0, 4, 0, 5, 0, 1, 0, 2, 1, 2, 1, 5, 1, 3, 2
 face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
 face_vertex_indices = PackedInt32Array(0, 1, 2, 3, 4, 3, 2, 5, 0, 3, 4, 6, 7, 6, 4, 5, 7, 1, 0, 6, 7, 5, 2, 1)
 face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
-face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 6, -5), Transform2D(1, 0, 0, 1, -28, -5), Transform2D(1, 0, 0, 1, 6, -28), Transform2D(1, 0, 0, 1, 6, -5), Transform2D(1, 0, 0, 1, -28, -5), Transform2D(1, 0, 0, 1, 6, -28)])
+face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 5, -4), Transform2D(1, 0, 0, 1, -28, -4), Transform2D(1, 0, 0, 1, 5, -28), Transform2D(1, 0, 0, 1, 5, -4), Transform2D(1, 0, 0, 1, -28, -4), Transform2D(1, 0, 0, 1, 5, -28)])
 face_visible = PackedByteArray(1, 1, 1, 1, 1, 1)
 face_color = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
 face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
@@ -9429,550 +9429,742 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 25, 19)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_vdbgb")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_3" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31, 28, 30)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_82crk")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_4" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 28, 30)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_xqo5w")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_5" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29, 28, 37)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_04wc2")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_6" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 28, 37)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_6dep5")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_7" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 26, 42)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_gwl2l")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_9" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 31, 54)
 script = ExtResource("1_xfayt")
-block_data = SubResource("Resource_wrbnt")
+block_data = SubResource("Resource_wab5p")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_11" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 31, 48)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_vv521")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_12" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 31, 48)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_klfh4")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_13" type="Node3D" parent="CyclopsBlocks_upgraded"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29, 30, 42)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 29, 42)
 script = ExtResource("1_xfayt")
-block_data = SubResource("Resource_8q6oo")
+block_data = SubResource("Resource_0b5mm")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_14" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 29, 42)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_0effm")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_15" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 28, 63)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_boui6")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_17" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 28, 74)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_xxy3j")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_18" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 28, 72)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_j76fx")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_19" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 31, 81)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_ny250")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_21" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 31, 67)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_7frsy")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_22" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 31, 78)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_oys6k")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_24" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 31, 68)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_bnm3m")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_26" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33, 31, 69)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_t4kku")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_27" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33, 31, 79)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_qp2c1")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_29" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 31, 78)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_45o2j")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_30" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 31, 61)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_2nbeg")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_33" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 31, 61)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_l50r8")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_34" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 31, 71)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_7dmfp")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_35" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 30, 77)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_ubjwi")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_8" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 28, 54)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_qbbet")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_10" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 31, 54)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_pnfbf")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_28" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 30, 81)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_r8e54")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_16" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 28, 72)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_lrlek")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_25" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31, 31, 65)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_kc7gd")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_31" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 31, 63)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_1qveb")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_32" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29, 31, 63)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_r423o")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_36" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 28, 72)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_n7b8d")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_37" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 30, 78)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_ps2fu")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_38" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 30, 66)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_ofd7d")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_39" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 32, 73)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_s53e8")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_40" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 32, 70)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_5f31t")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_1" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 30, 68)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_dbvdh")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_41" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 32, 70)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_gnoyr")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_42" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 30, 75)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_q4hsq")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_43" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 32, 73)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_w43ut")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_48" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 28, 71)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_oaext")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_49" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 26, 71)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_bmmwu")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_50" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 30, 79)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_t5lri")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_51" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 30, 63)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_f1llp")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_52" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 32, 73)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_1npq3")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_53" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 32, 70)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_nj0dy")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_54" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 30, 68)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_0sucn")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_55" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 32, 70)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_db06e")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_56" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 30, 75)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_mh6k6")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_57" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 32, 73)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_2472q")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_44" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 30, 75)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_vyarb")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_45" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 30, 68)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_ewqrx")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_46" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 33, 71)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_oxtnj")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_47" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 26, 71)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_smpe7")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_58" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 27, 62)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_tior0")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_59" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 27, 80)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_48vtt")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_60" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38, 30, 59)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_bqbtg")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_61" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 30, 84)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_ewdu8")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_63" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 27, 71)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_idyc1")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_64" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29, 27, 71)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_fqc3f")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_65" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 30, 61)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_h3ixr")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_66" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 30, 81)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_swo6h")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_67" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 28, 71)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_5n440")
 materials = Array[Material]([ExtResource("7_b6lpw")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_68" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 27, 71)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_7g24b")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_69" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 31, 64)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_xpp3x")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_71" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 33, 63)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_dwpn2")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_70" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 29, 62)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_h3xch")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_73" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 31, 60)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_pvxpx")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_74" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 33, 62)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_4dgbf")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_72" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 31, 73)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_4ysff")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_75" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 33, 72)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_hvdsi")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_76" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 29, 71)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_oiggf")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_77" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 31, 69)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_cyxtn")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_78" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 33, 71)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_utki2")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_79" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 31, 82)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_86tvs")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_80" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 33, 81)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_ev0sm")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_81" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 29, 80)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_kx1qx")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_82" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 31, 78)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_03amn")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_83" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 33, 80)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_4qv6r")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_62" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 31, 67)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_ob3ra")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_84" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 31, 76)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_dnwoa")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_85" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 30, 59)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_10jmh")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_86" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 30, 59)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_h6axd")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_87" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 32, 59)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_sjkio")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_88" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 32, 59)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_4lfh3")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_2" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 25, 30)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_y77jb")
 materials = Array[Material]([ExtResource("6_8wdyo")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_20" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 31, 64)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_5yprr")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_23" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 31, 65)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_2gfjf")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_1" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 32, 53)
 script = ExtResource("1_xfayt")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_3" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 27, 57)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_pr22g")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_4" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 38, 49)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_ol2g5")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_5" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 36, 57)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_48ibd")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_0" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 32, 52)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_wvhio")
 materials = Array[Material]([ExtResource("3_02243")])
+collision_layer = null
+collision_mask = null
 
 [node name="Block_2" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 34, 53)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_itni3")
+collision_layer = null
+collision_mask = null
 
 [node name="Block_6" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 25, 29)
 script = ExtResource("1_xfayt")
 block_data = SubResource("Resource_lhhld")
+collision_layer = null
+collision_mask = null

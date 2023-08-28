@@ -63,6 +63,22 @@ var control_mesh:ConvexVolume
 var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
 var display_mode:DisplayMode.Type = DisplayMode.Type.TEXTURED
 
+@export_flags_3d_physics var collision_layer:int = 1:
+	get:
+		return collision_layer
+	set(value):
+		collision_layer = value
+		if collision_body:
+			collision_body.collision_layer = collision_layer
+		
+@export_flags_3d_physics var collision_mask:int = 1:
+	get:
+		return collision_mask
+	set(value):
+		collision_mask = value
+		if collision_body:
+			collision_body.collision_mask = collision_mask
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	mesh_instance = MeshInstance3D.new()
@@ -75,10 +91,7 @@ func _ready():
 		mesh_wire = MeshInstance3D.new()
 		add_child(mesh_wire)
 	
-#	collision_body = StaticBody3D.new()
-#	add_child(collision_body)
 	collision_shape = CollisionShape3D.new()
-	#collision_body.add_child(collision_shape)
 
 	occluder = OccluderInstance3D.new()
 	add_child(occluder)
@@ -102,6 +115,8 @@ func update_physics_body():
 			collision_body = RigidBody3D.new()
 			
 	if collision_body:
+		collision_body.collision_layer = collision_layer
+		collision_body.collision_mask = collision_mask
 		add_child(collision_body)
 		
 		collision_body.add_child(collision_shape)
