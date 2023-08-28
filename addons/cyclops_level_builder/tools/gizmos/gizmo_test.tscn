@@ -32,3 +32,6 @@ mesh = SubResource("SphereMesh_off5f")
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.126, 0, 0.126)
 mesh = SubResource("SphereMesh_off5f")
+
+[editable path="gizmo_translate"]
+[editable path="gizmo_translate/gizmo_translate"]

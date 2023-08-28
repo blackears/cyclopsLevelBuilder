@@ -31,6 +31,9 @@ const TOOL_ID:String = "move"
 enum ToolState { NONE, READY, MOVE_BLOCK, DRAG_SELECTION }
 var tool_state:ToolState = ToolState.NONE
 
+enum MoveConstraint { NONE, AXIS_X, AXIS_Y, AXIS_Z, PLANE_XY, PLANE_XZ, PLANE_YZ }
+var move_constraint:MoveConstraint = MoveConstraint.NONE
+
 #var viewport_camera_start:Camera3D
 var event_start:InputEventMouseButton
 
@@ -65,17 +68,7 @@ func draw_gizmo(viewport_camera:Camera3D):
 		origin /= blocks.size()
 		global_scene.set_custom_gizmo(gizmo_translate)
 		gizmo_translate.global_transform.origin = origin
-	
-	#var gizmo_translate:Mesh = preload("res://addons/cyclops_level_builder/art/gizmos/gizmo_translate.obj")
-	#var gizmo_translate = preload("res://addons/cyclops_level_builder/art/gizmos/gizmo_translate.glb")
 
-#	var gltf := GLTFDocument.new()
-#	var gltf_state := GLTFState.new()
-#
-#	gltf.append_from_file("res://addons/cyclops_level_builder/art/gizmos/gizmo_translate.glb", gltf_state)
-#	var node = gltf.generate_scene(gltf_state)
-	
-	pass
 
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
@@ -96,6 +89,47 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 	
 	var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 	var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+
+	move_constraint = MoveConstraint.NONE
+
+	if gizmo_translate:
+		var part_res:GizmoTranslate.IntersectResult = gizmo_translate.intersect(origin, dir, viewport_camera)
+		if part_res:
+			#print("Gizmo hit ", part_res.part)
+			match part_res.part:
+				GizmoTranslate.Part.AXIS_X:
+					move_constraint = MoveConstraint.AXIS_X
+				GizmoTranslate.Part.AXIS_Y:
+					move_constraint = MoveConstraint.AXIS_Y
+				GizmoTranslate.Part.AXIS_Z:
+					move_constraint = MoveConstraint.AXIS_Z
+				GizmoTranslate.Part.PLANE_XY:
+					move_constraint = MoveConstraint.PLANE_XY
+				GizmoTranslate.Part.PLANE_XZ:
+					move_constraint = MoveConstraint.PLANE_XZ
+				GizmoTranslate.Part.PLANE_YZ:
+					move_constraint = MoveConstraint.PLANE_YZ
+		
+			var start_pos:Vector3 = part_res.pos_world
+			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
+
+			block_drag_p0 = MathUtil.snap_to_grid(start_pos, grid_step_size)
+
+	#		print("res obj %s" % result.object.get_path())
+			var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+			if !sel_blocks.is_empty():
+				
+				tool_state = ToolState.MOVE_BLOCK
+				#print("Move block")
+				
+				cmd_move_blocks = CommandMoveBlocks.new()
+				cmd_move_blocks.builder = builder
+				cmd_move_blocks.lock_uvs = builder.lock_uvs
+				for child in sel_blocks:
+					cmd_move_blocks.add_block(child.get_path())
+
+			return
+
 
 	var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 #	print("result %s" % result)
@@ -119,11 +153,16 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 				cmd_move_blocks.add_block(child.get_path())
 			
 			return
-		
+	
 	tool_state = ToolState.DRAG_SELECTION
 	drag_select_start_pos = e.position
 	drag_select_to_pos = e.position
 
+	if e.alt_pressed:
+		move_constraint = MoveConstraint.AXIS_Y
+	else:
+		move_constraint = MoveConstraint.PLANE_XZ
+	
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
@@ -225,13 +264,20 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			return true
 			
 		elif tool_state == ToolState.MOVE_BLOCK:
-			if e.alt_pressed:
-				block_drag_cur = MathUtil.closest_point_on_line(origin, dir, block_drag_p0, Vector3.UP)
-			else:
-				block_drag_cur = MathUtil.intersect_plane(origin, dir, block_drag_p0, Vector3.UP)
-			
-#			print("block_drag_cur %s" % block_drag_cur)
-#			print("block_drag_p0 %s" % block_drag_p0)
+			match move_constraint:
+				MoveConstraint.AXIS_X:
+					block_drag_cur = MathUtil.closest_point_on_line(origin, dir, block_drag_p0, Vector3.RIGHT)
+				MoveConstraint.AXIS_Y:
+					block_drag_cur = MathUtil.closest_point_on_line(origin, dir, block_drag_p0, Vector3.UP)
+				MoveConstraint.AXIS_Z:
+					block_drag_cur = MathUtil.closest_point_on_line(origin, dir, block_drag_p0, Vector3.BACK)
+				MoveConstraint.PLANE_XY:
+					block_drag_cur = MathUtil.intersect_plane(origin, dir, block_drag_p0, Vector3.BACK)
+				MoveConstraint.PLANE_XZ:
+					block_drag_cur = MathUtil.intersect_plane(origin, dir, block_drag_p0, Vector3.UP)
+				MoveConstraint.PLANE_YZ:
+					block_drag_cur = MathUtil.intersect_plane(origin, dir, block_drag_p0, Vector3.RIGHT)
+					
 
 			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)

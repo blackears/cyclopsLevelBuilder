@@ -1,6 +1,7 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://bv4k8o22vl6ub"]
 
 [resource]
+cull_mode = 2
 no_depth_test = true
 shading_mode = 0
 albedo_color = Color(0, 1, 0, 1)

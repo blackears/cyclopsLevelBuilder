@@ -56,6 +56,30 @@ static func intersects_triangle(ray_origin:Vector3, ray_dir:Vector3, p0:Vector3,
 		return false
 		
 	return true
+
+class IntersectTriangleResult:
+	var position:Vector3
+	var normal:Vector3
+
+static func intersect_triangle(ray_origin:Vector3, ray_dir:Vector3, p0:Vector3, p1:Vector3, p2:Vector3)->IntersectTriangleResult:
+	#Godot uses clockwise winding
+	var tri_area_x2:Vector3 = MathUtil.triangle_area_x2(p0, p1, p2)
+	
+	var p_hit:Vector3 = MathUtil.intersect_plane(ray_origin, ray_dir, p0, tri_area_x2)
+	if !p_hit.is_finite():
+		return null
+	
+	if MathUtil.triangle_area_x2(p_hit, p0, p1).dot(tri_area_x2) < 0:
+		return null
+	if MathUtil.triangle_area_x2(p_hit, p1, p2).dot(tri_area_x2) < 0:
+		return null
+	if MathUtil.triangle_area_x2(p_hit, p2, p0).dot(tri_area_x2) < 0:
+		return null
+		
+	var result:IntersectTriangleResult = IntersectTriangleResult.new()
+	result.position = p_hit
+	result.normal = tri_area_x2.normalized()
+	return result
 	
 #Returns the closest point on the line to the ray
 static func closest_point_on_line(ray_origin:Vector3, ray_dir:Vector3, line_origin:Vector3, line_dir:Vector3)->Vector3:

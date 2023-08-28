@@ -2,6 +2,8 @@
 extends Node3D
 class_name GizmoTranslate
 
+enum Part { NONE, AXIS_X, AXIS_Y, AXIS_Z, PLANE_XY, PLANE_XZ, PLANE_YZ }
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -23,21 +25,41 @@ func proj_mul_vec(m:Projection, p:Vector3)->Vector3:
 	p4_t /= p4_t.w
 	return Vector3(p4_t.x, p4_t.y, p4_t.z)
 
-func intersect(ray_origin:Vector3, ray_dir:Vector3, viewport_camera:Camera3D):
+class IntersectResult:
+	var part:Part
+	var pos_world:Vector3
+
+func intersect(ray_origin:Vector3, ray_dir:Vector3, viewport_camera:Camera3D)->IntersectResult:
+	var result:IntersectResult = IntersectResult.new()
+	result.part = Part.NONE
 #	if intersect_part(ray_origin, ray_dir, viewport_camera, $gizmo_translate/axis_y):
 	for child in $gizmo_translate.get_children():
-		if intersect_part(ray_origin, ray_dir, viewport_camera, child):
-			print("hit " + child.name)
-			return
+		var part_res:MathUtil.IntersectTriangleResult = intersect_part(ray_origin, ray_dir, viewport_camera, child)
 		
-	print("miss")
-
-#	if intersect_part(ray_origin, ray_dir, viewport_camera, $gizmo_translate/plane_xz):
-#		print("hit")
-#	else:
-#		print("miss")
+		if part_res:
+			result.pos_world = part_res.position
+			match child.name:
+				"axis_x":
+					result.part = Part.AXIS_X
+				"axis_y":
+					result.part = Part.AXIS_Y
+				"axis_z":
+					result.part = Part.AXIS_Z
+				"plane_xy":
+					result.part = Part.PLANE_XY
+				"plane_xz":
+					result.part = Part.PLANE_XZ
+				"plane_yz":
+					result.part = Part.PLANE_YZ
+					
+			return result
+#			print("hit " + child.name)
+#			return
 	
-func intersect_part(ray_origin:Vector3, ray_dir:Vector3, viewport_camera:Camera3D, mesh_inst:MeshInstance3D)->bool:
+	return null
+	#print("miss")
+
+func intersect_part(ray_origin:Vector3, ray_dir:Vector3, viewport_camera:Camera3D, mesh_inst:MeshInstance3D)->MathUtil.IntersectTriangleResult:
 	var proj:Projection = viewport_camera.get_camera_projection()
 	
 	#Calc modelview matrix
@@ -70,12 +92,14 @@ func intersect_part(ray_origin:Vector3, ray_dir:Vector3, viewport_camera:Camera3
 		var p2_t:Vector3 = proj_mul_point(model_mtx, p2)
 		
 		#print("tri world %s %s %s" % [p0_t, p1_t, p2_t])
-		if MathUtil.intersects_triangle(ray_origin, ray_dir, p0_t, p1_t, p2_t):
-			return true
+		var res = MathUtil.intersect_triangle(ray_origin, ray_dir, p0_t, p1_t, p2_t)
 		
-	return false
+		if res:
+			return res
+		
+	return null
 	
-	var mvp:Projection = proj * mv
+#	var mvp:Projection = proj * mv
 		
 	##############
 		

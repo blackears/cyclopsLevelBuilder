@@ -279,7 +279,7 @@ func set_custom_gizmo(gizmo:Node3D):
 		%GizmoControl.remove_child(child)
 	
 	if gizmo:
-		print("Setting gizmo")
+#		print("Setting gizmo")
 		%GizmoControl.add_child(gizmo)
 	
 	
