@@ -28,10 +28,10 @@ class_name ToolMove
 const TOOL_ID:String = "move"
 
 
-enum ToolState { NONE, READY, MOVE_BLOCK, DRAG_SELECTION }
+enum ToolState { NONE, READY, MOVE_BLOCK, MOVE_BLOCK_CLICK, DRAG_SELECTION }
 var tool_state:ToolState = ToolState.NONE
 
-enum MoveConstraint { NONE, AXIS_X, AXIS_Y, AXIS_Z, PLANE_XY, PLANE_XZ, PLANE_YZ }
+enum MoveConstraint { NONE, AXIS_X, AXIS_Y, AXIS_Z, PLANE_XY, PLANE_XZ, PLANE_YZ, PLANE_VIEWPORT }
 var move_constraint:MoveConstraint = MoveConstraint.NONE
 
 #var viewport_camera_start:Camera3D
@@ -177,6 +177,22 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					cmd_move_blocks = null
 					
 			return true
+
+		elif e.keycode == KEY_G:
+			if e.is_pressed() && tool_state == ToolState.NONE:
+				tool_state = ToolState.MOVE_BLOCK_CLICK
+				move_constraint = MoveConstraint.PLANE_VIEWPORT
+#				block_drag_p0 = MathUtil.intersect_plane(origin, dir, block_drag_p0, viewport_camera.global_transform.basis.z)
+#				block_drag_p0 = origin + dir * 20
+				block_drag_p0 = Vector3.INF
+				
+				cmd_move_blocks = CommandMoveBlocks.new()
+				cmd_move_blocks.builder = builder
+				cmd_move_blocks.lock_uvs = builder.lock_uvs
+				for child in builder.get_selected_blocks():
+					cmd_move_blocks.add_block(child.get_path())
+					
+			return true
 		
 	
 	elif event is InputEventMouseButton:
@@ -189,6 +205,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					event_start = event
 					
 					tool_state = ToolState.READY
+
+				elif tool_state == ToolState.MOVE_BLOCK_CLICK:
+					var undo:EditorUndoRedoManager = builder.get_undo_redo()
+					cmd_move_blocks.add_to_undo_manager(undo)
+					
+					tool_state = ToolState.NONE
 				
 			else:
 				if tool_state == ToolState.READY:
@@ -263,7 +285,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 			return true
 			
-		elif tool_state == ToolState.MOVE_BLOCK:
+		elif tool_state == ToolState.MOVE_BLOCK || tool_state == ToolState.MOVE_BLOCK_CLICK:
+			if !block_drag_p0.is_finite():
+				block_drag_p0 = origin + dir * 20
+				pass
+			
 			match move_constraint:
 				MoveConstraint.AXIS_X:
 					block_drag_cur = MathUtil.closest_point_on_line(origin, dir, block_drag_p0, Vector3.RIGHT)
@@ -277,6 +303,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					block_drag_cur = MathUtil.intersect_plane(origin, dir, block_drag_p0, Vector3.UP)
 				MoveConstraint.PLANE_YZ:
 					block_drag_cur = MathUtil.intersect_plane(origin, dir, block_drag_p0, Vector3.RIGHT)
+				MoveConstraint.PLANE_VIEWPORT:
+					block_drag_cur = MathUtil.intersect_plane(origin, dir, block_drag_p0, viewport_camera.global_transform.basis.z)
 					
 
 			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
