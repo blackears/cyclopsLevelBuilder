@@ -331,3 +331,7 @@ func _activate(builder:CyclopsLevelBuilder):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
 
+func _deactivate():
+	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
+	global_scene.set_custom_gizmo(null)
+

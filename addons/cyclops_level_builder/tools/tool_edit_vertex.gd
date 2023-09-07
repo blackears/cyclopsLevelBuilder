@@ -42,10 +42,33 @@ var added_point_pos:Vector3
 var cmd_move_vertex:CommandMoveVertices
 var cmd_add_vertex:CommandAddVertices
 
+var gizmo_translate:Node3D
 #var tracked_blocks_root:CyclopsBlocks
 
 func _get_tool_id()->String:
 	return TOOL_ID
+
+func draw_gizmo(viewport_camera:Camera3D):
+	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
+	if !gizmo_translate:
+		gizmo_translate = preload("res://addons/cyclops_level_builder/tools/gizmos/gizmo_translate.tscn").instantiate()
+	
+	var origin:Vector3
+	var count:int = 0
+	for h in handles:
+		var block:CyclopsBlock = builder.get_node(h.block_path)
+		var v:ConvexVolume.VertexInfo = block.control_mesh.vertices[h.vertex_index]
+		if v.selected:
+			origin += h.position
+			count += 1
+
+	if count == 0:
+		global_scene.set_custom_gizmo(null)
+	else:
+		origin /= count
+		#print("gizmo origin ", origin)
+		global_scene.set_custom_gizmo(gizmo_translate)
+		gizmo_translate.global_transform.origin = origin
 
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
@@ -58,6 +81,8 @@ func _draw_tool(viewport_camera:Camera3D):
 		#print("draw vert %s %s" % [h.vertex_index, v.selected])
 		var active:bool = block.control_mesh.active_vertex == h.vertex_index
 		global_scene.draw_vertex(h.position, pick_vertex_material(global_scene, v.selected, active))
+	
+	draw_gizmo(viewport_camera)
 	
 func setup_tool():
 	handles = []
@@ -145,8 +170,9 @@ func _activate(builder:CyclopsLevelBuilder):
 func _deactivate():
 	super._deactivate()
 	builder.active_node_changed.disconnect(active_node_changed)
-#	if tracked_blocks_root != null:
-#		tracked_blocks_root.blocks_changed.disconnect(active_node_updated)
+
+	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
+	global_scene.set_custom_gizmo(null)
 
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
@@ -184,11 +210,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					for block in sel_blocks:
 						cmd.add_vertices(block.get_path(), [])
 						
-#					for child in builder.active_node.get_children():
-#						if child is CyclopsBlock:
-#							var cur_block:CyclopsBlock = child
-#							if cur_block.selected:
-#								cmd.add_vertices(cur_block.get_path(), [])
 
 					cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
 

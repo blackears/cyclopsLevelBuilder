@@ -5663,7 +5663,7 @@ face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
 active_face = -1
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_ubjwi"]
+[sub_resource type="Resource" id="Resource_yomd1"]
 script = ExtResource("4_q38fu")
 selected = false
 active = false
@@ -5711,7 +5711,7 @@ face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
 active_face = -1
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_igcp4"]
+[sub_resource type="Resource" id="Resource_skq27"]
 script = ExtResource("4_q38fu")
 selected = false
 active = false
@@ -5719,10 +5719,10 @@ collsion = true
 physics_layer = 0
 physics_mask = 0
 vertex_points = PackedVector3Array(-1, 2, -7, -1, 2, 7, -1, -3, 7, -1, -3, -7, 0, 2, -7, 0, 2, 7, 0, -3, 7, 0, -3, -7)
-vertex_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0)
-active_vertex = -1
+vertex_selected = PackedByteArray(1, 0, 0, 1, 1, 0, 0, 1)
+active_vertex = 4
 edge_vertex_indices = PackedInt32Array(0, 1, 1, 2, 2, 3, 3, 0, 7, 6, 6, 5, 5, 4, 4, 7, 0, 4, 5, 1, 6, 2, 7, 3)
-edge_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+edge_selected = PackedByteArray(0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1)
 active_edge = -1
 edge_face_indices = PackedInt32Array(0, 2, 0, 3, 0, 4, 0, 5, 1, 4, 1, 3, 1, 2, 1, 5, 2, 5, 2, 3, 3, 4, 4, 5)
 face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
@@ -5731,7 +5731,7 @@ face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
 face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 55.0867, 20.6449), Transform2D(1, 0, 0, 1, 55.0867, 20.6449), Transform2D(1, 0, 0, 1, -13.6407, 55.0867), Transform2D(1, 0, 0, 1, -13.6407, 20.6449), Transform2D(1, 0, 0, 1, -13.6407, 55.0867), Transform2D(1, 0, 0, 1, -13.6407, 20.6449)])
 face_visible = PackedByteArray(1, 1, 1, 1, 1, 1)
 face_color = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
-face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
+face_selected = PackedByteArray(0, 0, 0, 0, 0, 1)
 active_face = -1
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
@@ -9571,7 +9571,7 @@ materials = Array[Material]([ExtResource("3_02243")])
 [node name="Block_35" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 30, 77)
 script = ExtResource("1_xfayt")
-block_data = SubResource("Resource_ubjwi")
+block_data = SubResource("Resource_yomd1")
 materials = Array[Material]([ExtResource("3_02243")])
 
 [node name="Block_8" type="Node3D" parent="CyclopsBlocks_upgraded"]
@@ -9583,7 +9583,7 @@ materials = Array[Material]([ExtResource("6_8wdyo")])
 [node name="Block_10" type="Node3D" parent="CyclopsBlocks_upgraded"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 31, 54)
 script = ExtResource("1_xfayt")
-block_data = SubResource("Resource_igcp4")
+block_data = SubResource("Resource_skq27")
 materials = Array[Material]([ExtResource("3_02243")])
 
 [node name="Block_28" type="Node3D" parent="CyclopsBlocks_upgraded"]

@@ -1,0 +1,26 @@
+[remap]
+
+importer="2d_array_texture"
+type="CompressedTexture2DArray"
+uid="uid://bv3guuxf8y00a"
+path="res://.godot/imported/bake_lightmaps.exr-55d9c810b5f7949799b3b4eea8b22119.ctexarray"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://experiments/lightmap_test/bake_lightmaps.exr"
+dest_files=["res://.godot/imported/bake_lightmaps.exr-55d9c810b5f7949799b3b4eea8b22119.ctexarray"]
+
+[params]
+
+compress/mode=3
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/channel_pack=1
+mipmaps/generate=false
+mipmaps/limit=-1
+slices/horizontal=1
+slices/vertical=2
