@@ -173,7 +173,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			if e.is_pressed():
 				tool_state = ToolState.NONE
 				if cmd_move_blocks:
-					cmd_move_blocks.undo()
+					cmd_move_blocks.undo_it()
 					cmd_move_blocks = null
 					
 			return true
@@ -193,8 +193,31 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					cmd_move_blocks.add_block(child.get_path())
 					
 			return true
-		
-	
+
+		elif e.keycode == KEY_X:
+			if tool_state == ToolState.MOVE_BLOCK_CLICK:
+				if e.shift_pressed:
+					move_constraint = MoveConstraint.PLANE_YZ
+				else:
+					move_constraint = MoveConstraint.AXIS_X
+			return true
+
+		elif e.keycode == KEY_Y:
+			if tool_state == ToolState.MOVE_BLOCK_CLICK:
+				if e.shift_pressed:
+					move_constraint = MoveConstraint.PLANE_XZ
+				else:
+					move_constraint = MoveConstraint.AXIS_Y
+			return true
+
+		elif e.keycode == KEY_Z:
+			if tool_state == ToolState.MOVE_BLOCK_CLICK:
+				if e.shift_pressed:
+					move_constraint = MoveConstraint.PLANE_XY
+				else:
+					move_constraint = MoveConstraint.AXIS_Z
+			return true
+				
 	elif event is InputEventMouseButton:
 		
 		var e:InputEventMouseButton = event

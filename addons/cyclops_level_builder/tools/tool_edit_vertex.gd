@@ -289,11 +289,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			if e.is_pressed():
 				tool_state = ToolState.NONE
 				if cmd_move_vertex:
-					cmd_move_vertex.undo()
+					cmd_move_vertex.undo_it()
 					cmd_move_vertex = null
 					
 				if cmd_add_vertex:
-					cmd_add_vertex.undo()
+					cmd_add_vertex.undo_it()
 					cmd_add_vertex = null
 					
 			return true
@@ -320,6 +320,32 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 								cmd_move_vertex.add_vertex(block.get_path(), v_idx)
 					
 			return true
+
+		elif e.keycode == KEY_X:
+			if tool_state == ToolState.MOVE_HANDLES_CLICK:
+				if e.shift_pressed:
+					move_constraint = MoveConstraint.PLANE_YZ
+				else:
+					move_constraint = MoveConstraint.AXIS_X
+			return true
+
+		elif e.keycode == KEY_Y:
+			if tool_state == ToolState.MOVE_HANDLES_CLICK:
+				if e.shift_pressed:
+					move_constraint = MoveConstraint.PLANE_XZ
+				else:
+					move_constraint = MoveConstraint.AXIS_Y
+			return true
+
+		elif e.keycode == KEY_Z:
+			if tool_state == ToolState.MOVE_HANDLES_CLICK:
+				if e.shift_pressed:
+					move_constraint = MoveConstraint.PLANE_XY
+				else:
+					move_constraint = MoveConstraint.AXIS_Z
+			return true
+
+
 
 	if event is InputEventMouseButton:
 		
