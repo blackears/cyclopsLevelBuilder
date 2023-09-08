@@ -288,7 +288,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		elif tool_state == ToolState.MOVE_BLOCK || tool_state == ToolState.MOVE_BLOCK_CLICK:
 			if !block_drag_p0.is_finite():
 				block_drag_p0 = origin + dir * 20
-				pass
 			
 			match move_constraint:
 				MoveConstraint.AXIS_X:

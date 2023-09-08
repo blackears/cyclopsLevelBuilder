@@ -29,7 +29,7 @@ const TOOL_ID:String = "edit_vertex"
 
 var handles:Array[HandleVertex] = []
 
-enum ToolState { NONE, READY, DRAGGING, DRAGGING_ADD, MOVE_BLOCK_CLICK }
+enum ToolState { NONE, READY, DRAGGING, DRAGGING_ADD, MOVE_HANDLES_CLICK }
 var tool_state:ToolState = ToolState.NONE
 
 enum MoveConstraint { NONE, AXIS_X, AXIS_Y, AXIS_Z, PLANE_XY, PLANE_XZ, PLANE_YZ, PLANE_VIEWPORT }
@@ -282,6 +282,45 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	
 	var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
+	if event is InputEventKey:
+		var e:InputEventKey = event
+		
+		if e.keycode == KEY_ESCAPE:
+			if e.is_pressed():
+				tool_state = ToolState.NONE
+				if cmd_move_vertex:
+					cmd_move_vertex.undo()
+					cmd_move_vertex = null
+					
+				if cmd_add_vertex:
+					cmd_add_vertex.undo()
+					cmd_add_vertex = null
+					
+			return true
+
+		elif e.keycode == KEY_G:
+			
+			if e.is_pressed() && tool_state == ToolState.NONE:
+				var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+				if !sel_blocks.is_empty():
+
+					tool_state = ToolState.MOVE_HANDLES_CLICK
+					move_constraint = MoveConstraint.PLANE_VIEWPORT
+
+					drag_handle_start_pos = Vector3.INF
+					
+					cmd_move_vertex = CommandMoveVertices.new()
+					cmd_move_vertex.builder = builder
+
+					for block in sel_blocks:
+						var vol:ConvexVolume = block.control_mesh
+						for v_idx in vol.vertices.size():
+							var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
+							if v.selected:
+								cmd_move_vertex.add_vertex(block.get_path(), v_idx)
+					
+			return true
+
 	if event is InputEventMouseButton:
 		
 		var e:InputEventMouseButton = event
@@ -342,6 +381,14 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					tool_state = ToolState.NONE
 					cmd_add_vertex = null
 
+				elif tool_state == ToolState.MOVE_HANDLES_CLICK:
+					var undo:EditorUndoRedoManager = builder.get_undo_redo()
+					cmd_move_vertex.add_to_undo_manager(undo)
+					
+					tool_state = ToolState.NONE
+					
+				return true
+					
 	elif event is InputEventMouseMotion:
 		var e:InputEventMouseMotion = event
 		#mouse_hover_pos = e.position
@@ -355,11 +402,14 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 			return true
 			
-		elif tool_state == ToolState.DRAGGING || tool_state == ToolState.MOVE_BLOCK_CLICK:
-
+		elif tool_state == ToolState.DRAGGING || tool_state == ToolState.MOVE_HANDLES_CLICK:
 			var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 			var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 			
+			if !drag_handle_start_pos.is_finite():
+				#If start point set to infinite, replace with point along view ray
+				drag_handle_start_pos = origin + dir * 20
+
 			var drag_to:Vector3
 			match move_constraint:
 				MoveConstraint.AXIS_X:
@@ -378,19 +428,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, viewport_camera.global_transform.basis.z)
 
 			
-#			if e.alt_pressed:
-#				drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, Vector3.UP)
-#			else:
-#				drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, Vector3.UP)
-			
 			drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
 			drag_handle.position = drag_to
 			
-#			cmd_move_vertex.move_offset = drag_to - drag_handle.initial_position
 			cmd_move_vertex.move_offset = drag_to - drag_handle_start_pos
 			cmd_move_vertex.do_it()
 
-#			draw_tool()
 			setup_tool()
 			return true
 
