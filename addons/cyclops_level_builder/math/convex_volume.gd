@@ -57,6 +57,11 @@ class EdgeInfo extends RefCounted:
 		start_index = start
 		end_index = end
 
+	func get_midpoint()->Vector3:
+		var p0:Vector3 = mesh.vertices[start_index].point
+		var p1:Vector3 = mesh.vertices[end_index].point
+		return (p0 + p1) / 2
+		
 	func _to_string():
 		var s:String = "%s %s [" % [start_index, end_index]
 		for i in face_indices:

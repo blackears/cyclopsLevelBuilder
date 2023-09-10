@@ -149,10 +149,9 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 		best_handle = h
 
 	return best_handle
-			
+
 func active_node_changed():
 	setup_tool()
-		
 	
 
 func active_node_updated():
