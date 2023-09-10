@@ -320,10 +320,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		
 		if e.keycode == KEY_ESCAPE:
 			if e.is_pressed():
-				tool_state = ToolState.NONE
 				if cmd_move_face:
 					cmd_move_face.undo_it()
 					cmd_move_face = null
+					tool_state = ToolState.NONE
+					
+					setup_tool()
 					
 			return true
 
@@ -431,6 +433,18 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					tool_state = ToolState.NONE
 					
 				return true
+				
+		elif e.button_index == MOUSE_BUTTON_RIGHT:
+			if e.is_pressed():
+				#Right click cancel
+				if cmd_move_face:
+					cmd_move_face.undo_it()
+					cmd_move_face = null
+					tool_state = ToolState.NONE
+					
+					setup_tool()
+					
+			return true
 
 	elif event is InputEventMouseMotion:
 		var e:InputEventMouseMotion = event
