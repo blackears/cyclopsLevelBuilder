@@ -85,6 +85,9 @@ func _draw_tool(viewport_camera:Camera3D):
 	
 	for h in handles:
 		var block:CyclopsBlock = builder.get_node(h.block_path)
+		if h.edge_index >= block.control_mesh.edges.size():
+			#TODO: Sometimes we are retaining handles that do not corepond to the correct edges after an undo operation.
+			continue
 		var e:ConvexVolume.EdgeInfo = block.control_mesh.edges[h.edge_index]
 		var p0:Vector3 = block.global_transform * block.control_mesh.vertices[e.start_index].point
 		var p1:Vector3 = block.global_transform * block.control_mesh.vertices[e.end_index].point
@@ -97,7 +100,8 @@ func _draw_tool(viewport_camera:Camera3D):
 	
 func setup_tool():
 	handles = []
-		
+	
+#	print("setuo_tool")
 	var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
 	for block in sel_blocks:
 		for e_idx in block.control_mesh.edges.size():
@@ -165,9 +169,7 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 	return result
 
 func active_node_changed():
-		
 	setup_tool()
-		
 
 func active_node_updated():
 	setup_tool()
@@ -193,7 +195,6 @@ func _deactivate():
 func start_drag(viewport_camera:Camera3D, event:InputEvent):
 	var e:InputEventMouseMotion = event
 	move_constraint = MoveConstraint.NONE
-
 
 	if gizmo_translate:
 	

@@ -29,14 +29,17 @@ const TOOL_ID:String = "edit_face"
 
 var handles:Array[HandleFace] = []
 
-enum ToolState { NONE, READY, DRAGGING }
+enum ToolState { NONE, READY, DRAGGING, MOVE_HANDLES_CLICK }
 var tool_state:ToolState = ToolState.NONE
 
 var drag_handle:HandleFace
 var drag_mouse_start_pos:Vector2
 var drag_handle_start_pos:Vector3
 			
-#var tracked_blocks_root:CyclopsBlocks
+enum MoveConstraint { NONE, AXIS_X, AXIS_Y, AXIS_Z, PLANE_XY, PLANE_XZ, PLANE_YZ, PLANE_VIEWPORT }
+var move_constraint:MoveConstraint = MoveConstraint.NONE
+
+var gizmo_translate:Node3D
 
 var cmd_move_face:CommandMoveFaces
 
@@ -47,6 +50,34 @@ class PickHandleResult extends RefCounted:
 	
 func _get_tool_id()->String:
 	return TOOL_ID
+
+
+func draw_gizmo(viewport_camera:Camera3D):
+	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
+	if !gizmo_translate:
+		gizmo_translate = preload("res://addons/cyclops_level_builder/tools/gizmos/gizmo_translate.tscn").instantiate()
+	
+	var origin:Vector3
+	var count:int = 0
+	for h in handles:
+		var block:CyclopsBlock = builder.get_node(h.block_path)
+		var l2w:Transform3D = block.global_transform
+		
+		var f:ConvexVolume.FaceInfo = block.control_mesh.faces[h.face_index]
+		if f.selected:
+#			print("adding midpoint ", e.get_midpoint())
+			origin += l2w * f.get_centroid()
+			count += 1
+
+	if count == 0:
+		global_scene.set_custom_gizmo(null)
+	else:
+		origin /= count
+		#print("gizmo origin ", origin)
+#		print("final origin ", origin)
+		global_scene.set_custom_gizmo(gizmo_translate)
+		gizmo_translate.global_transform.origin = origin
+
 
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
@@ -81,6 +112,7 @@ func _draw_tool(viewport_camera:Camera3D):
 			var mat:Material = global_scene.tool_edit_active_fill_material if active else global_scene.tool_edit_selected_fill_material
 			global_scene.draw_triangles(l2w * tris, mat)
 		
+	draw_gizmo(viewport_camera)
 	
 func setup_tool():
 	handles = []
@@ -165,17 +197,7 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 
 
 func active_node_changed():
-#	if tracked_blocks_root != null:
-#		tracked_blocks_root.blocks_changed.disconnect(active_node_updated)
-#		tracked_blocks_root = null
-		
 	setup_tool()
-	#draw_tool()
-	
-#	tracked_blocks_root = builder.active_node
-#	if tracked_blocks_root:
-#		tracked_blocks_root.blocks_changed.connect(active_node_updated)
-		
 	
 
 func active_node_updated():
@@ -187,38 +209,170 @@ func _activate(builder:CyclopsLevelBuilder):
 	
 	builder.mode = CyclopsLevelBuilder.Mode.EDIT
 	builder.edit_mode = CyclopsLevelBuilder.EditMode.FACE
-#	builder.active_node_changed.connect(active_node_changed)
-#
-#	tracked_blocks_root = builder.active_node
-#	if tracked_blocks_root:
-#		tracked_blocks_root.blocks_changed.connect(active_node_updated)
-	
+	builder.active_node_changed.connect(active_node_changed)
 	
 	setup_tool()
-	#draw_tool()
 	
 	
 func _deactivate():
 	super._deactivate()
-#	builder.active_node_changed.disconnect(active_node_changed)
-#	if tracked_blocks_root != null:
-#		tracked_blocks_root.blocks_changed.disconnect(active_node_updated)
+	builder.active_node_changed.disconnect(active_node_changed)
+
+	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
+	global_scene.set_custom_gizmo(null)
+
+
+func start_drag(viewport_camera:Camera3D, event:InputEvent):
+	var e:InputEventMouseMotion = event
+	move_constraint = MoveConstraint.NONE
+
+	if gizmo_translate:
+	
+		var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
+		var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+		
+		var part_res:GizmoTranslate.IntersectResult = gizmo_translate.intersect(origin, dir, viewport_camera)
+		if part_res:
+			#print("Gizmo hit ", part_res.part)
+			match part_res.part:
+				GizmoTranslate.Part.AXIS_X:
+					move_constraint = MoveConstraint.AXIS_X
+				GizmoTranslate.Part.AXIS_Y:
+					move_constraint = MoveConstraint.AXIS_Y
+				GizmoTranslate.Part.AXIS_Z:
+					move_constraint = MoveConstraint.AXIS_Z
+				GizmoTranslate.Part.PLANE_XY:
+					move_constraint = MoveConstraint.PLANE_XY
+				GizmoTranslate.Part.PLANE_XZ:
+					move_constraint = MoveConstraint.PLANE_XZ
+				GizmoTranslate.Part.PLANE_YZ:
+					move_constraint = MoveConstraint.PLANE_YZ
+		
+			var start_pos:Vector3 = part_res.pos_world
+			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
+
+			drag_handle_start_pos = MathUtil.snap_to_grid(start_pos, grid_step_size)
+
+	#		print("res obj %s" % result.object.get_path())
+			var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+			if !sel_blocks.is_empty():
+				
+				tool_state = ToolState.DRAGGING
+				#print("Move block")
+				
+				cmd_move_face = CommandMoveFaces.new()
+				cmd_move_face.builder = builder
+
+				for block in sel_blocks:
+					var vol:ConvexVolume = block.control_mesh
+					for f_idx in vol.faces.size():
+						var face:ConvexVolume.FaceInfo = vol.faces[f_idx]
+						if face.selected:
+							cmd_move_face.add_face(block.get_path(), f_idx)
+
+			return
+
+
+	if e.alt_pressed:
+		move_constraint = MoveConstraint.AXIS_Y
+	else:
+		move_constraint = MoveConstraint.PLANE_XZ
+		
+
+	var res:PickHandleResult = pick_closest_handle(viewport_camera, drag_mouse_start_pos, builder.handle_screen_radius)
+
+	if res:
+		#print("pick handle %s" % res.handle)
+		
+		var handle:HandleFace = res.handle
+		drag_handle = handle
+		drag_handle_start_pos = res.position
+		#print("drag_handle_start_pos %s" % drag_handle_start_pos)
+		tool_state = ToolState.DRAGGING
+
+		cmd_move_face = CommandMoveFaces.new()
+		cmd_move_face.builder = builder
+
+		var handle_block:CyclopsBlock = builder.get_node(handle.block_path)
+		if handle_block.control_mesh.faces[handle.face_index].selected:
+			var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+			for block in sel_blocks:
+				var vol:ConvexVolume = block.control_mesh
+				for f_idx in vol.faces.size():
+					var face:ConvexVolume.FaceInfo = vol.faces[f_idx]
+					if face.selected:
+						cmd_move_face.add_face(block.get_path(), f_idx)
+
+		else:
+			cmd_move_face.add_face(handle.block_path, handle.face_index)
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
-#	if !builder.active_node is CyclopsBlocks:
-#		return false
-		
 	var gui_result = super._gui_input(viewport_camera, event)
 	if gui_result:
 		return true
 		
-#	var blocks_root:CyclopsBlocks = self.builder.active_node
 	var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
-#	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
-	#_draw_tool(viewport_camera)
 
-#	if event is InputEventKey:
-#		return true
+
+
+	if event is InputEventKey:
+		var e:InputEventKey = event
+		
+		if e.keycode == KEY_ESCAPE:
+			if e.is_pressed():
+				tool_state = ToolState.NONE
+				if cmd_move_face:
+					cmd_move_face.undo_it()
+					cmd_move_face = null
+					
+			return true
+
+		elif e.keycode == KEY_G:
+			
+			if e.is_pressed() && tool_state == ToolState.NONE:
+				var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+				if !sel_blocks.is_empty():
+
+					tool_state = ToolState.MOVE_HANDLES_CLICK
+					move_constraint = MoveConstraint.PLANE_VIEWPORT
+
+					drag_handle_start_pos = Vector3.INF
+					
+					cmd_move_face = CommandMoveFaces.new()
+					cmd_move_face.builder = builder
+
+					for block in sel_blocks:
+						var vol:ConvexVolume = block.control_mesh
+						for f_idx in vol.faces.size():
+							var face:ConvexVolume.FaceInfo = vol.faces[f_idx]
+							if face.selected:
+								cmd_move_face.add_face(block.get_path(), f_idx)
+					
+			return true
+
+		elif e.keycode == KEY_X:
+			if tool_state == ToolState.MOVE_HANDLES_CLICK:
+				if e.shift_pressed:
+					move_constraint = MoveConstraint.PLANE_YZ
+				else:
+					move_constraint = MoveConstraint.AXIS_X
+			return true
+
+		elif e.keycode == KEY_Y:
+			if tool_state == ToolState.MOVE_HANDLES_CLICK:
+				if e.shift_pressed:
+					move_constraint = MoveConstraint.PLANE_XZ
+				else:
+					move_constraint = MoveConstraint.AXIS_Y
+			return true
+
+		elif e.keycode == KEY_Z:
+			if tool_state == ToolState.MOVE_HANDLES_CLICK:
+				if e.shift_pressed:
+					move_constraint = MoveConstraint.PLANE_XY
+				else:
+					move_constraint = MoveConstraint.AXIS_Z
+			return true
 
 	if event is InputEventMouseButton:
 		
@@ -270,6 +424,14 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					tool_state = ToolState.NONE
 				
 
+				elif tool_state == ToolState.MOVE_HANDLES_CLICK:
+					var undo:EditorUndoRedoManager = builder.get_undo_redo()
+					cmd_move_face.add_to_undo_manager(undo)
+					
+					tool_state = ToolState.NONE
+					
+				return true
+
 	elif event is InputEventMouseMotion:
 		var e:InputEventMouseMotion = event
 
@@ -278,46 +440,44 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 		if tool_state == ToolState.READY:
 			if e.position.distance_squared_to(drag_mouse_start_pos) > MathUtil.square(builder.drag_start_radius):
-				var res:PickHandleResult = pick_closest_handle(viewport_camera, drag_mouse_start_pos, builder.handle_screen_radius)
-
-				if res:
-					#print("pick handle %s" % res.handle)
-					
-					var handle:HandleFace = res.handle
-					drag_handle = handle
-					drag_handle_start_pos = res.position
-					#print("drag_handle_start_pos %s" % drag_handle_start_pos)
-					tool_state = ToolState.DRAGGING
-
-					cmd_move_face = CommandMoveFaces.new()
-					cmd_move_face.builder = builder
-
-					var handle_block:CyclopsBlock = builder.get_node(handle.block_path)
-					if handle_block.control_mesh.faces[handle.face_index].selected:
-						var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
-						for block in sel_blocks:
-							var vol:ConvexVolume = block.control_mesh
-							for f_idx in vol.faces.size():
-								var face:ConvexVolume.FaceInfo = vol.faces[f_idx]
-								if face.selected:
-									cmd_move_face.add_face(block.get_path(), f_idx)
-
-					else:
-						cmd_move_face.add_face(handle.block_path, handle.face_index)
+				start_drag(viewport_camera, event)
+			return true
 				
 			
-		elif tool_state == ToolState.DRAGGING:
+		elif tool_state == ToolState.DRAGGING || tool_state == ToolState.MOVE_HANDLES_CLICK:
 
 			var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 			var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 
+
+			if !drag_handle_start_pos.is_finite():
+				#If start point set to infinite, replace with point along view ray
+				drag_handle_start_pos = origin + dir * 20
+
+			var drag_to:Vector3
+			match move_constraint:
+				MoveConstraint.AXIS_X:
+					drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, Vector3.RIGHT)
+				MoveConstraint.AXIS_Y:
+					drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, Vector3.UP)
+				MoveConstraint.AXIS_Z:
+					drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, Vector3.BACK)
+				MoveConstraint.PLANE_XY:
+					drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, Vector3.BACK)
+				MoveConstraint.PLANE_XZ:
+					drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, Vector3.UP)
+				MoveConstraint.PLANE_YZ:
+					drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, Vector3.RIGHT)
+				MoveConstraint.PLANE_VIEWPORT:
+					drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, viewport_camera.global_transform.basis.z)
+
 			#print("drag_handle_start_pos %s" % drag_handle_start_pos)
 			
-			var drag_to:Vector3
-			if e.alt_pressed:
-				drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, Vector3.UP)
-			else:
-				drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, Vector3.UP)
+#			var drag_to:Vector3
+#			if e.alt_pressed:
+#				drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, Vector3.UP)
+#			else:
+#				drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, Vector3.UP)
 
 			#print("drag_to %s" % drag_to)
 			
