@@ -85,7 +85,8 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 			cmd_move_face.lock_uvs = builder.lock_uvs
 			cmd_move_face.move_dir_normal = result.object.control_mesh.faces[result.face_id].normal
 
-			move_face_origin = result.position
+			move_face_origin = result.object.global_transform * result.position
+			#print("movign face move_face_origin %s" % move_face_origin)
 			
 		else:
 			tool_state = ToolState.BLOCK_BASE
@@ -282,7 +283,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 			drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
 			
+			#print("move_face drag_to %s" % [drag_to])
 			cmd_move_face.move_amount = (drag_to - move_face_origin).dot(cmd_move_face.move_dir_normal)
+			#print("move by %s" % [drag_to - move_face_origin])
 			
 			cmd_move_face.do_it_intermediate()
 		

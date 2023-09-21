@@ -28,7 +28,7 @@ class_name IntersectResults
 var object:CyclopsBlock
 var face_id:int
 var face_index:int
-var position:Vector3
+var position:Vector3 #local space of block
 var normal:Vector3
 var distance_squared:float
 
