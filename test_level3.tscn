@@ -657,9 +657,6 @@ face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
 [node name="Node3D" type="Node3D"]
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.670843, -0.546394, 0.501422, -0.0558162, 0.637017, 0.768826, -0.739496, -0.543749, 0.39684, 4, 7.12156, 4.42434)
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.355433, 0.934702, 0, -0.934702, 0.355433, 0, 7.12156, 0)
 
@@ -668,6 +665,9 @@ environment = SubResource("Environment_4ln1u")
 
 [node name="player" parent="." instance=ExtResource("1_3nf4b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.88469, 0.19578, -3.7622)
+
+[node name="Camera3D" type="Camera3D" parent="player"]
+transform = Transform3D(-1, -4.37114e-08, 7.57103e-08, 0, 0.866025, 0.5, -8.74228e-08, 0.5, -0.866025, 0, 3, -2.19642)
 
 [node name="Node3D" type="Node3D" parent="."]
 
