@@ -80,7 +80,7 @@ shader_parameter/uv2_offset = Vector3(0, 0, 0)
 script = ExtResource("1_fyqe0")
 
 [node name="gizmo_translate" parent="." instance=ExtResource("1_ljs46")]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 
 [node name="axis_y" parent="gizmo_translate" index="0"]
 surface_material_override/0 = ExtResource("3_tsii4")

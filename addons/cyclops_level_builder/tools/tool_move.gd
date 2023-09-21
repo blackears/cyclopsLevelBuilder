@@ -136,10 +136,16 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 	
 	if result:
 
+		if e.alt_pressed:
+			move_constraint = MoveConstraint.AXIS_Y
+		else:
+			move_constraint = MoveConstraint.PLANE_XZ
+
 		var start_pos:Vector3 = result.get_world_position()			
 		var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
 		block_drag_p0 = MathUtil.snap_to_grid(start_pos, grid_step_size)
+		#print("block_drag_p0 %s" % block_drag_p0)
 
 #		print("res obj %s" % result.object.get_path())
 		if builder.is_selected(result.object):
@@ -157,11 +163,6 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 	tool_state = ToolState.DRAG_SELECTION
 	drag_select_start_pos = e.position
 	drag_select_to_pos = e.position
-
-	if e.alt_pressed:
-		move_constraint = MoveConstraint.AXIS_Y
-	else:
-		move_constraint = MoveConstraint.PLANE_XZ
 	
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
@@ -335,6 +336,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				MoveConstraint.PLANE_VIEWPORT:
 					block_drag_cur = MathUtil.intersect_plane(origin, dir, block_drag_p0, viewport_camera.global_transform.basis.z)
 					
+			#print("dragging move_constraint %s block_drag_cur %s" % [move_constraint, block_drag_cur])
 
 			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
