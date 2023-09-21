@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://k8coo8mweime"]
+
+[ext_resource type="Script" path="res://scenes/player.gd" id="1_orro8"]
+[ext_resource type="PackedScene" uid="uid://bdu3fyn51c0nk" path="res://art/character/person.glb" id="2_bnhsm"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tb625"]
+radius = 0.282663
+height = 1.57872
+
+[node name="player" type="CharacterBody3D"]
+script = ExtResource("1_orro8")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.797641, 0)
+shape = SubResource("CapsuleShape3D_tb625")
+
+[node name="person" parent="." instance=ExtResource("2_bnhsm")]
