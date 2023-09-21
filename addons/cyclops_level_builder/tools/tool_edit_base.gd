@@ -49,8 +49,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						
 						_deactivate()
 						_activate(builder)
-					
-					pass
 				
 			return true
 	

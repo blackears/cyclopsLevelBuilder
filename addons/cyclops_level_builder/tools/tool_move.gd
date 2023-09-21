@@ -43,6 +43,8 @@ var block_drag_p0:Vector3
 var drag_select_start_pos:Vector2
 var drag_select_to_pos:Vector2
 
+var mouse_hover_pos:Vector2
+
 #Keep a copy of move command here while we are building it
 var cmd_move_blocks:CommandMoveBlocks
 
@@ -218,6 +220,26 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				else:
 					move_constraint = MoveConstraint.AXIS_Z
 			return true
+
+		if e.keycode == KEY_Q && e.alt_pressed:
+			if e.is_pressed():
+				var origin:Vector3 = viewport_camera.project_ray_origin(mouse_hover_pos)
+				var dir:Vector3 = viewport_camera.project_ray_normal(mouse_hover_pos)
+			
+				var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
+				if result:
+					var cmd:CommandSelectBlocks = CommandSelectBlocks.new()
+					cmd.builder = builder
+					cmd.block_paths.append(result.object.get_path())
+					
+					if cmd.will_change_anything():
+						var undo:EditorUndoRedoManager = builder.get_undo_redo()
+						cmd.add_to_undo_manager(undo)
+						
+						_deactivate()
+						_activate(builder)
+				
+			return true
 				
 	elif event is InputEventMouseButton:
 		
@@ -300,6 +322,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 	elif event is InputEventMouseMotion:
 		var e:InputEventMouseMotion = event
+		
+		mouse_hover_pos = e.position
 
 		if (e.button_mask & MOUSE_BUTTON_MASK_MIDDLE):
 			return super._gui_input(viewport_camera, event)

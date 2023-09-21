@@ -49,6 +49,8 @@ var move_face_origin:Vector3 #Kep track of the origin when moving a face
 
 var base_points:PackedVector3Array
 
+var mouse_hover_pos:Vector2
+
 func _get_tool_id()->String:
 	return TOOL_ID
 
@@ -152,6 +154,25 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				tool_state = ToolState.NONE
 			return true
 		
+		if e.keycode == KEY_Q && e.alt_pressed:
+			if e.is_pressed():
+				var origin:Vector3 = viewport_camera.project_ray_origin(mouse_hover_pos)
+				var dir:Vector3 = viewport_camera.project_ray_normal(mouse_hover_pos)
+			
+				var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
+				if result:
+					var cmd:CommandSelectBlocks = CommandSelectBlocks.new()
+					cmd.builder = builder
+					cmd.block_paths.append(result.object.get_path())
+					
+					if cmd.will_change_anything():
+						var undo:EditorUndoRedoManager = builder.get_undo_redo()
+						cmd.add_to_undo_manager(undo)
+						
+						_deactivate()
+						_activate(builder)
+				
+			return true
 	
 	elif event is InputEventMouseButton:
 		
@@ -210,7 +231,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			
 	elif event is InputEventMouseMotion:
+		
 		var e:InputEventMouseMotion = event
+
+		mouse_hover_pos = e.position
 
 		var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 		var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
