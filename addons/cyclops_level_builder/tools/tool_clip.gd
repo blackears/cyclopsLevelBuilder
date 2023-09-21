@@ -49,8 +49,10 @@ func _draw_tool(viewport_camera:Camera3D):
 	global_scene.draw_selected_blocks(viewport_camera)
 
 	if !clip_points.is_empty():
-		global_scene.draw_loop(clip_points, false, global_scene.tool_material)
 		global_scene.draw_points(clip_points, global_scene.vertex_tool_material)
+		
+	if clip_points.size() >= 2:
+		global_scene.draw_loop(clip_points, false, global_scene.tool_material)
 	
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	

@@ -2,6 +2,7 @@ extends CharacterBody3D
 
 
 const SPEED = 5.0
+const TURN_SPEED = 2.0
 const JUMP_VELOCITY = 4.5
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -23,7 +24,7 @@ func _physics_process(delta):
 	var y_axis:float = Input.get_axis("ui_down", "ui_up")
 	
 	var basis:Basis = transform.basis
-	basis = basis.rotated(Vector3.UP, delta * x_axis * 1)
+	basis = basis.rotated(Vector3.UP, delta * x_axis * TURN_SPEED)
 	transform.basis = basis
 	
 	var direction = basis.z * y_axis
