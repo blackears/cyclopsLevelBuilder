@@ -1,8 +1,10 @@
 # Material Dock
 
+You can obtain materials for your project from [Material Maker](https://github.com/RodZill4/material-maker). Make sure to export to godot and import the resulting files into your project.
+
 The material dock provides a place to view and apply materials to your environment.
 
-Add materials to the material dock by clicking and dragging them from the file system dock.
+Add materials to the material dock by clicking and dragging .tres files from the file system dock.
 
 ![Dragging materials into Material dock](dragging_into_material_dock.gif)
 
