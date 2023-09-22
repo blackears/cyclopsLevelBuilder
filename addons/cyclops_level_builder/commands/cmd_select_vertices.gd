@@ -126,6 +126,9 @@ func do_it():
 						vol.active_vertex = -1
 					elif !vol.vertices[active_index].selected:
 						vol.active_vertex = active_index
+		else:
+			if selection_type == Selection.Type.REPLACE:
+				vol.active_vertex = -1
 		
 		match selection_type:
 			Selection.Type.REPLACE:

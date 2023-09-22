@@ -29,7 +29,7 @@ const TOOL_ID:String = "edit_vertex"
 
 var handles:Array[HandleVertex] = []
 
-enum ToolState { NONE, READY, DRAGGING, DRAGGING_ADD, MOVE_HANDLES_CLICK }
+enum ToolState { NONE, READY, DRAGGING, DRAGGING_ADD, MOVE_HANDLES_CLICK, DRAG_SELECTION }
 var tool_state:ToolState = ToolState.NONE
 
 enum MoveConstraint { NONE, AXIS_X, AXIS_Y, AXIS_Z, PLANE_XY, PLANE_XZ, PLANE_YZ, PLANE_VIEWPORT }
@@ -77,6 +77,9 @@ func draw_gizmo(viewport_camera:Camera3D):
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
+
+	if tool_state == ToolState.DRAG_SELECTION:
+		global_scene.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
 	
 	for h in handles:
 		var block:CyclopsBlock = builder.get_node(h.block_path)
@@ -185,7 +188,7 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 		
 		var part_res:GizmoTranslate.IntersectResult = gizmo_translate.intersect(origin, dir, viewport_camera)
 		if part_res:
-			#print("Gizmo hit ", part_res.part)
+#			print("Gizmo hit ", part_res.part)
 			match part_res.part:
 				GizmoTranslate.Part.AXIS_X:
 					move_constraint = MoveConstraint.AXIS_X
@@ -224,7 +227,6 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 
 			return
 
-
 	if e.alt_pressed:
 		move_constraint = MoveConstraint.AXIS_Y
 	else:
@@ -256,6 +258,7 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 			
 	else:
 		if e.ctrl_pressed:
+			#Add vertex under cursor
 			var pick_origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 			var pick_dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 			var result:IntersectResults = builder.intersect_ray_closest_selected_only(pick_origin, pick_dir)
@@ -273,6 +276,13 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 				#print("init point %s" % added_point_pos)
 			
 			return true
+
+	#Drag selectio rectangle
+	tool_state = ToolState.DRAG_SELECTION
+	drag_select_start_pos = e.position
+	drag_select_to_pos = e.position
+
+	
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
 	var gui_result = super._gui_input(viewport_camera, event)
@@ -361,6 +371,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				if tool_state == ToolState.NONE:
 					drag_mouse_start_pos = e.position
 					tool_state = ToolState.READY
+					#print("Start READY")
 					
 				return true
 			else:
@@ -417,6 +428,51 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 					tool_state = ToolState.NONE
 					
+
+				elif tool_state == ToolState.DRAG_SELECTION:
+					
+					var frustum:Array[Plane] = MathUtil.calc_frustum_camera_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos)
+
+					var cmd:CommandSelectVertices = CommandSelectVertices.new()
+					cmd.builder = builder
+
+					var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+					for block in sel_blocks:
+						cmd.add_vertices(block.get_path(), [])
+						
+						for v_idx in block.control_mesh.vertices.size():
+							var v:ConvexVolume.VertexInfo = block.control_mesh.vertices[v_idx]
+							var point_w:Vector3 = block.global_transform * v.point
+							
+							if MathUtil.frustum_contians_point(frustum, point_w):
+								cmd.add_vertex(block.get_path(), v_idx)
+
+					cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
+
+					if cmd.will_change_anything():
+						var undo:EditorUndoRedoManager = builder.get_undo_redo()
+
+						cmd.add_to_undo_manager(undo)
+					
+					
+#					var result:Array[CyclopsBlock] = builder.intersect_frustum_all(frustum)
+#
+#					if !result.is_empty():
+#						pass
+						
+		#				var cmd:CommandSelectBlocks = CommandSelectBlocks.new()
+		#				cmd.builder = builder
+		#				cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
+		#
+		#				for r in result:
+		#					cmd.block_paths.append(r.get_path())
+		#
+		#				if cmd.will_change_anything():
+		#					var undo:EditorUndoRedoManager = builder.get_undo_redo()
+		#					cmd.add_to_undo_manager(undo)
+					
+					tool_state = ToolState.NONE
+
 				return true
 
 		elif e.button_index == MOUSE_BUTTON_RIGHT:
@@ -506,6 +562,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			cmd_add_vertex.do_it()
 			
 			setup_tool()
-					
+
+		elif tool_state == ToolState.DRAG_SELECTION:
+			drag_select_to_pos = e.position
+			return true
+								
 	return false
 
