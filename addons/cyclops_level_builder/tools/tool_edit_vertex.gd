@@ -438,7 +438,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
 					for block in sel_blocks:
-						cmd.add_vertices(block.get_path(), [])
 						
 						for v_idx in block.control_mesh.vertices.size():
 							var v:ConvexVolume.VertexInfo = block.control_mesh.vertices[v_idx]
@@ -465,23 +464,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						var undo:EditorUndoRedoManager = builder.get_undo_redo()
 
 						cmd.add_to_undo_manager(undo)
-					
-					
-#					var result:Array[CyclopsBlock] = builder.intersect_frustum_all(frustum)
-#
-#					if !result.is_empty():
-#						pass
-						
-		#				var cmd:CommandSelectBlocks = CommandSelectBlocks.new()
-		#				cmd.builder = builder
-		#				cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
-		#
-		#				for r in result:
-		#					cmd.block_paths.append(r.get_path())
-		#
-		#				if cmd.will_change_anything():
-		#					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-		#					cmd.add_to_undo_manager(undo)
 					
 					tool_state = ToolState.NONE
 

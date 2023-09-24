@@ -29,7 +29,7 @@ const TOOL_ID:String = "edit_edge"
 
 var handles:Array[HandleEdge] = []
 
-enum ToolState { NONE, READY, DRAGGING, MOVE_HANDLES_CLICK }
+enum ToolState { NONE, READY, DRAGGING, MOVE_HANDLES_CLICK, DRAG_SELECTION }
 var tool_state:ToolState = ToolState.NONE
 
 var drag_handle:HandleEdge
@@ -82,6 +82,9 @@ func draw_gizmo(viewport_camera:Camera3D):
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()	
+
+	if tool_state == ToolState.DRAG_SELECTION:
+		global_scene.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
 	
 	for h in handles:
 		var block:CyclopsBlock = builder.get_node(h.block_path)
@@ -271,7 +274,14 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 						cmd_move_edge.add_edge(block.get_path(), e_idx)
 		else:
 			cmd_move_edge.add_edge(handle.block_path, handle.edge_index)
+			
+		return
 	
+	#Drag selectio rectangle
+	tool_state = ToolState.DRAG_SELECTION
+	drag_select_start_pos = e.position
+	drag_select_to_pos = e.position
+
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
 		
 	var gui_result = super._gui_input(viewport_camera, event)
@@ -396,6 +406,44 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					cmd_move_edge.add_to_undo_manager(undo)
 					
 					tool_state = ToolState.NONE
+
+				elif tool_state == ToolState.DRAG_SELECTION:
+					
+					var frustum:Array[Plane] = MathUtil.calc_frustum_camera_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos)
+
+					var cmd:CommandSelectEdges = CommandSelectEdges.new()
+					cmd.builder = builder
+
+					var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+					for block in sel_blocks:
+						
+						for e_idx in block.control_mesh.edges.size():
+							var edge:ConvexVolume.EdgeInfo = block.control_mesh.edges[e_idx]
+							var point_w:Vector3 = block.global_transform * edge.get_midpoint()
+							
+							var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
+#							var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+
+							var global_scene:CyclopsGlobalScene = builder.get_global_scene()
+
+							#Obstruction check
+							if !global_scene.xray_mode:  
+								var result:IntersectResults = builder.intersect_ray_closest(origin, point_w - origin)
+								var res_point_w:Vector3 = result.get_world_position()
+								if !res_point_w.is_equal_approx(point_w):
+									continue
+							
+							if MathUtil.frustum_contians_point(frustum, point_w):
+								cmd.add_edge(block.get_path(), e_idx)
+
+					cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
+
+					if cmd.will_change_anything():
+						var undo:EditorUndoRedoManager = builder.get_undo_redo()
+
+						cmd.add_to_undo_manager(undo)
+					
+					tool_state = ToolState.NONE
 					
 				return true
 				
@@ -466,5 +514,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			setup_tool()
 #			draw_tool()
 			return true
-		
+
+		elif tool_state == ToolState.DRAG_SELECTION:
+			drag_select_to_pos = e.position
+			return true
+					
 	return false

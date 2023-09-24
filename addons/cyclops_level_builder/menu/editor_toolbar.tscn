@@ -120,6 +120,7 @@ popup/item_1/id = 1
 [node name="bn_xray" type="Button" parent="HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Xray"
 toggle_mode = true
 icon = ExtResource("3_ldp0l")
 
