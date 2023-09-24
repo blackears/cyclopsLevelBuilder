@@ -79,14 +79,21 @@ func _ready():
 	$HBoxContainer/MenuBar/Menu.add_action_item(ActionRotateZ180.new(editor_plugin))
 	$HBoxContainer/MenuBar/Menu.add_action_item(ActionMirrorSelectionZ.new(editor_plugin))
 	
+	var global_scene = get_node("/root/CyclopsAutoload")
+
+#	var global_scene:CyclopsGlobalScene = CyclopsAutoload
+	#var global_scene:CyclopsGlobalScene = editor_plugin.get_global_scene()
+	global_scene.xray_mode_changed.connect(on_xray_mode_changed)
+	%bn_xray.button_pressed = global_scene.xray_mode
+			
 	update_grid()
 
 var tool_button_group = ButtonGroup.new()
 
 func build_ui():
 #	print("build_ui()")
-	for child in $HBoxContainer/ToolButtonContainer.get_children():
-		$HBoxContainer/ToolButtonContainer.remove_child(child)
+	for child in %ToolButtonContainer.get_children():
+		%ToolButtonContainer.remove_child(child)
 	
 	if !editor_plugin:
 		return
@@ -103,7 +110,7 @@ func build_ui():
 		bn.pressed.connect(func():tag._activate(editor_plugin))
 #		print("adding bn %s" % tag.name)
 		
-		$HBoxContainer/ToolButtonContainer.add_child(bn)
+		%ToolButtonContainer.add_child(bn)
 		
 	$HBoxContainer/display_mode.select(editor_plugin.display_mode)
 	pass
@@ -137,5 +144,13 @@ func _on_display_mode_item_selected(index):
 	editor_plugin.display_mode = index
 
 
+func on_xray_mode_changed(value:bool):
+	%bn_xray.button_pressed = value
 
-
+func _on_bn_xray_toggled(button_pressed:bool):
+	if !editor_plugin:
+		return
+	
+	var global_scene:CyclopsGlobalScene = editor_plugin.get_global_scene()
+	global_scene.xray_mode = button_pressed
+	

@@ -779,6 +779,15 @@ static func frustum_contians_point(planes:Array[Plane], point:Vector3)->bool:
 		if !plane.is_point_over(point) && !plane.has_point(point):
 			return false
 	return true
+
+static func frustum_intersects_sphere(planes:Array[Plane], center:Vector3, radius:float)->bool:
+	for plane in planes:
+		var dist:float = plane.distance_to(center)
+		
+		if dist < -radius:
+			return false
+			
+	return true
 	
 
 func plane_intesects_point_cloud(points:PackedVector3Array, plane:Plane)->bool:

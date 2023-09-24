@@ -47,6 +47,15 @@ var tool_mesh:ImmediateMesh
 @export var grid_size:int = 0
 @export var drag_angle_limit:float = deg_to_rad(5)
 
+signal xray_mode_changed(value:bool)
+
+@export var xray_mode:bool = false:
+	get:
+		return xray_mode
+	set(value):
+		if xray_mode != value:		
+			xray_mode = value
+			xray_mode_changed.emit(value)
 
 var unit_sphere:GeometryMesh
 var builder:CyclopsLevelBuilder

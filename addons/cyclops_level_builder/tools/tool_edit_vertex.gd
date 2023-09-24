@@ -444,6 +444,18 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 							var v:ConvexVolume.VertexInfo = block.control_mesh.vertices[v_idx]
 							var point_w:Vector3 = block.global_transform * v.point
 							
+							var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
+#							var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+
+							var global_scene:CyclopsGlobalScene = builder.get_global_scene()
+
+							#Obstruction check
+							if !global_scene.xray_mode:  
+								var result:IntersectResults = builder.intersect_ray_closest(origin, point_w - origin)
+								var res_point_w:Vector3 = result.get_world_position()
+								if !res_point_w.is_equal_approx(point_w):
+									continue
+							
 							if MathUtil.frustum_contians_point(frustum, point_w):
 								cmd.add_vertex(block.get_path(), v_idx)
 

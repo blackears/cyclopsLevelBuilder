@@ -733,7 +733,7 @@ face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
 active_face = -1
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_44mbx"]
+[sub_resource type="Resource" id="Resource_okg6w"]
 script = ExtResource("2_le7sa")
 selected = false
 active = false
@@ -741,10 +741,10 @@ collsion = true
 physics_layer = 0
 physics_mask = 0
 vertex_points = PackedVector3Array(10.25, 0, 0, 0, 0, 0, 0, 0, 7.5, 10.25, 0, 7.5, 10.25, 0.25, 7.5, 0, 0.25, 7.5, 0, 0.25, 0, 10.25, 0.25, 0)
-vertex_selected = PackedByteArray(0, 0, 0, 0, 1, 0, 0, 0)
-active_vertex = 4
+vertex_selected = PackedByteArray(0, 0, 0, 1, 1, 0, 0, 0)
+active_vertex = 3
 edge_vertex_indices = PackedInt32Array(0, 1, 1, 2, 2, 3, 3, 0, 4, 3, 2, 5, 5, 4, 6, 5, 1, 6, 4, 7, 7, 0, 6, 7)
-edge_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+edge_selected = PackedByteArray(0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0)
 active_edge = -1
 edge_face_indices = PackedInt32Array(0, 5, 0, 2, 0, 1, 0, 3, 1, 3, 1, 2, 1, 4, 2, 4, 2, 5, 3, 4, 3, 5, 4, 5)
 face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
@@ -757,7 +757,7 @@ face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
 active_face = -1
 face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
 
-[sub_resource type="Resource" id="Resource_hw8h2"]
+[sub_resource type="Resource" id="Resource_34dq2"]
 script = ExtResource("2_le7sa")
 selected = false
 active = false
@@ -765,8 +765,8 @@ collsion = true
 physics_layer = 0
 physics_mask = 0
 vertex_points = PackedVector3Array(0, 0, 0, 0, 0.25, 0, 0, 0.25, 3, 0, 0, 3, 4.75, 0.25, 3, 4.75, 0.25, 0, 4.75, 0, 3, 4.75, 0, 0)
-vertex_selected = PackedByteArray(0, 0, 0, 0, 1, 0, 0, 0)
-active_vertex = 4
+vertex_selected = PackedByteArray(0, 0, 1, 0, 0, 0, 0, 0)
+active_vertex = 2
 edge_vertex_indices = PackedInt32Array(0, 1, 1, 2, 2, 3, 3, 0, 4, 2, 1, 5, 5, 4, 6, 3, 4, 6, 7, 5, 0, 7, 7, 6)
 edge_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 active_edge = -1
@@ -1502,12 +1502,12 @@ block_data = SubResource("Resource_dlb1e")
 [node name="Block_30" type="Node3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.25, 0, 10.75)
 script = ExtResource("1_7ng5v")
-block_data = SubResource("Resource_44mbx")
+block_data = SubResource("Resource_okg6w")
 
 [node name="Block_31" type="Node3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.75, 0, 18.25)
 script = ExtResource("1_7ng5v")
-block_data = SubResource("Resource_hw8h2")
+block_data = SubResource("Resource_34dq2")
 
 [node name="Block_32" type="Node3D" parent="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0, 13.5)
