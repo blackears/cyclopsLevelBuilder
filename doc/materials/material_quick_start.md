@@ -17,7 +17,7 @@ First, let's create a scene that we can use to display our material.  Create a n
 
 Now let's create a new StandardMaterial3D.  Right click on the root of the FileSystem and select Create New/Resource.  Type the word 'standard' into the search bar and then double click StandardMaterial3D in the Matches window.
 
-![creating a resource](quick_start_create_resouce.png)
+![creating a resource](quick_start_create_resource.png)
 ![selecting StandardMaterial3D](quick_start_pick_standard_material_3d.png)
 
 Save your new material as my_material.tres.
