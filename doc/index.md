@@ -43,10 +43,10 @@ Most of the tools support pressing the Escape key to cancel the current operatio
 Each block you create is encapsulated in a CyclopsBlock object.  There is a limited number of properties on it that you can change.
 
 * Collision Type - Affects the type of collision generated for the object
-    * None - No collision
-    * Static - A StaticBody3D will be used for collision
-    * Kinematic - A CharacterBody3D will be used for collision
-    * Rigid - A RigidBody3D will be used for collision
+	* None - No collision
+	* Static - A StaticBody3D will be used for collision
+	* Kinematic - A CharacterBody3D will be used for collision
+	* Rigid - A RigidBody3D will be used for collision
 
 ## Tools
 
@@ -125,7 +125,7 @@ The display mode lets you switch between drawing blocks with materials and drawi
 * Ctrl-D will activate the duplicate tool.  When you type this in Block mode, the current selection will be duplicated and will follow the mouse cursor.  Click to drop the duplicated blocks at your desired location.
 
 * X key to delete all selected blocks.
-    * I wanted to use the Delete key, but this was causing a conflict with Godot so I went with the X key instead.
+	* I wanted to use the Delete key, but this was causing a conflict with Godot so I went with the X key instead.
 
 
 ## Docks
@@ -135,6 +135,12 @@ When the CyclopsBlocks object is selected, extra docked windows will appear to g
 * [Material](dock_material.md)
 * [Face Properties](dock_face_properties.md)
 * [Tool Properties](dock_tool_properties.md)
+
+## Materials
+
+Cyclops is designed to be able to use any material Godot supports.
+
+There are a many different ways to create materials.  [Here is a quick overview if you're new to materials and want to dive in.](materials/material_quick_start.md)
 
 
 ## Support
