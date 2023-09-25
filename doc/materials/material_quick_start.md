@@ -22,11 +22,11 @@ Now let's create a new StandardMaterial3D.  Right click on the root of the FileS
 
 Save your new material as my_material.tres.
 
-![saving the material](quick_start_pick_save_material.png)
+![saving the material](quick_start_save_material.png)
 
 A new material has been created and is stored in your filesystem.  Double click on it to show its porperties in the Inspector tab.
 
-![show material in inspector](quick_start_pick_show_material.png)
+![show material in inspector](quick_start_show_material.png)
 
 We can now edit the properties of the StandardMaterial3D.  Click on the Albedo drop down in the inspector panel.  Next, click on the Color property.  A color picker will pop up allowing you to choose a color.  You can choose whatever color you like.  I'll pick red for this demonstration.  You can also play around with changing other properties to see how they affect your material.
 
