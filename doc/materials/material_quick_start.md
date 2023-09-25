@@ -48,5 +48,11 @@ Let's add a texture to our shader.  Click on the material in the Surface Materia
 You can create materials for Cyclops Level Builder in the same way you create materials for any other object in Godot.  One thing to keep in mind is that Cyclops will automatically generate UV coordinates based on the world position of the block vertices.  You may need to adjust the UV1 scale and offset to get your textures to render at your desired size.
 
 
+## Support
+
+If you found this software useful, please consider buying me a coffee on Kofi.  Every contribution helps me to make more software:
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Y8Y43J6OB)
+
 
 
