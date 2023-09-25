@@ -3,11 +3,11 @@
 
 ## What is a Material?
 
-Godot has a wide variety of materials that effect how your 3D geometry is displayed.  Shaders can be simple and just draw your geometry with a solid color.  They can also let you wrap an image texture over your object like wallpaper.  Shaders can add lighting effects to make your object glow or be see-through like glass.  Shaders can even change the shape of your geometry and make it animate with time.  Once you start getting into shaders, you'll find they can have a huge impace on how your scene looks.
+Godot has a wide variety of materials that effect how your 3D geometry is displayed.  Materials can be simple and just draw your geometry with a solid color.  They can also let you wrap an image texture over your object like wallpaper.  Materials can add lighting effects to make your object glow or be see through like glass.  Materials can even change the shape of your geometry and make it animate with time.  Once you start getting into materials, you'll find they can have a huge impact on how your scene looks.
 
-In Godot, all shaders extend the Material base class.  The StandardShader3D handles most typical use cases and is a good place to start.  It is highly configurable and has a lot of parameters, so it may be a bit overwhelming at first.  Start by setting the Albedo to the color that you want your mesh to be.  You can then explore all the other options to change how your mesh can glow, shine like metal, become see through and do other things.  [The Godot website has a page describing all the properties of this versitile shader.](https://docs.godotengine.org/en/stable/tutorials/3d/standard_material_3d.html)
+In Godot, all materials extend the Material base class.  The StandardMaterial3D handles most typical cases and is a good place to start.  It is highly configurable and has a lot of parameters, so it may be a bit overwhelming at first.  Start by setting the Albedo to the color that you want your mesh to be.  You can then explore all the other options to change how your mesh can glow, shine like metal, become see through and do other things.  [The Godot website has a page describing all the properties of this versitile shader.](https://docs.godotengine.org/en/stable/tutorials/3d/standard_material_3d.html)
 
-Godot provides more complex shaders too.  If the StandardShader3D doesn't provide the effect you need, you can write your own shader using Godot's own shader langage.  This is a separate programming language Godot provides just for shaders.  It can be tricky to program your own shader, but sometimes it's the best route to take if you need your shader to do something very specific.  Godot also provides VisualShaders which are similar to shader programs, but allow you to build your shader by joining nodes together instead of writing a program, which you may find easier to do.  [Godot has a great webpage describing how to get started writing your own custom shader](https://docs.godotengine.org/en/stable/tutorials/shaders/your_first_shader/index.html)
+Godot provides more complex materials too.  If the StandardMaterial3D doesn't provide the effect you need, you can create your own custom material using written using Godot's own shader langage.  A shader is a separate program which can be attached to the special ShaderMaterial which allows it to be displayed on objects.  Shaders must be written in a separate programming specially designed for them.  It can be tricky to program your own shader, but sometimes it's the best route to take if you need your material to do something very specific.  Godot also provides VisualShaders which are similar to shader programs, but allow you to build your shader by joining nodes together instead of writing a program, which you may find easier to do.  [Godot has a great webpage describing how to get started writing your own custom shader.](https://docs.godotengine.org/en/stable/tutorials/shaders/your_first_shader/index.html)
 
 ## Creating a basic StandardShader3D
 
@@ -24,7 +24,7 @@ Save your new material as my_material.tres.
 
 ![saving the material](quick_start_save_material.png)
 
-A new material has been created and is stored in your filesystem.  Double click on it to show its porperties in the Inspector tab.
+A new material has been created and is stored in your filesystem.  Double click on it to show its properties in the Inspector tab.
 
 ![show material in inspector](quick_start_show_material.png)
 
