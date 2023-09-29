@@ -44,11 +44,21 @@ var cache_list:Array[BlockCache] = []
 
 func add_target(block_path:NodePath, face_indices:PackedInt32Array):
 #	print("add target %s %s" % [block_path.get_name(block_path.get_name_count() - 1), face_indices])
-	var target:Target = Target.new()
-	target.block_path = block_path
-	target.face_indices = face_indices
+	var target:Target = null
+	for t in target_list:
+		if t.block_path == block_path:
+			target = t
+			break
+
+	if !target:
+		target = Target.new()
+		target.block_path = block_path
+		target_list.append(target)
 	
-	target_list.append(target)
+	for f_idx in face_indices:
+		if !target.face_indices.has(f_idx):
+			target.face_indices.append(f_idx)
+	
 
 func make_cache():
 	cache_list = []
@@ -65,8 +75,32 @@ func make_cache():
 
 func will_change_anything()->bool:
 	for t in target_list:
-		if !t.face_indices.is_empty():
+			
+		var block:CyclopsBlock = builder.get_node(t.block_path)
+
+		#Find index of current material
+		var target_material:Material
+		var mat_idx:int = -1
+		for m_idx in block.materials.size():
+			var m:Material = block.materials[m_idx]
+			if m.resource_path == material_path:
+				mat_idx = m_idx
+				break
+
+		if mat_idx == -1:
 			return true
+
+		var data:ConvexBlockData = block.block_data
+		var vol:ConvexVolume = ConvexVolume.new()
+		vol.init_from_convex_block_data(data)
+		
+#		for f_idx in vol.faces.size():
+		for f_idx in t.face_indices:
+			var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
+			if f.material_id != mat_idx:
+				return true
+
+		
 	return false
 
 func _init():
