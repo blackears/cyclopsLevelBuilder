@@ -110,12 +110,14 @@ popup/item_8/id = 8
 
 [node name="display_mode" type="OptionButton" parent="HBoxContainer"]
 layout_mode = 2
-item_count = 2
+item_count = 3
 selected = 1
 popup/item_0/text = "Wireframe"
 popup/item_0/id = 0
-popup/item_1/text = "Materials"
+popup/item_1/text = "Mesh"
 popup/item_1/id = 1
+popup/item_2/text = "Materials"
+popup/item_2/id = 2
 
 [node name="bn_xray" type="Button" parent="HBoxContainer"]
 unique_name_in_owner = true

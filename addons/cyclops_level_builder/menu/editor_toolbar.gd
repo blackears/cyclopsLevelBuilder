@@ -140,7 +140,7 @@ func _on_check_lock_uvs_toggled(button_pressed):
 
 
 
-func _on_display_mode_item_selected(index):
+func _on_display_mode_item_selected(index:int):
 	editor_plugin.display_mode = index
 
 

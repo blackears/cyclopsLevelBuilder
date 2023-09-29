@@ -69,7 +69,7 @@ var mode:Mode = Mode.OBJECT
 enum EditMode { VERTEX, EDGE, FACE }
 var edit_mode:EditMode = EditMode.VERTEX
 
-var display_mode:DisplayMode.Type = DisplayMode.Type.TEXTURED
+var display_mode:DisplayMode.Type = DisplayMode.Type.MATERIAL
 
 var cached_viewport_camera:Camera3D
 

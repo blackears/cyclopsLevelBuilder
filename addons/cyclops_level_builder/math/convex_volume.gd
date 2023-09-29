@@ -696,11 +696,7 @@ func calc_lightmap_uvs():
 		var face:FaceInfo = faces[ft.face_index]
 		face.lightmap_uvs = xform_inv * ft.points
 
-func create_mesh(material_list:Array[Material], default_material:Material)->ArrayMesh:
-#	if Engine.is_editor_hint():
-#		return
-#	print("num faces %s" % faces.size())
-#	print("-creating mesh")
+func create_mesh(material_list:Array[Material], default_material:Material, override_with_default_material:bool = false)->ArrayMesh:
 
 	var mesh:ArrayMesh = ArrayMesh.new()
 	mesh.blend_shape_mode = Mesh.BLEND_SHAPE_MODE_NORMALIZED
@@ -733,9 +729,10 @@ func create_mesh(material_list:Array[Material], default_material:Material)->Arra
 		var uv1s:PackedVector2Array
 		var uv2s:PackedVector2Array
 
-		var material = default_material		
-		if mat_id >= 0 && mat_id < material_list.size():
-			material = material_list[mat_id]
+		var material = default_material
+		if !override_with_default_material:
+			if mat_id >= 0 && mat_id < material_list.size():
+				material = material_list[mat_id]
 		
 		for f_idx in face_dict[mat_id]:
 #			print("f_idx %s" % f_idx)

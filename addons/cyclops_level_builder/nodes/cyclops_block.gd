@@ -61,7 +61,7 @@ var control_mesh:ConvexVolume
 @export var materials:Array[Material]
 
 var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
-var display_mode:DisplayMode.Type = DisplayMode.Type.TEXTURED
+var display_mode:DisplayMode.Type = DisplayMode.Type.MATERIAL
 
 @export_flags_3d_physics var collision_layer:int = 1:
 	get:
@@ -146,21 +146,20 @@ func build_from_block():
 	
 	#print("volume %s" % vol)
 	
-#	var mesh:ImmediateMesh = ImmediateMesh.new()
 	var mesh:ArrayMesh
 
 	if Engine.is_editor_hint():
-#		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 		var global_scene = get_node("/root/CyclopsAutoload")
 		mesh_wire.mesh = vol.create_mesh_wire(global_scene.outline_material)
 		#print ("added wireframe")
 
-		if display_mode == DisplayMode.Type.TEXTURED:
+		if display_mode == DisplayMode.Type.MATERIAL:
 			mesh = vol.create_mesh(materials, default_material)
+		if display_mode == DisplayMode.Type.MESH:
+			mesh = vol.create_mesh(materials, default_material, true)
 			#print ("added faces")
 	else:
 		mesh = vol.create_mesh(materials, default_material)
-#	vol.append_mesh(mesh, materials, default_material)
 	
 	mesh_instance.mesh = mesh
 	
@@ -178,6 +177,7 @@ func build_from_block():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if dirty:
+			
 		build_from_block()
 
 		

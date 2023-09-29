@@ -44,7 +44,7 @@ var dirty:bool = true
 @export var materials:Array[Material]
 
 var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
-var display_mode:DisplayMode.Type = DisplayMode.Type.TEXTURED
+var display_mode:DisplayMode.Type = DisplayMode.Type.MATERIAL
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -98,10 +98,11 @@ func build_from_block():
 #		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 		var global_scene = get_node("/root/CyclopsAutoload")
 		mesh_wire.mesh = vol.create_mesh_wire(global_scene.outline_material)
-		#print ("added wireframe")
 
-		if display_mode == DisplayMode.Type.TEXTURED:
+		if display_mode == DisplayMode.Type.MATERIAL:
 			mesh = vol.create_mesh(materials, default_material)
+		elif display_mode == DisplayMode.Type.MESH:
+			mesh = vol.create_mesh(materials, default_material, true)
 			#print ("added faces")
 	else:
 		mesh = vol.create_mesh(materials, default_material)

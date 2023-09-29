@@ -151,7 +151,7 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 	var pick_origin:Vector3 = viewport_camera.project_ray_origin(position)
 	var pick_dir:Vector3 = viewport_camera.project_ray_normal(position)
 	
-	if builder.display_mode == DisplayMode.Type.TEXTURED:
+	if builder.display_mode == DisplayMode.Type.MATERIAL || builder.display_mode == DisplayMode.Type.MESH:
 		var result:IntersectResults = builder.intersect_ray_closest_selected_only(pick_origin, pick_dir)
 		if result:
 			for h in handles:

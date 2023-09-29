@@ -24,5 +24,5 @@
 @tool
 class_name DisplayMode
 
-enum Type { WIRE, TEXTURED }
+enum Type { WIRE, MESH, MATERIAL }
 
