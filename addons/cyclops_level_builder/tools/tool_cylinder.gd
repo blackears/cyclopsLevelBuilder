@@ -172,30 +172,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					return true
 
 				elif tool_state == ToolState.DRAG_HEIGHT:
-					#Create shape
 
-#					var cmd:CommandAddCylinder = CommandAddCylinder.new()
-#					cmd.builder = builder
-#					cmd.block_name_prefix = "Block_"
-#					cmd.blocks_root_path = blocks_root.get_path()
-#					cmd.tube = settings.tube
-#					cmd.origin = base_center
-#					cmd.axis_normal = floor_normal
-#					cmd.height = drag_offset.length() if drag_offset.dot(floor_normal) > 0 else - drag_offset.length()
-#					if settings.tube:
-#						cmd.radius_inner = min(first_ring_radius, second_ring_radius)
-#						cmd.radius_outer = max(first_ring_radius, second_ring_radius)
-#					else:
-#						cmd.radius_inner = first_ring_radius
-#						cmd.radius_outer = first_ring_radius
-#					cmd.segments = settings.segments
-#					cmd.uv_transform = builder.tool_uv_transform
-#					cmd.material_path = builder.tool_material_path
-#
-#					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-#
-#					cmd.add_to_undo_manager(undo)
-					
 					create_block()
 										
 					tool_state = ToolState.READY

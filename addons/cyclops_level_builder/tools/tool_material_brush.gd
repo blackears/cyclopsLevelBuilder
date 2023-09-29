@@ -32,6 +32,8 @@ const TOOL_ID:String = "material_brush"
 
 var cmd:CommandSetMaterial
 
+var settings:ToolMaterialBrushSettings = ToolMaterialBrushSettings.new()
+
 
 func _get_tool_id()->String:
 	return TOOL_ID
@@ -43,6 +45,13 @@ func _draw_tool(viewport_camera:Camera3D):
 	global_scene.clear_tool_mesh()
 	global_scene.draw_selected_blocks(viewport_camera)
 
+func _get_tool_properties_editor()->Control:
+	var res_insp:ResourceInspector = preload("res://addons/cyclops_level_builder/controls/resource_inspector/resource_inspector.tscn").instantiate()
+	
+	res_insp.target = settings
+	
+	return res_insp
+	
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
 	if event is InputEventMouseButton:
 		
@@ -63,7 +72,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						cmd.material_path = builder.tool_material_path
 						
 						var block:CyclopsBlock = result.object
-						cmd.add_target(block.get_path(), block.control_mesh.get_face_indices())
+						if settings.individual_faces:
+							cmd.add_target(block.get_path(), [result.face_index])
+
+						else:
+							cmd.add_target(block.get_path(), block.control_mesh.get_face_indices())
 						#cmd.do_it()
 						
 						tool_state = ToolState.PAINTING
@@ -93,7 +106,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			if result:
 				cmd.undo_it()
 				var block:CyclopsBlock = result.object
-				cmd.add_target(block.get_path(), block.control_mesh.get_face_indices())
+				if settings.individual_faces:
+					cmd.add_target(block.get_path(), [result.face_index])
+
+				else:
+					cmd.add_target(block.get_path(), block.control_mesh.get_face_indices())
 				cmd.do_it()
 			
 			return true
