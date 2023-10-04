@@ -28,7 +28,7 @@ extends CyclopsCommand
 
 class BlockFaceChanges extends RefCounted:
 	var block_path:NodePath
-	var face_indices:Array[int] = []
+	var face_indices:Array[int]
 	var tracked_block_data:ConvexBlockData
 
 var color:Color = Color.WHITE

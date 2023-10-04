@@ -10,6 +10,11 @@ script = ExtResource("1_q0hdg")
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 
+[node name="check_individual_faces" type="CheckBox" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Individual faces"
+
 [node name="check_paint_material" type="CheckBox" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -22,15 +27,10 @@ theme_override_constants/margin_left = 16
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="check_individual_faces" type="CheckBox" parent="VBoxContainer/MarginContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Individual Faces"
-
 [node name="check_erase_material" type="CheckBox" parent="VBoxContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Erase Materials"
+text = "Erase materials"
 
 [node name="check_paint_color" type="CheckBox" parent="VBoxContainer"]
 unique_name_in_owner = true
@@ -67,8 +67,8 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Visible"
 
+[connection signal="toggled" from="VBoxContainer/check_individual_faces" to="." method="_on_check_individual_faces_toggled"]
 [connection signal="toggled" from="VBoxContainer/check_paint_material" to="." method="_on_check_paint_material_toggled"]
-[connection signal="toggled" from="VBoxContainer/MarginContainer/VBoxContainer/check_individual_faces" to="." method="_on_check_individual_faces_toggled"]
 [connection signal="toggled" from="VBoxContainer/MarginContainer/VBoxContainer/check_erase_material" to="." method="_on_check_erase_material_toggled"]
 [connection signal="toggled" from="VBoxContainer/check_paint_color" to="." method="_on_check_paint_color_toggled"]
 [connection signal="color_changed" from="VBoxContainer/MarginContainer2/HBoxContainer/color_button" to="." method="_on_color_button_color_changed"]

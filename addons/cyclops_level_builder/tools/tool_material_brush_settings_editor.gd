@@ -49,11 +49,12 @@ func update():
 	%check_paint_material.disabled = false
 	%check_paint_color.disabled = false
 	%check_paint_visibility.disabled = false
+	%check_individual_faces.disabled = false
+
+	%check_individual_faces.button_pressed = settings.individual_faces
 	
 	%check_paint_material.button_pressed = settings.paint_materials
-	%check_individual_faces.button_pressed = settings.individual_faces
 	%check_erase_material.button_pressed = settings.erase_material
-	%check_individual_faces.disabled = !settings.paint_materials
 	%check_erase_material.disabled = !settings.paint_materials
 
 	%check_paint_color.button_pressed = settings.paint_color
@@ -78,7 +79,6 @@ func _process(delta):
 
 func _on_check_paint_material_toggled(button_pressed:bool):
 	settings.paint_materials = button_pressed
-	%check_individual_faces.disabled = !settings.paint_materials
 	%check_erase_material.disabled = !settings.paint_materials
 
 

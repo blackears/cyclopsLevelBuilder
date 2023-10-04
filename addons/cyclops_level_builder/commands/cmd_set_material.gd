@@ -35,7 +35,14 @@ class BlockCache extends RefCounted:
 	var materials:Array[Material]
 	
 #Public
+var setting_material:bool = true
 var material_path:String
+
+var setting_color:bool = false
+var color:Color = Color.WHITE
+
+var setting_visibility = false
+var visibility:bool = true
 
 #Private
 var target_list:Array[Target] = []
@@ -78,28 +85,39 @@ func will_change_anything()->bool:
 			
 		var block:CyclopsBlock = builder.get_node(t.block_path)
 
-		#Find index of current material
-		var target_material:Material
-		var mat_idx:int = -1
-		for m_idx in block.materials.size():
-			var m:Material = block.materials[m_idx]
-			if m.resource_path == material_path:
-				mat_idx = m_idx
-				break
-
-		if mat_idx == -1:
-			return true
-
 		var data:ConvexBlockData = block.block_data
 		var vol:ConvexVolume = ConvexVolume.new()
 		vol.init_from_convex_block_data(data)
 		
-#		for f_idx in vol.faces.size():
-		for f_idx in t.face_indices:
-			var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
-			if f.material_id != mat_idx:
+		if setting_material:
+			#Find index of current material
+			var target_material:Material
+			var mat_idx:int = -1
+			for m_idx in block.materials.size():
+				var m:Material = block.materials[m_idx]
+				if m.resource_path == material_path:
+					mat_idx = m_idx
+					break
+
+			if mat_idx == -1:
 				return true
 
+			for f_idx in t.face_indices:
+				var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
+				if f.material_id != mat_idx:
+					return true
+
+		if setting_color:
+			for f_idx in t.face_indices:
+				var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
+				if f.color != color:
+					return true
+
+		if setting_visibility:
+			for f_idx in t.face_indices:
+				var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
+				if f.visible != visibility:
+					return true
 		
 	return false
 
@@ -174,8 +192,18 @@ func do_it():
 			#print("has %s" % mat_list_reduced.has(mat))
 			#print("find %s" % mat_list_reduced.find(mat))
 			
-			face.material_id = -1 if mat == null else mat_list_reduced.find(mat)
+			if setting_material:
+				face.material_id = -1 if mat == null else mat_list_reduced.find(mat)
 			#print("face.material_id %s" % face.material_id)
+			
+		for f_idx in ctl_mesh.faces.size():
+			var face:ConvexVolume.FaceInfo = ctl_mesh.faces[f_idx]
+			
+			if t.face_indices.has(f_idx):
+				if setting_color:
+					face.color = color
+				if setting_visibility:
+					face.visible = visibility
 		
 		block.materials = mat_list_reduced
 		block.block_data = ctl_mesh.to_convex_block_data()

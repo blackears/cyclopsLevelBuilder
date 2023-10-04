@@ -30,7 +30,7 @@ var tool_state:ToolState = ToolState.READY
 
 const TOOL_ID:String = "material_brush"
 
-var cmd_material:CommandSetMaterial
+var cmd:CommandSetMaterial
 
 var settings:ToolMaterialBrushSettings = ToolMaterialBrushSettings.new()
 
@@ -67,26 +67,33 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 					
 					if result:
-						cmd_material = CommandSetMaterial.new()
-						cmd_material.builder = builder
+						cmd = CommandSetMaterial.new()
+						cmd.builder = builder
 						
-						cmd_material.material_path = builder.tool_material_path if !settings.erase_material else ""
+						cmd.setting_material = settings.paint_materials
+						cmd.material_path = builder.tool_material_path if !settings.erase_material else ""
+						
+						cmd.setting_color = settings.paint_color
+						cmd.color = settings.color
+						
+						cmd.setting_visibility = settings.paint_visibility
+						cmd.visibility = settings.visibility
 						
 						var block:CyclopsBlock = result.object
 						if settings.individual_faces:
-							cmd_material.add_target(block.get_path(), [result.face_index])
+							cmd.add_target(block.get_path(), [result.face_index])
 
 						else:
-							cmd_material.add_target(block.get_path(), block.control_mesh.get_face_indices())
+							cmd.add_target(block.get_path(), block.control_mesh.get_face_indices())
 						
 						tool_state = ToolState.PAINTING
 
 			else:
 				if tool_state == ToolState.PAINTING:
-					cmd_material.undo_it()
-					if cmd_material.will_change_anything():
+					cmd.undo_it()
+					if cmd.will_change_anything():
 						var undo:EditorUndoRedoManager = builder.get_undo_redo()
-						cmd_material.add_to_undo_manager(undo)					
+						cmd.add_to_undo_manager(undo)					
 					
 					tool_state = ToolState.READY
 					
@@ -104,14 +111,14 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 			
 			if result:
-				cmd_material.undo_it()
+				cmd.undo_it()
 				var block:CyclopsBlock = result.object
 				if settings.individual_faces:
-					cmd_material.add_target(block.get_path(), [result.face_index])
+					cmd.add_target(block.get_path(), [result.face_index])
 
 				else:
-					cmd_material.add_target(block.get_path(), block.control_mesh.get_face_indices())
-				cmd_material.do_it()
+					cmd.add_target(block.get_path(), block.control_mesh.get_face_indices())
+				cmd.do_it()
 			
 			return true
 		
