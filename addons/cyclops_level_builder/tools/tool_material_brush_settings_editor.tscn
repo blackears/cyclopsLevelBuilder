@@ -1,0 +1,76 @@
+[gd_scene load_steps=2 format=3 uid="uid://dugi0xh84150p"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_material_brush_settings_editor.gd" id="1_q0hdg"]
+
+[node name="PanelContainer" type="PanelContainer"]
+offset_right = 317.0
+offset_bottom = 269.0
+script = ExtResource("1_q0hdg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="check_paint_material" type="CheckBox" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Paint materials"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="check_individual_faces" type="CheckBox" parent="VBoxContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Individual Faces"
+
+[node name="check_erase_material" type="CheckBox" parent="VBoxContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Erase Materials"
+
+[node name="check_paint_color" type="CheckBox" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Paint color"
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
+layout_mode = 2
+text = "Color"
+
+[node name="color_button" type="ColorPickerButton" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="check_paint_visibility" type="CheckBox" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Paint visibility"
+
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+
+[node name="check_visibility" type="CheckBox" parent="VBoxContainer/MarginContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Visible"
+
+[connection signal="toggled" from="VBoxContainer/check_paint_material" to="." method="_on_check_paint_material_toggled"]
+[connection signal="toggled" from="VBoxContainer/MarginContainer/VBoxContainer/check_individual_faces" to="." method="_on_check_individual_faces_toggled"]
+[connection signal="toggled" from="VBoxContainer/MarginContainer/VBoxContainer/check_erase_material" to="." method="_on_check_erase_material_toggled"]
+[connection signal="toggled" from="VBoxContainer/check_paint_color" to="." method="_on_check_paint_color_toggled"]
+[connection signal="color_changed" from="VBoxContainer/MarginContainer2/HBoxContainer/color_button" to="." method="_on_color_button_color_changed"]
+[connection signal="toggled" from="VBoxContainer/check_paint_visibility" to="." method="_on_check_paint_visibility_toggled"]
+[connection signal="toggled" from="VBoxContainer/MarginContainer3/check_visibility" to="." method="_on_check_visibility_toggled"]

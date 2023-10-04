@@ -25,14 +25,17 @@
 extends Resource
 class_name ToolMaterialBrushSettings
 
+@export var paint_materials:bool = true
+@export var paint_color:bool = false
+@export var paint_visibility:bool = false
+
+
 @export var individual_faces:bool = false
 @export var erase_material:bool = false
 
-#@export var paint_color:bool = false
-#@export var color:Color = Color.WHITE
-#
-#@export var paint_visibility:bool = false
-#@export var visibility:bool = true
+@export var color:Color = Color.WHITE
+
+@export var visibility:bool = true
 
 
 

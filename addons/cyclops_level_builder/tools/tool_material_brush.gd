@@ -30,7 +30,7 @@ var tool_state:ToolState = ToolState.READY
 
 const TOOL_ID:String = "material_brush"
 
-var cmd:CommandSetMaterial
+var cmd_material:CommandSetMaterial
 
 var settings:ToolMaterialBrushSettings = ToolMaterialBrushSettings.new()
 
@@ -46,11 +46,11 @@ func _draw_tool(viewport_camera:Camera3D):
 	global_scene.draw_selected_blocks(viewport_camera)
 
 func _get_tool_properties_editor()->Control:
-	var res_insp:ResourceInspector = preload("res://addons/cyclops_level_builder/controls/resource_inspector/resource_inspector.tscn").instantiate()
+	var ed:ToolMaterialBrushSettingsEditor = preload("res://addons/cyclops_level_builder/tools/tool_material_brush_settings_editor.tscn").instantiate()
+
+	ed.settings = settings
 	
-	res_insp.target = settings
-	
-	return res_insp
+	return ed
 	
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
 	if event is InputEventMouseButton:
@@ -67,27 +67,26 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 					
 					if result:
-						cmd = CommandSetMaterial.new()
-						cmd.builder = builder
+						cmd_material = CommandSetMaterial.new()
+						cmd_material.builder = builder
 						
-						cmd.material_path = builder.tool_material_path if !settings.erase_material else ""
+						cmd_material.material_path = builder.tool_material_path if !settings.erase_material else ""
 						
 						var block:CyclopsBlock = result.object
 						if settings.individual_faces:
-							cmd.add_target(block.get_path(), [result.face_index])
+							cmd_material.add_target(block.get_path(), [result.face_index])
 
 						else:
-							cmd.add_target(block.get_path(), block.control_mesh.get_face_indices())
-						#cmd.do_it()
+							cmd_material.add_target(block.get_path(), block.control_mesh.get_face_indices())
 						
 						tool_state = ToolState.PAINTING
 
 			else:
 				if tool_state == ToolState.PAINTING:
-					cmd.undo_it()
-					if cmd.will_change_anything():
+					cmd_material.undo_it()
+					if cmd_material.will_change_anything():
 						var undo:EditorUndoRedoManager = builder.get_undo_redo()
-						cmd.add_to_undo_manager(undo)					
+						cmd_material.add_to_undo_manager(undo)					
 					
 					tool_state = ToolState.READY
 					
@@ -105,31 +104,20 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 			
 			if result:
-				cmd.undo_it()
+				cmd_material.undo_it()
 				var block:CyclopsBlock = result.object
 				if settings.individual_faces:
-					cmd.add_target(block.get_path(), [result.face_index])
+					cmd_material.add_target(block.get_path(), [result.face_index])
 
 				else:
-					cmd.add_target(block.get_path(), block.control_mesh.get_face_indices())
-				cmd.do_it()
+					cmd_material.add_target(block.get_path(), block.control_mesh.get_face_indices())
+				cmd_material.do_it()
 			
 			return true
 		
 	return false
 
-
-func dab_materials(block:CyclopsBlock):
-	var cmd:CommandSetMaterial = CommandSetMaterial.new()
-	cmd.builder = builder
-	cmd.material_path = builder.tool_material_path
 	
-	cmd.add_target(block.get_path(), block.control_mesh.get_face_indices())
-	
-
-	if cmd.will_change_anything():
-		var undo:EditorUndoRedoManager = builder.get_undo_redo()
-		cmd.add_to_undo_manager(undo)					
 
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
