@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   height="16"
+   viewBox="0 0 16 16"
+   width="16"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="snap.svg"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#111111"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="44.664289"
+     inkscape:cx="8.9221167"
+     inkscape:cy="8.0713251"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <defs
+     id="defs1" />
+  <path
+     style="fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 3.649448,1.2314088 c 0,0 -1.5448584,5.2166956 -1.5224691,7.836238 0.022389,2.6195422 2.2392687,5.4708902 5.3734203,5.5525342 3.1344948,0.08165 5.8659838,-2.564832 5.9331518,-5.1047492 0.07081,-2.6777391 -1.253799,-8.2392445 -1.253799,-8.2392445 L 9.3363178,1.2537978 c 0,0 0.8366212,5.8472805 0.8731812,7.3212852 0.03656,1.474005 -1.4770501,2.135295 -2.5523751,2.149368 C 6.5817989,10.738524 5.0823601,9.8960491 5.0599708,8.3959693 5.0375815,6.8958895 6.4928829,1.2537981 6.4928829,1.2537981 Z"
+     id="path1"
+     sodipodi:nodetypes="cssscczzzcc" />
+  <rect
+     style="fill:#ffffff;fill-opacity:1;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-dashoffset:0.8;stroke-opacity:0.626761"
+     id="rect1"
+     width="2.8434348"
+     height="1.7911401"
+     x="3.4703341"
+     y="1.3881335"
+     ry="0" />
+  <rect
+     style="fill:#ffffff;fill-opacity:1;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-dashoffset:0.8;stroke-opacity:0.626761"
+     id="rect2"
+     width="3.1568844"
+     height="1.9478649"
+     x="9.2691498"
+     y="1.2985766" />
+</svg>

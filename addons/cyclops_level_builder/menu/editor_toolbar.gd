@@ -154,3 +154,17 @@ func _on_bn_xray_toggled(button_pressed:bool):
 	var global_scene:CyclopsGlobalScene = editor_plugin.get_global_scene()
 	global_scene.xray_mode = button_pressed
 	
+
+func _on_bn_snap_settings_pressed():
+#	var rect:Rect2 = %bn_snap_settings.get_rect()
+	
+	var rect:Rect2 = %bn_snap_settings.get_global_rect()
+	var new_rect:Rect2 = Rect2(rect.position.x, rect.position.y + rect.size.y, 200, 100)
+	%snap_settings_popup.popup_on_parent(new_rect)
+	#print("snap popup2 ", rect)
+	
+#	var rect:Rect2 = %bn_snap_settings.get_rect()
+#	var new_rect:Rect2 = Rect2(rect.position.x, rect.position.y + rect.size.y, 200, 100)
+#	%snap_settings_popup.popup(new_rect)
+	
+	

@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://dd3a65ruc682h"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/menu/snapping/snap_settings_popup.gd" id="1_ef4xp"]
+
+[node name="snap_settings_popup" type="PopupPanel"]
+visible = true
+script = ExtResource("1_ef4xp")
+
+[node name="Button" type="Button" parent="."]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 96.0
+offset_bottom = 96.0
+text = "foo"
