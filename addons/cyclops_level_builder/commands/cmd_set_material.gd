@@ -127,7 +127,8 @@ func do_it():
 			if m.resource_path == material_path:
 				target_material = m
 				break
-		if !target_material:				
+				
+		if !target_material && ResourceLoader.exists(material_path):
 			target_material = load(material_path)
 			mat_list.append(target_material)
 		

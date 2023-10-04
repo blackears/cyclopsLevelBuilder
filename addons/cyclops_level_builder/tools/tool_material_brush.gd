@@ -69,7 +69,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					if result:
 						cmd = CommandSetMaterial.new()
 						cmd.builder = builder
-						cmd.material_path = builder.tool_material_path
+						
+						cmd.material_path = builder.tool_material_path if !settings.erase_material else ""
 						
 						var block:CyclopsBlock = result.object
 						if settings.individual_faces:
