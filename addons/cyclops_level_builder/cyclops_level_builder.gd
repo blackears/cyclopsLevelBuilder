@@ -29,6 +29,7 @@ signal active_node_changed
 signal selection_changed
 
 const AUTOLOAD_NAME = "CyclopsAutoload"
+const CYCLOPS_HUD_NAME = "CyclopsGlobalHud"
 
 var config:CyclopsConfig = preload("res://addons/cyclops_level_builder/data/configuration.tres")
 
@@ -59,7 +60,6 @@ var tool_overlay_extrude:float = .01
 var tool_uv_transform:Transform2D
 var tool_material_path:String
 
-var handle_point_radius:float = .05
 var handle_screen_radius:float = 6
 
 var drag_start_radius:float = 6
@@ -86,6 +86,7 @@ func _enter_tree():
 	add_custom_type("CyclopsConvexBlockBody", "Node", preload("nodes/cyclops_convex_block_body.gd"), preload("nodes/cyclops_blocks_icon.png"))
 
 	add_autoload_singleton(AUTOLOAD_NAME, "res://addons/cyclops_level_builder/cyclops_global_scene.tscn")
+	#add_autoload_singleton(CYCLOPS_HUD_NAME, "res://addons/cyclops_level_builder/cyclops_global_hud.tscn")
 	
 	material_dock = preload("res://addons/cyclops_level_builder/docks/material_palette/material_palette_viewport.tscn").instantiate()
 	material_dock.builder = self
@@ -228,6 +229,7 @@ func on_selection_changed():
 func _exit_tree():
 	# Clean-up of the plugin goes here.
 	remove_autoload_singleton(AUTOLOAD_NAME)
+	#remove_autoload_singleton(CYCLOPS_HUD_NAME)
 	
 	remove_custom_type("CyclopsBlock")
 	remove_custom_type("CyclopsBlocks")
@@ -259,6 +261,8 @@ func _handles(object:Object):
 	return object is CyclopsBlock or object is CyclopsBlocks or always_on
 
 func _forward_3d_draw_over_viewport(viewport_control:Control):
+	var global_scene:CyclopsGlobalScene = get_global_scene()
+	global_scene.draw_over_viewport(viewport_control)
 	#Draw on top of viweport here
 	pass
 

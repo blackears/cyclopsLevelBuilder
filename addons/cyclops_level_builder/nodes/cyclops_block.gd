@@ -180,7 +180,6 @@ func _process(delta):
 			
 		build_from_block()
 
-		
 	if Engine.is_editor_hint():
 #		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 		var global_scene = get_node("/root/CyclopsAutoload")
@@ -189,8 +188,30 @@ func _process(delta):
 			dirty = true
 			return
 
-func append_mesh_outline(mesh:ImmediateMesh, viewport_camera:Camera3D, local_to_world:Transform3D, mat:Material):
+func draw_unit_labels(viewport_camera:Camera3D, local_to_world:Transform3D):
 	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
+
+	var font:Font = global_scene.units_font
+	var font_size:float = global_scene.units_font_size	
+	var descent:float = font.get_descent(font_size)
+	var text_offset:Vector2 = Vector2(0, -global_scene.vertex_radius - descent)
+	
+	if control_mesh:
+		for e_idx in control_mesh.edges.size():
+			var e:ConvexVolume.EdgeInfo = control_mesh.edges[e_idx]
+			var focus:Vector3 = local_to_world * e.get_midpoint()
+			if !viewport_camera.is_position_behind(focus):
+				var focus_2d:Vector2 = viewport_camera.unproject_position(focus)
+				
+				var v0:ConvexVolume.VertexInfo = control_mesh.vertices[e.start_index]
+				var v1:ConvexVolume.VertexInfo = control_mesh.vertices[e.end_index]
+				var distance:Vector3 = v1.point - v0.point
+				global_scene.draw_text("%.3f" % distance.length(), focus_2d, font, font_size)
+		
+		
+
+func append_mesh_outline(mesh:ImmediateMesh, viewport_camera:Camera3D, local_to_world:Transform3D, mat:Material):
+	#var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 	
 	if control_mesh:
 		control_mesh.append_mesh_outline(mesh, viewport_camera, local_to_world, mat)

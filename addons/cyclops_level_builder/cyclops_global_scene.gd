@@ -39,6 +39,7 @@ class_name CyclopsGlobalScene
 @export var vertex_selected_material:Material = preload("res://addons/cyclops_level_builder/materials/vertex_selected_material.tres")
 @export var vertex_active_material:Material = preload("res://addons/cyclops_level_builder/materials/vertex_active_material.tres")
 @export var vertex_tool_material:Material = preload("res://addons/cyclops_level_builder/materials/vertex_tool_material.tres")
+@export var vertex_radius:float = 8
 
 @export var tool_material:Material = preload("res://addons/cyclops_level_builder/materials/tool_material.tres")
 @export var outline_material:Material = preload("res://addons/cyclops_level_builder/materials/outline_material.tres")
@@ -46,6 +47,8 @@ var tool_mesh:ImmediateMesh
 
 @export var grid_size:int = 0
 @export var drag_angle_limit:float = deg_to_rad(5)
+@export var units_font:Font
+@export var units_font_size:int = 16
 
 signal xray_mode_changed(value:bool)
 
@@ -60,12 +63,18 @@ signal xray_mode_changed(value:bool)
 var unit_sphere:GeometryMesh
 var builder:CyclopsLevelBuilder
 
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	unit_sphere = MathGeometry.unit_sphere()
 	
 	tool_mesh = ImmediateMesh.new()
 	$ToolInstance3D.mesh = tool_mesh
+
+#Called by CyclopsLevelBuilder to draw 2D components
+func draw_over_viewport(overlay:Control):
+	pass
 
 func draw_line(p0:Vector3, p1:Vector3, mat:Material):
 	
@@ -164,8 +173,12 @@ func clear_tool_mesh():
 	for child in %VertexGroup.get_children():
 		%VertexGroup.remove_child(child)
 		child.queue_free()
-		
-	
+	#print("clear")
+	%cyclops_overlay.clear()
+
+func draw_text(text:String, pos:Vector2, font:Font, font_size:float):
+	%cyclops_overlay.draw_text(text, pos, font, font_size)
+
 # Draws the bounding box for the points [p0, p1, p2]
 func draw_cube(p0:Vector3, p1:Vector3, p2:Vector3, mat:Material = null, vertex_mat:Material = null):	
 #	print ("draw_cube %s %s %s" % [p0, p1, p2])
@@ -254,16 +267,17 @@ func draw_sphere(xform:Transform3D = Transform3D.IDENTITY, material:Material = n
 
 func draw_selected_blocks(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
-	#var mesh:ImmediateMesh = ImmediateMesh.new()
 
-#	var blocks_root:CyclopsBlocks = builder.get_editor_interface().get_edited_scene_root()
 	var blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
 	var active_block:CyclopsBlock = builder.get_active_block()
 	for block in blocks:
 		var active:bool = block == active_block
 		var mat:Material = global_scene.tool_object_active_material if active else global_scene.tool_object_selected_material
 		
+		#Selection highlight outline
 		block.append_mesh_outline(tool_mesh, viewport_camera, block.global_transform, mat)
+		
+		#block.draw_unit_labels(viewport_camera, block.global_transform)
 
 
 func draw_screen_rect(viewport_camera:Camera3D, p00:Vector2, p11:Vector2, material:Material):

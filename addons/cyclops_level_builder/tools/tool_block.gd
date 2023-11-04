@@ -43,7 +43,6 @@ var block_drag_p2:Vector3
 var drag_floor_normal:Vector3
 
 #Keep a copy of move command here while we are building it
-#var cmd_move_blocks:CommandMoveBlocks
 var cmd_move_face:CommandMoveFacePlanar
 var move_face_origin:Vector3 #Kep track of the origin when moving a face
 
