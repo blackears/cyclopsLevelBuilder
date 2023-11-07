@@ -33,9 +33,9 @@ var editor_plugin:CyclopsLevelBuilder:
 		editor_plugin.active_node_changed.connect(on_active_node_changed)
 		
 		build_ui()
-#var editor_plugin:CyclopsLevelBuilder
 
-#var action_map:Array[CyclopsAction]
+
+var tool_button_group = ButtonGroup.new()
 
 func on_active_node_changed():
 	update_grid()
@@ -43,57 +43,55 @@ func on_active_node_changed():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$HBoxContainer/grid_size.clear()
-	$HBoxContainer/grid_size.add_item("1/16", 0)
-	$HBoxContainer/grid_size.add_item("1/8", 1)
-	$HBoxContainer/grid_size.add_item("1/4", 2)
-	$HBoxContainer/grid_size.add_item("1/2", 3)
-	$HBoxContainer/grid_size.add_item("1", 4)
-	$HBoxContainer/grid_size.add_item("2", 5)
-	$HBoxContainer/grid_size.add_item("4", 6)
-	$HBoxContainer/grid_size.add_item("8", 7)
-	$HBoxContainer/grid_size.add_item("16", 8)
+	%grid_size.clear()
+	%grid_size.add_item("1/16", 0)
+	%grid_size.add_item("1/8", 1)
+	%grid_size.add_item("1/4", 2)
+	%grid_size.add_item("1/2", 3)
+	%grid_size.add_item("1", 4)
+	%grid_size.add_item("2", 5)
+	%grid_size.add_item("4", 6)
+	%grid_size.add_item("8", 7)
+	%grid_size.add_item("16", 8)
 	
-	$HBoxContainer/MenuBar/Menu.clear()
-	$HBoxContainer/MenuBar/Menu.add_action_item(ActionToolDuplicate.new(editor_plugin))
-	$HBoxContainer/MenuBar/Menu.add_action_item(ActionMergeSelectedBlocks.new(editor_plugin))
-	$HBoxContainer/MenuBar/Menu.add_action_item(ActionSubtractBlock.new(editor_plugin))
-	$HBoxContainer/MenuBar/Menu.add_action_item(ActionIntersectBlock.new(editor_plugin))
-	$HBoxContainer/MenuBar/Menu.add_action_item(ActionDeleteSelectedBlocks.new(editor_plugin))
-	$HBoxContainer/MenuBar/Menu.add_action_item(ActionSnapToGrid.new(editor_plugin))
-	$HBoxContainer/MenuBar/Menu.add_separator()
-	$HBoxContainer/MenuBar/Menu.add_action_item(ActionExportAsGltf.new(editor_plugin))
-	$HBoxContainer/MenuBar/Menu.add_separator()
-	$HBoxContainer/MenuBar/Menu.add_action_item(ActionRotateX90Ccw.new(editor_plugin))
-	$HBoxContainer/MenuBar/Menu.add_action_item(ActionRotateX90Cw.new(editor_plugin))
-	$HBoxContainer/MenuBar/Menu.add_action_item(ActionRotateX180.new(editor_plugin))
-	$HBoxContainer/MenuBar/Menu.add_action_item(ActionMirrorSelectionX2.new(editor_plugin))
-	$HBoxContainer/MenuBar/Menu.add_separator()
-	$HBoxContainer/MenuBar/Menu.add_action_item(ActionRotateY90Ccw.new(editor_plugin))
-	$HBoxContainer/MenuBar/Menu.add_action_item(ActionRotateY90Cw.new(editor_plugin))
-	$HBoxContainer/MenuBar/Menu.add_action_item(ActionRotateY180.new(editor_plugin))
-	$HBoxContainer/MenuBar/Menu.add_action_item(ActionMirrorSelectionY2.new(editor_plugin))
-	$HBoxContainer/MenuBar/Menu.add_separator()
-	$HBoxContainer/MenuBar/Menu.add_action_item(ActionRotateZ90Ccw.new(editor_plugin))
-	$HBoxContainer/MenuBar/Menu.add_action_item(ActionRotateZ90Cw.new(editor_plugin))
-	$HBoxContainer/MenuBar/Menu.add_action_item(ActionRotateZ180.new(editor_plugin))
-	$HBoxContainer/MenuBar/Menu.add_action_item(ActionMirrorSelectionZ.new(editor_plugin))
+	%Menu.clear()
+	%Menu.add_action_item(ActionToolDuplicate.new(editor_plugin))
+	%Menu.add_action_item(ActionMergeSelectedBlocks.new(editor_plugin))
+	%Menu.add_action_item(ActionSubtractBlock.new(editor_plugin))
+	%Menu.add_action_item(ActionIntersectBlock.new(editor_plugin))
+	%Menu.add_action_item(ActionDeleteSelectedBlocks.new(editor_plugin))
+	%Menu.add_action_item(ActionSnapToGrid.new(editor_plugin))
+	%Menu.add_separator()
+	%Menu.add_action_item(ActionExportAsGltf.new(editor_plugin))
+	%Menu.add_separator()
+	%Menu.add_action_item(ActionRotateX90Ccw.new(editor_plugin))
+	%Menu.add_action_item(ActionRotateX90Cw.new(editor_plugin))
+	%Menu.add_action_item(ActionRotateX180.new(editor_plugin))
+	%Menu.add_action_item(ActionMirrorSelectionX2.new(editor_plugin))
+	%Menu.add_separator()
+	%Menu.add_action_item(ActionRotateY90Ccw.new(editor_plugin))
+	%Menu.add_action_item(ActionRotateY90Cw.new(editor_plugin))
+	%Menu.add_action_item(ActionRotateY180.new(editor_plugin))
+	%Menu.add_action_item(ActionMirrorSelectionY2.new(editor_plugin))
+	%Menu.add_separator()
+	%Menu.add_action_item(ActionRotateZ90Ccw.new(editor_plugin))
+	%Menu.add_action_item(ActionRotateZ90Cw.new(editor_plugin))
+	%Menu.add_action_item(ActionRotateZ180.new(editor_plugin))
+	%Menu.add_action_item(ActionMirrorSelectionZ.new(editor_plugin))
 	
 	var global_scene = get_node("/root/CyclopsAutoload")
 
-#	var global_scene:CyclopsGlobalScene = CyclopsAutoload
-	#var global_scene:CyclopsGlobalScene = editor_plugin.get_global_scene()
 	global_scene.xray_mode_changed.connect(on_xray_mode_changed)
 	%bn_xray.button_pressed = global_scene.xray_mode
 			
 	update_grid()
 
-var tool_button_group = ButtonGroup.new()
-
 func build_ui():
-#	print("build_ui()")
+	#Tools
 	for child in %ToolButtonContainer.get_children():
 		%ToolButtonContainer.remove_child(child)
+	
+	%snap_options.clear()
 	
 	if !editor_plugin:
 		return
@@ -112,8 +110,14 @@ func build_ui():
 		
 		%ToolButtonContainer.add_child(bn)
 		
-	$HBoxContainer/display_mode.select(editor_plugin.display_mode)
-	pass
+	%display_mode.select(editor_plugin.display_mode)
+	
+	#Snapping
+	for tag in config.snapping_tags:
+		if tag.icon:
+			%snap_options.add_icon_item(tag.icon, tag.name)
+		else:
+			%snap_options.add_item(tag.name)
 
 func update_grid():
 	if !editor_plugin:
@@ -166,5 +170,9 @@ func _on_bn_snap_settings_pressed():
 #	var rect:Rect2 = %bn_snap_settings.get_rect()
 #	var new_rect:Rect2 = Rect2(rect.position.x, rect.position.y + rect.size.y, 200, 100)
 #	%snap_settings_popup.popup(new_rect)
-	
+
+
+func _on_snap_options_item_selected(index:int):
+	var tag:SnappingTag = editor_plugin.config.snapping_tags[index]
+	tag._activate(editor_plugin)
 	

@@ -1,10 +1,12 @@
-[gd_resource type="Resource" script_class="SnappingTag" load_steps=3 format=3 uid="uid://beqrq2vlgidpe"]
+[gd_resource type="Resource" script_class="SnappingTag" load_steps=4 format=3 uid="uid://beqrq2vlgidpe"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/snapping/snapping_tag.gd" id="1_jlotd"]
+[ext_resource type="Texture2D" uid="uid://c0x011okomj8n" path="res://addons/cyclops_level_builder/art/icons/snap_vertex.svg" id="1_jmnf8"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/snapping/snapping_system_vertex.gd" id="2_c0g2w"]
 
 [resource]
 script = ExtResource("1_jlotd")
 name = "Vertex"
+icon = ExtResource("1_jmnf8")
 tooltip = "Snap to vertices"
 snapping_script = ExtResource("2_c0g2w")

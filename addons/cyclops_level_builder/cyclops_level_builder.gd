@@ -38,6 +38,7 @@ var logger:Logger = Logger.new()
 var material_dock:Control
 var convex_face_editor_dock:Control
 var tool_properties_dock:ToolPropertiesDock
+var snapping_properties_dock:SnappingPropertiesDock
 var cyclops_console_dock:CyclopsConsole
 #var sticky_toolbar:StickyToolbar
 var editor_toolbar:EditorToolbar
@@ -98,6 +99,9 @@ func _enter_tree():
 	tool_properties_dock = preload("res://addons/cyclops_level_builder/docks/tool_properties/tool_properties_dock.tscn").instantiate()
 	tool_properties_dock.builder = self
 	
+	snapping_properties_dock = preload("res://addons/cyclops_level_builder/docks/snapping_properties/snapping_properties_dock.tscn").instantiate()
+	snapping_properties_dock.builder = self
+	
 	cyclops_console_dock = preload("res://addons/cyclops_level_builder/docks/cyclops_console/cyclops_console.tscn").instantiate()
 	cyclops_console_dock.editor_plugin = self
 	
@@ -124,6 +128,7 @@ func _enter_tree():
 	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 	global_scene.builder = self
 	
+	switch_to_snapping_system(SnappingSystemGrid.new())
 	switch_to_tool(ToolBlock.new())
 
 func log(message:String, level:Logger.Level = Logger.Level.ERROR):
@@ -203,6 +208,7 @@ func update_activation():
 			add_control_to_bottom_panel(material_dock, "Materials")
 			add_control_to_dock(DOCK_SLOT_RIGHT_BL, convex_face_editor_dock)
 			add_control_to_dock(DOCK_SLOT_RIGHT_BL, tool_properties_dock)
+			add_control_to_dock(DOCK_SLOT_RIGHT_BL, snapping_properties_dock)
 			activated = true
 	else:
 		if activated:
@@ -210,6 +216,7 @@ func update_activation():
 			remove_control_from_bottom_panel(material_dock)
 			remove_control_from_docks(convex_face_editor_dock)
 			remove_control_from_docks(tool_properties_dock)
+			remove_control_from_docks(snapping_properties_dock)
 			activated = false
 	
 	if node is CyclopsBlocks:
@@ -244,6 +251,7 @@ func _exit_tree():
 		remove_control_from_docks(material_dock)
 		remove_control_from_docks(convex_face_editor_dock)
 		remove_control_from_docks(tool_properties_dock)
+		remove_control_from_docks(snapping_properties_dock)
 		remove_control_from_docks(cyclops_console_dock)
 		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
 
@@ -253,6 +261,7 @@ func _exit_tree():
 	material_dock.queue_free()
 	convex_face_editor_dock.queue_free()
 	tool_properties_dock.queue_free()
+	snapping_properties_dock.queue_free()
 	cyclops_console_dock.queue_free()
 	editor_toolbar.queue_free()
 	upgrade_cyclops_blocks_toolbar.queue_free()
@@ -283,6 +292,7 @@ func _get_state()->Dictionary:
 	material_dock.save_state(state)
 	convex_face_editor_dock.save_state(state)
 	tool_properties_dock.save_state(state)
+	snapping_properties_dock.save_state(state)
 	cyclops_console_dock.save_state(state)
 	return state
 	
@@ -290,6 +300,7 @@ func _set_state(state):
 	material_dock.load_state(state)
 	convex_face_editor_dock.load_state(state)
 	tool_properties_dock.load_state(state)
+	snapping_properties_dock.load_state(state)
 	cyclops_console_dock.load_state(state)
 
 func switch_to_tool(_tool:CyclopsTool):
@@ -311,7 +322,8 @@ func switch_to_snapping_system(_snapping_system:CyclopsSnappingSystem):
 	
 	if snapping_system:
 		snapping_system._activate(self)
-		var control:Control = tool._get_properties_editor()
+		var control:Control = snapping_system._get_properties_editor()
+		snapping_properties_dock.set_editor(control)
 	
 
 func get_global_scene()->CyclopsGlobalScene:
