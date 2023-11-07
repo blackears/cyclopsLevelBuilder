@@ -22,9 +22,44 @@
 # SOFTWARE.
 
 @tool
-extends Resource
-class_name CyclopsConfig
 
-@export var tool_tags:Array[ToolTag]
-@export var snapping_tags:Array[SnappingTag]
+extends Resource
+class_name CyclopsSnappingSystem
+
+enum MoveConstraint { NONE, AXIS_X, AXIS_Y, AXIS_Z, PLANE_XY, PLANE_XZ, PLANE_YZ, PLANE_VIEWPORT }
+var move_constraint:MoveConstraint = MoveConstraint.NONE
+
+var plugin:CyclopsLevelBuilder
+
+func _activate(plugin:CyclopsLevelBuilder):
+	self.plugin = plugin
+	
+func _deactivate():
+	pass
+
+func _snap_point(point:Vector3, move_constraint:MoveConstraint)->Vector3:
+	return point
+
+func _get_properties_editor()->Control:
+	return null
+	
+func constrain_point(point:Vector3, target_point:Vector3, move_constraint:MoveConstraint)->Vector3:
+	match move_constraint:
+		MoveConstraint.NONE:
+			return target_point
+		MoveConstraint.AXIS_X:
+			return Vector3(target_point.x, point.y, point.z)
+		MoveConstraint.AXIS_Y:
+			return Vector3(point.x, target_point.y, point.z)
+		MoveConstraint.AXIS_Z:
+			return Vector3(point.x, point.y, target_point.z)
+		MoveConstraint.PLANE_XY:
+			return Vector3(target_point.x, target_point.y, point.z)
+		MoveConstraint.PLANE_XZ:
+			return Vector3(target_point.x, point.y, target_point.z)
+		MoveConstraint.PLANE_YZ:
+			return Vector3(point.x, target_point.y, target_point.z)
+		_:
+			return point
+
 

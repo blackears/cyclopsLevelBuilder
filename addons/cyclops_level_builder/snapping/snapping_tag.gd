@@ -23,8 +23,23 @@
 
 @tool
 extends Resource
-class_name CyclopsConfig
+class_name SnappingTag
 
-@export var tool_tags:Array[ToolTag]
-@export var snapping_tags:Array[SnappingTag]
+@export var name:String
+@export var icon:Texture2D
+@export_multiline var tooltip:String
+@export var snapping_script:Script
+
+
+var snapping_system:CyclopsSnappingSystem
+
+func _activate(plugin:CyclopsLevelBuilder):
+	if !snapping_script:
+		return
+	
+	if !snapping_system:
+		snapping_system = snapping_script.new()
+	
+	plugin.switch_to_snapping_system(snapping_system)
+
 

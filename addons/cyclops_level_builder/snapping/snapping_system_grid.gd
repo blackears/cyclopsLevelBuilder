@@ -22,9 +22,44 @@
 # SOFTWARE.
 
 @tool
-extends Resource
-class_name CyclopsConfig
 
-@export var tool_tags:Array[ToolTag]
-@export var snapping_tags:Array[SnappingTag]
+extends CyclopsSnappingSystem
+class_name SnappintSystemGrid
+
+#const feet_per_meter:float = 3.28084
+
+@export var grid_size:Vector3 = Vector3(1, 1, 1)
+
+@export var use_subdivisions:bool = false
+@export var grid_subdivisions:int = 10
+
+@export var power_of_two_scale:int = 0 #Scaling 2^n
+
+#local transform matrix for grid
+@export var grid_transform:Transform3D = Transform3D.IDENTITY:
+	get:
+		return grid_transform
+	set(value):
+		grid_transform = value
+		grid_transform_inv = grid_transform.affine_inverse()
+		
+var grid_transform_inv:Transform3D = Transform3D.IDENTITY
+
+
+#Point is in world space
+func _snap_point(point:Vector3, move_constraint:MoveConstraint)->Vector3:
+	
+	var p_local:Vector3 = grid_transform_inv * point
+	
+	var scale:Vector3 = grid_size * pow(2, power_of_two_scale)
+	if use_subdivisions:
+		scale /= grid_subdivisions
+	
+	p_local = floor(p_local / scale + Vector3(.5, .5, .5)) * scale
+	
+	var target_point:Vector3 = grid_transform * p_local
+	return constrain_point(point, target_point, move_constraint)
+
+
+
 

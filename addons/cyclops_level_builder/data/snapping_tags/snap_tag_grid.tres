@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SnappingTag" load_steps=3 format=3 uid="uid://dwxpsgoxb60yp"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/snapping/snapping_tag.gd" id="1_jbxkl"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/snapping/snapping_system_grid.gd" id="2_thx8k"]
+
+[resource]
+script = ExtResource("1_jbxkl")
+name = "Grid"
+tooltip = "Snap to grid points"
+snapping_script = ExtResource("2_thx8k")

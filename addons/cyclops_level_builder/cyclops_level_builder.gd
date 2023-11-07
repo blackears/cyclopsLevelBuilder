@@ -54,6 +54,7 @@ var always_on:bool = false:
 
 var block_create_distance:float = 10
 var tool:CyclopsTool = null
+var snapping_system:CyclopsSnappingSystem = null
 var lock_uvs:bool = false
 var tool_overlay_extrude:float = .01
 
@@ -140,7 +141,7 @@ func get_blocks_recursive(node:Node)->Array[CyclopsBlock]:
 		result.append_array(get_blocks_recursive(child))
 	return result
 
-func  is_selected(node:Node)->bool:
+func is_selected(node:Node)->bool:
 	var selection:EditorSelection = get_editor_interface().get_selection()
 	for n in selection.get_selected_nodes():
 		if n == node:
@@ -301,6 +302,17 @@ func switch_to_tool(_tool:CyclopsTool):
 		tool._activate(self)
 		var control:Control = tool._get_tool_properties_editor()
 		tool_properties_dock.set_editor(control)
+
+func switch_to_snapping_system(_snapping_system:CyclopsSnappingSystem):
+	if snapping_system:
+		snapping_system._deactivate()
+		
+	snapping_system = _snapping_system
+	
+	if snapping_system:
+		snapping_system._activate(self)
+		var control:Control = tool._get_properties_editor()
+	
 
 func get_global_scene()->CyclopsGlobalScene:
 	var scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
