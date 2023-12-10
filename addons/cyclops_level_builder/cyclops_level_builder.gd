@@ -27,6 +27,7 @@ class_name CyclopsLevelBuilder
 
 signal active_node_changed
 signal selection_changed
+signal snapping_tool_changed
 
 const AUTOLOAD_NAME = "CyclopsAutoload"
 const CYCLOPS_HUD_NAME = "CyclopsGlobalHud"
@@ -325,6 +326,7 @@ func switch_to_snapping_system(_snapping_system:CyclopsSnappingSystem):
 		var control:Control = snapping_system._get_properties_editor()
 		snapping_properties_dock.set_editor(control)
 	
+	snapping_tool_changed.emit()
 
 func get_global_scene()->CyclopsGlobalScene:
 	var scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")

@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://cphtpklx81l3w"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/vector3_edit.gd" id="1_lnptu"]
+[ext_resource type="PackedScene" uid="uid://diibmlqy1mpqb" path="res://addons/cyclops_level_builder/controls/numeric_line_edit.tscn" id="2_wjq53"]
+
+[node name="vector3_edit" type="HBoxContainer"]
+offset_right = 237.0
+offset_bottom = 26.0
+script = ExtResource("1_lnptu")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "X:"
+
+[node name="edit_x" parent="." instance=ExtResource("2_wjq53")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 2
+text = "Y:"
+
+[node name="edit_y" parent="." instance=ExtResource("2_wjq53")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label3" type="Label" parent="."]
+layout_mode = 2
+text = "Z:"
+
+[node name="edit_z" parent="." instance=ExtResource("2_wjq53")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[connection signal="value_changed" from="edit_x" to="." method="_on_edit_x_value_changed"]
+[connection signal="value_changed" from="edit_y" to="." method="_on_edit_y_value_changed"]
+[connection signal="value_changed" from="edit_z" to="." method="_on_edit_z_value_changed"]

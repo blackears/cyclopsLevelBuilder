@@ -46,18 +46,32 @@ var mouse_down_pos:Vector2
 var drag_start_radius:float = 4
 var value_start_drag:float
 
+#@onready var line_input:LineEdit = %line_input
+#@onready var line_display:Label = %line_display
+var line_input:LineEdit
+var line_display:Label
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-#	text = "%.4f" % value
-#	$HBoxContainer/LineEdit.text = "%s" % value
-#	$HBoxContainer/Label.text = "%s" % value
-	$HBoxContainer/LineEdit.visible = false
+	var foo = $HBoxContainer/line_display
+	var uuu = get_node("HBoxContainer/line_display")
+	
+	line_input = %line_input
+	line_display = %line_display
+	
+	if line_input:
+		line_input.visible = false
 	pass
 
-func  _process(delta):
+func _process(delta):
 	if dirty:
-		$HBoxContainer/LineEdit.text = format_number(value)
-		$HBoxContainer/Label.text = format_number(value)
+		print("---value " + str(value))
+		if line_input:
+			line_input.text = format_number(value)
+			line_display.text = format_number(value)
+		
+#		$HBoxContainer/LineEdit.text = format_number(value)
+		#$HBoxContainer/Label.text = format_number(value)
 		dirty = false
 	
 func format_number(val:float)->String:
@@ -79,8 +93,9 @@ func _gui_input(event):
 				state = State.READY
 		else:
 			if state == State.READY:
-				$HBoxContainer/LineEdit.visible = true
-				$HBoxContainer/Label.visible = false
+				if line_input:
+					line_input.visible = true
+					line_display.visible = false
 				state = State.TEXT_EDIT
 			elif state == State.DRAGGING:
 				state = State.IDLE
@@ -119,7 +134,7 @@ func _on_line_edit_text_submitted(new_text):
 		
 	dirty = true
 	state = State.IDLE
-	$HBoxContainer/LineEdit.visible = false
-	$HBoxContainer/Label.visible = true
-#	text = "%s" % value
-#	print("text changed2 %s" % text)
+	if line_input:
+		line_input.visible = false
+		line_display.visible = true
+

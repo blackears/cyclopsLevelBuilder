@@ -60,6 +60,11 @@ func _snap_point(point:Vector3, move_constraint:MoveConstraint)->Vector3:
 	var target_point:Vector3 = grid_transform * p_local
 	return constrain_point(point, target_point, move_constraint)
 
+func _get_properties_editor()->Control:
+	var ed:SnappingSystemGridPropertiesEditor = preload("res://addons/cyclops_level_builder/snapping/snapping_system_grid_properties_editor.tscn").instantiate()
+	ed.properties = self
+	
+	return ed
 
 
 

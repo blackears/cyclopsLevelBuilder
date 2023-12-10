@@ -23,61 +23,15 @@
 
 @tool
 extends Control
-class_name SnappingPropertiesDock
+class_name SnappingSystemGridPropertiesEditor
 
-
-var builder:CyclopsLevelBuilder:
-	get:
-		return builder
-	set(value):
-		if builder == value:
-			return
-		builder.snapping_tool_changed.disconnect(on_snapping_tool_changed)
-		
-		builder = value
-
-		builder.snapping_tool_changed.connect(on_snapping_tool_changed)
-
-func on_snapping_tool_changed():
-	update_ui()
-
-func update_ui():
-	if builder:
-		var snap_tool:CyclopsSnappingSystem = builder.snapping_system
-	
-		var ed:Control = snap_tool._get_properties_editor()
-		
-		for child in %ScrollContainer.get_children():
-			%ScrollContainer.remove_child(child)
-			child.queue_free()
-			
-		%ScrollContainer.add_child(ed)
-	pass
+var properties:SnappingSystemGrid
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	update_ui()
 	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
-
-func set_editor(control:Control):
-	for child in $ScrollContainer.get_children():
-		$ScrollContainer.remove_child(child)
-	
-	if control:
-		$ScrollContainer.add_child(control)
-
-func save_state(state:Dictionary):
-	var substate:Dictionary = {}
-	state["snapping_properties"] = substate
-	
-
-func load_state(state:Dictionary):
-	if state == null || !state.has("snapping_properties"):
-		return
-	
-	var substate:Dictionary = state["snapping_properties"]

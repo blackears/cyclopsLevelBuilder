@@ -11,16 +11,18 @@ snap_size = 0.125
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="LineEdit" type="LineEdit" parent="HBoxContainer"]
+[node name="line_input" type="LineEdit" parent="HBoxContainer"]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0"
 select_all_on_focus = true
 
-[node name="Label" type="Label" parent="HBoxContainer"]
+[node name="line_display" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0"
 
-[connection signal="text_submitted" from="HBoxContainer/LineEdit" to="." method="_on_line_edit_text_submitted"]
+[connection signal="text_submitted" from="HBoxContainer/line_input" to="." method="_on_line_edit_text_submitted"]

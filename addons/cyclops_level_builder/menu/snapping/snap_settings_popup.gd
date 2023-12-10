@@ -22,6 +22,7 @@
 # SOFTWARE.
 
 @tool
+#@deorecated
 extends PopupPanel
 class_name SnapSettingsPopup
 
