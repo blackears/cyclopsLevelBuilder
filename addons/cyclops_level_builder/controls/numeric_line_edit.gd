@@ -25,7 +25,7 @@
 extends PanelContainer
 class_name NumbericLineEdit
 
-signal value_changed(value)
+signal value_changed(value:float)
 
 @export var value:float:
 	get:

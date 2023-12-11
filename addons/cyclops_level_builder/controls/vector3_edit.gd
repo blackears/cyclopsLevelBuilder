@@ -2,11 +2,17 @@
 extends HBoxContainer
 class_name Vector3Edit
 
+signal value_changed(value:Vector3)
+
 @export var value:Vector3:
 	get:
 		return value
 	set(v):
+		if value == v:
+			return
+			
 		value = v
+		value_changed.emit(v)
 		dirty = true
 		
 var dirty:bool = true

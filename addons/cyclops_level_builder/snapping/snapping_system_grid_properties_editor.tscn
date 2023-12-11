@@ -107,3 +107,12 @@ text = "Shear"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer2/spin_power_of_two" to="." method="_on_spin_power_of_two_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer3/ed_unit_size" to="." method="_on_ed_unit_size_value_changed"]
+[connection signal="toggled" from="VBoxContainer/check_use_subdiv" to="." method="_on_check_use_subdiv_toggled"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer/spin_subdiv" to="." method="_on_spin_subdiv_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/VBoxContainer2/GridContainer/xform_translate" to="." method="_on_xform_translate_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/VBoxContainer2/GridContainer/xform_rotate" to="." method="_on_xform_rotate_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/VBoxContainer2/GridContainer/xform_scale" to="." method="_on_xform_scale_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/VBoxContainer2/GridContainer/xform_shear" to="." method="_on_xform_shear_value_changed"]

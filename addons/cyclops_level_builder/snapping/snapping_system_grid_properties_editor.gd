@@ -35,6 +35,13 @@ var properties:SnappingSystemGrid:
 		properties = value
 		update_ui_from_props()
 
+func set_grid_transform_from_ui():
+	var xform:Transform3D = MathUtil.compose_matrix_3d(%xform_translate.value,
+		%xform_rotate.value,
+		%xform_shear.value,
+		%xform_scale.value)
+	properties.grid_transform = xform
+
 func update_ui_from_props():
 	#print("setting SnappingSystemGridPropertiesEditor props")
 	
@@ -61,3 +68,52 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
+
+
+func _on_spin_power_of_two_value_changed(value:float):
+	if !properties:
+		return
+		
+	properties.power_of_two_scale = value
+
+func _on_ed_unit_size_value_changed(value:float):
+	if !properties:
+		return
+		
+	properties.unit_size = value
+
+func _on_check_use_subdiv_toggled(toggled_on:bool):
+	if !properties:
+		return
+		
+	properties.use_subdivisions = toggled_on
+
+func _on_spin_subdiv_value_changed(value):
+	if !properties:
+		return
+		
+	properties.grid_subdivisions = value
+
+func _on_xform_translate_value_changed(value):
+	if !properties:
+		return
+	
+	set_grid_transform_from_ui()
+
+func _on_xform_rotate_value_changed(value):
+	if !properties:
+		return
+	
+	set_grid_transform_from_ui()
+
+func _on_xform_scale_value_changed(value):
+	if !properties:
+		return
+	
+	set_grid_transform_from_ui()
+
+func _on_xform_shear_value_changed(value):
+	if !properties:
+		return
+	
+	set_grid_transform_from_ui()
