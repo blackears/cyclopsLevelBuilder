@@ -806,3 +806,75 @@ func plane_intesects_point_cloud(points:PackedVector3Array, plane:Plane)->bool:
 			return true
 			
 	return false
+
+#Returns vector with [R, Q] where R is the orthogonal basis 
+# and Q is a triangular matrix such that basis = R * Q
+static func gram_schmidt_decomposition(basis:Basis)->Array[Basis]:
+	#https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process
+	var v0:Vector3 = basis.x
+	var v1:Vector3 = basis.y
+	var v2:Vector3 = basis.z
+	
+	var u0:Vector3 = v0
+	var u1:Vector3 = v1 - v1.project(u0)
+	var u2:Vector3 = v2 - v2.project(u0) - v2.project(u1)
+	
+	var R:Basis = Basis(u0.normalized(), u1.normalized(), u2.normalized())
+	var R_inv:Basis = R.inverse()
+	var Q:Basis = R_inv * basis
+	
+	return [R, Q]
+
+#static func subtract_basis(a:Basis, b:Basis):
+	#return Basis(a.x - b.x, a.y - b.y, a.z - b.z)
+	
+#Decomposes matrix into translate, rotate, scale and shear vectors where
+# M = T * R * Sh * S
+# where:
+#	T - translate matrix
+#	R - rotate matrix
+#	Sh - shear matrix
+#	S - scale matrix
+#
+# Shear matrix for vector (x, y, z) is
+# [1 x y]
+# [0 1 z]
+# [0 0 1]
+static func decompose_matrix_3d(m:Transform3D, order:EulerOrder = EULER_ORDER_YXZ)->Dictionary:
+	
+	if is_zero_approx(m.basis.determinant()):
+		return {"valid": false}
+	
+	var basis:Basis = m.basis
+	var gram_schmidt = gram_schmidt_decomposition(basis)
+	var rot_mtx = gram_schmidt[0]
+	var euler:Vector3 = rot_mtx.get_euler(order)
+	
+	var scale_shear = gram_schmidt[1]
+	var scale:Vector3 = Vector3(scale_shear.x.x, scale_shear.y.y, scale_shear.z.z)
+	var scale_mat:Basis = Basis.from_scale(scale)
+	var shear:Basis = scale_shear * scale_mat.inverse()
+	
+	print(shear)
+	
+	return {
+		"valid": true,
+		"translate": m.origin,
+		"rotate": euler,
+		"scale": scale,
+		"shear": Vector3(shear.y.x, shear.z.x, shear.z.y)
+	}
+	pass
+ 
+static func compose_matrix_3d(translate:Vector3, rotate:Vector3 = Vector3.ZERO, order:EulerOrder = EULER_ORDER_YXZ, shear:Vector3 = Vector3.ZERO, scale:Vector3 = Vector3.ONE)->Transform3D:
+	var scale_mat:Basis = Basis.from_scale(scale)
+	var shear_mat:Basis = Basis( 
+		Vector3(1, 0, 0),
+		Vector3(shear.x, 1, 0),
+		Vector3(shear.y, shear.z, 1))
+	var rot_mat:Basis = Basis.from_euler(rotate, order)
+	var basis:Basis = rot_mat * shear_mat * scale_mat
+	
+	return Transform3D(basis, translate)
+	
+	
