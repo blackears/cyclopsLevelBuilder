@@ -32,11 +32,14 @@ var builder:CyclopsLevelBuilder:
 	set(value):
 		if builder == value:
 			return
-		builder.snapping_tool_changed.disconnect(on_snapping_tool_changed)
+			
+		if builder:
+			builder.snapping_tool_changed.disconnect(on_snapping_tool_changed)
 		
 		builder = value
 
-		builder.snapping_tool_changed.connect(on_snapping_tool_changed)
+		if builder:
+			builder.snapping_tool_changed.connect(on_snapping_tool_changed)
 
 func on_snapping_tool_changed():
 	update_ui()
@@ -45,13 +48,17 @@ func update_ui():
 	if builder:
 		var snap_tool:CyclopsSnappingSystem = builder.snapping_system
 	
-		var ed:Control = snap_tool._get_properties_editor()
+		var ed = snap_tool._get_properties_editor()
+		
+		#print("Clearing editor")
 		
 		for child in %ScrollContainer.get_children():
 			%ScrollContainer.remove_child(child)
 			child.queue_free()
 			
-		%ScrollContainer.add_child(ed)
+		#print("Setting editor")
+		if ed:
+			%ScrollContainer.add_child(ed)
 	pass
 
 # Called when the node enters the scene tree for the first time.

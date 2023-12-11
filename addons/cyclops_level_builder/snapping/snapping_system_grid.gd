@@ -65,6 +65,11 @@ func _get_properties_editor()->Control:
 	ed.properties = self
 	
 	return ed
+	
+	#var bn:Button = Button.new()
+	#print("Returning button")
+	#bn.text = "Foo"
+	#return bn
 
 
 

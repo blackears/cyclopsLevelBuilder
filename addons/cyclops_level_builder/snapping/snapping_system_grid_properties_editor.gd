@@ -22,11 +22,37 @@
 # SOFTWARE.
 
 @tool
-extends Control
+extends PanelContainer
 class_name SnappingSystemGridPropertiesEditor
 
-var properties:SnappingSystemGrid
+var properties:SnappingSystemGrid:
+	get:
+		return properties
+	set(value):
+		#print("setting SnappingSystemGridPropertiesEditor props")
+		if value == properties:
+			return
+		properties = value
+		update_ui_from_props()
 
+func update_ui_from_props():
+	#print("setting SnappingSystemGridPropertiesEditor props")
+	
+	if !properties:
+		return
+	
+	%spin_power_of_two.value = properties.power_of_two_scale
+	%grid_cell_size.value = properties.grid_size
+	%check_use_subdiv.button_pressed = properties.use_subdivisions
+	%spin_subdiv.value = properties.grid_subdivisions
+	
+	var parts:Dictionary = MathUtil.decompose_matrix_3d(properties.grid_transform)
+	
+	%xform_translate.value = parts.translate
+	%xform_rotate.value = parts.rotate
+	%xform_shear.value = parts.shear
+	%xform_scale.value = parts.scale
+	
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.

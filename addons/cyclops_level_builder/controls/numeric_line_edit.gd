@@ -65,7 +65,7 @@ func _ready():
 
 func _process(delta):
 	if dirty:
-		print("---value " + str(value))
+#		print("---value " + str(value))
 		if line_input:
 			line_input.text = format_number(value)
 			line_display.text = format_number(value)

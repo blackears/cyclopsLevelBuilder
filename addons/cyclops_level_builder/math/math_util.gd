@@ -825,9 +825,6 @@ static func gram_schmidt_decomposition(basis:Basis)->Array[Basis]:
 	
 	return [R, Q]
 
-#static func subtract_basis(a:Basis, b:Basis):
-	#return Basis(a.x - b.x, a.y - b.y, a.z - b.z)
-	
 #Decomposes matrix into translate, rotate, scale and shear vectors where
 # M = T * R * Sh * S
 # where:
@@ -855,7 +852,7 @@ static func decompose_matrix_3d(m:Transform3D, order:EulerOrder = EULER_ORDER_YX
 	var scale_mat:Basis = Basis.from_scale(scale)
 	var shear:Basis = scale_shear * scale_mat.inverse()
 	
-	print(shear)
+	#print(shear)
 	
 	return {
 		"valid": true,
@@ -864,7 +861,6 @@ static func decompose_matrix_3d(m:Transform3D, order:EulerOrder = EULER_ORDER_YX
 		"scale": scale,
 		"shear": Vector3(shear.y.x, shear.z.x, shear.z.y)
 	}
-	pass
  
 static func compose_matrix_3d(translate:Vector3, rotate:Vector3 = Vector3.ZERO, order:EulerOrder = EULER_ORDER_YXZ, shear:Vector3 = Vector3.ZERO, scale:Vector3 = Vector3.ONE)->Transform3D:
 	var scale_mat:Basis = Basis.from_scale(scale)
