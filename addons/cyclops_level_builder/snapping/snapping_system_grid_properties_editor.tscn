@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://c165arqp73p1k"]
+[gd_scene load_steps=4 format=3 uid="uid://c165arqp73p1k"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/snapping/snapping_system_grid_properties_editor.gd" id="1_jva1e"]
+[ext_resource type="PackedScene" uid="uid://diibmlqy1mpqb" path="res://addons/cyclops_level_builder/controls/numeric_line_edit.tscn" id="2_3bhn6"]
 [ext_resource type="PackedScene" uid="uid://cphtpklx81l3w" path="res://addons/cyclops_level_builder/controls/vector3_edit.tscn" id="2_beo4d"]
 
 [node name="snapping_system_grid_properties" type="PanelContainer"]
@@ -21,22 +22,23 @@ text = "Power of 2 Scale"
 [node name="spin_power_of_two" type="SpinBox" parent="VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
-min_value = 1.0
+min_value = -16.0
 max_value = 16.0
-value = 10.0
 rounded = true
 allow_greater = true
+allow_lesser = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer3"]
 layout_mode = 2
-text = "Grid cell size:"
+text = "Unit size:"
 
-[node name="grid_cell_size" parent="VBoxContainer/VBoxContainer" instance=ExtResource("2_beo4d")]
+[node name="ed_unit_size" parent="VBoxContainer/HBoxContainer3" instance=ExtResource("2_3bhn6")]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="check_use_subdiv" type="CheckBox" parent="VBoxContainer"]
 unique_name_in_owner = true

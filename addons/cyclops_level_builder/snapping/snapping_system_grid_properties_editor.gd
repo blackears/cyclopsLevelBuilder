@@ -42,7 +42,7 @@ func update_ui_from_props():
 		return
 	
 	%spin_power_of_two.value = properties.power_of_two_scale
-	%grid_cell_size.value = properties.grid_size
+	%ed_unit_size.value = properties.unit_size
 	%check_use_subdiv.button_pressed = properties.use_subdivisions
 	%spin_subdiv.value = properties.grid_subdivisions
 	

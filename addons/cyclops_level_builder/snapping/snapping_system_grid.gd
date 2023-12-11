@@ -28,7 +28,8 @@ class_name SnappingSystemGrid
 
 #const feet_per_meter:float = 3.28084
 
-@export var grid_size:Vector3 = Vector3(1, 1, 1)
+#@export var grid_size:Vector3 = Vector3(1, 1, 1)
+@export var unit_size:float = 1
 
 @export var use_subdivisions:bool = false
 @export var grid_subdivisions:int = 10
@@ -51,7 +52,7 @@ func _snap_point(point:Vector3, move_constraint:MoveConstraint)->Vector3:
 	
 	var p_local:Vector3 = grid_transform_inv * point
 	
-	var scale:Vector3 = grid_size * pow(2, power_of_two_scale)
+	var scale:Vector3 = Vector3.ONE * unit_size * pow(2, power_of_two_scale)
 	if use_subdivisions:
 		scale /= grid_subdivisions
 	
@@ -66,10 +67,5 @@ func _get_properties_editor()->Control:
 	
 	return ed
 	
-	#var bn:Button = Button.new()
-	#print("Returning button")
-	#bn.text = "Foo"
-	#return bn
-
 
 
