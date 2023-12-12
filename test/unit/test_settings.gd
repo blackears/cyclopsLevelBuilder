@@ -4,9 +4,12 @@ var export_file_name:String = "settings_test.json"
 
 func test_write_settings():
 	var settings:Settings = Settings.new()
-	settings.set_property("xform", Transform3D.IDENTITY)
+	settings.set_property("xform", Transform3D(Basis.from_scale(Vector3(2, 3, 4)), Vector3.ONE))
 	
 	settings.save_to_file(export_file_name)
+	
+	settings.load_from_file(export_file_name)
+#	var val = settings.get_property_transform3d("xform")
 	pass
 
 func after_all():

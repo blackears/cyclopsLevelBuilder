@@ -87,6 +87,9 @@ static func closest_point_on_line(ray_origin:Vector3, ray_dir:Vector3, line_orig
 	var w_perp:Vector3 = ray_dir.cross(a)
 	return intersect_plane(line_origin, line_dir, ray_origin, w_perp)
 
+static func closest_point_on_plane(point:Vector3, plane_origin:Vector3, plane_dir:Vector3)->Vector3:
+	return point - (point - plane_origin).project(plane_dir)
+
 static func closest_point_on_segment(ray_origin:Vector3, ray_dir:Vector3, seg_start:Vector3, seg_end:Vector3)->Vector3:
 	var seg_span:Vector3 = seg_end - seg_start
 	var p:Vector3 = closest_point_on_line(ray_origin, ray_dir, seg_start, seg_span)

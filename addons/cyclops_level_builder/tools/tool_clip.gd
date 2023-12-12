@@ -58,10 +58,8 @@ func _draw_tool(viewport_camera:Camera3D):
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
 		
 	var blocks_root:Node = builder.get_block_add_parent()
-	var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
-	#var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
+	#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
-	#_draw_tool(viewport_camera)
 
 	if event is InputEventKey:
 		var e:InputEventKey = event
@@ -87,6 +85,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		elif e.keycode == KEY_ENTER:
 			#Cut at plane
 			var cut_plane:Plane
+			
+			for p in clip_points:
+				print("clip ", p)
 			
 			if clip_points.size() == 3:
 				cut_plane = Plane(clip_points[0], clip_points[1], clip_points[2])
@@ -137,7 +138,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				
 				if result:
 					#var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
-					var p:Vector3 = MathUtil.snap_to_grid(result.get_world_position(), grid_step_size)
+#					var p:Vector3 = MathUtil.snap_to_grid(result.get_world_position(), grid_step_size)
+					var p:Vector3 = builder.snapping_system._snap_point(result.get_world_position())
+					p = MathUtil.closest_point_on_plane(p, result.position, result.normal)
 					
 					if !has_clip_point(p):
 						if clip_points.is_empty():

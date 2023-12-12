@@ -35,6 +35,8 @@ func save_to_file(path:String):
 	f.close()
 	
 func load_from_file(path:String):
+	lookup.clear()
+	
 	var text:String = FileAccess.get_file_as_string(path)
 	var values = JSON.parse_string(text)
 	
@@ -49,4 +51,19 @@ func has_property(name:String)->bool:
 
 func get_property(name:String, default = null):
 	return lookup[name] if lookup.has(name) else default
+
+func arr_to_vec3(arr:Array)->Vector3:
+	return Vector3(arr[0], arr[1], arr[2])
+
+func get_property_transform3d(name:String, default:Transform3D = Transform3D.IDENTITY):
+	if !lookup.has(name):
+		return default
+		
+	var arr:Dictionary = lookup[name]
+	
+	return Transform3D(arr_to_vec3(arr["X"]),
+		arr_to_vec3( arr["Y"]), 
+		arr_to_vec3(arr["Z"]), 
+		arr_to_vec3(arr["O"]))
+	#return lookup[name] if lookup.has(name) else default
 	

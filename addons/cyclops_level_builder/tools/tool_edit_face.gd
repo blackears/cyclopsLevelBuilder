@@ -36,8 +36,8 @@ var drag_handle:HandleFace
 var drag_mouse_start_pos:Vector2
 var drag_handle_start_pos:Vector3
 			
-enum MoveConstraint { NONE, AXIS_X, AXIS_Y, AXIS_Z, PLANE_XY, PLANE_XZ, PLANE_YZ, PLANE_VIEWPORT }
-var move_constraint:MoveConstraint = MoveConstraint.NONE
+#enum MoveConstraint { NONE, AXIS_X, AXIS_Y, AXIS_Z, PLANE_XY, PLANE_XZ, PLANE_YZ, PLANE_VIEWPORT }
+var move_constraint:MoveConstraint.Type = MoveConstraint.Type.NONE
 
 var gizmo_translate:Node3D
 
@@ -227,7 +227,7 @@ func _deactivate():
 
 func start_drag(viewport_camera:Camera3D, event:InputEvent):
 	var e:InputEventMouseMotion = event
-	move_constraint = MoveConstraint.NONE
+	move_constraint = MoveConstraint.Type.NONE
 
 	if gizmo_translate:
 	
@@ -239,17 +239,17 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 			#print("Gizmo hit ", part_res.part)
 			match part_res.part:
 				GizmoTranslate.Part.AXIS_X:
-					move_constraint = MoveConstraint.AXIS_X
+					move_constraint = MoveConstraint.Type.AXIS_X
 				GizmoTranslate.Part.AXIS_Y:
-					move_constraint = MoveConstraint.AXIS_Y
+					move_constraint = MoveConstraint.Type.AXIS_Y
 				GizmoTranslate.Part.AXIS_Z:
-					move_constraint = MoveConstraint.AXIS_Z
+					move_constraint = MoveConstraint.Type.AXIS_Z
 				GizmoTranslate.Part.PLANE_XY:
-					move_constraint = MoveConstraint.PLANE_XY
+					move_constraint = MoveConstraint.Type.PLANE_XY
 				GizmoTranslate.Part.PLANE_XZ:
-					move_constraint = MoveConstraint.PLANE_XZ
+					move_constraint = MoveConstraint.Type.PLANE_XZ
 				GizmoTranslate.Part.PLANE_YZ:
-					move_constraint = MoveConstraint.PLANE_YZ
+					move_constraint = MoveConstraint.Type.PLANE_YZ
 		
 			var start_pos:Vector3 = part_res.pos_world
 			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
@@ -277,9 +277,9 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 
 
 	if e.alt_pressed:
-		move_constraint = MoveConstraint.AXIS_Y
+		move_constraint = MoveConstraint.Type.AXIS_Y
 	else:
-		move_constraint = MoveConstraint.PLANE_XZ
+		move_constraint = MoveConstraint.Type.PLANE_XZ
 		
 
 	var res:PickHandleResult = pick_closest_handle(viewport_camera, drag_mouse_start_pos, builder.handle_screen_radius)
@@ -347,7 +347,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				if !sel_blocks.is_empty():
 
 					tool_state = ToolState.MOVE_HANDLES_CLICK
-					move_constraint = MoveConstraint.PLANE_VIEWPORT
+					move_constraint = MoveConstraint.Type.PLANE_VIEWPORT
 
 					drag_handle_start_pos = Vector3.INF
 					
@@ -366,25 +366,25 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		elif e.keycode == KEY_X:
 			if tool_state == ToolState.MOVE_HANDLES_CLICK:
 				if e.shift_pressed:
-					move_constraint = MoveConstraint.PLANE_YZ
+					move_constraint = MoveConstraint.Type.PLANE_YZ
 				else:
-					move_constraint = MoveConstraint.AXIS_X
+					move_constraint = MoveConstraint.Type.AXIS_X
 			return true
 
 		elif e.keycode == KEY_Y:
 			if tool_state == ToolState.MOVE_HANDLES_CLICK:
 				if e.shift_pressed:
-					move_constraint = MoveConstraint.PLANE_XZ
+					move_constraint = MoveConstraint.Type.PLANE_XZ
 				else:
-					move_constraint = MoveConstraint.AXIS_Y
+					move_constraint = MoveConstraint.Type.AXIS_Y
 			return true
 
 		elif e.keycode == KEY_Z:
 			if tool_state == ToolState.MOVE_HANDLES_CLICK:
 				if e.shift_pressed:
-					move_constraint = MoveConstraint.PLANE_XY
+					move_constraint = MoveConstraint.Type.PLANE_XY
 				else:
-					move_constraint = MoveConstraint.AXIS_Z
+					move_constraint = MoveConstraint.Type.AXIS_Z
 			return true
 
 	if event is InputEventMouseButton:
@@ -518,19 +518,19 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 			var drag_to:Vector3
 			match move_constraint:
-				MoveConstraint.AXIS_X:
+				MoveConstraint.Type.AXIS_X:
 					drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, Vector3.RIGHT)
-				MoveConstraint.AXIS_Y:
+				MoveConstraint.Type.AXIS_Y:
 					drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, Vector3.UP)
-				MoveConstraint.AXIS_Z:
+				MoveConstraint.Type.AXIS_Z:
 					drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, Vector3.BACK)
-				MoveConstraint.PLANE_XY:
+				MoveConstraint.Type.PLANE_XY:
 					drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, Vector3.BACK)
-				MoveConstraint.PLANE_XZ:
+				MoveConstraint.Type.PLANE_XZ:
 					drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, Vector3.UP)
-				MoveConstraint.PLANE_YZ:
+				MoveConstraint.Type.PLANE_YZ:
 					drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, Vector3.RIGHT)
-				MoveConstraint.PLANE_VIEWPORT:
+				MoveConstraint.Type.PLANE_VIEWPORT:
 					drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, viewport_camera.global_transform.basis.z)
 
 			#print("drag_handle_start_pos %s" % drag_handle_start_pos)
