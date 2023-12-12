@@ -43,7 +43,10 @@ func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type = MoveConstr
 		
 			var dist:float = (v_point_world - point).length_squared()
 			if dist < best_dist && dist <= max_radius * max_radius:
+#			if dist < best_dist:
 				best_vertex = v_point_world
+				best_dist = dist
+
 	
 	return constrain_point(point, best_vertex, move_constraint) \
 		if is_finite(best_dist) else point
