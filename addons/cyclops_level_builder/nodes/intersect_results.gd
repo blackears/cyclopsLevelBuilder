@@ -37,8 +37,8 @@ func get_world_position()->Vector3:
 
 func get_world_normal()->Vector3:
 	var basis:Basis = object.global_transform.basis
-	basis = basis.inverse().transposed()
-	return basis * normal
+	var basis_normals:Basis = basis.inverse().transposed()
+	return basis_normals * normal
 
 func _to_string():
 	return "object:%s face_id:%s pos:%s norm:%s dist_sq:%s" % [object, face_id, position, normal, distance_squared]

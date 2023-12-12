@@ -48,7 +48,7 @@ var tool_mesh:ImmediateMesh
 @export var units_font:Font
 @export var units_font_size:int = 16
 
-@export var grid_size:int = 0
+#@export var grid_size:int = 0
 @export var drag_angle_limit:float = deg_to_rad(5)
 
 const SNAPPING_ENABLED:String = "snapping/enabled"
