@@ -42,7 +42,6 @@ func _draw_tool(viewport_camera:Camera3D):
 	global_scene.draw_selected_blocks(viewport_camera)
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
-	var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 	
 	if event is InputEventMouseButton:
 		
@@ -79,8 +78,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				drag_to = MathUtil.intersect_plane(origin, dir, drag_start_point, Vector3.UP)
 			
 			var offset:Vector3 = drag_to - drag_start_point
-			offset = MathUtil.snap_to_grid(offset, grid_step_size)
-			#print("drag offseat %s" % offset)
+			offset = builder.get_snapping_manager().snap_point(offset)
+			#print("drag offset %s" % offset)
 
 			#print("duplicate drag by %s" % offset)
 			
@@ -96,7 +95,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
 
-	#builder.mode = CyclopsLevelBuilder.Mode.OBJECT
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
 	
@@ -110,10 +108,9 @@ func _activate(builder:CyclopsLevelBuilder):
 	
 	var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
 	for block in sel_blocks:
-		if block.selected:
-			cmd_duplicate.blocks_to_duplicate.append(block.get_path())
-			centroid += block.global_transform * block.control_mesh.bounds.get_center()
-			count += 1
+		cmd_duplicate.blocks_to_duplicate.append(block.get_path())
+		centroid += block.global_transform * block.control_mesh.bounds.get_center()
+		count += 1
 	
 	cmd_duplicate.lock_uvs = builder.lock_uvs
 	

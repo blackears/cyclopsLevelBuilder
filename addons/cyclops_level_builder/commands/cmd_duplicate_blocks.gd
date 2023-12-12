@@ -36,7 +36,6 @@ class BlockInfo extends RefCounted:
 	var new_block:CyclopsBlock
 	var source_data:ConvexBlockData
 	var source_global_transform:Transform3D
-	#var materials:Array[Material]
 	
 	func _init(new_block:CyclopsBlock, source_data:ConvexBlockData, source_global_transform:Transform3D):
 		self.new_block = new_block
@@ -50,6 +49,7 @@ func will_change_anything():
 
 func do_it():
 	if added_blocks.is_empty():
+		
 		#Create new blocks
 		for block_path in blocks_to_duplicate:
 			var new_block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
@@ -65,19 +65,15 @@ func do_it():
 			
 			var info:BlockInfo = BlockInfo.new(new_block, source_block.block_data, source_block.global_transform)
 			new_block.materials = source_block.materials
-			new_block.selected = true
+			#new_block.selected = true
 			
 			added_blocks.append(info)
 
 	for path in blocks_to_duplicate:
 		var block:CyclopsBlock = builder.get_node(path)
-		block.selected = false
+		#block.selected = false
 
 	for info in added_blocks:
-#		var vol:ConvexVolume = ConvexVolume.new()
-#		vol.init_from_convex_block_data(info.source_data)
-#		vol.translate(move_offset, lock_uvs)
-#		info.new_block.block_data = vol.to_convex_block_data()
 		
 		var new_xform:Transform3D = info.source_global_transform.translated_local(move_offset)
 		info.new_block.global_transform = new_xform
@@ -90,5 +86,5 @@ func undo_it():
 
 	for path in blocks_to_duplicate:
 		var block:CyclopsBlock = builder.get_node(path)
-		block.selected = true
+		#block.selected = true
 
