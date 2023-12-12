@@ -164,7 +164,7 @@ func undo_it():
 	#print("sel vert undo_it()")
 	for block_path in block_map.keys():
 		var rec:BlockVertexChanges = block_map[block_path]
-		var block:CyclopsConvexBlock = builder.get_node(block_path)
+		var block:CyclopsBlock = builder.get_node(block_path)
 		block.block_data = rec.tracked_block_data
 
 	builder.selection_changed.emit()

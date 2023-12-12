@@ -222,9 +222,10 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 					move_constraint = MoveConstraint.Type.PLANE_YZ
 		
 			var start_pos:Vector3 = part_res.pos_world
-			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
+			#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
-			drag_handle_start_pos = MathUtil.snap_to_grid(start_pos, grid_step_size)
+			#drag_handle_start_pos = MathUtil.snap_to_grid(start_pos, grid_step_size)
+			drag_handle_start_pos = builder.get_snapping_manager().snap_point(start_pos)
 
 	#		print("res obj %s" % result.object.get_path())
 			var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
@@ -288,7 +289,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	if gui_result:
 		return true
 	
-	var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
+#	var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
 
 	if event is InputEventKey:
@@ -504,7 +505,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #				drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, Vector3.UP)
 			
 			var offset:Vector3 = drag_to - drag_handle_start_pos
-			offset = MathUtil.snap_to_grid(offset, grid_step_size)
+			#offset = MathUtil.snap_to_grid(offset, grid_step_size)
+			offset = builder.get_snapping_manager().snap_point(offset)
 			drag_to = drag_handle_start_pos + offset
 #			drag_handle.p_ref = drag_to
 			
