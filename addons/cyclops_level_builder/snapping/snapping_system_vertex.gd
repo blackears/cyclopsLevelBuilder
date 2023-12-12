@@ -29,7 +29,7 @@ class_name SnappintSystemVertex
 
 
 #Point is in world space
-func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type)->Vector3:
+func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type = MoveConstraint.Type.NONE)->Vector3:
 	var blocks:Array[CyclopsBlock] = plugin.get_blocks()
 	
 	var best_vertex:Vector3 = Vector3.INF

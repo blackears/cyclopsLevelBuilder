@@ -56,11 +56,6 @@ const SNAPPING_GRID_USE_SUBDIVISIONS:String = "snapping/grid/use_subdivisions"
 const SNAPPING_GRID_SUBDIVISIONS:String = "snapping/grid/subdivisions"
 const SNAPPING_GRID_POWER_OF_TWO_SCALE:String = "snapping/grid/power_of_two_scale"
 const SNAPPING_GRID_TRANSFORM:String = "snapping/grid/transform"
-#@export var snapping_grid_unit_size:float = 1
-#@export var snapping_grid_use_subdivisions:int = 10
-#@export var snapping_grid_subdivisions:int = 10
-#@export var snapping_grid_power_of_two_scale:int = 0
-#@export var snapping_grid_transform:Transform3D
 
 @export_file("*.json") var settings_file:String = "settings.json"
 var settings:Settings = Settings.new()
@@ -89,6 +84,9 @@ func _ready():
 	
 	if FileAccess.file_exists(settings_file):
 		settings.load_from_file(settings_file)
+
+func save_settings():
+	settings.save_to_file(settings_file)
 
 #Called by CyclopsLevelBuilder to draw 2D components
 func draw_over_viewport(overlay:Control):

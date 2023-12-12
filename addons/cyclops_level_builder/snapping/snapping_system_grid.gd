@@ -26,27 +26,7 @@
 extends CyclopsSnappingSystem
 class_name SnappingSystemGrid
 
-#const feet_per_meter:float = 3.28084
-
-#@export var unit_size:float = 1
-#
-#@export var use_subdivisions:bool = false
-#@export var grid_subdivisions:int = 10
-#
-#@export var power_of_two_scale:int = 0 #Scaling 2^n
-#
-##local transform matrix for grid
-#@export var grid_transform:Transform3D = Transform3D.IDENTITY:
-	#get:
-		#return grid_transform
-	#set(value):
-		#grid_transform = value
-		#grid_transform_inv = grid_transform.affine_inverse()
-		#
-#var grid_transform_inv:Transform3D = Transform3D.IDENTITY
-
 var snap_to_grid_util:SnapToGridUtil = SnapToGridUtil.new()
-
 
 func _activate(plugin:CyclopsLevelBuilder):
 	super._activate(plugin)
@@ -66,19 +46,11 @@ func _deactivate():
 	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_SUBDIVISIONS, snap_to_grid_util.grid_subdivisions)
 	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_TRANSFORM, snap_to_grid_util.grid_transform)
 	
+	CyclopsAutoload.save_settings()
+	
 
 #Point is in world space
-func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type)->Vector3:
-	
-	#var p_local:Vector3 = grid_transform_inv * point
-	#
-	#var scale:Vector3 = Vector3.ONE * unit_size * pow(2, power_of_two_scale)
-	#if use_subdivisions:
-		#scale /= grid_subdivisions
-	#
-	#p_local = floor(p_local / scale + Vector3(.5, .5, .5)) * scale
-	#
-	#var target_point:Vector3 = grid_transform * p_local
+func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type = MoveConstraint.Type.NONE)->Vector3:
 	
 	var target_point = snap_to_grid_util.snap_point(point)
 	return constrain_point(point, target_point, move_constraint)

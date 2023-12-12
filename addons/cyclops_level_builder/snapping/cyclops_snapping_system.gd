@@ -26,7 +26,6 @@
 extends Resource
 class_name CyclopsSnappingSystem
 
-#enum MoveConstraint { NONE, AXIS_X, AXIS_Y, AXIS_Z, PLANE_XY, PLANE_XZ, PLANE_YZ, PLANE_VIEWPORT }
 var move_constraint:MoveConstraint.Type = MoveConstraint.Type.NONE
 
 var plugin:CyclopsLevelBuilder
@@ -37,13 +36,13 @@ func _activate(plugin:CyclopsLevelBuilder):
 func _deactivate():
 	pass
 
-func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type)->Vector3:
+func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type = MoveConstraint.Type.NONE)->Vector3:
 	return point
 
 func _get_properties_editor()->Control:
 	return null
 	
-func constrain_point(point:Vector3, target_point:Vector3, move_constraint:MoveConstraint.Type)->Vector3:
+func constrain_point(point:Vector3, target_point:Vector3, move_constraint:MoveConstraint.Type = MoveConstraint.Type.NONE)->Vector3:
 	match move_constraint:
 		MoveConstraint.Type.NONE:
 			return target_point
