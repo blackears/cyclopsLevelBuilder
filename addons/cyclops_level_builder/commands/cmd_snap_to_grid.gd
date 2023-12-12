@@ -28,7 +28,8 @@ extends CyclopsCommand
 class TrackedInfo extends RefCounted:
 	var data:ConvexBlockData
 	
-var grid_size:float
+#var grid_size:float
+var snap_to_grid_util:SnapToGridUtil
 
 #Private
 var blocks_to_move:Array[NodePath]
@@ -61,7 +62,8 @@ func do_it():
 		var points_new:PackedVector3Array
 		for v_idx in vol.vertices.size():
 			var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
-			var p_snap:Vector3 = MathUtil.snap_to_grid(block.global_transform * v.point, grid_size)
+#			var p_snap:Vector3 = MathUtil.snap_to_grid(block.global_transform * v.point, grid_size)
+			var p_snap:Vector3 = snap_to_grid_util.snap_point(block.global_transform * v.point)
 			points_new.append(p_snap)
 			
 		var new_vol:ConvexVolume = ConvexVolume.new()

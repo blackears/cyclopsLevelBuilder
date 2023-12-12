@@ -44,19 +44,25 @@ class_name SnapToGridUtil
 		
 var grid_transform_inv:Transform3D = Transform3D.IDENTITY
 
-
 #Point is in world space
 func snap_point(point:Vector3)->Vector3:
 	
 	var p_local:Vector3 = grid_transform_inv * point
 	
+	#print("unit_size %s  pow 2 %s" % [unit_size, pow(2, power_of_two_scale)])
 	var scale:Vector3 = Vector3.ONE * unit_size * pow(2, power_of_two_scale)
 	if use_subdivisions:
-		scale /= grid_subdivisions
+		scale /= float(grid_subdivisions)
 	
 	p_local = floor(p_local / scale + Vector3(.5, .5, .5)) * scale
 	
 	var target_point:Vector3 = grid_transform * p_local
+	
+	#print("point %s  target_point %s  scale %s" % [point, target_point, scale])
 	return target_point
+
+func _to_string():
+	return "unit_size %s  use_subdiv %s  subdiv %s  pot %s  xform %s" \
+		% [unit_size, use_subdivisions, grid_subdivisions, power_of_two_scale, grid_transform]
 
 

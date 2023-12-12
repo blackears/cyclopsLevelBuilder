@@ -75,7 +75,6 @@ var unit_sphere:GeometryMesh
 var builder:CyclopsLevelBuilder
 
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	unit_sphere = MathGeometry.unit_sphere()
@@ -89,6 +88,14 @@ func _ready():
 func save_settings():
 	settings.save_to_file(settings_file)
 
+func calc_snap_to_grid_util():
+	var snap_to_grid_util:SnapToGridUtil = SnapToGridUtil.new()
+	snap_to_grid_util.unit_size = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_GRID_UNIT_SIZE, 1)
+	snap_to_grid_util.power_of_two_scale = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_GRID_POWER_OF_TWO_SCALE, 0)
+	snap_to_grid_util.use_subdivisions = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_GRID_USE_SUBDIVISIONS, false)
+	snap_to_grid_util.grid_subdivisions = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_GRID_SUBDIVISIONS, 10)
+	return snap_to_grid_util
+	
 #Called by CyclopsLevelBuilder to draw 2D components
 func draw_over_viewport(overlay:Control):
 	pass

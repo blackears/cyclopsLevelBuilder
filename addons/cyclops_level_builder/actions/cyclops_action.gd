@@ -39,7 +39,8 @@ func _execute():
 	pass
 	
 func calc_pivot_of_blocks(blocks:Array[CyclopsBlock])->Vector3:
-	var grid_step_size:float = pow(2, plugin.get_global_scene().grid_size)
+	#var grid_step_size:float = pow(2, plugin.get_global_scene().grid_size)
+	#var snap_to_grid_util:SnapToGridUtil = CyclopsAutoload.calc_snap_to_grid_util()
 	
 	var bounds:AABB = blocks[0].control_mesh.bounds
 	for idx in range(1, blocks.size()):
@@ -47,7 +48,8 @@ func calc_pivot_of_blocks(blocks:Array[CyclopsBlock])->Vector3:
 		bounds = bounds.merge(block.control_mesh.bounds)
 	
 	var center:Vector3 = bounds.get_center()
-	var pivot:Vector3 = MathUtil.snap_to_grid(center, grid_step_size)
+	#var pivot:Vector3 = MathUtil.snap_to_grid(center, grid_step_size)
+	#var pivot:Vector3 = snap_to_grid_util.snap_point(center)
 	
-	return pivot
+	return center
 	

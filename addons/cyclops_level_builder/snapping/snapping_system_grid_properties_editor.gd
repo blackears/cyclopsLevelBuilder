@@ -35,14 +35,6 @@ var tool:SnappingSystemGrid:
 		tool = value
 		update_ui_from_props()
 
-func set_grid_transform_from_ui():
-	var xform:Transform3D = MathUtil.compose_matrix_3d(%xform_translate.value,
-		%xform_rotate.value,
-		EULER_ORDER_YXZ,
-		%xform_shear.value,
-		%xform_scale.value)
-	tool.snap_to_grid_util.grid_transform = xform
-
 func update_ui_from_props():
 	#print("setting SnappingSystemGridPropertiesEditor props")
 	
@@ -77,24 +69,32 @@ func _on_spin_power_of_two_value_changed(value:float):
 		return
 		
 	tool.snap_to_grid_util.power_of_two_scale = value
+	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_POWER_OF_TWO_SCALE, value)
+	#CyclopsAutoload.save_settings()
 
 func _on_ed_unit_size_value_changed(value:float):
 	if !tool:
 		return
 		
 	tool.snap_to_grid_util.unit_size = value
+	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_UNIT_SIZE, value)
+	#CyclopsAutoload.save_settings()
 
 func _on_check_use_subdiv_toggled(toggled_on:bool):
 	if !tool:
 		return
 		
 	tool.snap_to_grid_util.use_subdivisions = toggled_on
+	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_USE_SUBDIVISIONS, toggled_on)
+	#CyclopsAutoload.save_settings()
 
 func _on_spin_subdiv_value_changed(value):
 	if !tool:
 		return
 		
 	tool.snap_to_grid_util.grid_subdivisions = value
+	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_SUBDIVISIONS, value)
+	#CyclopsAutoload.save_settings()
 
 func _on_xform_translate_value_changed(value):
 	if !tool:
@@ -119,3 +119,14 @@ func _on_xform_shear_value_changed(value):
 		return
 	
 	set_grid_transform_from_ui()
+
+func set_grid_transform_from_ui():
+	var xform:Transform3D = MathUtil.compose_matrix_3d(%xform_translate.value,
+		%xform_rotate.value,
+		EULER_ORDER_YXZ,
+		%xform_shear.value,
+		%xform_scale.value)
+	tool.snap_to_grid_util.grid_transform = xform
+	
+	#CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_TRANSFORM, xform)
+	#CyclopsAutoload.save_settings()
