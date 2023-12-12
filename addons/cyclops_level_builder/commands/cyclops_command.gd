@@ -43,7 +43,7 @@ class TrackedBlock extends RefCounted:
 		name = block.name
 		data = block.block_data.duplicate()
 		world_xform = block.global_transform
-		selected = block.selected
+		#selected = block.selected
 		materials = block.materials
 
 

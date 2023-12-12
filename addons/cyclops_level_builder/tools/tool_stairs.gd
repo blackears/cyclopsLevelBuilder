@@ -133,7 +133,7 @@ func _draw_tool(viewport_camera:Camera3D):
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
 		
 	var blocks_root:Node = builder.get_block_add_parent()
-	var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
+	#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
 	if event is InputEventKey:
 		var e:InputEventKey = event
@@ -162,7 +162,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						#print("init base point block")
 						floor_normal = result.get_world_normal()
 
-						var p:Vector3 = MathUtil.snap_to_grid(result.get_world_position(), grid_step_size)
+#						var p:Vector3 = MathUtil.snap_to_grid(result.get_world_position(), grid_step_size)
+						var p:Vector3 = builder.get_snapping_manager().snap_point(result.get_world_position())
 						drag_origin = p
 						base_drag_cur = p
 
@@ -174,7 +175,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						var start_pos:Vector3 = hit_result[0]
 						floor_normal = hit_result[1]
 
-						var p:Vector3 = MathUtil.snap_to_grid(start_pos, grid_step_size)
+						#var p:Vector3 = MathUtil.snap_to_grid(start_pos, grid_step_size)
+						var p:Vector3 = builder.get_snapping_manager().snap_point(start_pos)
 						drag_origin = p
 						base_drag_cur = p
 						
@@ -273,7 +275,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		if tool_state == ToolState.DRAG_BASE:
 			var p_isect:Vector3 = MathUtil.intersect_plane(origin, dir, drag_origin, floor_normal)
 			#var p_snapped = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
-			var p_snapped:Vector3 = MathUtil.snap_to_grid(p_isect, grid_step_size)
+#			var p_snapped:Vector3 = MathUtil.snap_to_grid(p_isect, grid_step_size)
+			var p_snapped:Vector3 = builder.get_snapping_manager().snap_point(p_isect)
 			base_drag_cur = p_snapped
 
 			return true
@@ -282,7 +285,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			block_drag_cur = MathUtil.closest_point_on_line(origin, dir, base_drag_cur, floor_normal)
 			
 			#block_drag_cur = to_local(block_drag_cur, blocks_root.global_transform.inverse(), grid_step_size)
-			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
+#			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
+			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur)
 			
 #			drag_offset = block_drag_cur - base_drag_cur
 

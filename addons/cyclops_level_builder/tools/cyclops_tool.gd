@@ -133,9 +133,10 @@ func calc_hit_point_empty_space(origin:Vector3, dir:Vector3):
 		#print("base_plane_origin ", base_plane_origin)
 		#print("hit_base ", hit_base)
 
-		var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
+#		var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
-		var block_drag_p0:Vector3 = MathUtil.snap_to_grid(hit_base, grid_step_size)
+#		var block_drag_p0:Vector3 = MathUtil.snap_to_grid(hit_base, grid_step_size)
+		var block_drag_p0:Vector3 = builder.get_snapping_manager().snap_point(hit_base)
 		
 		return [block_drag_p0, drag_floor_normal]
 
