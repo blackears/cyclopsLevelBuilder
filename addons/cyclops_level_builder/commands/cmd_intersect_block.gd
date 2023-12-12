@@ -52,11 +52,16 @@ func restore_tracked_block(tracked:TrackedBlock)->CyclopsBlock:
 	block.block_data = tracked.data
 	block.materials = tracked.materials
 	block.name = tracked.name
-	block.selected = tracked.selected
+	#block.selected = tracked.selected
 	block.global_transform = tracked.world_xform
 	
 	parent.add_child(block)
+
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
+	
+	if tracked.selected:
+		var selection:EditorSelection = builder.get_editor_interface().get_selection()
+		selection.add_node(block)
 	
 	return block
 	
@@ -80,7 +85,8 @@ func will_change_anything()->bool:
 
 func do_it():
 	var main_block:CyclopsBlock = builder.get_node(main_block_path)
-	var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
+	#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
+	var snap_to_grid_util:SnapToGridUtil = CyclopsAutoload.calc_snap_to_grid_util()
 	
 	if start_blocks.is_empty():
 		var main_vol:ConvexVolume = main_block.control_mesh
@@ -105,7 +111,8 @@ func do_it():
 		block_info.data = main_vol.to_convex_block_data()
 		block_info.materials = main_block.materials
 		var centroid:Vector3 = main_vol.get_centroid()
-		centroid = MathUtil.snap_to_grid(centroid, grid_step_size)
+		#centroid = MathUtil.snap_to_grid(centroid, grid_step_size)
+		centroid = snap_to_grid_util.snap_point(centroid)
 		main_vol.translate(-centroid)
 		block_info.centroid = main_vol.get_centroid()
 		added_block = block_info
