@@ -43,16 +43,16 @@ func on_active_node_changed():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	%grid_size.clear()
-	%grid_size.add_item("1/16", 0)
-	%grid_size.add_item("1/8", 1)
-	%grid_size.add_item("1/4", 2)
-	%grid_size.add_item("1/2", 3)
-	%grid_size.add_item("1", 4)
-	%grid_size.add_item("2", 5)
-	%grid_size.add_item("4", 6)
-	%grid_size.add_item("8", 7)
-	%grid_size.add_item("16", 8)
+	#%grid_size.clear()
+	#%grid_size.add_item("1/16", 0)
+	#%grid_size.add_item("1/8", 1)
+	#%grid_size.add_item("1/4", 2)
+	#%grid_size.add_item("1/2", 3)
+	#%grid_size.add_item("1", 4)
+	#%grid_size.add_item("2", 5)
+	#%grid_size.add_item("4", 6)
+	#%grid_size.add_item("8", 7)
+	#%grid_size.add_item("16", 8)
 	
 	%Menu.clear()
 	%Menu.add_action_item(ActionToolDuplicate.new(editor_plugin))
@@ -123,8 +123,8 @@ func update_grid():
 	if !editor_plugin:
 		return
 		
-	var size:int = editor_plugin.get_global_scene().grid_size
-	$HBoxContainer/grid_size.select(size + 4)
+	#var size:int = editor_plugin.get_global_scene().grid_size
+	#$HBoxContainer/grid_size.select(size + 4)
 	
 	$HBoxContainer/display_mode.select(editor_plugin.display_mode)
 		
@@ -134,8 +134,8 @@ func _process(delta):
 	pass
 
 
-func _on_grid_size_item_selected(index):
-	editor_plugin.get_global_scene().grid_size = index - 4
+#func _on_grid_size_item_selected(index):
+	#editor_plugin.get_global_scene().grid_size = index - 4
 
 
 
@@ -172,3 +172,8 @@ func _on_snap_options_item_selected(index:int):
 	var tag:SnappingTag = editor_plugin.config.snapping_tags[index]
 	tag._activate(editor_plugin)
 	
+
+
+func _on_bn_snap_toggled(toggled_on):
+	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_ENABLED, toggled_on)
+	pass # Replace with function body.

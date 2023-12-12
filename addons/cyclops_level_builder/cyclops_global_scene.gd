@@ -51,6 +51,7 @@ var tool_mesh:ImmediateMesh
 @export var grid_size:int = 0
 @export var drag_angle_limit:float = deg_to_rad(5)
 
+const SNAPPING_ENABLED:String = "snapping/enabled"
 const SNAPPING_GRID_UNIT_SIZE:String = "snapping/grid/unit_size"
 const SNAPPING_GRID_USE_SUBDIVISIONS:String = "snapping/grid/use_subdivisions"
 const SNAPPING_GRID_SUBDIVISIONS:String = "snapping/grid/subdivisions"

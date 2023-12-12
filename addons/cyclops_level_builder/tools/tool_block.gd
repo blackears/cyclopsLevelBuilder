@@ -74,7 +74,7 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 		#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 		#block_drag_p0 = MathUtil.snap_to_grid(start_pos, grid_step_size)
 
-		block_drag_p0 = builder.snapping_system._snap_point(start_pos)
+		block_drag_p0 = builder.get_snapping_manager().snap_point(start_pos)
 
 		
 		if e.ctrl_pressed:
@@ -275,7 +275,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 #			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
 
-			block_drag_cur = builder.snapping_system._snap_point(block_drag_cur)
+			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur)
 
 			#print("block_drag_cur snapped %s" % block_drag_cur)
 			
@@ -302,7 +302,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 			#block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
 
-			block_drag_cur = builder.snapping_system._snap_point(block_drag_cur)
+			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur)
 
 			return true
 
@@ -312,7 +312,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 			#drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
 
-			drag_to = builder.snapping_system._snap_point(drag_to)
+			drag_to = builder.get_snapping_manager().snap_point(drag_to)
 			
 			#print("move_face drag_to %s" % [drag_to])
 			cmd_move_face.move_amount = (drag_to - move_face_origin).dot(cmd_move_face.move_dir_normal)

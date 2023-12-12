@@ -97,31 +97,6 @@ icon = ExtResource("4_begwr")
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="grid_size" type="OptionButton" parent="HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-tooltip_text = "Grid snapping size"
-item_count = 9
-selected = 0
-popup/item_0/text = "1/16"
-popup/item_0/id = 0
-popup/item_1/text = "1/8"
-popup/item_1/id = 1
-popup/item_2/text = "1/4"
-popup/item_2/id = 2
-popup/item_3/text = "1/2"
-popup/item_3/id = 3
-popup/item_4/text = "1"
-popup/item_4/id = 4
-popup/item_5/text = "2"
-popup/item_5/id = 5
-popup/item_6/text = "4"
-popup/item_6/id = 6
-popup/item_7/text = "8"
-popup/item_7/id = 7
-popup/item_8/text = "16"
-popup/item_8/id = 8
-
 [node name="display_mode" type="OptionButton" parent="HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -144,6 +119,5 @@ icon = ExtResource("3_ldp0l")
 [connection signal="toggled" from="HBoxContainer/check_lock_uvs" to="." method="_on_check_lock_uvs_toggled"]
 [connection signal="toggled" from="HBoxContainer/bn_snap" to="." method="_on_bn_snap_toggled"]
 [connection signal="item_selected" from="HBoxContainer/snap_options" to="." method="_on_snap_options_item_selected"]
-[connection signal="item_selected" from="HBoxContainer/grid_size" to="." method="_on_grid_size_item_selected"]
 [connection signal="item_selected" from="HBoxContainer/display_mode" to="." method="_on_display_mode_item_selected"]
 [connection signal="toggled" from="HBoxContainer/bn_xray" to="." method="_on_bn_xray_toggled"]

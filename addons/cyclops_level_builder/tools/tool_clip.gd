@@ -139,7 +139,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				if result:
 					#var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
 #					var p:Vector3 = MathUtil.snap_to_grid(result.get_world_position(), grid_step_size)
-					var p:Vector3 = builder.snapping_system._snap_point(result.get_world_position())
+					var p:Vector3 = builder.get_snapping_manager().snap_point(result.get_world_position())
 					p = MathUtil.closest_point_on_plane(p, result.position, result.normal)
 					
 					if !has_clip_point(p):
