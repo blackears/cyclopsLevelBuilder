@@ -22,32 +22,31 @@
 # SOFTWARE.
 
 @tool
-extends CyclopsSnappingSystem
-class_name SnappintSystemVertex
+extends Resource
+class_name Settings
 
-@export var max_radius:float = .2
+@export var lookup:Dictionary
 
-
-#Point is in world space
-func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type)->Vector3:
-	var blocks:Array[CyclopsBlock] = plugin.get_blocks()
+func save_to_file(path:String):
+	var f:FileAccess = FileAccess.open(path, FileAccess.WRITE)
 	
-	var best_vertex:Vector3 = Vector3.INF
-	var best_dist:float = INF
+	f.store_line(JSON.stringify(lookup, "\t"))
 	
-	for block in blocks:
-		var ctrl_mesh:ConvexVolume = block.control_mesh
-		for v_idx in ctrl_mesh.vertices.size():
-			var v:ConvexVolume.VertexInfo = ctrl_mesh.vertices[v_idx]
-			var v_point_world:Vector3 = block.global_transform * v.point
-		
-			var dist:float = (v_point_world - point).length_squared()
-			if dist < best_dist && dist <= max_radius * max_radius:
-				best_vertex = v_point_world
+	f.close()
 	
-	return constrain_point(point, best_vertex, move_constraint) \
-		if is_finite(best_dist) else point
+func load_from_file(path:String):
+	var text:String = FileAccess.get_file_as_string(path)
+	var values = JSON.parse_string(text)
+	
+	lookup = values
+
+func set_property(name:String, value):
+	lookup[name] = value
 
 
+func has_property(name:String)->bool:
+	return lookup.has(name)
 
-
+func get_property(name:String, default = null):
+	return lookup[name] if lookup.has(name) else default
+	

@@ -71,6 +71,7 @@ func _ready():
 func _process(delta):
 	pass
 
+
 func set_editor(control:Control):
 	for child in $ScrollContainer.get_children():
 		$ScrollContainer.remove_child(child)
@@ -82,6 +83,7 @@ func save_state(state:Dictionary):
 	var substate:Dictionary = {}
 	state["snapping_properties"] = substate
 	
+	#substate["materials"] = material_list.duplicate()
 
 func load_state(state:Dictionary):
 	if state == null || !state.has("snapping_properties"):

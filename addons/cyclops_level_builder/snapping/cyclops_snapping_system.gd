@@ -26,8 +26,8 @@
 extends Resource
 class_name CyclopsSnappingSystem
 
-enum MoveConstraint { NONE, AXIS_X, AXIS_Y, AXIS_Z, PLANE_XY, PLANE_XZ, PLANE_YZ, PLANE_VIEWPORT }
-var move_constraint:MoveConstraint = MoveConstraint.NONE
+#enum MoveConstraint { NONE, AXIS_X, AXIS_Y, AXIS_Z, PLANE_XY, PLANE_XZ, PLANE_YZ, PLANE_VIEWPORT }
+var move_constraint:MoveConstraint.Type = MoveConstraint.Type.NONE
 
 var plugin:CyclopsLevelBuilder
 
@@ -37,27 +37,27 @@ func _activate(plugin:CyclopsLevelBuilder):
 func _deactivate():
 	pass
 
-func _snap_point(point:Vector3, move_constraint:MoveConstraint)->Vector3:
+func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type)->Vector3:
 	return point
 
 func _get_properties_editor()->Control:
 	return null
 	
-func constrain_point(point:Vector3, target_point:Vector3, move_constraint:MoveConstraint)->Vector3:
+func constrain_point(point:Vector3, target_point:Vector3, move_constraint:MoveConstraint.Type)->Vector3:
 	match move_constraint:
-		MoveConstraint.NONE:
+		MoveConstraint.Type.NONE:
 			return target_point
-		MoveConstraint.AXIS_X:
+		MoveConstraint.Type.AXIS_X:
 			return Vector3(target_point.x, point.y, point.z)
-		MoveConstraint.AXIS_Y:
+		MoveConstraint.Type.AXIS_Y:
 			return Vector3(point.x, target_point.y, point.z)
-		MoveConstraint.AXIS_Z:
+		MoveConstraint.Type.AXIS_Z:
 			return Vector3(point.x, point.y, target_point.z)
-		MoveConstraint.PLANE_XY:
+		MoveConstraint.Type.PLANE_XY:
 			return Vector3(target_point.x, target_point.y, point.z)
-		MoveConstraint.PLANE_XZ:
+		MoveConstraint.Type.PLANE_XZ:
 			return Vector3(target_point.x, point.y, target_point.z)
-		MoveConstraint.PLANE_YZ:
+		MoveConstraint.Type.PLANE_YZ:
 			return Vector3(point.x, target_point.y, target_point.z)
 		_:
 			return point

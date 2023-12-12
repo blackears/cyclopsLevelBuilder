@@ -22,32 +22,7 @@
 # SOFTWARE.
 
 @tool
-extends CyclopsSnappingSystem
-class_name SnappintSystemVertex
+class_name MoveConstraint
 
-@export var max_radius:float = .2
-
-
-#Point is in world space
-func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type)->Vector3:
-	var blocks:Array[CyclopsBlock] = plugin.get_blocks()
-	
-	var best_vertex:Vector3 = Vector3.INF
-	var best_dist:float = INF
-	
-	for block in blocks:
-		var ctrl_mesh:ConvexVolume = block.control_mesh
-		for v_idx in ctrl_mesh.vertices.size():
-			var v:ConvexVolume.VertexInfo = ctrl_mesh.vertices[v_idx]
-			var v_point_world:Vector3 = block.global_transform * v.point
-		
-			var dist:float = (v_point_world - point).length_squared()
-			if dist < best_dist && dist <= max_radius * max_radius:
-				best_vertex = v_point_world
-	
-	return constrain_point(point, best_vertex, move_constraint) \
-		if is_finite(best_dist) else point
-
-
-
+enum Type { NONE, AXIS_X, AXIS_Y, AXIS_Z, PLANE_XY, PLANE_XZ, PLANE_YZ, PLANE_VIEWPORT }
 

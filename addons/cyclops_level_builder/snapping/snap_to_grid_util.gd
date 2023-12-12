@@ -22,32 +22,41 @@
 # SOFTWARE.
 
 @tool
-extends CyclopsSnappingSystem
-class_name SnappintSystemVertex
+extends Resource
+class_name SnapToGridUtil
 
-@export var max_radius:float = .2
+#const feet_per_meter:float = 3.28084
+
+@export var unit_size:float = 1
+
+@export var use_subdivisions:bool = false
+@export var grid_subdivisions:int = 10
+
+@export var power_of_two_scale:int = 0 #Scaling 2^n
+
+#local transform matrix for grid
+@export var grid_transform:Transform3D = Transform3D.IDENTITY:
+	get:
+		return grid_transform
+	set(value):
+		grid_transform = value
+		grid_transform_inv = grid_transform.affine_inverse()
+		
+var grid_transform_inv:Transform3D = Transform3D.IDENTITY
 
 
 #Point is in world space
-func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type)->Vector3:
-	var blocks:Array[CyclopsBlock] = plugin.get_blocks()
+func snap_point(point:Vector3)->Vector3:
 	
-	var best_vertex:Vector3 = Vector3.INF
-	var best_dist:float = INF
+	var p_local:Vector3 = grid_transform_inv * point
 	
-	for block in blocks:
-		var ctrl_mesh:ConvexVolume = block.control_mesh
-		for v_idx in ctrl_mesh.vertices.size():
-			var v:ConvexVolume.VertexInfo = ctrl_mesh.vertices[v_idx]
-			var v_point_world:Vector3 = block.global_transform * v.point
-		
-			var dist:float = (v_point_world - point).length_squared()
-			if dist < best_dist && dist <= max_radius * max_radius:
-				best_vertex = v_point_world
+	var scale:Vector3 = Vector3.ONE * unit_size * pow(2, power_of_two_scale)
+	if use_subdivisions:
+		scale /= grid_subdivisions
 	
-	return constrain_point(point, best_vertex, move_constraint) \
-		if is_finite(best_dist) else point
-
-
+	p_local = floor(p_local / scale + Vector3(.5, .5, .5)) * scale
+	
+	var target_point:Vector3 = grid_transform * p_local
+	return target_point
 
 

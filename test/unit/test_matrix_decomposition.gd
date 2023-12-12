@@ -14,7 +14,7 @@ func test_gram_schmidt_decomposition():
 	assert_true(is_zero_approx(dot_yz), "Dot product should be 0: %f" % dot_yz)
 	
 	#Should be identity
-	var prod = result[0] * result[2]
+#	var prod = result[0] * result[2]
 	
 	#Should be equal to basis
 	var mult = result[0] * result[1]
