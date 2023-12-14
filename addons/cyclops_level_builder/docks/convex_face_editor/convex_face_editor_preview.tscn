@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/docks/convex_face_editor/convex_face_editor_preview.gd" id="1_bjhau"]
 [ext_resource type="Material" uid="uid://rdhrhgrb78ls" path="res://addons/cyclops_level_builder/materials/grid.tres" id="2_t8xtu"]
-[ext_resource type="PackedScene" path="res://addons/cyclops_level_builder/docks/convex_face_editor/convex_face_editor_preview_studio.tscn" id="3_jtspd"]
+[ext_resource type="PackedScene" uid="uid://716oipfa7f5l" path="res://addons/cyclops_level_builder/docks/convex_face_editor/convex_face_editor_preview_studio.tscn" id="3_jtspd"]
 
 [node name="UvPreview" type="SubViewport"]
 own_world_3d = true
