@@ -1,3 +1,4 @@
 # Godot 4+ specific ignores
 .godot/
 /art/character/*.blend1
+/cyclops_settings.config
