@@ -96,10 +96,12 @@ icon = ExtResource("4_begwr")
 [node name="snap_options" type="OptionButton" parent="HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Snapping system"
 
 [node name="display_mode" type="OptionButton" parent="HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "How the mesh is shown in the viewport."
 item_count = 3
 selected = 1
 popup/item_0/text = "Wireframe"
