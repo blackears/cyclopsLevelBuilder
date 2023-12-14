@@ -58,7 +58,7 @@ const SNAPPING_GRID_SUBDIVISIONS:String = "snapping/grid/subdivisions"
 const SNAPPING_GRID_POWER_OF_TWO_SCALE:String = "snapping/grid/power_of_two_scale"
 const SNAPPING_GRID_TRANSFORM:String = "snapping/grid/transform"
 
-@export_file("*.json") var settings_file:String = "settings.json"
+@export_file("*.config") var settings_file:String = "settings.config"
 var settings:Settings = Settings.new()
 
 signal xray_mode_changed(value:bool)
@@ -77,6 +77,8 @@ var builder:CyclopsLevelBuilder
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	init_settings()
+	
 	unit_sphere = MathGeometry.unit_sphere()
 	
 	tool_mesh = ImmediateMesh.new()
@@ -85,15 +87,26 @@ func _ready():
 	if FileAccess.file_exists(settings_file):
 		settings.load_from_file(settings_file)
 
+func init_settings():
+	settings.add_setting(SNAPPING_ENABLED, true, TYPE_BOOL)
+	settings.add_setting(SNAPPING_GRID_UNIT_SIZE, 1, TYPE_FLOAT)
+	settings.add_setting(SNAPPING_GRID_POWER_OF_TWO_SCALE, 0, TYPE_INT)
+	settings.add_setting(SNAPPING_GRID_USE_SUBDIVISIONS, false, TYPE_BOOL)
+	settings.add_setting(SNAPPING_GRID_SUBDIVISIONS, 10, TYPE_INT)
+
 func save_settings():
+	print("saving ", settings_file)
 	settings.save_to_file(settings_file)
 
 func calc_snap_to_grid_util():
 	var snap_to_grid_util:SnapToGridUtil = SnapToGridUtil.new()
-	snap_to_grid_util.unit_size = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_GRID_UNIT_SIZE, 1)
-	snap_to_grid_util.power_of_two_scale = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_GRID_POWER_OF_TWO_SCALE, 0)
-	snap_to_grid_util.use_subdivisions = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_GRID_USE_SUBDIVISIONS, false)
-	snap_to_grid_util.grid_subdivisions = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_GRID_SUBDIVISIONS, 10)
+	#print("calc_snap_to_grid_util")
+	snap_to_grid_util.unit_size = settings.get_property(SNAPPING_GRID_UNIT_SIZE)
+	#print("unit_size ", snap_to_grid_util.unit_size)
+	snap_to_grid_util.power_of_two_scale = settings.get_property(SNAPPING_GRID_POWER_OF_TWO_SCALE)
+	#print("power_of_two_scale ", snap_to_grid_util.power_of_two_scale)
+	snap_to_grid_util.use_subdivisions = settings.get_property(SNAPPING_GRID_USE_SUBDIVISIONS)
+	snap_to_grid_util.grid_subdivisions = settings.get_property(SNAPPING_GRID_SUBDIVISIONS)
 	return snap_to_grid_util
 	
 #Called by CyclopsLevelBuilder to draw 2D components

@@ -6,18 +6,19 @@
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_sl0cw"]
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_fpqav"]
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_lsmsi"]
 
 [node name="CyclopsGlobals" type="Node3D"]
 script = ExtResource("1_nu1d3")
 units_font = ExtResource("2_savc6")
+settings_file = "settings.json"
 
 [node name="ControlMesh" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource("PlaneMesh_sl0cw")
 
 [node name="ToolInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("ImmediateMesh_fpqav")
+mesh = SubResource("ImmediateMesh_lsmsi")
 
 [node name="VertexGroup" type="Node3D" parent="."]
 unique_name_in_owner = true

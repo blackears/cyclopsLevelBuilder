@@ -78,7 +78,7 @@ var cached_viewport_camera:Camera3D
 
 func get_snapping_manager()->SnappingManager:
 	var mgr:SnappingManager = SnappingManager.new()
-	mgr.snap_enabled = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_ENABLED, true)
+	mgr.snap_enabled = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_ENABLED)
 	mgr.snap_tool = snapping_system
 	
 	return mgr
