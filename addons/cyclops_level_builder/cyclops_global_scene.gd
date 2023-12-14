@@ -58,7 +58,7 @@ const SNAPPING_GRID_SUBDIVISIONS:String = "snapping/grid/subdivisions"
 const SNAPPING_GRID_POWER_OF_TWO_SCALE:String = "snapping/grid/power_of_two_scale"
 const SNAPPING_GRID_TRANSFORM:String = "snapping/grid/transform"
 
-@export_file("*.config") var settings_file:String = "settings.config"
+@export_file("*.config") var settings_file:String = "cyclops_settings.config"
 var settings:Settings = Settings.new()
 
 signal xray_mode_changed(value:bool)
@@ -95,7 +95,7 @@ func init_settings():
 	settings.add_setting(SNAPPING_GRID_SUBDIVISIONS, 10, TYPE_INT)
 
 func save_settings():
-	print("saving ", settings_file)
+	#print("saving ", settings_file)
 	settings.save_to_file(settings_file)
 
 func calc_snap_to_grid_util():
