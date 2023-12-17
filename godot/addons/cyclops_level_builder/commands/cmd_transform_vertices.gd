@@ -21,14 +21,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+#Applied trnasorm of points in local space
+
 @tool
-class_name CommandTransformBlocks
+class_name CommandTransformVertices
 extends CyclopsCommand
 
 class TrackedInfo extends RefCounted:
 	var data:ConvexBlockData
 #	var materials:Array[Material]
-	
+
+#Local space transform of points	
 var transform:Transform3D
 var lock_uvs:bool = false
 

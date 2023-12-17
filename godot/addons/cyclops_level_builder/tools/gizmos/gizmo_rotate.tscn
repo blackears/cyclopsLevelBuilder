@@ -1,0 +1,29 @@
+[gd_scene load_steps=7 format=3 uid="uid://cyi4s4loi2i15"]
+
+[ext_resource type="PackedScene" uid="uid://p26cj0m5amq0" path="res://addons/cyclops_level_builder/art/gizmos/gizmo_rotate.glb" id="1_knqem"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/gizmos/gizmo_rotate.gd" id="1_vhpbh"]
+[ext_resource type="Material" uid="uid://bv4k8o22vl6ub" path="res://addons/cyclops_level_builder/materials/gizmo_axis_y_material.tres" id="2_538x0"]
+[ext_resource type="Material" uid="uid://drodm0wf41vin" path="res://addons/cyclops_level_builder/materials/gizmo_axis_x_material.tres" id="3_7q6t6"]
+[ext_resource type="Material" uid="uid://divsg4lq712rw" path="res://addons/cyclops_level_builder/materials/gizmo_axis_z_material.tres" id="4_eibo1"]
+[ext_resource type="Material" uid="uid://cqvh1j2n71fej" path="res://addons/cyclops_level_builder/materials/gizmo_axis_special_material.tres" id="5_ib271"]
+
+[node name="GizmoRotate" type="Node3D"]
+script = ExtResource("1_vhpbh")
+
+[node name="gizmo_rotate" parent="." instance=ExtResource("1_knqem")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+
+[node name="rot_axis_y" parent="gizmo_rotate" index="0"]
+surface_material_override/0 = ExtResource("2_538x0")
+
+[node name="rot_axis_x" parent="gizmo_rotate" index="1"]
+surface_material_override/0 = ExtResource("3_7q6t6")
+
+[node name="rot_axis_z" parent="gizmo_rotate" index="2"]
+surface_material_override/0 = ExtResource("4_eibo1")
+
+[node name="rot_axis_viewport" parent="gizmo_rotate" index="3"]
+visible = false
+surface_material_override/0 = ExtResource("5_ib271")
+
+[editable path="gizmo_rotate"]

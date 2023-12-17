@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ToolTag" load_steps=4 format=3 uid="uid://p0ucaj6w232i"]
+
+[ext_resource type="Texture2D" uid="uid://1hu5mqwbm55w" path="res://addons/cyclops_level_builder/art/icons/rotate.svg" id="1_12a61"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/tool_tag.gd" id="2_10xto"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_rotate.gd" id="3_nykm1"]
+
+[resource]
+script = ExtResource("2_10xto")
+id = "rotate"
+name = "Rotate"
+tooltip = "Rotate
+
+Click and drag the circle gizmo to rotate around the plane the circle lies in."
+icon = ExtResource("1_12a61")
+tool_script = ExtResource("3_nykm1")

@@ -582,9 +582,6 @@ func transform(xform:Transform3D, lock_uvs:bool = false):
 			f.reverse()
 
 	if lock_uvs:
-#		var xform_inv:Transform3D = xform.affine_inverse()
-		#var xform_inv:Transform3D = xform
-		#print("--xform %s" % xform)
 		
 		for f in faces:
 			var axis:MathUtil.Axis = MathUtil.get_longest_axis(f.normal)

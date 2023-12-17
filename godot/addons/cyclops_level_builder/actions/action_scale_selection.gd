@@ -37,7 +37,7 @@ func _execute():
 		
 	var pivot:Vector3 = calc_pivot_of_blocks(blocks)
 	
-	var cmd:CommandTransformBlocks = CommandTransformBlocks.new()
+	var cmd:CommandTransformVertices = CommandTransformVertices.new()
 	cmd.builder = plugin
 	
 	for block in blocks:

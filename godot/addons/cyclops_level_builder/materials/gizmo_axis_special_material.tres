@@ -1,5 +1,7 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://cdbeptii7kjbh"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cqvh1j2n71fej"]
 
 [resource]
+cull_mode = 2
 no_depth_test = true
 shading_mode = 0
+fixed_size = true

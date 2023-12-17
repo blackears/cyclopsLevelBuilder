@@ -23,12 +23,12 @@
 
 @tool
 extends CyclopsTool
-class_name ToolMove
+class_name ToolRotate
 
-const TOOL_ID:String = "move"
+const TOOL_ID:String = "rotate"
 
 
-enum ToolState { NONE, READY, MOVE_BLOCK, MOVE_BLOCK_CLICK, DRAG_SELECTION }
+enum ToolState { NONE, READY, ROTATE_BLOCK, DRAG_SELECTION }
 var tool_state:ToolState = ToolState.NONE
 
 #enum MoveConstraint { NONE, AXIS_X, AXIS_Y, AXIS_Z, PLANE_XY, PLANE_XZ, PLANE_YZ, PLANE_VIEWPORT }
@@ -37,28 +37,27 @@ var move_constraint:MoveConstraint.Type = MoveConstraint.Type.NONE
 #var viewport_camera_start:Camera3D
 var event_start:InputEventMouseButton
 
-var block_drag_cur:Vector3
-var block_drag_p0:Vector3
-
 var drag_select_start_pos:Vector2
 var drag_select_to_pos:Vector2
+
+var block_drag_cur:Vector3
+var block_drag_p0:Vector3
+var block_drag_origin:Vector3
+
+var gizmo_rotate:GizmoRotate
 
 var mouse_hover_pos:Vector2
 
 #Keep a copy of move command here while we are building it
-var cmd_move_blocks:CommandMoveBlocks
-
-var base_points:PackedVector3Array
-
-var gizmo_translate:GizmoTranslate
+var cmd_transform_blocks:CommandTransformBlocks
 
 func _get_tool_id()->String:
 	return TOOL_ID
 
 func draw_gizmo(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
-	if !gizmo_translate:
-		gizmo_translate = preload("res://addons/cyclops_level_builder/tools/gizmos/gizmo_translate.tscn").instantiate()
+	if !gizmo_rotate:
+		gizmo_rotate = preload("res://addons/cyclops_level_builder/tools/gizmos/gizmo_rotate.tscn").instantiate()
 	
 	var blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
 	if blocks.is_empty():
@@ -68,9 +67,9 @@ func draw_gizmo(viewport_camera:Camera3D):
 		for block in blocks:
 			origin += block.global_transform.origin
 		origin /= blocks.size()
-		global_scene.set_custom_gizmo(gizmo_translate)
-		gizmo_translate.global_transform.origin = origin
-
+		global_scene.set_custom_gizmo(gizmo_rotate)
+		gizmo_rotate.global_transform.origin = origin
+	
 
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
@@ -94,81 +93,52 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 
 	move_constraint = MoveConstraint.Type.NONE
 
-	if gizmo_translate:
-		var part_res:GizmoTranslate.IntersectResult = gizmo_translate.intersect(origin, dir, viewport_camera)
+	if gizmo_rotate:
+		var part_res:GizmoRotate.IntersectResult = gizmo_rotate.intersect(origin, dir, viewport_camera)
 		if part_res:
 			#print("Gizmo hit ", part_res.part)
 			match part_res.part:
-				GizmoTranslate.Part.AXIS_X:
-					move_constraint = MoveConstraint.Type.AXIS_X
-				GizmoTranslate.Part.AXIS_Y:
-					move_constraint = MoveConstraint.Type.AXIS_Y
-				GizmoTranslate.Part.AXIS_Z:
-					move_constraint = MoveConstraint.Type.AXIS_Z
-				GizmoTranslate.Part.PLANE_XY:
+				GizmoRotate.Part.PLANE_XY:
 					move_constraint = MoveConstraint.Type.PLANE_XY
-				GizmoTranslate.Part.PLANE_XZ:
+				GizmoRotate.Part.PLANE_XZ:
 					move_constraint = MoveConstraint.Type.PLANE_XZ
-				GizmoTranslate.Part.PLANE_YZ:
+				GizmoRotate.Part.PLANE_YZ:
 					move_constraint = MoveConstraint.Type.PLANE_YZ
-		
+
 			var start_pos:Vector3 = part_res.pos_world
 #			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
 			#block_drag_p0 = MathUtil.snap_to_grid(start_pos, grid_step_size)
-			block_drag_p0 = builder.get_snapping_manager().snap_point(start_pos)
+			block_drag_p0 = start_pos
+
+			var blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+			#var blocks_origin:Vector3
+			block_drag_origin = Vector3.ZERO
+			for block in blocks:
+				block_drag_origin += block.global_transform.origin
+			block_drag_origin /= blocks.size()
 
 	#		print("res obj %s" % result.object.get_path())
 			var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
 			if !sel_blocks.is_empty():
 				
-				tool_state = ToolState.MOVE_BLOCK
+				tool_state = ToolState.ROTATE_BLOCK
 				#print("Move block")
 				
-				cmd_move_blocks = CommandMoveBlocks.new()
-				cmd_move_blocks.builder = builder
-				cmd_move_blocks.lock_uvs = builder.lock_uvs
+				cmd_transform_blocks = CommandTransformBlocks.new()
+				cmd_transform_blocks.builder = builder
+				cmd_transform_blocks.lock_uvs = builder.lock_uvs
 				for child in sel_blocks:
-					cmd_move_blocks.add_block(child.get_path())
+					cmd_transform_blocks.add_block(child.get_path())
 
 			return
 
-
-	var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
-#	print("result %s" % result)
-	
-	if result:
-
-		if e.alt_pressed:
-			move_constraint = MoveConstraint.Type.AXIS_Y
-		else:
-			move_constraint = MoveConstraint.Type.PLANE_XZ
-
-		var start_pos:Vector3 = result.get_world_position()			
-		#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
-
-		#block_drag_p0 = MathUtil.snap_to_grid(start_pos, grid_step_size)
-		block_drag_p0 = builder.get_snapping_manager().snap_point(start_pos)
-		
-		#print("block_drag_p0 %s" % block_drag_p0)
-
-#		print("res obj %s" % result.object.get_path())
-		if builder.is_selected(result.object):
-			
-			tool_state = ToolState.MOVE_BLOCK
-			
-			cmd_move_blocks = CommandMoveBlocks.new()
-			cmd_move_blocks.builder = builder
-			cmd_move_blocks.lock_uvs = builder.lock_uvs
-			for child in builder.get_selected_blocks():
-				cmd_move_blocks.add_block(child.get_path())
-			
-			return
 	
 	tool_state = ToolState.DRAG_SELECTION
 	drag_select_start_pos = e.position
 	drag_select_to_pos = e.position
-	
+
+
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
@@ -178,51 +148,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		if e.keycode == KEY_ESCAPE:
 			if e.is_pressed():
 				tool_state = ToolState.NONE
-				if cmd_move_blocks:
-					cmd_move_blocks.undo_it()
-					cmd_move_blocks = null
+				if cmd_transform_blocks:
+					cmd_transform_blocks.undo_it()
+					cmd_transform_blocks = null
 					
 			return true
 
-		elif e.keycode == KEY_G:
-			if e.is_pressed() && tool_state == ToolState.NONE:
-				tool_state = ToolState.MOVE_BLOCK_CLICK
-				move_constraint = MoveConstraint.Type.PLANE_VIEWPORT
-#				block_drag_p0 = MathUtil.intersect_plane(origin, dir, block_drag_p0, viewport_camera.global_transform.basis.z)
-#				block_drag_p0 = origin + dir * 20
-				block_drag_p0 = Vector3.INF
-				
-				cmd_move_blocks = CommandMoveBlocks.new()
-				cmd_move_blocks.builder = builder
-				cmd_move_blocks.lock_uvs = builder.lock_uvs
-				for child in builder.get_selected_blocks():
-					cmd_move_blocks.add_block(child.get_path())
-					
-			return true
-
-		elif e.keycode == KEY_X:
-			if tool_state == ToolState.MOVE_BLOCK_CLICK:
-				if e.shift_pressed:
-					move_constraint = MoveConstraint.Type.PLANE_YZ
-				else:
-					move_constraint = MoveConstraint.Type.AXIS_X
-			return true
-
-		elif e.keycode == KEY_Y:
-			if tool_state == ToolState.MOVE_BLOCK_CLICK:
-				if e.shift_pressed:
-					move_constraint = MoveConstraint.Type.PLANE_XZ
-				else:
-					move_constraint = MoveConstraint.Type.AXIS_Y
-			return true
-
-		elif e.keycode == KEY_Z:
-			if tool_state == ToolState.MOVE_BLOCK_CLICK:
-				if e.shift_pressed:
-					move_constraint = MoveConstraint.Type.PLANE_XY
-				else:
-					move_constraint = MoveConstraint.Type.AXIS_Z
-			return true
 
 		if e.keycode == KEY_Q && e.alt_pressed:
 			if e.is_pressed():
@@ -254,12 +185,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					event_start = event
 					
 					tool_state = ToolState.READY
-
-				elif tool_state == ToolState.MOVE_BLOCK_CLICK:
-					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-					cmd_move_blocks.add_to_undo_manager(undo)
-					
-					tool_state = ToolState.NONE
 				
 			else:
 				if tool_state == ToolState.READY:
@@ -270,7 +195,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 					
-					#print("Invokke select %s" % result)
+					#print("Invoke select %s" % result)
 					var cmd:CommandSelectBlocks = CommandSelectBlocks.new()
 					cmd.builder = builder
 					cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
@@ -284,11 +209,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 					tool_state = ToolState.NONE
 
-				elif tool_state == ToolState.MOVE_BLOCK:
+				elif tool_state == ToolState.ROTATE_BLOCK:
 					
 					#Finish moving blocks
 					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-					cmd_move_blocks.add_to_undo_manager(undo)
+					cmd_transform_blocks.add_to_undo_manager(undo)
 					
 					tool_state = ToolState.NONE
 
@@ -319,9 +244,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			if e.is_pressed():
 				#Right click cancel
 				tool_state = ToolState.NONE
-				if cmd_move_blocks:
-					cmd_move_blocks.undo_it()
-					cmd_move_blocks = null
+				if cmd_transform_blocks:
+					cmd_transform_blocks.undo_it()
+					cmd_transform_blocks = null
 			
 	elif event is InputEventMouseMotion:
 		var e:InputEventMouseMotion = event
@@ -343,35 +268,47 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 			return true
 			
-		elif tool_state == ToolState.MOVE_BLOCK || tool_state == ToolState.MOVE_BLOCK_CLICK:
+		elif tool_state == ToolState.ROTATE_BLOCK:
 			if !block_drag_p0.is_finite():
 				block_drag_p0 = origin + dir * 20
 			
+			var rot_axis:Vector3
 			match move_constraint:
-				MoveConstraint.Type.AXIS_X:
-					block_drag_cur = MathUtil.closest_point_on_line(origin, dir, block_drag_p0, Vector3.RIGHT)
-				MoveConstraint.Type.AXIS_Y:
-					block_drag_cur = MathUtil.closest_point_on_line(origin, dir, block_drag_p0, Vector3.UP)
-				MoveConstraint.Type.AXIS_Z:
-					block_drag_cur = MathUtil.closest_point_on_line(origin, dir, block_drag_p0, Vector3.BACK)
 				MoveConstraint.Type.PLANE_XY:
 					block_drag_cur = MathUtil.intersect_plane(origin, dir, block_drag_p0, Vector3.BACK)
+					rot_axis = Vector3.BACK
 				MoveConstraint.Type.PLANE_XZ:
 					block_drag_cur = MathUtil.intersect_plane(origin, dir, block_drag_p0, Vector3.UP)
+					rot_axis = Vector3.UP
 				MoveConstraint.Type.PLANE_YZ:
 					block_drag_cur = MathUtil.intersect_plane(origin, dir, block_drag_p0, Vector3.RIGHT)
+					rot_axis = Vector3.RIGHT
 				MoveConstraint.Type.PLANE_VIEWPORT:
 					block_drag_cur = MathUtil.intersect_plane(origin, dir, block_drag_p0, viewport_camera.global_transform.basis.z)
+					rot_axis = viewport_camera.global_transform.basis.z
 					
 			#print("dragging move_constraint %s block_drag_cur %s" % [move_constraint, block_drag_cur])
 
-			#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
-			#block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
+			var v0:Vector3 = (block_drag_p0 - block_drag_origin).normalized()
+			var v1:Vector3 = (block_drag_cur - block_drag_origin).normalized()
+			var binorm:Vector3 = v0.cross(rot_axis)
+
+			var angle:float = atan2(v1.dot(binorm), v1.dot(v0))
+
+			var xform:Transform3D = Transform3D.IDENTITY
+			xform = xform.translated_local(block_drag_origin)
+			xform = xform.rotated_local(rot_axis, angle)
+			xform = xform.translated_local(-block_drag_origin)
+			#var rot_basis:Basis
+			#rot_basis = rot_basis.rotated(rot_axis, angle)
+			
+			
+
 			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur)
 			
-			cmd_move_blocks.move_offset = block_drag_cur - block_drag_p0
+			cmd_transform_blocks.transform = xform
 			#print("cmd_move_blocks.move_offset %s" % cmd_move_blocks.move_offset)
-			cmd_move_blocks.do_it()
+			cmd_transform_blocks.do_it()
 
 			return true
 
