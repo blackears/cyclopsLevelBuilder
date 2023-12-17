@@ -33,3 +33,13 @@ func snap_point(point:Vector3)->Vector3:
 		return point
 		
 	return snap_tool._snap_point(point)
+
+func snap_angle(angle:float)->float:
+	if !snap_enabled || !snap_tool:
+		return angle
+	
+	return snap_tool._snap_angle(angle)
+	
+	
+	
+	

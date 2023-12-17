@@ -294,10 +294,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var binorm:Vector3 = v0.cross(rot_axis)
 
 			var angle:float = atan2(v1.dot(binorm), v1.dot(v0))
+			var snapped_angle = builder.get_snapping_manager().snap_angle(rad_to_deg(angle))
+			angle = deg_to_rad(snapped_angle)
 
 			var xform:Transform3D = Transform3D.IDENTITY
 			xform = xform.translated_local(block_drag_origin)
-			xform = xform.rotated_local(rot_axis, angle)
+			xform = xform.rotated_local(rot_axis, -angle)
 			xform = xform.translated_local(-block_drag_origin)
 			#var rot_basis:Basis
 			#rot_basis = rot_basis.rotated(rot_axis, angle)

@@ -39,6 +39,9 @@ func _deactivate():
 func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type = MoveConstraint.Type.NONE)->Vector3:
 	return point
 
+func _snap_angle(angle:float)->float:
+	return angle
+
 func _get_properties_editor()->Control:
 	return null
 	

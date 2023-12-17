@@ -31,33 +31,21 @@ var snap_to_grid_util:SnapToGridUtil = SnapToGridUtil.new()
 func _activate(plugin:CyclopsLevelBuilder):
 	super._activate(plugin)
 	
-	#snap_to_grid_util.unit_size = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_GRID_UNIT_SIZE, 1)
-	#snap_to_grid_util.power_of_two_scale = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_GRID_POWER_OF_TWO_SCALE, 0)
-	#snap_to_grid_util.use_subdivisions = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_GRID_USE_SUBDIVISIONS, false)
-	#snap_to_grid_util.grid_subdivisions = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_GRID_SUBDIVISIONS, 10)
-	##snap_to_grid_util.grid_transform = CyclopsAutoload.settings.get_property_transform3d(CyclopsGlobalScene.SNAPPING_GRID_TRANSFORM, Transform3D.IDENTITY)
-#	print("grids snap activate")
-	
 	snap_to_grid_util = CyclopsAutoload.calc_snap_to_grid_util()
 	
 func _deactivate():
 	super._deactivate()
-	
-	#CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_UNIT_SIZE, snap_to_grid_util.unit_size)
-	#CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_POWER_OF_TWO_SCALE, snap_to_grid_util.power_of_two_scale)
-	#CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_USE_SUBDIVISIONS, snap_to_grid_util.use_subdivisions)
-	#CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_SUBDIVISIONS, snap_to_grid_util.grid_subdivisions)
-	#CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_TRANSFORM, snap_to_grid_util.grid_transform)
-	
-#	print("grids snap deactivate")
-#	CyclopsAutoload.save_settings()
-	
+		
 
 #Point is in world space
 func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type = MoveConstraint.Type.NONE)->Vector3:
-	
 	var target_point = snap_to_grid_util.snap_point(point)
 	return constrain_point(point, target_point, move_constraint)
+
+func _snap_angle(angle:float)->float:
+	var snap_angle:float = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_GRID_ANGLE)
+	return floor(angle / snap_angle) * snap_angle
+
 
 func _get_properties_editor()->Control:
 	var ed:SnappingSystemGridPropertiesEditor = preload("res://addons/cyclops_level_builder/snapping/snapping_system_grid_properties_editor.tscn").instantiate()

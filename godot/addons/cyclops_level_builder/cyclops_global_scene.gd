@@ -57,6 +57,7 @@ const SNAPPING_GRID_USE_SUBDIVISIONS:String = "snapping/grid/use_subdivisions"
 const SNAPPING_GRID_SUBDIVISIONS:String = "snapping/grid/subdivisions"
 const SNAPPING_GRID_POWER_OF_TWO_SCALE:String = "snapping/grid/power_of_two_scale"
 const SNAPPING_GRID_TRANSFORM:String = "snapping/grid/transform"
+const SNAPPING_GRID_ANGLE:String = "snapping/grid/angle"
 
 @export_file("*.config") var settings_file:String = "cyclops_settings.config"
 var settings:Settings = Settings.new()
@@ -93,6 +94,8 @@ func init_settings():
 	settings.add_setting(SNAPPING_GRID_POWER_OF_TWO_SCALE, 0, TYPE_INT)
 	settings.add_setting(SNAPPING_GRID_USE_SUBDIVISIONS, false, TYPE_BOOL)
 	settings.add_setting(SNAPPING_GRID_SUBDIVISIONS, 10, TYPE_INT)
+	settings.add_setting(SNAPPING_GRID_TRANSFORM, Transform3D.IDENTITY, TYPE_TRANSFORM3D)
+	settings.add_setting(SNAPPING_GRID_ANGLE, 15, TYPE_FLOAT)
 
 func save_settings():
 	#print("saving ", settings_file)
@@ -107,6 +110,7 @@ func calc_snap_to_grid_util():
 	#print("power_of_two_scale ", snap_to_grid_util.power_of_two_scale)
 	snap_to_grid_util.use_subdivisions = settings.get_property(SNAPPING_GRID_USE_SUBDIVISIONS)
 	snap_to_grid_util.grid_subdivisions = settings.get_property(SNAPPING_GRID_SUBDIVISIONS)
+	snap_to_grid_util.grid_transform = settings.get_property(SNAPPING_GRID_TRANSFORM)
 	return snap_to_grid_util
 	
 #Called by CyclopsLevelBuilder to draw 2D components
