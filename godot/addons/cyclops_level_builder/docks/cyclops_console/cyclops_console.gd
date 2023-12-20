@@ -50,3 +50,7 @@ func load_state(state:Dictionary):
 
 func _on_enable_cyclops_toggled(button_pressed):
 	editor_plugin.always_on = button_pressed
+
+
+func _on_bn_create_block_pressed():
+	pass # Replace with function body.
