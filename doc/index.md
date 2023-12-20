@@ -54,6 +54,8 @@ There are several tools in the toolbar that let you create and edit blocks:
 
 ![Tool buttons](tool_buttons.jpg)
 
+* [Move](tool_move.md)
+* [Rotate](tool_rotate.md)
 * [Block](tool_block.md)
 * [Prism](tool_prism.md)
 * [Cylinder](tool_cylinder.md)
@@ -62,6 +64,7 @@ There are several tools in the toolbar that let you create and edit blocks:
 * [Vertex](tool_vertex.md)
 * [Edge](tool_edge.md)
 * [Face](tool_face.md)
+* [Material Brush](tool_material_brush.md)
 * [Duplicate](tool_duplicate.md)
 
 
@@ -87,6 +90,7 @@ The menu has a number of useful commands.
 * Delete Selected Blocks - Delete all currently selected blocks.
 * Snap to Grid - Snaps all vertices to the grid, just in case some are misaligned.
 
+* Convert to Godot Mesh - Builds a replica of the CyclopsBlocks in your level using core Godot objects.  Places them inside a node called 'converted_blocks' at the root of your scene.
 * Export As Gltf... - Generates a gltf file based on the current blocks in the scene.
 
 * Rotate 90 Ccw X - Rotate 90 degrees counter clockwise around the X axis
@@ -108,14 +112,17 @@ The menu has a number of useful commands.
 
 Cyclops Level Builder uses triplanar mapping to provide UVs to materials.  This means that if you move a block, the UVs will be updated to match where the block is in the world, which is generally what you want when building levels.  However, sometimes you want the texture to remain fixed when you move a block.  If Lock UVs is checked, the UV layout will travel with the block instead of updating based on the world position of the block.
 
-### Grid Snapping Size
+### Snapping
 
-Godot 4.0.2 does not provide addons with access to the 3D snapping, so Cyclops Level Builder implements its own snapping.  You can change the value of this dropdown to change the grid snapping size.
+![Snapping Menu](snapping_menu.png)
 
+When the magnet button is pressed, snapping is enabled.  The dropdown allows you to switch between snapping modes.
+
+[Snapping](snapping.md)
 
 ### Display Mode
 
-The display mode lets you switch between drawing blocks with materials and drawing them as wireframe objects.
+The display mode lets you determine how blocks are displayed in the viewport.
 
 ![Switching display mode](switching_display_mode.gif)
 

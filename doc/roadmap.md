@@ -3,15 +3,11 @@
 Here's a list of changes I'm thinking of making in future revisions of the project.
 
 
-### Make Blocks extend Node3D
+### Make the UI independent of the Godot editor
 
-At the moment, `CyclopsConvexBlock` extends `Node` and must be a child of a `CyclopsBlocks` node to be rendered.  Behind the scenes, the `CyclopsBlocks` is creating `CyclopsConvexBlockBody` nodes to draw the geometry.  Not only is this overly complicated, but it prevents the user from arranging the blocks in the scene tree and tweaking individual properties on the block, such as if it should have collision or be part of a moving platform.  I went with the original design because I was worried about how this would affect snapping, but I think I can get around this if I design a new move tool specific for moving blocks.
+One of the features that Cyclops has had since the beginning is the ability to create and edit blocks directly in the editor viewport.  While this does offer great integration, it also comes with a ton of restrictions that make it hard to add features and debug.  Some things I'd like to add are simply impossible with the way the Godot editor is currently designed, and other things are pretty janky - like having to select a block for the toolbar to appear, or having the viewport display not update right away.  For this reason, I'm considering making Cyclops a stand alone program - still available in Godot for display, but edited in either a separate program or in a 'main screen' plugin.
 
-I feel this is the most important change to make, although this will also involve rewriting a lot of code.
-
-### Switch from using convex blocks to general blocks
-
-At the moment, all blocks in the scene are forced to be convex.  It could be useful to switch to using a general mesh that allows users to make blocks with indentations, inside corners or faces with cuts in them.  This would make a lot of vertex, edge and face operations more accurate and allow users to have more control.  You could potentially even model characters or objects this way.  However, it might also make things more messy and make laying in level blocks less efficient.  I'm not entirely sure if I should go ahead with this idea.
+Please let me know what you think on the discussion board.
 
 ### Allow for face-corner UVs
 
@@ -20,9 +16,7 @@ Right now all uvs are auto-generated.  While this is helpful for laying in block
 
 ### UI Improvements
 
-At the moment, the editor toolbar does not look very good.  I'm not sure how to format the control so it sits nicely in the editor menu.  There also need to be icons generated for the different tools.
-
-The Material manager dock could also use some improvements.  The flow layout it currently uses is functional, but it would be nice if things were arranged in columns.  It would also be useful to arrange materials into something like a directory tree since it can become overwhelming once more than fifty or so materials have been added.
+The Material manager dock could use some improvements.  The flow layout it currently uses is functional, but it would be nice if things were arranged in columns.  It would also be useful to arrange materials into something like a directory tree since it can become overwhelming once more than fifty or so materials have been added.
 
 ### UV Viewport manipulator
 
