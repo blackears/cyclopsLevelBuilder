@@ -69,6 +69,14 @@ allow_greater = true
 [node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="bn_presets_transform" type="Button" parent="VBoxContainer/VBoxContainer2/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Transform Presets"
+
 [node name="Label" type="Label" parent="VBoxContainer/VBoxContainer2"]
 layout_mode = 2
 text = "Transform:"
@@ -123,13 +131,23 @@ item_1/id = 1
 item_2/text = "Feet"
 item_2/id = 2
 
+[node name="popup_transform_presets" type="PopupMenu" parent="."]
+unique_name_in_owner = true
+item_count = 2
+item_0/text = "Cube Grid"
+item_0/id = 0
+item_1/text = "Equilateral Triangles XZ"
+item_1/id = 1
+
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer2/spin_power_of_two" to="." method="_on_spin_power_of_two_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer3/ed_unit_size" to="." method="_on_ed_unit_size_value_changed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer3/bn_presets" to="." method="_on_bn_presets_pressed"]
 [connection signal="toggled" from="VBoxContainer/check_use_subdiv" to="." method="_on_check_use_subdiv_toggled"]
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer/spin_subdiv" to="." method="_on_spin_subdiv_value_changed"]
+[connection signal="pressed" from="VBoxContainer/VBoxContainer2/HBoxContainer/bn_presets_transform" to="." method="_on_bn_presets_transform_pressed"]
 [connection signal="value_changed" from="VBoxContainer/VBoxContainer2/GridContainer/xform_translate" to="." method="_on_xform_translate_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/VBoxContainer2/GridContainer/xform_rotate" to="." method="_on_xform_rotate_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/VBoxContainer2/GridContainer/xform_scale" to="." method="_on_xform_scale_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/VBoxContainer2/GridContainer/xform_shear" to="." method="_on_xform_shear_value_changed"]
 [connection signal="index_pressed" from="popup_presets" to="." method="_on_popup_presets_index_pressed"]
+[connection signal="index_pressed" from="popup_transform_presets" to="." method="_on_popup_transform_presets_index_pressed"]

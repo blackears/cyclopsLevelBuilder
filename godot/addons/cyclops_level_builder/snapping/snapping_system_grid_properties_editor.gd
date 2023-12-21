@@ -165,3 +165,31 @@ func _on_popup_presets_index_pressed(index):
 func _on_bn_presets_pressed():
 	var rect:Rect2 = %bn_presets.get_global_rect()
 	%popup_presets.popup_on_parent(Rect2i(rect.position.x, rect.position.y + rect.size.y, 0, 0))
+
+
+func _on_bn_presets_transform_pressed():
+	var rect:Rect2 = %bn_presets_transform.get_global_rect()
+	%popup_transform_presets.popup_on_parent(Rect2i(rect.position.x, rect.position.y + rect.size.y, 0, 0))
+
+
+func _on_popup_transform_presets_index_pressed(index):
+	var xform:Transform3D
+	match index:
+		0:
+			xform = Transform3D.IDENTITY
+		1:
+			var x:Vector3 = Vector3(1, 0, 0)
+			var y:Vector3 = Vector3(0, 1, 0)
+			var angle:float = deg_to_rad(60)
+			
+			var z:Vector3 = Vector3(cos(angle), 0, sin(angle))
+			xform = Transform3D(Basis(x, y, z), Vector3.ZERO)
+		_:
+			return
+
+			
+	tool.snap_to_grid_util.grid_transform = xform
+	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_TRANSFORM, xform)
+
+	CyclopsAutoload.save_settings()
+	update_ui_from_props()
