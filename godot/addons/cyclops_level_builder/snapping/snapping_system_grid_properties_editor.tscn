@@ -40,6 +40,11 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="bn_presets" type="Button" parent="VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Presets"
+
 [node name="check_use_subdiv" type="CheckBox" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -108,11 +113,23 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="popup_presets" type="PopupMenu" parent="."]
+unique_name_in_owner = true
+item_count = 3
+item_0/text = "Meters"
+item_0/id = 0
+item_1/text = "Yards"
+item_1/id = 1
+item_2/text = "Feet"
+item_2/id = 2
+
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer2/spin_power_of_two" to="." method="_on_spin_power_of_two_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer3/ed_unit_size" to="." method="_on_ed_unit_size_value_changed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer3/bn_presets" to="." method="_on_bn_presets_pressed"]
 [connection signal="toggled" from="VBoxContainer/check_use_subdiv" to="." method="_on_check_use_subdiv_toggled"]
 [connection signal="value_changed" from="VBoxContainer/HBoxContainer/spin_subdiv" to="." method="_on_spin_subdiv_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/VBoxContainer2/GridContainer/xform_translate" to="." method="_on_xform_translate_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/VBoxContainer2/GridContainer/xform_rotate" to="." method="_on_xform_rotate_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/VBoxContainer2/GridContainer/xform_scale" to="." method="_on_xform_scale_value_changed"]
 [connection signal="value_changed" from="VBoxContainer/VBoxContainer2/GridContainer/xform_shear" to="." method="_on_xform_shear_value_changed"]
+[connection signal="index_pressed" from="popup_presets" to="." method="_on_popup_presets_index_pressed"]

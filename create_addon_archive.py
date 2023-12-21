@@ -30,6 +30,7 @@ import getopt
 import platform
 
 projectName = 'cyclops_level_builder'
+version="_1_0_2"
 extensions = [".gd", ".tres", ".tscn", ".gdshaderinc", ".glsl", ".cfg", ".txt", ".md", ".glb", ".gltf", ".jpg", ".jpeg", ".png", ".exr", ".bin"]
 
 
@@ -55,7 +56,7 @@ def make():
     if not os.path.exists('export'):
         os.mkdir('export')
 
-    shutil.make_archive("export/" + projectName + "_godot_addon", "zip", "build")
+    shutil.make_archive("export/" + projectName + version, "zip", "build")
 
 
 

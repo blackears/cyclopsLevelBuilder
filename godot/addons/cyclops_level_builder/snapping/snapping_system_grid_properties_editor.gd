@@ -129,3 +129,39 @@ func set_grid_transform_from_ui():
 	tool.snap_to_grid_util.grid_transform = xform
 	
 	CyclopsAutoload.save_settings()
+
+const meters_per_yard:float = 0.9144
+const meters_per_feet:float = 0.3048
+
+func _on_popup_presets_index_pressed(index):
+	#print("Preset ", index)
+	var unit_size:float
+	var subdiv:int
+	match index:
+		0:
+			unit_size = 1
+			subdiv = 10
+		1:
+			unit_size = meters_per_yard
+			subdiv = 3
+		2:
+			unit_size = meters_per_feet
+			subdiv = 12
+		_:
+			return
+
+	%ed_unit_size.value = unit_size
+	%spin_subdiv.value = subdiv
+			
+	tool.snap_to_grid_util.unit_size = unit_size
+	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_UNIT_SIZE, unit_size)
+
+	tool.snap_to_grid_util.grid_subdivisions = subdiv
+	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_SUBDIVISIONS, int(subdiv))
+
+	CyclopsAutoload.save_settings()
+
+
+func _on_bn_presets_pressed():
+	var rect:Rect2 = %bn_presets.get_global_rect()
+	%popup_presets.popup_on_parent(Rect2i(rect.position.x, rect.position.y + rect.size.y, 0, 0))
