@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dviqx4kua5npt"]
+
+[ext_resource type="Texture2D" uid="uid://4j6nx7blefu0" path="res://art/tiles/block_brown.png" id="1_jewil"]
+
+[resource]
+albedo_texture = ExtResource("1_jewil")
+uv1_scale = Vector3(2, 2, 2)

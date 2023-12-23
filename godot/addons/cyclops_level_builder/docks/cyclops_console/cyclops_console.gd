@@ -53,4 +53,14 @@ func _on_enable_cyclops_toggled(button_pressed):
 
 
 func _on_bn_create_block_pressed():
-	pass # Replace with function body.
+	var cmd:CommandAddBlock = CommandAddBlock.new()
+	cmd.builder = editor_plugin
+
+	var bounds:AABB = AABB(%block_position.value, %block_size.value)
+	cmd.bounds = bounds
+	var scene_root = editor_plugin.get_editor_interface().get_edited_scene_root()
+	cmd.blocks_root_path = scene_root.get_path()
+	
+	var undo:EditorUndoRedoManager = editor_plugin.get_undo_redo()
+	cmd.add_to_undo_manager(undo)
+

@@ -69,6 +69,10 @@ allow_greater = true
 [node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Transform:"
+
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer2"]
 layout_mode = 2
 
@@ -76,10 +80,6 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 text = "Transform Presets"
-
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer2"]
-layout_mode = 2
-text = "Transform:"
 
 [node name="GridContainer" type="GridContainer" parent="VBoxContainer/VBoxContainer2"]
 layout_mode = 2

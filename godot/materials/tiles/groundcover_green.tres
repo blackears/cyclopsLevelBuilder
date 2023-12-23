@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bnqngqr4i8mgw"]
+
+[ext_resource type="Texture2D" uid="uid://b7g6os6xwbuj3" path="res://art/tiles/groundcover_green.png" id="1_g2ing"]
+
+[resource]
+albedo_texture = ExtResource("1_g2ing")
+uv1_scale = Vector3(2, 2, 2)

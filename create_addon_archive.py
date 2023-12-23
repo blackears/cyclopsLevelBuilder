@@ -31,7 +31,7 @@ import platform
 
 projectName = 'cyclops_level_builder'
 version="_1_0_2"
-extensions = [".gd", ".tres", ".tscn", ".gdshaderinc", ".glsl", ".cfg", ".txt", ".md", ".glb", ".gltf", ".jpg", ".jpeg", ".png", ".exr", ".bin"]
+extensions = [".gd", ".tres", ".tscn", ".gdshader", ".gdshaderinc", ".glsl", ".cfg", ".txt", ".md", ".glb", ".gltf", ".jpg", ".jpeg", ".png", ".exr", ".bin"]
 
 
 def copy_files_with_suffix(source_dir, dest_dir, suffixes):
