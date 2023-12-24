@@ -687,6 +687,8 @@ func calc_lightmap_uvs():
 
 	var xform:Transform2D = Transform2D.IDENTITY
 	xform = xform.scaled(tree.bounds.size)
+	if is_zero_approx(xform.determinant()):
+		return		
 	var xform_inv = xform.affine_inverse()
 
 	for ft in tree.face_list:
