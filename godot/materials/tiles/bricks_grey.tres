@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bc2ssvx57158d"]
+
+[ext_resource type="Texture2D" uid="uid://dq1hsv5vjg8hd" path="res://art/tiles/bricks_grey.png" id="1_tukol"]
+
+[resource]
+albedo_texture = ExtResource("1_tukol")

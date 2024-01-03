@@ -3,21 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b7g6os6xwbuj3"
-path.s3tc="res://.godot/imported/groundcover_green.png-5ee97529a73c25e5d28736c4acb5581f.s3tc.ctex"
-path.etc2="res://.godot/imported/groundcover_green.png-5ee97529a73c25e5d28736c4acb5581f.etc2.ctex"
+path="res://.godot/imported/groundcover_green.png-5ee97529a73c25e5d28736c4acb5581f.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc", "etc2_astc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://art/tiles/groundcover_green.png"
-dest_files=["res://.godot/imported/groundcover_green.png-5ee97529a73c25e5d28736c4acb5581f.s3tc.ctex", "res://.godot/imported/groundcover_green.png-5ee97529a73c25e5d28736c4acb5581f.etc2.ctex"]
+dest_files=["res://.godot/imported/groundcover_green.png-5ee97529a73c25e5d28736c4acb5581f.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1

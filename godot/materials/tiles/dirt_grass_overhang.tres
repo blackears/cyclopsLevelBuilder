@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bf8d1hb4xidtm"]
+
+[ext_resource type="Texture2D" uid="uid://cjffo83qfq4ed" path="res://art/tiles/dirt_grass_overhang.png" id="1_mi64f"]
+
+[resource]
+albedo_texture = ExtResource("1_mi64f")

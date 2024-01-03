@@ -60,6 +60,7 @@ func _on_bn_create_block_pressed():
 	cmd.bounds = bounds
 	var scene_root = editor_plugin.get_editor_interface().get_edited_scene_root()
 	cmd.blocks_root_path = scene_root.get_path()
+	cmd.block_name = GeneralUtil.find_unique_name(scene_root, "block")
 	
 	var undo:EditorUndoRedoManager = editor_plugin.get_undo_redo()
 	cmd.add_to_undo_manager(undo)

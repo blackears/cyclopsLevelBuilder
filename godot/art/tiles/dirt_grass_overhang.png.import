@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://4j6nx7blefu0"
-path="res://.godot/imported/block_brown.png-83e527db6796bfdc470404e0e2b3e488.ctex"
+uid="uid://cjffo83qfq4ed"
+path="res://.godot/imported/dirt_grass_overhang.png-cd6047c4067ff1e107fff627b44f8b6d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/tiles/block_brown.png"
-dest_files=["res://.godot/imported/block_brown.png-83e527db6796bfdc470404e0e2b3e488.ctex"]
+source_file="res://art/tiles/dirt_grass_overhang.png"
+dest_files=["res://.godot/imported/dirt_grass_overhang.png-cd6047c4067ff1e107fff627b44f8b6d.ctex"]
 
 [params]
 

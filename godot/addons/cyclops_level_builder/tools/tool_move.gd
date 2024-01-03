@@ -46,7 +46,8 @@ var drag_select_to_pos:Vector2
 var mouse_hover_pos:Vector2
 
 #Keep a copy of move command here while we are building it
-var cmd_move_blocks:CommandMoveBlocks
+#var cmd_move_blocks:CommandMoveBlocks
+var cmd_xform_blocks:CommandTransformBlocks
 
 var base_points:PackedVector3Array
 
@@ -125,11 +126,11 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 				tool_state = ToolState.MOVE_BLOCK
 				#print("Move block")
 				
-				cmd_move_blocks = CommandMoveBlocks.new()
-				cmd_move_blocks.builder = builder
-				cmd_move_blocks.lock_uvs = builder.lock_uvs
+				cmd_xform_blocks = CommandTransformBlocks.new()
+				cmd_xform_blocks.builder = builder
+				cmd_xform_blocks.lock_uvs = builder.lock_uvs
 				for child in sel_blocks:
-					cmd_move_blocks.add_block(child.get_path())
+					cmd_xform_blocks.add_block(child.get_path())
 
 			return
 
@@ -157,11 +158,11 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 			
 			tool_state = ToolState.MOVE_BLOCK
 			
-			cmd_move_blocks = CommandMoveBlocks.new()
-			cmd_move_blocks.builder = builder
-			cmd_move_blocks.lock_uvs = builder.lock_uvs
+			cmd_xform_blocks = CommandTransformBlocks.new()
+			cmd_xform_blocks.builder = builder
+			cmd_xform_blocks.lock_uvs = builder.lock_uvs
 			for child in builder.get_selected_blocks():
-				cmd_move_blocks.add_block(child.get_path())
+				cmd_xform_blocks.add_block(child.get_path())
 			
 			return
 	
@@ -178,9 +179,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		if e.keycode == KEY_ESCAPE:
 			if e.is_pressed():
 				tool_state = ToolState.NONE
-				if cmd_move_blocks:
-					cmd_move_blocks.undo_it()
-					cmd_move_blocks = null
+				if cmd_xform_blocks:
+					cmd_xform_blocks.undo_it()
+					cmd_xform_blocks = null
 					
 			return true
 
@@ -192,11 +193,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #				block_drag_p0 = origin + dir * 20
 				block_drag_p0 = Vector3.INF
 				
-				cmd_move_blocks = CommandMoveBlocks.new()
-				cmd_move_blocks.builder = builder
-				cmd_move_blocks.lock_uvs = builder.lock_uvs
+				cmd_xform_blocks = CommandTransformBlocks.new()
+				cmd_xform_blocks.builder = builder
+				cmd_xform_blocks.lock_uvs = builder.lock_uvs
 				for child in builder.get_selected_blocks():
-					cmd_move_blocks.add_block(child.get_path())
+					cmd_xform_blocks.add_block(child.get_path())
 					
 			return true
 
@@ -257,7 +258,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 				elif tool_state == ToolState.MOVE_BLOCK_CLICK:
 					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-					cmd_move_blocks.add_to_undo_manager(undo)
+					cmd_xform_blocks.add_to_undo_manager(undo)
 					
 					tool_state = ToolState.NONE
 				
@@ -288,7 +289,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 					#Finish moving blocks
 					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-					cmd_move_blocks.add_to_undo_manager(undo)
+					cmd_xform_blocks.add_to_undo_manager(undo)
 					
 					tool_state = ToolState.NONE
 
@@ -319,9 +320,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			if e.is_pressed():
 				#Right click cancel
 				tool_state = ToolState.NONE
-				if cmd_move_blocks:
-					cmd_move_blocks.undo_it()
-					cmd_move_blocks = null
+				if cmd_xform_blocks:
+					cmd_xform_blocks.undo_it()
+					cmd_xform_blocks = null
 			
 	elif event is InputEventMouseMotion:
 		var e:InputEventMouseMotion = event
@@ -369,9 +370,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			#block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
 			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur)
 			
-			cmd_move_blocks.move_offset = block_drag_cur - block_drag_p0
+			#cmd_move_blocks.move_offset = block_drag_cur - block_drag_p0
+			cmd_xform_blocks.transform = Transform3D(Basis.IDENTITY, block_drag_cur - block_drag_p0)
 			#print("cmd_move_blocks.move_offset %s" % cmd_move_blocks.move_offset)
-			cmd_move_blocks.do_it()
+			cmd_xform_blocks.do_it()
 
 			return true
 
