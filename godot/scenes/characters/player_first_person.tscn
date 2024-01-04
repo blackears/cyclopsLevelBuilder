@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://c804hmr0770v5"]
+
+[ext_resource type="Script" path="res://scenes/characters/player_first_person.gd" id="1_v2ava"]
+[ext_resource type="PackedScene" uid="uid://bdu3fyn51c0nk" path="res://art/character/person.glb" id="2_8ay2r"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oh1v0"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_xpbtf"]
+radius = 0.363355
+
+[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_ss22k"]
+length = 0.470337
+
+[node name="PlayerFirstPerson" type="CharacterBody3D"]
+script = ExtResource("1_v2ava")
+
+[node name="person" parent="." instance=ExtResource("2_8ay2r")]
+
+[node name="Cube" parent="person" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_oh1v0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.13349, 0)
+shape = SubResource("SphereShape3D_xpbtf")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.459879, 0)
+shape = SubResource("SeparationRayShape3D_ss22k")
+
+[editable path="person"]

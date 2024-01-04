@@ -22,43 +22,51 @@
 # SOFTWARE.
 
 extends CharacterBody3D
+class_name PlayerFirstPerson
 
-
-const SPEED = 5.0
-const TURN_SPEED = 2.0
-const JUMP_VELOCITY = 4.5
+var drag:float = 1.0
+var friction:float = 4.0
+var impulse:float = 5.0
+var max_speed:float = 15.0
+var jump_impulse:float = 4.5
+var rotation_speed:float = 4
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 
 func _physics_process(delta):
-	# Add the gravity.
-	if not is_on_floor():
-		velocity.y -= gravity * delta
-
-	# Handle Jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
-	var x_axis:float = Input.get_axis("ui_right", "ui_left")
-	var y_axis:float = Input.get_axis("ui_down", "ui_up")
-	
-	var basis:Basis = transform.basis
-	basis = basis.rotated(Vector3.UP, delta * x_axis * TURN_SPEED)
-	transform.basis = basis
-	
-	var direction = basis.z * y_axis
-	
-#	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-#	var direction = (transform.basis * Vector3(-input_dir.x, 0, -input_dir.y)).normalized()
-	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+	#var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var axis_x:float = Input.get_axis("ui_left", "ui_right")
+	var axis_y:float = Input.get_axis("ui_up", "ui_down")
+
+	var move_impulse:Vector3 = -global_transform.basis.z * axis_y * impulse
+#	velocity -= global_transform.basis.z * axis_y * impulse
+	if Input.is_key_pressed(KEY_SHIFT):
+#		velocity -= global_transform.basis.x * axis_x * impulse
+		move_impulse -= global_transform.basis.x * axis_x * impulse
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+		var basis:Basis = global_transform.basis
+		basis = basis.rotated(Vector3.UP, -delta * rotation_speed * axis_x)
+		global_transform = Transform3D(basis, global_position)
+	
+	if (velocity + move_impulse).length() < max_speed:
+		velocity += move_impulse
+	
+	velocity -= velocity * drag * delta
+
+	# Add the gravity.
+	if not is_on_floor():
+		velocity.y -= gravity * delta
+	else:
+		var tangent:Vector3 = velocity - velocity.project(Vector3.UP)
+		velocity -= tangent * delta * friction
+
+	# Handle jump.
+	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+		velocity.y += jump_impulse
 
 	move_and_slide()
