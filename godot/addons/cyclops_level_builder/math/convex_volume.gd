@@ -821,6 +821,8 @@ func append_mesh_outline(mesh:ImmediateMesh, viewport_camera:Camera3D, local_to_
 
 	var segments:PackedVector2Array
 	
+	var view_plane:Plane = Plane(viewport_camera.global_basis.z, viewport_camera.global_position)
+	
 	for edge in edges:
 		var has_front:bool = false
 		var has_back:bool = false
@@ -845,6 +847,18 @@ func append_mesh_outline(mesh:ImmediateMesh, viewport_camera:Camera3D, local_to_
 			var v1:VertexInfo = vertices[edge.end_index]
 			var p0_world:Vector3 = local_to_world * v0.point
 			var p1_world:Vector3 = local_to_world * v1.point
+			
+			var p0_behind:bool = view_plane.is_point_over(p0_world)
+			var p1_behind:bool = view_plane.is_point_over(p1_world)
+			
+			if p0_behind && p1_behind:
+				continue
+			
+			if p0_behind:
+				p0_world = view_plane.intersects_segment(p0_world, p1_world)
+			elif p1_behind:
+				p1_world = view_plane.intersects_segment(p0_world, p1_world)
+			
 			var p0_screen:Vector2 = viewport_camera.unproject_position(p0_world)
 			var p1_screen:Vector2 = viewport_camera.unproject_position(p1_world)
 			segments.append(p0_screen)
