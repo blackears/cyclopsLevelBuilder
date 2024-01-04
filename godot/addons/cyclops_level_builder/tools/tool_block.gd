@@ -42,6 +42,8 @@ var block_drag_p2:Vector3
 
 var drag_floor_normal:Vector3
 
+var settings:ToolBlockSettings = ToolBlockSettings.new()
+
 #Keep a copy of move command here while we are building it
 var cmd_move_face:CommandMoveFacePlanar
 var move_face_origin:Vector3 #Kep track of the origin when moving a face
@@ -52,6 +54,13 @@ var mouse_hover_pos:Vector2
 
 func _get_tool_id()->String:
 	return TOOL_ID
+
+func _get_tool_properties_editor()->Control:
+	var ed:ToolBlockSettingsEditor = preload("res://addons/cyclops_level_builder/tools/tool_block_settings_editor.tscn").instantiate()
+	
+	ed.settings = settings
+	
+	return ed
 
 func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 	var blocks_root:Node = builder.get_block_add_parent()
@@ -200,7 +209,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
 					if angle_with_base < drag_angle_limit || angle_with_base > PI - drag_angle_limit:
-						block_drag_cur = block_drag_p1 + drag_floor_normal
+						block_drag_cur = block_drag_p1 + drag_floor_normal * settings.default_block_height
 						
 						create_block()
 						
@@ -299,9 +308,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		elif tool_state == ToolState.BLOCK_HEIGHT:
 			block_drag_cur = MathUtil.closest_point_on_line(origin, dir, block_drag_p1, drag_floor_normal)
 			
-			#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
-			#block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
-
 			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur)
 
 			return true
@@ -309,8 +315,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		elif tool_state == ToolState.MOVE_FACE:			
 			var drag_to:Vector3 = MathUtil.closest_point_on_line(origin, dir, move_face_origin, cmd_move_face.move_dir_normal)
 			#print("move_face_origin %s norm %s" % [move_face_origin, cmd_move_face.move_dir_normal])
-			#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
-			#drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
 
 			drag_to = builder.get_snapping_manager().snap_point(drag_to)
 			

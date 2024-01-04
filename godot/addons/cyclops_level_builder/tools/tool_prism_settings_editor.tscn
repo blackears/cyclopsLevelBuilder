@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7vyy46r72h0d"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_prism_settings_editor.gd" id="1_rbt26"]
+[ext_resource type="PackedScene" uid="uid://diibmlqy1mpqb" path="res://addons/cyclops_level_builder/controls/numeric_line_edit.tscn" id="2_aysnj"]
+
+[node name="ToolPrismSettings" type="PanelContainer"]
+offset_right = 315.0
+offset_bottom = 70.0
+script = ExtResource("1_rbt26")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Default Block Height"
+
+[node name="default_block_height" parent="GridContainer" instance=ExtResource("2_aysnj")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[connection signal="value_changed" from="GridContainer/default_block_height" to="." method="_on_default_block_height_value_changed"]

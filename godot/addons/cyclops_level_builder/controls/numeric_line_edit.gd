@@ -37,6 +37,9 @@ signal value_changed(value:float)
 		dirty = true
 
 @export var snap_size:float = 1
+
+@export var disabled:bool = false
+
 var dirty:bool = true
 
 enum State{ IDLE, READY, DRAGGING, TEXT_EDIT }
@@ -46,8 +49,6 @@ var mouse_down_pos:Vector2
 var drag_start_radius:float = 4
 var value_start_drag:float
 
-#@onready var line_input:LineEdit = %line_input
-#@onready var line_display:Label = %line_display
 var line_input:LineEdit
 var line_display:Label
 
@@ -70,8 +71,6 @@ func _process(delta):
 			line_input.text = format_number(value)
 			line_display.text = format_number(value)
 		
-#		$HBoxContainer/LineEdit.text = format_number(value)
-		#$HBoxContainer/Label.text = format_number(value)
 		dirty = false
 	
 func format_number(val:float)->String:

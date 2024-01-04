@@ -36,6 +36,15 @@ var block_drag_cur:Vector3
 var drag_offset:Vector3
 var preview_point:Vector3
 
+var settings:ToolPrismSettings = ToolPrismSettings.new()
+
+func _get_tool_properties_editor()->Control:
+	var ed:ToolPrismSettingsEditor = preload("res://addons/cyclops_level_builder/tools/tool_prism_settings_editor.tscn").instantiate()
+	
+	ed.settings = settings
+	
+	return ed
+
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
 
@@ -76,8 +85,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var angle_with_base:float = acos(floor_normal.dot(camera_dir))
 					var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
 					if angle_with_base < drag_angle_limit || angle_with_base > PI - drag_angle_limit:
-						drag_offset = floor_normal
-						block_drag_cur = base_points[0] + floor_normal
+						drag_offset = floor_normal * settings.default_block_height
+						block_drag_cur = base_points[0] + drag_offset
 						
 						create_block()
 						
@@ -116,7 +125,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					if result:
 						floor_normal = result.get_world_normal()
 
-#						var p:Vector3 = MathUtil.snap_to_grid(result.get_world_position(), grid_step_size)
 						var p:Vector3 = builder.get_snapping_manager().snap_point(result.get_world_position())
 
 						base_points.append(p)
@@ -145,8 +153,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 							var angle_with_base:float = acos(floor_normal.dot(camera_dir))
 							var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
 							if angle_with_base < drag_angle_limit || angle_with_base > PI - drag_angle_limit:
-								drag_offset = floor_normal
-								block_drag_cur = base_points[0] + floor_normal
+								drag_offset = floor_normal * settings.default_block_height
+								block_drag_cur = base_points[0] + drag_offset
 								
 								create_block()
 								
@@ -157,33 +165,14 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						return true
 
 					var p_isect:Vector3 = MathUtil.intersect_plane(origin, dir, base_points[0], floor_normal)
-#					var p:Vector3 = MathUtil.snap_to_grid(p_isect, grid_step_size)
 					var p:Vector3 = builder.get_snapping_manager().snap_point(p_isect)
-					#var p:Vector3 = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
 					base_points.append(p)
 
-					var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)					
+					var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
 					return true
 					
 				elif tool_state == ToolState.DRAG_HEIGHT:
 					create_block()
-					
-#					var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
-#					drag_offset = block_drag_cur - base_points[0]
-#
-#					var cmd:CommandAddPrism = CommandAddPrism.new()
-#					cmd.builder = builder
-#					cmd.block_name = GeneralUtil.find_unique_name(blocks_root, "Block_")
-#					cmd.blocks_root_path = blocks_root.get_path()
-#					cmd.base_polygon = bounding_points
-#					#cmd.local_transform = local_xform
-#					cmd.extrude = drag_offset
-#					cmd.uv_transform = builder.tool_uv_transform
-#					cmd.material_path = builder.tool_material_path
-#
-#					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-#
-#					cmd.add_to_undo_manager(undo)
 					
 					tool_state = ToolState.READY
 					return true
@@ -215,23 +204,16 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 		if tool_state == ToolState.BASE_POINTS:
 			var p_isect:Vector3 = MathUtil.intersect_plane(origin, dir, base_points[0], floor_normal)
-#			preview_point = MathUtil.snap_to_grid(p_isect, grid_step_size)
 			preview_point = builder.get_snapping_manager().snap_point(p_isect)
-			#preview_point = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
 			
 
 		elif tool_state == ToolState.DRAG_HEIGHT:
 			block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, base_points[0], floor_normal)
 			
-#			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
 			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur)
-			#block_drag_cur = to_local(block_drag_cur, blocks_root.global_transform.inverse(), grid_step_size)
 			
 			drag_offset = block_drag_cur - base_points[0]
 			var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
-			
-#			global_scene.clear_tool_mesh()
-#			global_scene.draw_prism(bounding_points, drag_offset, global_scene.tool_material)
 
 			return true
 
