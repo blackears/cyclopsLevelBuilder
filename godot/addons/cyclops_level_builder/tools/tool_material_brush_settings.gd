@@ -37,6 +37,26 @@ class_name ToolMaterialBrushSettings
 
 @export var visibility:bool = true
 
+func load_from_cache(cache:Dictionary):
+	paint_materials = cache.get("paint_materials", true)
+	paint_color = cache.get("paint_color", false)
+	paint_visibility = cache.get("paint_visibility", false)
+	individual_faces = cache.get("individual_faces", false)
+	erase_material = cache.get("erase_material", false)
+	color = cache.get("color", Color.WHITE)
+	visibility = cache.get("visibility", false)
+	
+func save_to_cache():
+	return {
+		"paint_materials": paint_materials,
+		"paint_color": paint_color,
+		"paint_visibility": paint_visibility,
+		"individual_faces": individual_faces,
+		"erase_material": erase_material,
+		"color": color,
+		"visibility": visibility,
+	}
+
 
 
 

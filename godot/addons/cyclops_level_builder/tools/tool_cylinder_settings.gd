@@ -28,3 +28,12 @@ class_name ToolCylinderSettings
 @export var segments:int = 16
 @export var tube:bool = false
 
+func load_from_cache(cache:Dictionary):
+	segments = cache.get("segments", 16)
+	tube = cache.get("tube", false)
+	
+func save_to_cache():
+	return {
+		"segments": segments,
+		"tube": tube,
+	}

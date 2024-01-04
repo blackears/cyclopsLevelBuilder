@@ -49,6 +49,14 @@ func _activate(builder:CyclopsLevelBuilder):
 	builder.mode = CyclopsLevelBuilder.Mode.OBJECT
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
+	
+	var cache:Dictionary = builder.get_tool_cache(TOOL_ID)
+	settings.load_from_cache(cache)
+
+func _deactivate():
+	var cache:Dictionary = settings.save_to_cache()
+	builder.set_tool_cache(TOOL_ID, cache)
+	
 
 func _get_tool_properties_editor()->Control:
 	var res_insp:ResourceInspector = preload("res://addons/cyclops_level_builder/controls/resource_inspector/resource_inspector.tscn").instantiate()

@@ -27,3 +27,11 @@ class_name ToolBlockSettings
 
 
 @export var default_block_height:float = 1
+
+func load_from_cache(cache:Dictionary):
+	default_block_height = cache.get("default_block_height", 1)
+	
+func save_to_cache():
+	return {
+		"default_block_height": default_block_height
+	}

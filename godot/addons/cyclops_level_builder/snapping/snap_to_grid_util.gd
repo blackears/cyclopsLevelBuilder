@@ -44,6 +44,22 @@ class_name SnapToGridUtil
 		
 var grid_transform_inv:Transform3D = Transform3D.IDENTITY
 
+func load_from_cache(cache:Dictionary):
+	unit_size = cache.get("unit_size", 1)
+	use_subdivisions = cache.get("use_subdivisions", false)
+	grid_subdivisions = cache.get("grid_subdivisions", 10)
+	power_of_two_scale = cache.get("power_of_two_scale", 0)
+	grid_transform = cache.get("grid_transform", Transform3D.IDENTITY)
+	
+func save_to_cache():
+	return {
+		"unit_size": unit_size,
+		"use_subdivisions": use_subdivisions,
+		"grid_subdivisions": grid_subdivisions,
+		"power_of_two_scale": power_of_two_scale,
+		"grid_transform": grid_transform,
+	}
+
 #Point is in world space
 func snap_point(point:Vector3)->Vector3:
 	

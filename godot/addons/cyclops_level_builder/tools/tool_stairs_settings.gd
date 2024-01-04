@@ -29,3 +29,15 @@ class_name ToolStairsSettings
 @export var step_depth:float = .5
 @export var direction:int = 0
 
+func load_from_cache(cache:Dictionary):
+	step_height = cache.get("step_height", .25)
+	step_depth = cache.get("step_depth", .5)
+	direction = cache.get("direction", 0)
+	
+func save_to_cache():
+	return {
+		"step_height": step_height,
+		"step_depth": step_depth,
+		"direction": direction,
+	}
+

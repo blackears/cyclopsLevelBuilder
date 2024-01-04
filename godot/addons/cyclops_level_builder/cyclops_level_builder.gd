@@ -36,8 +36,8 @@ var config:CyclopsConfig = preload("res://addons/cyclops_level_builder/data/conf
 
 var logger:Logger = Logger.new()
 
-var material_dock:Control
-var convex_face_editor_dock:Control
+var material_dock:MaterialPaletteViewport
+var convex_face_editor_dock:ConvexFaceEdtiorViewport
 var tool_properties_dock:ToolPropertiesDock
 var snapping_properties_dock:SnappingPropertiesDock
 var cyclops_console_dock:CyclopsConsole
@@ -75,6 +75,8 @@ var edit_mode:EditMode = EditMode.VERTEX
 var display_mode:DisplayMode.Type = DisplayMode.Type.MATERIAL
 
 var cached_viewport_camera:Camera3D
+
+var editor_cache:Dictionary
 
 func get_snapping_manager()->SnappingManager:
 	var mgr:SnappingManager = SnappingManager.new()
@@ -133,6 +135,7 @@ func _enter_tree():
 
 	#Wait until everything is loaded	
 	await get_tree().process_frame
+	
 	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 	global_scene.builder = self
 	
@@ -196,6 +199,7 @@ func get_block_add_parent()->Node:
 		return get_editor_interface().get_edited_scene_root()
 	
 	if nodes[0] is CyclopsBlock:
+		#print("getting parent of ", nodes[0].name)
 		return nodes[0].get_parent()
 	return nodes[0]
 
@@ -297,21 +301,62 @@ func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent):
 
 func _get_state()->Dictionary:
 	var state:Dictionary = {}
+	
+	#print("ed cache ", str(editor_cache))
+	state["editor_cache"] = editor_cache.duplicate()
+	
 	material_dock.save_state(state)
 	convex_face_editor_dock.save_state(state)
 	tool_properties_dock.save_state(state)
 	snapping_properties_dock.save_state(state)
 	cyclops_console_dock.save_state(state)
+	
 	return state
 	
 func _set_state(state):
+	#print("ed set_state ", str(state))
+	
+	editor_cache = state.get("editor_cache", {}).duplicate()
+	
 	material_dock.load_state(state)
 	convex_face_editor_dock.load_state(state)
 	tool_properties_dock.load_state(state)
 	snapping_properties_dock.load_state(state)
 	cyclops_console_dock.load_state(state)
 
+
+func get_tool_cache(tool_id:String):
+	if !editor_cache.has("tool"):
+		return {}
+	
+	if !editor_cache.tool.has(tool_id):
+		return {}
+	
+	return editor_cache.tool[tool_id]
+
+func set_tool_cache(tool_id:String, cache:Dictionary):
+	if !editor_cache.has("tool"):
+		editor_cache["tool"] = {}
+	
+	editor_cache.tool[tool_id] = cache
+
+func get_snapping_cache(tool_id:String):
+	if !editor_cache.has("snapping"):
+		return {}
+	
+	if !editor_cache.snapping.has(tool_id):
+		return {}
+	
+	return editor_cache.snapping[tool_id]
+
+func set_snapping_cache(tool_id:String, cache:Dictionary):
+	if !editor_cache.has("snapping"):
+		editor_cache["snapping"] = {}
+	
+	editor_cache.snapping[tool_id] = cache
+
 func switch_to_tool(_tool:CyclopsTool):
+	
 	if tool:
 		tool._deactivate()
 	

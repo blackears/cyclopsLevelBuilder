@@ -43,17 +43,7 @@ func on_active_node_changed():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	#%grid_size.clear()
-	#%grid_size.add_item("1/16", 0)
-	#%grid_size.add_item("1/8", 1)
-	#%grid_size.add_item("1/4", 2)
-	#%grid_size.add_item("1/2", 3)
-	#%grid_size.add_item("1", 4)
-	#%grid_size.add_item("2", 5)
-	#%grid_size.add_item("4", 6)
-	#%grid_size.add_item("8", 7)
-	#%grid_size.add_item("16", 8)
-	
+
 	%Menu.clear()
 	%Menu.add_action_item(ActionToolDuplicate.new(editor_plugin))
 	%Menu.add_action_item(ActionMergeSelectedBlocks.new(editor_plugin))

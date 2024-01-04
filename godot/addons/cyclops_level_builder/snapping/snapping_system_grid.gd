@@ -26,16 +26,24 @@
 extends CyclopsSnappingSystem
 class_name SnappingSystemGrid
 
+const TOOL_ID:String = "grid"
+
 var snap_to_grid_util:SnapToGridUtil = SnapToGridUtil.new()
 
 func _activate(plugin:CyclopsLevelBuilder):
 	super._activate(plugin)
 	
 	snap_to_grid_util = CyclopsAutoload.calc_snap_to_grid_util()
-	
+
+	var cache:Dictionary = plugin.get_snapping_cache(TOOL_ID)
+	snap_to_grid_util.load_from_cache(cache)
+		
 func _deactivate():
 	super._deactivate()
-		
+
+	var cache:Dictionary = snap_to_grid_util.save_to_cache()
+	plugin.set_snapping_cache(TOOL_ID, cache)
+				
 
 #Point is in world space
 func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type = MoveConstraint.Type.NONE)->Vector3:

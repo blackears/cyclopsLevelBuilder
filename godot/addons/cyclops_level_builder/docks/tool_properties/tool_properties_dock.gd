@@ -46,11 +46,11 @@ func set_editor(control:Control):
 
 func save_state(state:Dictionary):
 	var substate:Dictionary = {}
-	state["tool_properties"] = substate
+	state["tool_properties_dock"] = substate
 	
 
 func load_state(state:Dictionary):
-	if state == null || !state.has("tool_properties"):
+	if state == null || !state.has("tool_properties_dock"):
 		return
 	
-	var substate:Dictionary = state["tool_properties"]
+	var substate:Dictionary = state["tool_properties_dock"]
