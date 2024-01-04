@@ -75,7 +75,7 @@ func do_it():
 
 	for info in added_blocks:
 		
-		var new_xform:Transform3D = info.source_global_transform.translated_local(move_offset)
+		var new_xform:Transform3D = info.source_global_transform.translated(move_offset)
 		info.new_block.global_transform = new_xform
 
 

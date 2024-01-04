@@ -1,6 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://diibmlqy1mpqb"]
+[gd_scene load_steps=5 format=3 uid="uid://diibmlqy1mpqb"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/numeric_line_edit.gd" id="1_u8bpo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o7f15"]
+bg_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+
+[sub_resource type="Theme" id="Theme_cw2vs"]
+Label/styles/normal = SubResource("StyleBoxFlat_o7f15")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8gfnv"]
 content_margin_left = 4.0
@@ -30,6 +36,7 @@ select_all_on_focus = true
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+theme = SubResource("Theme_cw2vs")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_8gfnv")
 text = "0"
 horizontal_alignment = 2
