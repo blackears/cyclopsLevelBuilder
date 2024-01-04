@@ -342,6 +342,30 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 			return true
 
+		elif e.keycode == KEY_A:
+
+			if e.is_pressed():
+				var cmd:CommandSelectFaces = CommandSelectFaces.new()
+				cmd.builder = builder
+				
+				if e.alt_pressed:
+					var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+					for block in sel_blocks:
+						cmd.add_faces(block.get_path(), [])
+						
+				else:
+					var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+					for block in sel_blocks:
+						for f_idx in block.control_mesh.faces.size():
+							cmd.add_face(block.get_path(), f_idx)
+
+				cmd.selection_type = Selection.Type.REPLACE
+
+				if cmd.will_change_anything():
+					var undo:EditorUndoRedoManager = builder.get_undo_redo()
+
+					cmd.add_to_undo_manager(undo)
+					
 		elif e.keycode == KEY_G:
 			
 			if e.is_pressed() && tool_state == ToolState.NONE:

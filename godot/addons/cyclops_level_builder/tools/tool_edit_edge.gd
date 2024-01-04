@@ -306,6 +306,30 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 			return true
 
+		elif e.keycode == KEY_A:
+
+			if e.is_pressed():
+				var cmd:CommandSelectEdges = CommandSelectEdges.new()
+				cmd.builder = builder
+				
+				if e.alt_pressed:
+					var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+					for block in sel_blocks:
+						cmd.add_edges(block.get_path(), [])
+						
+				else:
+					var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+					for block in sel_blocks:
+						for e_idx in block.control_mesh.edges.size():
+							cmd.add_edge(block.get_path(), e_idx)
+
+				cmd.selection_type = Selection.Type.REPLACE
+
+				if cmd.will_change_anything():
+					var undo:EditorUndoRedoManager = builder.get_undo_redo()
+
+					cmd.add_to_undo_manager(undo)
+								
 		elif e.keycode == KEY_G:
 			
 			if e.is_pressed() && tool_state == ToolState.NONE:
@@ -498,17 +522,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				MoveConstraint.Type.PLANE_VIEWPORT:
 					drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, viewport_camera.global_transform.basis.z)
 			
-#			var drag_to:Vector3
-#			if e.alt_pressed:
-#				drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, Vector3.UP)
-#			else:
-#				drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, Vector3.UP)
-			
 			var offset:Vector3 = drag_to - drag_handle_start_pos
-			#offset = MathUtil.snap_to_grid(offset, grid_step_size)
 			offset = builder.get_snapping_manager().snap_point(offset)
 			drag_to = drag_handle_start_pos + offset
-#			drag_handle.p_ref = drag_to
 			
 			cmd_move_edge.move_offset = offset
 			cmd_move_edge.do_it()
