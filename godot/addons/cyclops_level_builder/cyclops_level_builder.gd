@@ -77,6 +77,7 @@ var display_mode:DisplayMode.Type = DisplayMode.Type.MATERIAL
 var cached_viewport_camera:Camera3D
 
 var editor_cache:Dictionary
+var editor_cache_file:String = "editor_cache.json"
 
 func get_snapping_manager()->SnappingManager:
 	var mgr:SnappingManager = SnappingManager.new()
@@ -92,6 +93,13 @@ func _get_plugin_icon()->Texture2D:
 	return preload("res://addons/cyclops_level_builder/art/cyclops.svg")
 
 func _enter_tree():
+	if FileAccess.file_exists(editor_cache_file):
+		#print(">> _enter_tree")
+		var text:String = FileAccess.get_file_as_string(editor_cache_file)
+		#print("load text:", text)
+		editor_cache = JSON.parse_string(text)
+		
+	
 	add_custom_type("CyclopsBlock", "Node3D", preload("nodes/cyclops_block.gd"), preload("nodes/cyclops_blocks_icon.png"))
 	add_custom_type("CyclopsBlocks", "Node3D", preload("nodes/cyclops_blocks.gd"), preload("nodes/cyclops_blocks_icon.png"))
 	add_custom_type("CyclopsConvexBlock", "Node", preload("nodes/cyclops_convex_block.gd"), preload("nodes/cyclops_blocks_icon.png"))
@@ -141,6 +149,45 @@ func _enter_tree():
 	
 	switch_to_snapping_system(SnappingSystemGrid.new())
 	switch_to_tool(ToolBlock.new())
+
+
+func _exit_tree():
+	var file:FileAccess = FileAccess.open(editor_cache_file, FileAccess.WRITE)
+	#var text:String = JSON.stringify(editor_cache, "  ")
+	#print("saving cache:", text)
+	file.store_string(JSON.stringify(editor_cache, "    "))
+	file.close()
+		
+	# Clean-up of the plugin goes here.
+	remove_autoload_singleton(AUTOLOAD_NAME)
+	#remove_autoload_singleton(CYCLOPS_HUD_NAME)
+	
+	remove_custom_type("CyclopsBlock")
+	remove_custom_type("CyclopsBlocks")
+	remove_custom_type("CyclopsConvexBlock")
+	remove_custom_type("CyclopsConvexBlockBody")
+	
+#	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, sticky_toolbar)
+	remove_control_from_bottom_panel(cyclops_console_dock)
+	
+	if activated:
+		remove_control_from_docks(material_dock)
+		remove_control_from_docks(convex_face_editor_dock)
+		remove_control_from_docks(tool_properties_dock)
+		remove_control_from_docks(snapping_properties_dock)
+		remove_control_from_docks(cyclops_console_dock)
+		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
+
+	if upgrade_cyclops_blocks_toolbar.activated:		
+		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, upgrade_cyclops_blocks_toolbar)
+
+	material_dock.queue_free()
+	convex_face_editor_dock.queue_free()
+	tool_properties_dock.queue_free()
+	snapping_properties_dock.queue_free()
+	cyclops_console_dock.queue_free()
+	editor_toolbar.queue_free()
+	upgrade_cyclops_blocks_toolbar.queue_free()
 
 func log(message:String, level:Logger.Level = Logger.Level.ERROR):
 	logger.log(message, level)
@@ -246,38 +293,6 @@ func on_selection_changed():
 	if cached_viewport_camera:
 		tool._draw_tool(cached_viewport_camera)
 
-func _exit_tree():
-	# Clean-up of the plugin goes here.
-	remove_autoload_singleton(AUTOLOAD_NAME)
-	#remove_autoload_singleton(CYCLOPS_HUD_NAME)
-	
-	remove_custom_type("CyclopsBlock")
-	remove_custom_type("CyclopsBlocks")
-	remove_custom_type("CyclopsConvexBlock")
-	remove_custom_type("CyclopsConvexBlockBody")
-	
-#	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, sticky_toolbar)
-	remove_control_from_bottom_panel(cyclops_console_dock)
-	
-	if activated:
-		remove_control_from_docks(material_dock)
-		remove_control_from_docks(convex_face_editor_dock)
-		remove_control_from_docks(tool_properties_dock)
-		remove_control_from_docks(snapping_properties_dock)
-		remove_control_from_docks(cyclops_console_dock)
-		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
-
-	if upgrade_cyclops_blocks_toolbar.activated:		
-		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, upgrade_cyclops_blocks_toolbar)
-
-	material_dock.queue_free()
-	convex_face_editor_dock.queue_free()
-	tool_properties_dock.queue_free()
-	snapping_properties_dock.queue_free()
-	cyclops_console_dock.queue_free()
-	editor_toolbar.queue_free()
-	upgrade_cyclops_blocks_toolbar.queue_free()
-
 func _handles(object:Object):
 #	return object is CyclopsBlocks or object is CyclopsConvexBlock
 	return object is CyclopsBlock or object is CyclopsBlocks or always_on
@@ -286,7 +301,6 @@ func _forward_3d_draw_over_viewport(viewport_control:Control):
 	var global_scene:CyclopsGlobalScene = get_global_scene()
 	global_scene.draw_over_viewport(viewport_control)
 	#Draw on top of viweport here
-	pass
 
 func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent):
 	#print("plugin: " + event.as_text())
@@ -303,7 +317,7 @@ func _get_state()->Dictionary:
 	var state:Dictionary = {}
 	
 	#print("ed cache ", str(editor_cache))
-	state["editor_cache"] = editor_cache.duplicate()
+	#state["editor_cache"] = editor_cache.duplicate()
 	
 	material_dock.save_state(state)
 	convex_face_editor_dock.save_state(state)
@@ -316,7 +330,7 @@ func _get_state()->Dictionary:
 func _set_state(state):
 	#print("ed set_state ", str(state))
 	
-	editor_cache = state.get("editor_cache", {}).duplicate()
+	#editor_cache = state.get("editor_cache", {}).duplicate()
 	
 	material_dock.load_state(state)
 	convex_face_editor_dock.load_state(state)
@@ -356,6 +370,7 @@ func set_snapping_cache(tool_id:String, cache:Dictionary):
 	editor_cache.snapping[tool_id] = cache
 
 func switch_to_tool(_tool:CyclopsTool):
+	print(">> switch to tool")
 	
 	if tool:
 		tool._deactivate()
