@@ -155,7 +155,7 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 			#Behind camera
 			continue
 		
-		#print("h pos %s ray orig %s ray dir %s offset %s para %s dist %s perp %s" % [h.position, ray_origin, ray_dir, offset, parallel, dist, perp])
+#		print("h pos %s ray orig %s ray dir %s offset %s para %s dist %s" % [h.position, pick_origin, pick_dir, offset, parallel, dist])
 		if dist >= best_dist:
 			continue
 		
@@ -260,6 +260,7 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 #					drag_handle_start_pos = handle.p_ref
 		drag_handle_start_pos = res.position
 		tool_state = ToolState.DRAGGING
+		#print("drag habdle start pos ", drag_handle_start_pos)
 
 		cmd_move_edge = CommandMoveEdges.new()
 		cmd_move_edge.builder = builder
@@ -524,7 +525,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			var offset:Vector3 = drag_to - drag_handle_start_pos
 			offset = builder.get_snapping_manager().snap_point(offset)
-			drag_to = drag_handle_start_pos + offset
+			#drag_to = drag_handle_start_pos + offset
 			
 			cmd_move_edge.move_offset = offset
 			cmd_move_edge.do_it()

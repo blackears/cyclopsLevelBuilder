@@ -441,6 +441,9 @@ static func get_convex_hull_points_from_planes(planes:Array[Plane])->Array[Vecto
 	return points
 
 static func dist_to_segment_squared_2d(point:Vector2, seg_start:Vector2, seg_end:Vector2)->float:
+	if seg_start.is_equal_approx(seg_end):
+		return point.distance_squared_to(seg_start)
+	
 	var dist_sq_p0:float = point.distance_squared_to(seg_start)
 	var dist_sq_p1:float = point.distance_squared_to(seg_end)
 	var seg_span:Vector2 = seg_end - seg_start

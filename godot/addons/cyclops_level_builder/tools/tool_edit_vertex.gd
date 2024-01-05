@@ -123,6 +123,7 @@ func setup_tool():
 
 
 func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:float)->HandleVertex:
+#	print("pick radius ", radius)
 	var best_dist:float = INF
 	var best_handle:HandleVertex = null
 	
