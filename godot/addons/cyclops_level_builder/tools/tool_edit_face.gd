@@ -32,7 +32,7 @@ var handles:Array[HandleFace] = []
 enum ToolState { NONE, READY, DRAGGING, MOVE_HANDLES_CLICK, DRAG_SELECTION }
 var tool_state:ToolState = ToolState.NONE
 
-var drag_handle:HandleFace
+#var drag_handle:HandleFace
 var drag_mouse_start_pos:Vector2
 var drag_handle_start_pos:Vector3
 			
@@ -290,7 +290,7 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 		#print("pick handle %s" % res.handle)
 		
 		var handle:HandleFace = res.handle
-		drag_handle = handle
+		#drag_handle = handle
 		drag_handle_start_pos = res.position
 		#print("drag_handle_start_pos %s" % drag_handle_start_pos)
 		tool_state = ToolState.DRAGGING

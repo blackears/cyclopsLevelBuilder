@@ -370,7 +370,7 @@ func set_snapping_cache(tool_id:String, cache:Dictionary):
 	editor_cache.snapping[tool_id] = cache
 
 func switch_to_tool(_tool:CyclopsTool):
-	print(">> switch to tool")
+	#print(">> switch to tool")
 	
 	if tool:
 		tool._deactivate()

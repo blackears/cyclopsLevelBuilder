@@ -37,7 +37,7 @@ var move_constraint:MoveConstraint.Type = MoveConstraint.Type.NONE
 
 #var mouse_hover_pos:Vector2
 
-var drag_handle:HandleVertex
+#var drag_handle:HandleVertex
 var drag_mouse_start_pos:Vector2
 var drag_handle_start_pos:Vector3
 var added_point_pos:Vector3
@@ -96,7 +96,7 @@ func on_block_changed():
 	
 func setup_tool():
 	handles = []
-#	print("setup_tool")
+	#print("setup_tool")
 
 	for block in watched_blocks:
 		block.mesh_changed.disconnect(on_block_changed)
@@ -236,7 +236,7 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 	var handle:HandleVertex = pick_closest_handle(viewport_camera, drag_mouse_start_pos, builder.handle_screen_radius)
 
 	if handle:
-		drag_handle = handle
+		#drag_handle = handle
 		drag_handle_start_pos = handle.position
 		tool_state = ToolState.DRAGGING
 
@@ -283,7 +283,6 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 	drag_select_start_pos = e.position
 	drag_select_to_pos = e.position
 
-	
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
 	var gui_result = super._gui_input(viewport_camera, event)
@@ -554,7 +553,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			#drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
 			drag_to = builder.get_snapping_manager().snap_point(drag_to)
-			drag_handle.position = drag_to
+			#drag_handle.position = drag_to
 			
 			cmd_move_vertex.move_offset = drag_to - drag_handle_start_pos
 			cmd_move_vertex.do_it()
