@@ -40,7 +40,7 @@ var blocks_to_move:Array[NodePath]
 var tracked_block_data:Array[TrackedInfo]
 
 func _init():
-	command_name = "Transform blocks"
+	command_name = "Transform vertices"
 
 #Add blocks to be moved here
 func add_block(block_path:NodePath):

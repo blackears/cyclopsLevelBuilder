@@ -49,15 +49,23 @@ func load_from_cache(cache:Dictionary):
 	use_subdivisions = cache.get("use_subdivisions", false)
 	grid_subdivisions = cache.get("grid_subdivisions", 10)
 	power_of_two_scale = cache.get("power_of_two_scale", 0)
-	grid_transform = cache.get("grid_transform", Transform3D.IDENTITY)
+	#print("load grid_transform before")
+	grid_transform = SerialUtil.load_cache_transform_3d(cache.get("grid_transform"), Transform3D.IDENTITY)
+	#print("load grid_transform after ")
+	
+	if is_zero_approx(grid_transform.basis.determinant()):
+		#print("replace")
+		grid_transform = Transform3D.IDENTITY
+	#grid_transform = cache.get("grid_transform", Transform3D.IDENTITY)
 	
 func save_to_cache():
+	#print("save SnapToGridUtil")
 	return {
 		"unit_size": unit_size,
 		"use_subdivisions": use_subdivisions,
 		"grid_subdivisions": grid_subdivisions,
 		"power_of_two_scale": power_of_two_scale,
-		"grid_transform": grid_transform,
+		"grid_transform": SerialUtil.save_cache_transform_3d(grid_transform),
 	}
 
 #Point is in world space
