@@ -472,29 +472,45 @@ class Segment2d extends RefCounted:
 	func _to_string():
 		return "[%s %s]" % [p0, p1]
 		
-static func extract_loop_2d(seg_stack:Array[Segment2d])->PackedVector2Array:
+static func extract_loop_2d(seg_stack:Array[Segment2d])->Loop2D:
 	var segs_sorted:Array[Segment2d] = []
-	var prev_seg = seg_stack.pop_back()
-	segs_sorted.append(prev_seg)
+	var seg_tail = seg_stack.pop_back()
+	segs_sorted.append(seg_tail)
+	var seg_head = seg_tail
 	
 	while !seg_stack.is_empty():
 		var found_seg:bool = false
 		for s_idx in seg_stack.size():
 			var cur_seg:Segment2d = seg_stack[s_idx]
 			
-			if cur_seg.p0.is_equal_approx(prev_seg.p1):
-#				print("matching %s with %s" % [prev_seg, cur_seg])
+			if cur_seg.p0.is_equal_approx(seg_tail.p1):
+				#print("matching %s with %s" % [seg_tail, cur_seg])
 				segs_sorted.append(cur_seg)
 				seg_stack.remove_at(s_idx)
-				prev_seg = cur_seg
+				seg_tail = cur_seg
 				found_seg = true
 				break
-			elif cur_seg.p1.is_equal_approx(prev_seg.p1):
-#				print("matching %s with %s" % [prev_seg, cur_seg])
+			elif cur_seg.p1.is_equal_approx(seg_tail.p1):
+				#print("matching %s with %s" % [seg_tail, cur_seg])
 				cur_seg = cur_seg.reverse()
 				segs_sorted.append(cur_seg)
 				seg_stack.remove_at(s_idx)
-				prev_seg = cur_seg
+				seg_tail = cur_seg
+				found_seg = true
+				break
+			elif cur_seg.p1.is_equal_approx(seg_head.p0):
+				#print("matching %s with %s" % [seg_head, cur_seg])
+				segs_sorted.insert(0, cur_seg)
+				seg_stack.remove_at(s_idx)
+				seg_head = cur_seg
+				found_seg = true
+				break
+			elif cur_seg.p0.is_equal_approx(seg_head.p0):
+				#print("matching %s with %s" % [seg_head, cur_seg])
+				cur_seg = cur_seg.reverse()
+				segs_sorted.insert(0, cur_seg)
+				seg_stack.remove_at(s_idx)
+				seg_head = cur_seg
 				found_seg = true
 				break
 
@@ -502,20 +518,27 @@ static func extract_loop_2d(seg_stack:Array[Segment2d])->PackedVector2Array:
 #			push_warning("loop not continuous")
 			break
 
-#	print("segs_sorted %s" % str(segs_sorted))
+	#print("segs_sorted %s" % str(segs_sorted))
 	
-	var result:PackedVector2Array
+	var result:Loop2D = Loop2D.new()
+	result.closed = true
 	for s in segs_sorted:
-		result.append(s.p0)
+		result.points.append(s.p0)
 	
-	if face_area_x2_2d(result) < 0:
+	if seg_head.p0 != seg_tail.p1:
+		result.points.append(seg_tail.p1)
+		result.closed = false
+	
+	if face_area_x2_2d(result.points) < 0:
 		result.reverse()
+
+	#print("loop %s" % str(result))
 		
 	return result
 	
-static func get_loops_from_segments_2d(segments:PackedVector2Array)->Array[PackedVector2Array]:
+static func get_loops_from_segments_2d(segments:PackedVector2Array)->Array[Loop2D]:
 	#print("segments %s" % segments)
-	var loops:Array[PackedVector2Array] = []
+	var loops:Array[Loop2D] = []
 
 	var seg_stack:Array[Segment2d] = []
 	for i in range(0, segments.size(), 2):
@@ -524,10 +547,10 @@ static func get_loops_from_segments_2d(segments:PackedVector2Array)->Array[Packe
 #	print("segs %s" % str(seg_stack))
 	
 	while !seg_stack.is_empty():
-		var loop:PackedVector2Array = extract_loop_2d(seg_stack)
+		var loop:Loop2D = extract_loop_2d(seg_stack)
 		loops.append(loop)
 	
-#	print("result %s" % str(result))
+	#print("result %s" % str(loops))
 	return loops
 
 static func create_transform(translation:Vector3, rotation_axis:Vector3, rotation_angle:float, scale:Vector3, pivot:Vector3)->Transform3D:
@@ -879,4 +902,16 @@ static func compose_matrix_3d(translate:Vector3, rotate:Vector3 = Vector3.ZERO, 
 	
 	return Transform3D(basis, translate)
 	
+static func clip_segment_to_plane_3d(p:Plane, v0:Vector3, v1:Vector3)->PackedVector3Array:
+	var clip_v0:bool = !p.is_point_over(v0)
+	var clip_v1:bool = !p.is_point_over(v1)
+	if clip_v0 && clip_v1:
+		return []
+	
+	if clip_v0:
+		v0 = p.intersects_segment(v0, v1)
+	elif clip_v1:
+		v1 = p.intersects_segment(v0, v1)
+	
+	return [v0, v1]
 	

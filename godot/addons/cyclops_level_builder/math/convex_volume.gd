@@ -821,9 +821,32 @@ func append_mesh_outline(mesh:ImmediateMesh, viewport_camera:Camera3D, local_to_
 
 	var segments:PackedVector2Array
 	
-	var view_plane:Plane = Plane(viewport_camera.global_basis.z, viewport_camera.global_position)
+	#print("--append_mesh_outline")
+	#var view_plane:Plane = Plane(-viewport_camera.global_basis.z, 
+		#viewport_camera.global_position 
+		#- viewport_camera.global_basis.z * viewport_camera.near * 1)
+	
+	var frustum:Array[Plane] = viewport_camera.get_frustum()
 	
 	for edge in edges:
+		var v0:VertexInfo = vertices[edge.start_index]
+		var v1:VertexInfo = vertices[edge.end_index]
+		var p0_world:Vector3 = local_to_world * v0.point
+		var p1_world:Vector3 = local_to_world * v1.point
+		
+		var frustum_culled:bool = false
+		for p in frustum:
+			var p_flip:Plane = MathUtil.flip_plane(p)
+			var result:PackedVector3Array = MathUtil.clip_segment_to_plane_3d(p_flip, p0_world, p1_world)
+			if result.is_empty():
+				frustum_culled = true
+				break
+			p0_world = result[0]
+			p1_world = result[1]
+		
+		if frustum_culled:
+			continue
+		
 		var has_front:bool = false
 		var has_back:bool = false
 		
@@ -841,37 +864,24 @@ func append_mesh_outline(mesh:ImmediateMesh, viewport_camera:Camera3D, local_to_
 		#print("front %s back %s" % [has_front, has_back])
 		
 		if has_front && has_back:
-			#print("drawing edge %s %s" % [edge.start_index, edge.end_index])
-			#Draw edge
-			var v0:VertexInfo = vertices[edge.start_index]
-			var v1:VertexInfo = vertices[edge.end_index]
-			var p0_world:Vector3 = local_to_world * v0.point
-			var p1_world:Vector3 = local_to_world * v1.point
-			
-			var p0_behind:bool = view_plane.is_point_over(p0_world)
-			var p1_behind:bool = view_plane.is_point_over(p1_world)
-			
-			if p0_behind && p1_behind:
-				continue
-			
-			if p0_behind:
-				p0_world = view_plane.intersects_segment(p0_world, p1_world)
-			elif p1_behind:
-				p1_world = view_plane.intersects_segment(p0_world, p1_world)
-			
+			#Draw edge			
 			var p0_screen:Vector2 = viewport_camera.unproject_position(p0_world)
 			var p1_screen:Vector2 = viewport_camera.unproject_position(p1_world)
 			segments.append(p0_screen)
 			segments.append(p1_screen)
+			#print("seg %s %s" % [p0_screen, p1_screen])
+
+	#print("segments ", segments)
 			
-	var loops:Array[PackedVector2Array] = MathUtil.get_loops_from_segments_2d(segments)
-	for loop_points in loops:
+	var loops:Array[Loop2D] = MathUtil.get_loops_from_segments_2d(segments)
+	for loop in loops:
 		var out_dirs:PackedVector2Array
 		
-		for v_idx in loop_points.size():
-			var p0_screen:Vector2 = loop_points[wrap(v_idx - 1, 0, loop_points.size())]
-			var p1_screen:Vector2 = loop_points[v_idx]
-			var p2_screen:Vector2 = loop_points[wrap(v_idx + + 1, 0, loop_points.size())]
+		#print("loop ", loop)
+		for v_idx in loop.points.size():
+			var p0_screen:Vector2 = loop.points[wrap(v_idx - 1, 0, loop.points.size())]
+			var p1_screen:Vector2 = loop.points[v_idx]
+			var p2_screen:Vector2 = loop.points[wrap(v_idx + + 1, 0, loop.points.size())]
 			#var span:Vector2 = p2_screen - p1_screen
 			
 			var norm01:Vector2 = (p1_screen - p0_screen).normalized()
@@ -887,9 +897,9 @@ func append_mesh_outline(mesh:ImmediateMesh, viewport_camera:Camera3D, local_to_
 				
 		
 		mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, material)
-		for v_idx in loop_points.size() + 1:
-			var p_screen:Vector2 = loop_points[wrap(v_idx, 0, loop_points.size())]
-			var p_out_dir:Vector2 = out_dirs[wrap(v_idx, 0, loop_points.size())]
+		for v_idx in loop.points.size() + (1 if loop.closed else 0):
+			var p_screen:Vector2 = loop.points[wrap(v_idx, 0, loop.points.size())]
+			var p_out_dir:Vector2 = out_dirs[wrap(v_idx, 0, loop.points.size())]
 			
 			var z_pos:float = (viewport_camera.near + viewport_camera.far) / 2
 			var p0:Vector3 = viewport_camera.project_position(p_screen, z_pos)
