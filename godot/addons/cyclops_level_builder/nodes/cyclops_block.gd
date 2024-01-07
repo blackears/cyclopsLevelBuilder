@@ -167,12 +167,12 @@ func build_from_block():
 	shape.points = vol.get_points()
 	collision_shape.shape = shape
 	
-	if !Engine.is_editor_hint():
-		#Disabling this in the editor for now since this is causing slowdown
-		var occluder_object:ArrayOccluder3D = ArrayOccluder3D.new()
-		occluder_object.vertices = vol.get_points()
-		occluder_object.indices = vol.get_trimesh_indices()
-#		occluder.occluder = occluder_object
+	#if !Engine.is_editor_hint():
+		##Disabling this in the editor for now since this is causing slowdown
+		#var occluder_object:ArrayOccluder3D = ArrayOccluder3D.new()
+		#occluder_object.vertices = vol.get_points()
+		#occluder_object.indices = vol.get_trimesh_indices()
+		#occluder.occluder = occluder_object
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

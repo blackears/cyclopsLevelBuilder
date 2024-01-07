@@ -104,16 +104,16 @@ func clone_branch(node:Node3D)->Node3D:
 			shape.points = vol.get_points()
 			collision_shape.shape = shape
 
-		var occluder:OccluderInstance3D = OccluderInstance3D.new()
-		occluder.name = name_root + "_occ"
-#		occluder.owner = plugin.get_editor_interface().get_edited_scene_root()
-		new_node.add_child(occluder)
-		
-		var occluder_object:ArrayOccluder3D = ArrayOccluder3D.new()
-		occluder.name = name_root + "_occ"
-		occluder_object.vertices = vol.get_points()
-		occluder_object.indices = vol.get_trimesh_indices()
-		occluder.occluder = occluder_object
+		#var occluder:OccluderInstance3D = OccluderInstance3D.new()
+		#occluder.name = name_root + "_occ"
+##		occluder.owner = plugin.get_editor_interface().get_edited_scene_root()
+		#new_node.add_child(occluder)
+		#
+		#var occluder_object:ArrayOccluder3D = ArrayOccluder3D.new()
+		#occluder.name = name_root + "_occ"
+		#occluder_object.vertices = vol.get_points()
+		#occluder_object.indices = vol.get_trimesh_indices()
+		#occluder.occluder = occluder_object
 		
 		return new_node
 		
