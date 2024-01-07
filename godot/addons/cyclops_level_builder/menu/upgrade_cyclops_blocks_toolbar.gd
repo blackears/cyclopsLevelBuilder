@@ -61,7 +61,7 @@ func _on_bn_upgrade_pressed():
 	
 	root.visible = false
 
-	var grid_step_size:float = pow(2, editor_plugin.get_global_scene().grid_size)
+	#var grid_step_size:float = pow(2, editor_plugin.get_global_scene().grid_size)
 	
 	for child in root.get_children():
 		if child is CyclopsConvexBlock:
@@ -70,7 +70,7 @@ func _on_bn_upgrade_pressed():
 			var vol:ConvexVolume = ConvexVolume.new()
 			vol.init_from_convex_block_data(old_block.block_data)
 			var centroid:Vector3 = vol.get_centroid()
-			centroid = MathUtil.snap_to_grid(centroid, grid_step_size)
+			#centroid = MathUtil.snap_to_grid(centroid, grid_step_size)
 			vol.translate(-centroid)
 
 			var new_block:CyclopsBlock = CyclopsBlock.new()
