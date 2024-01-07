@@ -56,7 +56,7 @@ static func save_cache_transform_3d(t:Transform3D)->String:
 	return JSON.stringify(dict)
 	
 static func load_cache_transform_3d(text:String, default_value:Transform3D = Transform3D.IDENTITY)->Transform3D:
-	if !(text is String):
+	if text.is_empty():
 		return default_value
 	
 	var cache:Dictionary = JSON.parse_string(text)

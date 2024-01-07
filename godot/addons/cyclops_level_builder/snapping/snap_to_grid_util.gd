@@ -50,7 +50,7 @@ func load_from_cache(cache:Dictionary):
 	grid_subdivisions = cache.get("grid_subdivisions", 10)
 	power_of_two_scale = cache.get("power_of_two_scale", 0)
 	#print("load grid_transform before")
-	grid_transform = SerialUtil.load_cache_transform_3d(cache.get("grid_transform"), Transform3D.IDENTITY)
+	grid_transform = SerialUtil.load_cache_transform_3d(cache.get("grid_transform", ""), Transform3D.IDENTITY)
 	#print("load grid_transform after ")
 	
 	if is_zero_approx(grid_transform.basis.determinant()):
