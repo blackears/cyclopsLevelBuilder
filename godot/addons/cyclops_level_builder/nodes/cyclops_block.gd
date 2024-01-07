@@ -38,7 +38,7 @@ var mesh_instance:MeshInstance3D
 var mesh_wire:MeshInstance3D
 var collision_body:PhysicsBody3D
 var collision_shape:CollisionShape3D
-var occluder:OccluderInstance3D
+#var occluder:OccluderInstance3D
 #var selected:bool
 var active:bool
 
@@ -93,8 +93,8 @@ func _ready():
 	
 	collision_shape = CollisionShape3D.new()
 
-	occluder = OccluderInstance3D.new()
-	add_child(occluder)
+	#occluder = OccluderInstance3D.new()
+	#add_child(occluder)
 	
 	build_from_block()
 	update_physics_body()
@@ -172,7 +172,7 @@ func build_from_block():
 		var occluder_object:ArrayOccluder3D = ArrayOccluder3D.new()
 		occluder_object.vertices = vol.get_points()
 		occluder_object.indices = vol.get_trimesh_indices()
-		occluder.occluder = occluder_object
+#		occluder.occluder = occluder_object
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

@@ -27,7 +27,7 @@ class_name PlayerFirstPerson
 var drag:float = 1.0
 var friction:float = 4.0
 var impulse:float = 5.0
-var max_speed:float = 15.0
+var max_speed:float = 10.0
 var jump_impulse:float = 4.5
 var rotation_speed:float = 4
 
