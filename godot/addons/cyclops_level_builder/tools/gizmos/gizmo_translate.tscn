@@ -13,21 +13,33 @@ script = ExtResource("1_fyqe0")
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 
 [node name="axis_y" parent="gizmo_translate" index="0"]
+lod_bias = 128.0
+ignore_occlusion_culling = true
 surface_material_override/0 = ExtResource("3_tsii4")
 
 [node name="axis_z" parent="gizmo_translate" index="1"]
+lod_bias = 128.0
+ignore_occlusion_culling = true
 surface_material_override/0 = ExtResource("4_0qd8v")
 
 [node name="axis_x" parent="gizmo_translate" index="2"]
+lod_bias = 128.0
+ignore_occlusion_culling = true
 surface_material_override/0 = ExtResource("5_xvd3e")
 
 [node name="plane_xz" parent="gizmo_translate" index="3"]
+lod_bias = 128.0
+ignore_occlusion_culling = true
 surface_material_override/0 = ExtResource("3_tsii4")
 
 [node name="plane_yz" parent="gizmo_translate" index="4"]
+lod_bias = 128.0
+ignore_occlusion_culling = true
 surface_material_override/0 = ExtResource("5_xvd3e")
 
 [node name="plane_xy" parent="gizmo_translate" index="5"]
+lod_bias = 128.0
+ignore_occlusion_culling = true
 surface_material_override/0 = ExtResource("4_0qd8v")
 
 [editable path="gizmo_translate"]

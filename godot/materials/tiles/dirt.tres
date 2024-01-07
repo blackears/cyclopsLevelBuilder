@@ -3,4 +3,5 @@
 [ext_resource type="Texture2D" uid="uid://rnvbjjnfe8qw" path="res://art/tiles/dirt.png" id="1_oba10"]
 
 [resource]
+vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("1_oba10")

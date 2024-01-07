@@ -3,4 +3,5 @@
 [ext_resource type="Texture2D" uid="uid://cjffo83qfq4ed" path="res://art/tiles/dirt_grass_overhang.png" id="1_mi64f"]
 
 [resource]
+vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("1_mi64f")

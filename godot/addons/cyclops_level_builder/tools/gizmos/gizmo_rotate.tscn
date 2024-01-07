@@ -14,16 +14,24 @@ script = ExtResource("1_vhpbh")
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 
 [node name="rot_axis_y" parent="gizmo_rotate" index="0"]
+lod_bias = 128.0
+ignore_occlusion_culling = true
 surface_material_override/0 = ExtResource("2_538x0")
 
 [node name="rot_axis_x" parent="gizmo_rotate" index="1"]
+lod_bias = 128.0
+ignore_occlusion_culling = true
 surface_material_override/0 = ExtResource("3_7q6t6")
 
 [node name="rot_axis_z" parent="gizmo_rotate" index="2"]
+lod_bias = 128.0
+ignore_occlusion_culling = true
 surface_material_override/0 = ExtResource("4_eibo1")
 
 [node name="rot_axis_viewport" parent="gizmo_rotate" index="3"]
 visible = false
+lod_bias = 128.0
+ignore_occlusion_culling = true
 surface_material_override/0 = ExtResource("5_ib271")
 
 [editable path="gizmo_rotate"]

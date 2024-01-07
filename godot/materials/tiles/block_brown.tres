@@ -3,4 +3,5 @@
 [ext_resource type="Texture2D" uid="uid://4j6nx7blefu0" path="res://art/tiles/block_brown.png" id="1_jewil"]
 
 [resource]
+vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("1_jewil")

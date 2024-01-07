@@ -3,4 +3,5 @@
 [ext_resource type="Texture2D" uid="uid://b7g6os6xwbuj3" path="res://art/tiles/groundcover_green.png" id="1_g2ing"]
 
 [resource]
+vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("1_g2ing")
