@@ -27,6 +27,7 @@ class_name SnappintSystemVertex
 
 @export var max_radius:float = .2
 
+var settings:SnappingSystemVertexSettings = SnappingSystemVertexSettings.new()
 
 #Point is in world space
 func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type = MoveConstraint.Type.NONE)->Vector3:
@@ -52,5 +53,10 @@ func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type = MoveConstr
 		if is_finite(best_dist) else point
 
 
-
+func _get_properties_editor()->Control:
+	var ed:SnappingSystemVertexPropertiesEditor = preload("res://addons/cyclops_level_builder/snapping/snapping_system_vertex_properties_editor.tscn").instantiate()
+	ed.settings = settings
+	
+	return ed
+	
 

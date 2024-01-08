@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://cbucsqmj5g1i1"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/snapping/snapping_system_vertex_properties_editor.gd" id="1_tibga"]
+[ext_resource type="PackedScene" uid="uid://diibmlqy1mpqb" path="res://addons/cyclops_level_builder/controls/numeric_line_edit.tscn" id="2_hl6or"]
+
+[node name="SnappingSystemVertexPropertiesEditor" type="PanelContainer"]
+offset_right = 319.0
+offset_bottom = 210.0
+script = ExtResource("1_tibga")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Snap Radius
+"
+
+[node name="snap_radius" parent="GridContainer" instance=ExtResource("2_hl6or")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[connection signal="value_changed" from="GridContainer/snap_radius" to="." method="_on_snap_radius_value_changed"]
