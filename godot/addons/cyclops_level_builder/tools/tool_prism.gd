@@ -132,7 +132,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					if result:
 						floor_normal = result.get_world_normal()
 
-						var p:Vector3 = builder.get_snapping_manager().snap_point(result.get_world_position(), viewport_camera)
+						var p:Vector3 = builder.get_snapping_manager().snap_point(result.get_world_position(), SnappingQuery.new(viewport_camera))
 
 						base_points.append(p)
 						preview_point = p
@@ -147,7 +147,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						
 						
 #						var p:Vector3 = MathUtil.snap_to_grid(start_pos, grid_step_size)
-						var p:Vector3 = builder.get_snapping_manager().snap_point(start_pos, viewport_camera)
+						var p:Vector3 = builder.get_snapping_manager().snap_point(start_pos, SnappingQuery.new(viewport_camera))
 						base_points.append(p)
 						
 						return true
@@ -172,7 +172,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						return true
 
 					var p_isect:Vector3 = MathUtil.intersect_plane(origin, dir, base_points[0], floor_normal)
-					var p:Vector3 = builder.get_snapping_manager().snap_point(p_isect, viewport_camera)
+					var p:Vector3 = builder.get_snapping_manager().snap_point(p_isect, SnappingQuery.new(viewport_camera))
 					base_points.append(p)
 
 					var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)
@@ -211,13 +211,13 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 		if tool_state == ToolState.BASE_POINTS:
 			var p_isect:Vector3 = MathUtil.intersect_plane(origin, dir, base_points[0], floor_normal)
-			preview_point = builder.get_snapping_manager().snap_point(p_isect, viewport_camera)
+			preview_point = builder.get_snapping_manager().snap_point(p_isect, SnappingQuery.new(viewport_camera))
 			
 
 		elif tool_state == ToolState.DRAG_HEIGHT:
 			block_drag_cur = MathUtil.closest_point_on_line(origin_local, dir_local, base_points[0], floor_normal)
 			
-			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur, viewport_camera)
+			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur, SnappingQuery.new(viewport_camera))
 			
 			drag_offset = block_drag_cur - base_points[0]
 			var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)

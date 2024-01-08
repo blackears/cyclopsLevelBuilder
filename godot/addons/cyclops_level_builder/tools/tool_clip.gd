@@ -141,7 +141,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #					var p:Vector3 = MathUtil.snap_to_grid(result.get_world_position(), grid_step_size)
 					var p_hit:Vector3 = result.get_world_position()
 					var p_norm:Vector3 = result.get_world_normal()
-					var p:Vector3 = builder.get_snapping_manager().snap_point(p_hit, viewport_camera)
+					var p:Vector3 = builder.get_snapping_manager().snap_point(p_hit, SnappingQuery.new(viewport_camera))
 					p = MathUtil.closest_point_on_plane(p, p_hit, p_norm)
 					
 					if !has_clip_point(p):

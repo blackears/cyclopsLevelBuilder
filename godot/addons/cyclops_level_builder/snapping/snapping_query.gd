@@ -22,45 +22,13 @@
 # SOFTWARE.
 
 @tool
-
-extends CyclopsSnappingSystem
-class_name SnappingSystemGrid
-
-const TOOL_ID:String = "grid"
-
-var snap_to_grid_util:SnapToGridUtil = SnapToGridUtil.new()
-
-func _activate(plugin:CyclopsLevelBuilder):
-	super._activate(plugin)
-	
-	snap_to_grid_util = CyclopsAutoload.calc_snap_to_grid_util()
-
-	var cache:Dictionary = plugin.get_snapping_cache(TOOL_ID)
-	snap_to_grid_util.load_from_cache(cache)
-		
-func _deactivate():
-	super._deactivate()
-
-	var cache:Dictionary = snap_to_grid_util.save_to_cache()
-	plugin.set_snapping_cache(TOOL_ID, cache)
-				
-
-#Point is in world space
-func _snap_point(point:Vector3, query:SnappingQuery)->Vector3:
-		
-	var target_point = snap_to_grid_util.snap_point(point)
-	return target_point
-
-func _snap_angle(angle:float, query:SnappingQuery)->float:
-	var snap_angle:float = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_GRID_ANGLE)
-	return floor(angle / snap_angle) * snap_angle
+extends Resource
+class_name SnappingQuery
 
 
-func _get_properties_editor()->Control:
-	var ed:SnappingSystemGridPropertiesEditor = preload("res://addons/cyclops_level_builder/snapping/snapping_system_grid_properties_editor.tscn").instantiate()
-	ed.tool = self
-	
-	return ed
-	
+var viewport_camera:Camera3D
+var exclude_blocks:Array[NodePath]
 
 
+func _init(viewport_camera:Camera3D = null):
+	self.viewport_camera = viewport_camera

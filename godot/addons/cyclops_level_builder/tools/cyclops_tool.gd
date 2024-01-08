@@ -133,7 +133,7 @@ func calc_hit_point_empty_space(origin:Vector3, dir:Vector3, viewport_camera:Cam
 		#print("base_plane_origin ", base_plane_origin)
 		#print("hit_base ", hit_base)
 
-		var block_drag_p0:Vector3 = builder.get_snapping_manager().snap_point(hit_base, viewport_camera)
+		var block_drag_p0:Vector3 = builder.get_snapping_manager().snap_point(hit_base, SnappingQuery.new(viewport_camera))
 		
 		return [block_drag_p0, drag_floor_normal]
 

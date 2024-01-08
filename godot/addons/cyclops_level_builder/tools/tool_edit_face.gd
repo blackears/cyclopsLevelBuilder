@@ -255,7 +255,7 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 			#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
 #			drag_handle_start_pos = MathUtil.snap_to_grid(start_pos, grid_step_size)
-			drag_handle_start_pos = builder.get_snapping_manager().snap_point(start_pos, viewport_camera)
+			drag_handle_start_pos = builder.get_snapping_manager().snap_point(start_pos, SnappingQuery.new(viewport_camera))
 
 
 	#		print("res obj %s" % result.object.get_path())
@@ -571,7 +571,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			var offset = drag_to - drag_handle_start_pos
 #			offset = MathUtil.snap_to_grid(offset, grid_step_size)
-			offset = builder.get_snapping_manager().snap_point(offset, viewport_camera)
+			offset = builder.get_snapping_manager().snap_point(offset, SnappingQuery.new(viewport_camera))
 
 			#print("offset %s" % offset)
 			

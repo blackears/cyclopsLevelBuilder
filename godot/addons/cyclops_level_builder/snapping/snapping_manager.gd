@@ -28,17 +28,17 @@ class_name SnappingManager
 var snap_enabled:bool
 var snap_tool:CyclopsSnappingSystem
 
-func snap_point(point:Vector3, viewport_camera:Camera3D = null)->Vector3:
+func snap_point(point:Vector3, query:SnappingQuery)->Vector3:
 	if !snap_enabled || !snap_tool:
 		return point
 	
-	return snap_tool._snap_point(point, viewport_camera)
+	return snap_tool._snap_point(point, query)
 
-func snap_angle(angle:float, viewport_camera:Camera3D = null)->float:
+func snap_angle(angle:float, query:SnappingQuery)->float:
 	if !snap_enabled || !snap_tool:
 		return angle
 	
-	return snap_tool._snap_angle(angle, viewport_camera)
+	return snap_tool._snap_angle(angle, query)
 	
 	
 	

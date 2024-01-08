@@ -294,7 +294,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var binorm:Vector3 = v0.cross(rot_axis)
 
 			var angle:float = atan2(v1.dot(binorm), v1.dot(v0))
-			var snapped_angle = builder.get_snapping_manager().snap_angle(rad_to_deg(angle))
+			var snapped_angle = builder.get_snapping_manager().snap_angle(rad_to_deg(angle), SnappingQuery.new(viewport_camera))
 			angle = deg_to_rad(snapped_angle)
 
 			var xform:Transform3D = Transform3D.IDENTITY
@@ -306,7 +306,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			
 
-			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur, viewport_camera)
+			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur, SnappingQuery.new(viewport_camera))
 			
 			cmd_transform_blocks.transform = xform
 			#print("cmd_move_blocks.move_offset %s" % cmd_move_blocks.move_offset)

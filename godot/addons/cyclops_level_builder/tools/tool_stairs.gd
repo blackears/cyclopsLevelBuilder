@@ -170,7 +170,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						floor_normal = result.get_world_normal()
 
 #						var p:Vector3 = MathUtil.snap_to_grid(result.get_world_position(), grid_step_size)
-						var p:Vector3 = builder.get_snapping_manager().snap_point(result.get_world_position(, viewport_camera))
+						var p:Vector3 = builder.get_snapping_manager().snap_point(result.get_world_position(), SnappingQuery.new(viewport_camera))
 						drag_origin = p
 						base_drag_cur = p
 
@@ -183,7 +183,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						floor_normal = hit_result[1]
 
 						#var p:Vector3 = MathUtil.snap_to_grid(start_pos, grid_step_size)
-						var p:Vector3 = builder.get_snapping_manager().snap_point(start_pos, viewport_camera)
+						var p:Vector3 = builder.get_snapping_manager().snap_point(start_pos, SnappingQuery.new(viewport_camera))
 						drag_origin = p
 						base_drag_cur = p
 						
@@ -209,24 +209,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					#Create shape
 					create_block()
 
-#					var cmd:CommandAddStairs = CommandAddStairs.new()
-#					cmd.builder = builder
-#					cmd.blocks_root_path = blocks_root.get_path()
-#					cmd.block_name_prefix = "Block_"
-#					cmd.floor_normal = floor_normal
-#					cmd.drag_origin = drag_origin
-#					cmd.base_drag_cur = base_drag_cur
-#					cmd.block_drag_cur = block_drag_cur
-#					cmd.step_height = settings.step_height
-#					cmd.step_depth = settings.step_depth
-#					cmd.direction = settings.direction
-#					cmd.uv_transform = builder.tool_uv_transform
-#					cmd.material_path = builder.tool_material_path
-#
-#					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-#
-#					cmd.add_to_undo_manager(undo)
-										
 					tool_state = ToolState.READY
 					return true
 					
@@ -283,7 +265,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var p_isect:Vector3 = MathUtil.intersect_plane(origin, dir, drag_origin, floor_normal)
 			#var p_snapped = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
 #			var p_snapped:Vector3 = MathUtil.snap_to_grid(p_isect, grid_step_size)
-			var p_snapped:Vector3 = builder.get_snapping_manager().snap_point(p_isect, viewport_camera)
+			var p_snapped:Vector3 = builder.get_snapping_manager().snap_point(p_isect, SnappingQuery.new(viewport_camera))
 			base_drag_cur = p_snapped
 
 			return true
@@ -292,11 +274,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			block_drag_cur = MathUtil.closest_point_on_line(origin, dir, base_drag_cur, floor_normal)
 			
 			#block_drag_cur = to_local(block_drag_cur, blocks_root.global_transform.inverse(), grid_step_size)
-#			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
-			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur, viewport_camera)
+			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur, SnappingQuery.new(viewport_camera))
 			
-#			drag_offset = block_drag_cur - base_drag_cur
-
 			return true
 				
 	return super._gui_input(viewport_camera, event)		
