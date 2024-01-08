@@ -46,11 +46,12 @@ func _deactivate():
 				
 
 #Point is in world space
-func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type = MoveConstraint.Type.NONE)->Vector3:
+func _snap_point(point:Vector3, viewport_camera:Camera3D = null)->Vector3:
+		
 	var target_point = snap_to_grid_util.snap_point(point)
-	return constrain_point(point, target_point, move_constraint)
+	return target_point
 
-func _snap_angle(angle:float)->float:
+func _snap_angle(angle:float, viewport_camera:Camera3D = null)->float:
 	var snap_angle:float = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_GRID_ANGLE)
 	return floor(angle / snap_angle) * snap_angle
 

@@ -30,7 +30,11 @@ class_name SnappintSystemVertex
 var settings:SnappingSystemVertexSettings = SnappingSystemVertexSettings.new()
 
 #Point is in world space
-func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type = MoveConstraint.Type.NONE)->Vector3:
+func _snap_point(point:Vector3, 
+	viewport_camera:Camera3D = null)->Vector3:
+		
+	var screen_point:Vector2 = viewport_camera.unproject_position(point)
+		
 	var blocks:Array[CyclopsBlock] = plugin.get_blocks()
 	
 	var best_vertex:Vector3 = Vector3.INF
@@ -38,19 +42,38 @@ func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type = MoveConstr
 	
 	for block in blocks:
 		var ctrl_mesh:ConvexVolume = block.control_mesh
+		var bounds_local:AABB = ctrl_mesh.bounds
+		
+		var obj_center:Vector3 = block.global_transform * bounds_local.get_center()
+		var obj_corner:Vector3 = block.global_transform * bounds_local.position
+		var screen_obj_center:Vector2 = viewport_camera.unproject_position(obj_center)
+		var screen_obj_corner:Vector2 = viewport_camera.unproject_position(obj_corner)
+		
+		if screen_point.distance_to(screen_obj_center) > \
+			screen_obj_center.distance_to(screen_obj_corner) + settings.snap_radius:
+			#Skip if bounding box text fails
+			continue
+
+		
+		print("snap block ", block.name)
 		for v_idx in ctrl_mesh.vertices.size():
 			var v:ConvexVolume.VertexInfo = ctrl_mesh.vertices[v_idx]
 			var v_point_world:Vector3 = block.global_transform * v.point
+			var v_point_screen:Vector2 = viewport_camera.unproject_position(v_point_world)
 		
-			var dist:float = (v_point_world - point).length_squared()
-			if dist < best_dist && dist <= max_radius * max_radius:
+			var dist:float = v_point_screen.distance_to(screen_point)
+			print("dist ", dist, " settings.snap_radius ", settings.snap_radius)
+			if dist > settings.snap_radius:
+				continue
+		
+			print("try vertex ", v_point_world)
+			if dist < best_dist:
 #			if dist < best_dist:
 				best_vertex = v_point_world
 				best_dist = dist
 
 	
-	return constrain_point(point, best_vertex, move_constraint) \
-		if is_finite(best_dist) else point
+	return best_vertex if is_finite(best_dist) else point
 
 
 func _get_properties_editor()->Control:

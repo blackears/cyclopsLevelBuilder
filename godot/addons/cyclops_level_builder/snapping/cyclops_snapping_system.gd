@@ -36,10 +36,10 @@ func _activate(plugin:CyclopsLevelBuilder):
 func _deactivate():
 	pass
 
-func _snap_point(point:Vector3, move_constraint:MoveConstraint.Type = MoveConstraint.Type.NONE)->Vector3:
+func _snap_point(point:Vector3, viewport_camera:Camera3D = null)->Vector3:
 	return point
 
-func _snap_angle(angle:float)->float:
+func _snap_angle(angle:float, viewport_camera:Camera3D = null)->float:
 	return angle
 
 func _get_properties_editor()->Control:

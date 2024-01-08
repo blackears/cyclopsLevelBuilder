@@ -31,14 +31,14 @@ var snap_tool:CyclopsSnappingSystem
 func snap_point(point:Vector3, viewport_camera:Camera3D = null)->Vector3:
 	if !snap_enabled || !snap_tool:
 		return point
-		
-	return snap_tool._snap_point(point)
+	
+	return snap_tool._snap_point(point, viewport_camera)
 
-func snap_angle(angle:float)->float:
+func snap_angle(angle:float, viewport_camera:Camera3D = null)->float:
 	if !snap_enabled || !snap_tool:
 		return angle
 	
-	return snap_tool._snap_angle(angle)
+	return snap_tool._snap_angle(angle, viewport_camera)
 	
 	
 	
