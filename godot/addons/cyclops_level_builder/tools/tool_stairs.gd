@@ -170,7 +170,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						floor_normal = result.get_world_normal()
 
 #						var p:Vector3 = MathUtil.snap_to_grid(result.get_world_position(), grid_step_size)
-						var p:Vector3 = builder.get_snapping_manager().snap_point(result.get_world_position())
+						var p:Vector3 = builder.get_snapping_manager().snap_point(result.get_world_position(, viewport_camera))
 						drag_origin = p
 						base_drag_cur = p
 
@@ -178,12 +178,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						
 					else:
 						#print("init base point empty space")
-						var hit_result = calc_hit_point_empty_space(origin, dir)
+						var hit_result = calc_hit_point_empty_space(origin, dir, viewport_camera)
 						var start_pos:Vector3 = hit_result[0]
 						floor_normal = hit_result[1]
 
 						#var p:Vector3 = MathUtil.snap_to_grid(start_pos, grid_step_size)
-						var p:Vector3 = builder.get_snapping_manager().snap_point(start_pos)
+						var p:Vector3 = builder.get_snapping_manager().snap_point(start_pos, viewport_camera)
 						drag_origin = p
 						base_drag_cur = p
 						
@@ -283,7 +283,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var p_isect:Vector3 = MathUtil.intersect_plane(origin, dir, drag_origin, floor_normal)
 			#var p_snapped = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
 #			var p_snapped:Vector3 = MathUtil.snap_to_grid(p_isect, grid_step_size)
-			var p_snapped:Vector3 = builder.get_snapping_manager().snap_point(p_isect)
+			var p_snapped:Vector3 = builder.get_snapping_manager().snap_point(p_isect, viewport_camera)
 			base_drag_cur = p_snapped
 
 			return true
@@ -293,7 +293,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			#block_drag_cur = to_local(block_drag_cur, blocks_root.global_transform.inverse(), grid_step_size)
 #			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
-			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur)
+			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur, viewport_camera)
 			
 #			drag_offset = block_drag_cur - base_drag_cur
 

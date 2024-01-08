@@ -44,9 +44,9 @@ func _execute():
 		
 	
 	#cmd.grid_size = pow(2, plugin.get_global_scene().grid_size)
-	var snap_to_grid_util:SnapToGridUtil = CyclopsAutoload.calc_snap_to_grid_util()
+	#var snap_to_grid_util:SnapToGridUtil = CyclopsAutoload.calc_snap_to_grid_util()
 	#print("snap_to_grid_util  %s" % snap_to_grid_util)
-	cmd.snap_to_grid_util = snap_to_grid_util
+	#cmd.snap_to_grid_util = snap_to_grid_util
 	
 	
 	#print("cform %s" % xform)

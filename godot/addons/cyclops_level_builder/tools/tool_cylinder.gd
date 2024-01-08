@@ -128,14 +128,14 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 #						var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
 						#var p:Vector3 = MathUtil.snap_to_grid(result.get_world_position(), grid_step_size)
-						var p:Vector3 = builder.get_snapping_manager().snap_point(result.get_world_position())
+						var p:Vector3 = builder.get_snapping_manager().snap_point(result.get_world_position(), viewport_camera)
 						base_center = p
 
 						return true
 						
 					else:
 						#print("init base point empty space")
-						var hit_result = calc_hit_point_empty_space(origin, dir)
+						var hit_result = calc_hit_point_empty_space(origin, dir, viewport_camera)
 						var start_pos:Vector3 = hit_result[0]
 						floor_normal = hit_result[1]
 #						floor_normal = Vector3.UP
@@ -144,7 +144,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						
 						#var p:Vector3 = to_local(start_pos, blocks_root.global_transform.inverse(), grid_step_size)
 						#var p:Vector3 = MathUtil.snap_to_grid(start_pos, grid_step_size)
-						var p:Vector3 = builder.get_snapping_manager().snap_point(start_pos)
+						var p:Vector3 = builder.get_snapping_manager().snap_point(start_pos, viewport_camera)
 						base_center = p
 						
 						return true	
@@ -224,7 +224,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var p_isect:Vector3 = MathUtil.intersect_plane(origin, dir, base_center, floor_normal)
 			#var p_snapped = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
 			#var p_snapped = MathUtil.snap_to_grid(p_isect, grid_step_size)
-			var p_snapped:Vector3 = builder.get_snapping_manager().snap_point(p_isect)
+			var p_snapped:Vector3 = builder.get_snapping_manager().snap_point(p_isect, viewport_camera)
 			first_ring_radius = (p_snapped - base_center).length()
 
 			return true
@@ -233,7 +233,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var p_isect:Vector3 = MathUtil.intersect_plane(origin, dir, base_center, floor_normal)
 			#var p_snapped = to_local(p_isect, blocks_root.global_transform.inverse(), grid_step_size)
 #			var p_snapped = MathUtil.snap_to_grid(p_isect, grid_step_size)
-			var p_snapped:Vector3 = builder.get_snapping_manager().snap_point(p_isect)
+			var p_snapped:Vector3 = builder.get_snapping_manager().snap_point(p_isect, viewport_camera)
 			second_ring_radius = (p_snapped - base_center).length()
 
 			return true
@@ -243,7 +243,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			#block_drag_cur = to_local(block_drag_cur, blocks_root.global_transform.inverse(), grid_step_size)
 			#block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
-			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur)
+			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur, viewport_camera)
 			
 			drag_offset = block_drag_cur - base_center
 #			var bounding_points:PackedVector3Array = MathUtil.bounding_polygon_3d(base_points, floor_normal)

@@ -85,7 +85,6 @@ func will_change_anything()->bool:
 
 func do_it():
 	var main_block:CyclopsBlock = builder.get_node(main_block_path)
-	#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 	var snap_to_grid_util:SnapToGridUtil = CyclopsAutoload.calc_snap_to_grid_util()
 	
 	if start_blocks.is_empty():
@@ -111,7 +110,6 @@ func do_it():
 		block_info.data = main_vol.to_convex_block_data()
 		block_info.materials = main_block.materials
 		var centroid:Vector3 = main_vol.get_centroid()
-		#centroid = MathUtil.snap_to_grid(centroid, grid_step_size)
 		centroid = snap_to_grid_util.snap_point(centroid)
 		main_vol.translate(-centroid)
 		block_info.centroid = main_vol.get_centroid()

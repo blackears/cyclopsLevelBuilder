@@ -306,7 +306,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			
 
-			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur)
+			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur, viewport_camera)
 			
 			cmd_transform_blocks.transform = xform
 			#print("cmd_move_blocks.move_offset %s" % cmd_move_blocks.move_offset)

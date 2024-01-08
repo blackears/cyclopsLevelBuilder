@@ -78,7 +78,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				drag_to = MathUtil.intersect_plane(origin, dir, drag_start_point, Vector3.UP)
 			
 			var offset:Vector3 = drag_to - drag_start_point
-			offset = builder.get_snapping_manager().snap_point(offset)
+			offset = builder.get_snapping_manager().snap_point(offset, viewport_camera)
 			#print("drag offset %s" % offset)
 
 			#print("duplicate drag by %s" % offset)

@@ -105,7 +105,7 @@ func to_local(point:Vector3, world_to_local:Transform3D, grid_step_size:float)->
 	return MathUtil.snap_to_grid(p_local, grid_step_size)
 	
 
-func calc_hit_point_empty_space(origin:Vector3, dir:Vector3):
+func calc_hit_point_empty_space(origin:Vector3, dir:Vector3, viewport_camera:Camera3D = null):
 		#print("Miss")
 		var base_plane_origin:Vector3 = Vector3.ZERO
 		var drag_floor_normal:Vector3 = Vector3.UP
@@ -133,10 +133,7 @@ func calc_hit_point_empty_space(origin:Vector3, dir:Vector3):
 		#print("base_plane_origin ", base_plane_origin)
 		#print("hit_base ", hit_base)
 
-#		var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
-
-#		var block_drag_p0:Vector3 = MathUtil.snap_to_grid(hit_base, grid_step_size)
-		var block_drag_p0:Vector3 = builder.get_snapping_manager().snap_point(hit_base)
+		var block_drag_p0:Vector3 = builder.get_snapping_manager().snap_point(hit_base, viewport_camera)
 		
 		return [block_drag_p0, drag_floor_normal]
 

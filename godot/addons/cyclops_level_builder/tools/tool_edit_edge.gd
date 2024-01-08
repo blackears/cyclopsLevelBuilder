@@ -225,7 +225,7 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 			#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
 			#drag_handle_start_pos = MathUtil.snap_to_grid(start_pos, grid_step_size)
-			drag_handle_start_pos = builder.get_snapping_manager().snap_point(start_pos)
+			drag_handle_start_pos = builder.get_snapping_manager().snap_point(start_pos, viewport_camera)
 
 	#		print("res obj %s" % result.object.get_path())
 			var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
@@ -524,7 +524,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, viewport_camera.global_transform.basis.z)
 			
 			var offset:Vector3 = drag_to - drag_handle_start_pos
-			offset = builder.get_snapping_manager().snap_point(offset)
+			offset = builder.get_snapping_manager().snap_point(offset, viewport_camera)
 			#drag_to = drag_handle_start_pos + offset
 			
 			cmd_move_edge.move_offset = offset

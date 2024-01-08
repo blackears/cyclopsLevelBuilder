@@ -83,7 +83,6 @@ func will_change_anything()->bool:
 
 func do_it():
 	var subtrahend_block:CyclopsBlock = builder.get_node(block_to_subtract_path)
-	#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 	var snap_to_grid_util:SnapToGridUtil = CyclopsAutoload.calc_snap_to_grid_util()
 	
 	if start_blocks.is_empty():
@@ -107,7 +106,6 @@ func do_it():
 			for f in fragments:
 				f.copy_face_attributes(minuend_vol)
 				var centroid:Vector3 = f.get_centroid()
-				#centroid = MathUtil.snap_to_grid(centroid, grid_step_size)
 				centroid = snap_to_grid_util.snap_point(centroid)
 				f.translate(-centroid)
 				

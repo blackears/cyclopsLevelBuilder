@@ -28,7 +28,7 @@ class_name SnappingManager
 var snap_enabled:bool
 var snap_tool:CyclopsSnappingSystem
 
-func snap_point(point:Vector3)->Vector3:
+func snap_point(point:Vector3, viewport_camera:Camera3D = null)->Vector3:
 	if !snap_enabled || !snap_tool:
 		return point
 		

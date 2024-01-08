@@ -83,7 +83,7 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 		#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 		#block_drag_p0 = MathUtil.snap_to_grid(start_pos, grid_step_size)
 
-		block_drag_p0 = builder.get_snapping_manager().snap_point(start_pos)
+		block_drag_p0 = builder.get_snapping_manager().snap_point(start_pos, viewport_camera)
 
 		
 		if e.ctrl_pressed:
@@ -106,7 +106,7 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 		
 	else:
 		#print("Miss")
-		var hit_result = calc_hit_point_empty_space(origin, dir)
+		var hit_result = calc_hit_point_empty_space(origin, dir, viewport_camera)
 		block_drag_p0 = hit_result[0]
 		drag_floor_normal = hit_result[1]
 		
@@ -284,7 +284,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 #			block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
 
-			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur)
+			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur, viewport_camera)
 
 			#print("block_drag_cur snapped %s" % block_drag_cur)
 			
@@ -308,7 +308,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		elif tool_state == ToolState.BLOCK_HEIGHT:
 			block_drag_cur = MathUtil.closest_point_on_line(origin, dir, block_drag_p1, drag_floor_normal)
 			
-			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur)
+			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur, viewport_camera)
 
 			return true
 
@@ -316,7 +316,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var drag_to:Vector3 = MathUtil.closest_point_on_line(origin, dir, move_face_origin, cmd_move_face.move_dir_normal)
 			#print("move_face_origin %s norm %s" % [move_face_origin, cmd_move_face.move_dir_normal])
 
-			drag_to = builder.get_snapping_manager().snap_point(drag_to)
+			drag_to = builder.get_snapping_manager().snap_point(drag_to, viewport_camera)
 			
 			#print("move_face drag_to %s" % [drag_to])
 			cmd_move_face.move_amount = (drag_to - move_face_origin).dot(cmd_move_face.move_dir_normal)
