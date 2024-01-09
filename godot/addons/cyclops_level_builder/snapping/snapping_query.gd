@@ -30,5 +30,6 @@ var viewport_camera:Camera3D
 var exclude_blocks:Array[NodePath]
 
 
-func _init(viewport_camera:Camera3D = null):
+func _init(viewport_camera:Camera3D = null, exclude_blocks:Array[NodePath] = []):
 	self.viewport_camera = viewport_camera
+	self.exclude_blocks = exclude_blocks

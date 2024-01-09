@@ -40,6 +40,7 @@ var move_constraint:MoveConstraint.Type = MoveConstraint.Type.NONE
 #var drag_handle:HandleVertex
 var drag_mouse_start_pos:Vector2
 var drag_handle_start_pos:Vector3
+var drag_home_block:NodePath
 var added_point_pos:Vector3
 
 var cmd_move_vertex:CommandMoveVertices
@@ -204,11 +205,12 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 				GizmoTranslate.Part.PLANE_YZ:
 					move_constraint = MoveConstraint.Type.PLANE_YZ
 		
-			var start_pos:Vector3 = part_res.pos_world
+			drag_handle_start_pos = part_res.pos_world
 #			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
 #			drag_handle_start_pos = MathUtil.snap_to_grid(start_pos, grid_step_size)
-			drag_handle_start_pos = builder.get_snapping_manager().snap_point(start_pos, SnappingQuery.new(viewport_camera))
+			#drag_handle_start_pos = builder.get_snapping_manager().snap_point(\
+				#start_pos, SnappingQuery.new(viewport_camera))
 
 	#		print("res obj %s" % result.object.get_path())
 			var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
@@ -226,6 +228,9 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 						var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
 						if v.selected:
 							cmd_move_vertex.add_vertex(block.get_path(), v_idx)
+						if vol.active_vertex == v_idx:
+							drag_handle_start_pos = block.global_transform * v.point
+							drag_home_block = block.get_path()
 
 			return
 
@@ -239,6 +244,7 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 	if handle:
 		#drag_handle = handle
 		drag_handle_start_pos = handle.position
+		drag_home_block = handle.block_path
 		tool_state = ToolState.DRAGGING
 
 		cmd_move_vertex = CommandMoveVertices.new()
@@ -279,7 +285,7 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 			
 			return true
 
-	#Drag selectio rectangle
+	#Drag selection rectangle
 	tool_state = ToolState.DRAG_SELECTION
 	drag_select_start_pos = e.position
 	drag_select_to_pos = e.position
@@ -553,7 +559,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 			
 			#drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
-			drag_to = builder.get_snapping_manager().snap_point(drag_to, SnappingQuery.new(viewport_camera))
+			#print("send snap bock-2- ", drag_home_block)
+			drag_to = builder.get_snapping_manager().snap_point(drag_to, SnappingQuery.new(viewport_camera, [drag_home_block]))
 			#drag_handle.position = drag_to
 			
 			cmd_move_vertex.move_offset = drag_to - drag_handle_start_pos
@@ -574,7 +581,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, Vector3.UP)
 
 			#drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
-			drag_to = builder.get_snapping_manager().snap_point(drag_to, SnappingQuery.new(viewport_camera))
+			print("send snap bock ", drag_home_block)
+			drag_to = builder.get_snapping_manager().snap_point(drag_to, SnappingQuery.new(viewport_camera, [drag_home_block]))
 
 			added_point_pos = drag_to
 			#print("drag point to %s" % drag_to)
