@@ -1,0 +1,36 @@
+[gd_scene load_steps=3 format=3 uid="uid://d3lrd75qqaa7q"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_lv2hg"]
+plane = Plane(-0.358, 0.442, 0.822, -7.084)
+
+[sub_resource type="SphereMesh" id="SphereMesh_sikgc"]
+radius = 0.1
+height = 0.2
+
+[node name="Node3D" type="Node3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("WorldBoundaryShape3D_lv2hg")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.25, 2.25, -12.645)
+mesh = SubResource("SphereMesh_sikgc")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.25, 2.25, -22.5)
+mesh = SubResource("SphereMesh_sikgc")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.25, 4.25, -22.5)
+mesh = SubResource("SphereMesh_sikgc")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 4.25, -22.5)
+mesh = SubResource("SphereMesh_sikgc")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 4.25, -11.595)
+mesh = SubResource("SphereMesh_sikgc")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.4885, 0, -21.9883)
