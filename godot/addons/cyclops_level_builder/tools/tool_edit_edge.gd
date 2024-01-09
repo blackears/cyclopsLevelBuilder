@@ -221,11 +221,11 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 				GizmoTranslate.Part.PLANE_YZ:
 					move_constraint = MoveConstraint.Type.PLANE_YZ
 		
-			var start_pos:Vector3 = part_res.pos_world
+			drag_handle_start_pos = gizmo_translate.global_position
 			#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
 			#drag_handle_start_pos = MathUtil.snap_to_grid(start_pos, grid_step_size)
-			drag_handle_start_pos = builder.get_snapping_manager().snap_point(start_pos, SnappingQuery.new(viewport_camera))
+			#drag_handle_start_pos = builder.get_snapping_manager().snap_point(start_pos, SnappingQuery.new(viewport_camera))
 
 	#		print("res obj %s" % result.object.get_path())
 			var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()

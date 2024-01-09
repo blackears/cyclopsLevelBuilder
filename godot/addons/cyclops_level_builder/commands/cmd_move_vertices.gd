@@ -49,7 +49,7 @@ func add_vertices(block_path:NodePath, indices:Array[int]):
 		changes = BlockVertexChanges.new()
 		changes.block_path = block_path
 		var block:CyclopsBlock = builder.get_node(block_path)
-		changes.tracked_block_data = block.block_data
+		changes.tracked_block_data = block.block_data.duplicate()
 		block_map[block_path] = changes
 
 	for index in indices:
