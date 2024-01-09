@@ -138,7 +138,7 @@ func undo_it():
 		block.block_data = tracked.data
 		block.materials = tracked.materials
 		block.name = tracked.name
-		block.selected = tracked.selected
+		#block.selected = tracked.selected
 		block.global_transform = tracked.world_xform
 		
 		parent.add_child(block)
