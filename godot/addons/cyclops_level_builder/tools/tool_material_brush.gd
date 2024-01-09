@@ -111,6 +111,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 			
 			if result:
+				print ("hit ", result.object.name)
 				cmd.undo_it()
 				var block:CyclopsBlock = result.object
 				if settings.individual_faces:

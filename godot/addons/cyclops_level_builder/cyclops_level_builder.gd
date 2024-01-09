@@ -407,6 +407,9 @@ func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 	var blocks:Array[CyclopsBlock] = get_blocks()
 
 	for block in blocks:
+		if !block.is_visible_in_tree():
+			continue
+		
 		var result:IntersectResults = block.intersect_ray_closest(origin, dir)
 #			print("isect %s %s" % [node.name, result])
 		if result:

@@ -28,12 +28,14 @@ layout_mode = 2
 [node name="check_flatten" type="CheckBox" parent="MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "If unchecked, the scene heierarchy will be refelected in the exported nodes.  Otherwise all nodes will be children of the root."
 button_pressed = true
 text = "Flatten"
 
 [node name="check_markers" type="CheckBox" parent="MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Include Marker3Ds in export."
 button_pressed = true
 text = "Markers"
 
