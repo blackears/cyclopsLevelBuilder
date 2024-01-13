@@ -25,11 +25,7 @@
 extends RefCounted
 class_name CyclopsLogger
 
-enum LogLevel {
-	ERROR,
-	WARNING,
-	INFO
-	}
+enum LogLevel { ERROR, WARNING, INFO }
 
 func log(message:String, level:LogLevel = LogLevel.ERROR):
 	print(message)
