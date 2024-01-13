@@ -34,7 +34,7 @@ const CYCLOPS_HUD_NAME = "CyclopsGlobalHud"
 
 var config:CyclopsConfig = preload("res://addons/cyclops_level_builder/data/configuration.tres")
 
-var logger:Logger = Logger.new()
+var logger:CyclopsLogger = CyclopsLogger.new()
 
 var material_dock:MaterialPaletteViewport
 var convex_face_editor_dock:ConvexFaceEdtiorViewport
@@ -178,7 +178,7 @@ func _exit_tree():
 		remove_control_from_docks(cyclops_console_dock)
 		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
 
-	if upgrade_cyclops_blocks_toolbar.activated:		
+	if upgrade_cyclops_blocks_toolbar.activated:
 		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, upgrade_cyclops_blocks_toolbar)
 
 	material_dock.queue_free()
@@ -189,7 +189,7 @@ func _exit_tree():
 	editor_toolbar.queue_free()
 	upgrade_cyclops_blocks_toolbar.queue_free()
 
-func log(message:String, level:Logger.Level = Logger.Level.ERROR):
+func log(message:String, level:CyclopsLogger.LogLevel = CyclopsLogger.LogLevel.ERROR):
 	logger.log(message, level)
 
 func get_blocks()->Array[CyclopsBlock]:

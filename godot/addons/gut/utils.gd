@@ -269,10 +269,10 @@ func is_godot_version_gte(expected, engine_info=Engine.get_version_info()):
 # ------------------------------------------------------------------------------
 func get_logger():
 	if(_test_mode):
-		return Logger.new()
+		return CyclopsLogger.new()
 	else:
 		if(_lgr == null):
-			_lgr = Logger.new()
+			_lgr = CyclopsLogger.new()
 		return _lgr
 
 
