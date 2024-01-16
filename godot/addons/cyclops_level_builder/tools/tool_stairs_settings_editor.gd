@@ -46,17 +46,17 @@ func _process(delta):
 func update():
 	if !settings:
 		#%default_block_height.value = 0
-		%step_height.disabled = true
-		%step_depth.disabled = true
+#		%step_height.disabled = true
+#		%step_depth.disabled = true
 		%spin_direction.disabled = true
 		%check_match_selected_block.disabled = true
 		%default_block_elevation.disabled = true
 		%default_block_height.disabled = true
 		return
 
-	%step_height.disabled = false
+#	%step_height.disabled = false
 	%step_height.value = settings.step_height
-	%step_depth.disabled = false
+#	%step_depth.disabled = false
 	%step_depth.button_pressed = settings.step_depth
 	%spin_direction.disabled = false
 	%spin_direction.button_pressed = settings.direction

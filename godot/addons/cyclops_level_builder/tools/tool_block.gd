@@ -213,24 +213,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var angle_with_base:float = acos(drag_floor_normal.dot(camera_dir))
 
 					var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
+
 					if angle_with_base < drag_angle_limit || angle_with_base > PI - drag_angle_limit:
 						var height = settings.default_block_height
 						if settings.match_selected_block:
-							var active_block:CyclopsBlock = builder.get_active_block()
-							var block_bounds:AABB = active_block.control_mesh.calc_bounds_xform(active_block.global_transform)
-							var plane:Plane = Plane(drag_floor_normal, block_bounds.get_center())
-							var p0_over:bool = plane.is_point_over(block_drag_p1)
-
-							#print("plane ", plane)
-							#print("viewport_camera.global_position ", viewport_camera.global_position)
-							height = abs(block_bounds.size.dot(drag_floor_normal))
-							if p0_over:
-#								print("Not over")
-								height = -height
-							#else:
-								#print("Over")
+							height = calc_active_block_orthogonal_height(block_drag_p0, drag_floor_normal)
 							
-#						print("height ", height)
 						block_drag_cur = block_drag_p1 + drag_floor_normal * height
 						
 						create_block()

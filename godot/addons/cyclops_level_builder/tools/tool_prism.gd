@@ -92,7 +92,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var angle_with_base:float = acos(floor_normal.dot(camera_dir))
 					var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
 					if angle_with_base < drag_angle_limit || angle_with_base > PI - drag_angle_limit:
-						drag_offset = floor_normal * settings.default_block_height
+						var height = settings.default_block_height
+						
+						if settings.match_selected_block:
+							height = calc_active_block_orthogonal_height(base_points[0], floor_normal)
+						
+						drag_offset = floor_normal * height
 						block_drag_cur = base_points[0] + drag_offset
 						
 						create_block()
@@ -165,7 +170,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 							var angle_with_base:float = acos(floor_normal.dot(camera_dir))
 							var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
 							if angle_with_base < drag_angle_limit || angle_with_base > PI - drag_angle_limit:
-								drag_offset = floor_normal * settings.default_block_height
+								var height = settings.default_block_height
+								
+								if settings.match_selected_block:
+									height = calc_active_block_orthogonal_height(base_points[0], floor_normal)
+								
+								drag_offset = floor_normal * height
 								block_drag_cur = base_points[0] + drag_offset
 								
 								create_block()

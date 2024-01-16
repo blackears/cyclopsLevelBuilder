@@ -158,4 +158,16 @@ func calc_hit_point_empty_space(origin:Vector3, dir:Vector3, viewport_camera:Cam
 		
 		return [block_drag_p0, drag_floor_normal]
 
+func calc_active_block_orthogonal_height(plane_origin:Vector3, drag_floor_normal:Vector3)->float:
+	var active_block:CyclopsBlock = builder.get_active_block()
+	var block_bounds:AABB = active_block.control_mesh.calc_bounds_xform(active_block.global_transform)
+	var plane:Plane = Plane(drag_floor_normal, block_bounds.get_center())
+	var p0_over:bool = plane.is_point_over(plane_origin)
+
+	var height:float = abs(block_bounds.size.dot(drag_floor_normal))
+	if p0_over:
+		height = -height
+		
+	return height
+
 

@@ -60,7 +60,7 @@ func _get_tool_properties_editor()->Control:
 	#return res_insp
 	var ed:ToolStairsSettingsEditor = preload("res://addons/cyclops_level_builder/tools/tool_stairs_settings_editor.tscn").instantiate()
 	
-	ed.target = settings
+	ed.settings = settings
 	
 	return ed
 	
@@ -205,7 +205,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var angle_with_base:float = acos(floor_normal.dot(camera_dir))
 					var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
 					if angle_with_base < drag_angle_limit || angle_with_base > PI - drag_angle_limit:
-						block_drag_cur = base_drag_cur + floor_normal
+						var height = settings.default_block_height
+						if settings.match_selected_block:
+							height = calc_active_block_orthogonal_height(base_drag_cur, floor_normal)
+						
+						block_drag_cur = base_drag_cur + floor_normal * height
 						
 						create_block()
 						
