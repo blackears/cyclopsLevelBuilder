@@ -53,11 +53,16 @@ func _deactivate():
 	builder.set_tool_cache(TOOL_ID, cache)
 			
 func _get_tool_properties_editor()->Control:
-	var res_insp:ResourceInspector = preload("res://addons/cyclops_level_builder/controls/resource_inspector/resource_inspector.tscn").instantiate()
+	#var res_insp:ResourceInspector = preload("res://addons/cyclops_level_builder/controls/resource_inspector/resource_inspector.tscn").instantiate()
+	#
+	#res_insp.target = settings
+	#
+	#return res_insp
+	var ed:ToolStairsSettingsEditor = preload("res://addons/cyclops_level_builder/tools/tool_stairs_settings_editor.tscn").instantiate()
 	
-	res_insp.target = settings
+	ed.target = settings
 	
-	return res_insp
+	return ed
 	
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()

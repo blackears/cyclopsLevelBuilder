@@ -25,17 +25,27 @@
 extends Resource
 class_name ToolStairsSettings
 
+@export var match_selected_block:bool = true
+@export var default_block_elevation:float = 0
+@export var default_block_height:float = 1
+
 @export var step_height:float = .25
 @export var step_depth:float = .5
 @export var direction:int = 0
 
 func load_from_cache(cache:Dictionary):
+	match_selected_block = cache.get("match_selected_block", true)
+	default_block_elevation = cache.get("default_block_elevation", 0)
+	default_block_height = cache.get("default_block_height", 1)
 	step_height = cache.get("step_height", .25)
 	step_depth = cache.get("step_depth", .5)
 	direction = cache.get("direction", 0)
 	
 func save_to_cache():
 	return {
+		"match_selected_block": match_selected_block,
+		"default_block_elevation": default_block_elevation,
+		"default_block_height": default_block_height,
 		"step_height": step_height,
 		"step_depth": step_depth,
 		"direction": direction,

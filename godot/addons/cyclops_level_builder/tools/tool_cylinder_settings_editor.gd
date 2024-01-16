@@ -23,24 +23,40 @@
 
 @tool
 extends PanelContainer
-class_name ToolBlockSettingsEditor
+class_name ToolCylinderSettingsEditor
 
-var settings:ToolBlockSettings:
+
+var settings:ToolCylinderSettings:
 	get:
 		return settings
 	set(value):
 		settings = value
 		update()
 
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+
 
 func update():
 	if !settings:
 		#%default_block_height.value = 0
+		%spin_segments.disabled = true
+		%check_tube.disabled = true
 		%check_match_selected_block.disabled = true
 		%default_block_elevation.disabled = true
 		%default_block_height.disabled = true
 		return
 
+	%spin_segments.disabled = false
+	%spin_segments.value = settings.segments
+	%check_tube.disabled = false
+	%check_tube.button_pressed = settings.match_selected_block
 	%check_match_selected_block.disabled = false
 	%check_match_selected_block.button_pressed = settings.match_selected_block
 	%default_block_elevation.disabled = false
@@ -49,13 +65,21 @@ func update():
 	%default_block_height.value = settings.default_block_height
 
 
-func _on_default_block_height_value_changed(value:float):
-	settings.default_block_height = value
+func _on_check_match_selected_block_toggled(value):
+	settings.match_selected_block = value
 
 
-func _on_default_block_elevation_value_changed(value:float):
+func _on_default_block_elevation_value_changed(value):
 	settings.default_block_elevation = value
 
 
-func _on_check_match_selected_block_toggled(value:bool):
-	settings.match_selected_block = value
+func _on_default_block_height_value_changed(value):
+	settings.default_block_height = value
+
+
+func _on_check_tube_toggled(value):
+	settings.tube = value
+
+
+func _on_spin_segments_value_changed(value):
+	settings.segments = value

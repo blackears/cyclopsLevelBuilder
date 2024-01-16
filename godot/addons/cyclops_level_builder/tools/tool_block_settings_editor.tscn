@@ -4,21 +4,55 @@
 [ext_resource type="PackedScene" uid="uid://diibmlqy1mpqb" path="res://addons/cyclops_level_builder/controls/numeric_line_edit.tscn" id="2_1r7f8"]
 
 [node name="ToolBlockSettings" type="PanelContainer"]
-offset_right = 315.0
-offset_bottom = 70.0
+offset_right = 413.0
+offset_bottom = 232.0
 script = ExtResource("1_nvmrk")
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="check_match_selected_block" type="CheckBox" parent="PanelContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "When drawing in empty space, copy elevation and height properties from currently selected block."
+text = "Match selected block"
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Orthogonal Viewport:"
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 columns = 2
 
-[node name="Label" type="Label" parent="GridContainer"]
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
-text = "Default Block Height"
+text = "Default Block Elevation"
 
-[node name="default_block_height" parent="GridContainer" instance=ExtResource("2_1r7f8")]
+[node name="default_block_elevation" parent="PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/GridContainer" instance=ExtResource("2_1r7f8")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[connection signal="value_changed" from="GridContainer/default_block_height" to="." method="_on_default_block_height_value_changed"]
+[node name="Label2" type="Label" parent="PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Default Block Height"
+
+[node name="default_block_height" parent="PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/GridContainer" instance=ExtResource("2_1r7f8")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[connection signal="toggled" from="PanelContainer/VBoxContainer/check_match_selected_block" to="." method="_on_check_match_selected_block_toggled"]
+[connection signal="value_changed" from="PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/GridContainer/default_block_elevation" to="." method="_on_default_block_elevation_value_changed"]
+[connection signal="value_changed" from="PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/GridContainer/default_block_height" to="." method="_on_default_block_height_value_changed"]

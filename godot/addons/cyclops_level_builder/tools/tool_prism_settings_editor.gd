@@ -35,13 +35,25 @@ var settings:ToolPrismSettings:
 
 func update():
 	if !settings:
-		#%default_block_height.value = 0
+		%check_match_selected_block.disabled = true
+		%default_block_elevation.disabled = true
 		%default_block_height.disabled = true
 		return
 
+	%check_match_selected_block.disabled = false
+	%check_match_selected_block.button_pressed = settings.match_selected_block
+	%default_block_elevation.disabled = false
+	%default_block_elevation.value = settings.default_block_elevation
 	%default_block_height.disabled = false
 	%default_block_height.value = settings.default_block_height
 
-
-func _on_default_block_height_value_changed(value):
+func _on_default_block_height_value_changed(value:float):
 	settings.default_block_height = value
+
+
+func _on_default_block_elevation_value_changed(value:float):
+	settings.default_block_elevation = value
+
+
+func _on_check_match_selected_block_toggled(value:bool):
+	settings.match_selected_block = value

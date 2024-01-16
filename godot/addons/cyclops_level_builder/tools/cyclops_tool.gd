@@ -105,10 +105,8 @@ func to_local(point:Vector3, world_to_local:Transform3D, grid_step_size:float)->
 	return MathUtil.snap_to_grid(p_local, grid_step_size)
 	
 
-func calc_hit_point_empty_space(origin:Vector3, dir:Vector3, viewport_camera:Camera3D = null):
+func calc_hit_point_empty_space(origin:Vector3, dir:Vector3, viewport_camera:Camera3D = null, base_plane_origin:Vector3 = Vector3.ZERO, drag_floor_normal:Vector3 = Vector3.UP):
 		#print("Miss")
-		var base_plane_origin:Vector3 = Vector3.ZERO
-		var drag_floor_normal:Vector3 = Vector3.UP
 		var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
 
 		var angle_y_axis:float = acos(dir.dot(Vector3.UP))
