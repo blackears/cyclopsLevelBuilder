@@ -141,7 +141,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						
 					else:
 						#print("init base point empty space")
-						var hit_result = calc_hit_point_empty_space(origin, dir, viewport_camera)
+						var draw_plane_point:Vector3 = Vector3.ZERO
+						var draw_plane_normal:Vector3 = Vector3.UP
+						if settings.match_selected_block:
+							draw_plane_point = calc_empty_space_draw_plane_origin(viewport_camera, draw_plane_point, draw_plane_normal)
+							
+						var hit_result = calc_hit_point_empty_space(origin, dir, viewport_camera, draw_plane_point, draw_plane_normal)
 						var start_pos:Vector3 = hit_result[0]
 						floor_normal = hit_result[1]
 						

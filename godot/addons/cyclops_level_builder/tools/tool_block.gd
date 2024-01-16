@@ -117,29 +117,6 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 		
 		tool_state = ToolState.BLOCK_BASE
 
-func calc_empty_space_draw_plane_origin(viewport_camera:Camera3D, draw_plane_point:Vector3 = Vector3.ZERO, draw_plane_normal:Vector3 = Vector3.UP):
-	var active_block:CyclopsBlock = builder.get_active_block()
-	var block_xfrom:Transform3D = active_block.global_transform
-	if active_block:
-		var vol:ConvexVolume = active_block.control_mesh
-		var bounds:AABB = vol.calc_bounds_xform(block_xfrom)
-		var plane:Plane = Plane(draw_plane_normal, bounds.get_center())
-		
-		var p0:Vector3 = bounds.position
-		var p1:Vector3 = bounds.position + bounds.size
-		if plane.is_point_over(viewport_camera.global_transform.origin):
-			if plane.is_point_over(p0):
-				draw_plane_point = p1
-			else:
-				draw_plane_point = p0
-		else:
-			if plane.is_point_over(p0):
-				draw_plane_point = p0
-			else:
-				draw_plane_point = p1
-				
-	return draw_plane_point
-
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
@@ -237,7 +214,24 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
 					if angle_with_base < drag_angle_limit || angle_with_base > PI - drag_angle_limit:
-						block_drag_cur = block_drag_p1 + drag_floor_normal * settings.default_block_height
+						var height = settings.default_block_height
+						if settings.match_selected_block:
+							var active_block:CyclopsBlock = builder.get_active_block()
+							var block_bounds:AABB = active_block.control_mesh.calc_bounds_xform(active_block.global_transform)
+							var plane:Plane = Plane(drag_floor_normal, block_bounds.get_center())
+							var p0_over:bool = plane.is_point_over(block_drag_p1)
+
+							#print("plane ", plane)
+							#print("viewport_camera.global_position ", viewport_camera.global_position)
+							height = abs(block_bounds.size.dot(drag_floor_normal))
+							if p0_over:
+#								print("Not over")
+								height = -height
+							#else:
+								#print("Over")
+							
+#						print("height ", height)
+						block_drag_cur = block_drag_p1 + drag_floor_normal * height
 						
 						create_block()
 						
