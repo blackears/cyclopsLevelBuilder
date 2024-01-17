@@ -653,6 +653,17 @@ func calc_bounds()->AABB:
 		
 	return result
 
+func calc_bounds_xform(xform:Transform3D)->AABB:
+	if vertices.is_empty():
+		return AABB()
+		
+	var result:AABB = AABB(xform * vertices[0].point, Vector3.ZERO)
+	
+	for v_idx in range(1, vertices.size()):
+		result = result.expand(xform * vertices[v_idx].point)
+		
+	return result
+
 
 func tristrip_vertex_range(num_verts:int)->PackedInt32Array:
 	var result:PackedInt32Array

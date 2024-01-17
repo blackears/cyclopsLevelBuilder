@@ -92,7 +92,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var angle_with_base:float = acos(floor_normal.dot(camera_dir))
 					var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
 					if angle_with_base < drag_angle_limit || angle_with_base > PI - drag_angle_limit:
-						drag_offset = floor_normal * settings.default_block_height
+						var height = settings.default_block_height
+						
+						if settings.match_selected_block:
+							height = calc_active_block_orthogonal_height(base_points[0], floor_normal)
+						
+						drag_offset = floor_normal * height
 						block_drag_cur = base_points[0] + drag_offset
 						
 						create_block()
@@ -141,7 +146,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						
 					else:
 						#print("init base point empty space")
-						var hit_result = calc_hit_point_empty_space(origin, dir, viewport_camera)
+						var draw_plane_point:Vector3 = Vector3.ZERO
+						var draw_plane_normal:Vector3 = Vector3.UP
+						if settings.match_selected_block:
+							draw_plane_point = calc_empty_space_draw_plane_origin(viewport_camera, draw_plane_point, draw_plane_normal)
+							
+						var hit_result = calc_hit_point_empty_space(origin, dir, viewport_camera, draw_plane_point, draw_plane_normal)
 						var start_pos:Vector3 = hit_result[0]
 						floor_normal = hit_result[1]
 						
@@ -160,7 +170,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 							var angle_with_base:float = acos(floor_normal.dot(camera_dir))
 							var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
 							if angle_with_base < drag_angle_limit || angle_with_base > PI - drag_angle_limit:
-								drag_offset = floor_normal * settings.default_block_height
+								var height = settings.default_block_height
+								
+								if settings.match_selected_block:
+									height = calc_active_block_orthogonal_height(base_points[0], floor_normal)
+								
+								drag_offset = floor_normal * height
 								block_drag_cur = base_points[0] + drag_offset
 								
 								create_block()

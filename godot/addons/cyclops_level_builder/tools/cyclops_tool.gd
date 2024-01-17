@@ -105,10 +105,31 @@ func to_local(point:Vector3, world_to_local:Transform3D, grid_step_size:float)->
 	return MathUtil.snap_to_grid(p_local, grid_step_size)
 	
 
-func calc_hit_point_empty_space(origin:Vector3, dir:Vector3, viewport_camera:Camera3D = null):
+func calc_empty_space_draw_plane_origin(viewport_camera:Camera3D, draw_plane_point:Vector3 = Vector3.ZERO, draw_plane_normal:Vector3 = Vector3.UP):
+	var active_block:CyclopsBlock = builder.get_active_block()
+	var block_xfrom:Transform3D = active_block.global_transform
+	if active_block:
+		var vol:ConvexVolume = active_block.control_mesh
+		var bounds:AABB = vol.calc_bounds_xform(block_xfrom)
+		var plane:Plane = Plane(draw_plane_normal, bounds.get_center())
+		
+		var p0:Vector3 = bounds.position
+		var p1:Vector3 = bounds.position + bounds.size
+		if plane.is_point_over(viewport_camera.global_transform.origin):
+			if plane.is_point_over(p0):
+				draw_plane_point = p1
+			else:
+				draw_plane_point = p0
+		else:
+			if plane.is_point_over(p0):
+				draw_plane_point = p0
+			else:
+				draw_plane_point = p1
+				
+	return draw_plane_point
+
+func calc_hit_point_empty_space(origin:Vector3, dir:Vector3, viewport_camera:Camera3D = null, base_plane_origin:Vector3 = Vector3.ZERO, drag_floor_normal:Vector3 = Vector3.UP):
 		#print("Miss")
-		var base_plane_origin:Vector3 = Vector3.ZERO
-		var drag_floor_normal:Vector3 = Vector3.UP
 		var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
 
 		var angle_y_axis:float = acos(dir.dot(Vector3.UP))
@@ -136,5 +157,17 @@ func calc_hit_point_empty_space(origin:Vector3, dir:Vector3, viewport_camera:Cam
 		var block_drag_p0:Vector3 = builder.get_snapping_manager().snap_point(hit_base, SnappingQuery.new(viewport_camera))
 		
 		return [block_drag_p0, drag_floor_normal]
+
+func calc_active_block_orthogonal_height(plane_origin:Vector3, drag_floor_normal:Vector3)->float:
+	var active_block:CyclopsBlock = builder.get_active_block()
+	var block_bounds:AABB = active_block.control_mesh.calc_bounds_xform(active_block.global_transform)
+	var plane:Plane = Plane(drag_floor_normal, block_bounds.get_center())
+	var p0_over:bool = plane.is_point_over(plane_origin)
+
+	var height:float = abs(block_bounds.size.dot(drag_floor_normal))
+	if p0_over:
+		height = -height
+		
+	return height
 
 

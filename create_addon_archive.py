@@ -30,7 +30,7 @@ import getopt
 import platform
 
 projectName = 'cyclops_level_builder'
-version="_1_0_2"
+version="_1_0_3"
 extensions = [".gd", ".tres", ".tscn", ".gdshader", ".gdshaderinc", ".glsl", ".cfg", ".txt", ".md", ".glb", ".gltf", ".jpg", ".jpeg", ".png", ".exr", ".svg", ".bin", ".ttf", ".otf"]
 
 

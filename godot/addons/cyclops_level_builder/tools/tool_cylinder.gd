@@ -59,11 +59,12 @@ func _deactivate():
 	
 
 func _get_tool_properties_editor()->Control:
-	var res_insp:ResourceInspector = preload("res://addons/cyclops_level_builder/controls/resource_inspector/resource_inspector.tscn").instantiate()
+#	var res_insp:ResourceInspector = preload("res://addons/cyclops_level_builder/controls/resource_inspector/resource_inspector.tscn").instantiate()
+	var ed:ToolCylinderSettingsEditor = preload("res://addons/cyclops_level_builder/tools/tool_cylinder_settings_editor.tscn").instantiate()
 	
-	res_insp.target = settings
+	ed.settings = settings
 	
-	return res_insp
+	return ed
 
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
@@ -134,14 +135,14 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						
 					else:
 						#print("init base point empty space")
-						var hit_result = calc_hit_point_empty_space(origin, dir, viewport_camera)
+						var draw_plane_point:Vector3 = Vector3.ZERO
+						var draw_plane_normal:Vector3 = Vector3.UP
+						if settings.match_selected_block:
+							draw_plane_point = calc_empty_space_draw_plane_origin(viewport_camera, draw_plane_point, draw_plane_normal)
+							
+						var hit_result = calc_hit_point_empty_space(origin, dir, viewport_camera, draw_plane_point, draw_plane_normal)
 						var start_pos:Vector3 = hit_result[0]
 						floor_normal = hit_result[1]
-#						floor_normal = Vector3.UP
-
-#						var start_pos:Vector3 = origin + builder.block_create_distance * dir
-						
-						#var p:Vector3 = to_local(start_pos, blocks_root.global_transform.inverse(), grid_step_size)
 
 						var p:Vector3 = builder.get_snapping_manager().snap_point(start_pos, SnappingQuery.new(viewport_camera))
 						base_center = p
@@ -156,7 +157,14 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						var angle_with_base:float = acos(floor_normal.dot(camera_dir))
 						var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
 						if angle_with_base < drag_angle_limit || angle_with_base > PI - drag_angle_limit:
-							block_drag_cur = base_center + floor_normal
+							#block_drag_cur = base_center + floor_normal
+							var height = settings.default_block_height
+							
+							if settings.match_selected_block:
+								height = calc_active_block_orthogonal_height(base_center, floor_normal)
+								
+							block_drag_cur = base_center + floor_normal * height
+							drag_offset = block_drag_cur - base_center
 							
 							create_block()
 							
@@ -170,7 +178,13 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var angle_with_base:float = acos(floor_normal.dot(camera_dir))
 					var drag_angle_limit:float = builder.get_global_scene().drag_angle_limit
 					if angle_with_base < drag_angle_limit || angle_with_base > PI - drag_angle_limit:
-						block_drag_cur = base_center + floor_normal
+						#block_drag_cur = base_center + floor_normal
+						var height = settings.default_block_height
+						if settings.match_selected_block:
+							height = calc_active_block_orthogonal_height(base_center, floor_normal)
+							
+						block_drag_cur = base_center + floor_normal * height
+						drag_offset = block_drag_cur - base_center
 						
 						create_block()
 						
@@ -262,7 +276,9 @@ func create_block():
 	cmd.tube = settings.tube
 	cmd.origin = base_center
 	cmd.axis_normal = floor_normal
-	cmd.height = drag_offset.length() if drag_offset.dot(floor_normal) > 0 else - drag_offset.length()
+	var height:float = drag_offset.length() if drag_offset.dot(floor_normal) > 0 else - drag_offset.length()
+	cmd.height = height
+	
 	if settings.tube:
 		cmd.radius_inner = min(first_ring_radius, second_ring_radius)
 		cmd.radius_outer = max(first_ring_radius, second_ring_radius)
