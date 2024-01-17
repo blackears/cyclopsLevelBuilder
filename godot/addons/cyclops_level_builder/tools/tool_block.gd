@@ -243,11 +243,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				
 			return true
 		
-		elif e.button_index == MOUSE_BUTTON_RIGHT:
-			if tool_state == ToolState.BLOCK_BASE || tool_state == ToolState.BLOCK_HEIGHT:
-				if e.is_pressed():
-					tool_state = ToolState.NONE
-				return true
+		#elif e.button_index == MOUSE_BUTTON_RIGHT:
+			#if tool_state == ToolState.BLOCK_BASE || tool_state == ToolState.BLOCK_HEIGHT:
+				#if e.is_pressed():
+					#tool_state = ToolState.NONE
+				#return true
 			
 			
 	elif event is InputEventMouseMotion:

@@ -226,11 +226,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					tool_state = ToolState.READY
 					return true
 					
-		elif e.button_index == MOUSE_BUTTON_RIGHT:
-			if tool_state == ToolState.DRAG_BASE || tool_state == ToolState.DRAG_HEIGHT:
-				if e.is_pressed():
-					tool_state = ToolState.READY
-				return true
+		#elif e.button_index == MOUSE_BUTTON_RIGHT:
+			#if tool_state == ToolState.DRAG_BASE || tool_state == ToolState.DRAG_HEIGHT:
+				#if e.is_pressed():
+					#tool_state = ToolState.READY
+				#return true
 					
 		elif e.button_index == MOUSE_BUTTON_WHEEL_UP:
 			if tool_state == ToolState.DRAG_BASE || tool_state == ToolState.DRAG_HEIGHT:

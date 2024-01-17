@@ -57,9 +57,9 @@ func update():
 #	%step_height.disabled = false
 	%step_height.value = settings.step_height
 #	%step_depth.disabled = false
-	%step_depth.button_pressed = settings.step_depth
-	%spin_direction.disabled = false
-	%spin_direction.button_pressed = settings.direction
+	%step_depth.value = settings.step_depth
+	#%spin_direction.disabled = false
+	%spin_direction.value = settings.direction
 	%check_match_selected_block.disabled = false
 	%check_match_selected_block.button_pressed = settings.match_selected_block
 	%default_block_elevation.disabled = false

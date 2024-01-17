@@ -23,6 +23,7 @@ layout_mode = 2
 text = "Step Height"
 
 [node name="step_height" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("2_hqkby")]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 

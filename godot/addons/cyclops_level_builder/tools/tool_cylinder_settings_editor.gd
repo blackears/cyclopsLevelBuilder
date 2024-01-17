@@ -46,14 +46,14 @@ func _process(delta):
 func update():
 	if !settings:
 		#%default_block_height.value = 0
-		%spin_segments.disabled = true
+		#%spin_segments.disabled = true
 		%check_tube.disabled = true
 		%check_match_selected_block.disabled = true
 		%default_block_elevation.disabled = true
 		%default_block_height.disabled = true
 		return
 
-	%spin_segments.disabled = false
+	#%spin_segments.disabled = false
 	%spin_segments.value = settings.segments
 	%check_tube.disabled = false
 	%check_tube.button_pressed = settings.match_selected_block
