@@ -77,7 +77,7 @@ var display_mode:DisplayMode.Type = DisplayMode.Type.MATERIAL
 var cached_viewport_camera:Camera3D
 
 var editor_cache:Dictionary
-var editor_cache_file:String = "editor_cache.json"
+var editor_cache_file:String = "user://cyclops_editor_cache.json"
 
 func get_snapping_manager()->SnappingManager:
 	var mgr:SnappingManager = SnappingManager.new()
