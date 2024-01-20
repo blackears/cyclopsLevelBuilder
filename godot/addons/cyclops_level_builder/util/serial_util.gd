@@ -47,23 +47,26 @@ static func load_cache_color(cache:Dictionary, default_value:Color = Color.BLACK
 	return Color(cache.color[0], cache.color[1], cache.color[2], cache.color[3])
 
 static func save_cache_transform_3d(t:Transform3D)->String:
-	var dict:Dictionary = {
-		"x": [t.basis.x.x, t.basis.x.y, t.basis.x.z],
-		"y": [t.basis.y.x, t.basis.y.y, t.basis.y.z],
-		"z": [t.basis.z.x, t.basis.z.y, t.basis.z.z],
-		"o": [t.origin.x, t.origin.y, t.origin.z],
-	}
-	return JSON.stringify(dict)
+	return var_to_str(t)
+	#var dict:Dictionary = {
+		#"x": [t.basis.x.x, t.basis.x.y, t.basis.x.z],
+		#"y": [t.basis.y.x, t.basis.y.y, t.basis.y.z],
+		#"z": [t.basis.z.x, t.basis.z.y, t.basis.z.z],
+		#"o": [t.origin.x, t.origin.y, t.origin.z],
+	#}
+	#return JSON.stringify(dict)
 	
 static func load_cache_transform_3d(text:String, default_value:Transform3D = Transform3D.IDENTITY)->Transform3D:
 	if text.is_empty():
 		return default_value
+
+	return str_to_var(text)
 	
-	var cache:Dictionary = JSON.parse_string(text)
-	var x:Vector3 = Vector3(cache.x[0], cache.x[1], cache.x[2])
-	var y:Vector3 = Vector3(cache.y[0], cache.y[1], cache.y[2])
-	var z:Vector3 = Vector3(cache.z[0], cache.z[1], cache.z[2])
-	var o:Vector3 = Vector3(cache.o[0], cache.o[1], cache.o[2])
-	
-	return Transform3D(x, y, z, o)
+	#var cache:Dictionary = JSON.parse_string(text)
+	#var x:Vector3 = Vector3(cache.x[0], cache.x[1], cache.x[2])
+	#var y:Vector3 = Vector3(cache.y[0], cache.y[1], cache.y[2])
+	#var z:Vector3 = Vector3(cache.z[0], cache.z[1], cache.z[2])
+	#var o:Vector3 = Vector3(cache.o[0], cache.o[1], cache.o[2])
+	#
+	#return Transform3D(x, y, z, o)
 
