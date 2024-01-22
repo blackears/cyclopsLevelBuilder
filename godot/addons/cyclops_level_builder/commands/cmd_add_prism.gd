@@ -32,6 +32,9 @@ var extrude:Vector3
 #var local_transform:Transform3D
 var uv_transform:Transform2D
 var material_path:String
+var collision_type:Collision.Type = Collision.Type.STATIC
+var collision_layers:int = 1
+var collision_mask:int = 1
 
 #Private
 var block_path:NodePath
@@ -47,6 +50,9 @@ func do_it():
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
 	block.name = block_name
 	#block.transform = local_transform
+	block.collision_type = collision_type
+	block.collision_layer = collision_layers
+	block.collision_mask = collision_mask
 
 	var material_id:int = -1
 	if ResourceLoader.exists(material_path):

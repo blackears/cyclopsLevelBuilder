@@ -38,6 +38,9 @@ var direction:int = 0
 
 var uv_transform:Transform2D
 var material_path:String
+var collision_type:Collision.Type = Collision.Type.STATIC
+var collision_layers:int = 1
+var collision_mask:int = 1
 
 #Private data
 var block_paths:Array[NodePath]
@@ -50,6 +53,9 @@ func create_block(blocks_root:Node, mat:Material)->CyclopsBlock:
 	blocks_root.add_child(block)
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
 	block.name = GeneralUtil.find_unique_name(blocks_root, block_name_prefix)
+	block.collision_type = collision_type
+	block.collision_layer = collision_layers
+	block.collision_mask = collision_mask
 
 	if mat:
 		block.materials.append(mat)

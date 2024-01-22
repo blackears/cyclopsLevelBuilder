@@ -150,6 +150,9 @@ func create_block():
 #						command.origin = block_drag_p0
 		command.uv_transform = builder.tool_uv_transform
 		command.material_path = builder.tool_material_path
+		command.collision_type = settings.collision_type
+		command.collision_layers = settings.collision_layer
+		command.collision_mask = settings.collision_mask
 
 		var undo:EditorUndoRedoManager = builder.get_undo_redo()
 

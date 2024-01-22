@@ -18,6 +18,47 @@ layout_mode = 2
 layout_mode = 2
 columns = 2
 
+[node name="Label5" type="Label" parent="PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Collision Type"
+
+[node name="collision_type" type="OptionButton" parent="PanelContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 4
+selected = 0
+popup/item_0/text = "NONE"
+popup/item_0/id = 0
+popup/item_1/text = "STATIC"
+popup/item_1/id = 1
+popup/item_2/text = "KINEMATIC"
+popup/item_2/id = 2
+popup/item_3/text = "RIGID"
+popup/item_3/id = 3
+
+[node name="Label6" type="Label" parent="PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Collision Layers"
+
+[node name="collision_layers" type="SpinBox" parent="PanelContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+rounded = true
+allow_greater = true
+allow_lesser = true
+
+[node name="Label7" type="Label" parent="PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Collision Mask"
+
+[node name="collision_mask" type="SpinBox" parent="PanelContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+rounded = true
+allow_greater = true
+allow_lesser = true
+
 [node name="Label2" type="Label" parent="PanelContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Step Height"
@@ -92,6 +133,9 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
+[connection signal="item_selected" from="PanelContainer/VBoxContainer/GridContainer/collision_type" to="." method="_on_collision_type_item_selected"]
+[connection signal="value_changed" from="PanelContainer/VBoxContainer/GridContainer/collision_layers" to="." method="_on_collision_layers_value_changed"]
+[connection signal="value_changed" from="PanelContainer/VBoxContainer/GridContainer/collision_mask" to="." method="_on_collision_mask_value_changed"]
 [connection signal="value_changed" from="PanelContainer/VBoxContainer/GridContainer/step_height" to="." method="_on_step_height_value_changed"]
 [connection signal="value_changed" from="PanelContainer/VBoxContainer/GridContainer/step_depth" to="." method="_on_step_depth_value_changed"]
 [connection signal="value_changed" from="PanelContainer/VBoxContainer/GridContainer/spin_direction" to="." method="_on_spin_direction_value_changed"]

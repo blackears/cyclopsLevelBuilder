@@ -278,6 +278,9 @@ func create_block():
 	cmd.axis_normal = floor_normal
 	var height:float = drag_offset.length() if drag_offset.dot(floor_normal) > 0 else - drag_offset.length()
 	cmd.height = height
+	cmd.collision_type = settings.collision_type
+	cmd.collision_layers = settings.collision_layer
+	cmd.collision_mask = settings.collision_mask
 	
 	if settings.tube:
 		cmd.radius_inner = min(first_ring_radius, second_ring_radius)

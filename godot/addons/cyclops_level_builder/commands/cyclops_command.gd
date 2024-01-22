@@ -36,6 +36,9 @@ class TrackedBlock extends RefCounted:
 	var materials:Array[Material]
 	var selected:bool
 	var name:String
+	var collision_type:Collision.Type
+	var collision_layers:int
+	var collision_mask:int
 
 	func _init(block:CyclopsBlock):
 		path = block.get_path()
@@ -45,7 +48,9 @@ class TrackedBlock extends RefCounted:
 		world_xform = block.global_transform
 		#selected = block.selected
 		materials = block.materials
-
+		collision_type = block.collision_type
+		collision_layers = block.collision_layer
+		collision_mask = block.collision_mask
 
 func add_to_undo_manager(undo_manager:EditorUndoRedoManager):
 	undo_manager.create_action(command_name, UndoRedo.MERGE_DISABLE)

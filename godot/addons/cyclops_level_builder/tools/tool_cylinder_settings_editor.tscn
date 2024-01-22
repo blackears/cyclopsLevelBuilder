@@ -18,6 +18,47 @@ layout_mode = 2
 layout_mode = 2
 columns = 2
 
+[node name="Label4" type="Label" parent="PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Collision Type"
+
+[node name="collision_type" type="OptionButton" parent="PanelContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 4
+selected = 0
+popup/item_0/text = "NONE"
+popup/item_0/id = 0
+popup/item_1/text = "STATIC"
+popup/item_1/id = 1
+popup/item_2/text = "KINEMATIC"
+popup/item_2/id = 2
+popup/item_3/text = "RIGID"
+popup/item_3/id = 3
+
+[node name="Label5" type="Label" parent="PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Collision Layers"
+
+[node name="collision_layers" type="SpinBox" parent="PanelContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+rounded = true
+allow_greater = true
+allow_lesser = true
+
+[node name="Label6" type="Label" parent="PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Collision Mask"
+
+[node name="collision_mask" type="SpinBox" parent="PanelContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+rounded = true
+allow_greater = true
+allow_lesser = true
+
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "Segments"
@@ -38,6 +79,7 @@ text = "Tube"
 [node name="check_tube" type="CheckBox" parent="PanelContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+disabled = true
 text = "On"
 
 [node name="Label3" type="Label" parent="PanelContainer/VBoxContainer/GridContainer"]
@@ -48,6 +90,7 @@ text = "Match selected block"
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "When drawing in empty space, copy elevation and height properties from currently selected block."
+disabled = true
 text = "On"
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer"]
@@ -73,6 +116,7 @@ text = "Default Block Elevation"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+disabled = true
 
 [node name="Label2" type="Label" parent="PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
@@ -82,7 +126,11 @@ text = "Default Block Height"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+disabled = true
 
+[connection signal="item_selected" from="PanelContainer/VBoxContainer/GridContainer/collision_type" to="." method="_on_collision_type_item_selected"]
+[connection signal="value_changed" from="PanelContainer/VBoxContainer/GridContainer/collision_layers" to="." method="_on_collision_layers_value_changed"]
+[connection signal="value_changed" from="PanelContainer/VBoxContainer/GridContainer/collision_mask" to="." method="_on_collision_mask_value_changed"]
 [connection signal="value_changed" from="PanelContainer/VBoxContainer/GridContainer/spin_segments" to="." method="_on_spin_segments_value_changed"]
 [connection signal="toggled" from="PanelContainer/VBoxContainer/GridContainer/check_tube" to="." method="_on_check_tube_toggled"]
 [connection signal="toggled" from="PanelContainer/VBoxContainer/GridContainer/check_match_selected_block" to="." method="_on_check_match_selected_block_toggled"]

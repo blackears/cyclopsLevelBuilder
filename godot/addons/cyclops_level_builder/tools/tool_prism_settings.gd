@@ -29,16 +29,25 @@ class_name ToolPrismSettings
 @export var match_selected_block:bool = true
 @export var default_block_elevation:float = 0
 @export var default_block_height:float = 1
+@export var collision_type:Collision.Type = Collision.Type.STATIC
+@export_flags_3d_physics var collision_layer:int = 1
+@export_flags_3d_physics var collision_mask:int = 1
 
 func load_from_cache(cache:Dictionary):
 	match_selected_block = cache.get("match_selected_block", true)
 	default_block_elevation = cache.get("default_block_elevation", 0)
 	default_block_height = cache.get("default_block_height", 1)
+	collision_type = cache.get("collision_type", Collision.Type.STATIC)
+	collision_layer = cache.get("collision_layer", 1)
+	collision_mask = cache.get("collision_mask", 1)
 	
 func save_to_cache():
 	return {
 		"match_selected_block": match_selected_block,
 		"default_block_elevation": default_block_elevation,
 		"default_block_height": default_block_height,
+		"collision_type": collision_type,
+		"collision_layer": collision_layer,
+		"collision_mask": collision_mask,
 	}
 

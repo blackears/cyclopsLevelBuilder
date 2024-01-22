@@ -39,6 +39,9 @@ var tube:bool = false
 
 var material_path:String
 var uv_transform:Transform2D = Transform2D.IDENTITY
+var collision_type:Collision.Type = Collision.Type.STATIC
+var collision_layers:int = 1
+var collision_mask:int = 1
 
 #Private data
 var block_paths:Array[NodePath]
@@ -52,6 +55,9 @@ func create_block(blocks_root:Node, set_pivot_xform:Transform3D, mat:Material)->
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
 	block.name = GeneralUtil.find_unique_name(blocks_root, block_name_prefix)
 	block.global_transform = set_pivot_xform.affine_inverse()
+	block.collision_type = collision_type
+	block.collision_layer = collision_layers
+	block.collision_mask = collision_mask
 
 	if mat:
 		block.materials.append(mat)

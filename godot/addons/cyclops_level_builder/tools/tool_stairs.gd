@@ -310,6 +310,9 @@ func create_block():
 	cmd.direction = settings.direction
 	cmd.uv_transform = builder.tool_uv_transform
 	cmd.material_path = builder.tool_material_path
+	cmd.collision_type = settings.collision_type
+	cmd.collision_layers = settings.collision_layer
+	cmd.collision_mask = settings.collision_mask
 
 	var undo:EditorUndoRedoManager = builder.get_undo_redo()
 

@@ -14,7 +14,56 @@ layout_mode = 2
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
 layout_mode = 2
 
-[node name="check_match_selected_block" type="CheckBox" parent="PanelContainer/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Collision Type"
+
+[node name="collision_type" type="OptionButton" parent="PanelContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 4
+selected = 0
+popup/item_0/text = "NONE"
+popup/item_0/id = 0
+popup/item_1/text = "STATIC"
+popup/item_1/id = 1
+popup/item_2/text = "KINEMATIC"
+popup/item_2/id = 2
+popup/item_3/text = "RIGID"
+popup/item_3/id = 3
+
+[node name="Label2" type="Label" parent="PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Collision Layers"
+
+[node name="collision_layers" type="SpinBox" parent="PanelContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+rounded = true
+allow_greater = true
+allow_lesser = true
+
+[node name="Label3" type="Label" parent="PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Collision Mask"
+
+[node name="collision_mask" type="SpinBox" parent="PanelContainer/VBoxContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+rounded = true
+allow_greater = true
+allow_lesser = true
+
+[node name="Label4" type="Label" parent="PanelContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Match Active Block"
+
+[node name="check_match_selected_block" type="CheckBox" parent="PanelContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "When drawing in empty space, copy elevation and height properties from currently selected block."
@@ -53,6 +102,9 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[connection signal="toggled" from="PanelContainer/VBoxContainer/check_match_selected_block" to="." method="_on_check_match_selected_block_toggled"]
+[connection signal="item_selected" from="PanelContainer/VBoxContainer/GridContainer/collision_type" to="." method="_on_collision_type_item_selected"]
+[connection signal="value_changed" from="PanelContainer/VBoxContainer/GridContainer/collision_layers" to="." method="_on_collision_layers_value_changed"]
+[connection signal="value_changed" from="PanelContainer/VBoxContainer/GridContainer/collision_mask" to="." method="_on_collision_mask_value_changed"]
+[connection signal="toggled" from="PanelContainer/VBoxContainer/GridContainer/check_match_selected_block" to="." method="_on_check_match_selected_block_toggled"]
 [connection signal="value_changed" from="PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/GridContainer/default_block_elevation" to="." method="_on_default_block_elevation_value_changed"]
 [connection signal="value_changed" from="PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/GridContainer/default_block_height" to="." method="_on_default_block_height_value_changed"]

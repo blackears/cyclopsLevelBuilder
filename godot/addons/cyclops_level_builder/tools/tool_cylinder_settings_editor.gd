@@ -31,29 +31,29 @@ var settings:ToolCylinderSettings:
 		return settings
 	set(value):
 		settings = value
-		update()
+		dirty = true
 
-# Called when the node enters the scene tree for the first time.
+var dirty:bool = true
+
 func _ready():
-	pass # Replace with function body.
+	%collision_type.clear()
+	for text in Collision.Type.keys():
+		%collision_type.add_item(text)
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	if dirty:
+		update()
+		dirty = false
 
 
 func update():
 	if !settings:
-		#%default_block_height.value = 0
-		#%spin_segments.disabled = true
 		%check_tube.disabled = true
 		%check_match_selected_block.disabled = true
 		%default_block_elevation.disabled = true
 		%default_block_height.disabled = true
 		return
 
-	#%spin_segments.disabled = false
 	%spin_segments.value = settings.segments
 	%check_tube.disabled = false
 	%check_tube.button_pressed = settings.match_selected_block
@@ -64,6 +64,9 @@ func update():
 	%default_block_height.disabled = false
 	%default_block_height.value = settings.default_block_height
 
+	%collision_type.selected = settings.collision_type
+	%collision_layers.value = settings.collision_layer
+	%collision_mask.value = settings.collision_mask
 
 func _on_check_match_selected_block_toggled(value):
 	settings.match_selected_block = value
@@ -83,3 +86,13 @@ func _on_check_tube_toggled(value):
 
 func _on_spin_segments_value_changed(value):
 	settings.segments = value
+
+func _on_collision_layers_value_changed(value):
+	settings.collision_layer = value
+
+
+func _on_collision_mask_value_changed(value):
+	settings.collision_mask = value
+
+func _on_collision_type_item_selected(index):
+	settings.collision_type = index

@@ -32,6 +32,9 @@ var block_name:String
 var bounds:AABB
 var material_path:String
 var uv_transform:Transform2D = Transform2D.IDENTITY
+var collision_type:Collision.Type = Collision.Type.STATIC
+var collision_layers:int = 1
+var collision_mask:int = 1
 
 #Private data
 var block_path:NodePath
@@ -48,6 +51,9 @@ func do_it():
 	block_parent.add_child(block)
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
 	block.name = block_name
+	block.collision_type = collision_type
+	block.collision_layer = collision_layers
+	block.collision_mask = collision_mask
 	
 	var material_id:int = -1
 	if ResourceLoader.exists(material_path):

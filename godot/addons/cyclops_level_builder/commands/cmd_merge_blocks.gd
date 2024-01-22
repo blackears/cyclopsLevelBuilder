@@ -140,6 +140,9 @@ func undo_it():
 		block.name = tracked.name
 		#block.selected = tracked.selected
 		block.global_transform = tracked.world_xform
+		block.collision_type = tracked.collision_type
+		block.collision_layer = tracked.collision_layers
+		block.collision_mask = tracked.collision_mask
 		
 		parent.add_child(block)
 		block.owner = builder.get_editor_interface().get_edited_scene_root()
