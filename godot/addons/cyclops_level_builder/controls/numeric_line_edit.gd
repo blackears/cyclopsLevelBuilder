@@ -42,8 +42,8 @@ signal value_changed(value:float)
 
 var dirty:bool = true
 
-enum State{ IDLE, READY, DRAGGING, TEXT_EDIT }
-var state:State = State.IDLE
+enum NumEditState{ IDLE, READY, DRAGGING, TEXT_EDIT }
+var state:NumEditState = NumEditState.IDLE
 
 var mouse_down_pos:Vector2
 var drag_start_radius:float = 4
@@ -87,29 +87,29 @@ func _gui_input(event):
 	if event is InputEventMouseButton:
 		var e:InputEventMouseButton = event
 		if e.is_pressed():
-			if state == State.IDLE:
+			if state == NumEditState.IDLE:
 				mouse_down_pos = e.position
-				state = State.READY
+				state = NumEditState.READY
 		else:
-			if state == State.READY:
+			if state == NumEditState.READY:
 				if line_input:
 					line_input.visible = true
 					line_display.visible = false
-				state = State.TEXT_EDIT
-			elif state == State.DRAGGING:
-				state = State.IDLE
+				state = NumEditState.TEXT_EDIT
+			elif state == NumEditState.DRAGGING:
+				state = NumEditState.IDLE
 				
 				
 		accept_event()
 			
 	elif event is InputEventMouseMotion:
 		var e:InputEventMouseMotion = event
-		if state == State.READY:
+		if state == NumEditState.READY:
 			if e.position.distance_to(mouse_down_pos) >= drag_start_radius:
-				state = State.DRAGGING
+				state = NumEditState.DRAGGING
 				value_start_drag = value
 				
-		elif state == State.DRAGGING:
+		elif state == NumEditState.DRAGGING:
 			var offset = e.position.x - mouse_down_pos.x
 			var new_value = value_start_drag + (offset * snap_size / 20.0)
 			#print("-new_value %s" % new_value)
@@ -132,7 +132,7 @@ func _on_line_edit_text_submitted(new_text):
 		value_changed.emit(value)
 		
 	dirty = true
-	state = State.IDLE
+	state = NumEditState.IDLE
 	if line_input:
 		line_input.visible = false
 		line_display.visible = true
