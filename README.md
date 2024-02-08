@@ -32,6 +32,9 @@ If you're upgrading your project from Cyclops v1.0.0, v1.0.1 or an earlier devel
 
 [An overview of the architecture of Cyclops Level Builder](doc/design.md) for those who want to dive into the code.
 
+## Change Log
+
+[Change log](doc/change_log.md)
 
 ## Contributing 
 

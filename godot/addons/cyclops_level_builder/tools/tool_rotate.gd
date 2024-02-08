@@ -243,10 +243,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		elif e.button_index == MOUSE_BUTTON_RIGHT:
 			if e.is_pressed():
 				#Right click cancel
-				tool_state = ToolState.NONE
-				if cmd_transform_blocks:
-					cmd_transform_blocks.undo_it()
-					cmd_transform_blocks = null
+				if tool_state == ToolState.ROTATE_BLOCK:
+					tool_state = ToolState.NONE
+					if cmd_transform_blocks:
+						cmd_transform_blocks.undo_it()
+						cmd_transform_blocks = null
 			
 	elif event is InputEventMouseMotion:
 		var e:InputEventMouseMotion = event
