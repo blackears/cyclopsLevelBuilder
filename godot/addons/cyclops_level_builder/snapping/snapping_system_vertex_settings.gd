@@ -27,3 +27,11 @@ class_name SnappingSystemVertexSettings
 
 #Snapping redous in viewport pixels
 @export var snap_radius:float = 6
+
+func load_from_cache(cache:Dictionary):
+	snap_radius = cache.get("snap_radius", 6.0)
+
+func save_to_cache()->Dictionary:
+	return {
+		"snap_radius": snap_radius
+	}

@@ -23,11 +23,31 @@
 
 @tool
 extends CyclopsSnappingSystem
-class_name SnappintSystemVertex
+class_name SnappingSystemVertex
 
 @export var max_radius:float = .2
 
+const SNAPPING_TOOL_ID:String = "vertex"
+
+#var snap_to_grid_util:SnapToGridUtil = SnapToGridUtil.new()
+
 var settings:SnappingSystemVertexSettings = SnappingSystemVertexSettings.new()
+
+func _activate(plugin:CyclopsLevelBuilder):
+	super._activate(plugin)
+
+	var cache:Dictionary = plugin.get_snapping_cache(SNAPPING_TOOL_ID)
+	settings.load_from_cache(cache)
+
+func _deactivate():
+	super._deactivate()
+
+	flush_cache()
+
+func flush_cache():
+	var cache:Dictionary = settings.save_to_cache()
+	plugin.set_snapping_cache(SNAPPING_TOOL_ID, cache)
+
 
 #Point is in world space
 func _snap_point(point:Vector3, query:SnappingQuery)->Vector3:
@@ -90,7 +110,7 @@ func _snap_point(point:Vector3, query:SnappingQuery)->Vector3:
 
 func _get_properties_editor()->Control:
 	var ed:SnappingSystemVertexPropertiesEditor = preload("res://addons/cyclops_level_builder/snapping/snapping_system_vertex_properties_editor.tscn").instantiate()
-	ed.settings = settings
+	ed.snap_tool = self
 	
 	return ed
 	

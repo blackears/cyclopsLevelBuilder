@@ -73,6 +73,7 @@ func _process(delta):
 
 
 func set_editor(control:Control):
+	
 	for child in $ScrollContainer.get_children():
 		$ScrollContainer.remove_child(child)
 	

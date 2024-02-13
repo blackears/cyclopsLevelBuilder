@@ -25,24 +25,38 @@
 extends PanelContainer
 class_name SnappingSystemVertexPropertiesEditor
 
-
-var settings:SnappingSystemVertexSettings:
+var snap_tool:SnappingSystemVertex:
 	get:
-		return settings
+		return snap_tool
 	set(value):
 		#print("setting SnappingSystemGridPropertiesEditor props")
-		if value == settings:
+		if value == snap_tool:
 			return
-		settings = value
+		snap_tool = value
 		update_ui_from_props()
 
+#var settings:SnappingSystemVertexSettings:
+	#get:
+		#return settings
+	#set(value):
+		##print("setting SnappingSystemGridPropertiesEditor props")
+		#if value == settings:
+			#return
+		#settings = value
+		#update_ui_from_props()
+
 func update_ui_from_props():
-	if !settings:
-		%snap_radius.disabled = true
-		
-	%snap_radius.disabled = false
+	if !snap_tool:
+		return
+	
+	var settings = snap_tool.settings
+
 	%snap_radius.value = settings.snap_radius
 
 func _on_snap_radius_value_changed(value):
-	if settings:
-		settings.snap_radius = value
+	if !snap_tool:
+		return
+	
+	snap_tool.settings.snap_radius = value
+	snap_tool.flush_cache()
+		

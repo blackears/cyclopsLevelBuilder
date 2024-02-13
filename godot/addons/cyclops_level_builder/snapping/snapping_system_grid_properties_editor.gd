@@ -25,6 +25,9 @@
 extends PanelContainer
 class_name SnappingSystemGridPropertiesEditor
 
+const meters_per_yard:float = 0.9144
+const meters_per_feet:float = 0.3048
+
 var tool:SnappingSystemGrid:
 	get:
 		return tool
@@ -69,6 +72,7 @@ func _on_spin_power_of_two_value_changed(value:float):
 		return
 		
 	tool.snap_to_grid_util.power_of_two_scale = value
+	tool.flush_cache()
 	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_POWER_OF_TWO_SCALE, int(value))
 	CyclopsAutoload.save_settings()
 
@@ -77,6 +81,7 @@ func _on_ed_unit_size_value_changed(value:float):
 		return
 		
 	tool.snap_to_grid_util.unit_size = value
+	tool.flush_cache()
 	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_UNIT_SIZE, value)
 	CyclopsAutoload.save_settings()
 
@@ -85,6 +90,7 @@ func _on_check_use_subdiv_toggled(toggled_on:bool):
 		return
 		
 	tool.snap_to_grid_util.use_subdivisions = toggled_on
+	tool.flush_cache()
 	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_USE_SUBDIVISIONS, toggled_on)
 	CyclopsAutoload.save_settings()
 
@@ -93,6 +99,7 @@ func _on_spin_subdiv_value_changed(value):
 		return
 		
 	tool.snap_to_grid_util.grid_subdivisions = value
+	tool.flush_cache()
 	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_SUBDIVISIONS, int(value))
 	CyclopsAutoload.save_settings()
 
@@ -127,11 +134,9 @@ func set_grid_transform_from_ui():
 		%xform_shear.value,
 		%xform_scale.value)
 	tool.snap_to_grid_util.grid_transform = xform
+	tool.flush_cache()
 	
 	CyclopsAutoload.save_settings()
-
-const meters_per_yard:float = 0.9144
-const meters_per_feet:float = 0.3048
 
 func _on_popup_presets_index_pressed(index):
 	#print("Preset ", index)
@@ -157,6 +162,8 @@ func _on_popup_presets_index_pressed(index):
 	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_UNIT_SIZE, unit_size)
 
 	tool.snap_to_grid_util.grid_subdivisions = subdiv
+	tool.flush_cache()
+	
 	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_SUBDIVISIONS, int(subdiv))
 
 	CyclopsAutoload.save_settings()
@@ -189,6 +196,8 @@ func _on_popup_transform_presets_index_pressed(index):
 
 			
 	tool.snap_to_grid_util.grid_transform = xform
+	tool.flush_cache()
+	
 	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_TRANSFORM, xform)
 
 	CyclopsAutoload.save_settings()
