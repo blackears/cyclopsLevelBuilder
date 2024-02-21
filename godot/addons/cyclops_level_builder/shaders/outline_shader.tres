@@ -35,7 +35,7 @@ void fragment() {
 // LinearSceneDepth:4
 	{
 		float __log_depth = textureLod(depth_tex_frg_4, SCREEN_UV, 0.0).x;
-	vec4 __depth_view = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, __log_depth, 1.0);
+	vec4 __depth_view = INV_PROJECTION_MATRIX * vec4(vec3(SCREEN_UV, __log_depth) * 2.0 - 1.0, 1.0);
 		__depth_view.xyz /= __depth_view.w;
 		n_out4p0 = -__depth_view.z;
 	}
