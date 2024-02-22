@@ -47,6 +47,17 @@ static func find_unique_name(parent:Node, base_name:String)->String:
 		
 	return ""
 
+static func calc_resource_name(res:Resource)->String:
+	var name:String = res.resource_name
+	
+	if name.is_empty():
+		name = res.resource_path.get_file()
+		var idx:int = name.rfind(".")
+		if idx != -1:
+			name = name.substr(0, idx)
+			
+	return name
+					
 static func format_planes_string(planes:Array[Plane])->String:
 	var result:String = ""
 	for p in planes:

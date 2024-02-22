@@ -29,7 +29,22 @@ class_name MaterialPaletteViewport
 
 @export var thumbnail_group:ThumbnailGroup
 
-var builder:CyclopsLevelBuilder
+var builder:CyclopsLevelBuilder:
+	get:
+		return builder
+	set(value):
+		if builder == value:
+			return
+			
+		builder = value
+		
+		var mv:MaterialViewer = %MaterialViewer
+		if mv:
+			mv.builder = builder
+
+		#call_deferred("update_plugin")
+		#update_plugin()
+		
 #var undo_manager:UndoRedo
 
 var has_mouse_focus:bool = false
@@ -38,6 +53,11 @@ var drag_pressed:bool = false
 var drag_start_pos:Vector2
 var drag_start_scroll_value_y:float
 
+func update_plugin():
+	var mv:MaterialViewer = %MaterialViewer
+	if mv:
+		mv.builder = builder
+	
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -45,6 +65,8 @@ func _ready():
 	#undo_manager = UndoRedo.new()
 	
 	update_thumbnails()
+	
+	#%MaterialViewer.builder = builder
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -59,7 +81,7 @@ func _gui_input(event):
 		var e:InputEventMouseButton = event
 		
 		if e.button_index == MOUSE_BUTTON_MIDDLE:
-			var v_scroll:VScrollBar = $VBoxContainer/ScrollContainer.get_v_scroll_bar()
+			var v_scroll:VScrollBar = %ScrollContainer.get_v_scroll_bar()
 			
 			drag_pressed = e.pressed
 			drag_start_pos = e.position
@@ -70,9 +92,9 @@ func _gui_input(event):
 			var e:InputEventMouseMotion = event
 			var offset:Vector2 = e.position - drag_start_pos
 			
-			var win_size:Vector2 = $VBoxContainer/ScrollContainer.size
+			var win_size:Vector2 = %ScrollContainer.size
 			
-			var v_scroll:VScrollBar = $VBoxContainer/ScrollContainer.get_v_scroll_bar()
+			var v_scroll:VScrollBar = %ScrollContainer.get_v_scroll_bar()
 			v_scroll.value = clamp(drag_start_scroll_value_y - (offset.y / win_size.y) * v_scroll.max_value, v_scroll.min_value, v_scroll.max_value)
 #			print("v min max %s %s" % [v_scroll.min_value, v_scroll.max_value])
 		
@@ -97,7 +119,7 @@ func remove_selected_material():
 	var cmd:CommandMaterialDockRemoveMaterials = CommandMaterialDockRemoveMaterials.new()
 	cmd.builder = builder
 	
-	for child in $VBoxContainer/ScrollContainer/HFlowContainer.get_children():
+	for child in %HFlowContainer.get_children():
 		if child.selected:
 			cmd.res_path_list.append(child.material_path)
 
@@ -158,15 +180,15 @@ func update_thumbnails():
 #	print("update_thumbnails()")
 	var cur_sel:String
 	
-	for child in $VBoxContainer/ScrollContainer/HFlowContainer.get_children():
+	for child in %HFlowContainer.get_children():
 		if child.selected:
 			cur_sel = child.material_path
 			break
 
-	for child in $VBoxContainer/ScrollContainer/HFlowContainer.get_children():
+	for child in %HFlowContainer.get_children():
 		#print("removing %s" % child.get_class())
 		child.group = null
-		$VBoxContainer/ScrollContainer/HFlowContainer.remove_child(child)
+		%HFlowContainer.remove_child(child)
 		child.queue_free()
 
 	for path in material_list:
@@ -178,11 +200,11 @@ func update_thumbnails():
 #		print("adding mat %s" % path)
 		
 		
-		$VBoxContainer/ScrollContainer/HFlowContainer.add_child(thumbnail)
+		%HFlowContainer.add_child(thumbnail)
 		thumbnail.owner = self
 	
 	if cur_sel:
-		for child in $VBoxContainer/ScrollContainer/HFlowContainer.get_children():
+		for child in %HFlowContainer.get_children():
 			if child.material_path == cur_sel:
 				child.selected = true
 				break
