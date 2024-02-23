@@ -9,25 +9,43 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_nrjye")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
 layout_mode = 2
 
-[node name="bn_refresh_mat_list" type="Button" parent="VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer"]
+layout_mode = 2
+
+[node name="Tree" type="Tree" parent="HSplitContainer/ScrollContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="bn_refresh_mat_list" type="Button" parent="HSplitContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Refresh Material List
 "
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+[node name="lineEd_filter" type="LineEdit" parent="HSplitContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Filter materials"
+
+[node name="PanelContainer" type="PanelContainer" parent="HSplitContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/PanelContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/VBoxContainer/PanelContainer"]
 layout_mode = 2
 
-[node name="ButtonArea" type="HFlowContainer" parent="VBoxContainer/PanelContainer/ScrollContainer"]
+[node name="ButtonArea" type="HFlowContainer" parent="HSplitContainer/VBoxContainer/PanelContainer/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[connection signal="pressed" from="VBoxContainer/bn_refresh_mat_list" to="." method="_on_bn_refresh_mat_list_pressed"]
+[connection signal="pressed" from="HSplitContainer/VBoxContainer/HBoxContainer/bn_refresh_mat_list" to="." method="_on_bn_refresh_mat_list_pressed"]
+[connection signal="text_changed" from="HSplitContainer/VBoxContainer/HBoxContainer/lineEd_filter" to="." method="_on_line_ed_filter_text_changed"]

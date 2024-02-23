@@ -52,16 +52,26 @@ var builder:CyclopsLevelBuilder:
 		
 		reload_materials()
 
+
+var material_groups:MaterialGroup
+
 func on_filesystem_changed():
+	print("on_filesystem_changed")
 	pass
 
 func on_resources_reimported(resources:PackedStringArray):
+	print("on_resources_reimported ", resources)
 	pass
 
 func on_resources_reload(resources:PackedStringArray):
+	print("on_resources_reload ", resources)
 	pass
 
 func reload_materials():
+	for child in %ButtonArea.get_children():
+		%ButtonArea.remove_child(child)
+		child.queue_free()
+	
 	if !builder:
 		return
 		
@@ -102,6 +112,9 @@ func resource_preview_callback(path:String, preview:Texture2D, userdata:Variant)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	material_groups = MaterialGroup.new("All")
+	
+	reload_materials()
 	pass # Replace with function body.
 
 
@@ -112,3 +125,7 @@ func _process(delta):
 
 func _on_bn_refresh_mat_list_pressed():
 	reload_materials()
+
+
+func _on_line_ed_filter_text_changed(new_text):
+	pass # Replace with function body.

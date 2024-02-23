@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3 uid="uid://clyah5iptfmyi"]
+
+[ext_resource type="PackedScene" uid="uid://bk0eelj64x4fk" path="res://addons/cyclops_level_builder/controls/fold_out_panel.tscn" id="1_wm236"]
+[ext_resource type="Texture2D" uid="uid://bor2x3t7fiqc2" path="res://addons/cyclops_level_builder/art/icons/arrow_down.svg" id="2_bmf4f"]
+
+[node name="TestFlow" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FoldOutPanel" parent="." instance=ExtResource("1_wm236")]
+layout_mode = 0
+text = "Foo"
+
+[node name="HeaderButton" parent="FoldOutPanel/VBoxContainer" index="0"]
+text = "Foo"
+icon = ExtResource("2_bmf4f")
+
+[node name="FoldOutPanel" parent="FoldOutPanel/VBoxContainer/PanelContainer/HBoxContainer/ContentArea" index="0" instance=ExtResource("1_wm236")]
+layout_mode = 2
+text = "Bar"
+
+[node name="HeaderButton" parent="FoldOutPanel/VBoxContainer/PanelContainer/HBoxContainer/ContentArea/FoldOutPanel/VBoxContainer" index="0"]
+text = "Bar"
+icon = ExtResource("2_bmf4f")
+
+[node name="SpinBox" type="SpinBox" parent="FoldOutPanel/VBoxContainer/PanelContainer/HBoxContainer/ContentArea/FoldOutPanel/VBoxContainer/PanelContainer/HBoxContainer/ContentArea" index="0"]
+layout_mode = 2
+
+[editable path="FoldOutPanel"]
+[editable path="FoldOutPanel/VBoxContainer/PanelContainer/HBoxContainer/ContentArea/FoldOutPanel"]

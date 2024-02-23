@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3 uid="uid://bk0eelj64x4fk"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/fold_out_panel.gd" id="1_n3mr0"]
+[ext_resource type="Texture2D" uid="uid://c7c2vg6lbhmfn" path="res://addons/cyclops_level_builder/art/icons/arrow_right.svg" id="2_dwm1s"]
+
+[node name="FoldOutPanel" type="PanelContainer"]
+offset_right = 245.0
+offset_bottom = 219.0
+script = ExtResource("1_n3mr0")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="HeaderButton" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Fold Name"
+icon = ExtResource("2_dwm1s")
+alignment = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="ContentArea" type="PanelContainer" parent="VBoxContainer/PanelContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[connection signal="pressed" from="VBoxContainer/HeaderButton" to="." method="_on_button_pressed"]
