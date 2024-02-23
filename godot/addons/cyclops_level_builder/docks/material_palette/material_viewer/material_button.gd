@@ -88,7 +88,7 @@ func rebuild_thumbnail():
 	%MaterialName.tooltip_text = material_path
 
 func resource_preview_callback(path:String, preview:Texture2D, thumbnail_preview:Texture2D, userdata:Variant):
-	print("Set bn tex ", path)
+	#print("Set bn tex ", path)
 	%TextureRect.texture = preview
 	
 # Called when the node enters the scene tree for the first time.

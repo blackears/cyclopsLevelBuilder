@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://cchlfqbh0djdn"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/docks/material_palette/material_viewer/material_groups_tree.gd" id="1_u4dlj"]
+
+[node name="MatGroupTree" type="Tree"]
+unique_name_in_owner = true
+script = ExtResource("1_u4dlj")
+
+[node name="PopupMenu" type="PopupMenu" parent="."]
+unique_name_in_owner = true
+item_count = 3
+item_0/text = "New Group"
+item_0/id = 0
+item_1/text = "Delete Group"
+item_1/id = 1
+item_2/text = "Rename"
+item_2/id = 2
+
+[connection signal="item_edited" from="." to="." method="_on_item_edited"]
+[connection signal="item_selected" from="." to="." method="_on_item_selected"]

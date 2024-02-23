@@ -42,6 +42,7 @@ var builder:CyclopsLevelBuilder:
 			efs.resources_reload.disconnect(on_resources_reload)
 			
 		builder = value
+		%MatGroupTree.plugin = builder
 		
 		if builder:
 			var ed_iface:EditorInterface = builder.get_editor_interface()
@@ -92,7 +93,7 @@ func reload_materials_recursive(dir:EditorFileSystemDirectory):
 		#"StandardMaterial3D"
 		if type == "StandardMaterial3D" || type == "ShaderMaterial" || type == "ORMMaterial3D":
 			var path:String = dir.get_file_path(i)
-			print("path %s type %s" % [path, type])
+			#print("path %s type %s" % [path, type])
 			
 			res_prev.queue_resource_preview(path, self, "resource_preview_callback", null)
 			
