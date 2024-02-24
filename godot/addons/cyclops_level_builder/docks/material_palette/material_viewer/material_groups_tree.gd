@@ -53,13 +53,17 @@ var plugin:CyclopsLevelBuilder:
 
 var root_group:MaterialGroup = MaterialGroup.new("All")
 
-func _gui_input(event):
+func _input(event):
 	if event is InputEventMouseButton:
 		var e:InputEventMouseButton = event
 		
-		if !e.is_pressed():
-			%PopupMenu.popup(Rect2i(0, 0, 0, 0))
-			pass
+		if e.button_index == MOUSE_BUTTON_RIGHT:
+			if !e.is_pressed():
+				
+				%PopupMenu.popup_on_parent(Rect2i(e.position.x, e.position.y, 0, 0))
+
+			get_viewport().set_input_as_handled()
+		
 
 func reload_materials():
 	print("reload_materials")

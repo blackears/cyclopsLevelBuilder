@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=3 uid="uid://dgvj2a2o76kh"]
+
+[ext_resource type="Script" path="res://test/interactive/tree_test/test_tree.gd" id="1_2t5er"]
+
+[node name="TestTree" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2t5er")
+
+[node name="Tree" type="Tree" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PopupMenu" type="PopupMenu" parent="."]
+unique_name_in_owner = true
+item_count = 2
+item_0/text = "New"
+item_0/id = 0
+item_1/text = "Delete"
+item_1/id = 1
+
+[connection signal="custom_item_clicked" from="Tree" to="." method="_on_tree_custom_item_clicked"]
+[connection signal="item_selected" from="Tree" to="." method="_on_tree_item_selected"]

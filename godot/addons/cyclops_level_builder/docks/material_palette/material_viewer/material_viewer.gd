@@ -69,6 +69,8 @@ func on_resources_reload(resources:PackedStringArray):
 	pass
 
 func reload_materials():
+	#return
+	
 	for child in %ButtonArea.get_children():
 		%ButtonArea.remove_child(child)
 		child.queue_free()
@@ -116,7 +118,14 @@ func _ready():
 	material_groups = MaterialGroup.new("All")
 	
 	reload_materials()
-	pass # Replace with function body.
+	
+	
+	#var root:TreeItem = %Tree.create_item()
+	#var child1:TreeItem = %Tree.create_item(root)
+	#var child2:TreeItem = %Tree.create_item(root)
+	#var subchild1:TreeItem = %Tree.create_item(child1)
+	#subchild1.set_text(0, "Subchild1")
+	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
