@@ -115,16 +115,16 @@ func resource_preview_callback(path:String, preview:Texture2D, userdata:Variant)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	material_groups = MaterialGroup.new("All")
+	#material_groups = MaterialGroup.new("All")
+	#
+	#reload_materials()
 	
-	reload_materials()
 	
-	
-	#var root:TreeItem = %Tree.create_item()
-	#var child1:TreeItem = %Tree.create_item(root)
-	#var child2:TreeItem = %Tree.create_item(root)
-	#var subchild1:TreeItem = %Tree.create_item(child1)
-	#subchild1.set_text(0, "Subchild1")
+	var root:TreeItem = %Tree.create_item()
+	var child1:TreeItem = %Tree.create_item(root)
+	var child2:TreeItem = %Tree.create_item(root)
+	var subchild1:TreeItem = %Tree.create_item(child1)
+	subchild1.set_text(0, "Subchild1")
 	
 
 

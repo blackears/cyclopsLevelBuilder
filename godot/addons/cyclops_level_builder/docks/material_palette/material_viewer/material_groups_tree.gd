@@ -51,7 +51,7 @@ var plugin:CyclopsLevelBuilder:
 		
 		reload_materials()
 
-var root_group:MaterialGroup = MaterialGroup.new("All")
+var root_group:MaterialGroup = MaterialGroup.new()
 
 func _input(event):
 	if event is InputEventMouseButton:
@@ -75,6 +75,7 @@ func reload_materials():
 	print("Set item ", root_group.name)
 	var root_item:TreeItem = create_item()
 	root_item.set_text(0, root_group.name)
+	root_item.set_editable(0, true)
 	
 	build_tree_recursive(root_group, root_item)
 	
@@ -84,6 +85,7 @@ func reload_materials():
 func build_tree_recursive(mat_group:MaterialGroup, tree_group_parent:TreeItem):
 	var item:TreeItem = create_item(tree_group_parent)
 	item.set_text(0, mat_group.name)
+	item.set_editable(0, true)
 	
 	for child in mat_group.children:
 		build_tree_recursive(child, item)
@@ -107,7 +109,14 @@ func _ready():
 func _process(delta):
 	pass
 
+func create_new_group():
+	pass
 
+func delete_selected_group():
+	pass
+
+func rename_selected_group():
+	pass
 
 func _on_item_selected():
 	var item:TreeItem = get_selected()
@@ -118,3 +127,14 @@ func _on_item_selected():
 func _on_item_edited():
 	var item:TreeItem = get_edited()
 	pass # Replace with function body.
+
+
+func _on_popup_menu_id_pressed(id:int):
+	match id:
+		0:
+			create_new_group()
+		1:
+			delete_selected_group()
+		2:
+			rename_selected_group()
+			

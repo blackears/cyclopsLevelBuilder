@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://7xg6fyk4dust"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/tree/TreeTextComponent.gd" id="1_eruho"]
+
+[node name="TreeTextLine" type="PanelContainer"]
+offset_right = 216.0
+offset_bottom = 31.0
+script = ExtResource("1_eruho")
+
+[node name="Label" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "text label"
+
+[node name="LineEdit" type="LineEdit" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "line edit"
