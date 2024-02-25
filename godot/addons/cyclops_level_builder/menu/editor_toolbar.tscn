@@ -26,6 +26,7 @@ layout_mode = 2
 
 [node name="MenuBar" type="MenuBar" parent="HBoxContainer"]
 layout_mode = 2
+prefer_global_menu = false
 
 [node name="Menu" type="PopupMenu" parent="HBoxContainer/MenuBar"]
 unique_name_in_owner = true
