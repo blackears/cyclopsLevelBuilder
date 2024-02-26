@@ -123,6 +123,14 @@ func _drop_data(at_position:Vector2, data:Variant):
 		0:
 			clone_branch(src_tier, tgt_tier, 0)
 			delete_branch(src_tier)
+		-1:
+			var par_tier:TestTreeDataModel.Tier = tgt_tier.parent
+			clone_branch(src_tier, par_tier, par_tier.index_of(tgt_tier))
+			delete_branch(src_tier)
+		1:
+			var par_tier:TestTreeDataModel.Tier = tgt_tier.parent
+			clone_branch(src_tier, par_tier, par_tier.index_of(tgt_tier) + 1)
+			delete_branch(src_tier)
 
 func clone_branch(src_tier:TestTreeDataModel.Tier, tgt_tier:TestTreeDataModel.Tier, index:int):
 	var child_name:String = tgt_tier.create_unique_name(src_tier.name)

@@ -53,19 +53,35 @@ class Tier extends RefCounted:
 	func _init(name:String = ""):
 		self.name = name
 	
+	func index_of(child:Tier)->int:
+		for i in children.size():
+			if children[i] == child:
+				return i
+		return -1
+		
 	func num_children()->int:
 		return children.size()
 	
 	func create_unique_name(root_name:String)->String:
 		if !has_child_with_name(root_name):
 			return root_name
+
+		var regex = RegEx.new()
+		regex.compile("(\\d+)")
+		var match_res:RegExMatch = regex.search(root_name)
 		
-		var idx:int = 0
+		var name_idx:int = 0
+		
+		if match_res:
+			var suffix:String = match_res.get_string(1)
+			name_idx = int(suffix) + 1
+			root_name = root_name.substr(0, root_name.length() - suffix.length())
+		
 		while true:
-			var new_name:String = "%s_%d" % [root_name, idx]
+			var new_name:String = "%s_%d" % [root_name, name_idx]
 			if !has_child_with_name(new_name):
 				return new_name
-			idx += 1
+			name_idx += 1
 			
 		return ""
 	
