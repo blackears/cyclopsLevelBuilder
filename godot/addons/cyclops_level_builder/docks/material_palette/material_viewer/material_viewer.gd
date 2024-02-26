@@ -58,6 +58,7 @@ var material_groups:MaterialGroup
 
 func on_filesystem_changed():
 	print("on_filesystem_changed")
+	reload_materials()
 	pass
 
 func on_resources_reimported(resources:PackedStringArray):
@@ -120,11 +121,13 @@ func _ready():
 	#reload_materials()
 	
 	
-	var root:TreeItem = %Tree.create_item()
-	var child1:TreeItem = %Tree.create_item(root)
-	var child2:TreeItem = %Tree.create_item(root)
-	var subchild1:TreeItem = %Tree.create_item(child1)
-	subchild1.set_text(0, "Subchild1")
+	#var root:TreeItem = %Tree.create_item()
+	#var child1:TreeItem = %Tree.create_item(root)
+	#var child2:TreeItem = %Tree.create_item(root)
+	#var subchild1:TreeItem = %Tree.create_item(child1)
+	#subchild1.set_text(0, "Subchild1")
+	
+	pass
 	
 
 
