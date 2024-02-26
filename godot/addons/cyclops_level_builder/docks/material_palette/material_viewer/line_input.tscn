@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=3 uid="uid://tkp4i7e1fs5"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/docks/material_palette/material_viewer/line_input.gd" id="1_5x46h"]
+
+[node name="LineInput" type="PopupPanel"]
+title = "Input"
+size = Vector2i(200, 74)
+visible = true
+unresizable = false
+borderless = false
+always_on_top = true
+script = ExtResource("1_5x46h")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 196.0
+offset_bottom = 70.0
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/CenterContainer"]
+layout_mode = 2
+
+[node name="bn_accept" type="Button" parent="VBoxContainer/CenterContainer/HBoxContainer"]
+layout_mode = 2
+text = "Okay"
+
+[node name="bn_cancel" type="Button" parent="VBoxContainer/CenterContainer/HBoxContainer"]
+layout_mode = 2
+text = "Cancel"
+
+[connection signal="text_submitted" from="VBoxContainer/LineEdit" to="." method="_on_line_edit_text_submitted"]
+[connection signal="pressed" from="VBoxContainer/CenterContainer/HBoxContainer/bn_accept" to="." method="_on_bn_accept_pressed"]
+[connection signal="pressed" from="VBoxContainer/CenterContainer/HBoxContainer/bn_cancel" to="." method="_on_bn_cancel_pressed"]
