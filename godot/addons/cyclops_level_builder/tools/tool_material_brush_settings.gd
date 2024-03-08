@@ -28,6 +28,7 @@ class_name ToolMaterialBrushSettings
 @export var paint_materials:bool = true
 @export var paint_color:bool = false
 @export var paint_visibility:bool = false
+@export var reset_uv:bool = false
 
 
 @export var individual_faces:bool = false
@@ -45,7 +46,8 @@ func load_from_cache(cache:Dictionary):
 	erase_material = cache.get("erase_material", false)
 	color = cache.get("color", Color.WHITE)
 	visibility = cache.get("visibility", false)
-	
+	reset_uv = cache.get("reset_uv", false)
+
 func save_to_cache():
 	return {
 		"paint_materials": paint_materials,
@@ -55,6 +57,7 @@ func save_to_cache():
 		"erase_material": erase_material,
 		"color": color,
 		"visibility": visibility,
+		"reset_uv": reset_uv,
 	}
 
 

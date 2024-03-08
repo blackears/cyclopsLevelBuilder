@@ -49,43 +49,45 @@ func _get_tool_properties_editor()->Control:
 	var ed:ToolMaterialBrushSettingsEditor = preload("res://addons/cyclops_level_builder/tools/tool_material_brush_settings_editor.tscn").instantiate()
 
 	ed.settings = settings
-	
+
 	return ed
-	
-func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
+
+func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	if event is InputEventMouseButton:
-		
+
 		var e:InputEventMouseButton = event
 		if e.button_index == MOUSE_BUTTON_LEFT:
 
 			if e.is_pressed():
-				
+
 				if tool_state == ToolState.READY:
 					var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
-					var dir:Vector3 = viewport_camera.project_ray_normal(e.position)				
-					
+					var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+
 					var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
-					
+
 					if result:
 						cmd = CommandSetMaterial.new()
 						cmd.builder = builder
-						
+
 						cmd.setting_material = settings.paint_materials
 						cmd.material_path = builder.tool_material_path if !settings.erase_material else ""
-						
+
 						cmd.setting_color = settings.paint_color
 						cmd.color = settings.color
-						
+
 						cmd.setting_visibility = settings.paint_visibility
 						cmd.visibility = settings.visibility
-						
+
+						cmd.resetting_uv = settings.reset_uv
+
 						var block:CyclopsBlock = result.object
 						if settings.individual_faces:
 							cmd.add_target(block.get_path(), [result.face_index])
 
 						else:
 							cmd.add_target(block.get_path(), block.control_mesh.get_face_indices())
-						
+
 						tool_state = ToolState.PAINTING
 
 			else:
@@ -93,23 +95,23 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					cmd.undo_it()
 					if cmd.will_change_anything():
 						var undo:EditorUndoRedoManager = builder.get_undo_redo()
-						cmd.add_to_undo_manager(undo)					
-					
+						cmd.add_to_undo_manager(undo)
+
 					tool_state = ToolState.READY
-					
+
 			return true
-		
-				
+
+
 	elif event is InputEventMouseMotion:
-		
+
 		var e:InputEventMouseMotion = event
 
 		if tool_state == ToolState.PAINTING:
 			var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
-			var dir:Vector3 = viewport_camera.project_ray_normal(e.position)				
-			
+			var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+
 			var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
-			
+
 			if result:
 				print ("hit ", result.object.name)
 				cmd.undo_it()
@@ -120,12 +122,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				else:
 					cmd.add_target(block.get_path(), block.control_mesh.get_face_indices())
 				cmd.do_it()
-			
+
 			return true
-		
+
 	return false
 
-	
+
 
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
@@ -136,5 +138,5 @@ func _activate(builder:CyclopsLevelBuilder):
 func _deactivate():
 	var cache:Dictionary = settings.save_to_cache()
 	builder.set_tool_cache(TOOL_ID, cache)
-	
-	
+
+

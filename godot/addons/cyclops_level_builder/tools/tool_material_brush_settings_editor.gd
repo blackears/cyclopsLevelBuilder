@@ -43,16 +43,18 @@ func update():
 
 		%check_paint_visibility.disabled = true
 		%check_visibility.disabled = true
-		
+
+		%check_reset_uv.disabled = true
+
 		return
-		
+
 	%check_paint_material.disabled = false
 	%check_paint_color.disabled = false
 	%check_paint_visibility.disabled = false
 	%check_individual_faces.disabled = false
 
 	%check_individual_faces.button_pressed = settings.individual_faces
-	
+
 	%check_paint_material.button_pressed = settings.paint_materials
 	%check_erase_material.button_pressed = settings.erase_material
 	%check_erase_material.disabled = !settings.paint_materials
@@ -60,12 +62,12 @@ func update():
 	%check_paint_color.button_pressed = settings.paint_color
 	%color_button.color = settings.color
 	%color_button.disabled = !settings.paint_color
-	
+
 	%check_paint_visibility.button_pressed = settings.paint_visibility
 	%check_visibility.button_pressed = settings.visibility
 	%check_visibility.disabled = !settings.paint_visibility
-	
-	
+
+	%check_reset_uv.button_pressed = settings.reset_uv
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -107,3 +109,6 @@ func _on_check_paint_visibility_toggled(button_pressed:bool):
 func _on_check_visibility_toggled(button_pressed:bool):
 	settings.visibility = button_pressed
 
+
+func _on_check_reset_uv_toggled(button_pressed:bool):
+	settings.reset_uv = button_pressed
