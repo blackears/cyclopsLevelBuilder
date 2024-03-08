@@ -6,3 +6,5 @@
 * Shape creation tools now let you specify collision settings.
 * Right click cancel now does not undo rotation and move after operation has been completed.
 * Now flushing snapping changes whenever a setting is changed.
+* Renaming Settings to CyclopsSettings
+* Now generating tangent vectors for block meshes.

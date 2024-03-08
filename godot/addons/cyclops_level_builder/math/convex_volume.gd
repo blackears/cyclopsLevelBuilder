@@ -732,9 +732,10 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 	var surface_idx:int = 0
 	for mat_id in face_dict.keys():
 #		print("surface mat grp %s" % mat_id)
-		
+
 		var points:PackedVector3Array
 		var normals:PackedVector3Array
+		var tangents:PackedFloat32Array
 		var colors:PackedColorArray
 		var uv1s:PackedVector2Array
 		var uv2s:PackedVector2Array
@@ -743,24 +744,24 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 		if !override_with_default_material:
 			if mat_id >= 0 && mat_id < material_list.size():
 				material = material_list[mat_id]
-		
+
 		for f_idx in face_dict[mat_id]:
 #			print("f_idx %s" % f_idx)
 
 			var face:FaceInfo = faces[f_idx]
 			if !face.visible:
 				continue
-			
+
 			var axis:MathUtil.Axis = MathUtil.get_longest_axis(face.normal)
-			
+
 			var fv_trianglation:Array[int] = face.get_triangulation()
-			
+
 			for fv_idx in fv_trianglation:
-				
+
 				var v_idx:int = face.vertex_indices[fv_idx]
 	#			var p:Vector3 = triangles[i]
 				var p:Vector3 = vertices[v_idx].point
-							
+
 				var uv:Vector2
 				if axis == MathUtil.Axis.X:
 					uv = Vector2(-p.z, -p.y)
@@ -768,24 +769,56 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 					uv = Vector2(-p.x, -p.z)
 				elif axis == MathUtil.Axis.Z:
 					uv = Vector2(-p.x, -p.y)
-					
+
 				uv = face.uv_transform * uv
 				uv1s.append(uv)
 				uv2s.append(face.lightmap_uvs[fv_idx])
-				
+
 				normals.append(face.normal)
 				colors.append(face.color)
-				
+
 				points.append(p)
-		
+
+		#Calculate tangents
+		#http://foundationsofgameenginedev.com/FGED2-sample.pdf
+		for i in range(0, points.size(), 3):
+			var p0:Vector3 = points[i]
+			var p1:Vector3 = points[i + 1]
+			var p2:Vector3 = points[i + 2]
+
+			var uv0:Vector2 = uv1s[i]
+			var uv1:Vector2 = uv1s[i + 1]
+			var uv2:Vector2 = uv1s[i + 2]
+			
+			var n:Vector3 = normals[i]
+			
+			var e1:Vector3 = p1 - p0
+			var e2:Vector3 = p2 - p0
+			
+			var duv1:Vector2 = uv1 - uv0
+			var duv2:Vector2 = uv2 - uv0
+			
+			var r:float = 1.0 / (duv1.x * duv2.y - duv2.x * duv1.y)
+			var t:Vector3 = (e1 * duv2.y - e2 * duv1.y) * r
+			var b:Vector3 = (e2 * duv1.x - e1 * duv2.x) * r
+			
+			t = t.normalized()
+			
+			for j in 3:
+				tangents.append(t.x)
+				tangents.append(t.y)
+				tangents.append(t.z)
+				tangents.append(-1.0 if t.cross(b).dot(n) > 0 else 1.0)
+
 		var arrays:Array = []
 		arrays.resize(Mesh.ARRAY_MAX)
 		arrays[Mesh.ARRAY_VERTEX] = points
 		arrays[Mesh.ARRAY_NORMAL] = normals
+		arrays[Mesh.ARRAY_TANGENT] = tangents
 		arrays[Mesh.ARRAY_TEX_UV] = uv1s
 		arrays[Mesh.ARRAY_TEX_UV2] = uv2s
 		arrays[Mesh.ARRAY_COLOR] = colors
-			
+
 		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 		mesh.surface_set_material(surface_idx, material)
 
@@ -797,7 +830,7 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 		shadow_mesh.surface_set_material(surface_idx, material)
 
 		surface_idx += 1
-	
+
 	mesh.shadow_mesh = shadow_mesh
 #	var err = mesh.lightmap_unwrap(Transform3D.IDENTITY, 10)
 #	print("Lightmap unwrap Error: %s" % err)
