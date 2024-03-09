@@ -8,3 +8,4 @@
 * Now flushing snapping changes whenever a setting is changed.
 * Renaming Settings to CyclopsSettings
 * Now generating tangent vectors for block meshes.
+* Restoring ability for UVs to remain in place when moving blocks.
