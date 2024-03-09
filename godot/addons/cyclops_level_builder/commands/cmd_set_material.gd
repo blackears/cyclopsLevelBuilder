@@ -170,7 +170,7 @@ func do_it():
 		for f_idx in ctl_mesh.faces.size():
 			var f:ConvexVolume.FaceInfo = ctl_mesh.faces[f_idx]
 
-			if t.face_indices.has(f_idx):
+			if setting_material && t.face_indices.has(f_idx):
 				remap_face_idx_to_mat.append(target_material)
 			elif f.material_id >= 0 && f.material_id < block.materials.size():
 				remap_face_idx_to_mat.append(block.materials[f.material_id])
@@ -200,8 +200,9 @@ func do_it():
 			#print("has %s" % mat_list_reduced.has(mat))
 			#print("find %s" % mat_list_reduced.find(mat))
 
-			if setting_material:
-				face.material_id = -1 if mat == null else mat_list_reduced.find(mat)
+			#print("setting_material ", setting_material)
+			#if setting_material:
+				#face.material_id = -1 if mat == null else mat_list_reduced.find(mat)
 			#print("face.material_id %s" % face.material_id)
 
 		for f_idx in ctl_mesh.faces.size():

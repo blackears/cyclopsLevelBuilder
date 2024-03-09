@@ -70,6 +70,7 @@ text = "Visible"
 [node name="check_reset_uv" type="CheckBox" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Set the face's UV transform to the identity matrix."
 text = "Reset UV"
 
 [connection signal="toggled" from="VBoxContainer/check_individual_faces" to="." method="_on_check_individual_faces_toggled"]

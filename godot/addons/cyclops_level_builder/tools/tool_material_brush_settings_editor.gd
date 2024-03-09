@@ -80,6 +80,7 @@ func _process(delta):
 
 
 func _on_check_paint_material_toggled(button_pressed:bool):
+	#print("_on_check_paint_material_toggled ", button_pressed)
 	settings.paint_materials = button_pressed
 	%check_erase_material.disabled = !settings.paint_materials
 

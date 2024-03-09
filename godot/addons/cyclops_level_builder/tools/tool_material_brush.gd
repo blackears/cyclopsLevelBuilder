@@ -70,6 +70,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						cmd = CommandSetMaterial.new()
 						cmd.builder = builder
 
+						#print("settings.paint_materials ", settings.paint_materials)
 						cmd.setting_material = settings.paint_materials
 						cmd.material_path = builder.tool_material_path if !settings.erase_material else ""
 
@@ -113,7 +114,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 
 			if result:
-				print ("hit ", result.object.name)
+				#print ("hit ", result.object.name)
 				cmd.undo_it()
 				var block:CyclopsBlock = result.object
 				if settings.individual_faces:
