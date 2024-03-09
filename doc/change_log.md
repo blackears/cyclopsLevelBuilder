@@ -9,3 +9,4 @@
 * Renaming Settings to CyclopsSettings
 * Now generating tangent vectors for block meshes.
 * Restoring ability for UVs to remain in place when moving blocks.
+* Adding option to clear UV transform in material brush.
