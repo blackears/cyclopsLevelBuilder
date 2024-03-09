@@ -41,10 +41,10 @@ var material_path:String
 var setting_color:bool = false
 var color:Color = Color.WHITE
 
-var setting_visibility = false
+var setting_visibility:bool = false
 var visibility:bool = true
 
-var resetting_uv = false
+var resetting_uv:bool = false
 
 #Private
 var target_list:Array[Target] = []
