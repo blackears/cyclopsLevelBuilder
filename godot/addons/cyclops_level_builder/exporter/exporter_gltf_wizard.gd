@@ -26,7 +26,7 @@ extends Window
 class_name ExporterGltfWizard
 
 #@onready var _text_path:LineEdit = $VBoxContainer/HBoxContainer/text_path
-var _text_path:LineEdit
+#var _text_path:LineEdit
 
 var file_dialog:FileDialog
 var save_path:String
@@ -44,8 +44,9 @@ func _ready():
 	file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	file_dialog.set_access(FileDialog.ACCESS_FILESYSTEM)
 	file_dialog.title = "Export scene..."
-	file_dialog.filters = PackedStringArray(["*.gltf ; glTF files"])
+	file_dialog.filters = PackedStringArray(["*.gltf; glTF files"])
 	file_dialog.current_file = save_path
+	file_dialog.file_selected.connect(on_save_file)
 
 #	_text_path = $VBoxContainer/HBoxContainer/lineEdit_path
 	#var hh = get_node("VBoxContainer")
@@ -53,18 +54,17 @@ func _ready():
 
 
 #	_text_path = get_node("VBoxContainer/HBoxContainer/lineEdit_path")
-	_text_path = %lineEdit_path
-	_text_path.text = save_path
+	%lineEdit_path.text = save_path
+	#_text_path = %lineEdit_path
+	#_text_path.text = save_path
 
 
 func on_save_file(path:String):
 	save_path = path
-	_text_path.text = path
+	%lineEdit_path.text = path
 
 func _on_bn_browse_pressed():
-	file_dialog.file_selected.connect(on_save_file)
 	file_dialog.popup_centered()
-	pass
 
 func branch_is_valid(node:Node)->bool:
 	if node is CyclopsBlock || (%check_markers.button_pressed && node is Marker3D):
