@@ -60,7 +60,7 @@ const SNAPPING_GRID_TRANSFORM:String = "snapping/grid/transform"
 const SNAPPING_GRID_ANGLE:String = "snapping/grid/angle"
 
 @export_file("*.config") var settings_file:String = "cyclops_settings.config"
-var settings:Settings = Settings.new()
+var settings:CyclopsSettings = CyclopsSettings.new()
 
 signal xray_mode_changed(value:bool)
 

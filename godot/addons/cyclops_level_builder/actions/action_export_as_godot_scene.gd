@@ -22,45 +22,27 @@
 # SOFTWARE.
 
 @tool
-extends Resource
-class_name ToolMaterialBrushSettings
+class_name ActionExportAsGodotScene
+extends CyclopsAction
 
-@export var paint_materials:bool = true
-@export var paint_color:bool = false
-@export var paint_visibility:bool = false
-@export var reset_uv:bool = false
+var wizard:ExporterGodotSceneWizard = preload("res://addons/cyclops_level_builder/exporter/exporter_godot_scene_wizard.tscn").instantiate()
 
+func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
+	super._init(plugin, "Export As Godot Scene...")
 
-@export var individual_faces:bool = false
-@export var erase_material:bool = false
-
-@export var color:Color = Color.WHITE
-
-@export var visibility:bool = true
-
-func load_from_cache(cache:Dictionary):
-	paint_materials = cache.get("paint_materials", true)
-	paint_color = cache.get("paint_color", false)
-	paint_visibility = cache.get("paint_visibility", false)
-	individual_faces = cache.get("individual_faces", false)
-	erase_material = cache.get("erase_material", false)
-	color = cache.get("color", Color.WHITE)
-	visibility = cache.get("visibility", false)
-	reset_uv = cache.get("reset_uv", false)
-
-func save_to_cache():
-	return {
-		"paint_materials": paint_materials,
-		"paint_color": paint_color,
-		"paint_visibility": paint_visibility,
-		"individual_faces": individual_faces,
-		"erase_material": erase_material,
-		"color": color,
-		"visibility": visibility,
-		"reset_uv": reset_uv,
-	}
-
-
-
-
-
+func _execute():
+	var base_control:Node = plugin.get_editor_interface().get_base_control()
+	base_control.add_child(wizard)
+	
+	wizard.plugin = plugin
+	wizard.popup_centered()
+	
+	#await base_control.get_tree().process_frame
+	
+#	wizard.popup_hide.connect(func(): wizard.queue_free() )
+	
+	#wizard.popup_centered()
+	
+	
+	
+	

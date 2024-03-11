@@ -23,7 +23,7 @@
 
 @tool
 extends Resource
-class_name Settings
+class_name CyclopsSettings
 
 @export var definition_map:Dictionary
 @export var lookup:Dictionary
