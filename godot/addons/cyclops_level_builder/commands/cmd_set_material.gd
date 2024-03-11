@@ -201,8 +201,8 @@ func do_it():
 			#print("find %s" % mat_list_reduced.find(mat))
 
 			#print("setting_material ", setting_material)
-			#if setting_material:
-				#face.material_id = -1 if mat == null else mat_list_reduced.find(mat)
+			if setting_material:
+				face.material_id = -1 if mat == null else mat_list_reduced.find(mat)
 			#print("face.material_id %s" % face.material_id)
 
 		for f_idx in ctl_mesh.faces.size():
