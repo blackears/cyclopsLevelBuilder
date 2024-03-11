@@ -102,6 +102,7 @@ func replace_blocks_recursive(node:Node, root:Node):
 			child.add_sibling(new_child)
 			new_child.owner = root
 			new_child.transform = child_block.transform
+			new_child.set_display_folded(true)
 			
 			#Mesh
 			var vol:ConvexVolume = ConvexVolume.new()
