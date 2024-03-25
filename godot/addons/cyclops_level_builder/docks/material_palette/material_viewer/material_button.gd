@@ -25,8 +25,26 @@
 extends PanelContainer
 class_name MaterialButton
 
-@export var selected:bool = false
-@export var active:bool = false
+signal apply_material(mat_bn:MaterialButton)
+signal select_material(mat_bn:MaterialButton, selection_type:SelectionList.Type)
+
+@export var selected:bool = false:
+	get:
+		return selected
+	set(value):
+		if selected == value:
+			return
+		selected = value
+		update_border()
+	
+@export var active:bool = false:
+	get:
+		return active
+	set(value):
+		if active == value:
+			return
+		active = value
+		update_border()
 
 @export_file("*.tres") var material_path:String:
 	get:
@@ -55,9 +73,9 @@ class_name MaterialButton
 		if group != null:
 			group.add_button(self)
 			
-@export var theme_normal:Theme
-@export var theme_selected:Theme
-@export var theme_active:Theme
+@export var theme_normal:Theme = preload("res://addons/cyclops_level_builder/docks/material_palette/material_viewer/mat_bn_normal_theme.tres")
+@export var theme_selected:Theme = preload("res://addons/cyclops_level_builder/docks/material_palette/material_viewer/mat_bn_selected_theme.tres")
+@export var theme_active:Theme = preload("res://addons/cyclops_level_builder/docks/material_palette/material_viewer/mat_bn_active_theme.tres")
 
 var plugin:CyclopsLevelBuilder:
 	get:
@@ -90,9 +108,42 @@ func rebuild_thumbnail():
 func resource_preview_callback(path:String, preview:Texture2D, thumbnail_preview:Texture2D, userdata:Variant):
 	#print("Set bn tex ", path)
 	%TextureRect.texture = preview
+
+
+func _gui_input(event:InputEvent):
+	if event is InputEventMouseButton:
+		var e:InputEventMouseButton = event
+	
+		if e.button_index == MOUSE_BUTTON_LEFT:
+		
+			if e.pressed:
+				if e.double_click:
+					#apply_material_to_selected()
+					apply_material.emit(self)
+				else:
+					#if group:
+						#group.select_thumbnail(self)
+					#else:
+						#selected = true
+						
+	#				builder.tool_material_path = material_path
+					
+					select_material.emit(self, SelectionList.choose_type(e.shift_pressed, e.ctrl_pressed))
+					
+			get_viewport().set_input_as_handled()
+
+func update_border():
+	if active:
+		theme = theme_active
+	elif selected:
+		theme = theme_selected
+	else:
+		theme = theme_normal
+
 	
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	update_border()
 	pass # Replace with function body.
 
 

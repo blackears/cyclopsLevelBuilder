@@ -56,6 +56,8 @@ var builder:CyclopsLevelBuilder:
 
 var material_groups:MaterialGroup
 
+var selected_material_paths:Array[String]
+
 func on_filesystem_changed():
 	print("on_filesystem_changed")
 	reload_materials()
@@ -98,12 +100,14 @@ func reload_materials_recursive(dir:EditorFileSystemDirectory):
 			var path:String = dir.get_file_path(i)
 			#print("path %s type %s" % [path, type])
 			
-			res_prev.queue_resource_preview(path, self, "resource_preview_callback", null)
+			#res_prev.queue_resource_preview(path, self, "resource_preview_callback", null)
 			
 			var bn:MaterialButton = preload("res://addons/cyclops_level_builder/docks/material_palette/material_viewer/material_button.tscn").instantiate()
 			bn.material_path = path
 			bn.plugin = builder
 			button_group.add_button(bn)
+			bn.apply_material.connect(func(mat_bn:MaterialButton): apply_material(mat_bn))
+			bn.select_material.connect(func(mat_bn:MaterialButton, type:SelectionList.Type): select_material(mat_bn, type))
 			
 			%ButtonArea.add_child(bn)
 			pass
@@ -111,8 +115,56 @@ func reload_materials_recursive(dir:EditorFileSystemDirectory):
 	for i in dir.get_subdir_count():
 		reload_materials_recursive(dir.get_subdir(i))
 
-func resource_preview_callback(path:String, preview:Texture2D, userdata:Variant):
+func apply_material(mat_bn:MaterialButton):
 	pass
+
+func is_active_material(path:String):
+	return !selected_material_paths.is_empty() && path == selected_material_paths[-1]
+
+func select_material(mat_bn:MaterialButton, sel_type:SelectionList.Type):
+	match sel_type:
+		SelectionList.Type.REPLACE:
+			selected_material_paths = [mat_bn.material_path]
+		SelectionList.Type.TOGGLE:
+			var idx:int = selected_material_paths.find(mat_bn.material_path)
+			if idx >= 0:
+				selected_material_paths.remove_at(idx)
+			else:
+				selected_material_paths.append(mat_bn.material_path)
+		SelectionList.Type.RANGE:
+			var bn_list = %ButtonArea.get_children()
+			var range_from_idx:int = -1
+			var range_to_idx:int = -1
+			for i in bn_list.size():
+				if bn_list[i] == mat_bn:
+					range_to_idx = i
+				if is_active_material(bn_list[i].material_path):
+					range_from_idx = i
+			
+			for i in range(range_from_idx, range_to_idx + (1 if range_from_idx < range_to_idx else -1), 1 if range_from_idx < range_to_idx else -1):
+				var path = bn_list[i].material_path
+				if selected_material_paths.has(path):
+					selected_material_paths.erase(path)
+				selected_material_paths.append(path)
+
+	print("sel mat list: ", selected_material_paths)
+
+	for bn in %ButtonArea.get_children():
+		var mat_idx:int = selected_material_paths.find(bn.material_path)
+		if mat_idx == selected_material_paths.size() - 1:
+			bn.active = true
+			bn.selected = true
+		elif mat_idx >= 0:
+			bn.active = false
+			bn.selected = true
+		else:
+			bn.active = false
+			bn.selected = false
+		
+		
+	
+#func resource_preview_callback(path:String, preview:Texture2D, userdata:Variant):
+	#pass
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
