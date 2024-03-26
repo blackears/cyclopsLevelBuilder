@@ -25,7 +25,7 @@
 extends PanelContainer
 class_name MaterialViewer
 
-var button_group:RadioButtonGroup = RadioButtonGroup.new()
+#var button_group:RadioButtonGroup = RadioButtonGroup.new()
 
 var builder:CyclopsLevelBuilder:
 	get:
@@ -90,6 +90,8 @@ func reload_materials():
 	pass
 
 func reload_materials_recursive(dir:EditorFileSystemDirectory):
+	var mat_name_filter:String = %lineEd_filter.text
+	
 	var ed_iface:EditorInterface = builder.get_editor_interface()
 	var res_prev:EditorResourcePreview = ed_iface.get_resource_previewer()
 
@@ -99,6 +101,10 @@ func reload_materials_recursive(dir:EditorFileSystemDirectory):
 		#"StandardMaterial3D"
 		if type == "StandardMaterial3D" || type == "ShaderMaterial" || type == "ORMMaterial3D":
 			var path:String = dir.get_file_path(i)
+			
+			if !mat_name_filter.is_empty() && !path.contains(mat_name_filter):
+				continue
+			
 			#print("path %s type %s" % [path, type])
 			
 			#res_prev.queue_resource_preview(path, self, "resource_preview_callback", null)
@@ -106,7 +112,9 @@ func reload_materials_recursive(dir:EditorFileSystemDirectory):
 			var bn:MaterialButton = preload("res://addons/cyclops_level_builder/docks/material_palette/material_viewer/material_button.tscn").instantiate()
 			bn.material_path = path
 			bn.plugin = builder
-			button_group.add_button(bn)
+			bn.selected = selected_material_paths.has(path)
+			bn.active = !selected_material_paths.is_empty() && path == selected_material_paths[-1]
+			#button_group.add_button(bn)
 			bn.apply_material.connect(func(mat_bn:MaterialButton): apply_material(mat_bn))
 			bn.select_material.connect(func(mat_bn:MaterialButton, type:SelectionList.Type): select_material(mat_bn, type))
 			
@@ -199,4 +207,4 @@ func _on_bn_refresh_mat_list_pressed():
 
 
 func _on_line_ed_filter_text_changed(new_text):
-	pass # Replace with function body.
+	reload_materials()
