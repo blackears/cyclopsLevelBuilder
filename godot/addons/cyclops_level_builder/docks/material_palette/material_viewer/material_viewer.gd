@@ -208,13 +208,14 @@ func _process(delta):
 	pass
 
 
-func _on_bn_refresh_mat_list_pressed():
-	reload_materials()
-
-
 func _on_line_ed_filter_text_changed(new_text):
 	reload_materials()
 
 
 func _on_mat_group_tree_visiblity_changed():
 	reload_materials()
+
+
+
+func _on_bn_show_unused_dirs_toggled(toggled_on):
+	%MatGroupTree.show_unused_dirs = toggled_on

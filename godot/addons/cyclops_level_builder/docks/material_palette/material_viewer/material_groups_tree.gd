@@ -32,6 +32,16 @@ enum ButtonType { VISIBLE }
 const bn_vis_off = preload("res://addons/cyclops_level_builder/art/icons/eye_closed.svg")
 const bn_vis_on = preload("res://addons/cyclops_level_builder/art/icons/eye_open.svg")
 
+@export var show_unused_dirs:bool = true:
+	get:
+		return show_unused_dirs
+	set(value):
+		if value == show_unused_dirs:
+			return
+		show_unused_dirs = value
+		
+		reload_materials()
+
 var plugin:CyclopsLevelBuilder:
 	get:
 		return plugin
@@ -94,6 +104,9 @@ func build_tree_recursive(parent_dir:EditorFileSystemDirectory, tree_item_parent
 	for i in parent_dir.get_subdir_count():
 		var child_dir:EditorFileSystemDirectory = parent_dir.get_subdir(i)
 		#print("add child ", child_dir.get_path())
+
+		if !show_unused_dirs && !dir_has_materials_recursive(child_dir):
+			continue
 
 		var item:TreeItem = create_item(tree_item_parent)
 		item.set_text(0, child_dir.get_name())
