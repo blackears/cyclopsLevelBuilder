@@ -33,6 +33,7 @@ const TOOL_ID:String = "material_brush"
 var cmd:CommandSetMaterial
 
 var settings:ToolMaterialBrushSettings = ToolMaterialBrushSettings.new()
+var material_viewer_state:MaterialViewerState = preload("res://addons/cyclops_level_builder/docks/material_palette/material_viewer/material_viewer_state_res.tres")
 
 
 func _get_tool_id()->String:
@@ -72,7 +73,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 						#print("settings.paint_materials ", settings.paint_materials)
 						cmd.setting_material = settings.paint_materials
-						cmd.material_path = builder.tool_material_path if !settings.erase_material else ""
+						#cmd.material_path = builder.tool_material_path if !settings.erase_material else ""
+						cmd.material_path = material_viewer_state.active_material_path \
+							if !settings.erase_material else ""
+						#print("mat brush using material ", cmd.material_path)
 
 						cmd.setting_color = settings.paint_color
 						cmd.color = settings.color

@@ -57,6 +57,7 @@ var builder:CyclopsLevelBuilder:
 var material_groups:MaterialGroup
 
 var selected_material_paths:Array[String]
+var material_viewer_state:MaterialViewerState = preload("res://addons/cyclops_level_builder/docks/material_palette/material_viewer/material_viewer_state_res.tres")
 
 func on_filesystem_changed():
 	print("on_filesystem_changed")
@@ -147,16 +148,21 @@ func select_material(mat_bn:MaterialButton, sel_type:SelectionList.Type):
 					selected_material_paths.erase(path)
 				selected_material_paths.append(path)
 
+	material_viewer_state.active_material_path = \
+		"" if selected_material_paths.is_empty() else selected_material_paths[-1]
+		
 	print("sel mat list: ", selected_material_paths)
 
 	for bn in %ButtonArea.get_children():
 		var mat_idx:int = selected_material_paths.find(bn.material_path)
-		if mat_idx == selected_material_paths.size() - 1:
-			bn.active = true
+		if mat_idx >= 0:
+			if mat_idx == selected_material_paths.size() - 1:
+				bn.active = true
+			else:
+				bn.active = false
+			
 			bn.selected = true
-		elif mat_idx >= 0:
-			bn.active = false
-			bn.selected = true
+			
 		else:
 			bn.active = false
 			bn.selected = false

@@ -135,89 +135,149 @@ func _init():
 func do_it():
 	make_cache()
 
-#	print("cmd set material %s" % material_path)
-	for t in target_list:
-		var block:CyclopsBlock = builder.get_node(t.block_path)
+	for tgt in target_list:
+		var block:CyclopsBlock = builder.get_node(tgt.block_path)
 
 		var data:ConvexBlockData = block.block_data
 		var vol:ConvexVolume = ConvexVolume.new()
 		vol.init_from_convex_block_data(data)
 
-		var mat_list:Array[Material] = block.materials.duplicate()
-#		print("start mat list")
-#		for m in mat_list:
-#			print("cur mat %s" % "?" if m == null else m.resource_path)
+		if setting_material:
 
-		var target_material:Material
-		for m in mat_list:
-			if m.resource_path == material_path:
-				target_material = m
-				break
+			var target_material:Material = null
+			if ResourceLoader.exists(material_path, "Material"):
+				#print("loading material ", material_path)
+				var mat = load(material_path)
+				target_material = mat if mat is Material else null
 
-		if !target_material && ResourceLoader.exists(material_path):
-			target_material = load(material_path)
-			mat_list.append(target_material)
+			var mat_reindex:Dictionary
+			var mat_list_reduced:Array[Material]
 
-#		print("target mat list")
-#		for m in mat_list:
-#			print("mat %s" % "?" if m == null else m.resource_path)
+			for f_idx in vol.faces.size():
+				var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
 
-		var remap_face_idx_to_mat:Array[Material] = []
+				var mat_to_apply:Material
 
-		var ctl_mesh:ConvexVolume = ConvexVolume.new()
-		ctl_mesh.init_from_convex_block_data(block.control_mesh.to_convex_block_data())
+				if tgt.face_indices.has(f_idx):
+					mat_to_apply = target_material
+				else:
+					mat_to_apply = null if f.material_id == -1 else block.materials[f.material_id]
 
-		for f_idx in ctl_mesh.faces.size():
-			var f:ConvexVolume.FaceInfo = ctl_mesh.faces[f_idx]
+				if !mat_to_apply:
+					f.material_id = -1
+				elif !mat_reindex.has(mat_to_apply):
+					var new_idx = mat_reindex.size()
+					mat_reindex[mat_to_apply] = new_idx
+					mat_list_reduced.append(mat_to_apply)
+					f.material_id = new_idx
+				else:
+					f.material_id = mat_reindex[mat_to_apply]
 
-			if setting_material && t.face_indices.has(f_idx):
-				remap_face_idx_to_mat.append(target_material)
-			elif f.material_id >= 0 && f.material_id < block.materials.size():
-				remap_face_idx_to_mat.append(block.materials[f.material_id])
-			else:
-				remap_face_idx_to_mat.append(null)
+			block.materials = mat_list_reduced
+			
+		#Set other properties
+		for f_idx in vol.faces.size():
+			if tgt.face_indices.has(f_idx):
+				var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
+				if setting_color:
+					f.color = color
+				if setting_visibility:
+					f.visible = visibility
+				if resetting_uv:
+					f.uv_transform = Transform2D.IDENTITY
+			
+		block.block_data = vol.to_convex_block_data()			
 
-#		print("remap faceidx to mat")
-#		for m in remap_face_idx_to_mat:
-#			print("mat %s" % "?" if m == null else m.resource_path)
 
-		#Reduce material list, discarding unused materials
-		var mat_list_reduced:Array[Material]
-		for m in remap_face_idx_to_mat:
-			if m != null && !mat_list_reduced.has(m):
-				mat_list_reduced.append(m)
-
-#		print("mat_list_reduced")
-#		for m in mat_list_reduced:
-#			print("mat %s" % "?" if m == null else m.resource_path)
-
-		#Set new face materials using new material ids
-		for f_idx in remap_face_idx_to_mat.size():
-			#print("face_idx %s" % f_idx)
-			var face:ConvexVolume.FaceInfo = ctl_mesh.faces[f_idx]
-			var mat = remap_face_idx_to_mat[f_idx]
+#func do_it_old():
+	#make_cache()
+#
+##	print("cmd set material %s" % material_path)
+	#for t in target_list:
+		#var block:CyclopsBlock = builder.get_node(t.block_path)
+#
+		#var data:ConvexBlockData = block.block_data
+		#var vol:ConvexVolume = ConvexVolume.new()
+		#vol.init_from_convex_block_data(data)
+#
+		#var mat_list:Array[Material] = block.materials.duplicate()
+		#print("start mat list")
+		#for m in mat_list:
+			#print("cur mat %s" % ("null" if m == null else m.resource_path))
+#
+		#var target_material:Material
+		#for m in mat_list:
+			#if m.resource_path == material_path:
+				#target_material = m
+				#break
+#
+		#if !target_material && ResourceLoader.exists(material_path):
+			#print("loading material ", material_path)
+			#target_material = load(material_path)
+			#mat_list.append(target_material)
+#
+		#print("target mat list")
+		#for m in mat_list:
+			#print("mat %s" % ("null" if m == null else m.resource_path))
+#
+		##All potential materials now in mat list
+#
+		#var remap_face_idx_to_mat:Array[Material] = []
+#
+		#var ctl_mesh:ConvexVolume = ConvexVolume.new()
+		#ctl_mesh.init_from_convex_block_data(block.control_mesh.to_convex_block_data())
+#
+		#for f_idx in ctl_mesh.faces.size():
+			#var f:ConvexVolume.FaceInfo = ctl_mesh.faces[f_idx]
+#
+			#if setting_material && t.face_indices.has(f_idx):
+				#remap_face_idx_to_mat.append(target_material)
+			#elif f.material_id >= 0 && f.material_id < block.materials.size():
+				#remap_face_idx_to_mat.append(block.materials[f.material_id])
+			#else:
+				#remap_face_idx_to_mat.append(null)
+#
+		#print("remap faceidx to mat")
+		#for m in remap_face_idx_to_mat:
+			#print("remap mat %s" % ("null" if m == null else m.resource_path))
+#
+		##Reduce material list, discarding unused materials
+		#var mat_list_reduced:Array[Material]
+		#for m in remap_face_idx_to_mat:
+			#if m != null && !mat_list_reduced.has(m):
+				#mat_list_reduced.append(m)
+#
+		#print("mat_list_reduced")
+		#for m in mat_list_reduced:
+			#print("mat %s" % "?" if m == null else m.resource_path)
+#
+		##Set new face materials using new material ids
+		#for f_idx in remap_face_idx_to_mat.size():
+			##print("face_idx %s" % f_idx)
+			#var face:ConvexVolume.FaceInfo = ctl_mesh.faces[f_idx]
+			#var mat = remap_face_idx_to_mat[f_idx]
 			#print("mat %s" % "?" if mat == null else mat.resource_path)
 			#print("has %s" % mat_list_reduced.has(mat))
 			#print("find %s" % mat_list_reduced.find(mat))
-
+#
 			#print("setting_material ", setting_material)
-			if setting_material:
-				face.material_id = -1 if mat == null else mat_list_reduced.find(mat)
+			#if setting_material:
+				#face.material_id = -1 if mat == null else mat_list_reduced.find(mat)
 			#print("face.material_id %s" % face.material_id)
-
-		for f_idx in ctl_mesh.faces.size():
-			var face:ConvexVolume.FaceInfo = ctl_mesh.faces[f_idx]
-
-			if t.face_indices.has(f_idx):
-				if setting_color:
-					face.color = color
-				if setting_visibility:
-					face.visible = visibility
-				if resetting_uv:
-					face.uv_transform = Transform2D.IDENTITY
-
-		block.materials = mat_list_reduced
-		block.block_data = ctl_mesh.to_convex_block_data()
+#
+		#for f_idx in ctl_mesh.faces.size():
+			#var face:ConvexVolume.FaceInfo = ctl_mesh.faces[f_idx]
+#
+			#if t.face_indices.has(f_idx):
+				#if setting_color:
+					#face.color = color
+				#if setting_visibility:
+					#face.visible = visibility
+				#if resetting_uv:
+					#face.uv_transform = Transform2D.IDENTITY
+#
+		#block.materials = mat_list_reduced
+		#block.block_data = ctl_mesh.to_convex_block_data()
 
 func undo_it():
 	for cache in cache_list:
