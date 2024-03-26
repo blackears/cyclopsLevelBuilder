@@ -131,8 +131,26 @@ func reload_materials_recursive(dir:EditorFileSystemDirectory):
 		reload_materials_recursive(dir.get_subdir(i))
 
 func apply_material(mat_bn:MaterialButton):
-	pass
+	var cmd:CommandSetMaterial = CommandSetMaterial.new()
+	cmd.builder = builder
+	cmd.material_path = mat_bn.material_path
 
+	var is_obj_mode:bool = builder.mode == CyclopsLevelBuilder.Mode.OBJECT
+
+	var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+	for block in sel_blocks:
+		if is_obj_mode:
+			cmd.add_target(block.get_path(), block.control_mesh.get_face_indices())
+		else:
+			var face_indices:PackedInt32Array = block.control_mesh.get_face_indices(true)					
+			if !face_indices.is_empty():
+				cmd.add_target(block.get_path(), face_indices)
+	
+	if cmd.will_change_anything():
+		var undo:EditorUndoRedoManager = builder.get_undo_redo()
+		cmd.add_to_undo_manager(undo)
+		
+		
 func is_active_material(path:String):
 	return !selected_material_paths.is_empty() && path == selected_material_paths[-1]
 
