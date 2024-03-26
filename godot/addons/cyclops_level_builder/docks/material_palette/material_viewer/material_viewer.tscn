@@ -51,5 +51,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[connection signal="visiblity_changed" from="HSplitContainer/MatGroupTree" to="." method="_on_mat_group_tree_visiblity_changed"]
 [connection signal="pressed" from="HSplitContainer/VBoxContainer/HBoxContainer/bn_refresh_mat_list" to="." method="_on_bn_refresh_mat_list_pressed"]
 [connection signal="text_changed" from="HSplitContainer/VBoxContainer/HBoxContainer/lineEd_filter" to="." method="_on_line_ed_filter_text_changed"]

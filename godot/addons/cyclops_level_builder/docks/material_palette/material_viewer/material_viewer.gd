@@ -92,6 +92,12 @@ func reload_materials():
 func reload_materials_recursive(dir:EditorFileSystemDirectory):
 	var mat_name_filter:String = %lineEd_filter.text
 	
+	if !%MatGroupTree.is_path_visible(dir.get_path()):
+		return
+	#var vis = %MatGroupTree.is_path_visible(dir.get_path())
+	#print("reload check path ", dir.get_path(), " vis ", vis)
+	#get_hidden_directories()
+	
 	var ed_iface:EditorInterface = builder.get_editor_interface()
 	var res_prev:EditorResourcePreview = ed_iface.get_resource_previewer()
 
@@ -207,4 +213,8 @@ func _on_bn_refresh_mat_list_pressed():
 
 
 func _on_line_ed_filter_text_changed(new_text):
+	reload_materials()
+
+
+func _on_mat_group_tree_visiblity_changed():
 	reload_materials()

@@ -25,6 +25,7 @@
 extends Tree
 class_name MaterialGroupsTree
 
+signal visiblity_changed
 
 enum ButtonType { VISIBLE }
 
@@ -56,22 +57,9 @@ var plugin:CyclopsLevelBuilder:
 		
 		reload_materials()
 
-#var root_group:MaterialGroup = MaterialGroup.new()
-
 var tree_item_to_path_map:Dictionary
 var path_to_tree_item_map:Dictionary
 
-#func _input(event):
-	#if event is InputEventMouseButton:
-		#var e:InputEventMouseButton = event
-		#
-		#if e.button_index == MOUSE_BUTTON_RIGHT:
-			#if !e.is_pressed():
-				#
-				#%PopupMenu.popup_on_parent(Rect2i(e.position.x, e.position.y, 0, 0))
-#
-			#get_viewport().set_input_as_handled()
-		
 
 func reload_materials():
 	print("reload_materials")
@@ -98,22 +86,7 @@ func reload_materials():
 	build_tree_recursive(root_dir, root_tree_item)
 	
 	collapse_unused_dirs()	
-	
-	##################
-	#root_item.set_text(0, root_group.name)
-#
-	#
-	#if !root_group:
-		#return
-	#
-	#print("Set item ", root_group.name)
-	#var root_item:TreeItem = create_item()
-	#root_item.set_text(0, root_group.name)
-	#root_item.set_editable(0, true)
-	#
-	#build_tree_recursive(root_group, root_item)
-	
-	pass
+
 
 func build_tree_recursive(parent_dir:EditorFileSystemDirectory, tree_item_parent:TreeItem):
 	#print("par_dir count ", parent_dir.get_path(), parent_dir.get_subdir_count())
@@ -134,16 +107,6 @@ func build_tree_recursive(parent_dir:EditorFileSystemDirectory, tree_item_parent
 		
 		build_tree_recursive(child_dir, item)
 		
-
-#
-#func build_tree_recursive(mat_group:MaterialGroup, tree_group_parent:TreeItem):
-	#var item:TreeItem = create_item(tree_group_parent)
-	#item.set_text(0, mat_group.name)
-	#item.set_editable(0, true)
-	#
-	#for child in mat_group.children:
-		#build_tree_recursive(child, item)
-	
 	
 func on_filesystem_changed():
 	reload_materials()
@@ -199,6 +162,25 @@ func _on_button_clicked(item:TreeItem, column:int, id:int, mouse_button_index:in
 	var checked:bool = !item.is_checked(1)
 	item.set_checked(1, checked)
 	item.set_button(1, ButtonType.VISIBLE, bn_vis_on if checked else bn_vis_off)
+	visiblity_changed.emit()
+
+func is_path_visible(path:String)->bool:
+	if !path_to_tree_item_map.has(path):
+		return false
+	
+	var item:TreeItem = path_to_tree_item_map[path]
+	return item.is_checked(1)
+	
+
+func get_hidden_directories()->Array[String]:
+	var ret_paths:Array[String]
+	
+	for path in path_to_tree_item_map.keys():
+		var item:TreeItem = path_to_tree_item_map[path]
+		if !item.is_checked(1):
+			ret_paths.append(path)
+		
+	return ret_paths
 
 func dir_has_materials(dir:EditorFileSystemDirectory)->bool:
 	for i in dir.get_file_count():
@@ -206,16 +188,6 @@ func dir_has_materials(dir:EditorFileSystemDirectory)->bool:
 		
 		if file_type == "StandardMaterial3D" || file_type == "ORMMaterial3D" || file_type == "ShaderMaterial":
 			return true
-		
-		#var path:String = dir.get_file_path(i)
-		#print("check ", path)
-		#if !ResourceLoader.exists(path):
-			#continue
-		#var res:Resource = load(path)
-		#print("is Res ")
-		#if res is Material:
-			#print("is Material! ")
-			#return true
 	
 	return false
 	

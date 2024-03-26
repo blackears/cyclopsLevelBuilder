@@ -103,7 +103,7 @@ func rebuild_thumbnail():
 	#print("res ", res)
 	#print("Set bn name ", GeneralUtil.calc_resource_name(res))
 	%MaterialName.text = GeneralUtil.calc_resource_name(res)
-	%MaterialName.tooltip_text = material_path
+	tooltip_text = material_path
 
 func resource_preview_callback(path:String, preview:Texture2D, thumbnail_preview:Texture2D, userdata:Variant):
 	#print("Set bn tex ", path)

@@ -6,8 +6,6 @@
 unique_name_in_owner = true
 columns = 2
 script = ExtResource("1_u4dlj")
-bn_vis_off = null
-bn_vis_on = null
 
 [node name="PopupMenu" type="PopupMenu" parent="."]
 unique_name_in_owner = true
