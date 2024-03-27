@@ -48,7 +48,7 @@ var plugin:CyclopsLevelBuilder:
 	set(value):
 		if value == plugin:
 			return
-			
+		
 		if plugin:
 			var ed_iface:EditorInterface = plugin.get_editor_interface()
 			var efs:EditorFileSystem = ed_iface.get_resource_filesystem()
@@ -57,6 +57,7 @@ var plugin:CyclopsLevelBuilder:
 			efs.resources_reload.disconnect(on_resources_reload)
 			
 		plugin = value
+		%CreateMaterialDialog.plugin = plugin
 		
 		if plugin:
 			var ed_iface:EditorInterface = plugin.get_editor_interface()
@@ -72,7 +73,7 @@ var path_to_tree_item_map:Dictionary
 
 
 func reload_materials():
-	print("reload_materials")
+	#print("reload_materials")
 	clear()
 	tree_item_to_path_map.clear()
 	path_to_tree_item_map.clear()
@@ -228,6 +229,9 @@ func collapse_unused_dirs():
 
 func collapse_unused_dirs_recursive(dir:EditorFileSystemDirectory)->bool:
 	#print("path ", dir.get_path())
+	if !path_to_tree_item_map.has(dir.get_path()):
+		return false
+		
 	var item:TreeItem = path_to_tree_item_map[dir.get_path()]
 	#print("item ", item.get_text(0))
 	var expanded:bool = dir_has_materials(dir)
@@ -242,3 +246,76 @@ func collapse_unused_dirs_recursive(dir:EditorFileSystemDirectory)->bool:
 	item.collapsed = !expanded
 	
 	return expanded
+
+func _can_drop_data(at_position:Vector2, data:Variant):
+#	print("_can_drop_data %s" % data)
+	return typeof(data) == TYPE_DICTIONARY and data.has("type") and data["type"] == "files"
+
+
+func _drop_data(at_position:Vector2, data:Variant):
+	var item:TreeItem = get_item_at_position(at_position)
+	if !item:
+		return
+	
+	var files = data["files"]
+	#print("--drop")
+	var texture_list:Array[Texture2D]
+	for f in files:
+#		print("Dropping %s" % f)
+		var res:Resource = load(f)
+		if res is Texture2D:
+			#print("Dropping %s" % res.resource_path)
+
+			texture_list.append(res)
+
+	if texture_list.is_empty():
+		return
+	
+	var parent_dir_path:String = tree_item_to_path_map[item]
+	
+	%CreateMaterialDialog.parent_dir_path = parent_dir_path
+	%CreateMaterialDialog.texture_list = texture_list
+	%CreateMaterialDialog.popup_centered()
+	#%CreateMaterialDialog.popup_on_parent()
+
+func _on_create_material_dialog_create_material(params:Dictionary):
+	
+	#Prepare texture
+	var target_texture:Texture2D
+
+	var tex_list:Array = params["textures"]
+	if tex_list.size() == 1:
+		target_texture = tex_list[0]
+	elif tex_list.size() > 1:
+		var anim_tex:AnimatedTexture = AnimatedTexture.new()
+		anim_tex.frames = tex_list.size()
+		for i in tex_list.size():
+			anim_tex.set_frame_texture(i, tex_list[i])
+		
+		target_texture = anim_tex
+	
+	#Create material
+	if params["material_type"] == "standard":
+		var new_mat:StandardMaterial3D = StandardMaterial3D.new()
+		new_mat.albedo_texture = target_texture
+		
+		if params["uv_type"] == "pix_per_game_unit":
+			var ppgu:int = params["pix_per_game_unit"]
+			new_mat.uv1_scale = Vector3(tex_list[0].get_width() / ppgu, tex_list[0].get_height() / ppgu, 1)
+		
+		ResourceSaver.save(new_mat, params["parent_dir"] + "/" + params["name"] + ".tres")
+
+	elif params["material_type"] == "shader":
+		var new_mat:ShaderMaterial = ShaderMaterial.new()
+		new_mat.shader = ResourceLoader.load(params["shader_res_path"], "Shader")
+		
+		#print("tex param ", params["texture_parameter"])
+		new_mat.set_shader_parameter(params["texture_parameter"], target_texture)
+
+		if params["uv_type"] == "pix_per_game_unit":
+			var ppgu:float = params["pix_per_game_unit"]
+			new_mat.set_shader_parameter(params["uv_parameter"], Vector3(tex_list[0].get_width() / ppgu, tex_list[0].get_height() / ppgu, 1))
+		
+		ResourceSaver.save(new_mat, params["parent_dir"] + "/" + params["name"] + ".tres")
+		
+	pass # Replace with function body.

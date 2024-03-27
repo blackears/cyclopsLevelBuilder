@@ -60,16 +60,16 @@ var selected_material_paths:Array[String]
 var material_viewer_state:MaterialViewerState = preload("res://addons/cyclops_level_builder/docks/material_palette/material_viewer/material_viewer_state_res.tres")
 
 func on_filesystem_changed():
-	print("on_filesystem_changed")
+	#print("on_filesystem_changed")
 	reload_materials()
 	pass
 
 func on_resources_reimported(resources:PackedStringArray):
-	print("on_resources_reimported ", resources)
+	#print("on_resources_reimported ", resources)
 	pass
 
 func on_resources_reload(resources:PackedStringArray):
-	print("on_resources_reload ", resources)
+	#print("on_resources_reload ", resources)
 	pass
 
 func reload_materials():

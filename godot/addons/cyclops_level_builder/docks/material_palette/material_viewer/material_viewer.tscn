@@ -31,7 +31,6 @@ text = "Show unused"
 [node name="MatGroupTree" parent="HSplitContainer/VBoxContainer2" instance=ExtResource("2_8hnut")]
 layout_mode = 2
 size_flags_vertical = 3
-show_unused_dirs = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer"]
 layout_mode = 2

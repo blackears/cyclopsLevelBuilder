@@ -90,6 +90,8 @@ var plugin:CyclopsLevelBuilder:
 
 var dirty:bool = true
 
+var material_local:Material
+
 func rebuild_thumbnail():
 	if !plugin:
 		return
@@ -97,12 +99,9 @@ func rebuild_thumbnail():
 	var rp:EditorResourcePreview = plugin.get_editor_interface().get_resource_previewer()
 	rp.queue_resource_preview(material_path, self, "resource_preview_callback", null)
 	
-#	var res:Resource = ResourceLoader.load(material_path)
-	var res:Resource = load(material_path)
-	#print("loading ", material_path)
-	#print("res ", res)
-	#print("Set bn name ", GeneralUtil.calc_resource_name(res))
-	%MaterialName.text = GeneralUtil.calc_resource_name(res)
+	material_local = ResourceLoader.load(material_path, "Material")
+#	material_local = load(material_path)
+	%MaterialName.text = GeneralUtil.calc_resource_name(material_local)
 	tooltip_text = material_path
 
 func resource_preview_callback(path:String, preview:Texture2D, thumbnail_preview:Texture2D, userdata:Variant):
