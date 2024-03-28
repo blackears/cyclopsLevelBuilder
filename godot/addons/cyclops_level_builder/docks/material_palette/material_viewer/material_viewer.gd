@@ -183,7 +183,8 @@ func select_material(mat_bn:MaterialButton, sel_type:SelectionList.Type):
 	material_viewer_state.active_material_path = \
 		"" if selected_material_paths.is_empty() else selected_material_paths[-1]
 		
-	print("sel mat list: ", selected_material_paths)
+	#print("set sel mat: ", material_viewer_state.active_material_path)
+	#print("sel mat list: ", selected_material_paths)
 
 	for bn in %ButtonArea.get_children():
 		var mat_idx:int = selected_material_paths.find(bn.material_path)
