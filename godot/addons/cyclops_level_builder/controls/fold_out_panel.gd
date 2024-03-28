@@ -21,26 +21,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
 @tool
-extends SubViewport
-class_name MaterialShapshot
+extends PanelContainer
+class_name FoldOutPanel
 
-@export var target_material:Material:
-	get:
-		return target_material
-	set(value):
-		target_material = value
-		$Node3D/MeshInstance3D.material_override = target_material
+@export var open:bool = true
+@export var text:String = ""
 
-func take_snapshot()->ImageTexture:
-	#print ("pre-grabbing image %s" % target_material.resource_path)
-	await RenderingServer.frame_post_draw
-	#print ("grabbing image %s" % target_material.resource_path)
-	var image:Image = get_viewport().get_texture().get_image()
-	var tex:ImageTexture = ImageTexture.create_from_image(image)
-	return tex
-	
+func get_content_area():
+	return %ContentArea
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -49,4 +38,14 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	%HeaderButton.text = text
+	if open:
+		%HeaderButton.icon = preload("res://addons/cyclops_level_builder/art/icons/arrow_down.svg")
+		%ContentArea.visible = true
+	else:
+		%HeaderButton.icon = preload("res://addons/cyclops_level_builder/art/icons/arrow_right.svg")
+		%ContentArea.visible = false
+
+
+func _on_button_pressed():
+	open = !open

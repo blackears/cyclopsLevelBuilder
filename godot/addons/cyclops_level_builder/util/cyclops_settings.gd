@@ -149,6 +149,8 @@ func save_to_file(path:String):
 	keys.sort()
 	
 	var f:FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	if !f:
+		return
 	
 	for key in keys:
 		var def:SettingDef = definition_map[key]

@@ -1,0 +1,66 @@
+[gd_scene load_steps=3 format=3 uid="uid://denc7grw42qsu"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/docks/material_palette/material_viewer/material_viewer.gd" id="1_nrjye"]
+[ext_resource type="PackedScene" uid="uid://cchlfqbh0djdn" path="res://addons/cyclops_level_builder/docks/material_palette/material_viewer/material_groups_tree.tscn" id="2_8hnut"]
+
+[node name="MaterialViewer" type="PanelContainer"]
+offset_right = 523.0
+offset_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_nrjye")
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+layout_mode = 2
+split_offset = 240
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HSplitContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="bn_show_unused_dirs" type="Button" parent="HSplitContainer/VBoxContainer2/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Show unused directories"
+toggle_mode = true
+button_pressed = true
+text = "Show unused"
+
+[node name="MatGroupTree" parent="HSplitContainer/VBoxContainer2" instance=ExtResource("2_8hnut")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HSplitContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Filter:"
+
+[node name="lineEd_filter" type="LineEdit" parent="HSplitContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Filter materials"
+
+[node name="PanelContainer" type="PanelContainer" parent="HSplitContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="ButtonArea" type="HFlowContainer" parent="HSplitContainer/VBoxContainer/PanelContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[connection signal="toggled" from="HSplitContainer/VBoxContainer2/HBoxContainer/bn_show_unused_dirs" to="." method="_on_bn_show_unused_dirs_toggled"]
+[connection signal="visiblity_changed" from="HSplitContainer/VBoxContainer2/MatGroupTree" to="." method="_on_mat_group_tree_visiblity_changed"]
+[connection signal="text_changed" from="HSplitContainer/VBoxContainer/HBoxContainer/lineEd_filter" to="." method="_on_line_ed_filter_text_changed"]

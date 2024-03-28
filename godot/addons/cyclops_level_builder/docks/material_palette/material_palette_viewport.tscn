@@ -1,10 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://o1efx0qxc4n3"]
+[gd_scene load_steps=3 format=3 uid="uid://o1efx0qxc4n3"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/docks/material_palette/material_palette_viewport.gd" id="1_xyxg3"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/docks/material_palette/thumbnail_group.gd" id="2_sg6yo"]
-
-[sub_resource type="Resource" id="Resource_ljbow"]
-script = ExtResource("2_sg6yo")
+[ext_resource type="PackedScene" uid="uid://denc7grw42qsu" path="res://addons/cyclops_level_builder/docks/material_palette/material_viewer/material_viewer.tscn" id="3_bks23"]
 
 [node name="Materials" type="Control"]
 layout_mode = 3
@@ -14,47 +11,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_xyxg3")
-thumbnail_group = SubResource("Resource_ljbow")
 metadata/_edit_lock_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="MaterialViewer" parent="." instance=ExtResource("3_bks23")]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
-metadata/_edit_lock_ = true
-
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
-layout_mode = 2
-
-[node name="remove_all_materials" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Remove All"
-
-[node name="remove_sel" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer"]
-layout_mode = 2
-tooltip_text = "Press X to removeselected material."
-text = "Remove Selected"
-
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-metadata/_edit_lock_ = true
-
-[node name="HFlowContainer" type="HFlowContainer" parent="VBoxContainer/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
 
 [connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/remove_all_materials" to="." method="_on_remove_all_materials_pressed"]
-[connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/remove_sel" to="." method="_on_remove_sel_pressed"]
-[connection signal="mouse_entered" from="VBoxContainer/ScrollContainer/HFlowContainer" to="." method="_on_h_flow_container_mouse_entered"]
-[connection signal="mouse_exited" from="VBoxContainer/ScrollContainer/HFlowContainer" to="." method="_on_h_flow_container_mouse_exited"]

@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://dgvj2a2o76kh"]
+
+[ext_resource type="Script" path="res://test/interactive/tree_test/test_tree_control_main.gd" id="1_twdbm"]
+[ext_resource type="PackedScene" uid="uid://bhuaw5k7xsl4i" path="res://test/interactive/tree_test/test_tree_control.tscn" id="2_yfqv1"]
+
+[node name="TestTree" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_twdbm")
+
+[node name="Tree" parent="." instance=ExtResource("2_yfqv1")]
+unique_name_in_owner = true
+layout_mode = 1

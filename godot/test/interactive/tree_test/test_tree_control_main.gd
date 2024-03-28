@@ -21,20 +21,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-@tool
-extends Resource
-class_name ThumbnailGroup
+extends Control
 
-var thumbnails:Array[MaterialThumbnail] = []
+#func _gui_input(event):
+	#pass
 
-func select_thumbnail(obj:MaterialThumbnail):
-	for t in thumbnails:
-		t.selected = t == obj
 
-func add_thumbnail(obj:MaterialThumbnail):
-	thumbnails.append(obj)
-
-func remove_thumbnail(obj:MaterialThumbnail):
-	thumbnails.remove_at(thumbnails.find(obj))
+# Called when the node enters the scene tree for the first time.
+func _ready():
 	
+	pass # Replace with function body.
 
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass

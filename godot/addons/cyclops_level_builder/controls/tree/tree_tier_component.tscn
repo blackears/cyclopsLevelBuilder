@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3 uid="uid://bd6lfhom4yxls"]
+
+[ext_resource type="Texture2D" uid="uid://c7c2vg6lbhmfn" path="res://addons/cyclops_level_builder/art/icons/arrow_right.svg" id="1_rpn77"]
+[ext_resource type="Texture2D" uid="uid://bor2x3t7fiqc2" path="res://addons/cyclops_level_builder/art/icons/arrow_down.svg" id="2_58w4p"]
+
+[node name="PanelContainer" type="PanelContainer"]
+offset_right = 230.0
+offset_bottom = 210.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="bn_expand" type="TextureButton" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("1_rpn77")
+texture_pressed = ExtResource("2_58w4p")
+
+[node name="NodeDisplayArea" type="PanelContainer" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DropdownArea" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/DropdownArea"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="ChildArea" type="PanelContainer" parent="VBoxContainer/DropdownArea"]
+unique_name_in_owner = true
+layout_mode = 2

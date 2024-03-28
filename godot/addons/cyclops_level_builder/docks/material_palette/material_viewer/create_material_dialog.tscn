@@ -1,0 +1,182 @@
+[gd_scene load_steps=6 format=3 uid="uid://b510d4yme5xtx"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/docks/material_palette/material_viewer/create_material_dialog.gd" id="1_ysdvw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7cu3j"]
+bg_color = Color(0.309804, 0.309804, 0.309804, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+
+[sub_resource type="Theme" id="Theme_u2063"]
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_7cu3j")
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_hlttb"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_rde8s"]
+
+[node name="CreateMaterialDialog" type="Window"]
+title = "Create Material"
+position = Vector2i(0, 36)
+size = Vector2i(600, 400)
+script = ExtResource("1_ysdvw")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Material Name:"
+
+[node name="line_material_name" type="LineEdit" parent="PanelContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PanelContainer2" type="PanelContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_u2063")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
+layout_mode = 2
+text = "Material Type"
+
+[node name="radio_stdMat" type="CheckBox" parent="PanelContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+button_group = SubResource("ButtonGroup_hlttb")
+text = "StandardMaterial3D"
+
+[node name="radio_shaderMat" type="CheckBox" parent="PanelContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+button_group = SubResource("ButtonGroup_hlttb")
+text = "ShaderMaterial"
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/PanelContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 64
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer2/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer2/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/PanelContainer2/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Shader:"
+
+[node name="line_shader_path" type="LineEdit" parent="PanelContainer/VBoxContainer/PanelContainer2/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="bn_browse_shader" type="Button" parent="PanelContainer/VBoxContainer/PanelContainer2/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Pick shader to use for material"
+text = "..."
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer2/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/PanelContainer2/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Texture Parameter:"
+
+[node name="target_slot" type="OptionButton" parent="PanelContainer/VBoxContainer/PanelContainer2/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer2/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/PanelContainer2/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "UV Parameter:"
+
+[node name="uv_slot" type="OptionButton" parent="PanelContainer/VBoxContainer/PanelContainer2/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_u2063")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer2"]
+layout_mode = 2
+text = "UVs"
+
+[node name="radio_uv_1x1" type="CheckBox" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+button_group = SubResource("ButtonGroup_rde8s")
+text = "1 x 1"
+
+[node name="radio_uv_scale_to_pix" type="CheckBox" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+button_group = SubResource("ButtonGroup_rde8s")
+text = "Scale to pixel size"
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 64
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer2/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer2/MarginContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Pixels per game unit"
+
+[node name="line_pix_per_game_unit" type="LineEdit" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer2/MarginContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "32"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="bn_okay" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Okay"
+
+[node name="bn_cancel" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Cancel
+"
+
+[node name="FileDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+title = "Open a File"
+size = Vector2i(600, 400)
+ok_button_text = "Open"
+file_mode = 0
+
+[connection signal="about_to_popup" from="." to="." method="_on_about_to_popup"]
+[connection signal="text_changed" from="PanelContainer/VBoxContainer/PanelContainer2/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/line_shader_path" to="." method="_on_line_shader_path_text_changed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/PanelContainer2/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/bn_browse_shader" to="." method="_on_bn_browse_shader_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/bn_okay" to="." method="_on_bn_okay_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/bn_cancel" to="." method="_on_bn_cancel_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
