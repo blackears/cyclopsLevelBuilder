@@ -70,7 +70,7 @@ var drag_start_radius:float = 6
 enum Mode { OBJECT, EDIT }
 var mode:Mode = Mode.OBJECT
 enum EditMode { VERTEX, EDGE, FACE }
-var edit_mode:EditMode = EditMode.VERTEX
+var edit_mode:CyclopsLevelBuilder.EditMode = CyclopsLevelBuilder.EditMode.VERTEX
 
 var display_mode:DisplayMode.Type = DisplayMode.Type.MATERIAL
 

@@ -53,6 +53,24 @@ class_name ConvexBlockData
 @export var active_face:int
 @export var face_ids:PackedInt32Array  #Per face
 
+#func _get(property):
+	#if property == "fake_property":
+		#print("Getting my property!")
+		#return 4
+#
+#func _get_property_list():
+	#return [
+		#{ "name": "fake_property", "type": TYPE_INT }
+	#]
+#
+#func _set(property, value):
+	#if property == "fake_property":
+		## Storing the value in the fake property.
+		#internal_data["fake_property"] = value
+		#return true
+	#return false
+	
+	
 #Validate arrays to make sure they're the right size
 func validate_arrays():
 	var num_faces:int = face_vertex_count.size()
