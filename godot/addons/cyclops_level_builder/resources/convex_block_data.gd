@@ -33,12 +33,10 @@ class_name ConvexBlockData
 
 @export var vertex_points:PackedVector3Array  #Per vertex
 @export var vertex_selected:PackedByteArray  #Per vertex
-#@export var vertex_active:PackedByteArray  #Per vertex
 @export var active_vertex:int
 
 @export var edge_vertex_indices:PackedInt32Array
 @export var edge_selected:PackedByteArray
-#@export var edge_active:PackedByteArray
 @export var active_edge:int
 @export var edge_face_indices:PackedInt32Array
 

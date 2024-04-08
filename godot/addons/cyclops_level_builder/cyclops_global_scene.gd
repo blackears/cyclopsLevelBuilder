@@ -141,6 +141,18 @@ func draw_loop(points:PackedVector3Array, closed:bool = true, mat:Material = nul
 	tool_mesh.surface_end()
 	
 
+func draw_wireframe(points:PackedVector3Array, edges:PackedInt32Array, mat:Material = null, vertex_mat = null):
+	for p in points:
+		draw_vertex(p, vertex_mat)
+		
+	tool_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, mat)
+
+	for e_idx in edges:		
+		tool_mesh.surface_add_vertex(points[e_idx])
+	
+	tool_mesh.surface_end()
+
+
 func draw_prism(points:PackedVector3Array, extrude:Vector3, mat:Material = null, vertex_mat = null):
 	for p in points:
 		draw_vertex(p, vertex_mat)
