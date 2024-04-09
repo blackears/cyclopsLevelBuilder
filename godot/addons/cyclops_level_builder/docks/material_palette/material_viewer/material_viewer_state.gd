@@ -25,4 +25,8 @@
 extends Resource
 class_name MaterialViewerState
 
-@export var active_material_path:String
+@export var active_material_path:String:
+	set(value):
+		if active_material_path != value:
+			active_material_path = value
+			emit_changed()

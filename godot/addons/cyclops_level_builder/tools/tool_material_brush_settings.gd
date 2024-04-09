@@ -44,6 +44,12 @@ class_name ToolMaterialBrushSettings
 			color = value
 			emit_changed()
 
+@export var material_path:NodePath:
+	set(value):
+		if value != material_path:
+			material_path = value
+			emit_changed()
+
 @export var visibility:bool = true:
 	set(value):
 		if value != visibility:
@@ -56,10 +62,11 @@ func load_from_cache(cache:Dictionary):
 	paint_visibility = cache.get("paint_visibility", false)
 	individual_faces = cache.get("individual_faces", false)
 	erase_material = cache.get("erase_material", false)
-	color = cache.get("color", Color.WHITE)
+	material_path = str_to_var(cache.get("material_path", NodePath()))
+	color = str_to_var(cache.get("color", var_to_str(Color.WHITE)))
 	visibility = cache.get("visibility", false)
 	paint_uv = cache.get("paint_uv", false)
-	uv_matrix = cache.get("uv_matrix", Transform2D.IDENTITY)
+	uv_matrix = str_to_var(cache.get("uv_matrix", var_to_str(Transform2D.IDENTITY)))
 
 func save_to_cache():
 	return {
@@ -68,10 +75,11 @@ func save_to_cache():
 		"paint_visibility": paint_visibility,
 		"individual_faces": individual_faces,
 		"erase_material": erase_material,
-		"color": color,
+		"material_path": var_to_str(material_path),
+		"color": var_to_str(color),
 		"visibility": visibility,
 		"paint_uv": paint_uv,
-		"uv_matrix": uv_matrix
+		"uv_matrix": var_to_str(uv_matrix)
 	}
 
 

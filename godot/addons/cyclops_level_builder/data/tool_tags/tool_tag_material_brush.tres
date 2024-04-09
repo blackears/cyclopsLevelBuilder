@@ -10,6 +10,8 @@ id = "material_brush"
 name = "Material Brush"
 tooltip = "Material Brush
 
-Click and drag on surfaces to apply the currently selected material."
+Click and drag on surfaces to apply the currently selected material.
+
+Shift-X will sample the properties of the face under the brush cursor."
 icon = ExtResource("1_hjh4j")
 tool_script = ExtResource("3_1e4l3")

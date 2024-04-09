@@ -75,15 +75,18 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						vol.init_from_convex_block_data(block.block_data)
 						
 						var face:ConvexVolume.FaceInfo = vol.faces[result.face_index]
-#						cmd.add_target(block.get_path(), [result.face_index])
-						pass
 					
 						#Sample under cursor
 						if settings.paint_materials:
 							if face.material_id != -1:
 								#Pick this material
-								#block.materials[face.material_id]
-								pass
+								#print("face.material_id ", face.material_id)
+								var mat:Material = block.materials[face.material_id] \
+									if face.material_id >= 0 && face.material_id < block.materials.size() \
+									else null
+								settings.material_path = mat.resource_path if mat else NodePath()
+								#print("settings.material_path ", settings.material_path)
+								
 							
 						if settings.paint_color:
 							settings.color = face.color
@@ -93,7 +96,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 							
 						if settings.paint_uv:
 							settings.uv_matrix = face.uv_transform
-							print("settings.uv_matrix ", settings.uv_matrix)
 
 			return true
 			
@@ -116,9 +118,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 						#print("settings.paint_materials ", settings.paint_materials)
 						cmd.setting_material = settings.paint_materials
-						#cmd.material_path = builder.tool_material_path if !settings.erase_material else ""
-						cmd.material_path = material_viewer_state.active_material_path \
+						
+						cmd.material_path = settings.material_path \
 							if !settings.erase_material else ""
+						#cmd.material_path = material_viewer_state.active_material_path \
+							#if !settings.erase_material else ""
 						#print("mat brush using material ", cmd.material_path)
 
 						cmd.setting_color = settings.paint_color
@@ -180,15 +184,24 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	return false
 
 
+func on_material_viewer_state_changed():
+	#print("mat changed to ", material_viewer_state.active_material_path)
+	settings.material_path = material_viewer_state.active_material_path
+
 
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
 
 	var cache:Dictionary = builder.get_tool_cache(TOOL_ID)
 	settings.load_from_cache(cache)
+	
+	material_viewer_state.changed.connect(on_material_viewer_state_changed)
 
 func _deactivate():
+	material_viewer_state.changed.disconnect(on_material_viewer_state_changed)
+	
 	var cache:Dictionary = settings.save_to_cache()
 	builder.set_tool_cache(TOOL_ID, cache)
+
 
 
