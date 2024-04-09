@@ -28,9 +28,23 @@ class_name ToolMaterialBrushSettingsEditor
 @export var settings:ToolMaterialBrushSettings:
 	get:
 		return settings
+		
 	set(value):
+		if settings == value:
+			return
+		
+		if settings:
+			settings.changed.disconnect(on_settings_changed)
+		
 		settings = value
+		
+		if settings:
+			settings.changed.connect(on_settings_changed)
+		
 		update()
+
+func on_settings_changed():
+	update()
 
 func update():
 	if !settings:

@@ -35,6 +35,7 @@ var cmd:CommandSetMaterial
 var settings:ToolMaterialBrushSettings = ToolMaterialBrushSettings.new()
 var material_viewer_state:MaterialViewerState = preload("res://addons/cyclops_level_builder/docks/material_palette/material_viewer/material_viewer_state_res.tres")
 
+var last_mouse_pos:Vector2
 
 func _get_tool_id()->String:
 	return TOOL_ID
@@ -54,7 +55,49 @@ func _get_tool_properties_editor()->Control:
 	return ed
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
-	if event is InputEventMouseButton:
+
+	if event is InputEventKey:
+		var e:InputEventKey = event
+		
+		if e.keycode == KEY_X:
+			if e.shift_pressed:
+				if e.is_pressed():
+					var origin:Vector3 = viewport_camera.project_ray_origin(last_mouse_pos)
+					var dir:Vector3 = viewport_camera.project_ray_normal(last_mouse_pos)
+
+					var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
+
+					if result:
+						var block:CyclopsBlock = result.object
+						result.face_index
+						
+						var vol:ConvexVolume = ConvexVolume.new()
+						vol.init_from_convex_block_data(block.block_data)
+						
+						var face:ConvexVolume.FaceInfo = vol.faces[result.face_index]
+#						cmd.add_target(block.get_path(), [result.face_index])
+						pass
+					
+						#Sample under cursor
+						if settings.paint_materials:
+							if face.material_id != -1:
+								#Pick this material
+								#block.materials[face.material_id]
+								pass
+							
+						if settings.paint_color:
+							settings.color = face.color
+							
+						if settings.paint_visibility:
+							settings.visibility = face.visible
+							
+						if settings.paint_uv:
+							settings.uv_matrix = face.uv_transform
+							print("settings.uv_matrix ", settings.uv_matrix)
+
+			return true
+			
+	elif event is InputEventMouseButton:
 
 		var e:InputEventMouseButton = event
 		if e.button_index == MOUSE_BUTTON_LEFT:
@@ -97,6 +140,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						tool_state = ToolState.PAINTING
 
 			else:
+				
 				if tool_state == ToolState.PAINTING:
 					cmd.undo_it()
 					if cmd.will_change_anything():
@@ -111,6 +155,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	elif event is InputEventMouseMotion:
 
 		var e:InputEventMouseMotion = event
+
+		last_mouse_pos = e.position
 
 		if tool_state == ToolState.PAINTING:
 			var origin:Vector3 = viewport_camera.project_ray_origin(e.position)

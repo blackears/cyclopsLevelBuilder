@@ -29,15 +29,26 @@ class_name ToolMaterialBrushSettings
 @export var paint_color:bool = false
 @export var paint_visibility:bool = false
 @export var paint_uv:bool = false
-@export var uv_matrix:Transform2D = Transform2D.IDENTITY
-
+@export var uv_matrix:Transform2D = Transform2D.IDENTITY:
+	set(value):
+		if value != uv_matrix:
+			uv_matrix = value
+			emit_changed()
 
 @export var individual_faces:bool = false
 @export var erase_material:bool = false
 
-@export var color:Color = Color.WHITE
+@export var color:Color = Color.WHITE:
+	set(value):
+		if value != color:
+			color = value
+			emit_changed()
 
-@export var visibility:bool = true
+@export var visibility:bool = true:
+	set(value):
+		if value != visibility:
+			visibility = value
+			emit_changed()
 
 func load_from_cache(cache:Dictionary):
 	paint_materials = cache.get("paint_materials", true)

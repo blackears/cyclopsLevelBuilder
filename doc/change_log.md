@@ -9,9 +9,11 @@
 * Renaming Settings to CyclopsSettings
 * Now generating tangent vectors for block meshes.
 * Restoring ability for UVs to remain in place when moving blocks.
-* Adding option to clear UV transform in material brush.
+* ~~Adding option to clear UV transform in material brush.~~
 * Adding tool to export current scene as Godot scene with only native Godot objects.
 * Overhaul of the material manager.  Will now automatically track all materials in project and provide filters to let you focus on subsets of materials.
 * Can drag and drop Texture2D resources from the file explorer into the material directory window to automatically create new materials.  Dragging more than one texture will create an animated texture sequence.
 * Adding command to merge vertices at center.
+* Material brush can now apply UV coordinates
+* Material brush can sample brush settings from under the cursor by pressing Shift-X
 
