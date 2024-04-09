@@ -55,6 +55,7 @@ func do_it():
 	#Delete source blocks
 	for block_path in block_paths:
 		var del_block:CyclopsBlock = builder.get_node(block_path)
+		del_block.get_parent().remove_child(del_block)
 		del_block.queue_free()
 
 
