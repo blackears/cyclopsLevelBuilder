@@ -44,7 +44,7 @@ func update():
 		%check_paint_visibility.disabled = true
 		%check_visibility.disabled = true
 
-		%check_reset_uv.disabled = true
+		%check_paint_uv.disabled = true
 
 		return
 
@@ -67,7 +67,7 @@ func update():
 	%check_visibility.button_pressed = settings.visibility
 	%check_visibility.disabled = !settings.paint_visibility
 
-	%check_reset_uv.button_pressed = settings.reset_uv
+	%check_paint_uv.button_pressed = settings.paint_uv
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -111,5 +111,5 @@ func _on_check_visibility_toggled(button_pressed:bool):
 	settings.visibility = button_pressed
 
 
-func _on_check_reset_uv_toggled(button_pressed:bool):
-	settings.reset_uv = button_pressed
+func _on_check_paint_uv_toggled(button_pressed:bool):
+	settings.paint_uv = button_pressed

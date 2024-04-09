@@ -67,11 +67,11 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Visible"
 
-[node name="check_reset_uv" type="CheckBox" parent="VBoxContainer"]
+[node name="check_paint_uv" type="CheckBox" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Set the face's UV transform to the identity matrix."
-text = "Reset UV"
+text = "Paint UV"
 
 [connection signal="toggled" from="VBoxContainer/check_individual_faces" to="." method="_on_check_individual_faces_toggled"]
 [connection signal="toggled" from="VBoxContainer/check_paint_material" to="." method="_on_check_paint_material_toggled"]
@@ -80,4 +80,4 @@ text = "Reset UV"
 [connection signal="color_changed" from="VBoxContainer/MarginContainer2/HBoxContainer/color_button" to="." method="_on_color_button_color_changed"]
 [connection signal="toggled" from="VBoxContainer/check_paint_visibility" to="." method="_on_check_paint_visibility_toggled"]
 [connection signal="toggled" from="VBoxContainer/MarginContainer3/check_visibility" to="." method="_on_check_visibility_toggled"]
-[connection signal="toggled" from="VBoxContainer/check_reset_uv" to="." method="_on_check_reset_uv_toggled"]
+[connection signal="toggled" from="VBoxContainer/check_paint_uv" to="." method="_on_check_paint_uv_toggled"]

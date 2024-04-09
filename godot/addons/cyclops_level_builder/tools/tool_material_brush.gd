@@ -84,7 +84,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						cmd.setting_visibility = settings.paint_visibility
 						cmd.visibility = settings.visibility
 
-						cmd.resetting_uv = settings.reset_uv
+						cmd.painting_uv = settings.paint_uv
+						cmd.uv_matrix = settings.uv_matrix
 
 						var block:CyclopsBlock = result.object
 						if settings.individual_faces:
