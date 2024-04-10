@@ -67,6 +67,7 @@ const F_SELECTED: StringName = "selected"
 
 const FV_VERTEX_INDEX: StringName = "vertex_index"
 const FV_FACE_INDEX: StringName = "face_index"
+const FV_VERTEX_LOCAL_INDEX: StringName = "vertex_local_index"
 const FV_SELECTED: StringName = "selected"
 const FV_COLOR: StringName = "color"
 const FV_UV1: StringName = "uv1"
@@ -78,61 +79,101 @@ var face_data:Dictionary
 var face_vertex_data:Dictionary
 
 func create_from_convex_block(block_data:ConvexBlockData):
+
+	selected = block_data.selected
+	active = block_data.active
+	collsion = block_data.collsion
+	physics_layer = block_data.physics_layer
+	physics_mask = block_data.physics_mask
+	
+	
 	num_vertices = block_data.vertex_points.size()
 	num_edges = block_data.edge_vertex_indices.size() / 2
 	num_faces = block_data.face_vertex_count.size()
 	
-	#Create face vertex data
+	set_vertex_data(DataVectorFloat.new(V_POSITION, 
+		block_data.vertex_points.to_byte_array().to_float32_array(), 
+		DataVector.DataType.VECTOR3,
+		3))
+
+	set_vertex_data(DataVectorByte.new(V_SELECTED, 
+		block_data.vertex_selected, 
+		DataVector.DataType.BOOL))
+
+	set_edge_data(DataVectorByte.new(E_SELECTED, 
+		block_data.edge_selected, 
+		DataVector.DataType.BOOL))
+
+	set_face_data(DataVectorInt.new(F_MATERIAL_INDEX, 
+		block_data.face_material_indices, 
+		DataVector.DataType.INT))
+
+	set_face_data(DataVectorByte.new(F_VISIBLE, 
+		block_data.face_visible, 
+		DataVector.DataType.BOOL))
+		
+		
+	set_face_data(DataVectorByte.new(F_SELECTED, 
+		block_data.face_selected, 
+		DataVector.DataType.BOOL))
+
+	set_face_data(DataVectorFloat.new(F_COLOR, 
+		block_data.face_color.to_byte_array().to_float32_array(), 
+		DataVector.DataType.COLOR, 
+		4))
+
+	
+	#Create face-vertex data
 	num_face_vertices = 0
 	for n in block_data.face_vertex_count:
 		num_face_vertices += n
 
 	var fv_array_offset:int = 0
 	var next_fv_idx:int = 0
+	var face_indices:PackedInt32Array
+	var vert_indices:PackedInt32Array
+	#var fv_local_indices:PackedInt32Array
+	#var fv_coord_map:Dictionary
+	
 	for f_idx in block_data.face_vertex_count.size():
 		var num_verts_in_face:int = block_data.face_vertex_count[f_idx]
 		for fv_local_idx in num_verts_in_face:
 			var v_idx:int = block_data.face_vertex_indices[fv_array_offset + fv_local_idx]
 			
-			var fv_idx:Vector2i = Vector2i(f_idx, fv_local_idx)
+			#var fv_coord:Vector2i = Vector2i(f_idx, fv_local_idx)
+			#fv_coord_map[fv_coord] = face_indices
+			face_indices.append(f_idx)
+			vert_indices.append(v_idx)
+			#fv_local_indices.append(fv_local_idx)
 			
 		fv_array_offset += num_verts_in_face
 	
-	set_vertex_data(DataVectorFloat.new(V_POSITION, 
-		block_data.vertex_points.to_byte_array().to_float32_array(), 
-		DataVectorFloat.DataType.VECTOR3,
-		3))
 
-	set_vertex_data(DataVectorByte.new(V_SELECTED, 
-		block_data.vertex_selected, 
-		DataVectorFloat.DataType.BOOL))
+	set_face_vertex_data(DataVectorInt.new(FV_FACE_INDEX, 
+		face_indices, 
+		DataVector.DataType.INT))
 
-	set_edge_data(DataVectorByte.new(E_SELECTED, 
-		block_data.edge_selected, 
-		DataVectorFloat.DataType.BOOL))
+	set_face_vertex_data(DataVectorInt.new(FV_VERTEX_INDEX, 
+		vert_indices, 
+		DataVector.DataType.INT))
 
-	set_face_data(DataVectorInt.new(F_MATERIAL_INDEX, 
-		block_data.face_material_indices, 
-		DataVectorFloat.DataType.INT))
-
-	set_face_data(DataVectorByte.new(F_VISIBLE, 
-		block_data.face_visible, 
-		DataVectorFloat.DataType.BOOL))
-		
-		
-	set_face_data(DataVectorByte.new(F_SELECTED, 
-		block_data.face_selected, 
-		DataVectorFloat.DataType.BOOL))
-
-	set_face_data(DataVectorFloat.new(F_COLOR, 
-		block_data.face_color.to_byte_array().to_float32_array(), 
-		DataVectorFloat.DataType.COLOR))
+	#set_face_vertex_data(DataVectorInt.new(FV_VERTEX_LOCAL_INDEX, 
+		#fv_local_indices, 
+		#DataVector.DataType.INT))
 	
-	var fv_col_array:PackedColorArray
-			
-	#for col in block_data.face_color:
+	var col_fv_data:PackedColorArray
+	for fv_idx in num_face_vertices:
+		var f_idx:int = face_indices[fv_idx]
+		var v_idx:int = vert_indices[fv_idx]
+		col_fv_data.append(block_data.face_color[f_idx])
 		
-	pass
+
+	set_face_vertex_data(DataVectorFloat.new(FV_COLOR, 
+		col_fv_data.to_byte_array().to_float32_array(), 
+		DataVector.DataType.COLOR, 
+		4))
+			
+
 
 func set_vertex_data(data_vector:DataVector):
 	vertex_data[data_vector.name] = data_vector
