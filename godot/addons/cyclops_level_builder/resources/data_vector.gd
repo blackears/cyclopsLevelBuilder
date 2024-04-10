@@ -23,13 +23,16 @@
 
 @tool
 extends Resource
-class_name DataPlane
+class_name DataVector
 
-enum DataType { BOOL, INT, FLOAT, STRING }
+enum DataFormatType { BYTE, INT32, FLOAT32, STRING }
+enum DataType { BOOL, INT, FLOAT, STRING, COLOR, VECTOR2, VECTOR3, VECTOR4, TRANSFORM_2D, TRANSFORM_3D }
 
-@export var name:String
+@export var name:StringName
 @export var category:String #uv, color, weights, etc.
 @export var data_type:DataType
-@export var tuple_size:int = 1
+@export var stride:int = 1
 
+func get_data_format_type()->DataFormatType:
+	return DataFormatType.BYTE
 

@@ -22,42 +22,50 @@
 # SOFTWARE.
 
 @tool
-extends DataPlane
-class_name DataPlaneFloat
+extends DataVector
+class_name DataVectorFloat
 
 @export var data:PackedFloat32Array
 
+func _init(name:StringName = "", data:PackedFloat32Array = [], data_type:DataType = DataType.FLOAT, stride:int = 1):
+	self.name = name
+	self.data = data
+	self.data_type = data_type
+	self.stride = stride
+
+func get_data_format_type()->DataFormatType:
+	return DataFormatType.FLOAT32
 
 func resize(size:int):
-	data.resize(size * tuple_size)
+	data.resize(size * stride)
 	
-func get_value(index:int, tuple_index:int = 0)->float:
-	return data[index * tuple_size + tuple_index]
+func get_value(index:int)->float:
+	return data[index]
 
 func get_value_vec2(index:int)->Vector2:
-	return Vector2(data[index * tuple_size], data[index * tuple_size + 1])
+	return Vector2(data[index * stride], data[index * stride + 1])
 	
 func get_value_vec3(index:int)->Vector3:
-	return Vector3(data[index * tuple_size], data[index * tuple_size + 1], data[index * tuple_size + 2])
+	return Vector3(data[index * stride], data[index * stride + 1], data[index * stride + 2])
 	
 func get_value_vec4(index:int)->Vector4:
-	return Vector4(data[index * tuple_size], data[index * tuple_size + 1], data[index * tuple_size + 2], data[index * tuple_size + 3])
+	return Vector4(data[index * stride], data[index * stride + 1], data[index * stride + 2], data[index * stride + 3])
 	
 
-func set_value(value:int, index:int, tuple_index:int = 0):
-	data[index * tuple_size + tuple_index] = value
+func set_value(value:int, index:int):
+	data[index] = value
 	
 func set_value_vec2(value:Vector2, index:int):
-	data[index * tuple_size] = value.x
-	data[index * tuple_size + 1] = value.y
+	data[index * stride] = value.x
+	data[index * stride + 1] = value.y
 
 func set_value_vec3(value:Vector3, index:int):
-	data[index * tuple_size] = value.x
-	data[index * tuple_size + 1] = value.y
-	data[index * tuple_size + 2] = value.z
+	data[index * stride] = value.x
+	data[index * stride + 1] = value.y
+	data[index * stride + 2] = value.z
 
 func set_value_vec4(value:Vector4, index:int):
-	data[index * tuple_size] = value.x
-	data[index * tuple_size + 1] = value.y
-	data[index * tuple_size + 2] = value.z
-	data[index * tuple_size + 3] = value.w
+	data[index * stride] = value.x
+	data[index * stride + 1] = value.y
+	data[index * stride + 2] = value.z
+	data[index * stride + 3] = value.w

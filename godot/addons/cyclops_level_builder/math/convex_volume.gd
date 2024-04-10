@@ -431,7 +431,7 @@ func to_convex_block_data()->ConvexBlockData:
 		result.edge_face_indices.append_array([e.face_indices[0], e.face_indices[1]])
 		result.edge_selected.append(e.selected)
 		#result.edge_active.append(e.active)
-
+	
 	for face in faces:
 		var num_verts:int = face.vertex_indices.size()
 		result.face_vertex_count.append(num_verts)

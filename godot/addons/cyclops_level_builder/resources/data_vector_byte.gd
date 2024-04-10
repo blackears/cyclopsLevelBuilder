@@ -22,16 +22,26 @@
 # SOFTWARE.
 
 @tool
-extends DataPlane
-class_name DataPlaneString
+extends DataVector
+class_name DataVectorByte
 
-@export var data:PackedStringArray
+@export var data:PackedByteArray
 
-func resize(size:int):
-	data.resize(size * tuple_size)
+func _init(name:StringName = "", data:PackedByteArray = [], data_type:DataType = DataType.FLOAT, stride:int = 1):
+	self.name = name
+	self.data = data
+	self.data_type = data_type
+	self.stride = stride
+
+
+func get_data_format_type()->DataFormatType:
+	return DataFormatType.BYTE
 	
-func get_value(index:int, tuple_index:int = 0)->String:
-	return data[index * tuple_size + tuple_index]
+func resize(size:int):
+	data.resize(size * stride)
+	
+func get_value(index:int)->int:
+	return data[index]
 
-func set_value(value:String, index:int, tuple_index:int = 0):
-	data[index * tuple_size + tuple_index] = value
+func set_value(value:int, index:int):
+	data[index] = value

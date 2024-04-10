@@ -33,44 +33,33 @@ class_name ConvexBlockData
 
 @export var vertex_points:PackedVector3Array  #Per vertex
 @export var vertex_selected:PackedByteArray  #Per vertex
-@export var active_vertex:int
 
-@export var edge_vertex_indices:PackedInt32Array
 @export var edge_selected:PackedByteArray
-@export var active_edge:int
-@export var edge_face_indices:PackedInt32Array
 
-@export var face_vertex_count:PackedInt32Array #Number of verts in each face
-@export var face_vertex_indices:PackedInt32Array  #Vertex index per face
 @export var face_material_indices:PackedInt32Array #Material index for each face
 @export var face_uv_transform:Array[Transform2D]
 @export var face_visible:PackedByteArray
 @export var face_color:PackedColorArray
 @export var face_selected:PackedByteArray  #Per face
-#@export var face_active:PackedByteArray  #Per face
-@export var active_face:int
 @export var face_ids:PackedInt32Array  #Per face
 
-#func _get(property):
-	#if property == "fake_property":
-		#print("Getting my property!")
-		#return 4
-#
-#func _get_property_list():
-	#return [
-		#{ "name": "fake_property", "type": TYPE_INT }
-	#]
-#
-#func _set(property, value):
-	#if property == "fake_property":
-		## Storing the value in the fake property.
-		#internal_data["fake_property"] = value
-		#return true
-	#return false
-	
+
+@export var edge_vertex_indices:PackedInt32Array
+@export var edge_face_indices:PackedInt32Array
+
+@export var face_vertex_count:PackedInt32Array #Number of verts in each face
+@export var face_vertex_indices:PackedInt32Array #Vertex index per face
+
+@export var active_vertex:int
+@export var active_edge:int
+@export var active_face:int
+@export var active_face_vertex:int
+
 	
 #Validate arrays to make sure they're the right size
+#@deprecated
 func validate_arrays():
+	#print("deprecated validate_arrays")
 	var num_faces:int = face_vertex_count.size()
 
 	if face_visible.size() < num_faces:
