@@ -26,7 +26,7 @@ extends RefCounted
 class_name IntersectResults
 
 var object:CyclopsBlock
-var face_id:int
+#var face_id:int
 var face_index:int
 var position:Vector3 #local space of block
 var normal:Vector3
@@ -41,4 +41,4 @@ func get_world_normal()->Vector3:
 	return basis_normals * normal
 
 func _to_string():
-	return "object:%s face_id:%s pos:%s norm:%s dist_sq:%s" % [object, face_id, position, normal, distance_squared]
+	return "object:%s face_idx:%s pos:%s norm:%s dist_sq:%s" % [object, face_index, position, normal, distance_squared]

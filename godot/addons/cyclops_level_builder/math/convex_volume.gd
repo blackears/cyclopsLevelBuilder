@@ -424,7 +424,8 @@ func build_edges():
 				var v1:VertexInfo = vertices[v1_idx]
 				v1.edge_indices.append(edge_idx)
 
-			edge.face_indices.append(face.id)
+#			edge.face_indices.append(face.id)
+			edge.face_indices.append(face.index)
 
 func get_face_coincident_with_plane(plane:Plane)->FaceInfo:
 	for f in faces:
@@ -433,13 +434,13 @@ func get_face_coincident_with_plane(plane:Plane)->FaceInfo:
 			return f
 	return null
 
-
-func get_face_ids(selected_only:bool = false)->PackedInt32Array:
-	var result:PackedInt32Array
-	for f in faces:
-		if !selected_only || f.selected:
-			result.append(f.id)
-	return result
+#@deprecated
+#func get_face_ids(selected_only:bool = false)->PackedInt32Array:
+	#var result:PackedInt32Array
+	#for f in faces:
+		#if !selected_only || f.selected:
+			#result.append(f.id)
+	#return result
 
 func get_face_indices(selected_only:bool = false)->PackedInt32Array:
 	var result:PackedInt32Array
@@ -525,11 +526,14 @@ func to_convex_block_data()->ConvexBlockData:
 	
 	return result
 
-func get_face(face_id:int)->FaceInfo:
-	for face in faces:
-		if face.id == face_id:
-			return face
-	return null
+func get_face(face_index:int)->FaceInfo:
+	return faces[face_index]
+
+#func get_face(face_id:int)->FaceInfo:
+	#for face in faces:
+		#if face.id == face_id:
+			#return face
+	#return null
 
 func get_centroid()->Vector3:
 	var points:PackedVector3Array = get_points()
@@ -574,7 +578,7 @@ func is_empty():
 # Returns a new ConvexVolume equal to this volume after the plane of the 
 # indicated face has been translated the given offset.  Does not modify the
 # geometry of this volume.
-func translate_face_plane(face_id:int, offset:Vector3, lock_uvs:bool = false)->ConvexVolume:
+func translate_face_plane(face_index:int, offset:Vector3, lock_uvs:bool = false)->ConvexVolume:
 	var xform:Transform3D = Transform3D(Basis.IDENTITY, -offset)
 
 	var source_face:FaceInfo
@@ -582,7 +586,7 @@ func translate_face_plane(face_id:int, offset:Vector3, lock_uvs:bool = false)->C
 
 	var planes:Array[Plane] = []
 	for f in faces:
-		if f.id == face_id:
+		if f.index == face_index:
 			transformed_plane = MathUtil.flip_plane(f.get_plane()) * xform
 			planes.append(transformed_plane)
 			source_face = f
@@ -699,11 +703,12 @@ func transform(xform:Transform3D, lock_uvs:bool = false):
 		
 	#calc_lightmap_uvs()
 
-func unused_face_id()->int:
-	var idx = 0
-	for p in faces:
-		idx = max(idx, p.id)
-	return idx + 1
+#@deprecated
+#func unused_face_id()->int:
+	#var idx = 0
+	#for p in faces:
+		#idx = max(idx, p.id)
+	#return idx + 1
 
 func contains_point(point:Vector3)->bool:
 	for f in faces:
@@ -1088,7 +1093,7 @@ func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 			if !best_result || best_result.distance_squared > dist_sq:
 			
 				var result:IntersectResults = IntersectResults.new()
-				result.face_id = face.id
+				#result.face_id = face.id
 				result.face_index = f_idx
 				result.normal = face.normal
 				result.position = p_hit

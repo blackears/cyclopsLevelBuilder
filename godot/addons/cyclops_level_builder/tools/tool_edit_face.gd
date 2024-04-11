@@ -252,13 +252,8 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 					move_constraint = MoveConstraint.Type.PLANE_YZ
 		
 			var start_pos:Vector3 = part_res.pos_world
-			#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
-
-#			drag_handle_start_pos = MathUtil.snap_to_grid(start_pos, grid_step_size)
-			#drag_handle_start_pos = builder.get_snapping_manager().snap_point(start_pos, SnappingQuery.new(viewport_camera))
 
 			drag_handle_start_pos = start_pos
-#			drag_handle_start_pos = gizmo_translate.global_position
 
 	#		print("res obj %s" % result.object.get_path())
 			var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
@@ -325,10 +320,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	var gui_result = super._gui_input(viewport_camera, event)
 	if gui_result:
 		return true
-		
-	#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
-
-
 
 	if event is InputEventKey:
 		var e:InputEventKey = event

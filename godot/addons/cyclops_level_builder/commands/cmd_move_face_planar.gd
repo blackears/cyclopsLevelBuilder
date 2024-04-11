@@ -30,7 +30,7 @@ var blocks_root_path:NodePath
 var block_path:NodePath
 var move_dir_normal:Vector3
 var move_amount:float
-var face_id:int
+var face_index:int
 var lock_uvs:bool = false
 
 
@@ -46,7 +46,7 @@ func _init():
 	command_name = "Move face planar"
 
 func move_to(offset:Vector3, intermediate:bool):
-#	print("move_to off %s faceid %s amount %s movedir %s" % [offset, face_id, move_amount, move_dir_normal])
+#	print("move_to off %s faceindex %s amount %s movedir %s" % [offset, face_index, move_amount, move_dir_normal])
 	if !tracked_block_data:
 		var block:CyclopsBlock = builder.get_node(block_path)
 		
@@ -56,7 +56,7 @@ func move_to(offset:Vector3, intermediate:bool):
 	
 	var ctl_mesh:ConvexVolume = ConvexVolume.new()
 	ctl_mesh.init_from_convex_block_data(tracked_block_data)
-	var new_mesh:ConvexVolume = ctl_mesh.translate_face_plane(face_id, offset, lock_uvs)
+	var new_mesh:ConvexVolume = ctl_mesh.translate_face_plane(face_index, offset, lock_uvs)
 
 	#print("offset %s" % offset)
 	#print("ctl_mesh %s" % ctl_mesh.get_points())

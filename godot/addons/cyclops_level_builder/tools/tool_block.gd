@@ -93,7 +93,7 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 			cmd_move_face.builder = builder
 			cmd_move_face.blocks_root_path = builder.get_block_add_parent().get_path()
 			cmd_move_face.block_path = result.object.get_path()
-			cmd_move_face.face_id = result.face_id
+			cmd_move_face.face_index = result.face_index
 			cmd_move_face.lock_uvs = builder.lock_uvs
 			cmd_move_face.move_dir_normal = result.object.control_mesh.faces[result.face_id].normal
 
@@ -276,7 +276,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				if result:
 					var block:CyclopsBlock = result.object
 					var convex_mesh:ConvexVolume = block.control_mesh
-					base_points = convex_mesh.get_face(result.face_id).get_points()
+					base_points = convex_mesh.get_face(result.face_index).get_points()
 					return true
 			
 			return false
