@@ -44,6 +44,7 @@ var dirty:bool = true
 
 var control_mesh:ConvexVolume
 
+#@deprecated
 @export var block_data:ConvexBlockData:
 	get:
 		return block_data
@@ -55,7 +56,9 @@ var control_mesh:ConvexVolume
 			
 			dirty = true
 			mesh_changed.emit()
-	
+
+@export var mesh_vector_data:MeshVectorData
+
 @export var materials:Array[Material]
 
 var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
