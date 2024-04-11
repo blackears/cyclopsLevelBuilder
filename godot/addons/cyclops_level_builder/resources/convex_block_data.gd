@@ -41,7 +41,7 @@ class_name ConvexBlockData
 @export var face_visible:PackedByteArray
 @export var face_color:PackedColorArray
 @export var face_selected:PackedByteArray  #Per face
-@export var face_ids:PackedInt32Array  #Per face
+#@export var face_ids:PackedInt32Array  #Per face
 
 
 @export var edge_vertex_indices:PackedInt32Array
