@@ -189,16 +189,20 @@ func on_material_viewer_state_changed():
 	settings.material_path = material_viewer_state.active_material_path
 
 
+func _init():
+	material_viewer_state.changed.connect(on_material_viewer_state_changed)
+
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
 
 	var cache:Dictionary = builder.get_tool_cache(TOOL_ID)
 	settings.load_from_cache(cache)
+	settings.material_path = material_viewer_state.active_material_path
 	
-	material_viewer_state.changed.connect(on_material_viewer_state_changed)
+#	material_viewer_state.changed.connect(on_material_viewer_state_changed)
 
 func _deactivate():
-	material_viewer_state.changed.disconnect(on_material_viewer_state_changed)
+#	material_viewer_state.changed.disconnect(on_material_viewer_state_changed)
 	
 	var cache:Dictionary = settings.save_to_cache()
 	builder.set_tool_cache(TOOL_ID, cache)
