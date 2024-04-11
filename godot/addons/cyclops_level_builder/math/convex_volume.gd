@@ -250,6 +250,8 @@ func init_from_convex_block_data(data:ConvexBlockData):
 	vertices = []
 	edges = []
 	faces = []
+	face_vertices = []
+	face_vertex_coord_map.clear()
 	
 	data.validate_arrays()
 
@@ -305,7 +307,20 @@ func init_from_convex_block_data(data:ConvexBlockData):
 	bounds = calc_bounds()
 	calc_lightmap_uvs()
 	
-	build_face_vertices()
+	if data.face_vertex_face_index.size() == 0:
+		#Face vertices not initialized - generate new ones
+		build_face_vertices()
+	else:
+		for fv_idx in data.face_vertex_face_index.size():
+			var f_idx:int = data.face_vertex_face_index[fv_idx]
+			var v_idx:int = data.face_vertex_vertex_index[fv_idx]
+			var fv:FaceVertexInfo = FaceVertexInfo.new()
+			face_vertices.append(fv)
+			var coord:Vector2i = Vector2i(f_idx, v_idx)
+			face_vertex_coord_map[coord] = fv
+			
+			fv.normal = data.face_vertex_normal[fv_idx]
+			fv.color = data.face_vertex_color[fv_idx]
 	
 	calc_vertex_normals()
 	
@@ -317,6 +332,8 @@ func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Tran
 	vertices = []
 	edges = []
 	faces = []
+	face_vertices = []
+	face_vertex_coord_map.clear()
 
 	#print("init_from_points %s" % points)
 	var hull:QuickHull.Hull = QuickHull.quickhull(points)
@@ -486,10 +503,11 @@ func copy_face_attributes(ref_vol:ConvexVolume):
 		#Copy face vertex values		
 		for v_local_idx in fl.vertex_indices.size():
 			var v_idx:int = fl.vertex_indices[v_local_idx]
-			var fv:FaceVertexInfo = face_vertex_coord_map[Vector2i(f_idx, v_idx)]
+			var coord:Vector2i = Vector2i(f_idx, v_idx)
+			var fv:FaceVertexInfo = face_vertex_coord_map[coord]
 
-			var ref_fv_index:int = ref_face.face_vertex_indices[min(v_local_idx, ref_face.vertex_indices.size() - 1)]
-			var fv_ref:FaceVertexInfo = ref_vol.face_vertices[ref_fv_index]
+			var ref_v_index:int = ref_face.vertex_indices[min(v_local_idx, ref_face.vertex_indices.size() - 1)]
+			var fv_ref:FaceVertexInfo = ref_vol.face_vertex_coord_map[Vector2i(ref_face.index, ref_v_index)]
 			
 			fv.normal = fv_ref.normal
 			fv.color = fv_ref.color
@@ -523,6 +541,13 @@ func to_convex_block_data()->ConvexBlockData:
 		result.face_uv_transform.append(face.uv_transform)
 		result.face_visible.append(face.visible)
 		result.face_color.append(face.color)
+	
+	for fv_idx in face_vertices.size():
+		var fv:FaceVertexInfo = face_vertices[fv_idx]
+		result.face_vertex_face_index.append(fv.face_index)
+		result.face_vertex_vertex_index.append(fv.vertex_index)
+		result.face_vertex_normal.append(fv.normal)
+		result.face_vertex_color.append(fv.color)
 	
 	return result
 
