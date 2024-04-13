@@ -58,12 +58,25 @@ class_name ToolVertexColorBrushSettings
 			pen_pressure_strength = value
 			emit_changed()
 
+@export var falloff_curve:Curve:
+	set(value):
+		if value != falloff_curve:
+			falloff_curve = value
+			emit_changed()
+
 func load_from_cache(cache:Dictionary):
 	component_type = cache.get("component_type", GeometryComponentType.Type.OBJECT)
 	color = str_to_var(cache.get("color", var_to_str(Color.WHITE)))
 	radius = cache.get("radius", 1)
 	strength = cache.get("strength", 1)
 	pen_pressure_strength = cache.get("pen_pressure_strength", false)
+	
+	if cache.has("falloff_curve"):
+		falloff_curve = str_to_var(cache.get("falloff_curve"))
+	else:
+		falloff_curve = Curve.new()
+		falloff_curve.add_point(Vector2(0, 0))
+		falloff_curve.add_point(Vector2(1, 1))
 
 func save_to_cache():
 	return {
@@ -71,7 +84,8 @@ func save_to_cache():
 		"color": var_to_str(color),
 		"radius": radius,
 		"strength": strength,
-		"pen_pressure_strength": pen_pressure_strength
+		"pen_pressure_strength": pen_pressure_strength,
+		"falloff_curve": var_to_str(falloff_curve)
 	}
 
 

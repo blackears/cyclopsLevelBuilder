@@ -147,6 +147,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						cmd.color = settings.color
 						cmd.strength = settings.strength
 						cmd.radius = settings.radius
+						cmd.falloff_curve = settings.falloff_curve.duplicate()
+						cmd.mask = settings.mask_type
 						
 						var pos:Vector3 = result.object.global_basis * result.position
 						#print("pos ", pos)

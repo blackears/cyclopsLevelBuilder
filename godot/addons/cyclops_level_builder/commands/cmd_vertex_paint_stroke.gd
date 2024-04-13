@@ -31,9 +31,10 @@ extends CyclopsCommand
 @export var color:Color = Color.WHITE
 @export var strength:float = 1
 @export var radius:float = 1
+@export var falloff_curve:Curve
 
 enum MaskType { NONE, VERTICES, FACES }
-var mask:MaskType = MaskType.NONE
+@export var mask:MaskType = MaskType.NONE
 
 #Private
 var block_map:Dictionary = {}
@@ -90,6 +91,14 @@ func do_it():
 			#print("stroke_pt ", stroke_pt)
 			for fv in vol.face_vertices:
 				var v:ConvexVolume.VertexInfo = vol.vertices[fv.vertex_index]
+				var f:ConvexVolume.FaceInfo = vol.faces[fv.face_index]
+				
+				if mask == MaskType.FACES:
+					if !f.selected:
+						continue
+				elif mask == MaskType.VERTICES:
+					if !v.selected:
+						continue
 				
 				var dist:float = v.point.distance_to(pos_local)
 				
@@ -97,8 +106,11 @@ func do_it():
 					continue
 				
 				var falloff_frac:float = 1 - (dist / radius)
+				var falloff:float = falloff_curve.sample(falloff_frac) \
+					if falloff_curve else 1
+				
 				fv.color = MathUtil.blend_colors_ignore_alpha(\
-					color, fv.color, strength * stroke_pt.pressure * falloff_frac)
+					color, fv.color, strength * stroke_pt.pressure * falloff)
 
 				#print("fv_idx ", fv.index)
 				#print("fv color ", fv.color)
