@@ -41,6 +41,7 @@ class StrokePoint extends Resource:
 		var r:StrokePoint = StrokePoint.new()
 		r.position = lerp(position, p.position, weight)
 		r.pressure = lerp(pressure, p.pressure, weight)
+		return r
 
 var stroke_points:Array[StrokePoint]
 

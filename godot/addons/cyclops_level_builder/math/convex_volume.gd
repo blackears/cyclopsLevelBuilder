@@ -340,6 +340,8 @@ func init_from_convex_block_data(data:ConvexBlockData):
 			var v_idx:int = data.face_vertex_vertex_index[fv_idx]
 			var fv:FaceVertexInfo = FaceVertexInfo.new()
 			face_vertices.append(fv)
+			#faces[f_idx].face_vertex_indices.append(fv_idx)
+			
 			fv.face_index = f_idx
 			fv.vertex_index = v_idx
 			var coord:Vector2i = Vector2i(f_idx, v_idx)
@@ -348,6 +350,11 @@ func init_from_convex_block_data(data:ConvexBlockData):
 			fv.normal = data.face_vertex_normal[fv_idx]
 			fv.color = data.face_vertex_color[fv_idx]
 	#print("init_from_convex_block_data face_vertex_coord_map ", face_vertex_coord_map)
+		for f_idx in faces.size():
+			var face:FaceInfo = faces[f_idx]
+			for v_idx in face.vertex_indices:
+				face.face_vertex_indices.append(face_vertex_coord_map[Vector2i(f_idx, v_idx)].index)
+				
 	
 	calc_vertex_normals()
 	
@@ -907,10 +914,15 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 
 			var fv_trianglation:Array[int] = face.get_triangulation()
 
-			for fv_idx in fv_trianglation:
+			for v_local_idx in fv_trianglation:
 
-				var v_idx:int = face.vertex_indices[fv_idx]
-	#			var p:Vector3 = triangles[i]
+				var v_idx:int = face.vertex_indices[v_local_idx]
+#				var fv_idx:int = face.face_vertex_indices[v_local_idx]
+#				var fv_idx:int = face_vertex_coord_map[Vector2i(f_idx, v_idx)].index
+				var fv:FaceVertexInfo = face_vertex_coord_map[Vector2i(f_idx, v_idx)]
+				#var fv:ConvexVolume.FaceVertexInfo = face
+				#vol.get_face_vertex(f_idx, v_idx)
+	
 				var p:Vector3 = vertices[v_idx].point
 
 				var uv:Vector2
@@ -923,10 +935,12 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 
 				uv = face.uv_transform * uv
 				uv1s.append(uv)
-				uv2s.append(face.lightmap_uvs[fv_idx])
+				uv2s.append(face.lightmap_uvs[v_local_idx])
 
 				normals.append(face.normal)
-				colors.append(face.color)
+#				colors.append(face.color)
+#				colors.append(face_vertices[fv_idx].color)
+				colors.append(fv.color)
 
 				points.append(p)
 

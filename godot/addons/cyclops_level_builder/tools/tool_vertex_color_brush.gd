@@ -55,9 +55,6 @@ func _draw_tool(viewport_camera:Camera3D):
 			MathUtil.create_circle_points(last_hit_pos, view_dir.normalized(), settings.radius, 16)
 		global_scene.draw_loop(bounding_points, true, global_scene.tool_material)
 
-	#var points:PackedVector3Array = MathGeometry.circle_points()
-	#last_mouse_pos
-	#global_scene.draw_loop(points, true, )
 
 func _get_tool_properties_editor()->Control:
 	var ed:ToolVertexColorBrushSettingsEditor = preload("res://addons/cyclops_level_builder/tools/tool_vertex_color_brush_settings_editor.tscn").instantiate()
@@ -132,7 +129,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			if e.is_pressed():
 
 				if tool_state == ToolState.READY:
-					print("vertex color brush bn down")
+					#print("vertex color brush bn down")
 						
 					var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 					var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
@@ -140,7 +137,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 					
 					if result && result.object == builder.get_active_block():
-						print("starting paint")
+						#print("starting paint")
 						cmd = CommandVertexPaintStroke.new()
 						cmd.builder = builder
 
@@ -150,7 +147,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						cmd.radius = settings.radius
 						
 						var pos:Vector3 = result.object.global_basis * result.position
-						print("pos ", pos)
+						#print("pos ", pos)
 						cmd.append_stroke_point(pos, 1)
 
 
