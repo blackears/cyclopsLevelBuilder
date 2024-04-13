@@ -44,7 +44,6 @@ var dirty:bool = true
 
 var control_mesh:ConvexVolume
 
-#@deprecated
 @export var block_data:ConvexBlockData:
 	get:
 		return block_data
@@ -57,7 +56,7 @@ var control_mesh:ConvexVolume
 			dirty = true
 			mesh_changed.emit()
 
-@export var mesh_vector_data:MeshVectorData
+#@export var mesh_vector_data:MeshVectorData
 
 @export var materials:Array[Material]
 

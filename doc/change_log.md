@@ -16,4 +16,5 @@
 * Adding command to merge vertices at center.
 * Material brush can now apply UV coordinates
 * Material brush can sample brush settings from under the cursor by pressing Shift-X
+* Adding face-vertices to ConvexBlockData
 

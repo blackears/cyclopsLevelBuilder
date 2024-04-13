@@ -5,7 +5,7 @@
    width="16"
    version="1.1"
    id="svg1"
-   sodipodi:docname="material_brush.svg"
+   sodipodi:docname="vertex_color_brush.svg"
    inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -20,9 +20,9 @@
      inkscape:pageopacity="0"
      inkscape:pagecheckerboard="1"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="25.65625"
-     inkscape:cx="8.0876979"
-     inkscape:cy="10.036541"
+     inkscape:zoom="51.3125"
+     inkscape:cx="6.8112059"
+     inkscape:cy="6.4409257"
      inkscape:window-width="1920"
      inkscape:window-height="1017"
      inkscape:window-x="1912"
@@ -46,8 +46,22 @@
      d="M 5.374356,10.528226 C 5.2916736,9.9770096 5.098748,8.9848204 4.13412,9.1501852 3.169492,9.3155502 2.3151072,10.169934 2.2875464,11.244806 c -0.027561,1.074871 -0.7441416,2.645837 -0.7441416,2.645837 0,0 1.3157354,-0.09616 2.6733976,-0.275608 1.587861,-0.209869 2.3977897,-0.909506 2.4253505,-1.598527 C 6.6712349,11.289464 5.374356,10.528226 5.374356,10.528226 Z"
      id="path10"
      sodipodi:nodetypes="csscssc" />
-  <path
-     style="fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 1.36419,7.0158343 V 1.7149817 L 3.819732,4.2484774 6.3922046,1.6760049 6.3142506,6.8989037"
-     id="path5" />
+  <circle
+     style="fill:#f90000;fill-opacity:1;stroke:#ffffff;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none"
+     id="path1"
+     cx="2.6699145"
+     cy="2.6894031"
+     r="1.9879562" />
+  <circle
+     style="fill:#0df900;fill-opacity:1;stroke:#ffffff;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none"
+     id="path1-3"
+     cx="4.2842412"
+     cy="5.3561049"
+     r="1.9879562" />
+  <circle
+     style="fill:#0023f9;fill-opacity:1;stroke:#ffffff;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none"
+     id="path1-6"
+     cx="5.9980049"
+     cy="2.8408792"
+     r="1.9879562" />
 </svg>

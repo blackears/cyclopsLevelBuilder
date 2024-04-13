@@ -68,6 +68,7 @@ func update():
 	%check_individual_faces.disabled = false
 
 	%check_individual_faces.button_pressed = settings.individual_faces
+	#%opbn_geom_component.selected = settings.component_type
 
 	%check_paint_material.button_pressed = settings.paint_materials
 	%check_erase_material.button_pressed = settings.erase_material
@@ -99,9 +100,6 @@ func _on_check_paint_material_toggled(button_pressed:bool):
 	%check_erase_material.disabled = !settings.paint_materials
 
 
-func _on_check_individual_faces_toggled(button_pressed:bool):
-	settings.individual_faces = button_pressed
-
 
 func _on_check_erase_material_toggled(button_pressed:bool):
 	settings.erase_material = button_pressed
@@ -127,3 +125,18 @@ func _on_check_visibility_toggled(button_pressed:bool):
 
 func _on_check_paint_uv_toggled(button_pressed:bool):
 	settings.paint_uv = button_pressed
+
+
+func _on_check_individual_faces_toggled(button_pressed:bool):
+	settings.individual_faces = button_pressed
+
+#func _on_opbn_geom_component_item_selected(index):
+	#match index:
+		#0:
+			#settings.component_type = GeometryComponentType.Type.OBJECT
+		#1:
+			#settings.component_type = GeometryComponentType.Type.VERTEX
+		#2:
+			#settings.component_type = GeometryComponentType.Type.FACE
+		#3:
+			#settings.component_type = GeometryComponentType.Type.FACE_VERTEX

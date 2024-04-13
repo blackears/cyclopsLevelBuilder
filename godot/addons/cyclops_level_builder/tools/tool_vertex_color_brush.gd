@@ -23,36 +23,49 @@
 
 @tool
 extends CyclopsTool
-class_name ToolMaterialBrush
+class_name ToolVertexColorBrush
 
 enum ToolState { READY, PAINTING }
 var tool_state:ToolState = ToolState.READY
 
-const TOOL_ID:String = "material_brush"
+const TOOL_ID:String = "vertex_color_brush"
 
-var cmd:CommandSetMaterial
+var cmd:CommandVertexPaintStroke
 
-var settings:ToolMaterialBrushSettings = ToolMaterialBrushSettings.new()
-var material_viewer_state:MaterialViewerState = preload("res://addons/cyclops_level_builder/docks/material_palette/material_viewer/material_viewer_state_res.tres")
+var settings:ToolVertexColorBrushSettings = ToolVertexColorBrushSettings.new()
 
 var last_mouse_pos:Vector2
+
+var brush_over_mesh:bool = false
+var last_hit_pos:Vector3
 
 func _get_tool_id()->String:
 	return TOOL_ID
 
 func _draw_tool(viewport_camera:Camera3D):
-	super._draw_tool(viewport_camera)
-
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
 	global_scene.draw_selected_blocks(viewport_camera)
 
+	#super._draw_tool(viewport_camera)
+
+	if brush_over_mesh:
+		var view_dir:Vector3 = viewport_camera.global_transform.basis.z
+		var bounding_points:PackedVector3Array = \
+			MathUtil.create_circle_points(last_hit_pos, view_dir.normalized(), settings.radius, 16)
+		global_scene.draw_loop(bounding_points, true, global_scene.tool_material)
+
+	#var points:PackedVector3Array = MathGeometry.circle_points()
+	#last_mouse_pos
+	#global_scene.draw_loop(points, true, )
+
 func _get_tool_properties_editor()->Control:
-	var ed:ToolMaterialBrushSettingsEditor = preload("res://addons/cyclops_level_builder/tools/tool_material_brush_settings_editor.tscn").instantiate()
+	var ed:ToolVertexColorBrushSettingsEditor = preload("res://addons/cyclops_level_builder/tools/tool_vertex_color_brush_settings_editor.tscn").instantiate()
 
 	ed.settings = settings
 
 	return ed
+
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
@@ -62,6 +75,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		if e.keycode == KEY_X:
 			if e.shift_pressed:
 				if e.is_pressed():
+					#Pick closest vertex color
 					var origin:Vector3 = viewport_camera.project_ray_origin(last_mouse_pos)
 					var dir:Vector3 = viewport_camera.project_ray_normal(last_mouse_pos)
 
@@ -75,30 +89,41 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						vol.init_from_convex_block_data(block.block_data)
 						
 						var face:ConvexVolume.FaceInfo = vol.faces[result.face_index]
+						var v_idx:int = face.get_closest_vertex(result.position)
+						var vert:ConvexVolume.VertexInfo = vol.vertices[v_idx]
 					
-						#Sample under cursor
-						if settings.paint_materials:
-							if face.material_id != -1:
-								#Pick this material
-								#print("face.material_id ", face.material_id)
-								var mat:Material = block.materials[face.material_id] \
-									if face.material_id >= 0 && face.material_id < block.materials.size() \
-									else null
-								settings.material_path = mat.resource_path if mat else NodePath()
-								#print("settings.material_path ", settings.material_path)
-								
-							
-						if settings.paint_color:
-							settings.color = face.color
-							
-						if settings.paint_visibility:
-							settings.visibility = face.visible
-							
-						if settings.paint_uv:
-							settings.uv_matrix = face.uv_transform
+						var fv:ConvexVolume.FaceVertexInfo = vol.get_face_vertex(result.face_index, v_idx)
+					
+						settings.color = fv.color
 
 			return true
 			
+
+		elif e.keycode == KEY_A:
+
+			if e.is_pressed():
+				#Change currently active object
+				var cmd:CommandSelectEdges = CommandSelectEdges.new()
+				cmd.builder = builder
+				
+				if e.alt_pressed:
+					var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+					for block in sel_blocks:
+						cmd.add_edges(block.get_path(), [])
+						
+				else:
+					var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+					for block in sel_blocks:
+						for e_idx in block.control_mesh.edges.size():
+							cmd.add_edge(block.get_path(), e_idx)
+
+				cmd.selection_type = Selection.Type.REPLACE
+
+				if cmd.will_change_anything():
+					var undo:EditorUndoRedoManager = builder.get_undo_redo()
+
+					cmd.add_to_undo_manager(undo)
+
 	elif event is InputEventMouseButton:
 
 		var e:InputEventMouseButton = event
@@ -107,43 +132,29 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			if e.is_pressed():
 
 				if tool_state == ToolState.READY:
+					print("vertex color brush bn down")
+						
 					var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 					var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 
 					var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
-
-					if result:
-						cmd = CommandSetMaterial.new()
+					
+					
+					if result && result.object == builder.get_active_block():
+						print("starting paint")
+						cmd = CommandVertexPaintStroke.new()
 						cmd.builder = builder
 
-						#print("settings.paint_materials ", settings.paint_materials)
-						cmd.setting_material = settings.paint_materials
-						
-						cmd.material_path = settings.material_path \
-							if !settings.erase_material else ""
-
-						cmd.setting_color = settings.paint_color
+						cmd.append_block(result.object.get_path())
 						cmd.color = settings.color
-
-						cmd.setting_visibility = settings.paint_visibility
-						cmd.visibility = settings.visibility
-
-						cmd.painting_uv = settings.paint_uv
-						cmd.uv_matrix = settings.uv_matrix
-
-						var block:CyclopsBlock = result.object
-						#var vol:ConvexVolume = ConvexVolume.new()
-						#vol.init_from_convex_block_data(block.block_data)
-						#var face:ConvexVolume.FaceInfo = vol.faces[result.face_index]
-						#var v_idx:int = face.get_closest_vertex(result.position)
-						#var vertex:ConvexVolume.VertexInfo = vol.vertices[v_idx]
+						cmd.strength = settings.strength
+						cmd.radius = settings.radius
 						
-						if settings.individual_faces:
-							cmd.add_target(block.get_path(), [result.face_index])
+						cmd.append_stroke_point(\
+							result.object.global_basis * result.position, 1)
 
-						else:
-							cmd.add_target(block.get_path(), block.control_mesh.get_face_indices())
 
+						cmd.do_it()
 						tool_state = ToolState.PAINTING
 
 			else:
@@ -165,21 +176,27 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 		last_mouse_pos = e.position
 
-		if tool_state == ToolState.PAINTING:
-			var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
-			var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+		var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
+		var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 
-			var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
+		var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
+		
+		if result:
+			brush_over_mesh = true
+			last_hit_pos = result.object.global_transform * result.position
+		else:
+			brush_over_mesh = false
+
+		if tool_state == ToolState.PAINTING:
 
 			if result:
 				#print ("hit ", result.object.name)
 				cmd.undo_it()
-				var block:CyclopsBlock = result.object
-				if settings.individual_faces:
-					cmd.add_target(block.get_path(), [result.face_index])
+				
+				cmd.append_stroke_point(\
+					result.object.global_basis * result.position, \
+					e.pressure if settings.pen_pressure_strength else 1)
 
-				else:
-					cmd.add_target(block.get_path(), block.control_mesh.get_face_indices())
 				cmd.do_it()
 
 			return true
@@ -187,28 +204,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	return false
 
 
-func on_material_viewer_state_changed():
-	#print("mat changed to ", material_viewer_state.active_material_path)
-	settings.material_path = material_viewer_state.active_material_path
-
-
-func _init():
-	material_viewer_state.changed.connect(on_material_viewer_state_changed)
-
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
 
 	var cache:Dictionary = builder.get_tool_cache(TOOL_ID)
 	settings.load_from_cache(cache)
-	settings.material_path = material_viewer_state.active_material_path
-	
-#	material_viewer_state.changed.connect(on_material_viewer_state_changed)
 
 func _deactivate():
-#	material_viewer_state.changed.disconnect(on_material_viewer_state_changed)
-	
 	var cache:Dictionary = settings.save_to_cache()
 	builder.set_tool_cache(TOOL_ID, cache)
-
-
-

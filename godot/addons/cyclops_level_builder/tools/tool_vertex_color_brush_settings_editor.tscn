@@ -1,0 +1,82 @@
+[gd_scene load_steps=2 format=3 uid="uid://djlowj2pi405u"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_vertex_color_brush_settings_editor.gd" id="1_1a32u"]
+
+[node name="PanelContainer" type="PanelContainer"]
+offset_right = 317.0
+offset_bottom = 269.0
+script = ExtResource("1_1a32u")
+
+[node name="MarginContainer2" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer2"]
+layout_mode = 2
+columns = 2
+
+[node name="Label3" type="Label" parent="MarginContainer2/GridContainer"]
+layout_mode = 2
+text = "Component type"
+
+[node name="opbn_geom_component" type="OptionButton" parent="MarginContainer2/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 4
+selected = 0
+popup/item_0/text = "Object"
+popup/item_0/id = 0
+popup/item_1/text = "Vertex"
+popup/item_1/id = 1
+popup/item_2/text = "Face"
+popup/item_2/id = 2
+popup/item_3/text = "Face-Vertex"
+popup/item_3/id = 3
+
+[node name="Label" type="Label" parent="MarginContainer2/GridContainer"]
+layout_mode = 2
+text = "Color"
+
+[node name="color_button" type="ColorPickerButton" parent="MarginContainer2/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label5" type="Label" parent="MarginContainer2/GridContainer"]
+layout_mode = 2
+text = "Radius"
+
+[node name="spin_radius" type="SpinBox" parent="MarginContainer2/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.1
+value = 1.0
+allow_greater = true
+
+[node name="Label2" type="Label" parent="MarginContainer2/GridContainer"]
+layout_mode = 2
+text = "Strength"
+
+[node name="spin_strength" type="SpinBox" parent="MarginContainer2/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.1
+value = 1.0
+allow_greater = true
+
+[node name="Label4" type="Label" parent="MarginContainer2/GridContainer"]
+layout_mode = 2
+text = "Pen Pressure"
+
+[node name="check_pen_pressure_str" type="CheckBox" parent="MarginContainer2/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "On"
+
+[connection signal="item_selected" from="MarginContainer2/GridContainer/opbn_geom_component" to="." method="_on_opbn_geom_component_item_selected"]
+[connection signal="color_changed" from="MarginContainer2/GridContainer/color_button" to="." method="_on_color_button_color_changed"]
+[connection signal="value_changed" from="MarginContainer2/GridContainer/spin_radius" to="." method="_on_spin_radius_value_changed"]
+[connection signal="value_changed" from="MarginContainer2/GridContainer/spin_strength" to="." method="_on_spin_strength_value_changed"]
+[connection signal="toggled" from="MarginContainer2/GridContainer/check_pen_pressure_str" to="." method="_on_check_pen_pressure_str_toggled"]

@@ -35,6 +35,7 @@ class_name ToolMaterialBrushSettings
 			uv_matrix = value
 			emit_changed()
 
+#@export var component_type:GeometryComponentType.Type = GeometryComponentType.Type.OBJECT
 @export var individual_faces:bool = false
 @export var erase_material:bool = false
 
@@ -61,6 +62,7 @@ func load_from_cache(cache:Dictionary):
 	paint_color = cache.get("paint_color", false)
 	paint_visibility = cache.get("paint_visibility", false)
 	individual_faces = cache.get("individual_faces", false)
+	#component_type = cache.get("component_type", GeometryComponentType.Type.OBJECT)
 	erase_material = cache.get("erase_material", false)
 	material_path = str_to_var(cache.get("material_path", NodePath()))
 	color = str_to_var(cache.get("color", var_to_str(Color.WHITE)))
@@ -74,6 +76,7 @@ func save_to_cache():
 		"paint_color": paint_color,
 		"paint_visibility": paint_visibility,
 		"individual_faces": individual_faces,
+		#"component_type": component_type,
 		"erase_material": erase_material,
 		"material_path": var_to_str(material_path),
 		"color": var_to_str(color),

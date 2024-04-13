@@ -25,6 +25,23 @@
 #extends RefCounted
 class_name MathGeometry
 	
+#static func circle_points(radius:float = 1, segs:int = 16, u_axis:Vector3 = Vector3.RIGHT, v_axis:Vector3 = Vector3.BACK)->PackedVector3Array:
+	#var result:PackedVector3Array
+	#
+	#for i in (segs + 1):
+		#result.append(u_axis * cos(i / float(segs)) + v_axis * sin(i / float(segs)))
+#
+	#return result
+		#
+#static func circle(radius:float = 1, segs:int = 16, u_axis:Vector3 = Vector3.RIGHT, v_axis:Vector3 = Vector3.BACK)->GeometryMesh:
+	#var mesh:GeometryMesh = GeometryMesh.new()
+	#
+	#for i in (segs + 1):
+		#mesh.coords.append(u_axis * cos(i / float(segs)) + v_axis * sin(i / float(segs)))
+		#mesh.uvs.append(Vector2(i / float(segs), 0))
+		#mesh.normals.append(mesh.coords[-1].normalized())
+	#
+	#return mesh
 
 static func unit_cylinder(segs:int = 16, radius0:float = 1, radius1:float = 1, top_height:float = 1, bottom_height:float = -1, bottom_cap:bool = false, top_cap:bool = false)->GeometryMesh:
 	var mesh:GeometryMesh = GeometryMesh.new()

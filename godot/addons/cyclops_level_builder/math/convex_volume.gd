@@ -146,6 +146,21 @@ class FaceInfo extends RefCounted:
 		normal = -normal
 		vertex_indices.reverse()
 		triangulation_indices.clear()
+		
+	#Vertex on face closest to given point
+	func get_closest_vertex(point:Vector3)->int:
+		var best_dist:float = -1
+		var best_idx:int = -1
+		for v_idx in vertex_indices:
+			var v:VertexInfo = mesh.vertices[v_idx]
+			var dist:float = v.point.distance_to(point)
+			if best_idx == -1 || best_dist < dist:
+				best_idx = v_idx
+				best_dist = dist
+				
+		return best_idx
+				
+			
 
 class FaceVertexInfo extends RefCounted:
 	var index:int
@@ -307,20 +322,32 @@ func init_from_convex_block_data(data:ConvexBlockData):
 	bounds = calc_bounds()
 	calc_lightmap_uvs()
 	
-	if data.face_vertex_face_index.size() == 0:
+	#Rebuild face verticies if input data is erronious
+	var all_zero:bool = true
+	for f_idx in data.face_vertex_face_index:
+		if f_idx != 0:
+			all_zero = false
+			break
+	
+	if data.face_vertex_face_index.size() == 0 || all_zero:
+		#print("<<0>>")
 		#Face vertices not initialized - generate new ones
 		build_face_vertices()
 	else:
+		#print("<<1>>")
 		for fv_idx in data.face_vertex_face_index.size():
 			var f_idx:int = data.face_vertex_face_index[fv_idx]
 			var v_idx:int = data.face_vertex_vertex_index[fv_idx]
 			var fv:FaceVertexInfo = FaceVertexInfo.new()
 			face_vertices.append(fv)
+			fv.face_index = f_idx
+			fv.vertex_index = v_idx
 			var coord:Vector2i = Vector2i(f_idx, v_idx)
 			face_vertex_coord_map[coord] = fv
 			
 			fv.normal = data.face_vertex_normal[fv_idx]
 			fv.color = data.face_vertex_color[fv_idx]
+	#print("init_from_convex_block_data face_vertex_coord_map ", face_vertex_coord_map)
 	
 	calc_vertex_normals()
 	
@@ -369,6 +396,7 @@ func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Tran
 	
 func calc_vertex_normals(smooth:bool = false):
 	#print("calc_vertex_normals ", _to_string())
+	#print("calc_vertex_normals face_vertex_coord_map ", face_vertex_coord_map)
 	
 	for v_idx in vertices.size():
 		var v:VertexInfo = vertices[v_idx]
@@ -386,7 +414,15 @@ func calc_vertex_normals(smooth:bool = false):
 			if face.vertex_indices.has(v_idx):
 				var fv:FaceVertexInfo = face_vertex_coord_map[Vector2i(f_idx, v_idx)]
 				fv.normal = v.normal if smooth else face.normal
-				
+
+func get_vertices_in_sphere(center:Vector3, radius:float)->Array[VertexInfo]:
+	var result:Array[VertexInfo]
+	for v in vertices:
+		var dist2 = v.point.distance_squared_to(center)
+		if dist2 <= radius * radius:
+			result.append(v)
+		
+	return result
 
 func get_edge(vert_idx0:int, vert_idx1:int)->EdgeInfo:
 	for e in edges:
@@ -396,7 +432,12 @@ func get_edge(vert_idx0:int, vert_idx1:int)->EdgeInfo:
 			return e
 	return null
 
+func get_face_vertex(face_idx:int, vertex_idx:int)->FaceVertexInfo:
+	var coord:Vector2i = Vector2i(face_idx, vertex_idx)
+	return face_vertex_coord_map[coord]
+
 func build_face_vertices():
+	#print("build_face_vertices")
 	for f_idx in faces.size():
 		var face:FaceInfo = faces[f_idx]
 		for v_local_idx in face.vertex_indices.size():
@@ -544,6 +585,7 @@ func to_convex_block_data()->ConvexBlockData:
 	
 	for fv_idx in face_vertices.size():
 		var fv:FaceVertexInfo = face_vertices[fv_idx]
+		#print("to_convex_block_data fv ", fv.face_index, " ", fv.vertex_index)
 		result.face_vertex_face_index.append(fv.face_index)
 		result.face_vertex_vertex_index.append(fv.vertex_index)
 		result.face_vertex_normal.append(fv.normal)

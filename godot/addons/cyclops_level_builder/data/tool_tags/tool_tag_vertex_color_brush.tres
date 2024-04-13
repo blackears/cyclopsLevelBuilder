@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ToolTag" load_steps=4 format=3 uid="uid://b1a71dvqwi4h1"]
+
+[ext_resource type="Texture2D" uid="uid://be3f2j6mnl1yb" path="res://addons/cyclops_level_builder/art/icons/vertex_color_brush.svg" id="1_e5tvl"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/tool_tag.gd" id="2_pcbhj"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_vertex_color_brush.gd" id="3_12f6u"]
+
+[resource]
+script = ExtResource("2_pcbhj")
+id = "vertex_color_brush"
+name = "Vertex Color Brush"
+tooltip = "Vertex Color Brush
+
+Click and drag on surfaces to adjust the vertex color.
+
+Shift-X will sample the color of the closest vertex."
+icon = ExtResource("1_e5tvl")
+tool_script = ExtResource("3_12f6u")

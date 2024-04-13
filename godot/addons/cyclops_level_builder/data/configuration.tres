@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="CyclopsConfig" load_steps=15 format=3 uid="uid://b54ok0creqhnb"]
+[gd_resource type="Resource" script_class="CyclopsConfig" load_steps=16 format=3 uid="uid://b54ok0creqhnb"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/cyclops_config.gd" id="1_jrivp"]
 [ext_resource type="Resource" uid="uid://dwxpsgoxb60yp" path="res://addons/cyclops_level_builder/data/snapping_tags/snap_tag_grid.tres" id="2_8mhpe"]
@@ -14,8 +14,9 @@
 [ext_resource type="Resource" uid="uid://dub6oyal5fxly" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_edit_edge.tres" id="9_hqyx3"]
 [ext_resource type="Resource" uid="uid://cmdgd8wmfdo4a" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_edit_face.tres" id="10_j16ya"]
 [ext_resource type="Resource" uid="uid://bjmuechy70058" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_material_brush.tres" id="11_ew3jv"]
+[ext_resource type="Resource" uid="uid://b1a71dvqwi4h1" path="res://addons/cyclops_level_builder/data/tool_tags/tool_tag_vertex_color_brush.tres" id="15_u2xjc"]
 
 [resource]
 script = ExtResource("1_jrivp")
-tool_tags = Array[Resource("res://addons/cyclops_level_builder/resources/tool_tag.gd")]([ExtResource("2_mkeje"), ExtResource("5_lrya4"), ExtResource("3_fxuvh"), ExtResource("4_utowl"), ExtResource("5_yyi6p"), ExtResource("6_pr2fs"), ExtResource("7_pbu8d"), ExtResource("8_m71cc"), ExtResource("9_hqyx3"), ExtResource("10_j16ya"), ExtResource("11_ew3jv")])
+tool_tags = Array[Resource("res://addons/cyclops_level_builder/resources/tool_tag.gd")]([ExtResource("2_mkeje"), ExtResource("5_lrya4"), ExtResource("3_fxuvh"), ExtResource("4_utowl"), ExtResource("5_yyi6p"), ExtResource("6_pr2fs"), ExtResource("7_pbu8d"), ExtResource("8_m71cc"), ExtResource("9_hqyx3"), ExtResource("10_j16ya"), ExtResource("11_ew3jv"), ExtResource("15_u2xjc")])
 snapping_tags = Array[Resource("res://addons/cyclops_level_builder/snapping/snapping_tag.gd")]([ExtResource("2_8mhpe"), ExtResource("3_bw3pn")])

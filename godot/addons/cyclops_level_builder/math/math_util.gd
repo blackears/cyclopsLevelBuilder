@@ -915,3 +915,20 @@ static func clip_segment_to_plane_3d(p:Plane, v0:Vector3, v1:Vector3)->PackedVec
 	
 	return [v0, v1]
 	
+
+static func blend_over_with_alpha(src:Color, dest:Color):
+	#https://en.wikipedia.org/wiki/Alpha_compositing
+	var a0:float = src.a + dest.a * (1 - src.a)
+	var r0:float = (src.r * src.a + dest.r * dest.a * (1 - src.a)) / a0
+	var g0:float = (src.g * src.a + dest.g * dest.a * (1 - src.a)) / a0
+	var b0:float = (src.b * src.a + dest.b * dest.a * (1 - src.a)) / a0
+	return Color(r0, g0, b0, a0)
+	
+static func blend_colors_with_alpha(src:Color, dest:Color, weight:float)->Color:
+	var col:Color = blend_over_with_alpha(src, dest)
+	col.a *= weight
+	return blend_over_with_alpha(col, dest)
+	
+static func blend_colors_ignore_alpha(src:Color, dest:Color, weight:float)->Color:
+	return weight * src + (1 - weight) * dest
+	
