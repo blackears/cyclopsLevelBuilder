@@ -937,7 +937,8 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 				uv1s.append(uv)
 				uv2s.append(face.lightmap_uvs[v_local_idx])
 
-				normals.append(face.normal)
+#				normals.append(face.normal)
+				normals.append(fv.normal)
 #				colors.append(face.color)
 #				colors.append(face_vertices[fv_idx].color)
 				colors.append(fv.color)

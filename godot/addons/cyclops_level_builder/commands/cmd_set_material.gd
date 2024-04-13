@@ -84,51 +84,53 @@ func make_cache():
 		cache_list.append(cache)
 
 func will_change_anything()->bool:
-	for t in target_list:
-
-		var block:CyclopsBlock = builder.get_node(t.block_path)
-
-		var data:ConvexBlockData = block.block_data
-		var vol:ConvexVolume = ConvexVolume.new()
-		vol.init_from_convex_block_data(data)
-
-		if setting_material:
-			#Find index of current material
-			var target_material:Material
-			var mat_idx:int = -1
-			for m_idx in block.materials.size():
-				var m:Material = block.materials[m_idx]
-				if m.resource_path == material_path:
-					mat_idx = m_idx
-					break
-
-			if mat_idx == -1:
-				return true
-
-			for f_idx in t.face_indices:
-				var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
-				if f.material_id != mat_idx:
-					return true
-
-		if setting_color:
-			for f_idx in t.face_indices:
-				var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
-				if f.color != color:
-					return true
-
-		if setting_visibility:
-			for f_idx in t.face_indices:
-				var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
-				if f.visible != visibility:
-					return true
-
-		if painting_uv:
-			for f_idx in t.face_indices:
-				var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
-				if f.uv_transform != uv_matrix:
-					return true
-
-	return false
+	return !target_list.is_empty()
+	
+	#for t in target_list:
+#
+		#var block:CyclopsBlock = builder.get_node(t.block_path)
+#
+		#var data:ConvexBlockData = block.block_data
+		#var vol:ConvexVolume = ConvexVolume.new()
+		#vol.init_from_convex_block_data(data)
+#
+		#if setting_material:
+			##Find index of current material
+			#var target_material:Material
+			#var mat_idx:int = -1
+			#for m_idx in block.materials.size():
+				#var m:Material = block.materials[m_idx]
+				#if m.resource_path == material_path:
+					#mat_idx = m_idx
+					#break
+#
+			#if mat_idx == -1:
+				#return true
+#
+			#for f_idx in t.face_indices:
+				#var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
+				#if f.material_id != mat_idx:
+					#return true
+#
+		#if setting_color:
+			#for f_idx in t.face_indices:
+				#var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
+				#if f.color != color:
+					#return true
+#
+		#if setting_visibility:
+			#for f_idx in t.face_indices:
+				#var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
+				#if f.visible != visibility:
+					#return true
+#
+		#if painting_uv:
+			#for f_idx in t.face_indices:
+				#var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
+				#if f.uv_transform != uv_matrix:
+					#return true
+#
+	#return false
 
 func _init():
 	command_name = "Set material"
@@ -182,6 +184,10 @@ func do_it():
 				var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
 				if setting_color:
 					f.color = color
+					for v_idx in f.vertex_indices:
+						var fv:ConvexVolume.FaceVertexInfo = \
+							vol.get_face_vertex(f_idx, v_idx)
+						fv.color = color
 				if setting_visibility:
 					f.visible = visibility
 				if painting_uv:
