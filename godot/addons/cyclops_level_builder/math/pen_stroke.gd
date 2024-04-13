@@ -26,15 +26,20 @@ class_name PenStroke
 extends Resource
 
 class StrokePoint extends Resource:
-	var position:Vector3
-	var pressure:float
+	@export var position:Vector3
+	@export var pressure:float
 
-	func _init(position:Vector3, pressure:float = 1):
-		self.position = position
-		self.pressure = pressure
+	#func _init(position:Vector3 = Vector3.ZERO, pressure:float = 1):
+		#print("ppp ", position)
+		#self.position = position
+		#self.pressure = pressure
+		
+	func _to_string()->String:
+		return "%s %f" % [str(position), pressure]
 
 	func lerp(p:StrokePoint, weight:float):
-		var r:StrokePoint = StrokePoint.new(lerp(position, p.position, weight))
+		var r:StrokePoint = StrokePoint.new()
+		r.position = lerp(position, p.position, weight)
 		r.pressure = lerp(pressure, p.pressure, weight)
 
 var stroke_points:Array[StrokePoint]
@@ -46,7 +51,10 @@ func is_empty()->bool:
 	return stroke_points.is_empty()
 
 func append_stroke_point(position:Vector3, pressure:float = 1):
-	stroke_points.append(StrokePoint.new(position, pressure))
+	var p:StrokePoint = StrokePoint.new()
+	p.position = position
+	p.pressure = pressure
+	stroke_points.append(p)
 
 func resample_points(resample_dist:float)->PenStroke:
 	if stroke_points.is_empty():
@@ -54,7 +62,13 @@ func resample_points(resample_dist:float)->PenStroke:
 	
 	var result:PenStroke = PenStroke.new()
 	
+	#var p_start:StrokePoint = stroke_points[0]
+	#var p_start1:StrokePoint = p_start.duplicate(true)
+	#print("p_start ", p_start)
+	#print("p_start1 ", p_start1)
+	#print("stroke_points[0] ", stroke_points[0].position)
 	result.stroke_points.append(stroke_points[0].duplicate())
+	#print("--stroke_points[0] ", stroke_points[0].position)
 	
 	var seg_dist_covered:float = 0
 	var last_pos_plotted:float = 0
@@ -71,6 +85,8 @@ func resample_points(resample_dist:float)->PenStroke:
 			last_pos_plotted += resample_dist
 			
 		seg_dist_covered += seg_len
+	
+	#print("stroke points res ", str(result.stroke_points))
 	
 	return result
 

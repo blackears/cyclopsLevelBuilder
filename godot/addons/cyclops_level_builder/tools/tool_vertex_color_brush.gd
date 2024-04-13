@@ -139,7 +139,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 					
-					
 					if result && result.object == builder.get_active_block():
 						print("starting paint")
 						cmd = CommandVertexPaintStroke.new()
@@ -150,8 +149,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						cmd.strength = settings.strength
 						cmd.radius = settings.radius
 						
-						cmd.append_stroke_point(\
-							result.object.global_basis * result.position, 1)
+						var pos:Vector3 = result.object.global_basis * result.position
+						print("pos ", pos)
+						cmd.append_stroke_point(pos, 1)
 
 
 						cmd.do_it()

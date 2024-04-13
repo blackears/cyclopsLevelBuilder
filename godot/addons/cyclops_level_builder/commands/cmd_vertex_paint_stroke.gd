@@ -48,7 +48,7 @@ func append_block(block_path:NodePath):
 	
 	var block:CyclopsBlock = builder.get_node(block_path)
 
-	print("stroing block faces ", block.block_data.face_vertex_face_index)
+	#print("stroing block faces ", block.block_data.face_vertex_face_index)
 	
 	block_map[block_path] = block.block_data.duplicate(true)
 	#print("stroing block faces ", block.block_data.face_vertex_face_index)
@@ -56,6 +56,7 @@ func append_block(block_path:NodePath):
 	
 func append_stroke_point(position:Vector3, pressure:float = 1):
 	pen_stroke.append_stroke_point(position, pressure)
+	#print("--pen_stroke ", pen_stroke.stroke_points)
 
 func _init():
 	command_name = "Paint Vertex Color Stroke"
@@ -67,25 +68,30 @@ func do_it():
 	#print("sel verts do_it")
 #	print("sel uv_transform do_it()")
 
+	#print("stroke pts  ", str(pen_stroke.stroke_points))
 	var stroke_resamp:PenStroke = pen_stroke.resample_points(radius * .1)
+	#print("stroke resamp pts ", str(stroke_resamp.stroke_points))
 		
 	for block_path in block_map.keys():
 
 		var block:CyclopsBlock = builder.get_node(block_path)
-		print("painting block ", block.name)
+		var w2l:Transform3D = block.global_transform.affine_inverse()
+		#print("painting block ", block.name)
 
 		var block_data:ConvexBlockData = block_map[block_path]
-		print("block_data raw faces ", block_data.face_vertex_face_index)
+		#print("block_data raw faces ", block_data.face_vertex_face_index)
 		
 		var vol:ConvexVolume = ConvexVolume.new()
 		vol.init_from_convex_block_data(block_data)
 		
 		#Apply stroke
 		for stroke_pt in stroke_resamp.stroke_points:
+			var pos_local:Vector3 = w2l * stroke_pt.position
+			#print("stroke_pt ", stroke_pt)
 			for fv in vol.face_vertices:
 				var v:ConvexVolume.VertexInfo = vol.vertices[fv.vertex_index]
 				
-				var dist:float = v.point.distance_to(stroke_pt.position)
+				var dist:float = v.point.distance_to(pos_local)
 				
 				if dist > radius:
 					continue
@@ -94,11 +100,11 @@ func do_it():
 				fv.color = MathUtil.blend_colors_ignore_alpha(\
 					color, fv.color, strength * stroke_pt.pressure * falloff_frac)
 
-				print("fv_idx ", fv.index)
-				print("fv color ", fv.color)
+				#print("fv_idx ", fv.index)
+				#print("fv color ", fv.color)
 				
 		var new_block_data:ConvexBlockData = vol.to_convex_block_data()
-		print("new_block_data faces ", block.block_data.face_vertex_face_index)
+		#print("new_block_data faces ", block.block_data.face_vertex_face_index)
 		block.block_data = new_block_data
 					
 	builder.selection_changed.emit()
@@ -112,5 +118,5 @@ func undo_it():
 		
 		block.block_data = block_data
 
-	builder.selection_changed.emit()			
+	builder.selection_changed.emit()
 
