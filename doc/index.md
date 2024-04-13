@@ -66,6 +66,7 @@ There are several tools in the toolbar that let you create and edit blocks:
 * [Edge](tool_edge.md)
 * [Face](tool_face.md)
 * [Material Brush](tool_material_brush.md)
+* [Vertex Color Brush](tool_vertex_color_brush.md)
 * [Duplicate](tool_duplicate.md)
 
 

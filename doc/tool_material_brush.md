@@ -14,7 +14,9 @@ Speeds the process of applying materials to meshes.  When you click and drag wit
 * Paint Visibility - If true, the visibility state of the face will be changed.
 * Visible - If true, make the face visible.  If false, make the face invisible.
 
+### Hotkeys
 
+* Shift-X - Sample the face's properties under the mouse cursor.  Which properties are sampled will depend on the `on` state of the `Paint Materials`, `Paint Color` and `Paint Visibility` flags.
 
 ## Support
 

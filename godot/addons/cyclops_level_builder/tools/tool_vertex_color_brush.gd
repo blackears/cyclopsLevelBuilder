@@ -136,7 +136,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 					
-					if result && result.object == builder.get_active_block():
+					var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+#					if result && result.object == builder.get_active_block():
+					if result && sel_blocks.has(result.object):
 						#print("starting paint")
 						cmd = CommandVertexPaintStroke.new()
 						cmd.builder = builder

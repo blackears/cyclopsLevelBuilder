@@ -28,6 +28,12 @@ class_name ToolVertexColorBrushSettings
 
 @export var component_type:GeometryComponentType.Type = GeometryComponentType.Type.OBJECT
 
+@export var mask_type:CommandVertexPaintStroke.MaskType = CommandVertexPaintStroke.MaskType.NONE:
+	set(value):
+		if value != mask_type:
+			mask_type = value
+			emit_changed()
+
 @export var color:Color = Color.WHITE:
 	set(value):
 		if value != color:

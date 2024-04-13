@@ -48,7 +48,7 @@ func on_settings_changed():
 
 func update():
 
-	%opbn_geom_component.selected = settings.component_type
+	%opbn_mask_type.selected = settings.mask_type
 
 	%color_button.color = settings.color
 	%spin_strength.value = settings.strength
@@ -70,16 +70,16 @@ func _on_color_button_color_changed(color:Color):
 	settings.color = color
 
 
-func _on_opbn_geom_component_item_selected(index):
-	match index:
-		0:
-			settings.component_type = GeometryComponentType.Type.OBJECT
-		1:
-			settings.component_type = GeometryComponentType.Type.VERTEX
-		2:
-			settings.component_type = GeometryComponentType.Type.FACE
-		3:
-			settings.component_type = GeometryComponentType.Type.FACE_VERTEX
+#func _on_opbn_geom_component_item_selected(index):
+	#match index:
+		#0:
+			#settings.component_type = GeometryComponentType.Type.OBJECT
+		#1:
+			#settings.component_type = GeometryComponentType.Type.VERTEX
+		#2:
+			#settings.component_type = GeometryComponentType.Type.FACE
+		#3:
+			#settings.component_type = GeometryComponentType.Type.FACE_VERTEX
 
 
 func _on_spin_strength_value_changed(value):
@@ -92,3 +92,13 @@ func _on_check_pen_pressure_str_toggled(toggled_on):
 
 func _on_spin_radius_value_changed(value):
 	settings.radius = value
+
+
+func _on_opbn_mask_type_item_selected(index):
+	match index:
+		0:
+			settings.mask_type = CommandVertexPaintStroke.MaskType.NONE
+		1:
+			settings.mask_type = CommandVertexPaintStroke.MaskType.VERTICES
+		2:
+			settings.mask_type = CommandVertexPaintStroke.MaskType.FACES
