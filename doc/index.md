@@ -1,8 +1,9 @@
 # Documentation
 
+[![Version 1.0.3 updates](https://img.youtube.com/vi/2foYulFeZG4/0.jpg)](https://www.youtube.com/watch?v=2foYulFeZG4)
 [![Version 1.0.2 updates](https://img.youtube.com/vi/mbw_6dnOt_g/0.jpg)](https://www.youtube.com/watch?v=mbw_6dnOt_g)
-[![Version 1.0.0](https://img.youtube.com/vi/UAqmm6WIWhA/0.jpg)](https://www.youtube.com/watch?v=UAqmm6WIWhA)
 [![Version 1.0.1 updates](https://img.youtube.com/vi/AoG6olKg2_8/0.jpg)](https://www.youtube.com/watch?v=AoG6olKg2_8)
+[![Version 1.0.0](https://img.youtube.com/vi/UAqmm6WIWhA/0.jpg)](https://www.youtube.com/watch?v=UAqmm6WIWhA)
 
 
 ## Getting Started
