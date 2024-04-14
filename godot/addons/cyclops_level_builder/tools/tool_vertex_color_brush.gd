@@ -90,6 +90,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						var vert:ConvexVolume.VertexInfo = vol.vertices[v_idx]
 					
 						var fv:ConvexVolume.FaceVertexInfo = vol.get_face_vertex(result.face_index, v_idx)
+						print("sample color ", fv.color)
 					
 						settings.color = fv.color
 
@@ -100,21 +101,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 			if e.is_pressed():
 				select_block_under_cursor(viewport_camera, last_mouse_pos)
-				#var origin:Vector3 = viewport_camera.project_ray_origin(last_mouse_pos)
-				#var dir:Vector3 = viewport_camera.project_ray_normal(last_mouse_pos)
-			#
-				#var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
-				#if result:
-					#var cmd:CommandSelectBlocks = CommandSelectBlocks.new()
-					#cmd.builder = builder
-					#cmd.block_paths.append(result.object.get_path())
-					#
-					#if cmd.will_change_anything():
-						#var undo:EditorUndoRedoManager = builder.get_undo_redo()
-						#cmd.add_to_undo_manager(undo)
-						#
-						#_deactivate()
-						#_activate(builder)
 				
 			return true
 

@@ -154,7 +154,7 @@ class FaceInfo extends RefCounted:
 		for v_idx in vertex_indices:
 			var v:VertexInfo = mesh.vertices[v_idx]
 			var dist:float = v.point.distance_to(point)
-			if best_idx == -1 || best_dist < dist:
+			if best_idx == -1 || dist < best_dist:
 				best_idx = v_idx
 				best_dist = dist
 				
