@@ -454,7 +454,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 							var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 
 							#Obstruction check
-							if !global_scene.xray_mode:  
+							if !global_scene.xray_mode && builder.display_mode != DisplayMode.Type.WIRE:
 								var result:IntersectResults = builder.intersect_ray_closest(origin, point_w - origin)
 								if result:
 									var res_point_w:Vector3 = result.get_world_position()

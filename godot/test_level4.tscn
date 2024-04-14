@@ -2991,7 +2991,7 @@ active_edge = -1
 active_face = -1
 active_face_vertex = 0
 
-[sub_resource type="Resource" id="Resource_cd5vq"]
+[sub_resource type="Resource" id="Resource_y7ql2"]
 script = ExtResource("2_utw38")
 selected = false
 active = false
@@ -3002,7 +3002,7 @@ vertex_points = PackedVector3Array(4.25, 2, 0.25, 4.25, 0, 0.25, 4.25, 0, 0, 4.2
 vertex_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0)
 edge_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 face_material_indices = PackedInt32Array(-1, 0, 0, 0, -1, 0)
-face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, -7.75, -1.75), Transform2D(1, 0, 0, 1, -7.75, -0.5), Transform2D(1, 0, 0, 1, 0, 0.125), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, -7.75, -1.75)])
+face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, -7.75, -0.5), Transform2D(1, 0, 0, 1, -7.75, -0.5), Transform2D(1, 0, 0, 1, -7.75, -0.5), Transform2D(1, 0, 0, 1, -7.75, -0.5), Transform2D(1, 0, 0, 1, -7.75, -0.5), Transform2D(1, 0, 0, 1, -7.75, -0.5)])
 face_visible = PackedByteArray(1, 1, 1, 1, 1, 1)
 face_color = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
 face_selected = PackedByteArray(0, 0, 0, 1, 0, 0)
@@ -3741,7 +3741,7 @@ materials = Array[Material]([ExtResource("6_qmx5g"), ExtResource("11_i2ur1")])
 [node name="Block_108" type="Node3D" parent="cyclops_blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.25, 2.25, -6.5)
 script = ExtResource("1_4ta04")
-block_data = SubResource("Resource_cd5vq")
+block_data = SubResource("Resource_y7ql2")
 materials = Array[Material]([ExtResource("6_qmx5g"), ExtResource("11_i2ur1")])
 
 [node name="ceiling" type="Node3D" parent="."]

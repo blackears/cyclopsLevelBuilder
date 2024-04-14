@@ -283,7 +283,7 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 
 	var res:PickHandleResult = pick_closest_handle(viewport_camera, drag_mouse_start_pos, builder.handle_screen_radius)
 
-	if res:
+	if res && res.handle:
 		#print("pick handle %s" % res.handle)
 		
 		var handle:HandleFace = res.handle
@@ -471,6 +471,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
 					for block in sel_blocks:
+						#print("block ", block.name)
 						
 						for f_idx in block.control_mesh.faces.size():
 							var face:ConvexVolume.FaceInfo = block.control_mesh.faces[f_idx]
@@ -480,15 +481,18 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 							var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 
+							#print("precheck")
 							#Obstruction check
-							if !global_scene.xray_mode:  
+							if !global_scene.xray_mode && builder.display_mode != DisplayMode.Type.WIRE:
 								var result:IntersectResults = builder.intersect_ray_closest(origin, point_w - origin)
 								if result:
 									var res_point_w:Vector3 = result.get_world_position()
 									if !res_point_w.is_equal_approx(point_w):
 										continue
 							
+							#print("frustum check ", point_w)
 							if MathUtil.frustum_contians_point(frustum, point_w):
+								#print("frustim hit ", point_w)
 								cmd.add_face(block.get_path(), f_idx)
 
 					cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)

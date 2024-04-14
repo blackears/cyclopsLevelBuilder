@@ -29,7 +29,7 @@ var friction:float = 4.0
 var impulse:float = 5.0
 var max_speed:float = 10.0
 var jump_impulse:float = 4.5
-var rotation_speed:float = 4
+var rotation_speed:float = 3
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
