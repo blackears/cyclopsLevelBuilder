@@ -170,4 +170,20 @@ func calc_active_block_orthogonal_height(plane_origin:Vector3, drag_floor_normal
 		
 	return height
 
+func select_block_under_cursor(viewport_camera:Camera3D, mouse_pos:Vector2):
+	var origin:Vector3 = viewport_camera.project_ray_origin(mouse_pos)
+	var dir:Vector3 = viewport_camera.project_ray_normal(mouse_pos)
 
+	var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
+	if result:
+		var cmd:CommandSelectBlocks = CommandSelectBlocks.new()
+		cmd.builder = builder
+		cmd.block_paths.append(result.object.get_path())
+		
+		if cmd.will_change_anything():
+			var undo:EditorUndoRedoManager = builder.get_undo_redo()
+			cmd.add_to_undo_manager(undo)
+			
+			_deactivate()
+			_activate(builder)
+	

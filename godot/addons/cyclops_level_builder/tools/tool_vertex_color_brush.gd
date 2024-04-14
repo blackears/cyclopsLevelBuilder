@@ -96,30 +96,27 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			return true
 			
 
-		elif e.keycode == KEY_A:
+		elif e.keycode == KEY_Q:
 
 			if e.is_pressed():
-				#Change currently active object
-				var cmd:CommandSelectEdges = CommandSelectEdges.new()
-				cmd.builder = builder
+				select_block_under_cursor(viewport_camera, last_mouse_pos)
+				#var origin:Vector3 = viewport_camera.project_ray_origin(last_mouse_pos)
+				#var dir:Vector3 = viewport_camera.project_ray_normal(last_mouse_pos)
+			#
+				#var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
+				#if result:
+					#var cmd:CommandSelectBlocks = CommandSelectBlocks.new()
+					#cmd.builder = builder
+					#cmd.block_paths.append(result.object.get_path())
+					#
+					#if cmd.will_change_anything():
+						#var undo:EditorUndoRedoManager = builder.get_undo_redo()
+						#cmd.add_to_undo_manager(undo)
+						#
+						#_deactivate()
+						#_activate(builder)
 				
-				if e.alt_pressed:
-					var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
-					for block in sel_blocks:
-						cmd.add_edges(block.get_path(), [])
-						
-				else:
-					var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
-					for block in sel_blocks:
-						for e_idx in block.control_mesh.edges.size():
-							cmd.add_edge(block.get_path(), e_idx)
-
-				cmd.selection_type = Selection.Type.REPLACE
-
-				if cmd.will_change_anything():
-					var undo:EditorUndoRedoManager = builder.get_undo_redo()
-
-					cmd.add_to_undo_manager(undo)
+			return true
 
 	elif event is InputEventMouseButton:
 
