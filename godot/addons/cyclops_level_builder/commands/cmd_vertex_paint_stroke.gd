@@ -88,7 +88,6 @@ func do_it():
 		#Apply stroke
 		for stroke_pt in stroke_resamp.stroke_points:
 			var pos_local:Vector3 = w2l * stroke_pt.position
-			#print("stroke_pt ", stroke_pt)
 			for fv in vol.face_vertices:
 				var v:ConvexVolume.VertexInfo = vol.vertices[fv.vertex_index]
 				var f:ConvexVolume.FaceInfo = vol.faces[fv.face_index]

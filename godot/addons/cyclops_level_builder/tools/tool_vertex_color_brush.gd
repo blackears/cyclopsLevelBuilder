@@ -150,7 +150,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						cmd.falloff_curve = settings.falloff_curve.duplicate()
 						cmd.mask = settings.mask_type
 						
-						var pos:Vector3 = result.object.global_basis * result.position
+						var pos:Vector3 = result.get_world_position()
 						#print("pos ", pos)
 						cmd.append_stroke_point(pos, 1)
 
@@ -194,8 +194,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				#print ("hit ", result.object.name)
 				cmd.undo_it()
 				
-				cmd.append_stroke_point(\
-					result.object.global_basis * result.position, \
+				cmd.append_stroke_point(result.get_world_position(), \
 					e.pressure if settings.pen_pressure_strength else 1)
 
 				cmd.do_it()
