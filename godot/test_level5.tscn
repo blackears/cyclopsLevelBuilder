@@ -2991,7 +2991,7 @@ active_edge = -1
 active_face = -1
 active_face_vertex = 0
 
-[sub_resource type="Resource" id="Resource_fkbm8"]
+[sub_resource type="Resource" id="Resource_2a8q8"]
 script = ExtResource("2_8tl54")
 selected = false
 active = false
@@ -3015,8 +3015,8 @@ edge_face_indices = PackedInt32Array(0, 3, 0, 1, 0, 2, 0, 5, 1, 2, 1, 3, 1, 4, 2
 face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
 face_vertex_indices = PackedInt32Array(0, 1, 2, 3, 4, 2, 1, 5, 6, 3, 2, 4, 7, 5, 1, 0, 7, 6, 4, 5, 7, 0, 3, 6)
 active_vertex = 0
-active_edge = -1
-active_face = -1
+active_edge = 0
+active_face = 0
 active_face_vertex = 0
 
 [sub_resource type="Resource" id="Resource_k1m7j"]
@@ -5477,7 +5477,7 @@ materials = Array[Material]([ExtResource("8_1by13"), ExtResource("12_p3xns")])
 [node name="Block_108" type="Node3D" parent="cyclops_blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.25, 2.25, -6.5)
 script = ExtResource("1_ny18x")
-block_data = SubResource("Resource_fkbm8")
+block_data = SubResource("Resource_2a8q8")
 materials = Array[Material]([ExtResource("8_1by13"), ExtResource("12_p3xns")])
 
 [node name="Block_109" type="Node3D" parent="cyclops_blocks"]
