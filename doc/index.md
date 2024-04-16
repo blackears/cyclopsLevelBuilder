@@ -10,9 +10,9 @@
 
 ### Create the CyclopsBlock environment root
 
-You will need to begin by creating a CyclopsBlock, since the entire Cyclops system currently requires a block to be selected to be activated (this is a limitation of how the Godot Editor works.)
+You will need to begin with a 3D scene in Godot.  You can create a new empty scene, or modify a 3D scene you've already started working on.
 
-The easiest way to do this is to select the Cyclops tab in the bottom center window and press the `Create Block` button.  This will create a basic block with the dimensions you specified in the work area.
+Your first step to using Cyclops is to create a CyclopsBlock.  The Cyclops system currently requires a block to be selected for Cyclops to be activated (this is a limitation of how the Godot Editor works.)  The easiest way to do this is to select the Cyclops tab in the bottom center window and press the `Create Block` button.  This will create a basic block with the dimensions you specified in the work area.
 
 ![Creating the first CyclopsBlock node](create_starting_block.png)
 
