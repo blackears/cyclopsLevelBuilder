@@ -8,21 +8,23 @@
 
 ## Getting Started
 
-### Create the CyclopsBlocks environment root
+### Create the CyclopsBlock environment root
 
-Before you do anything else, you will need to create a CyclopsBlocks node in your scene.
+You will need to begin by creating a CyclopsBlock, since the entire Cyclops system currently requires a block to be selected to be activated (this is a limitation of how the Godot Editor works.)
 
-![Creating CyclopsBlocks node](add_CyclopsBlocks_node.jpg)
+The easiest way to do this is to select the Cyclops tab in the bottom center window and press the `Create Block` button.  This will create a basic block with the dimensions you specified in the work area.
 
-The CyclopsBlocks will be the root of the root of the environment you are creating.  You must select it to be able to add blocks to your scene or be able to use any of the block editing tools.
+![Creating the first CyclopsBlock node](create_starting_block.png)
 
-### Creating your first block
+You will now need to select this block to activate the tool menu.  You can continue creating blocks in this way, but will probably find it easier to use the `Block` tool to make new blocks.
 
-Click on the CyclopsBlocks node in your scene to show the Cyclops buttons in the editor toolbar.
+### Creating more blocks
+
+Make sure a `CyclopsBlock` is selected to show the Cyclops buttons in the editor toolbar.
 
 ![Starting editor menu](starting_editor_menu.jpg)
 
-Make sure the Block button is pressed, then click and drag in the viewport to start drawing your first block.  You will need to click and drag to create the base, then move the mouse to drag out the height and click again to finish drawing the cube.
+Make sure the Block button is pressed, then click and drag in the viewport to start drawing your block.  You will need to click and drag to create the base, then move the mouse to drag out the height and click again to finish drawing the cube.
 
 ![Dragging out your first block](drag_create_cube.gif)
 
