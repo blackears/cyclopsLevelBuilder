@@ -484,8 +484,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					tool_state = ToolState.NONE
 					
 					setup_tool()
+					return true
 					
-			return true
+			return false
 				
 	elif event is InputEventMouseMotion:
 		var e:InputEventMouseMotion = event

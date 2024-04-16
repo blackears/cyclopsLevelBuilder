@@ -2991,7 +2991,7 @@ active_edge = -1
 active_face = -1
 active_face_vertex = 0
 
-[sub_resource type="Resource" id="Resource_y7ql2"]
+[sub_resource type="Resource" id="Resource_fkbm8"]
 script = ExtResource("2_8tl54")
 selected = false
 active = false
@@ -2999,13 +2999,13 @@ collsion = true
 physics_layer = 0
 physics_mask = 0
 vertex_points = PackedVector3Array(4.25, 2, 0.25, 4.25, 0, 0.25, 4.25, 0, 0, 4.25, 2, 0, 6.75, 0, 0, 6.75, 0, 0.25, 6.75, 2, 0, 6.75, 2, 0.25)
-vertex_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0)
-edge_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+vertex_selected = PackedByteArray(1, 1, 1, 1, 1, 1, 1, 1)
+edge_selected = PackedByteArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
 face_material_indices = PackedInt32Array(-1, 0, 0, 0, -1, 0)
 face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, -7.75, -0.5), Transform2D(1, 0, 0, 1, -7.75, -0.5), Transform2D(1, 0, 0, 1, -7.75, -0.5), Transform2D(1, 0, 0, 1, -7.75, -0.5), Transform2D(1, 0, 0, 1, -7.75, -0.5), Transform2D(1, 0, 0, 1, -7.75, -0.5)])
 face_visible = PackedByteArray(1, 1, 1, 1, 1, 1)
 face_color = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
-face_selected = PackedByteArray(0, 0, 0, 1, 0, 0)
+face_selected = PackedByteArray(1, 1, 1, 1, 1, 1)
 face_vertex_face_index = PackedInt32Array(0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5)
 face_vertex_vertex_index = PackedInt32Array(0, 1, 2, 3, 4, 2, 1, 5, 6, 3, 2, 4, 7, 5, 1, 0, 7, 6, 4, 5, 7, 0, 3, 6)
 face_vertex_normal = PackedVector3Array(-1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0)
@@ -3014,7 +3014,7 @@ edge_vertex_indices = PackedInt32Array(0, 1, 1, 2, 2, 3, 3, 0, 4, 2, 1, 5, 5, 4,
 edge_face_indices = PackedInt32Array(0, 3, 0, 1, 0, 2, 0, 5, 1, 2, 1, 3, 1, 4, 2, 5, 2, 4, 3, 4, 3, 5, 4, 5)
 face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
 face_vertex_indices = PackedInt32Array(0, 1, 2, 3, 4, 2, 1, 5, 6, 3, 2, 4, 7, 5, 1, 0, 7, 6, 4, 5, 7, 0, 3, 6)
-active_vertex = -1
+active_vertex = 0
 active_edge = -1
 active_face = -1
 active_face_vertex = 0
@@ -5477,7 +5477,7 @@ materials = Array[Material]([ExtResource("8_1by13"), ExtResource("12_p3xns")])
 [node name="Block_108" type="Node3D" parent="cyclops_blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.25, 2.25, -6.5)
 script = ExtResource("1_ny18x")
-block_data = SubResource("Resource_y7ql2")
+block_data = SubResource("Resource_fkbm8")
 materials = Array[Material]([ExtResource("8_1by13"), ExtResource("12_p3xns")])
 
 [node name="Block_109" type="Node3D" parent="cyclops_blocks"]
