@@ -4,7 +4,7 @@ Cyclops Level Builder lets you quickly build environments in the Godot viewport.
 
 Cyclops Level Builder 1.0.2 works with Godot version 4.2 and later.  Versions 1.0.1 and earlier will work with Godot 4.0.
 
-[![Quick demo video](https://img.youtube.com/vi/mbw_6dnOt_g/0.jpg)](https://www.youtube.com/watch?v=mbw_6dnOt_g)
+[![Quick demo video](https://img.youtube.com/vi/2foYulFeZG4/0.jpg)](https://www.youtube.com/watch?v=2foYulFeZG4)
 
 ## Installation
 
