@@ -46,6 +46,8 @@ var editor_toolbar:EditorToolbar
 var upgrade_cyclops_blocks_toolbar:UpgradeCyclopsBlocksToolbar
 var activated:bool = false
 
+var cyclops_main_window:CyclopsMainWindow
+
 var always_on:bool = false:
 	get:
 		return always_on
@@ -87,10 +89,10 @@ func get_snapping_manager()->SnappingManager:
 	return mgr
 
 func _get_plugin_name()->String:
-	return "CyclopsLevelBuilder"
+	return "Cyclops"
 
 func _get_plugin_icon()->Texture2D:
-	return preload("res://addons/cyclops_level_builder/art/cyclops.svg")
+	return preload("res://addons/cyclops_level_builder/art/icons/eye_open.svg")
 
 func _enter_tree():
 	if FileAccess.file_exists(editor_cache_file):
@@ -107,6 +109,9 @@ func _enter_tree():
 
 	add_autoload_singleton(AUTOLOAD_NAME, "res://addons/cyclops_level_builder/cyclops_global_scene.tscn")
 	#add_autoload_singleton(CYCLOPS_HUD_NAME, "res://addons/cyclops_level_builder/cyclops_global_hud.tscn")
+
+	cyclops_main_window = preload("res://addons/cyclops_level_builder/gui/main_window/cyclops_main_window.tscn").instantiate()
+	cyclops_main_window.plugin = self
 	
 	material_dock = preload("res://addons/cyclops_level_builder/docks/material_palette/material_palette_viewport.tscn").instantiate()
 	material_dock.builder = self
@@ -129,6 +134,9 @@ func _enter_tree():
 	upgrade_cyclops_blocks_toolbar = preload("res://addons/cyclops_level_builder/menu/upgrade_cyclops_blocks_toolbar.tscn").instantiate()
 	upgrade_cyclops_blocks_toolbar.editor_plugin = self
 
+	EditorInterface.get_editor_main_screen().add_child(cyclops_main_window)
+	cyclops_main_window.visible = false
+	
 #	sticky_toolbar = preload("menu/sticky_toolbar.tscn").instantiate()
 #	sticky_toolbar.plugin = self
 #	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, sticky_toolbar)
@@ -151,12 +159,22 @@ func _enter_tree():
 	switch_to_tool(ToolBlock.new())
 
 
+func _make_visible(visible):
+	if cyclops_main_window:
+		cyclops_main_window.visible = visible
+
+func _has_main_screen():
+	return true
+	
 func _exit_tree():
 	var file:FileAccess = FileAccess.open(editor_cache_file, FileAccess.WRITE)
 	#var text:String = JSON.stringify(editor_cache, "  ")
 	#print("saving cache:", text)
 	file.store_string(JSON.stringify(editor_cache, "    "))
 	file.close()
+	
+	if cyclops_main_window:
+		cyclops_main_window.queue_free()
 		
 	# Clean-up of the plugin goes here.
 	remove_autoload_singleton(AUTOLOAD_NAME)
