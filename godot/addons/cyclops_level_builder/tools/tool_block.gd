@@ -30,6 +30,8 @@ const TOOL_ID:String = "block"
 enum ToolState { NONE, READY, BLOCK_BASE, BLOCK_HEIGHT, MOVE_FACE }
 var tool_state:ToolState = ToolState.NONE
 
+#enum BlockAlign { ALIGN_TO_SURFACE, XY_PLANE, XZ_PLANE, YZ_PLANE }
+
 #var drag_angle_limit:float = deg_to_rad(5)
 
 var viewport_camera_start:Camera3D
@@ -74,10 +76,10 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 	var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 	#print("result %s" % result)
 	
-	if result:
-		#print("Hit! %s" % result)
+	if result && settings.block_alignment == BlockAlignment.Type.ALIGN_TO_SURFACE:
+		print("Hit! %s" % result)
 		drag_floor_normal = MathUtil.snap_to_best_axis_normal(result.get_world_normal())
-
+				
 		var start_pos:Vector3 = result.get_world_position()
 
 		#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
@@ -105,9 +107,10 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 
 		
 	else:
-		#print("Miss")
+		print("Miss")
 		var draw_plane_point:Vector3 = Vector3.ZERO
-		var draw_plane_normal:Vector3 = Vector3.UP
+		var draw_plane_normal:Vector3 = BlockAlignment.get_plane_normal(settings.block_alignment)
+		
 		if settings.match_selected_block:
 			draw_plane_point = calc_empty_space_draw_plane_origin(viewport_camera, draw_plane_point, draw_plane_normal)
 			

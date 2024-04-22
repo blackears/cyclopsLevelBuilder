@@ -58,6 +58,8 @@ func update():
 	%default_block_height.disabled = false
 	%default_block_height.value = settings.default_block_height
 
+	%alignment_type.selected = settings.block_alignment
+
 	%collision_type.selected = settings.collision_type
 	%collision_layers.value = settings.collision_layer
 	%collision_mask.value = settings.collision_mask
@@ -82,3 +84,7 @@ func _on_collision_mask_value_changed(value):
 
 func _on_collision_type_item_selected(index):
 	settings.collision_type = index
+
+
+func _on_alignment_type_item_selected(index):
+	settings.block_alignment = index

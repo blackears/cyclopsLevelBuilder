@@ -26,6 +26,7 @@ extends Resource
 class_name ToolPrismSettings
 
 
+@export var block_alignment:BlockAlignment.Type = BlockAlignment.Type.ALIGN_TO_SURFACE
 @export var match_selected_block:bool = true
 @export var default_block_elevation:float = 0
 @export var default_block_height:float = 1
@@ -34,6 +35,7 @@ class_name ToolPrismSettings
 @export_flags_3d_physics var collision_mask:int = 1
 
 func load_from_cache(cache:Dictionary):
+	block_alignment = cache.get("block_alignment", BlockAlignment.Type.ALIGN_TO_SURFACE)
 	match_selected_block = cache.get("match_selected_block", true)
 	default_block_elevation = cache.get("default_block_elevation", 0)
 	default_block_height = cache.get("default_block_height", 1)
@@ -43,6 +45,7 @@ func load_from_cache(cache:Dictionary):
 	
 func save_to_cache():
 	return {
+		"block_alignment": block_alignment,
 		"match_selected_block": match_selected_block,
 		"default_block_elevation": default_block_elevation,
 		"default_block_height": default_block_height,

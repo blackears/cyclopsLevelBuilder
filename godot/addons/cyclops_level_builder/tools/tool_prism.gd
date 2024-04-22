@@ -134,7 +134,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					tool_state = ToolState.BASE_POINTS
 
 					var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
-					if result:
+					if result && settings.block_alignment == BlockAlignment.Type.ALIGN_TO_SURFACE:
 						floor_normal = result.get_world_normal()
 
 						var p:Vector3 = builder.get_snapping_manager().snap_point(result.get_world_position(), SnappingQuery.new(viewport_camera))
@@ -147,7 +147,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					else:
 						#print("init base point empty space")
 						var draw_plane_point:Vector3 = Vector3.ZERO
-						var draw_plane_normal:Vector3 = Vector3.UP
+						var draw_plane_normal:Vector3 = BlockAlignment.get_plane_normal(settings.block_alignment)
 						if settings.match_selected_block:
 							draw_plane_point = calc_empty_space_draw_plane_origin(viewport_camera, draw_plane_point, draw_plane_normal)
 							

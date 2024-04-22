@@ -22,3 +22,4 @@
 
 ### v1.0.4
 * You can now right-click fly when the vertex, edge or face tools are selected.
+* Adding alignment option to primitive creation tools so that you can turn off the auto alignment to surfaces.
