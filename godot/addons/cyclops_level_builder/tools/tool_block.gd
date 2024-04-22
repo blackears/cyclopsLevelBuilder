@@ -77,7 +77,7 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 	#print("result %s" % result)
 	
 	if result && settings.block_alignment == BlockAlignment.Type.ALIGN_TO_SURFACE:
-		print("Hit! %s" % result)
+		#print("Hit! %s" % result)
 		drag_floor_normal = MathUtil.snap_to_best_axis_normal(result.get_world_normal())
 				
 		var start_pos:Vector3 = result.get_world_position()
@@ -107,7 +107,7 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 
 		
 	else:
-		print("Miss")
+		#print("Miss")
 		var draw_plane_point:Vector3 = Vector3.ZERO
 		var draw_plane_normal:Vector3 = BlockAlignment.get_plane_normal(settings.block_alignment)
 		

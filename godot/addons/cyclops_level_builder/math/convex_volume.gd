@@ -976,15 +976,17 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 				tangents.append(t.z)
 				tangents.append(-1.0 if t.cross(b).dot(n) > 0 else 1.0)
 
-		var arrays:Array = []
-		arrays.resize(Mesh.ARRAY_MAX)
-		arrays[Mesh.ARRAY_VERTEX] = points
-		arrays[Mesh.ARRAY_NORMAL] = normals
-		arrays[Mesh.ARRAY_TANGENT] = tangents
-		arrays[Mesh.ARRAY_TEX_UV] = uv1s
-		arrays[Mesh.ARRAY_TEX_UV2] = uv2s
-		arrays[Mesh.ARRAY_COLOR] = colors
-
+		#var arrays:Array = []
+		#arrays.resize(Mesh.ARRAY_MAX)
+		#arrays[Mesh.ARRAY_VERTEX] = points
+		#arrays[Mesh.ARRAY_NORMAL] = normals
+		#arrays[Mesh.ARRAY_TANGENT] = tangents
+		#arrays[Mesh.ARRAY_TEX_UV] = uv1s
+		#arrays[Mesh.ARRAY_TEX_UV2] = uv2s
+		#arrays[Mesh.ARRAY_COLOR] = colors
+		
+		var arrays:Array = create_indexed_vertex_array(points, normals, tangents, colors, uv1s, uv2s)
+		
 		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 		mesh.surface_set_material(surface_idx, material)
 
@@ -1002,6 +1004,78 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 #	print("Lightmap unwrap Error: %s" % err)
 	return mesh
 
+
+
+func create_indexed_vertex_array(points:PackedVector3Array, normals:PackedVector3Array, tangents:PackedFloat32Array, colors:PackedColorArray, uv1s:PackedVector2Array, uv2s:PackedVector2Array)->Array:
+	var vert_idx_map:Dictionary
+	var indices:PackedInt32Array
+	var points_indexed:PackedVector3Array
+	var normals_indexed:PackedVector3Array
+	var tangents_indexed:PackedFloat32Array
+	var colors_indexed:PackedColorArray
+	var uv1s_indexed:PackedVector2Array
+	var uv2s_indexed:PackedVector2Array
+	
+	for v_idx in points.size():
+		var vertex:PackedFloat32Array
+		vertex.append(points[v_idx].x)
+		vertex.append(points[v_idx].y)
+		vertex.append(points[v_idx].z)
+
+		vertex.append(normals[v_idx].x)
+		vertex.append(normals[v_idx].y)
+		vertex.append(normals[v_idx].z)
+
+		vertex.append(tangents[v_idx * 4])
+		vertex.append(tangents[v_idx * 4 + 1])
+		vertex.append(tangents[v_idx * 4 + 2])
+		vertex.append(tangents[v_idx * 4 + 3])
+
+		vertex.append(colors[v_idx].r)
+		vertex.append(colors[v_idx].g)
+		vertex.append(colors[v_idx].b)
+		vertex.append(colors[v_idx].a)
+
+		vertex.append(uv1s[v_idx].x)
+		vertex.append(uv1s[v_idx].y)
+
+		vertex.append(uv2s[v_idx].x)
+		vertex.append(uv2s[v_idx].y)
+
+		var new_index:int
+		if !vert_idx_map.has(vertex):
+			#print("alloc vtx ", vertex)
+			
+			new_index = vert_idx_map.size()
+			vert_idx_map[vertex] = new_index
+			points_indexed.append(points[v_idx])
+			normals_indexed.append(normals[v_idx])
+			tangents_indexed.append(tangents[v_idx * 4])
+			tangents_indexed.append(tangents[v_idx * 4 + 1])
+			tangents_indexed.append(tangents[v_idx * 4 + 2])
+			tangents_indexed.append(tangents[v_idx * 4 + 3])
+			colors_indexed.append(colors[v_idx])
+			uv1s_indexed.append(uv1s[v_idx])
+			uv2s_indexed.append(uv2s[v_idx])
+		else:
+			new_index = vert_idx_map[vertex]
+		
+		#print("index ", new_index)
+		indices.append(new_index)
+
+	#print("indices ", indices)
+
+	var arrays:Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = points_indexed
+	arrays[Mesh.ARRAY_NORMAL] = normals_indexed
+	arrays[Mesh.ARRAY_TANGENT] = tangents_indexed
+	arrays[Mesh.ARRAY_TEX_UV] = uv1s_indexed
+	arrays[Mesh.ARRAY_TEX_UV2] = uv2s_indexed
+	arrays[Mesh.ARRAY_COLOR] = colors_indexed
+	arrays[Mesh.ARRAY_INDEX] = indices
+
+	return arrays
 
 
 func append_mesh_backfacing(mesh:ImmediateMesh, material:Material, offset:float = .2):

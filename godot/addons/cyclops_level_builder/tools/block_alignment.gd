@@ -35,5 +35,5 @@ static func get_plane_normal(type:Type)->Vector3:
 		BlockAlignment.Type.YZ_PLANE:
 			return Vector3(1, 0, 0)
 		_:
-			return Vector3(0, 0, 0)
+			return Vector3(0, 1, 0)
 			
