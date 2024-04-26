@@ -427,12 +427,14 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					cmd_move_edge.add_to_undo_manager(undo)
 					
 					tool_state = ToolState.NONE
+					cmd_move_edge = null
 
 				elif tool_state == ToolState.MOVE_HANDLES_CLICK:
 					var undo:EditorUndoRedoManager = builder.get_undo_redo()
 					cmd_move_edge.add_to_undo_manager(undo)
 					
 					tool_state = ToolState.NONE
+					cmd_move_edge = null
 
 				elif tool_state == ToolState.DRAG_SELECTION:
 					

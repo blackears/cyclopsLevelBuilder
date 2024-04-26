@@ -454,6 +454,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					cmd_move_face.add_to_undo_manager(undo)
 					
 					tool_state = ToolState.NONE
+					cmd_move_face = null
 				
 
 				elif tool_state == ToolState.MOVE_HANDLES_CLICK:
@@ -461,6 +462,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					cmd_move_face.add_to_undo_manager(undo)
 					
 					tool_state = ToolState.NONE
+					cmd_move_face = null
 					
 				elif tool_state == ToolState.DRAG_SELECTION:
 					
