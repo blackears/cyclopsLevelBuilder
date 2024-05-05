@@ -47,16 +47,22 @@ var control_mesh:ConvexVolume
 @export var block_data:ConvexBlockData:
 	get:
 		return block_data
+		
 	set(value):
 		if block_data != value:
 			block_data = value
 			control_mesh = ConvexVolume.new()
 			control_mesh.init_from_convex_block_data(block_data)
 			
+			#Convert to mesh vector data
+			var mvd:MeshVectorData = MeshVectorData.new()
+			mvd.create_from_convex_block(block_data)
+			mesh_vector_data = mvd
+			
 			dirty = true
 			mesh_changed.emit()
 
-#@export var mesh_vector_data:MeshVectorData
+@export var mesh_vector_data:MeshVectorData
 
 @export var materials:Array[Material]
 

@@ -27,7 +27,7 @@ class_name ConvexBlockData
 
 @export var selected:bool = false
 @export var active:bool = false
-@export var collsion:bool = true
+@export var collision:bool = true
 @export_flags_3d_physics var physics_layer:int
 @export_flags_3d_physics var physics_mask:int
 

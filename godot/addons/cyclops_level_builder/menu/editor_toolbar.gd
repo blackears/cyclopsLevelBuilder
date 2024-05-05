@@ -56,6 +56,7 @@ func _ready():
 	%Menu.add_action_item(ActionConvertToMesh.new(editor_plugin))
 	%Menu.add_action_item(ActionExportAsGltf.new(editor_plugin))
 	%Menu.add_action_item(ActionExportAsGodotScene.new(editor_plugin))
+	%Menu.add_action_item(ActionExportAsXml.new(editor_plugin))
 	%Menu.add_separator()
 	%Menu.add_action_item(ActionRotateX90Ccw.new(editor_plugin))
 	%Menu.add_action_item(ActionRotateX90Cw.new(editor_plugin))
