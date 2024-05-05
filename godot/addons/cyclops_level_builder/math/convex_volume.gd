@@ -262,13 +262,18 @@ func init_prism(base_points:Array[Vector3], extrude_dir:Vector3, uv_transform:Tr
 	calc_lightmap_uvs()
 
 func init_from_convex_block_data(data:ConvexBlockData):
+	print("init_from_convex_block_data")
+	print(var_to_str(data))
+	
 	vertices = []
 	edges = []
 	faces = []
 	face_vertices = []
 	face_vertex_coord_map.clear()
 	
-	data.validate_arrays()
+	if !data:
+		return
+	#data.validate_arrays()
 
 	active_vertex = data.active_vertex
 	active_edge = data.active_edge
@@ -290,6 +295,7 @@ func init_from_convex_block_data(data:ConvexBlockData):
 		edge.selected = data.edge_selected[i]
 		#edge.active = data.edge_active[i]
 		
+	print("data.face_vertex_count ", data.face_vertex_count)
 	var face_vertex_count:int = 0
 	for face_idx in data.face_vertex_count.size():
 		var num_verts:int = data.face_vertex_count[face_idx]
@@ -299,12 +305,10 @@ func init_from_convex_block_data(data:ConvexBlockData):
 			var vert_idx:int = data.face_vertex_indices[face_vertex_count]
 			vert_indices.append(vert_idx)
 			vert_points.append(vertices[vert_idx].point)
-#			var v_idx:int = data.face_vertex_indices[count]
 			face_vertex_count += 1
 		
 		var normal = MathUtil.face_area_x2(vert_points).normalized()
 		
-		#var face_id:int = data.face_ids[face_idx]
 		var face_uv_transform:Transform2D = data.face_uv_transform[face_idx]
 		var face_mat_index:int = data.face_material_indices[face_idx]
 		var face_visible:int = data.face_visible[face_idx]
@@ -317,7 +321,7 @@ func init_from_convex_block_data(data:ConvexBlockData):
 		
 		faces.append(f)
 
-	
+	print("faces buit ", faces.size())
 	
 	bounds = calc_bounds()
 	calc_lightmap_uvs()
@@ -359,6 +363,12 @@ func init_from_convex_block_data(data:ConvexBlockData):
 	calc_vertex_normals()
 	
 	#print("init_from_convex_block_data %s" % format_faces_string())
+	
+func init_from_mesh_vector_data(mvd:MeshVectorData):
+	print("init_from_mesh_vector_data")
+	var block_data:ConvexBlockData = ConvexBlockData.new()
+	block_data.init_from_mesh_vector_data(mvd)
+	init_from_convex_block_data(block_data)
 	
 
 #Calc convex hull bouding points
@@ -499,14 +509,6 @@ func get_face_coincident_with_plane(plane:Plane)->FaceInfo:
 			return f
 	return null
 
-#@deprecated
-#func get_face_ids(selected_only:bool = false)->PackedInt32Array:
-	#var result:PackedInt32Array
-	#for f in faces:
-		#if !selected_only || f.selected:
-			#result.append(f.id)
-	#return result
-
 func get_face_indices(selected_only:bool = false)->PackedInt32Array:
 	var result:PackedInt32Array
 	for f_idx in faces.size():
@@ -600,14 +602,14 @@ func to_convex_block_data()->ConvexBlockData:
 	
 	return result
 
+func to_mesh_vector_data()->MeshVectorData:
+	var mvd:MeshVectorData = MeshVectorData.new()
+	var block_data:ConvexBlockData = to_convex_block_data()
+	mvd.create_from_convex_block(block_data)
+	return mvd
+
 func get_face(face_index:int)->FaceInfo:
 	return faces[face_index]
-
-#func get_face(face_id:int)->FaceInfo:
-	#for face in faces:
-		#if face.id == face_id:
-			#return face
-	#return null
 
 func get_centroid()->Vector3:
 	var points:PackedVector3Array = get_points()
@@ -873,19 +875,22 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 	var shadow_mesh:ArrayMesh = ArrayMesh.new()
 	shadow_mesh.blend_shape_mode = Mesh.BLEND_SHAPE_MODE_NORMALIZED
 
+	print("create_mesh")
+	print("faces.size() ", faces.size())
+
 	var face_dict:Dictionary = {}
 	for f_idx in faces.size():
-#		print("check F_idx %s" % f_idx)
+		print("check F_idx %s" % f_idx)
 		var face:FaceInfo = faces[f_idx]
 		if face_dict.has(face.material_id):
 			var arr = face_dict[face.material_id]
 			arr.append(f_idx)
-#			print("arr %s" % [arr])
+			print("arr %s" % [arr])
 			face_dict[face.material_id] = arr
-#			print("append %s to %s" % [f_idx, face.material_id])
+			print("append %s to %s" % [f_idx, face.material_id])
 		else:
 			face_dict[face.material_id] = [f_idx]
-#			print("starting %s to %s" % [f_idx, face.material_id])
+			print("starting %s to %s" % [f_idx, face.material_id])
 
 	var surface_idx:int = 0
 	for mat_id in face_dict.keys():

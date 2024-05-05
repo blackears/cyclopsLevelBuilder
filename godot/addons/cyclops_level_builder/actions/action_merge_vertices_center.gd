@@ -38,16 +38,18 @@ func _execute():
 	cmd.builder = plugin
 	
 	for block in blocks:
-		if block.block_data.vertex_selected.size() < 2:
+		var sel_vec:DataVector = block.mesh_vector_data.get_vertex_data(MeshVectorData.V_SELECTED)
+		
+		if sel_vec.size() < 2:
 			continue
-			
+
 		var indices:Array[int]
-		print("sel vert bytes ", block.block_data.vertex_selected)
-		for idx in block.block_data.vertex_selected.size():
-			if block.block_data.vertex_selected[idx]:
+		#print("sel vert bytes ", block.block_data.vertex_selected)
+		for idx in sel_vec.size():
+			if sel_vec.get_value(idx):
 				indices.append(idx)
 		cmd.add_vertices(block.get_path(), indices)
-		
+			
 	
 	if cmd.will_change_anything():
 		var undo:EditorUndoRedoManager = plugin.get_undo_redo()

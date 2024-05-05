@@ -49,10 +49,10 @@ class_name MeshVectorData
 @export var face_vertex_count:PackedInt32Array #Number of verts in each face
 @export var face_vertex_indices:PackedInt32Array #Vertex index per face
 
-var vertex_data:Dictionary
-var edge_data:Dictionary
-var face_data:Dictionary
-var face_vertex_data:Dictionary
+@export var vertex_data:Dictionary
+@export var edge_data:Dictionary
+@export var face_data:Dictionary
+@export var face_vertex_data:Dictionary
 
 const V_POSITION: StringName = "position"
 const V_SELECTED: StringName = "selected"
@@ -71,6 +71,7 @@ const FV_FACE_INDEX: StringName = "face_index"
 const FV_VERTEX_LOCAL_INDEX: StringName = "vertex_local_index"
 const FV_SELECTED: StringName = "selected"
 const FV_COLOR: StringName = "color"
+const FV_NORMAL: StringName = "normal"
 const FV_UV1: StringName = "uv1"
 const FV_UV2: StringName = "uv2"
 
@@ -90,8 +91,7 @@ func create_from_convex_block(block_data:ConvexBlockData):
 	
 	set_vertex_data(DataVectorFloat.new(V_POSITION, 
 		block_data.vertex_points.to_byte_array().to_float32_array(), 
-		DataVector.DataType.VECTOR3,
-		3))
+		DataVector.DataType.VECTOR3))
 
 	set_vertex_data(DataVectorByte.new(V_SELECTED, 
 		block_data.vertex_selected, 
@@ -108,6 +108,17 @@ func create_from_convex_block(block_data:ConvexBlockData):
 	set_face_data(DataVectorByte.new(F_VISIBLE, 
 		block_data.face_visible, 
 		DataVector.DataType.BOOL))
+
+	set_face_data(DataVectorFloat.new(F_COLOR,
+		block_data.face_color.to_byte_array().to_float32_array(),
+		DataVector.DataType.COLOR))
+
+	var f_uv_xform:PackedFloat32Array	
+	for t in block_data.face_uv_transform:
+		f_uv_xform.append_array([t.x.x, t.x.y, t.y.x, t.y.y, t.origin.x, t.origin.y])
+	set_face_data(DataVectorFloat.new(F_UV_XFORM, 
+		f_uv_xform,
+		DataVector.DataType.TRANSFORM_2D))
 		
 		
 	set_face_data(DataVectorByte.new(F_SELECTED, 
@@ -116,8 +127,7 @@ func create_from_convex_block(block_data:ConvexBlockData):
 
 	set_face_data(DataVectorFloat.new(F_COLOR, 
 		block_data.face_color.to_byte_array().to_float32_array(), 
-		DataVector.DataType.COLOR, 
-		4))
+		DataVector.DataType.COLOR))
 
 	
 	#Create face-vertex data
@@ -134,13 +144,6 @@ func create_from_convex_block(block_data:ConvexBlockData):
 	var next_fv_idx:int = 0
 	var face_indices:PackedInt32Array
 	var vert_indices:PackedInt32Array
-
-#@export var edge_vertex_indices:PackedInt32Array
-#@export var edge_face_indices:PackedInt32Array
-#
-#@export var face_vertex_count:PackedInt32Array #Number of verts in each face
-#@export var face_vertex_indices:PackedInt32Array #Vertex index per face
-
 	
 	for f_idx in block_data.face_vertex_count.size():
 		var num_verts_in_face:int = block_data.face_vertex_count[f_idx]
@@ -174,14 +177,26 @@ func create_from_convex_block(block_data:ConvexBlockData):
 
 	set_face_vertex_data(DataVectorFloat.new(FV_COLOR, 
 		col_fv_data.to_byte_array().to_float32_array(), 
-		DataVector.DataType.COLOR, 
-		4))
+		DataVector.DataType.COLOR))
+
+	set_face_vertex_data(DataVectorFloat.new(FV_NORMAL, 
+		block_data.face_vertex_normal.to_byte_array().to_float32_array(), 
+		DataVector.DataType.VECTOR3))
 			
 
+func get_vertex_data(vector_name:String)->DataVector:
+	return vertex_data[vector_name]
+
+func get_edge_data(vector_name:String)->DataVector:
+	return edge_data[vector_name]
+
+func get_face_data(vector_name:String)->DataVector:
+	return face_data[vector_name]
+
+func get_face_vertex_data(vector_name:String)->DataVector:
+	return face_vertex_data[vector_name]
 
 func set_vertex_data(data_vector:DataVector):
-	#print("set_vertex_data ", var_to_str(data_vector))
-	#print("data_vector.name ", data_vector.name)
 	vertex_data[data_vector.name] = data_vector
 
 func set_edge_data(data_vector:DataVector):

@@ -79,4 +79,59 @@ func validate_arrays():
 		arr.fill(Color.WHITE)
 		face_color.append_array(arr)
 		
+func init_from_mesh_vector_data(mvd:MeshVectorData):
 
+	active_vertex = mvd.active_vertex
+	active_edge = mvd.active_edge
+	active_face = mvd.active_face
+	active_face_vertex = mvd.active_face_vertex
+	
+	selected = mvd.selected
+	active = mvd.active
+	collision = mvd.collision
+	physics_layer = mvd.physics_layer
+	physics_mask = mvd.physics_mask
+	
+	var v_pos:DataVectorFloat = mvd.get_vertex_data(MeshVectorData.V_POSITION)
+	vertex_points = v_pos.to_vec3_array()
+	
+	var v_sel:DataVectorByte = mvd.get_vertex_data(MeshVectorData.V_SELECTED)
+	vertex_selected = v_sel.data
+	
+	var e_sel:DataVectorByte = mvd.get_edge_data(MeshVectorData.E_SELECTED)
+	edge_selected = e_sel.data
+	
+	var f_mat:DataVectorInt = mvd.get_face_data(MeshVectorData.F_MATERIAL_INDEX)
+	face_material_indices = f_mat.data
+	
+#	print("+build convex_block_data")
+	var f_uv_xform:DataVectorFloat = mvd.get_face_data(MeshVectorData.F_UV_XFORM)
+	face_uv_transform = f_uv_xform.to_transform2d_array()
+#	print("-build convex_block_data")
+	
+	var f_vis:DataVectorByte = mvd.get_face_data(MeshVectorData.F_VISIBLE)
+	face_visible = f_vis.data
+	
+	var f_col:DataVectorFloat = mvd.get_face_data(MeshVectorData.F_COLOR)
+	face_color = f_col.to_color_array()
+	
+	var f_sel:DataVectorByte = mvd.get_face_data(MeshVectorData.F_SELECTED)
+	face_selected = f_sel.data
+	
+	var fv_fidx:DataVectorInt = mvd.get_face_vertex_data(MeshVectorData.FV_FACE_INDEX)
+	face_vertex_face_index = fv_fidx.data
+	
+	var fv_vidx:DataVectorInt = mvd.get_face_vertex_data(MeshVectorData.FV_VERTEX_INDEX)
+	face_vertex_vertex_index = fv_vidx.data
+	
+	var fv_norm:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_NORMAL)
+	face_vertex_normal = fv_norm.to_vec3_array()
+	
+	var fv_col:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_COLOR)
+	face_vertex_color = fv_col.to_color_array()
+
+	edge_vertex_indices = mvd.edge_vertex_indices
+	edge_face_indices = mvd.edge_face_indices
+	face_vertex_count = mvd.face_vertex_count
+	face_vertex_indices = mvd.face_vertex_indices
+	

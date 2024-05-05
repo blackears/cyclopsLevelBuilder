@@ -62,7 +62,16 @@ var control_mesh:ConvexVolume
 			dirty = true
 			mesh_changed.emit()
 
-@export var mesh_vector_data:MeshVectorData
+@export var mesh_vector_data:MeshVectorData:
+	set(value):
+		if mesh_vector_data != value:
+			mesh_vector_data = value
+
+			control_mesh = ConvexVolume.new()
+			control_mesh.init_from_mesh_vector_data(mesh_vector_data)
+
+			dirty = true
+			mesh_changed.emit()
 
 @export var materials:Array[Material]
 
@@ -129,6 +138,7 @@ func update_physics_body():
 	
 
 func build_from_block():
+	#print("build_from_block")
 		
 	dirty = false
 	
@@ -142,13 +152,16 @@ func build_from_block():
 	
 #	print("block_data %s" % block_data)
 #	print("vert points %s" % block_data.vertex_points)
-	if !block_data:
+	#if !block_data:
+		#return
+	if !mesh_vector_data:
 		return
 	
 #	print("got block data")		
 	
 	var vol:ConvexVolume = ConvexVolume.new()
-	vol.init_from_convex_block_data(block_data)
+	vol.init_from_mesh_vector_data(mesh_vector_data)
+	#vol.init_from_convex_block_data(block_data)
 	
 	#print("volume %s" % vol)
 	
@@ -159,6 +172,7 @@ func build_from_block():
 		mesh_wire.mesh = vol.create_mesh_wire(global_scene.outline_material)
 		#print ("added wireframe")
 
+		#print("rebuilding mesh")
 		if display_mode == DisplayMode.Type.MATERIAL:
 			mesh = vol.create_mesh(materials, default_material)
 		if display_mode == DisplayMode.Type.MESH:
