@@ -28,7 +28,7 @@ extends CyclopsCommand
 class BlockEdgeChanges extends RefCounted:
 	var block_path:NodePath
 	var edge_indices:Array[int] = []
-	var tracked_block_data:ConvexBlockData
+	var tracked_block_data:MeshVectorData
 
 #Public
 var selection_type:Selection.Type = Selection.Type.REPLACE
@@ -48,7 +48,7 @@ func add_edges(block_path:NodePath, indices:Array[int]):
 		changes = BlockEdgeChanges.new()
 		changes.block_path = block_path
 		var block:CyclopsBlock = builder.get_node(block_path)
-		changes.tracked_block_data = block.block_data
+		changes.tracked_block_data = block.mesh_vector_data
 		block_map[block_path] = changes
 	
 	for index in indices:
@@ -67,7 +67,7 @@ func will_change_anything()->bool:
 		var block:CyclopsBlock = builder.get_node(block_path)
 			
 		var vol:ConvexVolume = ConvexVolume.new()
-		vol.init_from_convex_block_data(rec.tracked_block_data)
+		vol.init_from_mesh_vector_data(rec.tracked_block_data)
 
 		if !rec.edge_indices.is_empty():
 			if vol.active_edge != rec.edge_indices[0]:
@@ -110,7 +110,7 @@ func do_it():
 		var block:CyclopsBlock = builder.get_node(block_path)
 			
 		var vol:ConvexVolume = ConvexVolume.new()
-		vol.init_from_convex_block_data(rec.tracked_block_data)
+		vol.init_from_mesh_vector_data(rec.tracked_block_data)
 		
 		if !rec.edge_indices.is_empty():
 			var active_index:int = rec.edge_indices[0]
@@ -157,20 +157,7 @@ func do_it():
 			if vol.active_edge >= vol.edges.size() || !vol.edges[vol.active_edge].selected:
 				vol.active_edge = -1
 
-		#Synchronize vertex & face selection
-		#print("synchronizing verts")
-#		var selected_verts:Array[int] = []
-#		for e in vol.edges:
-#			if e.selected:
-#				for v_idx in [e.start_index, e.end_index]:
-#					if !selected_verts.has(v_idx):
-#						#print("selecting vert %s" % v_idx)
-#						selected_verts.append(v_idx)
-#		for v_idx in vol.vertices.size():
-#			vol.vertices[v_idx].selected = selected_verts.has(v_idx)
-#		vol.update_edge_and_face_selection_from_vertices()		
-
-		block.block_data = vol.to_convex_block_data()
+		block.mesh_vector_data = vol.to_mesh_vector_data()
 		
 	builder.selection_changed.emit()
 
@@ -180,7 +167,7 @@ func undo_it():
 	for block_path in block_map.keys():
 		var rec:BlockEdgeChanges = block_map[block_path]
 		var block:CyclopsBlock = builder.get_node(block_path)
-		block.block_data = rec.tracked_block_data
+		block.mesh_vector_data = rec.tracked_block_data
 
 	builder.selection_changed.emit()
 	

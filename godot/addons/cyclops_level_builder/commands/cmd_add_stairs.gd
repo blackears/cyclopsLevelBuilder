@@ -128,7 +128,7 @@ func do_it():
 
 		var block:CyclopsBlock = create_block(blocks_root, material)
 
-		block.block_data = mesh.to_convex_block_data()
+		block.mesh_vector_data = mesh.to_mesh_vector_data()
 		block.global_transform = pivot_xform.affine_inverse()
 		block_paths.append(block.get_path())
 		

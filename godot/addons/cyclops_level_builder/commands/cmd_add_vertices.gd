@@ -31,7 +31,7 @@ var points_to_add:PackedVector3Array
 var block_path:NodePath
 
 #Private
-var tracked_block_data:ConvexBlockData
+var tracked_block_data:MeshVectorData
 var selected_points:PackedVector3Array
 
 			
@@ -43,14 +43,14 @@ func do_it():
 	
 	if !tracked_block_data:		
 		var tracked_vol:ConvexVolume = block.control_mesh
-		tracked_block_data = tracked_vol.to_convex_block_data()
+		tracked_block_data = tracked_vol.to_mesh_vector_data()
 
 		for v in tracked_vol.vertices:
 			if v.selected:
 				selected_points.append(v.point)
 	
 	var vol:ConvexVolume = ConvexVolume.new()
-	vol.init_from_convex_block_data(tracked_block_data)
+	vol.init_from_mesh_vector_data(tracked_block_data)
 	
 	var point_list:PackedVector3Array = vol.get_points()
 	var local_points = block.global_transform.affine_inverse() * points_to_add
@@ -66,9 +66,9 @@ func do_it():
 		if selected_points.has(v.point):
 			v.selected = true
 
-	block.block_data = new_vol.to_convex_block_data()		
+	block.mesh_vector_data = new_vol.to_mesh_vector_data()
 
 	
 func undo_it():
 	var block:CyclopsBlock = builder.get_node(block_path)
-	block.block_data = tracked_block_data
+	block.mesh_vector_data = tracked_block_data

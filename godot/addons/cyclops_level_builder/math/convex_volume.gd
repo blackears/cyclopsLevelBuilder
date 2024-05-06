@@ -262,8 +262,8 @@ func init_prism(base_points:Array[Vector3], extrude_dir:Vector3, uv_transform:Tr
 	calc_lightmap_uvs()
 
 func init_from_convex_block_data(data:ConvexBlockData):
-	print("init_from_convex_block_data")
-	print(var_to_str(data))
+	#print("init_from_convex_block_data")
+	#print(var_to_str(data))
 	
 	vertices = []
 	edges = []
@@ -295,7 +295,7 @@ func init_from_convex_block_data(data:ConvexBlockData):
 		edge.selected = data.edge_selected[i]
 		#edge.active = data.edge_active[i]
 		
-	print("data.face_vertex_count ", data.face_vertex_count)
+	#print("data.face_vertex_count ", data.face_vertex_count)
 	var face_vertex_count:int = 0
 	for face_idx in data.face_vertex_count.size():
 		var num_verts:int = data.face_vertex_count[face_idx]
@@ -321,7 +321,7 @@ func init_from_convex_block_data(data:ConvexBlockData):
 		
 		faces.append(f)
 
-	print("faces buit ", faces.size())
+	#print("faces buit ", faces.size())
 	
 	bounds = calc_bounds()
 	calc_lightmap_uvs()
@@ -351,8 +351,9 @@ func init_from_convex_block_data(data:ConvexBlockData):
 			var coord:Vector2i = Vector2i(f_idx, v_idx)
 			face_vertex_coord_map[coord] = fv
 			
-			fv.normal = data.face_vertex_normal[fv_idx]
-			fv.color = data.face_vertex_color[fv_idx]
+			var f:FaceInfo = faces[f_idx]
+			fv.normal = data.face_vertex_normal[fv_idx] if data.face_vertex_normal.size() > fv_idx else f.normal
+			fv.color = data.face_vertex_color[fv_idx] if data.face_vertex_color.size() > fv_idx else Color(1, 1, 1, 1)
 	#print("init_from_convex_block_data face_vertex_coord_map ", face_vertex_coord_map)
 		for f_idx in faces.size():
 			var face:FaceInfo = faces[f_idx]
@@ -365,7 +366,7 @@ func init_from_convex_block_data(data:ConvexBlockData):
 	#print("init_from_convex_block_data %s" % format_faces_string())
 	
 func init_from_mesh_vector_data(mvd:MeshVectorData):
-	print("init_from_mesh_vector_data")
+	#print("init_from_mesh_vector_data")
 	var block_data:ConvexBlockData = ConvexBlockData.new()
 	block_data.init_from_mesh_vector_data(mvd)
 	init_from_convex_block_data(block_data)
@@ -541,23 +542,24 @@ func get_face_most_similar_to_plane(plane:Plane)->FaceInfo:
 
 func copy_face_attributes(ref_vol:ConvexVolume):
 	for f_idx in faces.size():
-		var fl:FaceInfo = faces[f_idx]
-		var ref_face:FaceInfo = ref_vol.get_face_most_similar_to_plane(fl.get_plane())
+		var f:FaceInfo = faces[f_idx]
+		var ref_face:FaceInfo = ref_vol.get_face_most_similar_to_plane(f.get_plane())
 		
-		fl.material_id = ref_face.material_id
-		fl.uv_transform = ref_face.uv_transform
-		fl.visible = ref_face.visible
-		fl.color = ref_face.color
-		fl.selected = ref_face.selected
+		f.material_id = ref_face.material_id
+		f.uv_transform = ref_face.uv_transform
+		f.visible = ref_face.visible
+		f.color = ref_face.color
+		f.selected = ref_face.selected
 
-		#Copy face vertex values		
-		for v_local_idx in fl.vertex_indices.size():
-			var v_idx:int = fl.vertex_indices[v_local_idx]
-			var coord:Vector2i = Vector2i(f_idx, v_idx)
-			var fv:FaceVertexInfo = face_vertex_coord_map[coord]
+		#Copy face vertex values	
+		for v_local_idx in f.vertex_indices.size():
+			var v_idx:int = f.vertex_indices[v_local_idx]
+			var v:VertexInfo = vertices[v_idx]
+			var fv:FaceVertexInfo = face_vertex_coord_map[Vector2i(f_idx, v_idx)]
 
-			var ref_v_index:int = ref_face.vertex_indices[min(v_local_idx, ref_face.vertex_indices.size() - 1)]
-			var fv_ref:FaceVertexInfo = ref_vol.face_vertex_coord_map[Vector2i(ref_face.index, ref_v_index)]
+			var v_idx_ref:int = ref_face.get_closest_vertex(v.point)
+
+			var fv_ref:FaceVertexInfo = ref_vol.face_vertex_coord_map[Vector2i(ref_face.index, v_idx_ref)]
 			
 			fv.normal = fv_ref.normal
 			fv.color = fv_ref.color
@@ -875,22 +877,22 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 	var shadow_mesh:ArrayMesh = ArrayMesh.new()
 	shadow_mesh.blend_shape_mode = Mesh.BLEND_SHAPE_MODE_NORMALIZED
 
-	print("create_mesh")
-	print("faces.size() ", faces.size())
+	#print("create_mesh")
+	#print("faces.size() ", faces.size())
 
 	var face_dict:Dictionary = {}
 	for f_idx in faces.size():
-		print("check F_idx %s" % f_idx)
+#		print("check F_idx %s" % f_idx)
 		var face:FaceInfo = faces[f_idx]
 		if face_dict.has(face.material_id):
 			var arr = face_dict[face.material_id]
 			arr.append(f_idx)
-			print("arr %s" % [arr])
+#			print("arr %s" % [arr])
 			face_dict[face.material_id] = arr
-			print("append %s to %s" % [f_idx, face.material_id])
+#			print("append %s to %s" % [f_idx, face.material_id])
 		else:
 			face_dict[face.material_id] = [f_idx]
-			print("starting %s to %s" % [f_idx, face.material_id])
+#			print("starting %s to %s" % [f_idx, face.material_id])
 
 	var surface_idx:int = 0
 	for mat_id in face_dict.keys():
@@ -980,15 +982,6 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 				tangents.append(t.y)
 				tangents.append(t.z)
 				tangents.append(-1.0 if t.cross(b).dot(n) > 0 else 1.0)
-
-		#var arrays:Array = []
-		#arrays.resize(Mesh.ARRAY_MAX)
-		#arrays[Mesh.ARRAY_VERTEX] = points
-		#arrays[Mesh.ARRAY_NORMAL] = normals
-		#arrays[Mesh.ARRAY_TANGENT] = tangents
-		#arrays[Mesh.ARRAY_TEX_UV] = uv1s
-		#arrays[Mesh.ARRAY_TEX_UV2] = uv2s
-		#arrays[Mesh.ARRAY_COLOR] = colors
 		
 		var arrays:Array = create_indexed_vertex_array(points, normals, tangents, colors, uv1s, uv2s)
 		

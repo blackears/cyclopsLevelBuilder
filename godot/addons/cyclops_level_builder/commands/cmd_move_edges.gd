@@ -29,7 +29,7 @@ extends CyclopsCommand
 class BlockEdgeChanges extends RefCounted:
 	var block_path:NodePath
 	var edge_indices:Array[int] = []
-	var tracked_block_data:ConvexBlockData
+	var tracked_block_data:MeshVectorData
 
 #Public 
 var move_offset:Vector3 = Vector3.ZERO
@@ -48,7 +48,7 @@ func add_edges(block_path:NodePath, indices:Array[int]):
 		changes = BlockEdgeChanges.new()
 		changes.block_path = block_path
 		var block:CyclopsBlock = builder.get_node(block_path)
-		changes.tracked_block_data = block.block_data
+		changes.tracked_block_data = block.mesh_vector_data
 		block_map[block_path] = changes
 
 	for index in indices:
@@ -72,7 +72,7 @@ func do_it():
 #		print("rec %s" % rec)
 		
 		var vol:ConvexVolume = ConvexVolume.new()
-		vol.init_from_convex_block_data(rec.tracked_block_data)
+		vol.init_from_mesh_vector_data(rec.tracked_block_data)
 
 #		print("init done")
 		var w2l:Transform3D = block.global_transform.affine_inverse()
@@ -124,11 +124,11 @@ func do_it():
 #				print("set sel")
 				e_new.selected = true
 
-		block.block_data = new_vol.to_convex_block_data()
+		block.mesh_vector_data = new_vol.to_mesh_vector_data()
 	
 
 func undo_it():
 	for block_path in block_map.keys():
 		var rec:BlockEdgeChanges = block_map[block_path]
 		var block:CyclopsBlock = builder.get_node(block_path)
-		block.block_data = rec.tracked_block_data
+		block.mesh_vector_data = rec.tracked_block_data

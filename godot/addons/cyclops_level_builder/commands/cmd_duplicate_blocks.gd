@@ -34,10 +34,10 @@ var lock_uvs:bool
 #Private
 class BlockInfo extends RefCounted:
 	var new_block:CyclopsBlock
-	var source_data:ConvexBlockData
+	var source_data:MeshVectorData
 	var source_global_transform:Transform3D
 	
-	func _init(new_block:CyclopsBlock, source_data:ConvexBlockData, source_global_transform:Transform3D):
+	func _init(new_block:CyclopsBlock, source_data:MeshVectorData, source_global_transform:Transform3D):
 		self.new_block = new_block
 		self.source_data = source_data
 		self.source_global_transform = source_global_transform
@@ -61,9 +61,9 @@ func do_it():
 			blocks_root.add_child(new_block)
 			new_block.owner = builder.get_editor_interface().get_edited_scene_root()
 			new_block.global_transform = source_block.global_transform
-			new_block.block_data = source_block.block_data.duplicate()
+			new_block.mesh_vector_data = source_block.mesh_vector_data.duplicate()
 			
-			var info:BlockInfo = BlockInfo.new(new_block, source_block.block_data, source_block.global_transform)
+			var info:BlockInfo = BlockInfo.new(new_block, source_block.mesh_vector_data, source_block.global_transform)
 			new_block.materials = source_block.materials
 			#new_block.selected = true
 			

@@ -72,7 +72,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						result.face_index
 						
 						var vol:ConvexVolume = ConvexVolume.new()
-						vol.init_from_convex_block_data(block.block_data)
+						vol.init_from_mesh_vector_data(block.mesh_vector_data)
 						
 						var face:ConvexVolume.FaceInfo = vol.faces[result.face_index]
 					
@@ -132,11 +132,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						cmd.uv_matrix = settings.uv_matrix
 
 						var block:CyclopsBlock = result.object
-						#var vol:ConvexVolume = ConvexVolume.new()
-						#vol.init_from_convex_block_data(block.block_data)
-						#var face:ConvexVolume.FaceInfo = vol.faces[result.face_index]
-						#var v_idx:int = face.get_closest_vertex(result.position)
-						#var vertex:ConvexVolume.VertexInfo = vol.vertices[v_idx]
 						
 						if settings.individual_faces:
 							cmd.add_target(block.get_path(), [result.face_index])

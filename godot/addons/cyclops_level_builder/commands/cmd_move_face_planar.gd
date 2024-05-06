@@ -37,7 +37,7 @@ var lock_uvs:bool = false
 #Private
 var block_name:String
 var block_selected:bool
-var tracked_block_data:ConvexBlockData
+var tracked_block_data:MeshVectorData
 
 var deleted:bool = false
 
@@ -52,10 +52,10 @@ func move_to(offset:Vector3, intermediate:bool):
 		
 		block_name = block.name
 		block_selected = block.selected
-		tracked_block_data = block.block_data
+		tracked_block_data = block.mesh_vector_data
 	
 	var ctl_mesh:ConvexVolume = ConvexVolume.new()
-	ctl_mesh.init_from_convex_block_data(tracked_block_data)
+	ctl_mesh.init_from_mesh_vector_data(tracked_block_data)
 	var new_mesh:ConvexVolume = ctl_mesh.translate_face_plane(face_index, offset, lock_uvs)
 
 	#print("offset %s" % offset)
@@ -72,12 +72,10 @@ func move_to(offset:Vector3, intermediate:bool):
 			deleted = true
 		return
 	
-	#ctl_mesh.remove_unused_planes()
 	#print("new_mesh %s" % new_mesh.get_points())
 	
-	var result_data:ConvexBlockData = new_mesh.to_convex_block_data()
-#	var result_data:ConvexBlockData = ctl_mesh.to_convex_block_data()
-	block.block_data = result_data
+	var result_data:MeshVectorData = new_mesh.to_mesh_vector_data()
+	block.mesh_vector_data = result_data
 
 	
 func do_it_intermediate():
@@ -93,7 +91,7 @@ func undo_it():
 		var blocks_root:Node = builder.get_node(blocks_root_path)
 		blocks_root.add_child(block)
 		block.owner = builder.get_editor_interface().get_edited_scene_root()
-		block.block_data = tracked_block_data
+		block.mesh_vector_data = tracked_block_data
 		block.name = block_name
 		block.selected = block_selected
 		

@@ -28,7 +28,7 @@ extends CyclopsCommand
 class BlockVertexChanges extends RefCounted:
 	var block_path:NodePath
 	var vertex_indices:Array[int] = []
-	var tracked_block_data:ConvexBlockData
+	var tracked_block_data:MeshVectorData
 
 #Public 
 var move_offset:Vector3 = Vector3.ZERO
@@ -49,7 +49,7 @@ func add_vertices(block_path:NodePath, indices:Array[int]):
 		changes = BlockVertexChanges.new()
 		changes.block_path = block_path
 		var block:CyclopsBlock = builder.get_node(block_path)
-		changes.tracked_block_data = block.block_data.duplicate()
+		changes.tracked_block_data = block.mesh_vector_data.duplicate()
 		block_map[block_path] = changes
 
 	for index in indices:
@@ -73,7 +73,7 @@ func do_it():
 		var rec:BlockVertexChanges = block_map[block_path]
 		
 		var vol:ConvexVolume = ConvexVolume.new()
-		vol.init_from_convex_block_data(rec.tracked_block_data)
+		vol.init_from_mesh_vector_data(rec.tracked_block_data)
 
 #		print("rec.vertex_indices %s" % rec.vertex_indices)
 #		print("move_offset %s" % move_offset)
@@ -100,7 +100,7 @@ func do_it():
 #				print("set sel")
 				v.selected = true
 
-		block.block_data = new_vol.to_convex_block_data()
+		block.mesh_vector_data = new_vol.to_mesh_vector_data()
 			
 	
 func undo_it():
@@ -108,4 +108,4 @@ func undo_it():
 	for block_path in block_map.keys():
 		var rec:BlockVertexChanges = block_map[block_path]
 		var block:CyclopsBlock = builder.get_node(block_path)
-		block.block_data = rec.tracked_block_data
+		block.mesh_vector_data = rec.tracked_block_data

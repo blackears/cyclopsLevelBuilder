@@ -26,10 +26,11 @@ class_name CommandIntersectBlock
 extends CyclopsCommand
 
 class NewBlockInfo extends RefCounted:
-	var data:ConvexBlockData
+	var data:MeshVectorData
 	var materials:Array[Material]
 	var path:NodePath
-	var centroid:Vector3
+	var xform:Transform3D
+	#var centroid:Vector3
 
 #Public 
 var block_paths:Array[NodePath]
@@ -49,7 +50,7 @@ func restore_tracked_block(tracked:TrackedBlock)->CyclopsBlock:
 	var parent = builder.get_node(tracked.path_parent)
 	
 	var block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
-	block.block_data = tracked.data
+	block.mesh_vector_data = tracked.data
 	block.materials = tracked.materials
 	block.name = tracked.name
 	#block.selected = tracked.selected
@@ -110,12 +111,11 @@ func do_it():
 			
 			
 		var block_info:NewBlockInfo = NewBlockInfo.new()
-		block_info.data = main_vol.to_convex_block_data()
 		block_info.materials = main_block.materials
-		var centroid:Vector3 = main_vol.get_centroid()
-		centroid = snap_to_grid_util.snap_point(centroid)
-		main_vol.translate(-centroid)
-		block_info.centroid = main_vol.get_centroid()
+		var xform_inv:Transform3D = main_block.global_transform.affine_inverse()
+		main_vol = main_vol.transformed(xform_inv)
+		block_info.data = main_vol.to_mesh_vector_data()
+		block_info.xform = main_block.global_transform
 		added_block = block_info
 
 	#Delete source blocks
@@ -126,15 +126,14 @@ func do_it():
 	main_block.queue_free()
 
 	#Create blocks
-#	for info in added_blocks:
 	var block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
 	var parent:Node = builder.get_node(start_blocks[0].path_parent)
 	parent.add_child(block)
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
 	block.name = GeneralUtil.find_unique_name(parent, block_name_prefix)
-	block.block_data = added_block.data
+	block.mesh_vector_data = added_block.data
 	block.materials = added_block.materials
-	block.global_transform = Transform3D.IDENTITY.translated(added_block.centroid)
+	block.global_transform = added_block.xform
 	
 	added_block.path = block.get_path()
 

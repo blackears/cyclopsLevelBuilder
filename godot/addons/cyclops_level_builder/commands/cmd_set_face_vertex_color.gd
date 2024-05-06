@@ -29,7 +29,7 @@ extends CyclopsCommand
 class BlockFaceVertexChanges extends RefCounted:
 	var block_path:NodePath
 	var face_vert_indices:Array[int]
-	var tracked_block_data:ConvexBlockData
+	var tracked_block_data:MeshVectorData
 
 var color:Color = Color.WHITE
 var strength:float = 1
@@ -55,7 +55,7 @@ func add_face_vertices(block_path:NodePath, indices:Array[int]):
 		changes = BlockFaceVertexChanges.new()
 		changes.block_path = block_path
 		var block:CyclopsBlock = builder.get_node(block_path)
-		changes.tracked_block_data = block.block_data
+		changes.tracked_block_data = block.mesh_vertex_data
 		block_map[block_path] = changes
 
 	for index in indices:
@@ -89,24 +89,24 @@ func will_change_anything()->bool:
 
 func do_it():
 	#print("sel verts do_it")
-#	print("sel uv_transform do_it()")
+	#print("sel face vert color do_it()")
 	for block_path in block_map.keys():
 #		print("path %s" % block_path)
 		
 		var rec:BlockFaceVertexChanges = block_map[block_path]
 		var block:CyclopsBlock = builder.get_node(block_path)
 			
-#		print("block_path %s" % block_path)
+		#print("block_path %s" % block_path)
 		var vol:ConvexVolume = ConvexVolume.new()
-		vol.init_from_convex_block_data(rec.tracked_block_data)
+		vol.init_from_mesh_vector_data(rec.tracked_block_data)
 
 		for fv_idx in vol.face_vertices.size():
 			if rec.face_vert_indices.has(fv_idx):
-#				print("face_idx %s" % f_idx)
+				#print("face_v_idx %s" % fv_idx)
 				var fv:ConvexVolume.FaceVertexInfo = vol.face_vertices[fv_idx]
 				fv.color = MathUtil.blend_colors_ignore_alpha(color, fv.color, strength)
 
-		block.block_data = vol.to_convex_block_data()
+		block.mesh_vector_data = vol.to_mesh_vector_data()
 	builder.selection_changed.emit()
 
 
@@ -115,7 +115,7 @@ func undo_it():
 	for block_path in block_map.keys():
 		var rec:BlockFaceVertexChanges = block_map[block_path]
 		var block:CyclopsBlock = builder.get_node(block_path)
-		block.block_data = rec.tracked_block_data
+		block.mesh_vector_data = rec.tracked_block_data
 
 	builder.selection_changed.emit()
 	

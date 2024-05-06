@@ -31,7 +31,7 @@ class Target extends RefCounted:
 
 class BlockCache extends RefCounted:
 	var path:NodePath
-	var data:ConvexBlockData
+	var data:MeshVectorData
 	var materials:Array[Material]
 
 #Public
@@ -78,7 +78,7 @@ func make_cache():
 		var block:CyclopsBlock = builder.get_node(t.block_path)
 
 		cache.path = block.get_path()
-		cache.data = block.block_data
+		cache.data = block.mesh_vector_data
 		cache.materials = block.materials.duplicate()
 
 		cache_list.append(cache)
@@ -86,52 +86,6 @@ func make_cache():
 func will_change_anything()->bool:
 	return !target_list.is_empty()
 	
-	#for t in target_list:
-#
-		#var block:CyclopsBlock = builder.get_node(t.block_path)
-#
-		#var data:ConvexBlockData = block.block_data
-		#var vol:ConvexVolume = ConvexVolume.new()
-		#vol.init_from_convex_block_data(data)
-#
-		#if setting_material:
-			##Find index of current material
-			#var target_material:Material
-			#var mat_idx:int = -1
-			#for m_idx in block.materials.size():
-				#var m:Material = block.materials[m_idx]
-				#if m.resource_path == material_path:
-					#mat_idx = m_idx
-					#break
-#
-			#if mat_idx == -1:
-				#return true
-#
-			#for f_idx in t.face_indices:
-				#var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
-				#if f.material_id != mat_idx:
-					#return true
-#
-		#if setting_color:
-			#for f_idx in t.face_indices:
-				#var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
-				#if f.color != color:
-					#return true
-#
-		#if setting_visibility:
-			#for f_idx in t.face_indices:
-				#var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
-				#if f.visible != visibility:
-					#return true
-#
-		#if painting_uv:
-			#for f_idx in t.face_indices:
-				#var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
-				#if f.uv_transform != uv_matrix:
-					#return true
-#
-	#return false
-
 func _init():
 	command_name = "Set material"
 
@@ -141,9 +95,9 @@ func do_it():
 	for tgt in target_list:
 		var block:CyclopsBlock = builder.get_node(tgt.block_path)
 
-		var data:ConvexBlockData = block.block_data
+		var data:MeshVectorData = block.mesh_vector_data
 		var vol:ConvexVolume = ConvexVolume.new()
-		vol.init_from_convex_block_data(data)
+		vol.init_from_mesh_vector_data(data)
 
 		if setting_material:
 
@@ -193,12 +147,12 @@ func do_it():
 				if painting_uv:
 					f.uv_transform = uv_matrix
 			
-		block.block_data = vol.to_convex_block_data()			
+		block.mesh_vector_data = vol.to_mesh_vector_data()
 
 
 func undo_it():
 	for cache in cache_list:
 		var block:CyclopsBlock = builder.get_node(cache.path)
 		block.materials = cache.materials.duplicate()
-		block.block_data = cache.data
+		block.mesh_vector_data = cache.data
 

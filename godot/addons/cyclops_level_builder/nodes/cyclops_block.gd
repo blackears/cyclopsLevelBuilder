@@ -59,8 +59,8 @@ var control_mesh:ConvexVolume
 			mvd.create_from_convex_block(block_data)
 			mesh_vector_data = mvd
 			
-			dirty = true
-			mesh_changed.emit()
+			#dirty = true
+			#mesh_changed.emit()
 
 @export var mesh_vector_data:MeshVectorData:
 	set(value):
@@ -244,7 +244,7 @@ func append_mesh_wire(mesh:ImmediateMesh):
 
 
 func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
-	if !block_data:
+	if !mesh_vector_data:
 		return null
 	
 	var xform:Transform3D = global_transform.affine_inverse()

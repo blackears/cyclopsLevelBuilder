@@ -24,4 +24,10 @@
 * You can now right-click fly when the vertex, edge or face tools are selected.
 * Adding alignment option to primitive creation tools so that you can turn off the auto alignment to surfaces.
 * ConvexVolume is now generating indexed meshes which should take up less memory and also allow occluders to be baked properly on exported scenes.
+* Intersection and subtraction commands now preserve original transform of components
+* Snap to grid command now uses new snapping manager
+* Improving face-vertex accuracy when transferring mesh attributes
+* Replacing ConvexBlockData with MeshVectorData which provides a flexible way to add data layers to mesh features
+
+
 

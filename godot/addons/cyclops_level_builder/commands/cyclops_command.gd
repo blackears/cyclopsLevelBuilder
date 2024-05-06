@@ -31,7 +31,7 @@ var builder:CyclopsLevelBuilder
 class TrackedBlock extends RefCounted:
 	var path:NodePath
 	var path_parent:NodePath
-	var data:ConvexBlockData
+	var data:MeshVectorData
 	var world_xform:Transform3D
 	var materials:Array[Material]
 	var selected:bool
@@ -44,7 +44,7 @@ class TrackedBlock extends RefCounted:
 		path = block.get_path()
 		path_parent = block.get_parent().get_path()
 		name = block.name
-		data = block.block_data.duplicate()
+		data = block.mesh_vector_data.duplicate()
 		world_xform = block.global_transform
 		#selected = block.selected
 		materials = block.materials

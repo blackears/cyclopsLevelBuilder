@@ -168,17 +168,24 @@ func create_from_convex_block(block_data:ConvexBlockData):
 		#fv_local_indices, 
 		#DataVector.DataType.INT))
 	
-	var col_fv_data:PackedColorArray
-	for fv_idx in num_face_vertices:
-		var f_idx:int = face_indices[fv_idx]
-		var v_idx:int = vert_indices[fv_idx]
-		col_fv_data.append(block_data.face_color[f_idx])
-		
+	if block_data.face_vertex_color.is_empty():
+		#Construct face vertex colors from old face colors system
+		var col_fv_data:PackedColorArray
+		for fv_idx in num_face_vertices:
+			var f_idx:int = face_indices[fv_idx]
+			var v_idx:int = vert_indices[fv_idx]
+			col_fv_data.append(block_data.face_color[f_idx])
+			
 
-	set_face_vertex_data(DataVectorFloat.new(FV_COLOR, 
-		col_fv_data.to_byte_array().to_float32_array(), 
-		DataVector.DataType.COLOR))
-
+		set_face_vertex_data(DataVectorFloat.new(FV_COLOR, 
+			col_fv_data.to_byte_array().to_float32_array(), 
+			DataVector.DataType.COLOR))
+	else:
+		#Copy face vertex colors
+		set_face_vertex_data(DataVectorFloat.new(FV_COLOR, 
+			block_data.face_vertex_color.to_byte_array().to_float32_array(), 
+			DataVector.DataType.COLOR))
+			
 	set_face_vertex_data(DataVectorFloat.new(FV_NORMAL, 
 		block_data.face_vertex_normal.to_byte_array().to_float32_array(), 
 		DataVector.DataType.VECTOR3))

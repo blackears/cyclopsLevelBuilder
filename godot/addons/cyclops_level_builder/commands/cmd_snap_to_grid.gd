@@ -26,7 +26,7 @@ class_name CommandSnapToGrid
 extends CyclopsCommand
 
 class TrackedInfo extends RefCounted:
-	var data:ConvexBlockData
+	var data:MeshVectorData
 	
 
 #Private
@@ -45,24 +45,24 @@ func add_block(block_path:NodePath):
 	var block:CyclopsBlock = builder.get_node(block_path)
 	#tracked_blocks.append(block)
 	var info:TrackedInfo = TrackedInfo.new()
-	info.data = block.block_data.duplicate()
+	info.data = block.mesh_vector_data.duplicate()
 #	info.materials = block.materials
 	tracked_block_data.append(info)
 
 
 func do_it():
-	var snap_to_grid_util:SnapToGridUtil = CyclopsAutoload.calc_snap_to_grid_util()
 
 	for i in blocks_to_move.size():
 		var block:CyclopsBlock = builder.get_node(blocks_to_move[i])
 		
 		var vol:ConvexVolume = ConvexVolume.new()
-		vol.init_from_convex_block_data(tracked_block_data[i].data)
+		vol.init_from_mesh_vector_data(tracked_block_data[i].data)
 
 		var points_new:PackedVector3Array
 		for v_idx in vol.vertices.size():
 			var v:ConvexVolume.VertexInfo = vol.vertices[v_idx]
-			var p_snap:Vector3 = snap_to_grid_util.snap_point(block.global_transform * v.point)
+			var p_snap:Vector3 = builder.get_snapping_manager().snap_point(
+				block.global_transform * v.point, SnappingQuery.new(null, []))
 			points_new.append(p_snap)
 			
 		var new_vol:ConvexVolume = ConvexVolume.new()
@@ -72,13 +72,13 @@ func do_it():
 
 		new_vol.copy_face_attributes(vol)
 
-		block.block_data = new_vol.to_convex_block_data()
+		block.mesh_vector_data = new_vol.to_mesh_vector_data()
 
 func undo_it():
 	for i in blocks_to_move.size():
 		var block:CyclopsBlock = builder.get_node(blocks_to_move[i])
 		
-		block.block_data = tracked_block_data[i].data
+		block.mesh_vector_data = tracked_block_data[i].data
 
 
 

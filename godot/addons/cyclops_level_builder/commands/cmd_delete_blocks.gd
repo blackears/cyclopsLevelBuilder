@@ -65,7 +65,7 @@ func undo_it():
 		var parent = builder.get_node(tracked.path_parent)
 		
 		var block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
-		block.block_data = tracked.data
+		block.mesh_vector_data = tracked.data
 		block.materials = tracked.materials
 		block.name = tracked.name
 		#block.selected = tracked.selected

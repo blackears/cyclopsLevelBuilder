@@ -25,9 +25,6 @@
 class_name CommandVertexPaintStroke
 extends CyclopsCommand
 
-#@export var block_path:NodePath
-#var tracked_block_data:ConvexBlockData
-
 @export var color:Color = Color.WHITE
 @export var strength:float = 1
 @export var radius:float = 1
@@ -51,7 +48,7 @@ func append_block(block_path:NodePath):
 
 	#print("stroing block faces ", block.block_data.face_vertex_face_index)
 	
-	block_map[block_path] = block.block_data.duplicate(true)
+	block_map[block_path] = block.mesh_vector_data.duplicate(true)
 	#print("stroing block faces ", block.block_data.face_vertex_face_index)
 #	block_tgt_map[block_path] = block.block_data.duplicate(true)
 	
@@ -79,11 +76,11 @@ func do_it():
 		var w2l:Transform3D = block.global_transform.affine_inverse()
 		#print("painting block ", block.name)
 
-		var block_data:ConvexBlockData = block_map[block_path]
+		var block_data:MeshVectorData = block_map[block_path]
 		#print("block_data raw faces ", block_data.face_vertex_face_index)
 		
 		var vol:ConvexVolume = ConvexVolume.new()
-		vol.init_from_convex_block_data(block_data)
+		vol.init_from_mesh_vector_data(block_data)
 		
 		#Apply stroke
 		for stroke_pt in stroke_resamp.stroke_points:
@@ -114,9 +111,9 @@ func do_it():
 				#print("fv_idx ", fv.index)
 				#print("fv color ", fv.color)
 				
-		var new_block_data:ConvexBlockData = vol.to_convex_block_data()
+		var new_block_data:MeshVectorData = vol.to_mesh_vector_data()
 		#print("new_block_data faces ", block.block_data.face_vertex_face_index)
-		block.block_data = new_block_data
+		block.mesh_vector_data = new_block_data
 					
 	builder.selection_changed.emit()
 
@@ -125,9 +122,9 @@ func undo_it():
 	for block_path in block_map.keys():
 		var block:CyclopsBlock = builder.get_node(block_path)
 
-		var block_data:ConvexBlockData = block_map[block_path]
+		var block_data:MeshVectorData = block_map[block_path]
 		
-		block.block_data = block_data
+		block.mesh_vector_data = block_data
 
 	builder.selection_changed.emit()
 

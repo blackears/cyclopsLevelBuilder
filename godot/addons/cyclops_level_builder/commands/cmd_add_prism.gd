@@ -67,7 +67,7 @@ func do_it():
 	mesh.init_prism(base_polygon, extrude, uv_transform, material_id)
 	mesh.transform(set_pivot_xform)
 
-	block.block_data = mesh.to_convex_block_data()
+	block.mesh_vector_data = mesh.to_mesh_vector_data()
 	block_path = block.get_path()
 
 	block.global_transform = set_pivot_xform.affine_inverse()

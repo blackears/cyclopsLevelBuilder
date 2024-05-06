@@ -586,7 +586,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, Vector3.UP)
 
 			#drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
-			print("send snap bock ", drag_home_block)
+			#print("send snap bock ", drag_home_block)
 			drag_to = builder.get_snapping_manager().snap_point(drag_to, SnappingQuery.new(viewport_camera, [drag_home_block]))
 
 			added_point_pos = drag_to

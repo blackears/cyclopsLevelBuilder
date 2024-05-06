@@ -28,7 +28,7 @@ class_name CommandTransformVertices
 extends CyclopsCommand
 
 class TrackedInfo extends RefCounted:
-	var data:ConvexBlockData
+	var data:MeshVectorData
 #	var materials:Array[Material]
 
 #Local space transform of points	
@@ -49,7 +49,7 @@ func add_block(block_path:NodePath):
 	var block:CyclopsBlock = builder.get_node(block_path)
 	#tracked_blocks.append(block)
 	var info:TrackedInfo = TrackedInfo.new()
-	info.data = block.block_data.duplicate()
+	info.data = block.mesh_vector_data.duplicate()
 #	info.materials = block.materials
 	tracked_block_data.append(info)
 
@@ -59,19 +59,13 @@ func apply_transform(xform:Transform3D):
 		var block:CyclopsBlock = builder.get_node(blocks_to_move[i])
 		
 		var ctl_mesh:ConvexVolume = ConvexVolume.new()
-		ctl_mesh.init_from_convex_block_data(tracked_block_data[i].data)
+		ctl_mesh.init_from_mesh_vector_data(tracked_block_data[i].data)
 		ctl_mesh.transform(xform, lock_uvs)
-		var result_data:ConvexBlockData = ctl_mesh.to_convex_block_data()
-		block.block_data = result_data
-#		block.materials = tracked_block_data[i].materials
-		#tracked_blocks[block_idx].block_data = result_data
+		var result_data:MeshVectorData = ctl_mesh.to_mesh_vector_data()
+		block.mesh_vector_data = result_data
+
 
 func do_it():
-#	if blocks_to_move.is_empty():
-#		var blocks:Array[CyclopsConvexBlock] = builder.get_selected_blocks()
-#		for block in blocks:
-#			add_block(block.get_path())
-	
 	apply_transform(transform)
 
 func undo_it():

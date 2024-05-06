@@ -83,14 +83,14 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						result.face_index
 						
 						var vol:ConvexVolume = ConvexVolume.new()
-						vol.init_from_convex_block_data(block.block_data)
+						vol.init_from_mesh_vector_data(block.mesh_vector_data)
 						
 						var face:ConvexVolume.FaceInfo = vol.faces[result.face_index]
 						var v_idx:int = face.get_closest_vertex(result.position)
 						var vert:ConvexVolume.VertexInfo = vol.vertices[v_idx]
 					
 						var fv:ConvexVolume.FaceVertexInfo = vol.get_face_vertex(result.face_index, v_idx)
-						print("sample color ", fv.color)
+						#print("sample color ", fv.color)
 					
 						settings.color = fv.color
 

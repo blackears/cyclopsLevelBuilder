@@ -26,10 +26,11 @@ class_name CommandSubtractBlock
 extends CyclopsCommand
 
 class NewBlockInfo extends RefCounted:
-	var data:ConvexBlockData
+	var data:MeshVectorData
 	var materials:Array[Material]
 	var path:NodePath
-	var centroid:Vector3
+	#var centroid:Vector3
+	var xform:Transform3D
 
 #Public 
 var block_paths:Array[NodePath]
@@ -48,7 +49,7 @@ func restore_tracked_block(tracked:TrackedBlock)->CyclopsBlock:
 	var parent = builder.get_node(tracked.path_parent)
 	
 	var block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
-	block.block_data = tracked.data
+	block.mesh_vector_data = tracked.data
 	block.materials = tracked.materials
 	block.name = tracked.name
 #	block.selected = tracked.selected
@@ -92,6 +93,7 @@ func do_it():
 		var subtrahend_vol:ConvexVolume = subtrahend_block.control_mesh
 		subtracted_block_cache = TrackedBlock.new(subtrahend_block)
 		subtrahend_vol = subtrahend_vol.transformed(subtrahend_block.global_transform)
+		var subtra_xform_inv:Transform3D = subtrahend_block.global_transform.affine_inverse()
 		
 		for path in block_paths:
 			var block:CyclopsBlock = builder.get_node(path)
@@ -108,14 +110,16 @@ func do_it():
 			
 			for f in fragments:
 				f.copy_face_attributes(minuend_vol)
-				var centroid:Vector3 = f.get_centroid()
-				centroid = snap_to_grid_util.snap_point(centroid)
-				f.translate(-centroid)
+				#var centroid:Vector3 = f.get_centroid()
+				#centroid = snap_to_grid_util.snap_point(centroid)
+				#f.translate(-centroid)
+				f = f.transformed(block.global_transform.affine_inverse())
 				
 				var block_info:NewBlockInfo = NewBlockInfo.new()
-				block_info.data = f.to_convex_block_data()
+				block_info.data = f.to_mesh_vector_data()
 				block_info.materials = block.materials
-				block_info.centroid = centroid
+				block_info.xform = block.global_transform
+				#block_info.centroid = centroid
 				added_blocks.append(block_info)
 
 	#Delete source blocks
@@ -132,9 +136,10 @@ func do_it():
 		parent.add_child(block)
 		block.owner = builder.get_editor_interface().get_edited_scene_root()
 		block.name = GeneralUtil.find_unique_name(parent, block_name_prefix)
-		block.block_data = info.data
+		block.mesh_vector_data = info.data
 		block.materials = info.materials
-		block.global_transform = Transform3D.IDENTITY.translated(info.centroid)
+#		block.global_transform = Transform3D.IDENTITY.translated(info.centroid)
+		block.global_transform = info.xform
 		
 		info.path = block.get_path()
 

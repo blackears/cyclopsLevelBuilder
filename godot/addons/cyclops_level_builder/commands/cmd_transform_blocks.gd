@@ -62,12 +62,12 @@ func do_it():
 		
 		if !lock_uvs:
 			var vol:ConvexVolume = ConvexVolume.new()
-			vol.init_from_convex_block_data(tracked.data)
+			vol.init_from_mesh_vector_data(tracked.data)
 			
 			var uv_xform:Transform3D = transform.affine_inverse()
 			vol.transform_uvs(uv_xform)
 			
-			block.block_data = vol.to_convex_block_data()
+			block.mesh_vector_data = vol.to_mesh_vector_data()
 
 func undo_it():
 	for tracked in tracked_blocks:

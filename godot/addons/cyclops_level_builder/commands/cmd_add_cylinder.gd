@@ -94,7 +94,8 @@ func do_it():
 			mesh.init_prism(base_points, axis_normal * height, uv_transform, material_id)
 			mesh.transform(set_pivot_xform)
 
-			block.block_data = mesh.to_convex_block_data()
+#			block.block_data = mesh.to_convex_block_data()
+			block.mesh_vector_data = mesh.to_mesh_vector_data()
 			block_paths.append(block.get_path())
 		
 	else:
@@ -105,7 +106,7 @@ func do_it():
 		mesh.init_prism(bounding_points, axis_normal * height, uv_transform, material_id)
 		mesh.transform(set_pivot_xform)
 
-		block.block_data = mesh.to_convex_block_data()
+		block.mesh_vector_data = mesh.to_mesh_vector_data()
 		block_paths.append(block.get_path())
 
 func undo_it():

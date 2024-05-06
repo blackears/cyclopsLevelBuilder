@@ -106,7 +106,7 @@ func replace_blocks_recursive(node:Node, root:Node):
 			
 			#Mesh
 			var vol:ConvexVolume = ConvexVolume.new()
-			vol.init_from_convex_block_data(child_block.block_data)
+			vol.init_from_mesh_vector_data(child_block.mesh_vector_data)
 
 			var mesh:ArrayMesh = vol.create_mesh(child_block.materials, default_material)
 			

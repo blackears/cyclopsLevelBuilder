@@ -31,7 +31,7 @@ var block_name_prefix:String = "Block_"
 
 #Private
 var tracked_blocks:Array[TrackedBlock]
-var merged_block_data:ConvexBlockData
+var merged_block_data:MeshVectorData
 var merged_mat_list:Array[Material]
 var merged_block_path:NodePath
 var world_pivot:Vector3
@@ -95,7 +95,7 @@ func do_it():
 			tracked_blocks.append(tracker)
 			
 			var world_block:ConvexVolume = ConvexVolume.new()
-			world_block.init_from_convex_block_data(block.control_mesh.to_convex_block_data())
+			world_block.init_from_mesh_vector_data(block.control_mesh.to_mesh_vector_data())
 			world_block.transform(block.global_transform)
 			points.append_array(world_block.get_points())
 			
@@ -103,7 +103,7 @@ func do_it():
 		merged_vol.init_from_points(points)
 		merged_mat_list = copy_face_attributes(merged_vol, block_paths)
 		merged_vol.translate(-world_pivot)
-		merged_block_data = merged_vol.to_convex_block_data()
+		merged_block_data = merged_vol.to_mesh_vector_data()
 		
 
 
@@ -118,7 +118,7 @@ func do_it():
 	parent.add_child(block)
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
 	block.name = GeneralUtil.find_unique_name(parent, block_name_prefix)
-	block.block_data = merged_block_data
+	block.mesh_vector_data = merged_block_data
 	block.materials = merged_mat_list
 	block.global_transform = Transform3D.IDENTITY.translated(world_pivot)
 	#block.materials
@@ -135,7 +135,7 @@ func undo_it():
 		var parent = builder.get_node(tracked.path_parent)
 		
 		var block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
-		block.block_data = tracked.data
+		block.mesh_vector_data = tracked.data
 		block.materials = tracked.materials
 		block.name = tracked.name
 		#block.selected = tracked.selected

@@ -68,7 +68,7 @@ func _on_bn_upgrade_pressed():
 			var old_block:CyclopsConvexBlock = child
 
 			var vol:ConvexVolume = ConvexVolume.new()
-			vol.init_from_convex_block_data(old_block.block_data)
+			vol.init_from_mesh_vector_data(old_block.mesh_vector_data)
 			var centroid:Vector3 = vol.get_centroid()
 			#centroid = MathUtil.snap_to_grid(centroid, grid_step_size)
 			vol.translate(-centroid)
@@ -79,6 +79,6 @@ func _on_bn_upgrade_pressed():
 
 			new_block.name = old_block.name
 			new_block.materials = old_block.materials
-			new_block.block_data = vol.to_convex_block_data()
+			new_block.mesh_vector_data = vol.to_mesh_vector_data()
 			new_block.global_transform = Transform3D.IDENTITY.translated(centroid)
 	

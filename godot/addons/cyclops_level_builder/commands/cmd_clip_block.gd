@@ -34,7 +34,7 @@ var material_path:String = ""
 
 #Private
 var block_sibling_name:String
-var old_block_data:ConvexBlockData
+var old_block_data:MeshVectorData
 var old_mat_list:Array[Material]
 var block_sibling_path:NodePath
 
@@ -54,7 +54,7 @@ func do_it():
 	var blocks_root:Node = builder.get_node(blocks_root_path)
 	var block:CyclopsBlock = builder.get_node(block_path)
 	
-	old_block_data = block.block_data.duplicate()
+	old_block_data = block.mesh_vector_data.duplicate()
 	old_mat_list = block.materials.duplicate()
 	
 	var new_mat_list0:Array[Material] = old_mat_list.duplicate()
@@ -78,7 +78,7 @@ func do_it():
 	var vol1:ConvexVolume = block.control_mesh.cut_with_plane(MathUtil.flip_plane(cut_plane_local), uv_transform, cut_mat_idx)
 
 	#Set data of existing block
-	block.block_data = vol0.to_convex_block_data()
+	block.mesh_vector_data = vol0.to_mesh_vector_data()
 	block.materials = new_mat_list0
 	
 	#Create second block
@@ -91,13 +91,13 @@ func do_it():
 	#block_sibling.selected = block.selected
 	block_sibling_path = block_sibling.get_path()
 
-	block_sibling.block_data = vol1.to_convex_block_data()
+	block_sibling.mesh_vector_data = vol1.to_mesh_vector_data()
 	block_sibling.materials = new_mat_list1
 	
 
 func undo_it():
 	var block:CyclopsBlock = builder.get_node(block_path)
-	block.block_data = old_block_data
+	block.mesh_vector_data = old_block_data
 	block.materials = old_mat_list.duplicate()
 	
 	var block_sibling:CyclopsBlock = builder.get_node(block_sibling_path)
