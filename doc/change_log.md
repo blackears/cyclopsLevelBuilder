@@ -28,6 +28,8 @@
 * Snap to grid command now uses new snapping manager
 * Improving face-vertex accuracy when transferring mesh attributes
 * Replacing ConvexBlockData with MeshVectorData which provides a flexible way to add data layers to mesh features
+* Now including .import files when creating addon archive
+
 
 
 
