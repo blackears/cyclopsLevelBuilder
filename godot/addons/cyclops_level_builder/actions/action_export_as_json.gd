@@ -22,13 +22,13 @@
 # SOFTWARE.
 
 @tool
-class_name ActionExportAsXml
+class_name ActionExportAsJSOM
 extends CyclopsAction
 
-var wizard:ExporterXMLWizard = preload("res://addons/cyclops_level_builder/exporter/exporter_xml_wizard.tscn").instantiate()
+var wizard:ExporterJSONWizard = preload("res://addons/cyclops_level_builder/exporter/exporter_json_wizard.tscn").instantiate()
 
 func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	super._init(plugin, "Export As XML...")
+	super._init(plugin, "Export As JSON...")
 
 func _execute():
 	var base_control:Node = plugin.get_editor_interface().get_base_control()

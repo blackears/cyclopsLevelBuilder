@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bxmmf4lvpqtvr"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/exporter/exporter_xml_wizard.gd" id="1_wgk0n"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/exporter/exporter_json_wizard.gd" id="1_107gl"]
 
 [sub_resource type="Theme" id="Theme_5yuos"]
 MarginContainer/constants/margin_bottom = 10
@@ -11,7 +11,7 @@ MarginContainer/constants/margin_top = 10
 [node name="Window" type="Window"]
 position = Vector2i(0, 36)
 size = Vector2i(600, 100)
-script = ExtResource("1_wgk0n")
+script = ExtResource("1_107gl")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchors_preset = 15
