@@ -307,11 +307,16 @@ func to_dictionary(file_builder:CyclopsFileBuilder)->Dictionary:
 	result["actiev_face"] = active_face
 	result["active_face_vertex"] = active_face_vertex
 	
-	result["edge_vertex_indices"] = edge_vertex_indices
-	result["edge_face_indices"] = edge_face_indices
-	
-	result["face_vertex_count"] = face_vertex_count
-	result["face_vertex_indices"] = face_vertex_indices
+#	vectors["face_vertices"].append(file_builder.export_vector(data_vec))
+	result["edge_vertex_index_buffer"] = file_builder.export_byte_array(edge_vertex_indices.to_byte_array())
+	result["edge_face_index_buffer"] = file_builder.export_byte_array(edge_face_indices.to_byte_array())
+	result["face_vertex_count_buffer"] = file_builder.export_byte_array(face_vertex_count.to_byte_array())
+	result["face_vertex_index_buffer"] = file_builder.export_byte_array(face_vertex_indices.to_byte_array())
+	#result["edge_vertex_indices"] = edge_vertex_indices
+	#result["edge_face_indices"] = edge_face_indices
+	#
+	#result["face_vertex_count"] = face_vertex_count
+	#result["face_vertex_indices"] = face_vertex_indices
 
 	var vectors:Dictionary = {
 		"vertices": [],

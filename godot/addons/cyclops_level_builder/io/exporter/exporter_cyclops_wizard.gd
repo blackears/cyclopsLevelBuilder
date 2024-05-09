@@ -193,9 +193,11 @@ func _on_bn_okay_pressed():
 	if !save_path.to_lower().ends_with(".cyclops"):
 		path = save_path + ".cyclops"
 
-	var json_builder:CyclopsFileBuilder = CyclopsFileBuilder.new(plugin)
+	var cyclops_file_builder:CyclopsFileBuilder = CyclopsFileBuilder.new(plugin)
 
-	var text = JSON.stringify(json_builder.document, "    ")
+	cyclops_file_builder.build_file()
+	
+	var text = JSON.stringify(cyclops_file_builder.document, "    ", false)
 
 	var file:FileAccess = FileAccess.open(path, FileAccess.WRITE)
 	file.store_string(text)
