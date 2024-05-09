@@ -127,6 +127,21 @@ class JSONBuilder extends RefCounted:
 		document.meshes.append(build_mesh)
 		
 		build_mesh["id"] = mesh_indexer.get_or_create_id(cur_node)
+		
+		build_mesh["collision_type"] = Collision.Type.values()[cur_node.collision_type]
+		build_mesh["collision_layer"] = cur_node.collision_layer
+		build_mesh["collision_mask"] = cur_node.collision_mask
+		
+		var mat_res_paths:PackedStringArray
+		for mat in cur_node.materials:
+			if mat:
+				mat_res_paths.append(mat.resource_path)
+			else:
+				mat_res_paths.append("")
+		build_mesh["materials"] = mat_res_paths
+		
+		
+		
 		cur_node.mesh_vector_data
 		
 		pass

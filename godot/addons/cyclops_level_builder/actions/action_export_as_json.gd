@@ -22,7 +22,7 @@
 # SOFTWARE.
 
 @tool
-class_name ActionExportAsJSOM
+class_name ActionExportAsJSON
 extends CyclopsAction
 
 var wizard:ExporterJSONWizard = preload("res://addons/cyclops_level_builder/exporter/exporter_json_wizard.tscn").instantiate()

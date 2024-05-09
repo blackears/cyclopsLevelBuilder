@@ -86,11 +86,11 @@ func init_from_mesh_vector_data(mvd:MeshVectorData):
 	active_face = mvd.active_face
 	active_face_vertex = mvd.active_face_vertex
 	
-	selected = mvd.selected
-	active = mvd.active
-	collision = mvd.collision
-	physics_layer = mvd.physics_layer
-	physics_mask = mvd.physics_mask
+	#selected = mvd.selected
+	#active = mvd.active
+	#collision = mvd.collision
+	#physics_layer = mvd.physics_layer
+	#physics_mask = mvd.physics_mask
 	
 	var v_pos:DataVectorFloat = mvd.get_vertex_data(MeshVectorData.V_POSITION)
 	vertex_points = v_pos.to_vec3_array()

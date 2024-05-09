@@ -153,8 +153,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_2e1pb"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -317,8 +315,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_tgb47"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -481,8 +477,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_sjmd2"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -645,8 +639,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_qti32"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -809,8 +801,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_qwh4f"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -973,8 +963,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_6tmfo"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -1137,8 +1125,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_a4h8w"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -1301,8 +1287,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_fy1jh"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -1465,8 +1449,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_6dqp5"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -1629,8 +1611,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_672l7"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -1793,8 +1773,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_3ad6u"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -1957,8 +1935,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_vqqim"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -2121,8 +2097,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_apqm4"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -2285,8 +2259,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_uecc1"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -2449,8 +2421,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_l0v0c"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -2613,8 +2583,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_7k2sl"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -2777,8 +2745,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_q5vws"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -2941,8 +2907,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_nhxpl"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -3105,8 +3069,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_xwg3q"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -3269,8 +3231,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_77kfu"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -3433,8 +3393,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_sbo0g"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -3597,8 +3555,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_1w2kc"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -3761,8 +3717,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_jfl47"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -3925,8 +3879,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_dwudu"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -4089,8 +4041,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_mok3k"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -4253,8 +4203,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_ulhl8"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -4417,8 +4365,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_1f1r1"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -4581,8 +4527,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_vyn8v"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -4745,8 +4689,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_jqa1r"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -4909,8 +4851,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_gje8c"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -5073,8 +5013,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_dkwaq"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -5237,8 +5175,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_si77p"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -5401,8 +5337,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_7u5by"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -5565,8 +5499,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_4kmnq"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -5729,8 +5661,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_jq6rn"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -5893,8 +5823,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_xhlx6"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -6057,8 +5985,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_4umes"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -6221,8 +6147,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_3462e"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -6385,8 +6309,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_06k3p"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -6549,8 +6471,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_7po8i"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -6713,8 +6633,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_f8gya"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -6877,8 +6795,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_x2bki"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -7041,8 +6957,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_jbwfl"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -7205,8 +7119,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_8mpqj"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -7369,8 +7281,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_504th"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -7533,8 +7443,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_6jpst"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -7697,8 +7605,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_xqpen"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -7861,8 +7767,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_iqq40"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -8025,8 +7929,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_8h2yp"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -8189,8 +8091,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_xqwcd"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -8353,8 +8253,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_htsvj"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -8517,8 +8415,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_3o18r"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -8681,8 +8577,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_k748w"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -8845,8 +8739,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_xaxy2"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -9009,8 +8901,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_7dijs"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -9173,8 +9063,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_smcwx"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -9337,8 +9225,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_63qgi"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -9501,8 +9387,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_e0d7f"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -9665,8 +9549,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_jdcq0"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -9829,8 +9711,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_5kg0s"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -9993,8 +9873,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_613ns"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -10157,8 +10035,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_ml2oh"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -10321,8 +10197,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_sgj7c"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -10485,8 +10359,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_iegbe"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -10649,8 +10521,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_cffix"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -10813,8 +10683,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_lb3ql"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -10977,8 +10845,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_oki6m"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -11141,8 +11007,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_563jp"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -11305,8 +11169,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_vrjil"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -11469,8 +11331,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_elta0"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -11633,8 +11493,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_t8lqb"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -11797,8 +11655,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_iklgl"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -11961,8 +11817,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_mikio"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -12125,8 +11979,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_526x8"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -12289,8 +12141,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_avtew"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -12453,8 +12303,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_4fc0e"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -12617,8 +12465,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_dj6y0"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -12781,8 +12627,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_ircf6"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -12945,8 +12789,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_hklg2"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -13109,8 +12951,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_21wie"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -13273,8 +13113,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_d3v2x"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -13437,8 +13275,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_csrad"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -13601,8 +13437,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_f12iq"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -13765,8 +13599,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_2bocv"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -13929,8 +13761,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_lvbyr"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -14093,8 +13923,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_ype2u"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -14257,8 +14085,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_bvy07"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -14421,8 +14247,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_dx77s"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -14585,8 +14409,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_dsmxy"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -14749,8 +14571,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_mxxso"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -14913,8 +14733,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_v5sgc"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -15077,8 +14895,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_wce02"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -15241,8 +15057,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_qysh2"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -15405,8 +15219,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_o0hl4"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -15569,8 +15381,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_0lawx"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -15733,8 +15543,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_228nr"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -15897,8 +15705,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_28j7b"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -16061,8 +15867,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_egtc8"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -16225,8 +16029,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_8k67l"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -16389,8 +16191,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_pbso5"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -16553,8 +16353,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_s4lgf"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -16717,8 +16515,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_fh3vu"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -16881,8 +16677,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_053mh"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -17045,8 +16839,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_7co3w"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -17209,8 +17001,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_nm1xk"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -17373,8 +17163,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_8tnh5"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -17537,8 +17325,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_ee3ex"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -17701,8 +17487,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_cykjp"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -17865,8 +17649,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_j2m3l"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -18029,8 +17811,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_klu4q"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -18193,8 +17973,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_gbwl2"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -18357,8 +18135,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_1bti2"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -18521,8 +18297,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_pre4g"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -18685,8 +18459,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_arvgf"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -18849,8 +18621,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_qpl15"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -19013,8 +18783,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_0ngqb"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -19177,8 +18945,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_pb2o3"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -19341,8 +19107,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_algw7"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -19505,8 +19269,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_n733x"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -19669,8 +19431,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_k5k8w"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -19833,8 +19593,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_16t7t"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -19997,8 +19755,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_i5nsg"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -20161,8 +19917,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_o5u4d"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -20325,8 +20079,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_2jj81"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -20489,8 +20241,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_fkg1g"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -20653,8 +20403,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_nxp0o"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -20817,8 +20565,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_q54eu"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -20981,8 +20727,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_ifnj6"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -21145,8 +20889,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_4x1gl"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -21309,8 +21051,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_7uojt"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -21473,8 +21213,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_654ek"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -21637,8 +21375,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_4in6h"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -21801,8 +21537,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_4sf2n"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -21965,8 +21699,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_7gguu"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -22129,8 +21861,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_ino2m"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -22293,8 +22023,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_d7q6m"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -22457,8 +22185,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_07xp0"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -22621,8 +22347,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_1mn3p"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -22785,8 +22509,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_515dg"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -22949,8 +22671,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_pptu5"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -23113,8 +22833,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_n0a7q"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -23277,8 +22995,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_cpwoe"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -23441,8 +23157,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_wtwln"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -23605,8 +23319,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_302nf"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -23769,8 +23481,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_4tdib"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -23933,8 +23643,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_wgvsr"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -24097,8 +23805,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_o3s1u"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -24261,8 +23967,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_kawth"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -24425,8 +24129,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_bxmif"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -24589,8 +24291,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_arflf"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -24753,8 +24453,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_uw5au"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -24917,8 +24615,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_qwfya"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -25081,8 +24777,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_mt3e4"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -25245,8 +24939,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_pa5s8"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -25409,8 +25101,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_64gm8"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -25573,8 +25263,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_hwgfk"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -25737,8 +25425,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_c7osw"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -25901,8 +25587,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_ivxm6"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -26065,8 +25749,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_ify1b"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -26229,8 +25911,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_g8u4e"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -26393,8 +26073,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_djppr"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -26557,8 +26235,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_wkj3r"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -26721,8 +26397,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_lt10o"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -26885,8 +26559,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_onv85"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -27049,8 +26721,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_enlr8"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -27213,8 +26883,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_fd7ld"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -27377,8 +27045,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_hocwt"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -27541,8 +27207,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_v1i8i"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -27705,8 +27369,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_arlco"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -27869,8 +27531,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_4pw6s"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0
@@ -28033,8 +27693,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_wkytx"]
 script = ExtResource("8_dd0et")
-selected = false
-active = false
 collision = true
 physics_layer = 0
 physics_mask = 0

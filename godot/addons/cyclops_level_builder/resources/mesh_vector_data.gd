@@ -26,11 +26,11 @@ extends Resource
 class_name MeshVectorData
 
 
-@export var selected:bool = false
-@export var active:bool = false
-@export var collision:bool = true
-@export_flags_3d_physics var physics_layer:int
-@export_flags_3d_physics var physics_mask:int
+#@export var selected:bool = false
+#@export var active:bool = false
+#@export var collision:bool = true
+#@export_flags_3d_physics var physics_layer:int
+#@export_flags_3d_physics var physics_mask:int
 
 @export var num_vertices:int
 @export var num_edges:int
@@ -78,11 +78,11 @@ const FV_UV2: StringName = "uv2"
 
 func create_from_convex_block(block_data:ConvexBlockData):
 
-	selected = block_data.selected
-	active = block_data.active
-	collision = block_data.collision
-	physics_layer = block_data.physics_layer
-	physics_mask = block_data.physics_mask
+	#selected = block_data.selected
+	#active = block_data.active
+	#collision = block_data.collision
+	#physics_layer = block_data.physics_layer
+	#physics_mask = block_data.physics_mask
 	
 	
 	num_vertices = block_data.vertex_points.size()
@@ -260,12 +260,11 @@ func to_xml()->XMLElement:
 	var rec_ele:XMLElement = XMLElement.new("record")
 	rec_ele.set_attribute("type", "mesh")
 	
-	rec_ele.set_attribute("selected", str(selected))
-	rec_ele.set_attribute("active", str(active))
-	rec_ele.set_attribute("collision", str(collision))
-	
-	rec_ele.set_attribute("physics_layer", str(physics_layer))
-	rec_ele.set_attribute("physics_mask", str(physics_mask))
+	#rec_ele.set_attribute("selected", str(selected))
+	#rec_ele.set_attribute("active", str(active))
+	#rec_ele.set_attribute("collision", str(collision))	
+	#rec_ele.set_attribute("physics_layer", str(physics_layer))
+	#rec_ele.set_attribute("physics_mask", str(physics_mask))
 
 	rec_ele.set_attribute("num_vertices", str(num_vertices))
 	rec_ele.set_attribute("num_edges", str(num_edges))

@@ -27,13 +27,6 @@ class_name CyclopsBlock
 
 signal mesh_changed
 
-@export var collision_type:Collision.Type = Collision.Type.STATIC:
-	get:
-		return collision_type
-	set(value):
-		collision_type = value
-		update_physics_body()
-
 var mesh_instance:MeshInstance3D
 var mesh_wire:MeshInstance3D
 var collision_body:PhysicsBody3D
@@ -77,6 +70,13 @@ var control_mesh:ConvexVolume
 
 var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
 var display_mode:DisplayMode.Type = DisplayMode.Type.MATERIAL
+
+@export var collision_type:Collision.Type = Collision.Type.STATIC:
+	get:
+		return collision_type
+	set(value):
+		collision_type = value
+		update_physics_body()
 
 @export_flags_3d_physics var collision_layer:int = 1:
 	get:
