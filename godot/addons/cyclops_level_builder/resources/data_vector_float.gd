@@ -127,3 +127,14 @@ func set_value_color(value:Color, index:int):
 	data[index * stride + 1] = value.g
 	data[index * stride + 2] = value.b
 	data[index * stride + 3] = value.a
+
+func get_buffer_byte_data()->PackedByteArray:
+	return data.to_byte_array()
+
+#func to_dictionary(buffer_ar:BufferArchive)->Dictionary:
+	#var result:Dictionary = super(buffer_ar)
+	#var region:BufferArchive.BufferRegion = buffer_ar.store_buffer(data.to_byte_array())
+	#
+	#result["data_buffer"] = region.index
+	#
+	#return result

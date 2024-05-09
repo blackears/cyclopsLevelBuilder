@@ -42,6 +42,21 @@ func size()->int:
 func num_components()->int:
 	return size() / stride
 
+func get_buffer_byte_data()->PackedByteArray:
+	return []
+
+#func to_dictionary(buffer_ar:BufferArchive)->Dictionary:
+	#var result:Dictionary
+	#
+	#result["name"] = name
+	#result["data_type"] = DataType.values()[data_type]
+	#if stride != 1:
+		#result["stride"] = stride
+	#if !category.is_empty():
+		#result["category"] = category
+	#
+	#return result
+
 static func data_type_num_components(type:DataType)->int:
 	match type:
 		DataType.BOOL:

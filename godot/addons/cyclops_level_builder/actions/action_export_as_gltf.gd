@@ -25,7 +25,7 @@
 class_name ActionExportAsGltf
 extends CyclopsAction
 
-var wizard:ExporterGltfWizard = preload("res://addons/cyclops_level_builder/exporter/exporter_gltf_wizard.tscn").instantiate()
+var wizard:ExporterGltfWizard = preload("res://addons/cyclops_level_builder/io/exporter/exporter_gltf_wizard.tscn").instantiate()
 
 func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
 	super._init(plugin, "Export As Gltf...")

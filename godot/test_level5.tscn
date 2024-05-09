@@ -1,4 +1,4 @@
-[gd_scene load_steps=2414 format=3 uid="uid://dry7akxbm6q2c"]
+[gd_scene load_steps=2400 format=3 uid="uid://dry7akxbm6q2c"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/nodes/cyclops_block.gd" id="1_ny18x"]
 [ext_resource type="PackedScene" uid="uid://c804hmr0770v5" path="res://scenes/characters/player_first_person.tscn" id="1_q8oa1"]
@@ -26,168 +26,6 @@ sky_material = SubResource("ProceduralSkyMaterial_pxqax")
 background_mode = 2
 background_color = Color(0.282353, 0.282353, 0.282353, 1)
 sky = SubResource("Sky_iulrs")
-
-[sub_resource type="Resource" id="Resource_w1jh1"]
-script = ExtResource("2_8tl54")
-selected = false
-active = false
-collision = true
-physics_layer = 0
-physics_mask = 0
-vertex_points = PackedVector3Array(0, 0, 3.75, 0, 0.25, 3.75, 3.25, 0.25, 3.75, 3.25, 0, 3.75, 3.25, 0.25, -1.5, 3.25, 0, -1.5, 0, 0.25, -1.5, 0, 0, -1.5)
-vertex_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0)
-edge_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-face_material_indices = PackedInt32Array(0, 0, 0, 0, 0, 0)
-face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
-face_visible = PackedByteArray(1, 1, 1, 1, 1, 1)
-face_color = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
-face_selected = PackedByteArray(0, 1, 0, 0, 0, 0)
-face_vertex_face_index = PackedInt32Array()
-face_vertex_vertex_index = PackedInt32Array()
-face_vertex_normal = PackedVector3Array()
-face_vertex_color = PackedColorArray()
-edge_vertex_indices = PackedInt32Array(0, 1, 1, 2, 2, 3, 3, 0, 4, 5, 5, 3, 2, 4, 6, 4, 1, 6, 7, 0, 5, 7, 6, 7)
-edge_face_indices = PackedInt32Array(0, 5, 0, 2, 0, 1, 0, 3, 1, 4, 1, 3, 1, 2, 2, 4, 2, 5, 3, 5, 3, 4, 4, 5)
-face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
-face_vertex_indices = PackedInt32Array(0, 1, 2, 3, 4, 5, 3, 2, 6, 4, 2, 1, 7, 0, 3, 5, 7, 5, 4, 6, 7, 6, 1, 0)
-active_vertex = -1
-active_edge = -1
-active_face = -1
-active_face_vertex = 0
-
-[sub_resource type="Resource" id="Resource_gjkt2"]
-script = ExtResource("5_k3ch5")
-data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-name = &"selected"
-category = ""
-data_type = 0
-stride = 1
-
-[sub_resource type="Resource" id="Resource_rr1ns"]
-script = ExtResource("7_fma16")
-data = PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
-name = &"color"
-category = ""
-data_type = 4
-stride = 4
-
-[sub_resource type="Resource" id="Resource_p2fw3"]
-script = ExtResource("6_p0syi")
-data = PackedInt32Array(0, 0, 0, 0, 0, 0)
-name = &"material_index"
-category = ""
-data_type = 1
-stride = 1
-
-[sub_resource type="Resource" id="Resource_llkas"]
-script = ExtResource("5_k3ch5")
-data = PackedByteArray(0, 1, 0, 0, 0, 0)
-name = &"selected"
-category = ""
-data_type = 0
-stride = 1
-
-[sub_resource type="Resource" id="Resource_1lxh0"]
-script = ExtResource("7_fma16")
-data = PackedFloat32Array(1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0)
-name = &"uv_transform"
-category = ""
-data_type = 8
-stride = 6
-
-[sub_resource type="Resource" id="Resource_wlhij"]
-script = ExtResource("5_k3ch5")
-data = PackedByteArray(1, 1, 1, 1, 1, 1)
-name = &"visible"
-category = ""
-data_type = 0
-stride = 1
-
-[sub_resource type="Resource" id="Resource_nw57j"]
-script = ExtResource("7_fma16")
-data = PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
-name = &"color"
-category = ""
-data_type = 4
-stride = 4
-
-[sub_resource type="Resource" id="Resource_g6hl2"]
-script = ExtResource("6_p0syi")
-data = PackedInt32Array(0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5)
-name = &"face_index"
-category = ""
-data_type = 1
-stride = 1
-
-[sub_resource type="Resource" id="Resource_vmrge"]
-script = ExtResource("7_fma16")
-data = PackedFloat32Array()
-name = &"normal"
-category = ""
-data_type = 6
-stride = 3
-
-[sub_resource type="Resource" id="Resource_ptn7y"]
-script = ExtResource("6_p0syi")
-data = PackedInt32Array(0, 1, 2, 3, 4, 5, 3, 2, 6, 4, 2, 1, 7, 0, 3, 5, 7, 5, 4, 6, 7, 6, 1, 0)
-name = &"vertex_index"
-category = ""
-data_type = 1
-stride = 1
-
-[sub_resource type="Resource" id="Resource_vnnaw"]
-script = ExtResource("7_fma16")
-data = PackedFloat32Array(0, 0, 3.75, 0, 0.25, 3.75, 3.25, 0.25, 3.75, 3.25, 0, 3.75, 3.25, 0.25, -1.5, 3.25, 0, -1.5, 0, 0.25, -1.5, 0, 0, -1.5)
-name = &"position"
-category = ""
-data_type = 6
-stride = 3
-
-[sub_resource type="Resource" id="Resource_k6a1q"]
-script = ExtResource("5_k3ch5")
-data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0)
-name = &"selected"
-category = ""
-data_type = 0
-stride = 1
-
-[sub_resource type="Resource" id="Resource_2e1pb"]
-script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
-num_vertices = 8
-num_edges = 12
-num_faces = 6
-num_face_vertices = 24
-active_vertex = 0
-active_edge = 0
-active_face = 0
-active_face_vertex = 0
-edge_vertex_indices = PackedInt32Array(0, 1, 1, 2, 2, 3, 3, 0, 4, 5, 5, 3, 2, 4, 6, 4, 1, 6, 7, 0, 5, 7, 6, 7)
-edge_face_indices = PackedInt32Array(0, 5, 0, 2, 0, 1, 0, 3, 1, 4, 1, 3, 1, 2, 2, 4, 2, 5, 3, 5, 3, 4, 4, 5)
-face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
-face_vertex_indices = PackedInt32Array(0, 1, 2, 3, 4, 5, 3, 2, 6, 4, 2, 1, 7, 0, 3, 5, 7, 5, 4, 6, 7, 6, 1, 0)
-vertex_data = {
-"position": SubResource("Resource_vnnaw"),
-"selected": SubResource("Resource_k6a1q")
-}
-edge_data = {
-"selected": SubResource("Resource_gjkt2")
-}
-face_data = {
-"color": SubResource("Resource_rr1ns"),
-"material_index": SubResource("Resource_p2fw3"),
-"selected": SubResource("Resource_llkas"),
-"uv_transform": SubResource("Resource_1lxh0"),
-"visible": SubResource("Resource_wlhij")
-}
-face_vertex_data = {
-"color": SubResource("Resource_nw57j"),
-"face_index": SubResource("Resource_g6hl2"),
-"normal": SubResource("Resource_vmrge"),
-"vertex_index": SubResource("Resource_ptn7y")
-}
 
 [sub_resource type="Resource" id="Resource_x6du3"]
 script = ExtResource("2_8tl54")
@@ -315,9 +153,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_tgb47"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -477,9 +312,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_sjmd2"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -639,9 +471,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_qti32"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -801,9 +630,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_qwh4f"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -963,9 +789,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_6tmfo"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -1125,9 +948,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_a4h8w"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -1287,9 +1107,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_fy1jh"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -1449,9 +1266,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_6dqp5"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -1611,9 +1425,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_672l7"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -1773,9 +1584,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_3ad6u"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -1935,9 +1743,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_vqqim"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -2097,9 +1902,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_apqm4"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -2259,9 +2061,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_uecc1"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -2421,9 +2220,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_l0v0c"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -2583,9 +2379,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_7k2sl"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -2745,9 +2538,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_q5vws"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -2907,9 +2697,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_nhxpl"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -3069,9 +2856,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_xwg3q"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -3231,9 +3015,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_77kfu"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -3393,9 +3174,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_sbo0g"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -3555,9 +3333,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_1w2kc"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -3717,9 +3492,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_jfl47"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -3879,9 +3651,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_dwudu"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -4041,9 +3810,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_mok3k"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -4203,9 +3969,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_ulhl8"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -4365,9 +4128,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_1f1r1"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -4527,9 +4287,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_vyn8v"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -4689,9 +4446,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_jqa1r"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -4851,9 +4605,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_gje8c"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -5013,9 +4764,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_dkwaq"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -5175,9 +4923,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_si77p"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -5337,9 +5082,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_7u5by"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -5499,9 +5241,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_4kmnq"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -5661,9 +5400,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_jq6rn"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -5823,9 +5559,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_xhlx6"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -5985,9 +5718,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_4umes"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -6147,9 +5877,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_3462e"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -6309,9 +6036,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_06k3p"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -6471,9 +6195,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_7po8i"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -6633,9 +6354,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_f8gya"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -6795,9 +6513,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_x2bki"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -6957,9 +6672,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_jbwfl"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -7119,9 +6831,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_8mpqj"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -7281,9 +6990,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_504th"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -7443,9 +7149,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_6jpst"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -7605,9 +7308,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_xqpen"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -7767,9 +7467,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_iqq40"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -7929,9 +7626,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_8h2yp"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -8091,9 +7785,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_xqwcd"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -8253,9 +7944,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_htsvj"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -8415,9 +8103,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_3o18r"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -8577,9 +8262,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_k748w"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -8739,9 +8421,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_xaxy2"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -8901,9 +8580,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_7dijs"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -9063,9 +8739,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_smcwx"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -9225,9 +8898,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_63qgi"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -9387,9 +9057,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_e0d7f"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -9549,9 +9216,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_jdcq0"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -9711,9 +9375,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_5kg0s"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -9873,9 +9534,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_613ns"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -10035,9 +9693,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_ml2oh"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -10197,9 +9852,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_sgj7c"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -10359,9 +10011,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_iegbe"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -10521,9 +10170,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_cffix"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -10683,9 +10329,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_lb3ql"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -10845,9 +10488,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_oki6m"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -11007,9 +10647,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_563jp"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -11169,9 +10806,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_vrjil"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -11331,9 +10965,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_elta0"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -11493,9 +11124,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_t8lqb"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -11655,9 +11283,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_iklgl"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -11817,9 +11442,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_mikio"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -11979,9 +11601,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_526x8"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -12141,9 +11760,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_avtew"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -12303,9 +11919,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_4fc0e"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -12465,9 +12078,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_dj6y0"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -12627,9 +12237,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_ircf6"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -12789,9 +12396,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_hklg2"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -12951,9 +12555,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_21wie"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -13113,9 +12714,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_d3v2x"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -13275,9 +12873,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_csrad"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -13437,9 +13032,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_f12iq"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -13599,9 +13191,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_2bocv"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -13761,9 +13350,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_lvbyr"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -13923,9 +13509,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_ype2u"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -14085,9 +13668,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_bvy07"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -14247,9 +13827,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_dx77s"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -14409,9 +13986,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_dsmxy"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -14571,9 +14145,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_mxxso"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -14733,9 +14304,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_v5sgc"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -14895,9 +14463,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_wce02"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -15057,9 +14622,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_qysh2"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -15219,9 +14781,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_o0hl4"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -15381,9 +14940,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_0lawx"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -15543,9 +15099,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_228nr"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -15705,9 +15258,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_28j7b"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -15867,9 +15417,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_egtc8"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -16029,9 +15576,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_8k67l"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -16191,9 +15735,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_pbso5"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -16353,9 +15894,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_s4lgf"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -16515,9 +16053,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_fh3vu"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -16677,9 +16212,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_053mh"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -16839,9 +16371,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_7co3w"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -17001,9 +16530,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_nm1xk"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -17163,9 +16689,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_8tnh5"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -17325,9 +16848,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_ee3ex"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -17487,9 +17007,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_cykjp"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -17649,9 +17166,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_j2m3l"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -17811,9 +17325,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_klu4q"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -17973,9 +17484,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_gbwl2"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -18135,9 +17643,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_1bti2"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -18297,9 +17802,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_pre4g"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -18459,9 +17961,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_arvgf"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -18621,9 +18120,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_qpl15"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -18783,9 +18279,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_0ngqb"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -18945,9 +18438,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_pb2o3"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -19107,9 +18597,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_algw7"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -19269,9 +18756,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_n733x"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -19431,9 +18915,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_k5k8w"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -19593,9 +19074,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_16t7t"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -19755,9 +19233,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_i5nsg"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -19917,9 +19392,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_o5u4d"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -20079,9 +19551,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_2jj81"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -20241,9 +19710,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_fkg1g"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -20403,9 +19869,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_nxp0o"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -20565,9 +20028,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_q54eu"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -20727,9 +20187,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_ifnj6"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -20889,9 +20346,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_4x1gl"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -21051,9 +20505,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_7uojt"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -21213,9 +20664,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_654ek"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -21375,9 +20823,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_4in6h"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -21537,9 +20982,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_4sf2n"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -21699,9 +21141,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_7gguu"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -21861,9 +21300,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_ino2m"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -22023,9 +21459,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_d7q6m"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -22185,9 +21618,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_07xp0"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -22347,9 +21777,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_1mn3p"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -22509,9 +21936,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_515dg"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -22671,9 +22095,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_pptu5"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -22833,9 +22254,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_n0a7q"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -22995,9 +22413,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_cpwoe"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -23157,9 +22572,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_wtwln"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -23319,9 +22731,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_302nf"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -23481,9 +22890,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_4tdib"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -23643,9 +23049,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_wgvsr"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -23805,9 +23208,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_o3s1u"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -23967,9 +23367,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_kawth"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -24129,9 +23526,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_bxmif"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -24291,9 +23685,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_arflf"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -24453,9 +23844,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_uw5au"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -24615,9 +24003,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_qwfya"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -24777,9 +24162,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_mt3e4"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -24939,9 +24321,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_pa5s8"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -25101,9 +24480,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_64gm8"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -25263,9 +24639,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_hwgfk"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -25425,9 +24798,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_c7osw"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -25587,9 +24957,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_ivxm6"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -25749,9 +25116,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_ify1b"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -25911,9 +25275,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_g8u4e"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -26073,9 +25434,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_djppr"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -26235,9 +25593,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_wkj3r"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -26397,9 +25752,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_lt10o"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -26559,9 +25911,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_onv85"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -26721,9 +26070,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_enlr8"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -26883,9 +26229,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_fd7ld"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -27045,9 +26388,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_hocwt"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -27207,9 +26547,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_v1i8i"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -27369,9 +26706,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_arlco"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -27531,9 +26865,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_4pw6s"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -27693,9 +27024,6 @@ stride = 1
 
 [sub_resource type="Resource" id="Resource_wkytx"]
 script = ExtResource("8_dd0et")
-collision = true
-physics_layer = 0
-physics_mask = 0
 num_vertices = 8
 num_edges = 12
 num_faces = 6
@@ -27747,13 +27075,6 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.5
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.261639, -5)
 
 [node name="cyclops_blocks" type="Node3D" parent="."]
-
-[node name="Block_2" type="Node3D" parent="cyclops_blocks"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.25, 0, -5)
-script = ExtResource("1_ny18x")
-block_data = SubResource("Resource_w1jh1")
-mesh_vector_data = SubResource("Resource_2e1pb")
-materials = Array[Material]([ExtResource("5_rkmv8")])
 
 [node name="Block_3" type="Node3D" parent="cyclops_blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.25, -6.25)

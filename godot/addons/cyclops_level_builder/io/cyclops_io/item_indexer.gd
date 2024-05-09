@@ -22,22 +22,15 @@
 # SOFTWARE.
 
 @tool
-class_name ActionExportAsJSON
-extends CyclopsAction
+class_name ItemIndexer
+extends RefCounted
 
-var wizard:ExporterJSONWizard = preload("res://addons/cyclops_level_builder/exporter/exporter_json_wizard.tscn").instantiate()
+var dict:Dictionary
 
-func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	super._init(plugin, "Export As JSON...")
-
-func _execute():
-	var base_control:Node = plugin.get_editor_interface().get_base_control()
-	base_control.add_child(wizard)
+func get_or_create_id(node:Variant)->int:
+	if dict.has(node):
+		return dict[node]
 	
-	wizard.plugin = plugin
-	wizard.popup_centered()
-	
-	
-	
-	
-	
+	var id:int = dict.size()
+	dict[node] = id
+	return id

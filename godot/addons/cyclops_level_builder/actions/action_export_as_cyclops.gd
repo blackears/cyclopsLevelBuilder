@@ -22,41 +22,22 @@
 # SOFTWARE.
 
 @tool
-extends DataVector
-class_name DataVectorByte
+class_name ActionExportAsCyclops
+extends CyclopsAction
 
-@export var data:PackedByteArray
+var wizard:ExporterCyclopsWizard = preload("res://addons/cyclops_level_builder/io/exporter/exporter_cyclops_wizard.tscn").instantiate()
 
-func _init(name:StringName = "", data:PackedByteArray = [], data_type:DataType = DataType.BOOL):
-	self.name = name
-	self.data = data
-	self.data_type = data_type
-	self.stride = data_type_num_components(data_type)
+func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
+	super._init(plugin, "Export As Cyclops File...")
 
-
-func get_buffer_byte_data()->PackedByteArray:
-	return data
-
-#func to_dictionary(buffer_ar:BufferArchive)->Dictionary:
-	#var result:Dictionary = super(buffer_ar)
-	#var region:BufferArchive.BufferRegion = buffer_ar.store_buffer(data)
-	#
-##	result["data"] = Marshalls.raw_to_base64(data.compress())
-	#result["data_buffer"] = region.index
-	#
-	#return result
+func _execute():
+	var base_control:Node = plugin.get_editor_interface().get_base_control()
+	base_control.add_child(wizard)
 	
-func get_data_format_type()->DataFormatType:
-	return DataFormatType.BYTE
+	wizard.plugin = plugin
+	wizard.popup_centered()
 	
-func size()->int:
-	return data.size()
-
-func resize(size:int):
-	data.resize(size * stride)
 	
-func get_value(index:int)->int:
-	return data[index]
-
-func set_value(value:int, index:int):
-	data[index] = value
+	
+	
+	

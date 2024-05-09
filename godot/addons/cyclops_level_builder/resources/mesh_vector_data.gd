@@ -293,3 +293,68 @@ func to_xml()->XMLElement:
 				
 	
 	return rec_ele
+
+func to_dictionary(file_builder:CyclopsFileBuilder)->Dictionary:
+	var result:Dictionary
+	
+	result["num_vertices"] = num_vertices
+	result["num_edges"] = num_edges
+	result["num_faces"] = num_faces
+	result["num_face_vertices"] = num_face_vertices
+	
+	result["active_vertex"] = active_vertex
+	result["active_edge"] = active_edge
+	result["actiev_face"] = active_face
+	result["active_face_vertex"] = active_face_vertex
+	
+	result["edge_vertex_indices"] = edge_vertex_indices
+	result["edge_face_indices"] = edge_face_indices
+	
+	result["face_vertex_count"] = face_vertex_count
+	result["face_vertex_indices"] = face_vertex_indices
+
+	var vectors:Dictionary = {
+		"vertices": [],
+		"edges": [],
+		"faces": [],
+		"face_vertices": []
+	}
+	result["vectors"] = vectors
+	
+	for key in vertex_data.keys():
+		var data_vec:DataVector = vertex_data[key]
+#		vectors["vertices"].append(data_vec.to_dictionary(buf_ar))
+		vectors["vertices"].append(file_builder.export_vector(data_vec))
+	
+	for key in edge_data.keys():
+		var data_vec:DataVector = edge_data[key]
+#		vectors["edges"].append(data_vec.to_dictionary(buf_ar))
+		vectors["edges"].append(file_builder.export_vector(data_vec))
+	
+	for key in face_data.keys():
+		var data_vec:DataVector = face_data[key]
+#		vectors["faces"].append(data_vec.to_dictionary(buf_ar))
+		vectors["faces"].append(file_builder.export_vector(data_vec))
+	
+	for key in face_vertex_data.keys():
+		var data_vec:DataVector = face_vertex_data[key]
+#		vectors["face_vertices"].append(data_vec.to_dictionary(buf_ar))
+		vectors["face_vertices"].append(file_builder.export_vector(data_vec))
+	
+	return result
+
+#func export_vector(vec:DataVector, file_builder:CyclopsFileBuilder)->Dictionary:
+	#var result:Dictionary
+	#
+	#result["name"] = vec.name
+	#result["data_type"] = DataVector.DataType.values()[vec.data_type]
+	#if vec.stride != 1:
+		#result["stride"] = vec.stride
+	#if !vec.category.is_empty():
+		#result["category"] = vec.category
+	#
+	#var region:BufferArchive.BufferRegion = file_builder.buf_ar.store_buffer(vec.get_buffer_byte_data())
+	#result["data_buffer"] = region.index
+	#
+	#return result
+	
