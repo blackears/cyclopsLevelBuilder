@@ -41,7 +41,6 @@ var convex_face_editor_dock:ConvexFaceEdtiorViewport
 var tool_properties_dock:ToolPropertiesDock
 var snapping_properties_dock:SnappingPropertiesDock
 var cyclops_console_dock:CyclopsConsole
-#var sticky_toolbar:StickyToolbar
 var main_toolbar:MainToolbar
 var editor_toolbar:EditorToolbar
 var upgrade_cyclops_blocks_toolbar:UpgradeCyclopsBlocksToolbar
@@ -134,9 +133,6 @@ func _enter_tree():
 	upgrade_cyclops_blocks_toolbar = preload("res://addons/cyclops_level_builder/menu/upgrade_cyclops_blocks_toolbar.tscn").instantiate()
 	upgrade_cyclops_blocks_toolbar.editor_plugin = self
 
-#	sticky_toolbar = preload("menu/sticky_toolbar.tscn").instantiate()
-#	sticky_toolbar.plugin = self
-#	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, sticky_toolbar)
 	add_control_to_bottom_panel(cyclops_console_dock, "Cyclops")
 	
 	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, main_toolbar)
@@ -176,7 +172,6 @@ func _exit_tree():
 	remove_custom_type("CyclopsConvexBlock")
 	remove_custom_type("CyclopsConvexBlockBody")
 	
-#	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, sticky_toolbar)
 	remove_control_from_bottom_panel(cyclops_console_dock)
 	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, main_toolbar)
 	
