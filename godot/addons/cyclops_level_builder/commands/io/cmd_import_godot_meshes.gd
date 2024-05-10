@@ -36,6 +36,9 @@ var added_blocks:Array[NodePath]
 func _init():
 	command_name = "Import Godot Meshes"
 
+func will_change_anything()->bool:
+	return !target_parent.is_empty() && !source_nodes.is_empty()
+
 func do_it():
 	var tgt_parent_node:Node = builder.get_node(target_parent)
 	if !tgt_parent_node || !(tgt_parent_node is Node3D):
@@ -61,6 +64,8 @@ func do_it():
 		block.collision_layer = collision_layers
 		block.collision_mask = collision_mask
 
+		added_blocks.append(block.get_path())
+
 		var best_mat:Material
 		var points:PackedVector3Array
 		for i in src_mesh_inst.mesh.get_surface_count():
@@ -75,7 +80,7 @@ func do_it():
 					points.append(pt)
 			else:
 				for idx in surface_arrs[Mesh.ARRAY_INDEX]:
-					points.append(surface_arrs[Mesh.ARRAY_VERTEX])
+					points.append(surface_arrs[Mesh.ARRAY_VERTEX][idx])
 				
 		if best_mat:
 			block.materials = [best_mat]
@@ -90,4 +95,5 @@ func undo_it():
 		var block:CyclopsBlock = builder.get_node(block_path)
 		block.queue_free()
 
+	added_blocks.clear()
 

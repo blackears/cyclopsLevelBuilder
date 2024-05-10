@@ -22,18 +22,45 @@
 # SOFTWARE.
 
 @tool
-extends PanelContainer
-class_name MainToolbar
+class_name ActionImportMeshInstance
+extends CyclopsAction
 
-var editor_plugin:CyclopsLevelBuilder
+func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
+	super._init(plugin, "Import Godot MeshInstance...")
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	%Cyclops.clear()
-	%Cyclops.add_action_item(ActionImportMeshInstance.new(editor_plugin))
+func _execute():
+	var nodes:Array[Node] = plugin.get_editor_interface().get_selection().get_selected_nodes()
+
+	if nodes.is_empty():
+		return
+
+	if !(nodes[-1] is Node3D):
+		return
+
+	var tgt_parent:Node3D = nodes[-1]
+	if tgt_parent is MeshInstance3D:
+		tgt_parent = tgt_parent.get_parent()
 	
+	var cmd:CommandImportGodotMeshes = CommandImportGodotMeshes.new()
+	cmd.builder = plugin
+	cmd.target_parent = tgt_parent.get_path()
+	#print("parent ", tgt_parent.get_path())
+	
+	for node in nodes:
+		import_branch_recursive(node, cmd)
+	
+	if !cmd.will_change_anything():
+		return
+		
+	var undo:EditorUndoRedoManager = plugin.get_undo_redo()
+	cmd.add_to_undo_manager(undo)
 
+func import_branch_recursive(node:Node3D, cmd:CommandImportGodotMeshes):
+	if node is MeshInstance3D:
+		cmd.source_nodes.append(node.get_path())
+		#print("src ", node.get_path())
+	
+	for child in node.get_children():
+		import_branch_recursive(child, cmd)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+	
