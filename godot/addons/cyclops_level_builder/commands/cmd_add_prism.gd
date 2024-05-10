@@ -25,16 +25,16 @@
 class_name CommandAddPrism
 extends CyclopsCommand
 
-var blocks_root_path:NodePath
-var block_name:String
-var base_polygon:PackedVector3Array
-var extrude:Vector3
+@export var blocks_root_path:NodePath
+@export var block_name:String
+@export var base_polygon:PackedVector3Array
+@export var extrude:Vector3
 #var local_transform:Transform3D
-var uv_transform:Transform2D
-var material_path:String
-var collision_type:Collision.Type = Collision.Type.STATIC
-var collision_layers:int = 1
-var collision_mask:int = 1
+@export var uv_transform:Transform2D
+@export var material_path:String
+@export var collision_type:Collision.Type = Collision.Type.STATIC
+@export var collision_layers:int = 1
+@export var collision_mask:int = 1
 
 #Private
 var block_path:NodePath
