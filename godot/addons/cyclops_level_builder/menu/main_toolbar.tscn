@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://bm17ky7j4lwqc"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/menu/main_toolbar.gd" id="1_7i5xc"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/menu/action_popup_menu.gd" id="2_8w58b"]
+
+[node name="MainToolbar" type="PanelContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_7i5xc")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="MenuBar" type="MenuBar" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="Cyclops" type="PopupMenu" parent="HBoxContainer/MenuBar"]
+unique_name_in_owner = true
+script = ExtResource("2_8w58b")

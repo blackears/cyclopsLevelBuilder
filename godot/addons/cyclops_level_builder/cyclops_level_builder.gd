@@ -42,6 +42,7 @@ var tool_properties_dock:ToolPropertiesDock
 var snapping_properties_dock:SnappingPropertiesDock
 var cyclops_console_dock:CyclopsConsole
 #var sticky_toolbar:StickyToolbar
+var main_toolbar:MainToolbar
 var editor_toolbar:EditorToolbar
 var upgrade_cyclops_blocks_toolbar:UpgradeCyclopsBlocksToolbar
 var activated:bool = false
@@ -99,6 +100,7 @@ func _enter_tree():
 		#print("load text:", text)
 		editor_cache = JSON.parse_string(text)
 		
+	add_custom_type("CyclopsScene", "Node3D", preload("nodes/cyclops_scene.gd"), preload("nodes/cyclops_blocks_icon.png"))
 	
 	add_custom_type("CyclopsBlock", "Node3D", preload("nodes/cyclops_block.gd"), preload("nodes/cyclops_blocks_icon.png"))
 	add_custom_type("CyclopsBlocks", "Node3D", preload("nodes/cyclops_blocks.gd"), preload("nodes/cyclops_blocks_icon.png"))
@@ -123,6 +125,9 @@ func _enter_tree():
 	cyclops_console_dock = preload("res://addons/cyclops_level_builder/docks/cyclops_console/cyclops_console.tscn").instantiate()
 	cyclops_console_dock.editor_plugin = self
 	
+	main_toolbar = preload("menu/main_toolbar.tscn").instantiate()
+	main_toolbar.editor_plugin = self
+	
 	editor_toolbar = preload("menu/editor_toolbar.tscn").instantiate()
 	editor_toolbar.editor_plugin = self
 
@@ -133,6 +138,8 @@ func _enter_tree():
 #	sticky_toolbar.plugin = self
 #	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, sticky_toolbar)
 	add_control_to_bottom_panel(cyclops_console_dock, "Cyclops")
+	
+	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, main_toolbar)
 	
 	var editor:EditorInterface = get_editor_interface()
 	var selection:EditorSelection = editor.get_selection()
@@ -162,6 +169,8 @@ func _exit_tree():
 	remove_autoload_singleton(AUTOLOAD_NAME)
 	#remove_autoload_singleton(CYCLOPS_HUD_NAME)
 	
+	remove_custom_type("CyclopsScene")
+	
 	remove_custom_type("CyclopsBlock")
 	remove_custom_type("CyclopsBlocks")
 	remove_custom_type("CyclopsConvexBlock")
@@ -169,6 +178,7 @@ func _exit_tree():
 	
 #	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, sticky_toolbar)
 	remove_control_from_bottom_panel(cyclops_console_dock)
+	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, main_toolbar)
 	
 	if activated:
 		remove_control_from_docks(material_dock)
@@ -186,6 +196,7 @@ func _exit_tree():
 	tool_properties_dock.queue_free()
 	snapping_properties_dock.queue_free()
 	cyclops_console_dock.queue_free()
+	main_toolbar.queue_free()
 	editor_toolbar.queue_free()
 	upgrade_cyclops_blocks_toolbar.queue_free()
 
