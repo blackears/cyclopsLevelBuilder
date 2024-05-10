@@ -270,3 +270,24 @@ func select_face(face_idx:int, select_type:Selection.Type = Selection.Type.REPLA
 		control_mesh.faces[face_idx].selected = !control_mesh.faces[face_idx].selected
 
 	mesh_changed.emit()
+
+func export_to_cyclops_file(file_builder:CyclopsFileBuilder)->Dictionary:
+	var result:Dictionary
+	
+	result["collision_type"] = Collision.Type.keys()[collision_type]
+	result["collision_layer"] = collision_layer
+	result["collision_mask"] = collision_mask
+	
+	var mat_res_paths:PackedStringArray
+	for mat in materials:
+		if mat:
+			mat_res_paths.append(mat.resource_path)
+		else:
+			mat_res_paths.append("")
+	result["materials"] = mat_res_paths
+	
+	if mesh_vector_data:
+		result["mesh"] = mesh_vector_data.to_dictionary(file_builder)
+	#build_mesh["mesh"] = cur_node.mesh_vector_data.to_dictionary(self)
+	return result
+	

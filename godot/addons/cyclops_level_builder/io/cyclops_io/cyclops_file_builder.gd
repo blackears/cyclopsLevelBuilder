@@ -52,7 +52,7 @@ var document:Dictionary
 #var meshes_group:Dictionary
 #var mesh_id_map:Dictionary
 var node_indexer:ItemIndexer = ItemIndexer.new()
-var mesh_indexer:ItemIndexer = ItemIndexer.new()
+var object_indexer:ItemIndexer = ItemIndexer.new()
 var buffer_region_indexer:ItemIndexer = ItemIndexer.new()
 
 var buffer_region_map:Dictionary
@@ -72,18 +72,18 @@ func build_file():
 		},
 		"scenes": [],
 		"nodes": [],
-		"meshes": [],
+		"objects": [],
 		"buffer_regions": [],
 		"buffers": []
 	}
-	
-	#print("doc: ", JSON.stringify(document))
-
-	var build_scene:Dictionary
-	build_scene["root"] = root.name
-	document.scenes.append(build_scene)
 
 	export_scene_recursive(root)
+
+	#var build_scene:Dictionary
+	#build_scene["root"] = root.name
+	document.scenes.append({
+		"root": node_indexer.get_or_create_id(root)
+	})
 	
 	for id in buffer_region_map.keys():
 		var region:BufferArchive.BufferRegion = buffer_region_map[id]
@@ -100,21 +100,40 @@ func build_file():
 	
 
 func export_scene_recursive(cur_node:Node3D):
-	if cur_node is Node3D:
-		
-		var build_node:Dictionary
-		build_node["id"] = node_indexer.get_or_create_id(cur_node)
-		build_node["name"] = cur_node.name
-		document.nodes.append(build_node)
+	#print(str(cur_node.get_path()) + "\n")
+	
+	var build_node:Dictionary
+	build_node["id"] = node_indexer.get_or_create_id(cur_node)
+	build_node["name"] = cur_node.name
+	document.nodes.append(build_node)
 
-		if !cur_node.position.is_equal_approx(Vector3.ZERO):
-			build_node["translate"] = [cur_node.position.x, cur_node.position.y, cur_node.position.z]
-		if !cur_node.transform.basis.is_equal_approx(Basis.IDENTITY):
-			build_node["basis"] = [
-				cur_node.basis.x.x, cur_node.basis.x.y, cur_node.basis.x.z,
-				cur_node.basis.y.x, cur_node.basis.y.y, cur_node.basis.y.z,
-				cur_node.basis.z.x, cur_node.basis.z.y, cur_node.basis.z.z
-				]
+	if !cur_node.position.is_equal_approx(Vector3.ZERO):
+		build_node["translate"] = [cur_node.position.x, cur_node.position.y, cur_node.position.z]
+	if !cur_node.transform.basis.is_equal_approx(Basis.IDENTITY):
+		build_node["basis"] = [
+			cur_node.basis.x.x, cur_node.basis.x.y, cur_node.basis.x.z,
+			cur_node.basis.y.x, cur_node.basis.y.y, cur_node.basis.y.z,
+			cur_node.basis.z.x, cur_node.basis.z.y, cur_node.basis.z.z
+			]
+
+
+	
+	if cur_node is CyclopsBlock:
+		var obj_id:int = object_indexer.get_or_create_id(cur_node)
+		build_node["object"] = obj_id
+		
+		var dict:Dictionary = cur_node.export_to_cyclops_file(self)
+		
+		document.objects.append(
+			{
+				"id": obj_id,
+				"type": "convex_block",
+				"body": dict
+			}
+		)
+		#export_mesh_node(cur_node)
+	else:
+#		print("children of ", cur_node.name)
 
 		var child_ids:Array[int]
 		for local_child in cur_node.get_children():
@@ -123,28 +142,21 @@ func export_scene_recursive(cur_node:Node3D):
 		if !child_ids.is_empty():
 			build_node["children"] = child_ids
 
-	
 		for local_child in cur_node.get_children():
 			if local_child is Node3D:
+#				print("  recur ", local_child.name)
 				export_scene_recursive(local_child)
-		
-		if cur_node is CyclopsBlock:
-			var mesh_id:int = mesh_indexer.get_or_create_id(cur_node)
-				
-			build_node["mesh"] = mesh_id
-			export_mesh_node(cur_node)
-			pass
-			
+
 func export_mesh_node(cur_node:CyclopsBlock):
 	if !cur_node.mesh_vector_data:
 		return
 	
 	var build_mesh:Dictionary
-	document.meshes.append(build_mesh)
+	document.objects.append(build_mesh)
 	
-	build_mesh["id"] = mesh_indexer.get_or_create_id(cur_node)
+	build_mesh["id"] = object_indexer.get_or_create_id(cur_node)
 	
-	build_mesh["collision_type"] = Collision.Type.values()[cur_node.collision_type]
+	build_mesh["collision_type"] = Collision.Type.keys()[cur_node.collision_type]
 	build_mesh["collision_layer"] = cur_node.collision_layer
 	build_mesh["collision_mask"] = cur_node.collision_mask
 	
@@ -174,7 +186,7 @@ func export_vector(vec:DataVector)->Dictionary:
 	var result:Dictionary
 	
 	result["name"] = vec.name
-	result["data_type"] = DataVector.DataType.values()[vec.data_type]
+	result["data_type"] = DataVector.DataType.keys()[vec.data_type]
 	if vec.stride != 1:
 		result["stride"] = vec.stride
 	if !vec.category.is_empty():
