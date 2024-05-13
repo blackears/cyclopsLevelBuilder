@@ -31,18 +31,12 @@ func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_
 	super._init(plugin, "Export As Godot Scene...")
 
 func _execute():
-	var base_control:Node = plugin.get_editor_interface().get_base_control()
-	base_control.add_child(wizard)
+	if !wizard.get_parent():
+		var base_control:Node = plugin.get_editor_interface().get_base_control()
+		base_control.add_child(wizard)
 	
 	wizard.plugin = plugin
 	wizard.popup_centered()
-	
-	#await base_control.get_tree().process_frame
-	
-#	wizard.popup_hide.connect(func(): wizard.queue_free() )
-	
-	#wizard.popup_centered()
-	
 	
 	
 	

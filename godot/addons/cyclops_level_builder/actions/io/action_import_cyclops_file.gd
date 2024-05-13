@@ -22,18 +22,18 @@
 # SOFTWARE.
 
 @tool
-extends PanelContainer
-class_name MainToolbar
+class_name ActionImportCyclopsFile
+extends CyclopsAction
 
-var editor_plugin:CyclopsLevelBuilder
+var wizard:ImporterCyclopsFileWizard = preload("res://addons/cyclops_level_builder/io/importer/importer_cyclops_file_wizard.tscn").instantiate()
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	%Cyclops.clear()
-	%Cyclops.add_action_item(ActionImportMeshInstance.new(editor_plugin))
-	%Cyclops.add_action_item(ActionImportCyclopsFile.new(editor_plugin))
+func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
+	super._init(plugin, "Import Cyclops File...")
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+func _execute():
+	if !wizard.get_parent():
+		var base_control:Node = plugin.get_editor_interface().get_base_control()
+		base_control.add_child(wizard)
+	
+	wizard.plugin = plugin
+	wizard.popup_centered()

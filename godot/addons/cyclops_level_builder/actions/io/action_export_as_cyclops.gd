@@ -31,8 +31,9 @@ func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_
 	super._init(plugin, "Export As Cyclops File...")
 
 func _execute():
-	var base_control:Node = plugin.get_editor_interface().get_base_control()
-	base_control.add_child(wizard)
+	if !wizard.get_parent():
+		var base_control:Node = plugin.get_editor_interface().get_base_control()
+		base_control.add_child(wizard)
 	
 	wizard.plugin = plugin
 	wizard.popup_centered()
