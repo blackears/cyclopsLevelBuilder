@@ -49,7 +49,7 @@ func _init():
 	command_name = "Add stairs"
 
 func create_block(blocks_root:Node, mat:Material)->CyclopsBlock:
-	var block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
+	var block:CyclopsBlock = preload("res://addons/cyclops_level_builder/nodes/cyclops_block.gd").new()
 	blocks_root.add_child(block)
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
 	block.name = GeneralUtil.find_unique_name(blocks_root, block_name_prefix)

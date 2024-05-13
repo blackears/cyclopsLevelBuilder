@@ -49,7 +49,8 @@ func set_value(value:String, index:int):
 	data[index] = value
 
 func get_buffer_byte_data()->PackedByteArray:
-	return data.to_byte_array()
+	return var_to_bytes(data)
+#	return data.to_byte_array()
 
 #func to_dictionary(buffer_ar:BufferArchive)->Dictionary:
 	#var result:Dictionary = super(buffer_ar)

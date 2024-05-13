@@ -25,32 +25,11 @@
 class_name CyclopsFileBuilder 
 extends RefCounted
 
-
-#class ItemIndexer extends RefCounted:
-	#var dict:Dictionary
-	#
-	#func get_or_create_id(node:Variant)->int:
-		#if dict.has(node):
-			#return dict[node]
-		#
-		#var id:int = dict.size()
-		#dict[node] = id
-		#return id
 		
 var plugin:CyclopsLevelBuilder
 var buffer_archive:BufferArchive = BufferArchive.new()
 
-#var doc:XMLDocument
-#var root_ele:XMLElement
-#var scenes_ele:XMLElement
-#var nodes_ele:XMLElement
-#var meshes_ele:XMLElement
-
 var document:Dictionary
-#var scenes_group:Dictionary
-#var nodes_group:Dictionary
-#var meshes_group:Dictionary
-#var mesh_id_map:Dictionary
 var node_indexer:ItemIndexer = ItemIndexer.new()
 var object_indexer:ItemIndexer = ItemIndexer.new()
 var buffer_region_indexer:ItemIndexer = ItemIndexer.new()
@@ -91,11 +70,13 @@ func build_file():
 			"id": id,
 			"start": region.start_byte,
 			"length": region.length,
+			"buffer_id": 0
 		})
 	
 	document.buffers.append({
 		"id": 0,
-		"data": Marshalls.raw_to_base64(buffer_archive.buffer.compress())
+		"byte_length": buffer_archive.buffer.size(),
+		"data_buffer": Marshalls.raw_to_base64(buffer_archive.buffer.compress())
 		})
 	
 
@@ -187,8 +168,8 @@ func export_vector(vec:DataVector)->Dictionary:
 	
 	result["name"] = vec.name
 	result["data_type"] = DataVector.DataType.keys()[vec.data_type]
-	if vec.stride != 1:
-		result["stride"] = vec.stride
+	#if vec.stride != 1:
+		#result["stride"] = vec.stride
 	if !vec.category.is_empty():
 		result["category"] = vec.category
 	

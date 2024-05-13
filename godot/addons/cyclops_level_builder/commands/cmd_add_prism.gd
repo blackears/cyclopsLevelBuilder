@@ -43,7 +43,7 @@ func _init():
 	command_name = "Add prism"
 
 func do_it():
-	var block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
+	var block:CyclopsBlock = preload("res://addons/cyclops_level_builder/nodes/cyclops_block.gd").new()
 	
 	var blocks_root:Node = builder.get_node(blocks_root_path)
 	blocks_root.add_child(block)

@@ -43,7 +43,7 @@ func _init():
 	command_name = "Add block"
 
 func do_it():
-	var block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
+	var block:CyclopsBlock = preload("res://addons/cyclops_level_builder/nodes/cyclops_block.gd").new()
 		
 	#var blocks_root:Node = builder.get_block_add_parent()
 	var block_parent:Node = builder.get_node(blocks_root_path)
