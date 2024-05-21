@@ -98,5 +98,9 @@ func load_file(root:Dictionary):
 
 func set_owner_recursive(loaded_node:Node3D, owner_node:Node3D):
 	loaded_node.owner = owner_node
+	if loaded_node is CyclopsBlock:
+		#Do not set owner of hidden children
+		return
+	
 	for child in loaded_node.get_children():
 		set_owner_recursive(child, owner_node)

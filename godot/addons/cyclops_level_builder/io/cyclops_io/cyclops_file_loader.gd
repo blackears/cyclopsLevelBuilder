@@ -85,7 +85,7 @@ func load(root:Dictionary):
 		
 		node_map[id] = node
 		
-		if node_dict.has["name"]:
+		if node_dict.has("name"):
 			node.name = node_dict["name"]
 		
 		if node_dict.has("visible"):
