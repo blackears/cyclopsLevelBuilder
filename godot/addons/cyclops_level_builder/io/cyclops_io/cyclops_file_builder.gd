@@ -40,6 +40,16 @@ var buffer_region_map:Dictionary
 func _init(plugin:CyclopsLevelBuilder):
 	self.plugin = plugin
 
+func should_include_branch(node:Node3D)->bool:
+	if node is CyclopsBlock:
+		return true
+	
+	for child in node.get_children():
+		if child is Node3D && should_include_branch(child):
+			return true
+	
+	return false
+
 func build_file():
 
 	var root:Node = plugin.get_editor_interface().get_edited_scene_root()
@@ -61,6 +71,7 @@ func build_file():
 	#var build_scene:Dictionary
 	#build_scene["root"] = root.name
 	document.scenes.append({
+		"id": 0,
 		"root": node_indexer.get_or_create_id(root)
 	})
 	
@@ -82,12 +93,16 @@ func build_file():
 
 func export_scene_recursive(cur_node:Node3D):
 	#print(str(cur_node.get_path()) + "\n")
+	if !should_include_branch(cur_node):
+		return
 	
 	var build_node:Dictionary
 	build_node["id"] = node_indexer.get_or_create_id(cur_node)
 	build_node["name"] = cur_node.name
 	document.nodes.append(build_node)
 
+	if !cur_node.visible:
+		build_node["visible"] = cur_node.visible
 	if !cur_node.position.is_equal_approx(Vector3.ZERO):
 		build_node["translate"] = [cur_node.position.x, cur_node.position.y, cur_node.position.z]
 	if !cur_node.transform.basis.is_equal_approx(Basis.IDENTITY):
@@ -117,15 +132,16 @@ func export_scene_recursive(cur_node:Node3D):
 #		print("children of ", cur_node.name)
 
 		var child_ids:Array[int]
+		var exp_children:Array[Node3D]
 		for local_child in cur_node.get_children():
-			if local_child is Node3D:
+			if local_child is Node3D && should_include_branch(local_child):
 				child_ids.append(node_indexer.get_or_create_id(local_child))
+				exp_children.append(local_child)
+				
 		if !child_ids.is_empty():
 			build_node["children"] = child_ids
 
-		for local_child in cur_node.get_children():
-			if local_child is Node3D:
-#				print("  recur ", local_child.name)
+			for local_child in exp_children:
 				export_scene_recursive(local_child)
 
 func export_mesh_node(cur_node:CyclopsBlock):

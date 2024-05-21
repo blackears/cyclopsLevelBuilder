@@ -35,6 +35,8 @@ var buffer_archive:BufferArchive = BufferArchive.new()
 var buffer_map:Dictionary
 var buffer_region_map:Dictionary
 var object_map:Dictionary
+var node_map:Dictionary
+var scene_map:Dictionary
 
 var plugin:CyclopsLevelBuilder
 
@@ -72,9 +74,45 @@ func load(root:Dictionary):
 		if object_node:
 			object_map[id] = object_node
 	
+	for node_dict in root["nodes"]:
+		var id:int = node_dict["id"]
+		var node:Node3D
+		if node_dict.has("object"):
+			var obj_id:int = node_dict["object"]
+			node = object_map[obj_id]
+		else:
+			node = Node3D.new()
+		
+		node_map[id] = node
+		
+		if node_dict.has["name"]:
+			node.name = node_dict["name"]
+		
+		if node_dict.has("visible"):
+			node.visible = node_dict["visible"]
+		if node_dict.has("basis"):
+			var a:Array = node_dict["basis"]
+			var basis:Basis = Basis(Vector3(a[0], a[1], a[2]), Vector3(a[3], a[4], a[5]), Vector3(a[6], a[7], a[8]))
+			node.basis = basis
+		if node_dict.has("translate"):
+			var a:Array = node_dict["translate"]
+			node.position = Vector3(a[0], a[1], a[2])
 	
-	
-	pass
+	for node_dict in root["nodes"]:
+		var id:int = node_dict["id"]
+		var node:Node3D = node_map[id]
+		
+		if node_dict.has("children"):
+			for child_idx in node_dict["children"]:
+				
+				var child_node:Node3D = node_map[int(child_idx)]
+				node.add_child(child_node)
+		
+	for scene_dict in root["scenes"]:
+		var id:int = scene_dict["id"]
+		var root_id:int = scene_dict["root"]
+		scene_map[id] = root_id
+		
 
 func load_convex_block(body_dict:Dictionary)->CyclopsBlock:
 	var block:CyclopsBlock = preload("res://addons/cyclops_level_builder/nodes/cyclops_block.gd").new()
@@ -90,39 +128,40 @@ func load_convex_block(body_dict:Dictionary)->CyclopsBlock:
 		var res = ResourceLoader.load(mat_res_path)
 		block.materials.append(res)
 
-	var mesh_dict:Dictionary = body_dict["mesh"]
-	var mesh:MeshVectorData = MeshVectorData.new()
-	mesh.num_vertices = mesh_dict["num_vertices"]
-	mesh.num_edges = mesh_dict["num_edges"]
-	mesh.num_faces = mesh_dict["num_faces"]
-	mesh.num_face_vertices = mesh_dict["num_face_vertices"]
-	mesh.active_vertex = mesh_dict["active_vertex"]
-	mesh.active_edge = mesh_dict["active_edge"]
-	mesh.actiev_face = mesh_dict["actiev_face"]
-	mesh.active_face_vertex = mesh_dict["active_face_vertex"]
-	
-	mesh.edge_vertex_indices = load_buffer(mesh_dict["edge_vertex_index_buffer"]).to_int32_array()
-	mesh.edge_face_index_buffer = load_buffer(mesh_dict["edge_face_index_buffer"]).to_int32_array()
-	mesh.face_vertex_count_buffer = load_buffer(mesh_dict["face_vertex_count_buffer"]).to_int32_array()
-	mesh.face_vertex_index_buffer = load_buffer(mesh_dict["face_vertex_index_buffer"]).to_int32_array()
+	if body_dict.has("mesh"):
+		var mesh_dict:Dictionary = body_dict["mesh"]
+		var mesh:MeshVectorData = MeshVectorData.new()
+		mesh.num_vertices = mesh_dict["num_vertices"]
+		mesh.num_edges = mesh_dict["num_edges"]
+		mesh.num_faces = mesh_dict["num_faces"]
+		mesh.num_face_vertices = mesh_dict["num_face_vertices"]
+		mesh.active_vertex = mesh_dict["active_vertex"]
+		mesh.active_edge = mesh_dict["active_edge"]
+		mesh.active_face = mesh_dict["active_face"]
+		mesh.active_face_vertex = mesh_dict["active_face_vertex"]
+		
+		mesh.edge_vertex_indices = load_buffer(mesh_dict["edge_vertex_index_buffer"]).to_int32_array()
+		mesh.edge_face_indices = load_buffer(mesh_dict["edge_face_index_buffer"]).to_int32_array()
+		mesh.face_vertex_count = load_buffer(mesh_dict["face_vertex_count_buffer"]).to_int32_array()
+		mesh.face_vertex_indices = load_buffer(mesh_dict["face_vertex_index_buffer"]).to_int32_array()
 
-	for vec_dict in mesh_dict["vectors"]["vertices"]:
-		var vec:DataVector = load_data_vector(vec_dict)
-		mesh.vertex_data[vec.name] = vec
+		for vec_dict in mesh_dict["vectors"]["vertices"]:
+			var vec:DataVector = load_data_vector(vec_dict)
+			mesh.vertex_data[vec.name] = vec
 
-	for vec_dict in mesh_dict["vectors"]["edges"]:
-		var vec:DataVector = load_data_vector(vec_dict)
-		mesh.edge_data[vec.name] = vec
+		for vec_dict in mesh_dict["vectors"]["edges"]:
+			var vec:DataVector = load_data_vector(vec_dict)
+			mesh.edge_data[vec.name] = vec
 
-	for vec_dict in mesh_dict["vectors"]["faces"]:
-		var vec:DataVector = load_data_vector(vec_dict)
-		mesh.face_data[vec.name] = vec
+		for vec_dict in mesh_dict["vectors"]["faces"]:
+			var vec:DataVector = load_data_vector(vec_dict)
+			mesh.face_data[vec.name] = vec
 
-	for vec_dict in mesh_dict["vectors"]["face_vertices"]:
-		var vec:DataVector = load_data_vector(vec_dict)
-		mesh.face_vertex_data[vec.name] = vec
-	
-	block.mesh_vector_data = mesh
+		for vec_dict in mesh_dict["vectors"]["face_vertices"]:
+			var vec:DataVector = load_data_vector(vec_dict)
+			mesh.face_vertex_data[vec.name] = vec
+		
+		block.mesh_vector_data = mesh
 	
 	return block
 
@@ -163,7 +202,6 @@ func load_data_vector(vec_dict)->DataVector:
 		_:
 			return null
 			
-
 
 func load_buffer(buf_id:int)->PackedByteArray:
 	var buf_reg:BufferRegion = buffer_region_map[buf_id]

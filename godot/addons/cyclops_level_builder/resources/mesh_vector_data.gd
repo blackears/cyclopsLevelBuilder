@@ -304,7 +304,7 @@ func to_dictionary(file_builder:CyclopsFileBuilder)->Dictionary:
 	
 	result["active_vertex"] = active_vertex
 	result["active_edge"] = active_edge
-	result["actiev_face"] = active_face
+	result["active_face"] = active_face
 	result["active_face_vertex"] = active_face_vertex
 	
 #	vectors["face_vertices"].append(file_builder.export_vector(data_vec))

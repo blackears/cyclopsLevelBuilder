@@ -82,4 +82,21 @@ func _on_bn_okay_pressed():
 	hide()
 
 func load_file(root:Dictionary):
-	pass
+	var loader:CyclopsFileLoader = CyclopsFileLoader.new()
+	loader.load(root)
+	
+	var editor_scene_root:Node = plugin.get_editor_interface().get_edited_scene_root()
+	
+	
+	for scene_id in loader.scene_map.keys():
+		var root_node_id:int = loader.scene_map[scene_id]
+		var loaded_scene:Node3D = loader.node_map[root_node_id]
+		
+		editor_scene_root.add_child(loaded_scene)
+		set_owner_recursive(loaded_scene, editor_scene_root)
+		
+
+func set_owner_recursive(loaded_node:Node3D, owner_node:Node3D):
+	loaded_node.owner = owner_node
+	for child in loaded_node.get_children():
+		set_owner_recursive(child, owner_node)

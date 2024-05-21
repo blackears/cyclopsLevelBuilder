@@ -30,6 +30,10 @@ gdscript/warnings/unsafe_call_argument=1
 
 enabled=PackedStringArray("res://addons/cyclops_level_builder/plugin.cfg", "res://addons/gut/plugin.cfg")
 
+[filesystem]
+
+import/blender/enabled=false
+
 [rendering]
 
 renderer/rendering_method="mobile"
