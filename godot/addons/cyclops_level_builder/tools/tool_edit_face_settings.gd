@@ -23,32 +23,17 @@
 
 @tool
 extends Resource
-class_name ToolBlockSettings
+class_name ToolEditFaceSettings
 
-@export var block_alignment:BlockAlignment.Type = BlockAlignment.Type.ALIGN_TO_SURFACE
-@export var match_selected_block:bool = true
-@export var default_block_elevation:float = 0
-@export var default_block_height:float = 1
-@export var collision_type:Collision.Type = Collision.Type.STATIC
-@export_flags_3d_physics var collision_layer:int = 1
-@export_flags_3d_physics var collision_mask:int = 1
+@export var transform_space:TransformSpace.Type = TransformSpace.Type.GLOBAL
+@export var correct_uvs:bool = true
 
 func load_from_cache(cache:Dictionary):
-	block_alignment = cache.get("block_alignment", BlockAlignment.Type.ALIGN_TO_SURFACE)
-	match_selected_block = cache.get("match_selected_block", true)
-	default_block_elevation = cache.get("default_block_elevation", 0)
-	default_block_height = cache.get("default_block_height", 1)
-	collision_type = cache.get("collision_type", Collision.Type.STATIC)
-	collision_layer = cache.get("collision_layer", 1)
-	collision_mask = cache.get("collision_mask", 1)
+	transform_space = cache.get("transform_space", TransformSpace.Type.GLOBAL)
+	correct_uvs = cache.get("correct_uvs", true)
 	
 func save_to_cache():
 	return {
-		"block_alignment": block_alignment,
-		"match_selected_block": match_selected_block,
-		"default_block_elevation": default_block_elevation,
-		"default_block_height": default_block_height,
-		"collision_type": collision_type,
-		"collision_layer": collision_layer,
-		"collision_mask": collision_mask,
+		"transform_space": transform_space,
+		"correct_uvs": correct_uvs,
 	}

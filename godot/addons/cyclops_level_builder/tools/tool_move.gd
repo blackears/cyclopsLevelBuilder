@@ -53,6 +53,15 @@ var base_points:PackedVector3Array
 
 var gizmo_translate:GizmoTranslate
 
+var settings:ToolMoveSettings = ToolMoveSettings.new()
+
+func _get_tool_properties_editor()->Control:
+	var ed:ToolMoveSettingsEditor = preload("res://addons/cyclops_level_builder/tools/tool_move_settings_editor.tscn").instantiate()
+	
+	ed.settings = settings
+	
+	return ed
+	
 func _get_tool_id()->String:
 	return TOOL_ID
 
@@ -393,7 +402,13 @@ func _activate(builder:CyclopsLevelBuilder):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
 
+	var cache:Dictionary = builder.get_tool_cache(TOOL_ID)
+	settings.load_from_cache(cache)
+
 func _deactivate():
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.set_custom_gizmo(null)
+
+	var cache:Dictionary = settings.save_to_cache()
+	builder.set_tool_cache(TOOL_ID, cache)
 

@@ -27935,14 +27935,6 @@ block_data = SubResource("Resource_h6put")
 mesh_vector_data = SubResource("Resource_nm1xk")
 materials = Array[Material]([ExtResource("7_1f8vv"), ExtResource("5_rkmv8"), ExtResource("11_pkxin")])
 
-[node name="Block_106" type="Node3D" parent="cyclops_blocks"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, -1, 4)
-script = ExtResource("1_ny18x")
-
-[node name="Block_107" type="Node3D" parent="cyclops_blocks"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, -1, 3)
-script = ExtResource("1_ny18x")
-
 [node name="Block_105" type="Node3D" parent="cyclops_blocks"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.25, 2.25, -6.5)
 script = ExtResource("1_ny18x")
