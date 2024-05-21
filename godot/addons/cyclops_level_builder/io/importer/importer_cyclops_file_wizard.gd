@@ -68,39 +68,15 @@ func _on_bn_cancel_pressed():
 	hide()
 
 func _on_bn_okay_pressed():
-	if !FileAccess.file_exists(file_path):
-		push_error("No such file: ", file_path)
-		return
-	
-	var source:String = FileAccess.get_file_as_string(file_path)
-	var raw = JSON.parse_string(source)
-	if !(raw is Dictionary):
-		push_error("Invalid file format: ", file_path)
-		return
-
-	load_file(raw)
-	hide()
-
-func load_file(root:Dictionary):
-	var loader:CyclopsFileLoader = CyclopsFileLoader.new()
-	loader.load(root)
-	
 	var editor_scene_root:Node = plugin.get_editor_interface().get_edited_scene_root()
-	
-	
-	for scene_id in loader.scene_map.keys():
-		var root_node_id:int = loader.scene_map[scene_id]
-		var loaded_scene:Node3D = loader.node_map[root_node_id]
-		
-		editor_scene_root.add_child(loaded_scene)
-		set_owner_recursive(loaded_scene, editor_scene_root)
-		
 
-func set_owner_recursive(loaded_node:Node3D, owner_node:Node3D):
-	loaded_node.owner = owner_node
-	if loaded_node is CyclopsBlock:
-		#Do not set owner of hidden children
-		return
+	var cmd:CommandImportCyclopsFile = CommandImportCyclopsFile.new()
+	cmd.builder = plugin
+	cmd.file_path = file_path
+	cmd.target_parent = editor_scene_root.get_path()
 	
-	for child in loaded_node.get_children():
-		set_owner_recursive(child, owner_node)
+	var undo:EditorUndoRedoManager = plugin.get_undo_redo()
+	cmd.add_to_undo_manager(undo)
+	
+	
+	hide()
