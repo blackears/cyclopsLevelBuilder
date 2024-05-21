@@ -66,12 +66,12 @@ func load_file(root:Dictionary):
 		editor_scene_root.add_child(loaded_scene)
 		set_owner_recursive(loaded_scene, editor_scene_root)
 		
-		added_blocks.append(loaded_scene)
+		added_blocks.append(loaded_scene.get_path())
 		
 
 func undo_it():
 	for block_path in added_blocks:
-		var block:CyclopsBlock = builder.get_node(block_path)
+		var block:Node3D = builder.get_node(block_path)
 		block.queue_free()
 
 	added_blocks.clear()
