@@ -93,6 +93,12 @@ func draw_gizmo(viewport_camera:Camera3D):
 			TransformSpace.Type.NORMAL:
 				var xform:Transform3D = active_block.global_transform
 				gizmo_translate.global_transform = xform
+			TransformSpace.Type.VIEW:
+				gizmo_translate.global_basis = viewport_camera.global_basis
+				gizmo_translate.global_position = origin
+			TransformSpace.Type.PARENT:
+				var xform:Transform3D = active_block.get_parent_node_3d().global_transform
+				gizmo_translate.global_transform = xform
 
 
 func _draw_tool(viewport_camera:Camera3D):
@@ -381,6 +387,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					xform_basis = active_block.basis
 				TransformSpace.Type.NORMAL:
 					var active_block:Node3D = builder.get_active_block()
+					xform_basis = active_block.basis
+				TransformSpace.Type.VIEW:
+					xform_basis = viewport_camera.global_basis
+				TransformSpace.Type.PARENT:
+					var active_block:Node3D = builder.get_active_block().get_parent_node_3d()
 					xform_basis = active_block.basis
 					
 			

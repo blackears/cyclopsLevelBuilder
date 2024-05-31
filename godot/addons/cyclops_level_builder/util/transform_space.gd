@@ -26,4 +26,4 @@
 
 class_name TransformSpace
 
-enum Type { GLOBAL, LOCAL, NORMAL }
+enum Type { GLOBAL, LOCAL, NORMAL, VIEW, PARENT }
