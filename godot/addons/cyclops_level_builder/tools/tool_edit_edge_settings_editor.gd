@@ -22,18 +22,39 @@
 # SOFTWARE.
 
 @tool
-extends Resource
-class_name ToolEditEdgeSettings
+extends PanelContainer
+class_name ToolEditEdgeSettingsEditor
 
-@export var transform_space:TransformSpace.Type = TransformSpace.Type.GLOBAL
-@export var triplanar_lock_uvs:bool = true
+var settings:ToolEditEdgeSettings:
+	get:
+		return settings
+	set(value):
+		settings = value
+		dirty = true
 
-func load_from_cache(cache:Dictionary):
-	transform_space = cache.get("transform_space", TransformSpace.Type.GLOBAL)
-	triplanar_lock_uvs = cache.get("triplanar_lock_uvs", true)
+var dirty:bool = true
+
+
+func _ready():
+	%transform_space.clear()
+	for text in TransformSpace.Type.keys():
+		%transform_space.add_item(text)
+
+func _process(delta):
+	if dirty:
+		update()
+		dirty = false
+
+func update():
+	%transform_space.selected = settings.transform_space
+	%check_correct_uvs.button_pressed = settings.triplanar_lock_uvs
 	
-func save_to_cache():
-	return {
-		"transform_space": transform_space,
-		"triplanar_lock_uvs": triplanar_lock_uvs,
-	}
+	pass
+
+
+func _on_transform_space_item_selected(index):
+	settings.transform_space = index
+
+
+func _on_check_correct_uvs_toggled(toggled_on):
+	settings.triplanar_lock_uvs = toggled_on

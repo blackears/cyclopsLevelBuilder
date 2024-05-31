@@ -115,6 +115,12 @@ class FaceInfo extends RefCounted:
 		center /= points.size()
 		return center
 	
+	##Returns vector with magnitude equal to twice the area of the face and 
+	## pointing along the face normal
+	func get_area_vector_x2()->Vector3:
+		var points:PackedVector3Array = get_points()
+		return MathUtil.face_area_x2(points)
+	
 	func get_triangulation()->Array[int]:
 		if triangulation_indices.is_empty():
 			var points:PackedVector3Array

@@ -48,10 +48,20 @@ class PickHandleResult extends RefCounted:
 	var handle:HandleFace
 	var position:Vector3
 	
+var settings:ToolEditFaceSettings = ToolEditFaceSettings.new()
+
+var average_normal:Vector3 = Vector3.UP
+
 func _get_tool_id()->String:
 	return TOOL_ID
 
-
+func _get_tool_properties_editor()->Control:
+	var ed:ToolEditFaceSettingsEditor = preload("res://addons/cyclops_level_builder/tools/tool_edit_face_settings_editor.tscn").instantiate()
+	
+	ed.settings = settings
+	
+	return ed
+	
 func draw_gizmo(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	if !gizmo_translate:
@@ -122,12 +132,14 @@ func setup_tool():
 	#print("setup_tool")
 	
 	var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+	average_normal = Vector3.ZERO
+	
 	for block in sel_blocks:
 		var l2w:Transform3D = block.global_transform
-		#var w2l:Transform3D = block.global_transform.affine_inverse()
+
+		var l2w_normal:Basis = l2w.basis.transposed().inverse()
 		
 		for f_idx in block.control_mesh.faces.size():
-#					print("adding face hande %s %s" % [block.name, f_idx])
 			
 			var ctl_mesh:ConvexVolume = block.control_mesh
 			var face:ConvexVolume.FaceInfo = ctl_mesh.faces[f_idx]
@@ -138,13 +150,14 @@ func setup_tool():
 			#print("p_start %s" % p_start)
 
 			handle.p_center = p_start
-#			handle.p_ref = p_start
-#			handle.p_ref_init = p_start
 			
 			handle.face_index = f_idx
-#			handle.face_id = face.id
 			handle.block_path = block.get_path()
 			handles.append(handle)
+			
+			average_normal += l2w_normal * face.get_area_vector_x2()
+	
+	average_normal = average_normal.normalized()
 	
 func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:float)->PickHandleResult:
 	

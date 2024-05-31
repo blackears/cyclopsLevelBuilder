@@ -76,6 +76,7 @@ func do_it():
 
 #		print("init done")
 		var w2l:Transform3D = block.global_transform.affine_inverse()
+		w2l = w2l.affine_inverse()
 		var move_offset_local = w2l.basis * move_offset
 
 		#var moved_vert_indices:PackedInt32Array

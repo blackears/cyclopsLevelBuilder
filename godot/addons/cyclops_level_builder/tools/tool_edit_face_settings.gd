@@ -26,14 +26,14 @@ extends Resource
 class_name ToolEditFaceSettings
 
 @export var transform_space:TransformSpace.Type = TransformSpace.Type.GLOBAL
-@export var correct_uvs:bool = true
+@export var triplanar_lock_uvs:bool = true
 
 func load_from_cache(cache:Dictionary):
 	transform_space = cache.get("transform_space", TransformSpace.Type.GLOBAL)
-	correct_uvs = cache.get("correct_uvs", true)
+	triplanar_lock_uvs = cache.get("triplanar_lock_uvs", true)
 	
 func save_to_cache():
 	return {
 		"transform_space": transform_space,
-		"correct_uvs": correct_uvs,
+		"triplanar_lock_uvs": triplanar_lock_uvs,
 	}

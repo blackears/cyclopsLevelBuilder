@@ -1,0 +1,49 @@
+[gd_scene load_steps=2 format=3 uid="uid://d3hfpe2pe0ml2"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_edit_edge_settings_editor.gd" id="1_a1oyt"]
+
+[node name="ToolMoveSettingsEditor" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -929.0
+offset_bottom = -415.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_a1oyt")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Transform space"
+
+[node name="transform_space" type="OptionButton" parent="GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 5
+selected = 0
+popup/item_0/text = "GLOBAL"
+popup/item_0/id = 0
+popup/item_1/text = "LOCAL"
+popup/item_1/id = 1
+popup/item_2/text = "NORMAL"
+popup/item_2/id = 2
+popup/item_3/text = "VIEW"
+popup/item_3/id = 3
+popup/item_4/text = "PARENT"
+popup/item_4/id = 4
+
+[node name="Label2" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Correct UVs"
+
+[node name="check_correct_uvs" type="CheckBox" parent="GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "On"
+
+[connection signal="item_selected" from="GridContainer/transform_space" to="." method="_on_transform_space_item_selected"]
+[connection signal="toggled" from="GridContainer/check_correct_uvs" to="." method="_on_check_correct_uvs_toggled"]

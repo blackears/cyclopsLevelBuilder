@@ -31,7 +31,8 @@ class BlockVertexChanges extends RefCounted:
 	var tracked_block_data:MeshVectorData
 
 #Public 
-var move_offset:Vector3 = Vector3.ZERO
+@export var move_offset:Vector3 = Vector3.ZERO
+@export var triplanar_lock_uvs:bool = false
 
 #Private
 var block_map:Dictionary = {}
@@ -65,10 +66,11 @@ func do_it():
 		
 		var block:CyclopsBlock = builder.get_node(block_path)
 		var w2l:Transform3D = block.global_transform
+		w2l = w2l.affine_inverse()
 		var move_offset_local:Vector3 = w2l.basis * move_offset
 		
-#		print("move offset %s" % move_offset)
-#		print("move offset local %s" % move_offset_local)
+		#print("move offset %s" % move_offset)
+		#print("move offset local %s" % move_offset_local)
 		
 		var rec:BlockVertexChanges = block_map[block_path]
 		

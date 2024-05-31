@@ -403,11 +403,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				MoveConstraint.Type.AXIS_Z:
 					block_drag_cur = MathUtil.closest_point_on_line(origin, dir, block_drag_p0, xform_basis.z)
 				MoveConstraint.Type.PLANE_XY:
-					block_drag_cur = MathUtil.intersect_plane(origin, dir, block_drag_p0, xform_basis.x)
+					block_drag_cur = MathUtil.intersect_plane(origin, dir, block_drag_p0, xform_basis.z)
 				MoveConstraint.Type.PLANE_XZ:
 					block_drag_cur = MathUtil.intersect_plane(origin, dir, block_drag_p0, xform_basis.y)
 				MoveConstraint.Type.PLANE_YZ:
-					block_drag_cur = MathUtil.intersect_plane(origin, dir, block_drag_p0, xform_basis.z)
+					block_drag_cur = MathUtil.intersect_plane(origin, dir, block_drag_p0, xform_basis.x)
 				MoveConstraint.Type.PLANE_VIEWPORT:
 					block_drag_cur = MathUtil.intersect_plane(origin, dir, block_drag_p0, viewport_camera.global_transform.basis.z)
 					

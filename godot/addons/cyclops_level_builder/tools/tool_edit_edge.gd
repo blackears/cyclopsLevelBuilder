@@ -49,9 +49,20 @@ class PickHandleResult extends RefCounted:
 	var position:Vector3
 	
 	
+var settings:ToolEditEdgeSettings = ToolEditEdgeSettings.new()
+
+var average_normal:Vector3 = Vector3.UP
+
 func _get_tool_id()->String:
 	return TOOL_ID
 
+func _get_tool_properties_editor()->Control:
+	var ed:ToolEditEdgeSettingsEditor = preload("res://addons/cyclops_level_builder/tools/tool_edit_edge_settings_editor.tscn").instantiate()
+	
+	ed.settings = settings
+	
+	return ed
+	
 func draw_gizmo(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	if !gizmo_translate:
@@ -103,21 +114,32 @@ func _draw_tool(viewport_camera:Camera3D):
 	
 func setup_tool():
 	handles = []
-	
+
+	average_normal = Vector3.ZERO
 #	print("setuo_tool")
 	var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
 	for block in sel_blocks:
+		var l2w:Transform3D = block.global_transform
+
+		var l2w_normal:Basis = l2w.basis.transposed().inverse()
+		
 		for e_idx in block.control_mesh.edges.size():
 			var ctl_mesh:ConvexVolume = block.control_mesh
 			var e:ConvexVolume.EdgeInfo = ctl_mesh.edges[e_idx]
 
 			var handle:HandleEdge = HandleEdge.new()
-#			handle.p_ref = block.global_transform * ctl_mesh.vertices[e.start_index].point
-#			handle.p_ref_init = handle.p_ref
 			handle.edge_index = e_idx
 			handle.block_path = block.get_path()
 			handles.append(handle)
 	
+			var edge_normal:Vector3 = Vector3.ZERO
+			for f_idx in e.face_indices:
+				var f:ConvexVolume.FaceInfo = ctl_mesh.faces[f_idx]
+				edge_normal += f.get_area_vector_x2().normalized()
+			
+			average_normal += l2w_normal * edge_normal.normalized()
+	
+	average_normal = average_normal.normalized()
 	
 func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:float)->PickHandleResult:
 	var best_dist:float = INF
