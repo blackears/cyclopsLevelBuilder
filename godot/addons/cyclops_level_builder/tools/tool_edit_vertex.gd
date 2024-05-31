@@ -99,9 +99,6 @@ func draw_gizmo(viewport_camera:Camera3D):
 				var up:Vector3 = Vector3.UP
 				var x:Vector3 = up.cross(average_normal).normalized()
 				var y:Vector3 = average_normal.cross(x)
-				#print("x ", x)
-				#print("y ", y)
-				#print("z ", average_normal)
 				gizmo_translate.global_basis = Basis(x, y, average_normal)
 				gizmo_translate.global_position = origin
 			TransformSpace.Type.VIEW:
@@ -592,7 +589,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				#If start point set to infinite, replace with point along view ray
 				drag_handle_start_pos = origin + dir * 20
 
-
 			var xform_basis:Basis
 			
 			match settings.transform_space:
@@ -617,12 +613,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var drag_to:Vector3
 			match move_constraint:
 				MoveConstraint.Type.AXIS_X:
-#					print("axis x")
 					drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, xform_basis.x)
 				MoveConstraint.Type.AXIS_Y:
 					drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, xform_basis.y)
 				MoveConstraint.Type.AXIS_Z:
-#					print("axis z")
 					drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, xform_basis.z)
 				MoveConstraint.Type.PLANE_XY:
 					drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, xform_basis.z)

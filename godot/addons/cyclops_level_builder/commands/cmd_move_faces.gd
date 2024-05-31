@@ -71,7 +71,6 @@ func do_it():
 		var rec:BlockFaceChanges = block_map[block_path]
 		
 		var w2l:Transform3D = block.global_transform.affine_inverse()
-		w2l = w2l.affine_inverse()
 		var move_offset_local:Vector3 = w2l.basis * move_offset
 #		print("rec %s" % rec)
 		
