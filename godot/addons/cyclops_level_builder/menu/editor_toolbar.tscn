@@ -54,7 +54,7 @@ item_9/text = "Export As Gltf..."
 item_9/id = 1008
 item_10/text = "Export As Godot Scene..."
 item_10/id = 1009
-item_11/text = "Export As JSON..."
+item_11/text = "Export As Cyclops File..."
 item_11/id = 1010
 item_12/text = ""
 item_12/id = -1
@@ -91,10 +91,6 @@ item_26/text = "Mirror Selection Z"
 item_26/id = 1022
 script = ExtResource("2_ni0c8")
 
-[node name="check_lock_uvs" type="CheckBox" parent="HBoxContainer"]
-layout_mode = 2
-text = "Lock UVs"
-
 [node name="bn_snap" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 tooltip_text = "Snapping on/off"
@@ -127,7 +123,6 @@ tooltip_text = "Xray"
 toggle_mode = true
 icon = ExtResource("3_ldp0l")
 
-[connection signal="toggled" from="HBoxContainer/check_lock_uvs" to="." method="_on_check_lock_uvs_toggled"]
 [connection signal="toggled" from="HBoxContainer/bn_snap" to="." method="_on_bn_snap_toggled"]
 [connection signal="item_selected" from="HBoxContainer/snap_options" to="." method="_on_snap_options_item_selected"]
 [connection signal="item_selected" from="HBoxContainer/display_mode" to="." method="_on_display_mode_item_selected"]

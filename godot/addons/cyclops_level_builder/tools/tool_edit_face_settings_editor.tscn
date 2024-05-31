@@ -38,7 +38,7 @@ popup/item_4/id = 4
 
 [node name="Label2" type="Label" parent="GridContainer"]
 layout_mode = 2
-text = "Correct UVs"
+text = "Triplanar lock UVs"
 
 [node name="check_correct_uvs" type="CheckBox" parent="GridContainer"]
 unique_name_in_owner = true

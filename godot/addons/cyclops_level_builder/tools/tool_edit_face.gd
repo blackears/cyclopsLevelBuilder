@@ -71,6 +71,8 @@ func draw_gizmo(viewport_camera:Camera3D):
 	var count:int = 0
 	for h in handles:
 		var block:CyclopsBlock = builder.get_node(h.block_path)
+		if !block:
+			continue
 		var l2w:Transform3D = block.global_transform
 		
 		var f:ConvexVolume.FaceInfo = block.control_mesh.faces[h.face_index]
