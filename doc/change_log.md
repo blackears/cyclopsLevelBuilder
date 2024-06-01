@@ -33,7 +33,7 @@
 * Adding new menubar for Cyclops that will always be shown in the toolbar
 * Adding Import MeshInstance command
 * Adding importer/exporter for custom Cyclops file format
-
+* Adding a variety of gizmo coordinate orientations for tools
 
 
 
