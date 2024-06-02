@@ -27,6 +27,8 @@ class_name ToolTag
 
 @export var id:String
 @export var name:String
+@export var input_events: Array[InputEvent] = []
+@export var input_events_override := false
 @export_multiline var tooltip:String
 @export var icon:Texture2D
 @export var tool_script:Script

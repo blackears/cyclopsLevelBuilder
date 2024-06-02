@@ -1,13 +1,25 @@
-[gd_resource type="Resource" script_class="ToolTag" load_steps=4 format=3 uid="uid://cmdgd8wmfdo4a"]
+[gd_resource type="Resource" script_class="ToolTag" load_steps=6 format=3 uid="uid://cmdgd8wmfdo4a"]
 
-[ext_resource type="Texture2D" uid="uid://bi27fw31w4ssi" path="res://addons/cyclops_level_builder/art/icons/select_face.svg" id="1_s64xo"]
+[ext_resource type="Texture2D" uid="uid://bplqvowwcpe0u" path="res://addons/cyclops_level_builder/art/icons/select_face.svg" id="1_s64xo"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/tool_tag.gd" id="2_qfyqw"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_edit_face.gd" id="3_y22x5"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_xxi5p"]
+pressed = true
+keycode = 51
+
+[sub_resource type="InputEventKey" id="InputEventKey_1smmt"]
+device = -1
+pressed = true
+keycode = 52
+unicode = 52
 
 [resource]
 script = ExtResource("2_qfyqw")
 id = "edit_face"
 name = "Face"
+input_events = Array[InputEvent]([SubResource("InputEventKey_xxi5p"), SubResource("InputEventKey_1smmt")])
+input_events_override = false
 tooltip = "Face
 
 Click on a face to select it.  Shift Click to toggle selecton, Ctrl Click to add to selection, Shift-Ctrl click to subtract from selection.
