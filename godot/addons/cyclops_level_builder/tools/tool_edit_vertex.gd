@@ -86,8 +86,8 @@ func draw_gizmo(viewport_camera:Camera3D):
 		global_scene.set_custom_gizmo(gizmo_translate)
 		var active_block:Node3D = builder.get_active_block()
 		
-		var gizmo_global_xform:Transform3D = calc_gizmo_transform(origin, average_normal, active_block, viewport_camera, settings.transform_space)
-		gizmo_translate.global_transform = gizmo_global_xform
+		gizmo_translate.global_basis = calc_gizmo_basis(average_normal, active_block, viewport_camera, settings.transform_space)
+		gizmo_translate.global_position = origin
 		
 		#match settings.transform_space:
 			#TransformSpace.Type.GLOBAL:
@@ -593,24 +593,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				drag_handle_start_pos = origin + dir * 20
 
 			var active_block:Node3D = builder.get_active_block()
-			var gizmo_global_xform:Transform3D = calc_gizmo_transform(origin, average_normal, active_block, viewport_camera, settings.transform_space)
-			var xform_basis:Basis = gizmo_global_xform.basis
+#			var gizmo_global_xform:Transform3D = calc_gizmo_transform(origin, average_normal, active_block, viewport_camera, settings.transform_space)
+			var xform_basis:Basis = calc_gizmo_basis(average_normal, active_block, viewport_camera, settings.transform_space)
 			
-			#match settings.transform_space:
-				#TransformSpace.Type.GLOBAL:
-					#xform_basis = Basis.IDENTITY
-				#TransformSpace.Type.LOCAL:
-					#xform_basis = active_block.basis
-				#TransformSpace.Type.NORMAL:
-					#var up:Vector3 = Vector3.UP
-					#var x:Vector3 = up.cross(average_normal).normalized()
-					#var y:Vector3 = average_normal.cross(x)
-					#xform_basis = Basis(x, y, average_normal)
-				#TransformSpace.Type.VIEW:
-					#xform_basis = viewport_camera.global_basis
-				#TransformSpace.Type.PARENT:
-					#xform_basis = active_block.get_parent_node_3d().basis
-
 			#print("drag_handle_start_pos ", drag_handle_start_pos)
 			#print("basis ", xform_basis)
 			var drag_to:Vector3

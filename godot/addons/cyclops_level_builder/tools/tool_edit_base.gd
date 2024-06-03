@@ -68,16 +68,14 @@ func pick_vertex_material(global_scene:CyclopsGlobalScene, selected:bool = false
 	return global_scene.vertex_unselected_material
 	
 	
-func calc_gizmo_transform(origin:Vector3, average_normal:Vector3, active_block:Node3D, viewport_camera:Camera3D, orientation:TransformSpace.Type)->Transform3D:
-	var result:Transform3D
+func calc_gizmo_basis(average_normal:Vector3, active_block:Node3D, viewport_camera:Camera3D, orientation:TransformSpace.Type)->Basis:
+	var result:Basis
 	
 	match orientation:
 		TransformSpace.Type.GLOBAL:
-			result = Transform3D.IDENTITY
-			result.origin = origin
+			result = Basis.IDENTITY
 		TransformSpace.Type.LOCAL:
-			result = active_block.global_transform
-			result.origin = origin
+			result = active_block.global_basis
 			
 			#var xform:Transform3D = active_block.global_transform
 			#gizmo_translate.global_transform = xform
@@ -88,17 +86,14 @@ func calc_gizmo_transform(origin:Vector3, average_normal:Vector3, active_block:N
 			var y:Vector3 = average_normal.cross(x)
 			#gizmo_translate.global_basis = Basis(x, y, average_normal)
 			#gizmo_translate.global_position = origin
-			result.basis = Basis(x, y, average_normal)
-			result.origin = origin
+			result = Basis(x, y, average_normal)
 		TransformSpace.Type.VIEW:
 			#gizmo_translate.global_basis = viewport_camera.global_basis
 			#gizmo_translate.global_position = origin
 			
-			result.basis = viewport_camera.global_basis
-			result.origin = origin
+			result = viewport_camera.global_basis
 		TransformSpace.Type.PARENT:
-			result = active_block.get_parent_node_3d().global_transform
-			result.origin = origin
+			result = active_block.get_parent_node_3d().global_basis
 			#var xform:Transform3D = active_block.get_parent_node_3d().global_transform
 			#gizmo_translate.global_transform = xform
 

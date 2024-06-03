@@ -89,8 +89,8 @@ func draw_gizmo(viewport_camera:Camera3D):
 #		gizmo_translate.global_transform.origin = origin
 		var active_block:Node3D = builder.get_active_block()
 		
-		var gizmo_global_xform:Transform3D = calc_gizmo_transform(origin, average_normal, active_block, viewport_camera, settings.transform_space)
-		gizmo_translate.global_transform = gizmo_global_xform
+		gizmo_translate.global_basis = calc_gizmo_basis(average_normal, active_block, viewport_camera, settings.transform_space)
+		gizmo_translate.global_position = origin
 		#match settings.transform_space:
 			#TransformSpace.Type.GLOBAL:
 				#var xform:Transform3D = Transform3D.IDENTITY
@@ -585,8 +585,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				drag_handle_start_pos = origin + dir * 20
 				
 			var active_block:Node3D = builder.get_active_block()
-			var gizmo_global_xform:Transform3D = calc_gizmo_transform(origin, average_normal, active_block, viewport_camera, settings.transform_space)
-			var xform_basis:Basis = gizmo_global_xform.basis
+			var xform_basis:Basis = calc_gizmo_basis(average_normal, active_block, viewport_camera, settings.transform_space)
 			
 			#match settings.transform_space:
 				#TransformSpace.Type.GLOBAL:
@@ -622,15 +621,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				MoveConstraint.Type.PLANE_VIEWPORT:
 					drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, viewport_camera.global_transform.basis.z)
 
-			#print("drag_handle_start_pos %s" % drag_handle_start_pos)
-			
-#			var drag_to:Vector3
-#			if e.alt_pressed:
-#				drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, Vector3.UP)
-#			else:
-#				drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, Vector3.UP)
-
-			#print("drag_to %s" % drag_to)
 			
 			var offset = drag_to - drag_handle_start_pos
 #			offset = MathUtil.snap_to_grid(offset, grid_step_size)
