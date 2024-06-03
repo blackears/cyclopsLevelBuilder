@@ -1,13 +1,20 @@
-[gd_resource type="Resource" script_class="ToolTag" load_steps=4 format=3 uid="uid://bjmuechy70058"]
+[gd_resource type="Resource" script_class="ToolTag" load_steps=5 format=3 uid="uid://bjmuechy70058"]
 
-[ext_resource type="Texture2D" uid="uid://dw8s7hrmnu34j" path="res://addons/cyclops_level_builder/art/icons/material_brush.svg" id="1_hjh4j"]
+[ext_resource type="Texture2D" uid="uid://cri6ghcl4p2ob" path="res://addons/cyclops_level_builder/art/icons/material_brush.svg" id="1_hjh4j"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/tool_tag.gd" id="2_ooato"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_material_brush.gd" id="3_1e4l3"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_enkb2"]
+device = -1
+keycode = 66
+unicode = 98
 
 [resource]
 script = ExtResource("2_ooato")
 id = "material_brush"
 name = "Material Brush"
+input_events = Array[InputEvent]([SubResource("InputEventKey_enkb2")])
+input_events_override = false
 tooltip = "Material Brush
 
 Click and drag on surfaces to apply the currently selected material.

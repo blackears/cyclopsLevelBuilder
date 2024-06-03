@@ -1,13 +1,21 @@
-[gd_resource type="Resource" script_class="ToolTag" load_steps=4 format=3 uid="uid://c648hs1r46mat"]
+[gd_resource type="Resource" script_class="ToolTag" load_steps=5 format=3 uid="uid://c648hs1r46mat"]
 
-[ext_resource type="Texture2D" uid="uid://bwasqbq4iqkn6" path="res://addons/cyclops_level_builder/art/icons/block.svg" id="1_qojcl"]
+[ext_resource type="Texture2D" uid="uid://drd3l3vtr8uhd" path="res://addons/cyclops_level_builder/art/icons/block.svg" id="1_qojcl"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/tool_tag.gd" id="1_vgbvo"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_block.gd" id="3_52q4h"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_vdxf5"]
+device = -1
+pressed = true
+keycode = 82
+unicode = 114
 
 [resource]
 script = ExtResource("1_vgbvo")
 id = "block"
 name = "Block"
+input_events = Array[InputEvent]([SubResource("InputEventKey_vdxf5")])
+input_events_override = true
 tooltip = "Block
 
 Click and drag in empty space or on unselected block to create a new block.

@@ -1,13 +1,27 @@
-[gd_resource type="Resource" script_class="ToolTag" load_steps=4 format=3 uid="uid://rskdanqaqt1y"]
+[gd_resource type="Resource" script_class="ToolTag" load_steps=6 format=3 uid="uid://rskdanqaqt1y"]
 
-[ext_resource type="Texture2D" uid="uid://cqy2x1s41ypbt" path="res://addons/cyclops_level_builder/art/icons/move.svg" id="1_g0ofo"]
+[ext_resource type="Texture2D" uid="uid://db7mw8mug4vo1" path="res://addons/cyclops_level_builder/art/icons/move.svg" id="1_g0ofo"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/tool_tag.gd" id="1_skypg"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_move.gd" id="2_16d6f"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_0yb0p"]
+device = -1
+pressed = true
+keycode = 81
+unicode = 113
+
+[sub_resource type="InputEventKey" id="InputEventKey_ygw0u"]
+device = -1
+pressed = true
+keycode = 87
+unicode = 119
 
 [resource]
 script = ExtResource("1_skypg")
 id = "move"
 name = "Move"
+input_events = Array[InputEvent]([SubResource("InputEventKey_0yb0p"), SubResource("InputEventKey_ygw0u")])
+input_events_override = true
 tooltip = "Move
 
 Click and drag on a selected block to move it in the XZ plane.  Hold Alt to drag along the Y axis.
