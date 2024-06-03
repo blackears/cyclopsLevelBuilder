@@ -89,29 +89,6 @@ func draw_gizmo(viewport_camera:Camera3D):
 		gizmo_translate.global_basis = calc_gizmo_basis(average_normal, active_block, viewport_camera, settings.transform_space)
 		gizmo_translate.global_position = origin
 		
-		#match settings.transform_space:
-			#TransformSpace.Type.GLOBAL:
-				#var xform:Transform3D = Transform3D.IDENTITY
-				#xform.origin = origin
-				#gizmo_translate.global_transform = xform
-			#TransformSpace.Type.LOCAL:
-				#var xform:Transform3D = active_block.global_transform
-				#gizmo_translate.global_transform = xform
-				#gizmo_translate.global_position = origin
-			#TransformSpace.Type.NORMAL:
-				#var up:Vector3 = Vector3.UP
-				#var x:Vector3 = up.cross(average_normal).normalized()
-				#var y:Vector3 = average_normal.cross(x)
-				#gizmo_translate.global_basis = Basis(x, y, average_normal)
-				#gizmo_translate.global_position = origin
-			#TransformSpace.Type.VIEW:
-				#gizmo_translate.global_basis = viewport_camera.global_basis
-				#gizmo_translate.global_position = origin
-			#TransformSpace.Type.PARENT:
-				#var xform:Transform3D = active_block.get_parent_node_3d().global_transform
-				#gizmo_translate.global_transform = xform
-		
-
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
@@ -123,8 +100,8 @@ func _draw_tool(viewport_camera:Camera3D):
 		var block:CyclopsBlock = builder.get_node(h.block_path)
 		var v:ConvexVolume.VertexInfo = block.control_mesh.vertices[h.vertex_index]
 		
-		#print("draw vert %s %s" % [h.vertex_index, v.selected])
 		var active:bool = block.control_mesh.active_vertex == h.vertex_index
+		#print("draw vert idx:%s sel:%s active:%s" % [h.vertex_index, v.selected, active])
 		global_scene.draw_vertex(h.position, pick_vertex_material(global_scene, v.selected, active))
 	
 	draw_gizmo(viewport_camera)
@@ -251,11 +228,8 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 					move_constraint = MoveConstraint.Type.PLANE_YZ
 		
 			drag_handle_start_pos = gizmo_translate.global_position
+			#print("drag_handle_start_pos ", drag_handle_start_pos)
 #			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
-
-#			drag_handle_start_pos = MathUtil.snap_to_grid(start_pos, grid_step_size)
-			#drag_handle_start_pos = builder.get_snapping_manager().snap_point(\
-				#start_pos, SnappingQuery.new(viewport_camera))
 
 	#		print("res obj %s" % result.object.get_path())
 			var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
@@ -276,7 +250,7 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 						if v.selected:
 							cmd_move_vertex.add_vertex(block.get_path(), v_idx)
 						if vol.active_vertex == v_idx:
-							drag_handle_start_pos = block.global_transform * v.point
+							#drag_handle_start_pos = block.global_transform * v.point
 							drag_home_block = block.get_path()
 
 			return
@@ -616,10 +590,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, viewport_camera.global_transform.basis.z)
 
 			
-			#drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
 			#print("send snap bock-2- ", drag_home_block)
 			drag_to = builder.get_snapping_manager().snap_point(drag_to, SnappingQuery.new(viewport_camera, [drag_home_block]))
-			#drag_handle.position = drag_to
 			#print("drag_to snapped ", drag_to)
 			
 			cmd_move_vertex.move_offset = drag_to - drag_handle_start_pos

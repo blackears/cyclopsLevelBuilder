@@ -83,8 +83,12 @@ func create_from_convex_block(block_data:ConvexBlockData):
 	#collision = block_data.collision
 	#physics_layer = block_data.physics_layer
 	#physics_mask = block_data.physics_mask
-	
-	
+
+	active_vertex = block_data.active_vertex
+	active_edge = block_data.active_edge
+	active_face = block_data.active_face
+	active_face_vertex = block_data.active_face_vertex
+		
 	num_vertices = block_data.vertex_points.size()
 	num_edges = block_data.edge_vertex_indices.size() / 2
 	num_faces = block_data.face_vertex_count.size()

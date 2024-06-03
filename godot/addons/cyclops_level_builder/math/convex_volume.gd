@@ -191,6 +191,7 @@ var lightmap_uvs_dirty = true
 var active_vertex:int = -1
 var active_edge:int = -1
 var active_face:int = -1
+var active_face_vertex:int = -1
 
 func _to_string()->String:
 	var result:String = ""
@@ -546,6 +547,31 @@ func get_face_most_similar_to_plane(plane:Plane)->FaceInfo:
 			best_face = f
 	return best_face
 
+func get_vertex_at_position(point:Vector3)->VertexInfo:
+	for v in vertices:
+		if v.point.is_equal_approx(point):
+			return v
+	return null
+
+func get_edge_at_position(point:Vector3)->EdgeInfo:
+	for e in edges:
+		if e.get_midpoint().is_equal_approx(point):
+			return e
+	return null
+
+func get_face_at_position(point:Vector3)->FaceInfo:
+	for f in faces:
+		if f.get_centroid().is_equal_approx(point):
+			return f
+	return null
+
+func copy_vertex_attributes(ref_vol:ConvexVolume):
+	for v_idx in vertices.size():
+		var v:VertexInfo = vertices[v_idx]
+		var ref_v:VertexInfo = ref_vol.get_vertex_at_position(v.point)
+		if ref_v:
+			v.selected = ref_v.selected
+
 func copy_face_attributes(ref_vol:ConvexVolume):
 	for f_idx in faces.size():
 		var f:FaceInfo = faces[f_idx]
@@ -576,6 +602,7 @@ func to_convex_block_data()->ConvexBlockData:
 	result.active_vertex = active_vertex
 	result.active_edge = active_edge
 	result.active_face = active_face
+	result.active_face_vertex = active_face_vertex
 	
 	for v in vertices:
 		result.vertex_points.append(v.point)
@@ -1374,4 +1401,47 @@ func intersects_frustum(frustum:Array[Plane])->bool:
 		
 	return false
 
+func make_convex():
+	var selected_points:PackedVector3Array
+	var new_points:PackedVector3Array
+	
+	for v in vertices:
+		new_points.append(v.point)
+
+	var new_vol:ConvexVolume = ConvexVolume.new()
+	new_vol.init_from_points(new_points)
+	
+	new_vol.copy_vertex_attributes(self)
+	new_vol.copy_face_attributes(self)
+	
+	if active_vertex != -1:
+		var v:VertexInfo = vertices[active_vertex]
+		var new_v:VertexInfo = new_vol.get_vertex_at_position(v.point)
+		if new_v:
+			new_vol.active_vertex = new_v.index
+	
+	if active_edge != -1:
+		var e:EdgeInfo = edges[active_edge]
+		var mp:Vector3 = e.get_midpoint()
+		var new_e:EdgeInfo = new_vol.get_edge_at_position(mp)
+		if new_e:
+			new_vol.active_edge = new_e.index
+	
+	if active_face != -1:
+		var f:FaceInfo = faces[active_face]
+		var centroid:Vector3 = f.get_centroid()
+		var new_f:FaceInfo = new_vol.get_face_at_position(centroid)
+		if new_f:
+			new_vol.active_face = new_f.index
+		
+	
+	#for v_idx in new_vol.vertices.size():
+		#var v:ConvexVolume.VertexInfo = new_vol.vertices[v_idx]
+##			print ("vol point %s " % v.point)
+		#if selected_points.has(v.point):
+##				print("set sel")
+			#v.selected = true
+#
+	#block.mesh_vector_data = new_vol.to_mesh_vector_data()
+	
 

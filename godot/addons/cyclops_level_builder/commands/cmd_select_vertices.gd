@@ -113,6 +113,8 @@ func do_it():
 		
 		if !rec.vertex_indices.is_empty():
 			var active_index:int = rec.vertex_indices[0]
+			#print("active_index ", active_index)
+			
 			match selection_type:
 				Selection.Type.REPLACE:
 					vol.active_vertex = active_index
@@ -155,7 +157,9 @@ func do_it():
 						v.selected = !v.selected
 		
 		vol.update_edge_and_face_selection_from_vertices()
+		#print("vol.active_vertex ", vol.active_vertex)
 		block.mesh_vector_data = vol.to_mesh_vector_data()
+		#print("block.mesh_vector_data.active_vertex ", block.mesh_vector_data.active_vertex)
 
 	builder.selection_changed.emit()
 
