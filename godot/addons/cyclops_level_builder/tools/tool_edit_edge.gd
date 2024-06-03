@@ -90,28 +90,30 @@ func draw_gizmo(viewport_camera:Camera3D):
 #		gizmo_translate.global_transform.origin = origin
 		var active_block:Node3D = builder.get_active_block()
 		
-		match settings.transform_space:
-			TransformSpace.Type.GLOBAL:
-				var xform:Transform3D = Transform3D.IDENTITY
-				xform.origin = origin
-				gizmo_translate.global_transform = xform
-			TransformSpace.Type.LOCAL:
-				var xform:Transform3D = active_block.global_transform
-				gizmo_translate.global_transform = xform
-				gizmo_translate.global_position = origin
-			TransformSpace.Type.NORMAL:
-				var up:Vector3 = Vector3.UP
-				var x:Vector3 = up.cross(average_normal).normalized()
-				var y:Vector3 = average_normal.cross(x)
-				gizmo_translate.global_basis = Basis(x, y, average_normal)
-				gizmo_translate.global_position = origin
-			TransformSpace.Type.VIEW:
-				gizmo_translate.global_basis = viewport_camera.global_basis
-				gizmo_translate.global_position = origin
-			TransformSpace.Type.PARENT:
-				var xform:Transform3D = active_block.get_parent_node_3d().global_transform
-				gizmo_translate.global_transform = xform
-
+		var gizmo_global_xform:Transform3D = calc_gizmo_transform(origin, average_normal, active_block, viewport_camera, settings.transform_space)
+		gizmo_translate.global_transform = gizmo_global_xform
+		#match settings.transform_space:
+			#TransformSpace.Type.GLOBAL:
+				#var xform:Transform3D = Transform3D.IDENTITY
+				#xform.origin = origin
+				#gizmo_translate.global_transform = xform
+			#TransformSpace.Type.LOCAL:
+				#var xform:Transform3D = active_block.global_transform
+				#gizmo_translate.global_transform = xform
+				#gizmo_translate.global_position = origin
+			#TransformSpace.Type.NORMAL:
+				#var up:Vector3 = Vector3.UP
+				#var x:Vector3 = up.cross(average_normal).normalized()
+				#var y:Vector3 = average_normal.cross(x)
+				#gizmo_translate.global_basis = Basis(x, y, average_normal)
+				#gizmo_translate.global_position = origin
+			#TransformSpace.Type.VIEW:
+				#gizmo_translate.global_basis = viewport_camera.global_basis
+				#gizmo_translate.global_position = origin
+			#TransformSpace.Type.PARENT:
+				#var xform:Transform3D = active_block.get_parent_node_3d().global_transform
+				#gizmo_translate.global_transform = xform
+#
 
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
@@ -588,24 +590,26 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				#If start point set to infinite, replace with point along view ray
 				drag_handle_start_pos = origin + dir * 20
 				
-			var xform_basis:Basis
+			var active_block:Node3D = builder.get_active_block()
+			var gizmo_global_xform:Transform3D = calc_gizmo_transform(origin, average_normal, active_block, viewport_camera, settings.transform_space)
+			var xform_basis:Basis = gizmo_global_xform.basis
 			
-			match settings.transform_space:
-				TransformSpace.Type.GLOBAL:
-					xform_basis = Basis.IDENTITY
-				TransformSpace.Type.LOCAL:
-					var active_block:Node3D = builder.get_active_block()
-					xform_basis = active_block.basis
-				TransformSpace.Type.NORMAL:
-					var up:Vector3 = Vector3.UP
-					var x:Vector3 = up.cross(average_normal).normalized()
-					var y:Vector3 = average_normal.cross(x)
-					xform_basis = Basis(x, y, average_normal)
-				TransformSpace.Type.VIEW:
-					xform_basis = viewport_camera.global_basis
-				TransformSpace.Type.PARENT:
-					var active_block:Node3D = builder.get_active_block().get_parent_node_3d()
-					xform_basis = active_block.basis
+			#match settings.transform_space:
+				#TransformSpace.Type.GLOBAL:
+					#xform_basis = Basis.IDENTITY
+				#TransformSpace.Type.LOCAL:
+					#var active_block:Node3D = builder.get_active_block()
+					#xform_basis = active_block.basis
+				#TransformSpace.Type.NORMAL:
+					#var up:Vector3 = Vector3.UP
+					#var x:Vector3 = up.cross(average_normal).normalized()
+					#var y:Vector3 = average_normal.cross(x)
+					#xform_basis = Basis(x, y, average_normal)
+				#TransformSpace.Type.VIEW:
+					#xform_basis = viewport_camera.global_basis
+				#TransformSpace.Type.PARENT:
+					#var active_block:Node3D = builder.get_active_block().get_parent_node_3d()
+					#xform_basis = active_block.basis
 
 			var drag_to:Vector3
 			match move_constraint:

@@ -37,22 +37,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		
 		if e.keycode == KEY_Q && e.alt_pressed:
 			select_block_under_cursor(viewport_camera, mouse_hover_pos)
-			#if e.is_pressed():
-				#var origin:Vector3 = viewport_camera.project_ray_origin(mouse_hover_pos)
-				#var dir:Vector3 = viewport_camera.project_ray_normal(mouse_hover_pos)
-			#
-				#var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
-				#if result:
-					#var cmd:CommandSelectBlocks = CommandSelectBlocks.new()
-					#cmd.builder = builder
-					#cmd.block_paths.append(result.object.get_path())
-					#
-					#if cmd.will_change_anything():
-						#var undo:EditorUndoRedoManager = builder.get_undo_redo()
-						#cmd.add_to_undo_manager(undo)
-						#
-						#_deactivate()
-						#_activate(builder)
 				
 			return true
 	
@@ -84,4 +68,38 @@ func pick_vertex_material(global_scene:CyclopsGlobalScene, selected:bool = false
 	return global_scene.vertex_unselected_material
 	
 	
+func calc_gizmo_transform(origin:Vector3, average_normal:Vector3, active_block:Node3D, viewport_camera:Camera3D, orientation:TransformSpace.Type)->Transform3D:
+	var result:Transform3D
 	
+	match orientation:
+		TransformSpace.Type.GLOBAL:
+			result = Transform3D.IDENTITY
+			result.origin = origin
+		TransformSpace.Type.LOCAL:
+			result = active_block.global_transform
+			result.origin = origin
+			
+			#var xform:Transform3D = active_block.global_transform
+			#gizmo_translate.global_transform = xform
+			#gizmo_translate.global_position = origin
+		TransformSpace.Type.NORMAL:
+			var up:Vector3 = Vector3.UP
+			var x:Vector3 = up.cross(average_normal).normalized()
+			var y:Vector3 = average_normal.cross(x)
+			#gizmo_translate.global_basis = Basis(x, y, average_normal)
+			#gizmo_translate.global_position = origin
+			result.basis = Basis(x, y, average_normal)
+			result.origin = origin
+		TransformSpace.Type.VIEW:
+			#gizmo_translate.global_basis = viewport_camera.global_basis
+			#gizmo_translate.global_position = origin
+			
+			result.basis = viewport_camera.global_basis
+			result.origin = origin
+		TransformSpace.Type.PARENT:
+			result = active_block.get_parent_node_3d().global_transform
+			result.origin = origin
+			#var xform:Transform3D = active_block.get_parent_node_3d().global_transform
+			#gizmo_translate.global_transform = xform
+
+	return result	
