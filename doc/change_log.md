@@ -35,6 +35,7 @@
 * Adding importer/exporter for custom Cyclops file format
 * Adding a variety of gizmo coordinate orientations for tools
 * Fixing incorrect translation for some of the planar handles on the translation gizmo
+* Adding way to use hotkeys to switch between tools.
 
 
 
