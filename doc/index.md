@@ -105,7 +105,7 @@ A second menu has been created for import commands, since these need to be able 
 * Import Cyclops File - Will import a file exported using the `Export as Cyclops File` command.
 
 
-### Snapping
+## Snapping
 
 ![Snapping Menu](snapping_menu.png)
 
@@ -113,7 +113,7 @@ When the magnet button is pressed, snapping is enabled.  The dropdown allows you
 
 [Snapping](snapping.md)
 
-### Display Mode
+## Display Mode
 
 The display mode lets you determine how blocks are displayed in the viewport.
 
