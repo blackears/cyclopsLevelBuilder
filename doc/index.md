@@ -41,10 +41,9 @@ Most commands are undoable, so you can use Ctrl-Z to undo most actions and Ctrl-
 Most of the tools support pressing the Escape key to cancel the current operation.
 
 
-
 ## CyclopsBlock object
 
-Each block you create is encapsulated in a CyclopsBlock object.  There is a limited number of properties on it that you can change.
+Each block you create is encapsulated in a CyclopsBlock object.  There are a number of properties on it that you can change.
 
 * Collision Type - Affects the type of collision generated for the object
 	* None - No collision
@@ -52,41 +51,19 @@ Each block you create is encapsulated in a CyclopsBlock object.  There is a limi
 	* Kinematic - A CharacterBody3D will be used for collision
 	* Rigid - A RigidBody3D will be used for collision
 
+
 ## Tools
 
-There are several tools in the toolbar that let you create and edit blocks:
+Cyclops has many tools to let you create and edit your scene.
 
-![Tool buttons](tool_buttons.jpg)
-
-* [Move](tool_move.md)
-* [Rotate](tool_rotate.md)
-* [Block](tool_block.md)
-* [Prism](tool_prism.md)
-* [Cylinder](tool_cylinder.md)
-* [Stairs](tool_stairs.md)
-* [Clip](tool_clip.md)
-* [Vertex](tool_vertex.md)
-* [Edge](tool_edge.md)
-* [Face](tool_face.md)
-* [Material Brush](tool_material_brush.md)
-* [Vertex Color Brush](tool_vertex_color_brush.md)
-* [Duplicate](tool_duplicate.md)
+[Cyclops Tools](tools/index.md)
 
 
+### Main Menu
 
-## Other toolbar features
+![Main Menu](edit_menu.jpg)
 
-### Delete
-
-Delete currently selected blocks.
-
-* Pressing X in Block mode will also delete selected blocks.
-
-### Menu
-
-![Menu](edit_menu.jpg)
-
-The menu has a number of useful commands.
+The Menu has a number of useful commands.
 
 * Duplicate Selected Blocks - Duplicates selected blocks.  Click with mouse to place duplication.
 * Merge Selected Blocks - Combine all selected blocks into a single convex shape.
@@ -97,6 +74,8 @@ The menu has a number of useful commands.
 
 * Convert to Godot Mesh - Builds a replica of the CyclopsBlocks in your level using core Godot objects.  Places them inside a node called 'converted_blocks' at the root of your scene.
 * Export As Gltf... - Generates a gltf file based on the current blocks in the scene.
+* Export as Godot Scene - Creates a new scene file in your project that contains duplicates the current scene but where all the CyclopsBlock objects have been replaced with Godot library objects.
+* Export as Cyclops File - Exports all Cyclops objects to a custom file format.  Allows for your cyclops scene to be stored in a format independent of the Godot scene file.  This is intended to help with transitioning between different Cyclops version which may not be backwards compatible.
 
 * Rotate 90 Ccw X - Rotate 90 degrees counter clockwise around the X axis
 * Rotate 90 Cw X - Rotate 90 degrees clockwise around the X axis
@@ -113,9 +92,16 @@ The menu has a number of useful commands.
 * Rotate 180 Z - Rotate 180 degrees around the Z axis
 * Mirror Selection Z - Mirror the selection in the Z axis
 
-### Lock UVs
 
-Cyclops Level Builder uses triplanar mapping to provide UVs to materials.  This means that if you move a block, the UVs will be updated to match where the block is in the world, which is generally what you want when building levels.  However, sometimes you want the texture to remain fixed when you move a block.  If Lock UVs is checked, the UV layout will travel with the block instead of updating based on the world position of the block.
+### Cyclops Menu
+
+![Cyclops Menu](menu_cyclops.png)
+
+A second menu has been created for import commands, since these need to be able to run even if no Cyclops block has been created.
+
+* Import Godot MeshInstance - Will convert the currently selected Godot MeshInstance into a CyclopsBlock
+* Import Cyclops File - Will import a file exported using the `Export as Cyclops File` command.
+
 
 ### Snapping
 

@@ -14,6 +14,15 @@ Edit the vertices of the block.
 ![Move vertices](move_vertices.gif)
 
 
+### Tool Properties
+
+![Tool Properties Preview](tool_props_vertex.png)
+
+* Transform Space - Coordinate space to move block in
+* Triplanar Lock UVs - Use triplanar mapping to update UVs when block is moved.
+
+
+
 ## Support
 
 If you found this software useful, please consider buying me a coffee on Kofi.  Every contribution helps me to make more software:

@@ -6,7 +6,7 @@ Select and move blocks in your scene.
 
 Left click and drag with the mouse to select blocks within the rectangle's area.
 
-* Normal Drag - Blocks within the rectangle become the new selection.
+* Drag - Blocks within the rectangle become the new selection.
 * Shift-Drag - Toggle selection state of blocks.
 * Ctrl-Drag - Add blocks to selection.
 * Ctrl-Shift-Drag - Remove blocks from selection.
@@ -23,7 +23,15 @@ Right click in the middle of an operation to cancel it.
 
 At the moment, this gizmo overlaps Godot's default editor movement gizmo.  There is no way to turn Godot's gizmo off, but it also does not affect the movement, so you can just ignore it.
 
-## Keypresses
+### Tool Properties
+
+![Tool Properties Preview](tool_props_move.png)
+
+* Transform Space - Coordinate space to move block in
+* Triplanar Lock UVs - Use triplanar mapping to update UVs when block is moved.
+
+
+## Key Presses
 
 * Escape - Cancel the current movement operation.
 * G - Start moving objects in the plane perpendicular to the viewer.  Works similar to how the G key works in Blender.

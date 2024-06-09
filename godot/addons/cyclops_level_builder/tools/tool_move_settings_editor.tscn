@@ -23,18 +23,22 @@ text = "Transform space"
 [node name="transform_space" type="OptionButton" parent="GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-item_count = 3
+item_count = 5
 selected = 0
 popup/item_0/text = "GLOBAL"
 popup/item_0/id = 0
 popup/item_1/text = "LOCAL"
 popup/item_1/id = 1
-popup/item_2/text = "COMPONENT"
+popup/item_2/text = "NORMAL"
 popup/item_2/id = 2
+popup/item_3/text = "VIEW"
+popup/item_3/id = 3
+popup/item_4/text = "PARENT"
+popup/item_4/id = 4
 
 [node name="Label2" type="Label" parent="GridContainer"]
 layout_mode = 2
-text = "Correct UVs"
+text = "Triplanar Lock UVs"
 
 [node name="check_correct_uvs" type="CheckBox" parent="GridContainer"]
 unique_name_in_owner = true

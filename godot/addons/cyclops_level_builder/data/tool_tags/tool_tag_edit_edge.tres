@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ToolTag" load_steps=5 format=3 uid="uid://dub6oyal5fxly"]
 
-[ext_resource type="Texture2D" uid="uid://bxjb12iyfu4p2" path="res://addons/cyclops_level_builder/art/icons/select_edge.svg" id="1_6o0d8"]
+[ext_resource type="Texture2D" uid="uid://d2da2j8ve48rt" path="res://addons/cyclops_level_builder/art/icons/select_edge.svg" id="1_6o0d8"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/tool_tag.gd" id="1_w2hsk"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_edit_edge.gd" id="3_6rili"]
 

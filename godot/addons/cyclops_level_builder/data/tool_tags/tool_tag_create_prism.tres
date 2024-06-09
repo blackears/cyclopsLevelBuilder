@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ToolTag" load_steps=5 format=3 uid="uid://cihxgriu32oxb"]
 
-[ext_resource type="Texture2D" uid="uid://dn2bikqsleong" path="res://addons/cyclops_level_builder/art/icons/create_prism.svg" id="1_gxivr"]
+[ext_resource type="Texture2D" uid="uid://cbmwkjbju75er" path="res://addons/cyclops_level_builder/art/icons/create_prism.svg" id="1_gxivr"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/tool_tag.gd" id="1_oalyb"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_prism.gd" id="3_oagna"]
 

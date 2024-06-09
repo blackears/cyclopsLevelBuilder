@@ -13,6 +13,15 @@ Edit the faces of the block.
 ![Move faces](move_faces.gif)
 
 
+### Tool Properties
+
+![Tool Properties Preview](tool_props_face.png)
+
+* Transform Space - Coordinate space to move block in
+* Triplanar Lock UVs - Use triplanar mapping to update UVs when block is moved.
+
+
+
 ## Support
 
 If you found this software useful, please consider buying me a coffee on Kofi.  Every contribution helps me to make more software:
