@@ -1,5 +1,6 @@
 # Documentation
 
+[![Version 1.0.4 updates](https://img.youtube.com/vi/0nxUR5Giy_g/0.jpg)](https://www.youtube.com/watch?v=0nxUR5Giy_g)
 [![Version 1.0.3 updates](https://img.youtube.com/vi/2foYulFeZG4/0.jpg)](https://www.youtube.com/watch?v=2foYulFeZG4)
 [![Version 1.0.2 updates](https://img.youtube.com/vi/mbw_6dnOt_g/0.jpg)](https://www.youtube.com/watch?v=mbw_6dnOt_g)
 [![Version 1.0.1 updates](https://img.youtube.com/vi/AoG6olKg2_8/0.jpg)](https://www.youtube.com/watch?v=AoG6olKg2_8)
