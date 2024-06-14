@@ -38,6 +38,9 @@ var preview_point:Vector3
 
 var settings:ToolPrismSettings = ToolPrismSettings.new()
 
+func _can_handle_object(node:Node)->bool:
+	return true
+
 func _get_tool_properties_editor()->Control:
 	var ed:ToolPrismSettingsEditor = preload("res://addons/cyclops_level_builder/tools/tool_prism_settings_editor.tscn").instantiate()
 	

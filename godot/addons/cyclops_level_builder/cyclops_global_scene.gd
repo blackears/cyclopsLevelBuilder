@@ -62,15 +62,15 @@ const SNAPPING_GRID_ANGLE:String = "snapping/grid/angle"
 @export_file("*.config") var settings_file:String = "cyclops_settings.config"
 var settings:CyclopsSettings = CyclopsSettings.new()
 
-signal xray_mode_changed(value:bool)
-
-@export var xray_mode:bool = false:
-	get:
-		return xray_mode
-	set(value):
-		if xray_mode != value:		
-			xray_mode = value
-			xray_mode_changed.emit(value)
+#signal xray_mode_changed(value:bool)
+#
+#@export var xray_mode:bool = false:
+	#get:
+		#return xray_mode
+	#set(value):
+		#if xray_mode != value:		
+			#xray_mode = value
+			#xray_mode_changed.emit(value)
 
 var unit_sphere:GeometryMesh
 var builder:CyclopsLevelBuilder

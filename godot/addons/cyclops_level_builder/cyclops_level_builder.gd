@@ -72,12 +72,24 @@ var mode:Mode = Mode.OBJECT
 enum EditMode { VERTEX, EDGE, FACE }
 var edit_mode:CyclopsLevelBuilder.EditMode = CyclopsLevelBuilder.EditMode.VERTEX
 
+signal xray_mode_changed(value:bool)
+
+@export var xray_mode:bool = false:
+	get:
+		return xray_mode
+	set(value):
+		if xray_mode != value:		
+			xray_mode = value
+			xray_mode_changed.emit(value)
+
 var display_mode:DisplayMode.Type = DisplayMode.Type.MATERIAL
 
 var cached_viewport_camera:Camera3D
 
 var editor_cache:Dictionary
 var editor_cache_file:String = "user://cyclops_editor_cache.json"
+
+#var viewport_3d_showing:bool = false
 
 func get_snapping_manager()->SnappingManager:
 	var mgr:SnappingManager = SnappingManager.new()
@@ -92,13 +104,25 @@ func _get_plugin_name()->String:
 func _get_plugin_icon()->Texture2D:
 	return preload("res://addons/cyclops_level_builder/art/cyclops.svg")
 
+#func  on_main_screen_changed(screen_name:String)->void:
+	#print("EditorPlugin::on_main_screen_changed ", screen_name)
+	#pass
+
 func _enter_tree():
 	if FileAccess.file_exists(editor_cache_file):
 		#print(">> _enter_tree")
 		var text:String = FileAccess.get_file_as_string(editor_cache_file)
 		#print("load text:", text)
 		editor_cache = JSON.parse_string(text)
-		
+	
+	#main_screen_changed.connect(func (screen_name:String): 
+		#print("EditorPlugin::on_main_screen_changed ", screen_name)
+		#viewport_3d_showing = screen_name == "3D"
+		#)
+	set_input_event_forwarding_always_enabled()
+	#var main_viewport_3d:SubViewport = EditorInterface.get_editor_viewport_3d()
+	#main_viewport_3d.gui_focus_changed.connect(on_viewport_focus_changed)
+	
 	add_custom_type("CyclopsScene", "Node3D", preload("nodes/cyclops_scene.gd"), preload("nodes/cyclops_blocks_icon.png"))
 	
 	add_custom_type("CyclopsBlock", "Node3D", preload("nodes/cyclops_block.gd"), preload("nodes/cyclops_blocks_icon.png"))
@@ -136,6 +160,9 @@ func _enter_tree():
 	add_control_to_bottom_panel(cyclops_console_dock, "Cyclops")
 	
 	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, main_toolbar)
+
+	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
+	add_control_to_bottom_panel(material_dock, "Materials")
 	
 	var editor:EditorInterface = get_editor_interface()
 	var selection:EditorSelection = editor.get_selection()
@@ -174,9 +201,9 @@ func _exit_tree():
 	
 	remove_control_from_bottom_panel(cyclops_console_dock)
 	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, main_toolbar)
+	remove_control_from_bottom_panel(material_dock)
 	
 	if activated:
-		remove_control_from_docks(material_dock)
 		remove_control_from_docks(convex_face_editor_dock)
 		remove_control_from_docks(tool_properties_dock)
 		remove_control_from_docks(snapping_properties_dock)
@@ -269,16 +296,16 @@ func update_activation():
 	if node is CyclopsBlock || always_on:
 		#print("updarting activation")
 		if !activated:
-			add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
-			add_control_to_bottom_panel(material_dock, "Materials")
+			#add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
+			#add_control_to_bottom_panel(material_dock, "Materials")
 			add_control_to_dock(DOCK_SLOT_RIGHT_BL, convex_face_editor_dock)
 			add_control_to_dock(DOCK_SLOT_RIGHT_BL, tool_properties_dock)
 			add_control_to_dock(DOCK_SLOT_RIGHT_BL, snapping_properties_dock)
 			activated = true
 	else:
 		if activated:
-			remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
-			remove_control_from_bottom_panel(material_dock)
+			#remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
+			#remove_control_from_bottom_panel(material_dock)
 			remove_control_from_docks(convex_face_editor_dock)
 			remove_control_from_docks(tool_properties_dock)
 			remove_control_from_docks(snapping_properties_dock)
@@ -310,9 +337,14 @@ func _forward_3d_draw_over_viewport(viewport_control:Control):
 
 func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent):
 	#print("plugin: " + event.as_text())
+	#print("_forward_3d_gui_input ", event)
+	
 	cached_viewport_camera = viewport_camera
 	
-	if tool:
+	var sel_nodes:Array[Node] = EditorInterface.get_selection().get_selected_nodes()
+	var active_node:Node = sel_nodes.back()
+	
+	if tool && tool._can_handle_object(active_node):
 		var result:bool = tool._gui_input(viewport_camera, event)
 		tool._draw_tool(viewport_camera)
 		return EditorPlugin.AFTER_GUI_INPUT_STOP if result else EditorPlugin.AFTER_GUI_INPUT_PASS

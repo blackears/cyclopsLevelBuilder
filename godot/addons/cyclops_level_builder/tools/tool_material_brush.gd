@@ -40,6 +40,9 @@ var last_mouse_pos:Vector2
 func _get_tool_id()->String:
 	return TOOL_ID
 
+func _can_handle_object(node:Node)->bool:
+	return node is CyclopsBlock
+
 func _draw_tool(viewport_camera:Camera3D):
 	super._draw_tool(viewport_camera)
 

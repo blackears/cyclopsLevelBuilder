@@ -54,6 +54,9 @@ var cmd_transform_blocks:CommandTransformBlocks
 func _get_tool_id()->String:
 	return TOOL_ID
 
+func _can_handle_object(node:Node)->bool:
+	return node is CyclopsBlock
+
 func draw_gizmo(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	if !gizmo_rotate:

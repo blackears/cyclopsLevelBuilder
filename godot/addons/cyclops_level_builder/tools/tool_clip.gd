@@ -37,6 +37,9 @@ var clip_block:CyclopsBlock
 func _get_tool_id()->String:
 	return TOOL_ID
 
+func _can_handle_object(node:Node)->bool:
+	return node is CyclopsBlock
+
 func has_clip_point(point:Vector3)->bool:
 	for p in clip_points:
 		if p.is_equal_approx(point):

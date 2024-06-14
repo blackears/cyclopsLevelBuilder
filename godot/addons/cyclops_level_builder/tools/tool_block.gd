@@ -64,6 +64,9 @@ func _get_tool_properties_editor()->Control:
 	
 	return ed
 
+func _can_handle_object(node:Node)->bool:
+	return true
+
 func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 	var blocks_root:Node = builder.get_block_add_parent()
 	var e:InputEventMouseButton = event
@@ -104,7 +107,6 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 			
 		else:
 			tool_state = ToolState.BLOCK_BASE
-
 		
 	else:
 		#print("Miss")

@@ -30,6 +30,9 @@ var mouse_hover_pos:Vector2
 var drag_select_start_pos:Vector2
 var drag_select_to_pos:Vector2
 
+func _can_handle_object(node:Node)->bool:
+	return node is CyclopsBlock
+
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
 	
 	if event is InputEventKey:

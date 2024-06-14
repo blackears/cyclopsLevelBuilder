@@ -29,8 +29,17 @@ var editor_plugin:CyclopsLevelBuilder:
 	get:
 		return editor_plugin
 	set(value):
+		if editor_plugin:
+			editor_plugin.xray_mode_changed.disconnect(on_xray_mode_changed)
+			editor_plugin.main_screen_changed.disconnect(_on_main_screen_changed)
+			editor_plugin.active_node_changed.disconnect(on_active_node_changed)
+		
 		editor_plugin = value
-		editor_plugin.active_node_changed.connect(on_active_node_changed)
+		
+		if editor_plugin:
+			editor_plugin.active_node_changed.connect(on_active_node_changed)			
+			editor_plugin.xray_mode_changed.connect(on_xray_mode_changed)
+			editor_plugin.main_screen_changed.connect(_on_main_screen_changed)
 		
 		build_ui()
 
@@ -75,11 +84,8 @@ func _ready():
 	%Menu.add_action_item(ActionRotateZ180.new(editor_plugin))
 	%Menu.add_action_item(ActionMirrorSelectionZ.new(editor_plugin))
 	
-	var global_scene = get_node("/root/CyclopsAutoload")
-
-	global_scene.xray_mode_changed.connect(on_xray_mode_changed)
-	%bn_xray.button_pressed = global_scene.xray_mode
-			
+	#var global_scene = get_node("/root/CyclopsAutoload")
+#
 	update_grid()
 	
 
@@ -113,8 +119,9 @@ func build_ui():
 	
 	if !editor_plugin:
 		return
+
+	%bn_xray.button_pressed = editor_plugin.xray_mode
 		
-	editor_plugin.main_screen_changed.connect(_on_main_screen_changed)
 	set_process_input(true)
 	
 	
@@ -207,8 +214,8 @@ func _on_bn_xray_toggled(button_pressed:bool):
 	if !editor_plugin:
 		return
 	
-	var global_scene:CyclopsGlobalScene = editor_plugin.get_global_scene()
-	global_scene.xray_mode = button_pressed
+	#var global_scene:CyclopsGlobalScene = editor_plugin.get_global_scene()
+	editor_plugin.xray_mode = button_pressed
 	
 #
 #func _on_bn_snap_settings_pressed():

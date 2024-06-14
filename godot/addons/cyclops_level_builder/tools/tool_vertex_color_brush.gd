@@ -42,6 +42,9 @@ var last_hit_pos:Vector3
 func _get_tool_id()->String:
 	return TOOL_ID
 
+func _can_handle_object(node:Node)->bool:
+	return node is CyclopsBlock
+
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()

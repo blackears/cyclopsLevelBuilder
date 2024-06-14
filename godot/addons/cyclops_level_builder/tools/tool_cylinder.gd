@@ -43,6 +43,9 @@ var second_ring_radius:float
 
 
 
+func _can_handle_object(node:Node)->bool:
+	return true
+
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
 

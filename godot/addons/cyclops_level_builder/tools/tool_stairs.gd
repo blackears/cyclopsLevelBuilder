@@ -38,6 +38,9 @@ var base_drag_cur:Vector3
 var block_drag_cur:Vector3
 
 
+func _can_handle_object(node:Node)->bool:
+	return true
+
 func _activate(builder:CyclopsLevelBuilder):
 	super._activate(builder)
 
