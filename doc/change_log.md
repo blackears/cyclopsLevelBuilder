@@ -4,6 +4,7 @@
 
 * Editor toolbar is now always present.
 * Tool objects now have a method to indicate which nodes they are able to edit.
+* Fixing error when tessellating faces.
 
 
 ### v1.0.4

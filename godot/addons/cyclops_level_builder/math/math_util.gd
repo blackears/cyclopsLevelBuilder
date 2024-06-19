@@ -169,7 +169,34 @@ static func trianglate_face_indices(points:PackedVector3Array, indices:Array[int
 	
 	return result
 
-static func trianglate_face_vertex_indices(points:PackedVector3Array, normal:Vector3)->Array[int]:
+static func trianglate_face_vertex_indices(points:PackedVector3Array)->Array[int]:
+	var result:Array[int] = []
+	var fv_indices:Array = range(0, points.size())
+	
+	while fv_indices.size() > 3:
+		var best_idx_b:int = -1
+		var best_area:float = INF
+		
+		for idx_b in fv_indices.size():
+			var idx_a:int = wrap(idx_b - 1, 0, fv_indices.size())
+			var idx_c:int = wrap(idx_b + 1, 0, fv_indices.size())
+			
+			var area:float = triangle_area_x2(points[idx_a], points[idx_b], points[idx_c]).length_squared()
+			if best_idx_b == -1 || best_area < area:
+				best_area = area
+				best_idx_b = idx_b
+
+		result.append(fv_indices[wrap(best_idx_b - 1, 0, fv_indices.size())])
+		result.append(fv_indices[best_idx_b])
+		result.append(fv_indices[wrap(best_idx_b + 1, 0, fv_indices.size())])
+		
+		fv_indices.remove_at(best_idx_b)
+		
+	result.append_array(fv_indices)
+	
+	return result
+	
+static func trianglate_face_vertex_indices_in_plane(points:PackedVector3Array, plane_normal:Vector3)->Array[int]:
 	var result:Array[int] = []
 	var fv_indices:Array = range(0, points.size())
 #	print("trianglate_face_indices %s" % points)
@@ -188,7 +215,7 @@ static func trianglate_face_vertex_indices(points:PackedVector3Array, normal:Vec
 		
 			#Godot uses clockwise winding
 			var tri_norm_dir:Vector3 = (p2 - p0).cross(p1 - p0)
-			if tri_norm_dir.dot(normal) > 0:
+			if tri_norm_dir.dot(plane_normal) > 0:
 				result.append(fv_indices[idx0])
 				result.append(fv_indices[idx1])
 				result.append(fv_indices[idx2])

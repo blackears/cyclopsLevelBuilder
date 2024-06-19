@@ -339,6 +339,19 @@ func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent):
 	#print("plugin: " + event.as_text())
 	#print("_forward_3d_gui_input ", event)
 	
+	if event is InputEventKey:
+		if event.is_pressed():
+			var base_control:Control = EditorInterface.get_base_control()
+			print("--properties:")
+			for prop in base_control.get_property_list():
+				if prop["name"].contains("camera"):
+					print(prop)
+			print("--methods:")
+			for prop in base_control.get_method_list():
+				if prop["name"].contains("camera"):
+					print(prop)
+		
+	
 	cached_viewport_camera = viewport_camera
 	
 	var sel_nodes:Array[Node] = EditorInterface.get_selection().get_selected_nodes()

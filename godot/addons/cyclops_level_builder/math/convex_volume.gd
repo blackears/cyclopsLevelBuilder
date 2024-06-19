@@ -127,11 +127,13 @@ class FaceInfo extends RefCounted:
 			for v_idx in vertex_indices:
 				points.append(mesh.vertices[v_idx].point)
 
+			triangulation_indices = MathUtil.trianglate_face_vertex_indices(points)
+
 #			print("start points %s" % points)
 				
-			var normal:Vector3 = MathUtil.face_area_x2(points).normalized()
+#			var normal:Vector3 = MathUtil.face_area_x2(points).normalized()
 #			print("normal %s" % normal)
-			triangulation_indices = MathUtil.trianglate_face_vertex_indices(points, normal)
+#			triangulation_indices = MathUtil.trianglate_face_vertex_indices(points, normal)
 #			print("triangulation %s" % str(triangulation_indices))
 		
 		return triangulation_indices
