@@ -335,21 +335,21 @@ func _forward_3d_draw_over_viewport(viewport_control:Control):
 	global_scene.draw_over_viewport(viewport_control)
 	#Draw on top of viweport here
 
-func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent):
+func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent)->int:
 	#print("plugin: " + event.as_text())
 	#print("_forward_3d_gui_input ", event)
 	
-	if event is InputEventKey:
-		if event.is_pressed():
-			var base_control:Control = EditorInterface.get_base_control()
-			print("--properties:")
-			for prop in base_control.get_property_list():
-				if prop["name"].contains("camera"):
-					print(prop)
-			print("--methods:")
-			for prop in base_control.get_method_list():
-				if prop["name"].contains("camera"):
-					print(prop)
+	#if event is InputEventKey:
+		#if event.is_pressed():
+			#var base_control:Control = EditorInterface.get_base_control()
+			#print("--properties:")
+			#for prop in base_control.get_property_list():
+				#if prop["name"].contains("camera"):
+					#print(prop)
+			#print("--methods:")
+			#for prop in base_control.get_method_list():
+				#if prop["name"].contains("camera"):
+					#print(prop)
 		
 	
 	cached_viewport_camera = viewport_camera
