@@ -38,7 +38,7 @@ var selected_points:PackedVector3Array
 func _init():
 	command_name = "Add vertices"
 
-func do_it():
+func pre_do_it():
 	var block:CyclopsBlock = builder.get_node(block_path)
 	
 	if !tracked_block_data:		
@@ -68,6 +68,9 @@ func do_it():
 
 	block.mesh_vector_data = new_vol.to_mesh_vector_data()
 
+
+func do_it():
+	pre_do_it()
 	
 func undo_it():
 	var block:CyclopsBlock = builder.get_node(block_path)

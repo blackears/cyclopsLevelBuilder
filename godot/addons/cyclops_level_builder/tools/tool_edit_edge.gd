@@ -633,7 +633,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			#drag_to = drag_handle_start_pos + offset
 			
 			cmd_move_edge.move_offset = offset
-			cmd_move_edge.do_it()
+			cmd_move_edge.pre_do_it()
 
 			setup_tool()
 #			draw_tool()

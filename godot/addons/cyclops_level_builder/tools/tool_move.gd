@@ -322,6 +322,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						#if pick_result.has("collider"):
 							#EditorInterface.get_selection().clear()
 							#EditorInterface.get_selection().add_node(pick_result["collider"])
+						#var viewport:SubViewport = EditorInterface.get_editor_viewport_3d()
+						#viewport.push_input()
+						#Input.parse_input_event()
 							
 					#print("tool state up")
 					tool_state = ToolState.NONE

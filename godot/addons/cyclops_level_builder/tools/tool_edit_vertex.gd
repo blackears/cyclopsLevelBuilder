@@ -596,7 +596,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			cmd_move_vertex.move_offset = drag_to - drag_handle_start_pos
 			#print("cmd_move_vertex.move_offset ", cmd_move_vertex.move_offset)
-			cmd_move_vertex.do_it()
+			cmd_move_vertex.pre_do_it()
 
 			setup_tool()
 			return true
@@ -620,7 +620,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			#print("drag point to %s" % drag_to)
 
 			cmd_add_vertex.points_to_add = [drag_to]
-			cmd_add_vertex.do_it()
+			cmd_add_vertex.pre_do_it()
 			
 			setup_tool()
 

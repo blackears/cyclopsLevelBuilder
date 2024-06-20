@@ -59,7 +59,7 @@ func _init():
 	command_name = "Move edges"
 
 
-func do_it():
+func pre_do_it():
 #	print("cmd move edges- DO IT")
 	
 	for block_path in block_map.keys():
@@ -141,6 +141,9 @@ func do_it():
 				#e_new.selected = true
 #
 		#block.mesh_vector_data = new_vol.to_mesh_vector_data()
+
+func do_it():
+	pre_do_it()
 	
 
 func undo_it():

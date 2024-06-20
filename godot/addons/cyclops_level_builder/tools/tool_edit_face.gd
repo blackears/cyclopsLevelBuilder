@@ -629,7 +629,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			#print("offset %s" % offset)
 			
 			cmd_move_face.move_offset = offset
-			cmd_move_face.do_it()
+			cmd_move_face.pre_do_it()
 
 			setup_tool()
 			return true

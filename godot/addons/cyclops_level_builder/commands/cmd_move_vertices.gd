@@ -60,7 +60,7 @@ func add_vertices(block_path:NodePath, indices:Array[int]):
 func _init():
 	command_name = "Move vertices"
 
-func do_it():
+func pre_do_it():
 #	print("move verts do_it")
 	for block_path in block_map.keys():
 		
@@ -82,6 +82,33 @@ func do_it():
 				vol.vertices[v_idx].point += move_offset_local
 
 		block.mesh_vector_data = vol.to_mesh_vector_data()
+	
+
+func do_it():
+	pre_do_it()
+##	print("move verts do_it")
+	#for block_path in block_map.keys():
+		#
+		#var block:CyclopsBlock = builder.get_node(block_path)
+		#var w2l:Transform3D = block.global_transform
+		#w2l = w2l.affine_inverse()
+		#var move_offset_local:Vector3 = w2l.basis * move_offset
+		#
+		##print("move offset %s" % move_offset)
+		##print("move offset local %s" % move_offset_local)
+		#
+		#var rec:BlockVertexChanges = block_map[block_path]
+		#
+		#var vol:ConvexVolume = ConvexVolume.new()
+		#vol.init_from_mesh_vector_data(rec.tracked_block_data)
+#
+		#for v_idx in vol.vertices.size():
+			#if rec.vertex_indices.has(v_idx):
+				#vol.vertices[v_idx].point += move_offset_local
+#
+		#block.mesh_vector_data = vol.to_mesh_vector_data()
+		
+######		
 #####
 		#var selected_points:PackedVector3Array
 		#var new_points:PackedVector3Array
@@ -106,6 +133,39 @@ func do_it():
 ##				print("set sel")
 				#v.selected = true
 #
+		#block.mesh_vector_data = new_vol.to_mesh_vector_data()
+
+###
+	#for block_path in block_map.keys():
+		#var selected_points:PackedVector3Array
+		#var new_points:PackedVector3Array
+#
+		#var rec:BlockVertexChanges = block_map[block_path]
+		#var vol:ConvexVolume = ConvexVolume.new()
+		#vol.init_from_mesh_vector_data(rec.tracked_block_data)
+##		
+		#for v_idx in vol.vertices.size():
+			#if rec.vertex_indices.has(v_idx):
+				#var p:Vector3 = vol.vertices[v_idx].point
+				#new_points.append(p)
+				#selected_points.append(p)
+			#else:
+				#new_points.append(vol.vertices[v_idx].point)
+				#
+		#
+		#var new_vol:ConvexVolume = ConvexVolume.new()
+		#new_vol.init_from_points(new_points)
+		#
+		#new_vol.copy_face_attributes(vol)
+		#
+		#for v_idx in new_vol.vertices.size():
+			#var v:ConvexVolume.VertexInfo = new_vol.vertices[v_idx]
+##			print ("vol point %s " % v.point)
+			#if selected_points.has(v.point):
+##				print("set sel")
+				#v.selected = true
+#
+		#var block:CyclopsBlock = builder.get_node(block_path)
 		#block.mesh_vector_data = new_vol.to_mesh_vector_data()
 
 	
