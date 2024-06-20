@@ -84,7 +84,7 @@ signal xray_mode_changed(value:bool)
 
 var display_mode:DisplayMode.Type = DisplayMode.Type.MATERIAL
 
-var cached_viewport_camera:Camera3D
+#var cached_viewport_camera:Camera3D
 
 var editor_cache:Dictionary
 var editor_cache_file:String = "user://cyclops_editor_cache.json"
@@ -323,8 +323,10 @@ func update_activation():
 func on_selection_changed():
 	update_activation()
 	
-	if cached_viewport_camera:
-		tool._draw_tool(cached_viewport_camera)
+	var view_cam:Camera3D = EditorInterface.get_editor_viewport_3d().get_camera_3d()
+	tool._draw_tool(view_cam)
+	#if cached_viewport_camera:
+		#tool._draw_tool(cached_viewport_camera)
 
 func _handles(object:Object):
 #	return object is CyclopsBlocks or object is CyclopsConvexBlock
@@ -352,7 +354,7 @@ func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent)->int:
 					#print(prop)
 		
 	
-	cached_viewport_camera = viewport_camera
+	#cached_viewport_camera = viewport_camera
 	
 	var sel_nodes:Array[Node] = EditorInterface.get_selection().get_selected_nodes()
 	var active_node:Node = sel_nodes.back()

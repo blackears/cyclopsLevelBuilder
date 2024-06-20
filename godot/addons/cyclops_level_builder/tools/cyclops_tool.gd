@@ -192,3 +192,20 @@ func select_block_under_cursor(viewport_camera:Camera3D, mouse_pos:Vector2):
 			_deactivate()
 			_activate(builder)
 	
+
+#func select_general_objects_with_ray(viewport_camera:Camera3D, mouse_pos:Vector2):
+	#var origin:Vector3 = viewport_camera.project_ray_origin(mouse_pos)
+	#var dir:Vector3 = viewport_camera.project_ray_normal(mouse_pos)
+#
+	#var root:Node = EditorInterface.get_edited_scene_root()
+	#select_general_objects_with_ray_recursive(root, origin, dir)
+#
+	#pass
+#
+#func select_general_objects_with_ray_recursive(node:Node, origin:Vector3, dir:Vector3):
+	#if node is VisualInstance3D:
+		#var vi:VisualInstance3D = node
+		#var rid:RID = vi.get_instance()
+	#
+	#pass
+	

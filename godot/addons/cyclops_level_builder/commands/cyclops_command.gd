@@ -40,17 +40,19 @@ class TrackedBlock extends RefCounted:
 	var collision_layers:int
 	var collision_mask:int
 
-	func _init(block:CyclopsBlock):
+	func _init(block:Node3D):
 		path = block.get_path()
 		path_parent = block.get_parent().get_path()
 		name = block.name
-		data = block.mesh_vector_data.duplicate()
 		world_xform = block.global_transform
-		#selected = block.selected
-		materials = block.materials
-		collision_type = block.collision_type
-		collision_layers = block.collision_layer
-		collision_mask = block.collision_mask
+		
+		if block is CyclopsBlock:
+			var cyc_block:CyclopsBlock = block
+			data = cyc_block.mesh_vector_data.duplicate()
+			materials = cyc_block.materials
+			collision_type = cyc_block.collision_type
+			collision_layers = cyc_block.collision_layer
+			collision_mask = cyc_block.collision_mask
 
 func add_to_undo_manager(undo_manager:EditorUndoRedoManager):
 	undo_manager.create_action(command_name, UndoRedo.MERGE_DISABLE)
