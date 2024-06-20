@@ -89,6 +89,8 @@ var display_mode:DisplayMode.Type = DisplayMode.Type.MATERIAL
 var editor_cache:Dictionary
 var editor_cache_file:String = "user://cyclops_editor_cache.json"
 
+var viewport_renderings:Array[ViewportRenderings]
+
 #var viewport_3d_showing:bool = false
 
 func get_snapping_manager()->SnappingManager:
@@ -115,6 +117,14 @@ func _enter_tree():
 		#print("load text:", text)
 		editor_cache = JSON.parse_string(text)
 	
+	for i in 4:
+		var vr:ViewportRenderings = ViewportRenderings.new()
+		viewport_renderings.append(vr)
+		
+		var viewport:SubViewport = EditorInterface.get_editor_viewport_3d(i)
+		vr.viewport = viewport
+		vr.viewport_editor_index = i
+		
 	#main_screen_changed.connect(func (screen_name:String): 
 		#print("EditorPlugin::on_main_screen_changed ", screen_name)
 		#viewport_3d_showing = screen_name == "3D"
@@ -187,7 +197,12 @@ func _exit_tree():
 	#print("saving cache:", text)
 	file.store_string(JSON.stringify(editor_cache, "    "))
 	file.close()
-		
+	
+	for i in 4:
+		var vr:ViewportRenderings = viewport_renderings[i]
+		vr.dispose()
+	viewport_renderings.clear()
+	
 	# Clean-up of the plugin goes here.
 	remove_autoload_singleton(AUTOLOAD_NAME)
 	#remove_autoload_singleton(CYCLOPS_HUD_NAME)
@@ -252,9 +267,12 @@ func is_active_block(block:CyclopsBlock)->bool:
 	return !nodes.is_empty() && nodes.back() == block
 	
 func get_active_block()->CyclopsBlock:
-	var selection:EditorSelection = get_editor_interface().get_selection()
+	var selection:EditorSelection = EditorInterface.get_selection()
 	var nodes:Array[Node] = selection.get_selected_nodes()
 	
+	if nodes.is_empty():
+		return null
+		
 	var back:Node = nodes.back()
 	if back is CyclopsBlock:
 		return back
@@ -265,7 +283,7 @@ func get_active_block()->CyclopsBlock:
 func get_selected_blocks()->Array[CyclopsBlock]:
 	var result:Array[CyclopsBlock]
 
-	var selection:EditorSelection = get_editor_interface().get_selection()
+	var selection:EditorSelection = EditorInterface.get_selection()
 	for node in selection.get_selected_nodes():
 		if node is CyclopsBlock:
 			result.append(node)
@@ -357,7 +375,8 @@ func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent)->int:
 	#cached_viewport_camera = viewport_camera
 	
 	var sel_nodes:Array[Node] = EditorInterface.get_selection().get_selected_nodes()
-	var active_node:Node = sel_nodes.back()
+	
+	var active_node:Node = null if sel_nodes.is_empty() else sel_nodes.back()
 	
 	if tool && tool._can_handle_object(active_node):
 		var result:bool = tool._gui_input(viewport_camera, event)
