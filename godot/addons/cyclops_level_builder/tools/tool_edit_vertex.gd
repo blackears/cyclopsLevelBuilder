@@ -72,11 +72,13 @@ func draw_gizmo(viewport_camera:Camera3D):
 	var origin:Vector3
 	var count:int = 0
 	for h in handles:
-		var block:CyclopsBlock = builder.get_node(h.block_path)
-		var v:ConvexVolume.VertexInfo = block.control_mesh.vertices[h.vertex_index]
-		if v.selected:
-			origin += h.position
-			count += 1
+		var node:Node = builder.get_node(h.block_path)
+		if node is CyclopsBlock:
+			var block:CyclopsBlock = node
+			var v:ConvexVolume.VertexInfo = block.control_mesh.vertices[h.vertex_index]
+			if v.selected:
+				origin += h.position
+				count += 1
 
 	if count == 0:
 		global_scene.set_custom_gizmo(null)
@@ -97,12 +99,14 @@ func _draw_tool(viewport_camera:Camera3D):
 		global_scene.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
 	
 	for h in handles:
-		var block:CyclopsBlock = builder.get_node(h.block_path)
-		var v:ConvexVolume.VertexInfo = block.control_mesh.vertices[h.vertex_index]
-		
-		var active:bool = block.control_mesh.active_vertex == h.vertex_index
-		#print("draw vert idx:%s sel:%s active:%s" % [h.vertex_index, v.selected, active])
-		global_scene.draw_vertex(h.position, pick_vertex_material(global_scene, v.selected, active))
+		var node:Node = builder.get_node(h.block_path)
+		if node is CyclopsBlock:
+			var block:CyclopsBlock = node
+			var v:ConvexVolume.VertexInfo = block.control_mesh.vertices[h.vertex_index]
+			
+			var active:bool = block.control_mesh.active_vertex == h.vertex_index
+			#print("draw vert idx:%s sel:%s active:%s" % [h.vertex_index, v.selected, active])
+			global_scene.draw_vertex(h.position, pick_vertex_material(global_scene, v.selected, active))
 	
 	draw_gizmo(viewport_camera)
 	

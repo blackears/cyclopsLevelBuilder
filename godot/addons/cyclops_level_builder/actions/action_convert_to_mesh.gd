@@ -33,20 +33,22 @@ func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_
 func _execute():
 	var root:Node = plugin.get_editor_interface().get_edited_scene_root()
 	
-	#var ed_sel:EditorSelection = plugin.get_editor_interface().get_selection()
-	#var sel_nodes:Array[Node] = ed_sel.get_selected_nodes()
-	#
-	#if sel_nodes.is_empty():
-		#return
+	var ed_sel:EditorSelection = EditorInterface.get_selection()
+	var sel_nodes:Array[Node] = ed_sel.get_selected_nodes()
+	
+	if sel_nodes.is_empty():
+		#error_string("No nodes selected")
+		return
 
 	#var branch_to_clone:Node = sel_nodes[0]
 	#var root = branch_to_clone.get_parent()
 	
 	var converted_branch:Node3D = clone_branch(root)
-	converted_branch.name = GeneralUtil.find_unique_name(root, "converted_blocks")
-	root.add_child(converted_branch)
-	
-	set_owner_recursive(converted_branch, plugin.get_editor_interface().get_edited_scene_root())
+	if converted_branch:
+		converted_branch.name = GeneralUtil.find_unique_name(root, "converted_blocks")
+		root.add_child(converted_branch)
+		
+		set_owner_recursive(converted_branch, plugin.get_editor_interface().get_edited_scene_root())
 	
 	pass
 
@@ -58,6 +60,9 @@ func set_owner_recursive(node:Node3D, new_owner):
 
 func clone_branch(node:Node3D)->Node3D:
 	if node is CyclopsBlock:
+		if !EditorInterface.get_selection().get_selected_nodes().has(node):
+			return null
+		
 		var block:CyclopsBlock = node
 		var name_root:String = block.name
 		
@@ -104,27 +109,20 @@ func clone_branch(node:Node3D)->Node3D:
 			shape.points = vol.get_points()
 			collision_shape.shape = shape
 
-		#var occluder:OccluderInstance3D = OccluderInstance3D.new()
-		#occluder.name = name_root + "_occ"
-##		occluder.owner = plugin.get_editor_interface().get_edited_scene_root()
-		#new_node.add_child(occluder)
-		#
-		#var occluder_object:ArrayOccluder3D = ArrayOccluder3D.new()
-		#occluder.name = name_root + "_occ"
-		#occluder_object.vertices = vol.get_points()
-		#occluder_object.indices = vol.get_trimesh_indices()
-		#occluder.occluder = occluder_object
-		
 		return new_node
 		
 	else:
 		var new_node:Node3D = Node3D.new()
-#		new_node.owner = plugin.get_editor_interface().get_edited_scene_root()
+
 		new_node.transform = node.transform
 		new_node.name = node.name
 		for child in node.get_children():
 			if branch_is_valid(child):
-				new_node.add_child(clone_branch(child))
+				var child_branch:Node3D = clone_branch(child)
+				if child_branch:
+					new_node.add_child(child_branch)
+		if new_node.get_child_count() == 0:
+			return null
 		return new_node
 
 func branch_is_valid(node:Node)->bool:
