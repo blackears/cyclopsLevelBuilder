@@ -67,7 +67,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
 					if !sel_blocks.is_empty():
 											
-						builder.switch_to_tool(ToolDuplicate.new())
+#						builder.switch_to_tool(ToolDuplicate.new())
+						builder.switch_to_tool_id(ToolDuplicate.TOOL_ID)
 					
 			return true
 	

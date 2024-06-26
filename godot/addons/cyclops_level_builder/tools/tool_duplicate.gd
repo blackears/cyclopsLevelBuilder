@@ -60,7 +60,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						cmd_duplicate.add_to_undo_manager(undo)
 					
 					tool_state = ToolState.DONE
-					builder.switch_to_tool(ToolBlock.new())
+#					builder.switch_to_tool(ToolBlock.new())
+					builder.switch_to_tool_id(ToolBlock.TOOL_ID)
 					
 		return true
 					

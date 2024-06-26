@@ -30,4 +30,5 @@ func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_
 	super._init(plugin, "Duplicate Selected Blocks")
 
 func _execute():
-	plugin.switch_to_tool(ToolDuplicate.new())
+#	plugin.switch_to_tool(ToolDuplicate.new())
+	plugin.switch_to_tool_id(ToolDuplicate.TOOL_ID)

@@ -68,7 +68,7 @@ var handle_screen_radius:float = 6
 var drag_start_radius:float = 6
 
 var active_tool:CyclopsTool = null
-var loaded_tools:Dictionary
+var tool_list:Array[CyclopsTool]
 
 enum Mode { OBJECT, EDIT }
 var mode:Mode = Mode.OBJECT
@@ -181,6 +181,7 @@ func _enter_tree():
 	var selection:EditorSelection = editor.get_selection()
 	selection.selection_changed.connect(on_selection_changed)
 	
+	load_tools()
 	update_activation()
 
 
@@ -191,7 +192,8 @@ func _enter_tree():
 	global_scene.builder = self
 	
 	switch_to_snapping_system(SnappingSystemGrid.new())
-	switch_to_tool(ToolBlock.new())
+#	switch_to_tool(ToolBlock.new())
+	switch_to_tool_id(ToolBlock.TOOL_ID)
 
 
 func _exit_tree():
@@ -239,6 +241,17 @@ func _exit_tree():
 	main_toolbar.queue_free()
 	editor_toolbar.queue_free()
 	upgrade_cyclops_blocks_toolbar.queue_free()
+
+func load_tools():
+	if active_tool:
+		switch_to_tool_id("")
+	
+	tool_list.clear()
+	
+	for tag: ToolTag in config.tool_tags:
+		var tool:CyclopsTool = tag.tool_script.new()
+		tool_list.append(tool)
+
 
 func log(message:String, level:CyclopsLogger.LogLevel = CyclopsLogger.LogLevel.ERROR):
 	logger.log(message, level)
@@ -345,7 +358,9 @@ func on_selection_changed():
 	update_activation()
 	
 	var view_cam:Camera3D = EditorInterface.get_editor_viewport_3d().get_camera_3d()
-	active_tool._draw_tool(view_cam)
+	
+	if active_tool:
+		active_tool._draw_tool(view_cam)
 	#if cached_viewport_camera:
 		#active_tool._draw_tool(cached_viewport_camera)
 
@@ -443,6 +458,28 @@ func set_snapping_cache(tool_id:String, cache:Dictionary):
 		editor_cache["snapping"] = {}
 	
 	editor_cache.snapping[tool_id] = cache
+
+func get_tool_by_id(tool_id:String)->CyclopsTool:
+	for tool:CyclopsTool in tool_list:
+		if tool._get_tool_id() == tool_id:
+			return tool
+	return null
+
+func switch_to_tool_id(tool_id:String):
+	var next_tool:CyclopsTool = get_tool_by_id(tool_id)
+	
+	if active_tool:
+		active_tool._deactivate()
+		tool_properties_dock.set_editor(null)
+	
+	active_tool = next_tool
+
+	if active_tool:
+		active_tool._activate(self)
+		var control:Control = active_tool._get_tool_properties_editor()
+		tool_properties_dock.set_editor(control)
+		
+	tool_changed.emit(active_tool)
 
 func switch_to_tool(_tool:CyclopsTool):
 	#print(">> switch to tool")
