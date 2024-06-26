@@ -28,6 +28,7 @@ class_name CyclopsLevelBuilder
 signal active_node_changed
 signal selection_changed
 signal snapping_tool_changed
+signal tool_changed(tool:CyclopsTool)
 
 const AUTOLOAD_NAME = "CyclopsAutoload"
 const CYCLOPS_HUD_NAME = "CyclopsGlobalHud"
@@ -55,7 +56,6 @@ var always_on:bool = false:
 		update_activation()
 
 var block_create_distance:float = 10
-var tool:CyclopsTool = null
 var snapping_system:CyclopsSnappingSystem = null
 var lock_uvs:bool = false
 var tool_overlay_extrude:float = .01
@@ -66,6 +66,9 @@ var tool_material_path:String
 var handle_screen_radius:float = 6
 
 var drag_start_radius:float = 6
+
+var active_tool:CyclopsTool = null
+var loaded_tools:Dictionary
 
 enum Mode { OBJECT, EDIT }
 var mode:Mode = Mode.OBJECT
@@ -342,9 +345,9 @@ func on_selection_changed():
 	update_activation()
 	
 	var view_cam:Camera3D = EditorInterface.get_editor_viewport_3d().get_camera_3d()
-	tool._draw_tool(view_cam)
+	active_tool._draw_tool(view_cam)
 	#if cached_viewport_camera:
-		#tool._draw_tool(cached_viewport_camera)
+		#active_tool._draw_tool(cached_viewport_camera)
 
 func _handles(object:Object):
 #	return object is CyclopsBlocks or object is CyclopsConvexBlock
@@ -378,9 +381,9 @@ func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent)->int:
 	
 	var active_node:Node = null if sel_nodes.is_empty() else sel_nodes.back()
 	
-	if tool && tool._can_handle_object(active_node):
-		var result:bool = tool._gui_input(viewport_camera, event)
-		tool._draw_tool(viewport_camera)
+	if active_tool && active_tool._can_handle_object(active_node):
+		var result:bool = active_tool._gui_input(viewport_camera, event)
+		active_tool._draw_tool(viewport_camera)
 		return EditorPlugin.AFTER_GUI_INPUT_STOP if result else EditorPlugin.AFTER_GUI_INPUT_PASS
 	
 	return EditorPlugin.AFTER_GUI_INPUT_PASS
@@ -444,15 +447,17 @@ func set_snapping_cache(tool_id:String, cache:Dictionary):
 func switch_to_tool(_tool:CyclopsTool):
 	#print(">> switch to tool")
 	
-	if tool:
-		tool._deactivate()
+	if active_tool:
+		active_tool._deactivate()
 	
-	tool = _tool
+	active_tool = _tool
 
-	if tool:
-		tool._activate(self)
-		var control:Control = tool._get_tool_properties_editor()
+	if active_tool:
+		active_tool._activate(self)
+		var control:Control = active_tool._get_tool_properties_editor()
 		tool_properties_dock.set_editor(control)
+	
+	tool_changed.emit(active_tool)
 
 func switch_to_snapping_system(_snapping_system:CyclopsSnappingSystem):
 	if snapping_system:

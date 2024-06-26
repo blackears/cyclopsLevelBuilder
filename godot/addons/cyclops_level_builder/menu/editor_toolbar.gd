@@ -33,6 +33,7 @@ var editor_plugin:CyclopsLevelBuilder:
 			editor_plugin.xray_mode_changed.disconnect(on_xray_mode_changed)
 			editor_plugin.main_screen_changed.disconnect(_on_main_screen_changed)
 			editor_plugin.active_node_changed.disconnect(on_active_node_changed)
+			editor_plugin.tool_changed.disconnect(on_tool_changed)
 		
 		editor_plugin = value
 		
@@ -40,6 +41,7 @@ var editor_plugin:CyclopsLevelBuilder:
 			editor_plugin.active_node_changed.connect(on_active_node_changed)			
 			editor_plugin.xray_mode_changed.connect(on_xray_mode_changed)
 			editor_plugin.main_screen_changed.connect(_on_main_screen_changed)
+			editor_plugin.tool_changed.connect(on_tool_changed)
 		
 		build_ui()
 
@@ -54,6 +56,7 @@ func on_active_node_changed():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	EditorInterface.get_selection().selection_changed.connect(_on_selection_changed)
 
 	%Menu.clear()
 	%Menu.add_action_item(ActionToolDuplicate.new(editor_plugin))
@@ -92,6 +95,7 @@ func _ready():
 
 
 var prev_button_pressed: Button = null
+
 func _press_button_line(button: Button) -> void:
 	if prev_button_pressed != null:
 		var line := prev_button_pressed.get_node_or_null('line')
@@ -172,13 +176,18 @@ func update_grid():
 	
 	$HBoxContainer/display_mode.select(editor_plugin.display_mode)
 		
+func _on_selection_changed():
+	build_ui()
 
+func on_tool_changed(tool:CyclopsTool):
+	pass
 
 func _on_main_screen_changed(screen_name: String):
 	currently_in_3d = (screen_name == '3D')
 
 func _input(event: InputEvent) -> void:
-	if !currently_in_3d:		return
+	if !currently_in_3d:
+		return
 	
 	for v: InputEvent in override_shortcuts:
 		if event.is_match(v, true) and event.is_pressed() and not event.is_echo():
@@ -191,10 +200,6 @@ func _input(event: InputEvent) -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
-
-
-#func _on_grid_size_item_selected(index):
-	#editor_plugin.get_global_scene().grid_size = index - 4
 
 
 
