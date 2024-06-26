@@ -5,7 +5,6 @@
 [node name="ToolButton" type="Button"]
 offset_right = 58.0
 offset_bottom = 36.0
-text = "ppppp"
 script = ExtResource("1_gyfm5")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]

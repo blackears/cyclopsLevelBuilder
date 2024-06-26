@@ -56,6 +56,18 @@ var average_normal:Vector3 = Vector3.UP
 func _get_tool_id()->String:
 	return TOOL_ID
 
+func _get_tool_name()->String:
+	var tag:ToolTag = load("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_edit_edge.tres")
+	return tag.name
+
+func _get_tool_icon()->Texture2D:
+	var tag:ToolTag = load("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_edit_edge.tres")
+	return tag.icon
+
+func _get_tool_tooltip()->String:
+	var tag:ToolTag = load("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_edit_edge.tres")
+	return tag.tooltip
+
 func _get_tool_properties_editor()->Control:
 	var ed:ToolEditEdgeSettingsEditor = preload("res://addons/cyclops_level_builder/tools/tool_edit_edge_settings_editor.tscn").instantiate()
 	

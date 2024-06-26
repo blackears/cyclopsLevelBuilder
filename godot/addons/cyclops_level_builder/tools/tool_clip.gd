@@ -37,6 +37,21 @@ var clip_block:CyclopsBlock
 func _get_tool_id()->String:
 	return TOOL_ID
 
+func _get_tool_name()->String:
+	var tag_:ToolTag = load("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_clip.tres")
+	return tag_.name
+#	return "Clip"
+
+func _get_tool_icon()->Texture2D:
+	var tag_:ToolTag = load("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_clip.tres")
+	return tag_.icon
+#	return preload("res://addons/cyclops_level_builder/art/icons/edit_clip.svg")
+
+func _get_tool_tooltip()->String:
+	var tag_:ToolTag = load("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_clip.tres")
+	return tag_.tooltip
+#	return "Clip volume"
+
 func _can_handle_object(node:Node)->bool:
 	return node is CyclopsBlock
 

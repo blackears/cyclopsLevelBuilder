@@ -55,6 +55,30 @@ var gizmo_translate:GizmoTranslate
 
 var settings:ToolMoveSettings = ToolMoveSettings.new()
 
+#var tag:ToolTag = preload("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_move.tres")
+#var tag = preload("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_move.tres")
+
+func _get_tool_id()->String:
+	return TOOL_ID
+
+func _get_tool_name()->String:
+	#print("<<1>>")
+	var tag_:ToolTag = load("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_move.tres")
+	#var tag = preload("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_move.tres")
+	#print("<<2>>")
+	return tag_.name
+#	return "Move"
+
+func _get_tool_icon()->Texture2D:
+	#return preload("res://addons/cyclops_level_builder/art/icons/move.svg")
+	var tag_:ToolTag = load("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_move.tres")
+	return tag_.icon
+
+func _get_tool_tooltip()->String:
+	var tag_:ToolTag = load("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_move.tres")
+	return tag_.tooltip
+	#return "Select and move blocks."
+
 func _get_tool_properties_editor()->Control:
 	var ed:ToolMoveSettingsEditor = preload("res://addons/cyclops_level_builder/tools/tool_move_settings_editor.tscn").instantiate()
 	
@@ -62,9 +86,6 @@ func _get_tool_properties_editor()->Control:
 	
 	return ed
 	
-func _get_tool_id()->String:
-	return TOOL_ID
-
 func _can_handle_object(node:Node)->bool:
 	return node is CyclopsBlock
 #	return true

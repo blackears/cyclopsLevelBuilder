@@ -61,4 +61,4 @@ func _process(delta):
 
 func _on_pressed():
 	if plugin:
-		pass # Replace with function body.
+		plugin.switch_to_tool_id(tool_id)

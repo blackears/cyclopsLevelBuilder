@@ -42,6 +42,24 @@ var first_ring_radius:float
 var second_ring_radius:float
 
 
+func _get_tool_id()->String:
+	return TOOL_ID
+	
+func _get_tool_name()->String:
+	var tag_:ToolTag = load("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_create_cylinder.tres")
+	return tag_.name
+#	return "Cylinder"
+
+func _get_tool_icon()->Texture2D:
+#	return preload("res://addons/cyclops_level_builder/art/icons/create_cylinder.svg")
+	var tag_:ToolTag = load("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_create_cylinder.tres")
+	return tag_.icon
+
+func _get_tool_tooltip()->String:
+	var tag_:ToolTag = load("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_create_cylinder.tres")
+	return tag_.tooltip
+#	return "Create cylinder"
+
 
 func _can_handle_object(node:Node)->bool:
 	return true

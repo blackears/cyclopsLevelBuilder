@@ -248,8 +248,11 @@ func load_tools():
 	
 	tool_list.clear()
 	
-	for tag: ToolTag in config.tool_tags:
-		var tool:CyclopsTool = tag.tool_script.new()
+	for script:GDScript in config.tool_scripts:
+		#print("script: ", script.resource_path)
+		#print("type: ", typeof(script.get_class()))
+		
+		var tool:CyclopsTool = script.new()
 		tool_list.append(tool)
 
 

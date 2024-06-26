@@ -128,39 +128,54 @@ func build_ui():
 		
 	set_process_input(true)
 	
+	var active_block:CyclopsBlock = editor_plugin.get_active_block()
+	for tool:CyclopsTool in editor_plugin.tool_list:
+		if tool._show_in_toolbar() && tool._can_handle_object(active_block):
+			var bn:ToolButton = preload("res://addons/cyclops_level_builder/menu/tool_button.tscn").instantiate()
+			bn.plugin = editor_plugin
+			bn.tool_id = tool._get_tool_id()
+			bn.icon = tool._get_tool_icon()
+			if !bn.icon:
+				bn.text = tool._get_tool_name()
+			bn.tooltip_text = tool._get_tool_tooltip()
+			
+			%ToolButtonContainer.add_child(bn)
+	#########
 	
-	var config:CyclopsConfig = editor_plugin.config
-	for tag: ToolTag in config.tool_tags:
-#		print("adding tag %s" % tag.name)
-		var bn:Button = Button.new()
-		if tag.icon:
-			bn.icon = tag.icon
-		else:
-			bn.text = tag.name
-		
-		bn.name = tag.name
-		
-		if !tag.input_events.is_empty(): #InputEvent
-			if tag.input_events_override: #bool
-				for v: InputEvent in tag.input_events:
-					override_shortcuts[v] = tag.name #for _input function
-			else:
-				bn.shortcut = Shortcut.new()
-				for v: InputEvent in tag.input_events:
-					bn.shortcut.events.append(v)
-		
-		bn.tooltip_text = tag.tooltip
-		bn.pressed.connect(func():
-			_press_button_line(bn)
-			tag._activate(editor_plugin)
-		)
-#		print("adding bn %s" % tag.name)
-		
-		%ToolButtonContainer.add_child(bn)
+	#if false:
+		#var config:CyclopsConfig = editor_plugin.config
+		#for tag: ToolTag in config.tool_tags:
+	##		print("adding tag %s" % tag.name)
+			#var bn:Button = Button.new()
+			#if tag.icon:
+				#bn.icon = tag.icon
+			#else:
+				#bn.text = tag.name
+			#
+			#bn.name = tag.name
+			#
+			#if !tag.input_events.is_empty(): #InputEvent
+				#if tag.input_events_override: #bool
+					#for v: InputEvent in tag.input_events:
+						#override_shortcuts[v] = tag.name #for _input function
+				#else:
+					#bn.shortcut = Shortcut.new()
+					#for v: InputEvent in tag.input_events:
+						#bn.shortcut.events.append(v)
+			#
+			#bn.tooltip_text = tag.tooltip
+			#bn.pressed.connect(func():
+				#_press_button_line(bn)
+				#tag._activate(editor_plugin)
+			#)
+	##		print("adding bn %s" % tag.name)
+			#
+			#%ToolButtonContainer.add_child(bn)
 		
 	%display_mode.select(editor_plugin.display_mode)
 	
 	#Snapping
+	var config:CyclopsConfig = editor_plugin.config
 	for tag in config.snapping_tags:
 		if tag.icon:
 			%snap_options.add_icon_item(tag.icon, tag.name)

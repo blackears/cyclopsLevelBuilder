@@ -36,6 +36,18 @@ var tool_state:ToolState = ToolState.READY
 func _get_tool_id()->String:
 	return TOOL_ID
 
+func _show_in_toolbar()->bool:
+	return false
+	
+func _get_tool_name()->String:
+	return "Duplicate"
+
+func _get_tool_icon()->Texture2D:
+	return null
+
+func _get_tool_tooltip()->String:
+	return "Duplicate selected blocks"
+
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()

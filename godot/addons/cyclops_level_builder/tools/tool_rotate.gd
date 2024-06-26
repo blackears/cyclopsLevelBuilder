@@ -54,6 +54,21 @@ var cmd_transform_blocks:CommandTransformBlocks
 func _get_tool_id()->String:
 	return TOOL_ID
 
+func _get_tool_name()->String:
+	var tag:ToolTag = load("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_rotate.tres")
+	return tag.name
+	#return "Rotate"
+
+func _get_tool_icon()->Texture2D:
+	var tag:ToolTag = load("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_rotate.tres")
+	return tag.icon
+#	return preload("res://addons/cyclops_level_builder/art/icons/rotate.svg")
+
+func _get_tool_tooltip()->String:
+	var tag:ToolTag = load("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_rotate.tres")
+	return tag.tooltip
+#	return "Rotate selected objets."
+
 func _can_handle_object(node:Node)->bool:
 	return node is CyclopsBlock
 
