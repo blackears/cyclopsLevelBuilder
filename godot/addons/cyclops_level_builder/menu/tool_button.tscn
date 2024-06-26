@@ -22,7 +22,9 @@ metadata/_edit_lock_ = true
 
 [node name="hilight" type="ColorRect" parent="MarginContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
+mouse_filter = 1
 color = Color(1, 1, 1, 0.368627)
 metadata/_edit_lock_ = true
 

@@ -60,5 +60,14 @@ func _process(delta):
 
 
 func _on_pressed():
+	#print("click ", tool_id)
 	if plugin:
+#		if plugin.active_tool:
+#			print("cur tool id ", plugin.active_tool._get_tool_id())
+			
+		if plugin.active_tool && plugin.active_tool._get_tool_id() == tool_id:
+#			print("unclick ", tool_id)
+			plugin.switch_to_tool_id("")
+			return
+			
 		plugin.switch_to_tool_id(tool_id)

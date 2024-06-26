@@ -31,7 +31,7 @@ var editor_plugin:CyclopsLevelBuilder:
 	set(value):
 		if editor_plugin:
 			editor_plugin.xray_mode_changed.disconnect(on_xray_mode_changed)
-			editor_plugin.main_screen_changed.disconnect(_on_main_screen_changed)
+#			editor_plugin.main_screen_changed.disconnect(_on_main_screen_changed)
 			editor_plugin.active_node_changed.disconnect(on_active_node_changed)
 			editor_plugin.tool_changed.disconnect(on_tool_changed)
 		
@@ -40,15 +40,15 @@ var editor_plugin:CyclopsLevelBuilder:
 		if editor_plugin:
 			editor_plugin.active_node_changed.connect(on_active_node_changed)			
 			editor_plugin.xray_mode_changed.connect(on_xray_mode_changed)
-			editor_plugin.main_screen_changed.connect(_on_main_screen_changed)
+#			editor_plugin.main_screen_changed.connect(_on_main_screen_changed)
 			editor_plugin.tool_changed.connect(on_tool_changed)
 		
 		build_ui()
 
 
-var tool_button_group = ButtonGroup.new()
-var override_shortcuts: Dictionary = {} #Dictionary[InputEvent, String]
-var currently_in_3d := false
+#var tool_button_group = ButtonGroup.new()
+#var override_shortcuts: Dictionary = {} #Dictionary[InputEvent, String]
+#var currently_in_3d := false
 
 func on_active_node_changed():
 	update_grid()
@@ -115,9 +115,11 @@ func _press_button_line(button: Button) -> void:
 
 
 func build_ui():
+	#print("build_ui")
 	#Tools
 	for child in %ToolButtonContainer.get_children():
 		%ToolButtonContainer.remove_child(child)
+		child.queue_free()
 	
 	%snap_options.clear()
 	
@@ -197,19 +199,19 @@ func _on_selection_changed():
 func on_tool_changed(tool:CyclopsTool):
 	pass
 
-func _on_main_screen_changed(screen_name: String):
-	currently_in_3d = (screen_name == '3D')
+#func _on_main_screen_changed(screen_name: String):
+	#currently_in_3d = (screen_name == '3D')
 
-func _input(event: InputEvent) -> void:
-	if !currently_in_3d:
-		return
-	
-	for v: InputEvent in override_shortcuts:
-		if event.is_match(v, true) and event.is_pressed() and not event.is_echo():
-			var button := %ToolButtonContainer.get_node_or_null(override_shortcuts[v] as String) as Button
-			if button:
-				button.pressed.emit() #simulate press
-			break
+#func _input(event: InputEvent) -> void:
+	#if !currently_in_3d:
+		#return
+	#
+	#for v: InputEvent in override_shortcuts:
+		#if event.is_match(v, true) and event.is_pressed() and not event.is_echo():
+			#var button := %ToolButtonContainer.get_node_or_null(override_shortcuts[v] as String) as Button
+			#if button:
+				#button.pressed.emit() #simulate press
+			#break
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

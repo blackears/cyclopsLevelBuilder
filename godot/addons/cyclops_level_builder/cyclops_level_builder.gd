@@ -472,16 +472,20 @@ func switch_to_tool_id(tool_id:String):
 	var next_tool:CyclopsTool = get_tool_by_id(tool_id)
 	
 	if active_tool:
+		if active_tool._get_tool_id() == tool_id:
+			return
+		
 		active_tool._deactivate()
 		tool_properties_dock.set_editor(null)
-	
+	#print("switching to ", tool_id)
 	active_tool = next_tool
 
 	if active_tool:
 		active_tool._activate(self)
 		var control:Control = active_tool._get_tool_properties_editor()
 		tool_properties_dock.set_editor(control)
-		
+	
+	#print("emittng ", tool_id)
 	tool_changed.emit(active_tool)
 
 func switch_to_tool(_tool:CyclopsTool):
