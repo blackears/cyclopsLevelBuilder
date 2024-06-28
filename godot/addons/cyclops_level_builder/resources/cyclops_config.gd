@@ -26,6 +26,6 @@ extends Resource
 class_name CyclopsConfig
 
 @export var tool_scripts:Array[Script]
-@export var tool_tags:Array[ToolTag]
+#@export var tool_tags:Array[ToolTag]
 @export var snapping_tags:Array[SnappingTag]
 

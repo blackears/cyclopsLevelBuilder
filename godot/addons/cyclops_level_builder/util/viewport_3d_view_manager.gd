@@ -21,8 +21,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-extends Resource
-class_name ViewportRenderings
+@tool
+extends Node
+class_name Viewport3DViewManager
 
 var viewport:Viewport
 var viewport_editor_index:int
@@ -30,6 +31,14 @@ var viewport_editor_index:int
 var inst_rid:RID
 var mesh_rid:RID
 
+func _enter_tree():
+	#print("Viewport3DViewManager _enter_tree ", viewport_editor_index)
+	pass
+	
+func _exit_tree():
+	#print("Viewport3DViewManager _exit_tree ", viewport_editor_index)
+	pass
+	
 func set_up_mesh():
 	inst_rid = RenderingServer.instance_create()
 	mesh_rid = RenderingServer.mesh_create()

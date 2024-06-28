@@ -129,11 +129,14 @@ func draw_gizmo(viewport_camera:Camera3D):
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
-	global_scene.draw_selected_blocks(viewport_camera)
+#	global_scene.draw_selected_blocks(viewport_camera)
+	builder.viewport_3d_manager.clear_tool_display()
+	builder.viewport_3d_manager.draw_selection_marquis(viewport_camera)
 
 	if tool_state == ToolState.DRAG_SELECTION:
 		#print("draw sel %s " % drag_select_to_pos)
-		global_scene.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
+#		global_scene.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
+		builder.viewport_3d_manager.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
 
 	draw_gizmo(viewport_camera)
 	

@@ -195,7 +195,7 @@ func draw_triangles(tri_points:PackedVector3Array, mat:Material = null):
 		tool_mesh.surface_add_vertex(p)
 	
 	tool_mesh.surface_end()
-	
+
 func draw_rect(start:Vector3, end:Vector3, mat:Material = null, vertex_mat:Material = null):	
 	
 	var p0:Vector3 = start
@@ -319,14 +319,13 @@ func draw_sphere(xform:Transform3D = Transform3D.IDENTITY, material:Material = n
 	
 
 func draw_selected_blocks(viewport_camera:Camera3D):
-	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
+#	var global_scene:CyclopsGlobalScene = builder.get_node("/root/CyclopsAutoload")
 
 	var blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
 	var active_block:CyclopsBlock = builder.get_active_block()
 	for block in blocks:
 		var active:bool = block == active_block
-		var mat:Material = global_scene.tool_object_active_material if active else global_scene.tool_object_selected_material
-		
+		var mat:Material = tool_object_active_material if active else tool_object_selected_material	
 		#Selection highlight outline
 		block.append_mesh_outline(tool_mesh, viewport_camera, block.global_transform, mat)
 		

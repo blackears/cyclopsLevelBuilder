@@ -137,14 +137,20 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
-	global_scene.draw_selected_blocks(viewport_camera)
+#	global_scene.draw_selected_blocks(viewport_camera)
+
+	builder.viewport_3d_manager.clear_tool_display()
+	builder.viewport_3d_manager.draw_selection_marquis(viewport_camera)
 
 	if tool_state == ToolState.BLOCK_BASE:
-		global_scene.draw_loop(base_points, true, global_scene.tool_material)
-		global_scene.draw_points(base_points, global_scene.vertex_tool_material)
+		builder.viewport_3d_manager.draw_line_strip(base_points, global_scene.tool_material, true)
+		builder.viewport_3d_manager.draw_vertices(base_points, global_scene.vertex_tool_material)
+#		global_scene.draw_loop(base_points, true, global_scene.tool_material)
+#		global_scene.draw_points(base_points, global_scene.vertex_tool_material)
 		
 	if tool_state == ToolState.BLOCK_HEIGHT:
-		global_scene.draw_cube(block_drag_p0, block_drag_p1, block_drag_cur, global_scene.tool_material, global_scene.vertex_tool_material)
+		builder.viewport_3d_manager.draw_cube(block_drag_p0, block_drag_p1, block_drag_cur, global_scene.tool_material, global_scene.vertex_tool_material)
+#		global_scene.draw_cube(block_drag_p0, block_drag_p1, block_drag_cur, global_scene.tool_material, global_scene.vertex_tool_material)
 
 
 func create_block():

@@ -6,6 +6,8 @@
 * Tool objects now have a method to indicate which nodes they are able to edit.
 * Fixing error when tessellating faces.
 * Converting a cyclops block to a mesh now is restricted to selected blocks.
+* Tools now stored in the plugin object.  
+* New tool button system will hide/show buttons based on what nodes current tool can operate on.
 
 
 ### v1.0.4

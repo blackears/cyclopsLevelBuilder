@@ -92,7 +92,9 @@ var display_mode:DisplayMode.Type = DisplayMode.Type.MATERIAL
 var editor_cache:Dictionary
 var editor_cache_file:String = "user://cyclops_editor_cache.json"
 
-var viewport_renderings:Array[ViewportRenderings]
+#var viewport_renderings:Array[ViewportViewManager]
+#var viewport_3d_manager:Viewport3DManager = Viewport3DManager.new()
+var viewport_3d_manager:Viewport3DManager = preload("res://addons/cyclops_level_builder/util/viewport_3d_manager.tscn").instantiate()
 
 #var viewport_3d_showing:bool = false
 
@@ -120,13 +122,15 @@ func _enter_tree():
 		#print("load text:", text)
 		editor_cache = JSON.parse_string(text)
 	
-	for i in 4:
-		var vr:ViewportRenderings = ViewportRenderings.new()
-		viewport_renderings.append(vr)
-		
-		var viewport:SubViewport = EditorInterface.get_editor_viewport_3d(i)
-		vr.viewport = viewport
-		vr.viewport_editor_index = i
+	add_child(viewport_3d_manager)
+	viewport_3d_manager.plugin = self
+	#for i in 4:
+		#var vr:ViewportRenderings = ViewportRenderings.new()
+		#viewport_renderings.append(vr)
+		#
+		#var viewport:SubViewport = EditorInterface.get_editor_viewport_3d(i)
+		#vr.viewport = viewport
+		#vr.viewport_editor_index = i
 		
 	#main_screen_changed.connect(func (screen_name:String): 
 		#print("EditorPlugin::on_main_screen_changed ", screen_name)
@@ -203,10 +207,12 @@ func _exit_tree():
 	file.store_string(JSON.stringify(editor_cache, "    "))
 	file.close()
 	
-	for i in 4:
-		var vr:ViewportRenderings = viewport_renderings[i]
-		vr.dispose()
-	viewport_renderings.clear()
+	remove_child(viewport_3d_manager)
+	
+	#for i in 4:
+		#var vr:ViewportRenderings = viewport_renderings[i]
+		#vr.dispose()
+	#viewport_renderings.clear()
 	
 	# Clean-up of the plugin goes here.
 	remove_autoload_singleton(AUTOLOAD_NAME)
