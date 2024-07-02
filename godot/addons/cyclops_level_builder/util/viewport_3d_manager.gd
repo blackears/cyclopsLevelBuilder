@@ -25,7 +25,12 @@
 extends Node
 class_name Viewport3DManager
 
-var plugin:CyclopsLevelBuilder
+var plugin:CyclopsLevelBuilder:
+	set(value):
+		plugin = value
+		for v in viewport_views:
+			v.plugin = value
+	
 var viewport_views:Array[Viewport3DViewManager]
 var unit_sphere:GeometryMesh = MathGeometry.unit_sphere()
 #var tool_mesh:ImmediateMesh
@@ -244,6 +249,14 @@ func draw_triangles(tri_points:PackedVector3Array, mat:Material = null):
 	
 
 func draw_selection_marquis(viewport_camera:Camera3D):
+	#for vr:Viewport3DViewManager in viewport_views:
+		#var vm:ViewportMesh3D = vr.draw_selection_marquis()
+##		print("got vm " , vm)
+		#if vm:
+			#%tool_display.add_child(vm)
+	#pass
+	###########
+		
 	var mesh:MeshInstance3D = MeshInstance3D.new()
 	%tool_display.add_child(mesh)
 	
@@ -296,9 +309,13 @@ func clear_tool_display():
 		%VertexGroup.remove_child(child)
 		child.queue_free()
 
+	for vr:Viewport3DViewManager in viewport_views:
+		vr.clear_tool_display()
+
 func _enter_tree():
 	for i in 4:
 		var vr:Viewport3DViewManager = Viewport3DViewManager.new()
+		vr.plugin = plugin
 		viewport_views.append(vr)
 		add_child(vr)
 		

@@ -39,6 +39,22 @@ func _init():
 func will_change_anything()->bool:
 	return !target_parent.is_empty() && !source_nodes.is_empty()
 
+func convert_mesh_to_array_mesh(mesh:Mesh)->ArrayMesh:
+	if mesh is ArrayMesh:
+		return mesh
+	
+	var st:SurfaceTool = SurfaceTool.new()
+	var surf_array:ArrayMesh = ArrayMesh.new()
+	
+	for i:int in mesh.get_surface_count():
+		st.clear()
+		st.create_from(mesh, i)
+		
+		surf_array = st.commit(surf_array)
+		surf_array.surface_set_material(i, mesh.surface_get_material(i))
+
+	return surf_array
+	
 func do_it():
 	var tgt_parent_node:Node = builder.get_node(target_parent)
 	if !tgt_parent_node || !(tgt_parent_node is Node3D):
@@ -52,6 +68,8 @@ func do_it():
 		var src_mesh_inst:MeshInstance3D = src_node
 		if !src_mesh_inst.mesh:
 			continue
+		
+		var mesh:ArrayMesh = convert_mesh_to_array_mesh(src_mesh_inst.mesh)
 
 		var block:CyclopsBlock = preload("res://addons/cyclops_level_builder/nodes/cyclops_block.gd").new()
 
@@ -68,12 +86,12 @@ func do_it():
 
 		var best_mat:Material
 		var points:PackedVector3Array
-		for i in src_mesh_inst.mesh.get_surface_count():
-			var mat:Material = src_mesh_inst.mesh.surface_get_material(i)
+		for i in mesh.get_surface_count():
+			var mat:Material = mesh.surface_get_material(i)
 			if best_mat != null:
 				best_mat = mat
 			
-			var surface_arrs:Array = src_mesh_inst.mesh.surface_get_arrays(i)
+			var surface_arrs:Array = mesh.surface_get_arrays(i)
 			
 			if surface_arrs[Mesh.ARRAY_INDEX].is_empty():
 				for pt in surface_arrs[Mesh.ARRAY_VERTEX]:

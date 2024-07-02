@@ -25,34 +25,74 @@
 extends Node
 class_name Viewport3DViewManager
 
-var viewport:Viewport
-var viewport_editor_index:int
+var viewport:Viewport:
+	set(value):
+		#if viewport:
+			#viewport.remove_child(display_node)
+			
+		viewport = value
+		
+		#if viewport:
+			#viewport.add_child(display_node)
+		
+var viewport_editor_index:int:
+	set(value):
+		viewport_editor_index = value
+		#print("setting index ", viewport_editor_index)
+		#m.rotation = Vector3(deg_to_rad(viewport_editor_index * 15), 0, 0)
+		
+var plugin:CyclopsLevelBuilder
 
-var inst_rid:RID
-var mesh_rid:RID
+#var m:MeshInstance3D = MeshInstance3D.new()
+
+#var inst_rid:RID
+#var mesh_rid:RID
+
+#var display_node:Node3D = Node3D.new()
+
+func _ready():
+	#display_node = Node3D.new()
+#	var m:MeshInstance3D = MeshInstance3D.new()
+	#m.mesh = TorusMesh.new()
+	#display_node.add_child(m)
+	
+	pass
+	
+func clear_tool_display():
+	#for child:Node in display_node.get_children():
+		#display_node.remove_child(child)
+		#child.queue_free()
+	pass
+
+
 
 func _enter_tree():
 	#print("Viewport3DViewManager _enter_tree ", viewport_editor_index)
+	#if viewport:
+		#viewport.add_child(display_node)
+	
 	pass
 	
 func _exit_tree():
 	#print("Viewport3DViewManager _exit_tree ", viewport_editor_index)
+	#if viewport:
+		#viewport.remove_child(display_node)
 	pass
 	
-func set_up_mesh():
-	inst_rid = RenderingServer.instance_create()
-	mesh_rid = RenderingServer.mesh_create()
-	RenderingServer.instance_set_base(inst_rid, mesh_rid)
-	
-	RenderingServer.instance_set_scenario(inst_rid, viewport.world_3d.scenario)
-	
-	
-	pass
-
-func delete_mesh():
-	RenderingServer.free_rid(inst_rid)
-	RenderingServer.free_rid(mesh_rid)
-	
-func dispose():
-	if inst_rid.is_valid():
-		delete_mesh()
+#func set_up_mesh():
+	#inst_rid = RenderingServer.instance_create()
+	#mesh_rid = RenderingServer.mesh_create()
+	#RenderingServer.instance_set_base(inst_rid, mesh_rid)
+	#
+	#RenderingServer.instance_set_scenario(inst_rid, viewport.world_3d.scenario)
+	#
+	#
+	#pass
+#
+#func delete_mesh():
+	#RenderingServer.free_rid(inst_rid)
+	#RenderingServer.free_rid(mesh_rid)
+	#
+#func dispose():
+	#if inst_rid.is_valid():
+		#delete_mesh()
