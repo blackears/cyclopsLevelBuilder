@@ -357,13 +357,14 @@ func draw_screen_rect(viewport_camera:Camera3D, p00:Vector2, p11:Vector2, materi
 	
 	mesh_shape.surface_end()
 
+@export var draw_edge_labels:bool = false
 
 #Called by CyclopsLevelBuilder to draw 2D components
 func draw_over_viewport(overlay:Control):
 	#overlay.draw_circle(Vector2(100, 200), 10, Color.AQUAMARINE)
 
-	#Draw edge lengths
-	if false:
+	#Display edge lengths
+	if draw_edge_labels:
 		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 
 		var font:Font = global_scene.units_font
@@ -371,6 +372,7 @@ func draw_over_viewport(overlay:Control):
 		var descent:float = font.get_descent(font_size)
 		var text_offset:Vector2 = Vector2(0, -global_scene.vertex_radius - descent)
 		
+		#var viewport_camera:Camera3D = overlay.get_parent().get_viewport().get_camera_3d()
 		#var viewport_camera:Camera3D = overlay.get_viewport().get_camera_3d()
 		var viewport_camera:Camera3D = viewport_views[0].viewport.get_camera_3d()
 		#print("viewport_camera ", viewport_camera.global_transform)

@@ -405,6 +405,9 @@ func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent)->int:
 	
 	#cached_viewport_camera = viewport_camera
 	
+	if event is InputEventMouse || event is InputEventMouseButton:
+		update_overlays()
+		
 	var sel_nodes:Array[Node] = EditorInterface.get_selection().get_selected_nodes()
 	
 	var active_node:Node = null if sel_nodes.is_empty() else sel_nodes.back()
