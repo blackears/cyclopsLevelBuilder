@@ -378,8 +378,12 @@ func _handles(object:Object):
 	return object is CyclopsBlock or object is CyclopsBlocks or always_on
 
 func _forward_3d_draw_over_viewport(viewport_control:Control):
-	var global_scene:CyclopsGlobalScene = get_global_scene()
-	global_scene.draw_over_viewport(viewport_control)
+	#var global_scene:CyclopsGlobalScene = get_global_scene()
+	#global_scene.draw_over_viewport(viewport_control)
+	
+	#viewport_3d_manager.draw_over_viewport(viewport_control:Control)
+	viewport_3d_manager.draw_over_viewport(viewport_control)
+	
 	#Draw on top of viweport here
 
 func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent)->int:

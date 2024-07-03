@@ -201,7 +201,6 @@ func _to_string()->String:
 		result += str(v.point) + ", "
 	return result
 	
-
 func init_block(block_bounds:AABB, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = -1, visible:bool = true, color:Color = Color.WHITE):
 	var p000:Vector3 = block_bounds.position
 	var p111:Vector3 = block_bounds.end
@@ -1446,4 +1445,37 @@ func make_convex():
 #
 	#block.mesh_vector_data = new_vol.to_mesh_vector_data()
 	
+	
+func get_camera_facing_edges(viewport_camera:Camera3D, local_to_world:Transform3D)->Array[EdgeInfo]:
+	var result:Array[EdgeInfo]
+	
+	var pick_origin:Vector3 = viewport_camera.global_position
+	
+	for e_idx in edges.size():
+		var e:ConvexVolume.EdgeInfo = edges[e_idx]
+		var focus:Vector3 = local_to_world * e.get_midpoint()
+		if viewport_camera.is_position_behind(focus):
+			continue
+		
+		var pick_dir:Vector3 = focus - pick_origin	
+		var res:IntersectResults = intersect_ray_closest(pick_origin, pick_dir)
+		
+		if res:
+			var hit:bool = false
+			for f_idx in e.face_indices:
+				if f_idx == res.face_index:
+					hit = true
+					break
+					
+			if !hit:
+				continue
+
+		result.append(e)
+		#var focus_2d:Vector2 = viewport_camera.unproject_position(focus)
+		#
+		#var v0:ConvexVolume.VertexInfo = vertices[e.start_index]
+		#var v1:ConvexVolume.VertexInfo = vertices[e.end_index]
+	
+	
+	return result
 

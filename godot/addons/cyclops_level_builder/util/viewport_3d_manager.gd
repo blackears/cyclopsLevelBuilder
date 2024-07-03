@@ -276,6 +276,64 @@ func draw_selection_marquis(viewport_camera:Camera3D):
 		
 		#block.draw_unit_labels(viewport_camera, block.global_transform)
 
+
+
+func get_edge_label_locations(viewport_camera:Camera3D)->Array:
+	var result:Array
+#	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
+
+	#var font:Font = global_scene.units_font
+	#var font_size:float = global_scene.units_font_size	
+	#var descent:float = font.get_descent(font_size)
+	#var text_offset:Vector2 = Vector2(0, -global_scene.vertex_radius - descent)
+	
+	var sel_blocks:Array[CyclopsBlock] = plugin.get_selected_blocks()
+	var pick_origin:Vector3 = viewport_camera.global_position
+	
+	for block in sel_blocks:
+		
+		var control_mesh = block.control_mesh
+		if control_mesh:
+			#var edges:Array[ConvexVolume.EdgeInfo] = control_mesh.get_camera_facing_edges(viewport_camera, block.global_transform)
+			for e in control_mesh.edges:
+				var focus:Vector3 = e.get_midpoint()
+				var focus_world:Vector3 = block.global_transform * focus
+				
+				if viewport_camera.is_position_behind(focus_world):
+					continue
+					
+				var res:IntersectResults = plugin.intersect_ray_closest(pick_origin, focus_world - pick_origin)
+				
+				if res:
+					if res.object != block:
+						continue
+						
+					var hit:bool = false
+					for f_idx in e.face_indices:
+						if f_idx == res.face_index:
+							hit = true
+							break
+							
+					if !hit:
+						continue
+				
+				var focus_2d:Vector2 = viewport_camera.unproject_position(focus_world)
+				
+				var v0:ConvexVolume.VertexInfo = control_mesh.vertices[e.start_index]
+				var v1:ConvexVolume.VertexInfo = control_mesh.vertices[e.end_index]
+				
+				var length:float = v0.point.distance_to(v1.point)
+				
+				result.append({
+					"block": block,
+					"edge": e,
+					"center_3d": focus_world,
+					"center_2d": focus_2d,
+					"length": length
+				})
+	
+	return result
+
 func draw_screen_rect(viewport_camera:Camera3D, p00:Vector2, p11:Vector2, material:Material):
 	var mesh:MeshInstance3D = MeshInstance3D.new()
 	%tool_display.add_child(mesh)
@@ -298,8 +356,34 @@ func draw_screen_rect(viewport_camera:Camera3D, p00:Vector2, p11:Vector2, materi
 		mesh_shape.surface_add_vertex(p_proj)
 	
 	mesh_shape.surface_end()
-	
 
+
+#Called by CyclopsLevelBuilder to draw 2D components
+func draw_over_viewport(overlay:Control):
+	#overlay.draw_circle(Vector2(100, 200), 10, Color.AQUAMARINE)
+
+	#Draw edge lengths
+	if false:
+		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
+
+		var font:Font = global_scene.units_font
+		var font_size:float = global_scene.units_font_size	
+		var descent:float = font.get_descent(font_size)
+		var text_offset:Vector2 = Vector2(0, -global_scene.vertex_radius - descent)
+		
+		#var viewport_camera:Camera3D = overlay.get_viewport().get_camera_3d()
+		var viewport_camera:Camera3D = viewport_views[0].viewport.get_camera_3d()
+		#print("viewport_camera ", viewport_camera.global_transform)
+		
+		var edge_pos:Array = get_edge_label_locations(viewport_camera)
+		for p:Dictionary in edge_pos:
+			var len:float = p["length"]
+			var pos:Vector2 = p["center_2d"]
+			
+			overlay.draw_string(font, pos, "%.3f" % len, HORIZONTAL_ALIGNMENT_LEFT)
+		
+	
+	
 func clear_tool_display():
 	for child:Node in %tool_display.get_children():
 		%tool_display.remove_child(child)

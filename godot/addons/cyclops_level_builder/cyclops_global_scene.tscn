@@ -6,7 +6,7 @@
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_sl0cw"]
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_gd1wd"]
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_ml5r1"]
 
 [node name="CyclopsGlobals" type="Node3D"]
 script = ExtResource("1_nu1d3")
@@ -17,7 +17,7 @@ visible = false
 mesh = SubResource("PlaneMesh_sl0cw")
 
 [node name="ToolInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("ImmediateMesh_gd1wd")
+mesh = SubResource("ImmediateMesh_ml5r1")
 
 [node name="VertexGroup" type="Node3D" parent="."]
 unique_name_in_owner = true

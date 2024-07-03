@@ -208,6 +208,24 @@ func _process(delta):
 			dirty = true
 			return
 
+#func get_edge_labels(viewport_camera:Camera3D, local_to_world:Transform3D):
+	#var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
+#
+	#var font:Font = global_scene.units_font
+	#var font_size:float = global_scene.units_font_size	
+	#var descent:float = font.get_descent(font_size)
+	#var text_offset:Vector2 = Vector2(0, -global_scene.vertex_radius - descent)
+	#
+	#if control_mesh:
+		#var edges:Array[ConvexVolume.EdgeInfo] = control_mesh.get_camera_facing_edges(viewport_camera, local_to_world)
+		#for e in edges:
+			#var focus:Vector3 = edges[0].get_midpoint()
+			#var focus_2d:Vector2 = viewport_camera.unproject_position(focus)
+		#
+			##var v0:ConvexVolume.VertexInfo = vertices[e.start_index]
+			##var v1:ConvexVolume.VertexInfo = vertices[e.end_index]
+	#pass
+	
 func draw_unit_labels(viewport_camera:Camera3D, local_to_world:Transform3D):
 	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 
@@ -290,4 +308,3 @@ func export_to_cyclops_file(file_builder:CyclopsFileBuilder)->Dictionary:
 		result["mesh"] = mesh_vector_data.to_dictionary(file_builder)
 	#build_mesh["mesh"] = cur_node.mesh_vector_data.to_dictionary(self)
 	return result
-	
