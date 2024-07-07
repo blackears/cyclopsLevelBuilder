@@ -10,3 +10,6 @@ unique_name_in_owner = true
 
 [node name="VertexGroup" type="Node3D" parent="."]
 unique_name_in_owner = true
+
+[node name="GizmoControl" type="Node3D" parent="."]
+unique_name_in_owner = true

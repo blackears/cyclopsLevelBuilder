@@ -95,10 +95,10 @@ func draw_gizmo(viewport_camera:Camera3D):
 			count += 1
 
 	if count == 0:
-		global_scene.set_custom_gizmo(null)
+		builder.viewport_3d_manager.set_custom_gizmo(null)
 	else:
 		origin /= count
-		global_scene.set_custom_gizmo(gizmo_translate)
+		builder.viewport_3d_manager.set_custom_gizmo(gizmo_translate)
 #		gizmo_translate.global_transform.origin = origin
 		var active_block:Node3D = builder.get_active_block()
 		

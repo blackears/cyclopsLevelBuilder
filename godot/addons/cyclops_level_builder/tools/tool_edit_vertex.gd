@@ -93,11 +93,11 @@ func draw_gizmo(viewport_camera:Camera3D):
 				count += 1
 
 	if count == 0:
-		global_scene.set_custom_gizmo(null)
+		builder.viewport_3d_manager.set_custom_gizmo(null)
 	else:
 		origin /= count
 		#print("gizmo origin ", origin)
-		global_scene.set_custom_gizmo(gizmo_translate)
+		builder.viewport_3d_manager.set_custom_gizmo(gizmo_translate)
 		var active_block:Node3D = builder.get_active_block()
 		
 		gizmo_translate.global_basis = calc_gizmo_basis(average_normal, active_block, viewport_camera, settings.transform_space)

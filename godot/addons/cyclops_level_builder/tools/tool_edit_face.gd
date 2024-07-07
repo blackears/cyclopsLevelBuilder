@@ -94,36 +94,15 @@ func draw_gizmo(viewport_camera:Camera3D):
 			count += 1
 
 	if count == 0:
-		global_scene.set_custom_gizmo(null)
+		builder.viewport_3d_manager.set_custom_gizmo(null)
 	else:
 		origin /= count
-		global_scene.set_custom_gizmo(gizmo_translate)
+		builder.viewport_3d_manager.set_custom_gizmo(gizmo_translate)
 #		gizmo_translate.global_transform.origin = origin
 		var active_block:Node3D = builder.get_active_block()
 		
 		gizmo_translate.global_basis = calc_gizmo_basis(average_normal, active_block, viewport_camera, settings.transform_space)
 		gizmo_translate.global_position = origin
-		#match settings.transform_space:
-			#TransformSpace.Type.GLOBAL:
-				#var xform:Transform3D = Transform3D.IDENTITY
-				#xform.origin = origin
-				#gizmo_translate.global_transform = xform
-			#TransformSpace.Type.LOCAL:
-				#var xform:Transform3D = active_block.global_transform
-				#gizmo_translate.global_transform = xform
-				#gizmo_translate.global_position = origin
-			#TransformSpace.Type.NORMAL:
-				#var up:Vector3 = Vector3.UP
-				#var x:Vector3 = up.cross(average_normal).normalized()
-				#var y:Vector3 = average_normal.cross(x)
-				#gizmo_translate.global_basis = Basis(x, y, average_normal)
-				#gizmo_translate.global_position = origin
-			#TransformSpace.Type.VIEW:
-				#gizmo_translate.global_basis = viewport_camera.global_basis
-				#gizmo_translate.global_position = origin
-			#TransformSpace.Type.PARENT:
-				#var xform:Transform3D = active_block.get_parent_node_3d().global_transform
-				#gizmo_translate.global_transform = xform
 
 
 func _draw_tool(viewport_camera:Camera3D):
