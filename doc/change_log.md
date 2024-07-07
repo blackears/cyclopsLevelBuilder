@@ -8,6 +8,8 @@
 * Converting a cyclops block to a mesh now is restricted to selected blocks.
 * Tools now stored in the plugin object.  
 * New tool button system will hide/show buttons based on what nodes current tool can operate on.
+* Creating overlay system to draw overlays on viewport.
+* Creating overlay to display edge lengths.
 
 
 ### v1.0.4

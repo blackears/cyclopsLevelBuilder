@@ -38,6 +38,7 @@ var config:CyclopsConfig = preload("res://addons/cyclops_level_builder/data/conf
 var logger:CyclopsLogger = CyclopsLogger.new()
 
 var material_dock:MaterialPaletteViewport
+var overlays_dock:OverlaysDock
 var convex_face_editor_dock:ConvexFaceEdtiorViewport
 var tool_properties_dock:ToolPropertiesDock
 var snapping_properties_dock:SnappingPropertiesDock
@@ -70,6 +71,9 @@ var drag_start_radius:float = 6
 var active_tool:CyclopsTool = null
 var tool_list:Array[CyclopsTool]
 
+var overlay_list:Array[CyclopsOverlayObject]
+
+
 enum Mode { OBJECT, EDIT }
 var mode:Mode = Mode.OBJECT
 enum EditMode { VERTEX, EDGE, FACE }
@@ -98,6 +102,12 @@ var viewport_3d_manager:Viewport3DManager = preload("res://addons/cyclops_level_
 
 #var viewport_3d_showing:bool = false
 
+func get_overlay(name:String)->CyclopsOverlayObject:
+	for overlay:CyclopsOverlayObject in overlay_list:
+		if overlay.name == name:
+			return overlay
+	return null
+	
 func get_snapping_manager()->SnappingManager:
 	var mgr:SnappingManager = SnappingManager.new()
 	mgr.snap_enabled = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_ENABLED)
@@ -124,21 +134,8 @@ func _enter_tree():
 	
 	add_child(viewport_3d_manager)
 	viewport_3d_manager.plugin = self
-	#for i in 4:
-		#var vr:ViewportRenderings = ViewportRenderings.new()
-		#viewport_renderings.append(vr)
-		#
-		#var viewport:SubViewport = EditorInterface.get_editor_viewport_3d(i)
-		#vr.viewport = viewport
-		#vr.viewport_editor_index = i
 		
-	#main_screen_changed.connect(func (screen_name:String): 
-		#print("EditorPlugin::on_main_screen_changed ", screen_name)
-		#viewport_3d_showing = screen_name == "3D"
-		#)
 	set_input_event_forwarding_always_enabled()
-	#var main_viewport_3d:SubViewport = EditorInterface.get_editor_viewport_3d()
-	#main_viewport_3d.gui_focus_changed.connect(on_viewport_focus_changed)
 	
 	add_custom_type("CyclopsScene", "Node3D", preload("nodes/cyclops_scene.gd"), preload("nodes/cyclops_blocks_icon.png"))
 	
@@ -149,9 +146,16 @@ func _enter_tree():
 
 	add_autoload_singleton(AUTOLOAD_NAME, "res://addons/cyclops_level_builder/cyclops_global_scene.tscn")
 	#add_autoload_singleton(CYCLOPS_HUD_NAME, "res://addons/cyclops_level_builder/cyclops_global_hud.tscn")
+
+	var overlay:ObjectInfoOverlay = ObjectInfoOverlay.new()
+	overlay.plugin = self
+	overlay_list.append(overlay)
 	
 	material_dock = preload("res://addons/cyclops_level_builder/docks/material_palette/material_palette_viewport.tscn").instantiate()
 	material_dock.builder = self
+	
+	overlays_dock = preload("res://addons/cyclops_level_builder/docks/overlays/overlays_dock.tscn").instantiate()
+	overlays_dock.plugin = self
 	
 	convex_face_editor_dock = preload("res://addons/cyclops_level_builder/docks/convex_face_editor/convex_face_editor_viewport.tscn").instantiate()
 	convex_face_editor_dock.builder = self
@@ -233,6 +237,7 @@ func _exit_tree():
 		remove_control_from_docks(convex_face_editor_dock)
 		remove_control_from_docks(tool_properties_dock)
 		remove_control_from_docks(snapping_properties_dock)
+		remove_control_from_docks(overlays_dock)
 		remove_control_from_docks(cyclops_console_dock)
 		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
 
@@ -242,6 +247,7 @@ func _exit_tree():
 	material_dock.queue_free()
 	convex_face_editor_dock.queue_free()
 	tool_properties_dock.queue_free()
+	overlays_dock.queue_free()
 	snapping_properties_dock.queue_free()
 	cyclops_console_dock.queue_free()
 	main_toolbar.queue_free()
@@ -344,6 +350,7 @@ func update_activation():
 			add_control_to_dock(DOCK_SLOT_RIGHT_BL, convex_face_editor_dock)
 			add_control_to_dock(DOCK_SLOT_RIGHT_BL, tool_properties_dock)
 			add_control_to_dock(DOCK_SLOT_RIGHT_BL, snapping_properties_dock)
+			add_control_to_dock(DOCK_SLOT_RIGHT_BL, overlays_dock)
 			activated = true
 	else:
 		if activated:
@@ -352,6 +359,7 @@ func update_activation():
 			remove_control_from_docks(convex_face_editor_dock)
 			remove_control_from_docks(tool_properties_dock)
 			remove_control_from_docks(snapping_properties_dock)
+			remove_control_from_docks(overlays_dock)
 			activated = false
 	
 	if node is CyclopsBlocks:
@@ -378,12 +386,10 @@ func _handles(object:Object):
 	return object is CyclopsBlock or object is CyclopsBlocks or always_on
 
 func _forward_3d_draw_over_viewport(viewport_control:Control):
-	#var global_scene:CyclopsGlobalScene = get_global_scene()
-	#global_scene.draw_over_viewport(viewport_control)
-	
-	#viewport_3d_manager.draw_over_viewport(viewport_control:Control)
 	viewport_3d_manager.draw_over_viewport(viewport_control)
 	
+	for overlay in overlay_list:
+		overlay._draw_overlay(viewport_control, 0)
 	#Draw on top of viweport here
 
 func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent)->int:
@@ -429,6 +435,7 @@ func _get_state()->Dictionary:
 	convex_face_editor_dock.save_state(state)
 	tool_properties_dock.save_state(state)
 	snapping_properties_dock.save_state(state)
+	overlays_dock.save_state(state)
 	cyclops_console_dock.save_state(state)
 	
 	return state
@@ -442,6 +449,7 @@ func _set_state(state):
 	convex_face_editor_dock.load_state(state)
 	tool_properties_dock.load_state(state)
 	snapping_properties_dock.load_state(state)
+	overlays_dock.load_state(state)
 	cyclops_console_dock.load_state(state)
 
 
