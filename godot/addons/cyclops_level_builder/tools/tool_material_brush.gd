@@ -60,7 +60,9 @@ func _draw_tool(viewport_camera:Camera3D):
 
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
-	global_scene.draw_selected_blocks(viewport_camera)
+	#global_scene.draw_selected_blocks(viewport_camera)
+	builder.viewport_3d_manager.clear_tool_display()
+	builder.viewport_3d_manager.draw_selection_marquis(viewport_camera)
 
 func _get_tool_properties_editor()->Control:
 	var ed:ToolMaterialBrushSettingsEditor = preload("res://addons/cyclops_level_builder/tools/tool_material_brush_settings_editor.tscn").instantiate()

@@ -104,36 +104,16 @@ func draw_gizmo(viewport_camera:Camera3D):
 		
 		gizmo_translate.global_basis = calc_gizmo_basis(average_normal, active_block, viewport_camera, settings.transform_space)
 		gizmo_translate.global_position = origin
-		
-		#match settings.transform_space:
-			#TransformSpace.Type.GLOBAL:
-				#var xform:Transform3D = Transform3D.IDENTITY
-				#xform.origin = origin
-				#gizmo_translate.global_transform = xform
-			#TransformSpace.Type.LOCAL:
-				#var xform:Transform3D = active_block.global_transform
-				#gizmo_translate.global_transform = xform
-				#gizmo_translate.global_position = origin
-			#TransformSpace.Type.NORMAL:
-				#var up:Vector3 = Vector3.UP
-				#var x:Vector3 = up.cross(average_normal).normalized()
-				#var y:Vector3 = average_normal.cross(x)
-				#gizmo_translate.global_basis = Basis(x, y, average_normal)
-				#gizmo_translate.global_position = origin
-			#TransformSpace.Type.VIEW:
-				#gizmo_translate.global_basis = viewport_camera.global_basis
-				#gizmo_translate.global_position = origin
-			#TransformSpace.Type.PARENT:
-				#var xform:Transform3D = active_block.get_parent_node_3d().global_transform
-				#gizmo_translate.global_transform = xform
-#
 
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()	
 
+	builder.viewport_3d_manager.clear_tool_display()
+
 	if tool_state == ToolState.DRAG_SELECTION:
-		global_scene.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
+		#global_scene.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
+		builder.viewport_3d_manager.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
 	
 	for h in handles:
 		var block:CyclopsBlock = builder.get_node(h.block_path)
@@ -144,9 +124,11 @@ func _draw_tool(viewport_camera:Camera3D):
 		var p0:Vector3 = block.global_transform * block.control_mesh.vertices[e.start_index].point
 		var p1:Vector3 = block.global_transform * block.control_mesh.vertices[e.end_index].point
 
-		var active:bool = block.control_mesh.active_edge == h.edge_index		
-		global_scene.draw_vertex((p0 + p1) / 2, pick_vertex_material(global_scene, e.selected, active))
-		global_scene.draw_line(p0, p1, pick_material(global_scene, e.selected, active))
+		var active:bool = block.control_mesh.active_edge == h.edge_index
+		builder.viewport_3d_manager.draw_vertex((p0 + p1) / 2, pick_vertex_material(global_scene, e.selected, active))
+		builder.viewport_3d_manager.draw_line(p0, p1, pick_material(global_scene, e.selected, active))
+#		global_scene.draw_vertex((p0 + p1) / 2, pick_vertex_material(global_scene, e.selected, active))
+#		global_scene.draw_line(p0, p1, pick_material(global_scene, e.selected, active))
 
 	draw_gizmo(viewport_camera)
 	

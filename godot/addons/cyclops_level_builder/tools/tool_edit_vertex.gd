@@ -107,8 +107,11 @@ func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
 
+	builder.viewport_3d_manager.clear_tool_display()
+
 	if tool_state == ToolState.DRAG_SELECTION:
-		global_scene.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
+		#global_scene.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
+		builder.viewport_3d_manager.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
 	
 	for h in handles:
 		var node:Node = builder.get_node(h.block_path)
@@ -118,7 +121,8 @@ func _draw_tool(viewport_camera:Camera3D):
 			
 			var active:bool = block.control_mesh.active_vertex == h.vertex_index
 			#print("draw vert idx:%s sel:%s active:%s" % [h.vertex_index, v.selected, active])
-			global_scene.draw_vertex(h.position, pick_vertex_material(global_scene, v.selected, active))
+#			global_scene.draw_vertex(h.position, pick_vertex_material(global_scene, v.selected, active))
+			builder.viewport_3d_manager.draw_vertex(h.position, pick_vertex_material(global_scene, v.selected, active))
 	
 	draw_gizmo(viewport_camera)
 	

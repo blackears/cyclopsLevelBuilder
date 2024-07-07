@@ -84,7 +84,9 @@ func _get_tool_properties_editor()->Control:
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
-	global_scene.draw_selected_blocks(viewport_camera)
+#	global_scene.draw_selected_blocks(viewport_camera)
+	builder.viewport_3d_manager.clear_tool_display()
+	builder.viewport_3d_manager.draw_selection_marquis(viewport_camera)
 
 
 	if tool_state == ToolState.DRAG_BASE:
@@ -104,8 +106,10 @@ func _draw_tool(viewport_camera:Camera3D):
 
 		var base_points:PackedVector3Array = [drag_origin, p01, base_drag_cur, p10]
 		
-		global_scene.draw_loop(base_points, true, global_scene.tool_material)
-		global_scene.draw_points(base_points, global_scene.vertex_tool_material)
+		#global_scene.draw_loop(base_points, true, global_scene.tool_material)
+		#global_scene.draw_points(base_points, global_scene.vertex_tool_material)
+		builder.viewport_3d_manager.draw_line_strip(base_points, global_scene.tool_material, true)
+		builder.viewport_3d_manager.draw_vertices(base_points, global_scene.vertex_tool_material)
 		
 	if tool_state == ToolState.DRAG_HEIGHT:
 		var tan_bi:Array[Vector3] = MathUtil.get_axis_aligned_tangent_and_binormal(floor_normal)
@@ -138,7 +142,8 @@ func _draw_tool(viewport_camera:Camera3D):
 			v_span = -v_span
 		
 		#Stairs should ascend along v axis
-		global_scene.draw_cube(drag_origin, base_drag_cur, block_drag_cur, global_scene.tool_material, global_scene.vertex_tool_material)
+#		global_scene.draw_cube(drag_origin, base_drag_cur, block_drag_cur, global_scene.tool_material, global_scene.vertex_tool_material)
+		builder.viewport_3d_manager.draw_cube(drag_origin, base_drag_cur, block_drag_cur, global_scene.tool_material, global_scene.vertex_tool_material)
 		
 		var height_offset = block_drag_cur - base_drag_cur
 		if height_offset.dot(floor_normal) < 0:

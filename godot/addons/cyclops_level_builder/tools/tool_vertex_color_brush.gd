@@ -61,7 +61,9 @@ func _can_handle_object(node:Node)->bool:
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
-	global_scene.draw_selected_blocks(viewport_camera)
+#	global_scene.draw_selected_blocks(viewport_camera)
+	builder.viewport_3d_manager.clear_tool_display()
+	builder.viewport_3d_manager.draw_selection_marquis(viewport_camera)
 
 	#super._draw_tool(viewport_camera)
 
@@ -69,7 +71,8 @@ func _draw_tool(viewport_camera:Camera3D):
 		var view_dir:Vector3 = viewport_camera.global_transform.basis.z
 		var bounding_points:PackedVector3Array = \
 			MathUtil.create_circle_points(last_hit_pos, view_dir.normalized(), settings.radius, 16)
-		global_scene.draw_loop(bounding_points, true, global_scene.tool_material)
+#		global_scene.draw_loop(bounding_points, true, global_scene.tool_material)
+		builder.viewport_3d_manager.draw_line_strip(bounding_points, global_scene.tool_material, true)
 
 
 func _get_tool_properties_editor()->Control:

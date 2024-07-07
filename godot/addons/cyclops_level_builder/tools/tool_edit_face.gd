@@ -130,8 +130,11 @@ func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.clear_tool_mesh()
 
+	builder.viewport_3d_manager.clear_tool_display()
+
 	if tool_state == ToolState.DRAG_SELECTION:
-		global_scene.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
+#		global_scene.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
+		builder.viewport_3d_manager.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
 	
 	#var blocks_root:CyclopsBlocks = builder.active_node
 	for h in handles:
@@ -143,7 +146,8 @@ func _draw_tool(viewport_camera:Camera3D):
 		var f:ConvexVolume.FaceInfo = block.control_mesh.faces[h.face_index]
 
 		var active:bool = block.control_mesh.active_face == h.face_index		
-		global_scene.draw_vertex(h.p_center, pick_vertex_material(global_scene, f.selected, active))
+#		global_scene.draw_vertex(h.p_center, pick_vertex_material(global_scene, f.selected, active))
+		builder.viewport_3d_manager.draw_vertex(h.p_center, pick_vertex_material(global_scene, f.selected, active))
 		
 		var l2w:Transform3D = block.global_transform
 		#var w2l:Transform3D = block.global_transform.affine_inverse()
@@ -152,7 +156,8 @@ func _draw_tool(viewport_camera:Camera3D):
 			var edge_loop:PackedVector3Array = f.get_points()
 			for p_idx in edge_loop.size():
 				edge_loop[p_idx] += f.normal * builder.tool_overlay_extrude
-			global_scene.draw_loop(l2w * edge_loop, true, pick_material(global_scene, f.selected, active))
+#			global_scene.draw_loop(l2w * edge_loop, true, pick_material(global_scene, f.selected, active))
+			builder.viewport_3d_manager.draw_line_strip(l2w * edge_loop, pick_material(global_scene, f.selected, active), true)
 			
 			var tris:PackedVector3Array = f.get_trianges()
 			for p_idx in tris.size():
@@ -160,7 +165,8 @@ func _draw_tool(viewport_camera:Camera3D):
 			
 #			print("draw face %s %s %s" % [h.face_index, f.selected, f.active])
 			var mat:Material = global_scene.tool_edit_active_fill_material if active else global_scene.tool_edit_selected_fill_material
-			global_scene.draw_triangles(l2w * tris, mat)
+#			global_scene.draw_triangles(l2w * tris, mat)
+			builder.viewport_3d_manager.draw_triangles(l2w * tris, mat)
 		
 	draw_gizmo(viewport_camera)
 	
