@@ -46,10 +46,6 @@ var editor_plugin:CyclopsLevelBuilder:
 		build_ui()
 
 
-#var tool_button_group = ButtonGroup.new()
-#var override_shortcuts: Dictionary = {} #Dictionary[InputEvent, String]
-#var currently_in_3d := false
-
 func on_active_node_changed():
 	update_grid()
 	
@@ -91,27 +87,24 @@ func _ready():
 #
 	update_grid()
 	
-
-
-
-var prev_button_pressed: Button = null
-
-func _press_button_line(button: Button) -> void:
-	if prev_button_pressed != null:
-		var line := prev_button_pressed.get_node_or_null('line')
-		if line != null:
-			prev_button_pressed.remove_child(line)
-			line.queue_free()
-		prev_button_pressed = null
-	
-	var new_line := ColorRect.new()
-	new_line.anchor_left = 0.05
-	new_line.anchor_top = 0.9
-	new_line.anchor_right = 0.95
-	new_line.anchor_bottom = 0.94
-	button.add_child(new_line)
-	new_line.name = 'line'
-	prev_button_pressed = button
+#var prev_button_pressed: Button = null
+#
+#func _press_button_line(button: Button) -> void:
+	#if prev_button_pressed != null:
+		#var line := prev_button_pressed.get_node_or_null('line')
+		#if line != null:
+			#prev_button_pressed.remove_child(line)
+			#line.queue_free()
+		#prev_button_pressed = null
+	#
+	#var new_line := ColorRect.new()
+	#new_line.anchor_left = 0.05
+	#new_line.anchor_top = 0.9
+	#new_line.anchor_right = 0.95
+	#new_line.anchor_bottom = 0.94
+	#button.add_child(new_line)
+	#new_line.name = 'line'
+	#prev_button_pressed = button
 
 
 func build_ui():
@@ -142,37 +135,6 @@ func build_ui():
 			bn.tooltip_text = tool._get_tool_tooltip()
 			
 			%ToolButtonContainer.add_child(bn)
-	#########
-	
-	#if false:
-		#var config:CyclopsConfig = editor_plugin.config
-		#for tag: ToolTag in config.tool_tags:
-	##		print("adding tag %s" % tag.name)
-			#var bn:Button = Button.new()
-			#if tag.icon:
-				#bn.icon = tag.icon
-			#else:
-				#bn.text = tag.name
-			#
-			#bn.name = tag.name
-			#
-			#if !tag.input_events.is_empty(): #InputEvent
-				#if tag.input_events_override: #bool
-					#for v: InputEvent in tag.input_events:
-						#override_shortcuts[v] = tag.name #for _input function
-				#else:
-					#bn.shortcut = Shortcut.new()
-					#for v: InputEvent in tag.input_events:
-						#bn.shortcut.events.append(v)
-			#
-			#bn.tooltip_text = tag.tooltip
-			#bn.pressed.connect(func():
-				#_press_button_line(bn)
-				#tag._activate(editor_plugin)
-			#)
-	##		print("adding bn %s" % tag.name)
-			#
-			#%ToolButtonContainer.add_child(bn)
 		
 	%display_mode.select(editor_plugin.display_mode)
 	
@@ -187,9 +149,6 @@ func build_ui():
 func update_grid():
 	if !editor_plugin:
 		return
-		
-	#var size:int = editor_plugin.get_global_scene().grid_size
-	#$HBoxContainer/grid_size.select(size + 4)
 	
 	$HBoxContainer/display_mode.select(editor_plugin.display_mode)
 		
@@ -198,20 +157,6 @@ func _on_selection_changed():
 
 func on_tool_changed(tool:CyclopsTool):
 	pass
-
-#func _on_main_screen_changed(screen_name: String):
-	#currently_in_3d = (screen_name == '3D')
-
-#func _input(event: InputEvent) -> void:
-	#if !currently_in_3d:
-		#return
-	#
-	#for v: InputEvent in override_shortcuts:
-		#if event.is_match(v, true) and event.is_pressed() and not event.is_echo():
-			#var button := %ToolButtonContainer.get_node_or_null(override_shortcuts[v] as String) as Button
-			#if button:
-				#button.pressed.emit() #simulate press
-			#break
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -236,18 +181,7 @@ func _on_bn_xray_toggled(button_pressed:bool):
 	if !editor_plugin:
 		return
 	
-	#var global_scene:CyclopsGlobalScene = editor_plugin.get_global_scene()
 	editor_plugin.xray_mode = button_pressed
-	
-#
-#func _on_bn_snap_settings_pressed():
-##	var rect:Rect2 = %bn_snap_settings.get_rect()
-	#
-	#var rect:Rect2 = %bn_snap_settings.get_global_rect()
-	#var new_rect:Rect2 = Rect2(rect.position.x, rect.position.y + rect.size.y, 200, 100)
-	#%snap_settings_popup.popup_on_parent(new_rect)
-	##print("snap popup2 ", rect)
-	
 
 func _on_snap_options_item_selected(index:int):
 	var tag:SnappingTag = editor_plugin.config.snapping_tags[index]
