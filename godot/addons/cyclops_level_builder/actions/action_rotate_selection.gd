@@ -28,6 +28,7 @@ extends CyclopsAction
 var rotation_axis:Vector3 = Vector3.ONE
 var rotation_angle:float
 
+
 func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
 	super._init(plugin, name, accellerator)
 

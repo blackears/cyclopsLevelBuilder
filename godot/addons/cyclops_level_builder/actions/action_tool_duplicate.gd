@@ -26,6 +26,11 @@ class_name ActionToolDuplicate
 extends CyclopsAction
 
 
+const ACTION_ID:String = "tool_duplicate"
+
+func _get_action_id():
+	return ACTION_ID
+	
 func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
 	super._init(plugin, "Duplicate Selected Blocks")
 

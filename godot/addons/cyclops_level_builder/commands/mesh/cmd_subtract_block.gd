@@ -48,7 +48,7 @@ func _init():
 func restore_tracked_block(tracked:TrackedBlock)->CyclopsBlock:
 	var parent = builder.get_node(tracked.path_parent)
 	
-	var block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
+	var block:CyclopsBlock = preload("res://addons/cyclops_level_builder/nodes/cyclops_block.gd").new()
 	block.mesh_vector_data = tracked.data
 	block.materials = tracked.materials
 	block.name = tracked.name
@@ -131,7 +131,7 @@ func do_it():
 
 	#Create blocks
 	for info in added_blocks:
-		var block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
+		var block:CyclopsBlock = preload("res://addons/cyclops_level_builder/nodes/cyclops_block.gd").new()
 		var parent:Node = builder.get_node(start_blocks[0].path_parent)
 		parent.add_child(block)
 		block.owner = builder.get_editor_interface().get_edited_scene_root()

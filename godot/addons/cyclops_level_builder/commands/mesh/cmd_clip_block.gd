@@ -82,7 +82,7 @@ func do_it():
 	block.materials = new_mat_list0
 	
 	#Create second block
-	var block_sibling:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
+	var block_sibling:CyclopsBlock = preload("res://addons/cyclops_level_builder/nodes/cyclops_block.gd").new()
 	
 	blocks_root.add_child(block_sibling)
 	block_sibling.owner = builder.get_editor_interface().get_edited_scene_root()

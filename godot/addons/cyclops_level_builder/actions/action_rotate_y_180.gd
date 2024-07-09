@@ -25,6 +25,11 @@
 class_name ActionRotateY180
 extends ActionRotateSelection
 
+const ACTION_ID:String = "rotate_y_180"
+
+func _get_action_id():
+	return ACTION_ID
+	
 func _init(plugin:CyclopsLevelBuilder):
 	super._init(plugin, "Rotate 180 Y")
 	rotation_axis = Vector3(0, 1, 0)

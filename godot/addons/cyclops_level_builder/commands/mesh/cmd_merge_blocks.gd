@@ -113,7 +113,7 @@ func do_it():
 		del_block.queue_free()
 
 	#Create block	
-	var block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
+	var block:CyclopsBlock = preload("res://addons/cyclops_level_builder/nodes/cyclops_block.gd").new()
 	var parent:Node = builder.get_node(tracked_blocks[0].path_parent)
 	parent.add_child(block)
 	block.owner = builder.get_editor_interface().get_edited_scene_root()
@@ -134,7 +134,7 @@ func undo_it():
 	for tracked in tracked_blocks:
 		var parent = builder.get_node(tracked.path_parent)
 		
-		var block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
+		var block:CyclopsBlock = preload("res://addons/cyclops_level_builder/nodes/cyclops_block.gd").new()
 		block.mesh_vector_data = tracked.data
 		block.materials = tracked.materials
 		block.name = tracked.name

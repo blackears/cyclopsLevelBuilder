@@ -27,6 +27,11 @@ extends CyclopsAction
 
 @export var tool_id:String
 
+const ACTION_ID:String = "select_tool"
+
+func _get_action_id():
+	return ACTION_ID
+
 func _init(plugin:CyclopsLevelBuilder):
 	super._init(plugin, "Select tool")
 

@@ -30,6 +30,9 @@ var plugin:CyclopsLevelBuilder
 var name:String = ""
 var accellerator:Key = KEY_NONE
 
+func _get_action_id():
+	return ""
+
 func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
 	self.plugin = plugin
 	self.name= name

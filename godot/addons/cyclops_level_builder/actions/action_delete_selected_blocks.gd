@@ -25,6 +25,10 @@
 class_name ActionDeleteSelectedBlocks
 extends CyclopsAction
 
+const ACTION_ID:String = "delete_selected_blocks"
+
+func _get_action_id():
+	return ACTION_ID
 
 func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
 	super._init(plugin, "Delete Selected Blocks")

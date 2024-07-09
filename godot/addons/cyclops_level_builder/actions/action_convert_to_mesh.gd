@@ -25,6 +25,10 @@
 class_name ActionConvertToMesh
 extends CyclopsAction
 
+const ACTION_ID:String = "convert_to_mesh"
+
+func _get_action_id():
+	return ACTION_ID
 
 
 func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):

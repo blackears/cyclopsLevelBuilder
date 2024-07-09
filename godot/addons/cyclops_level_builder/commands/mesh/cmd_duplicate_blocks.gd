@@ -52,7 +52,7 @@ func do_it():
 		
 		#Create new blocks
 		for block_path in blocks_to_duplicate:
-			var new_block:CyclopsBlock = preload("../nodes/cyclops_block.gd").new()
+			var new_block:CyclopsBlock = preload("res://addons/cyclops_level_builder/nodes/cyclops_block.gd").new()
 			
 			var source_block:CyclopsBlock = builder.get_node(block_path)
 			

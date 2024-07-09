@@ -25,6 +25,11 @@
 class_name ActionSnapToGrid
 extends CyclopsAction
 
+const ACTION_ID:String = "snap_to_grid"
+
+func _get_action_id():
+	return ACTION_ID
+	
 func _init(plugin:CyclopsLevelBuilder):
 	super._init(plugin, "Snap to grid")
 
