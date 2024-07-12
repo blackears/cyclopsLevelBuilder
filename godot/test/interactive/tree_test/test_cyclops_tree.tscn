@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://51j72akaqtit"]
 
-[ext_resource type="PackedScene" uid="uid://7xg6fyk4dust" path="res://addons/cyclops_level_builder/controls/tree/TreeTextComponent.tscn" id="1_7fscp"]
+[ext_resource type="PackedScene" uid="uid://7xg6fyk4dust" path="res://addons/cyclops_level_builder/gui/controls/tree/TreeTextComponent.tscn" id="1_7fscp"]
 
 [node name="TestCyclopsTree" type="Control"]
 layout_mode = 3

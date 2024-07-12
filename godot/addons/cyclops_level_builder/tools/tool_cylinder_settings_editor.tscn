@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dx804lkvek177"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_cylinder_settings_editor.gd" id="1_oyugv"]
-[ext_resource type="PackedScene" uid="uid://diibmlqy1mpqb" path="res://addons/cyclops_level_builder/controls/numeric_line_edit.tscn" id="2_wm7rv"]
+[ext_resource type="PackedScene" uid="uid://diibmlqy1mpqb" path="res://addons/cyclops_level_builder/gui/controls/numeric_line_edit.tscn" id="2_wm7rv"]
 
 [node name="ToolCylinderSettings" type="PanelContainer"]
 offset_right = 413.0

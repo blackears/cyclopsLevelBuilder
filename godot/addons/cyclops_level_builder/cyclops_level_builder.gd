@@ -34,6 +34,7 @@ const AUTOLOAD_NAME = "CyclopsAutoload"
 const CYCLOPS_HUD_NAME = "CyclopsGlobalHud"
 
 var config:CyclopsConfig = preload("res://addons/cyclops_level_builder/data/configuration.tres")
+@export_file("*.json") var config_file:String = "res://addons/cyclops_level_builder/data/cyclops_config.json"
 
 var logger:CyclopsLogger = CyclopsLogger.new()
 
@@ -155,31 +156,31 @@ func _enter_tree():
 	overlay.plugin = self
 	overlay_list.append(overlay)
 	
-	material_dock = preload("res://addons/cyclops_level_builder/docks/material_palette/material_palette_viewport.tscn").instantiate()
+	material_dock = preload("res://addons/cyclops_level_builder/gui/docks/material_palette/material_palette_viewport.tscn").instantiate()
 	material_dock.builder = self
 	
-	overlays_dock = preload("res://addons/cyclops_level_builder/docks/overlays/overlays_dock.tscn").instantiate()
+	overlays_dock = preload("res://addons/cyclops_level_builder/gui/docks/overlays/overlays_dock.tscn").instantiate()
 	overlays_dock.plugin = self
 	
-	convex_face_editor_dock = preload("res://addons/cyclops_level_builder/docks/convex_face_editor/convex_face_editor_viewport.tscn").instantiate()
+	convex_face_editor_dock = preload("res://addons/cyclops_level_builder/gui/docks/convex_face_editor/convex_face_editor_viewport.tscn").instantiate()
 	convex_face_editor_dock.builder = self
 	
-	tool_properties_dock = preload("res://addons/cyclops_level_builder/docks/tool_properties/tool_properties_dock.tscn").instantiate()
+	tool_properties_dock = preload("res://addons/cyclops_level_builder/gui/docks/tool_properties/tool_properties_dock.tscn").instantiate()
 	tool_properties_dock.builder = self
 	
-	snapping_properties_dock = preload("res://addons/cyclops_level_builder/docks/snapping_properties/snapping_properties_dock.tscn").instantiate()
+	snapping_properties_dock = preload("res://addons/cyclops_level_builder/gui/docks/snapping_properties/snapping_properties_dock.tscn").instantiate()
 	snapping_properties_dock.builder = self
 	
-	cyclops_console_dock = preload("res://addons/cyclops_level_builder/docks/cyclops_console/cyclops_console.tscn").instantiate()
+	cyclops_console_dock = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/cyclops_console.tscn").instantiate()
 	cyclops_console_dock.editor_plugin = self
 	
-	main_toolbar = preload("menu/main_toolbar.tscn").instantiate()
+	main_toolbar = preload("gui/menu/main_toolbar.tscn").instantiate()
 	main_toolbar.editor_plugin = self
 	
-	editor_toolbar = preload("menu/editor_toolbar.tscn").instantiate()
+	editor_toolbar = preload("gui/menu/editor_toolbar.tscn").instantiate()
 	editor_toolbar.editor_plugin = self
 
-	upgrade_cyclops_blocks_toolbar = preload("res://addons/cyclops_level_builder/menu/upgrade_cyclops_blocks_toolbar.tscn").instantiate()
+	upgrade_cyclops_blocks_toolbar = preload("res://addons/cyclops_level_builder/gui/menu/upgrade_cyclops_blocks_toolbar.tscn").instantiate()
 	upgrade_cyclops_blocks_toolbar.editor_plugin = self
 
 	add_control_to_bottom_panel(cyclops_console_dock, "Cyclops")
@@ -341,8 +342,6 @@ func load_tools():
 #func on_filesystem_changed():
 	#load_config()
 	
-@export_file("*.json") var config_file:String = "res://addons/cyclops_level_builder/data/cyclops_config.json"
-
 func load_config():
 	#load_actions()
 	var text:String = FileAccess.get_file_as_string(config_file)
@@ -365,6 +364,7 @@ func load_config():
 	tool_list.clear()
 
 	for path in config_dict["tools"]:
+		#print("Loading tool ", path)
 		var script:Script = load(path)
 
 		var tool:CyclopsTool = script.new()

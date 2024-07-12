@@ -21,8 +21,6 @@
 
 [resource]
 script = ExtResource("1_jrivp")
-action_script_directories = Array[String](["res://addons/cyclops_level_builder/actions/"])
-tool_script_directories = Array[String](["res://addons/cyclops_level_builder/tools/"])
 action_scripts = Array[Script]([ExtResource("1_eup5n"), ExtResource("2_p5ywl"), null, null, null])
 tool_scripts = Array[Script]([ExtResource("12_umde1"), ExtResource("14_4xltc"), ExtResource("4_opr8c"), ExtResource("6_3o3am"), ExtResource("13_nea2o"), ExtResource("15_hmhlm"), ExtResource("5_askte"), ExtResource("7_r644u"), ExtResource("10_x0pmc"), ExtResource("8_5yxhi"), ExtResource("9_h8njg"), ExtResource("11_sjxhr"), ExtResource("16_krl45")])
 snapping_tags = Array[Resource("res://addons/cyclops_level_builder/snapping/snapping_tag.gd")]([ExtResource("2_8mhpe"), ExtResource("3_bw3pn")])

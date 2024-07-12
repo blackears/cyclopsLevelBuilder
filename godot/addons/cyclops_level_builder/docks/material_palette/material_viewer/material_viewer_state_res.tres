@@ -1,7 +1,0 @@
-[gd_resource type="Resource" script_class="MaterialViewerState" load_steps=2 format=3 uid="uid://cwq6b2p7f631n"]
-
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/docks/material_palette/material_viewer/material_viewer_state.gd" id="1_3sifp"]
-
-[resource]
-script = ExtResource("1_3sifp")
-active_material_path = "res://materials/tiles/groundcover_green.tres"

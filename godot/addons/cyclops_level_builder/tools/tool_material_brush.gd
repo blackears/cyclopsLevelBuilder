@@ -33,7 +33,7 @@ const TOOL_ID:String = "material_brush"
 var cmd:CommandSetMaterial
 
 var settings:ToolMaterialBrushSettings = ToolMaterialBrushSettings.new()
-var material_viewer_state:MaterialViewerState = preload("res://addons/cyclops_level_builder/docks/material_palette/material_viewer/material_viewer_state_res.tres")
+var material_viewer_state:MaterialViewerState = preload("res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/material_viewer_state_res.tres")
 
 var last_mouse_pos:Vector2
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cbucsqmj5g1i1"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/snapping/snapping_system_vertex_properties_editor.gd" id="1_tibga"]
-[ext_resource type="PackedScene" uid="uid://diibmlqy1mpqb" path="res://addons/cyclops_level_builder/controls/numeric_line_edit.tscn" id="2_hl6or"]
+[ext_resource type="PackedScene" uid="uid://diibmlqy1mpqb" path="res://addons/cyclops_level_builder/gui/controls/numeric_line_edit.tscn" id="2_hl6or"]
 
 [node name="SnappingSystemVertexPropertiesEditor" type="PanelContainer"]
 offset_right = 319.0

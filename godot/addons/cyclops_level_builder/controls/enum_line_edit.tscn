@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://7ur3lovebuua"]
-
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/enum_line_edit.gd" id="1_ltl6a"]
-
-[node name="EnumLineEdit" type="OptionButton"]
-script = ExtResource("1_ltl6a")
-
-[connection signal="item_selected" from="." to="." method="_on_item_selected"]

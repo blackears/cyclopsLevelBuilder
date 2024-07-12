@@ -10,6 +10,7 @@
 * New tool button system will hide/show buttons based on what nodes current tool can operate on.
 * Creating overlay system to draw overlays on viewport.
 * Creating overlay to display edge lengths.
+* Now using config file to organize loading load tools and actions.
 
 
 ### v1.0.4

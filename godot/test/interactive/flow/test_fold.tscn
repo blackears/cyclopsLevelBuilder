@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://clyah5iptfmyi"]
 
-[ext_resource type="PackedScene" uid="uid://bk0eelj64x4fk" path="res://addons/cyclops_level_builder/controls/fold_out_panel.tscn" id="1_wm236"]
+[ext_resource type="PackedScene" uid="uid://bk0eelj64x4fk" path="res://addons/cyclops_level_builder/gui/controls/fold_out_panel.tscn" id="1_wm236"]
 [ext_resource type="Texture2D" uid="uid://bor2x3t7fiqc2" path="res://addons/cyclops_level_builder/art/icons/arrow_down.svg" id="2_bmf4f"]
 
 [node name="TestFlow" type="Control"]

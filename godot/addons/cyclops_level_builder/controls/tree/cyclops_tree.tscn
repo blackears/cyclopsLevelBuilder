@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cq6olx6nychug"]
-
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/controls/tree/cyclops_tree.gd" id="1_5sunq"]
-
-[node name="CyclopsTree" type="PanelContainer"]
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("1_5sunq")
