@@ -22,23 +22,26 @@
 # SOFTWARE.
 
 @tool
-class_name ActionMergeSelectedBlocks
+class_name ActionDeleteSelectedBlocks
 extends CyclopsAction
 
-const ACTION_ID:String = "merge_selected_blocks"
+const ACTION_ID:String = "delete_selected_blocks"
 
 func _get_action_id():
 	return ACTION_ID
 
-func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	super._init(plugin, "Merge Selected Blocks")
+#func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
+	#super._init(plugin, "Delete Selected Blocks")
+
+func _init():
+	name = "Delete Selected Blocks"
 
 func _execute():
 	var blocks:Array[CyclopsBlock] = plugin.get_selected_blocks()
 	if blocks.is_empty():
 		return
 		
-	var cmd:CommandMergeBlocks = CommandMergeBlocks.new()
+	var cmd:CommandDeleteBlocks = CommandDeleteBlocks.new()
 	cmd.builder = plugin
 	
 	for block in blocks:
@@ -47,3 +50,4 @@ func _execute():
 	
 	var undo:EditorUndoRedoManager = plugin.get_undo_redo()
 	cmd.add_to_undo_manager(undo)
+	

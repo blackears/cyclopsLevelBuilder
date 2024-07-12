@@ -22,39 +22,20 @@
 # SOFTWARE.
 
 @tool
-class_name ActionMergeVerticesCenter
-extends CyclopsAction
+class_name ActionRotateZ90Ccw
+extends ActionRotateSelection
 
-const ACTION_ID:String = "merge_vertices_center"
+const ACTION_ID:String = "rotate_z_90_ccw"
 
 func _get_action_id():
 	return ACTION_ID
-
-func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	super._init(plugin, "Merge Vertices Center")
-
-func _execute():
-	var blocks:Array[CyclopsBlock] = plugin.get_selected_blocks()
-	if blocks.is_empty():
-		return
-		
-	var cmd:CommandMergeVertices = CommandMergeVertices.new()
-	cmd.builder = plugin
 	
-	for block in blocks:
-		var sel_vec:DataVector = block.mesh_vector_data.get_vertex_data(MeshVectorData.V_SELECTED)
-		
-		if sel_vec.size() < 2:
-			continue
-
-		var indices:Array[int]
-		#print("sel vert bytes ", block.block_data.vertex_selected)
-		for idx in sel_vec.size():
-			if sel_vec.get_value(idx):
-				indices.append(idx)
-		cmd.add_vertices(block.get_path(), indices)
-			
+#func _init(plugin:CyclopsLevelBuilder):
+	#super._init(plugin, "Rotate 90 Ccw Z")
+	#rotation_axis = Vector3(0, 0, 1)
+	#rotation_angle = deg_to_rad(90)
 	
-	if cmd.will_change_anything():
-		var undo:EditorUndoRedoManager = plugin.get_undo_redo()
-		cmd.add_to_undo_manager(undo)
+func _init():
+	name = "Rotate 90 Ccw Z"
+	rotation_axis = Vector3(0, 0, 1)
+	rotation_angle = deg_to_rad(90)

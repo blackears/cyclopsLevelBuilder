@@ -22,15 +22,31 @@
 # SOFTWARE.
 
 @tool
-class_name ActionRotateY90Ccw
-extends ActionRotateSelection
+class_name ActionDuplicateSelectedBlocks
+extends CyclopsAction
 
-const ACTION_ID:String = "rotate_y_90_ccw"
+const ACTION_ID:String = "duplicate_selected_blocks"
 
 func _get_action_id():
 	return ACTION_ID
+
+#func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
+	#super._init(plugin, "Duplicate Selected Blocks")
+
+func _init():
+	name = "Duplicate Selected Blocks"
+
+func _execute():
+	var blocks:Array[CyclopsBlock] = plugin.get_selected_blocks()
+	if blocks.is_empty():
+		return
+		
+	var cmd:CommandDuplicateBlocks = CommandDuplicateBlocks.new()
+	cmd.builder = plugin
 	
-func _init(plugin:CyclopsLevelBuilder):
-	super._init(plugin, "Rotate 90 Ccw Y")
-	rotation_axis = Vector3(0, 1, 0)
-	rotation_angle = deg_to_rad(90)
+	for block in blocks:
+		cmd.blocks_to_duplicate.append(block.get_path())
+		
+	
+	var undo:EditorUndoRedoManager = plugin.get_undo_redo()
+	cmd.add_to_undo_manager(undo)

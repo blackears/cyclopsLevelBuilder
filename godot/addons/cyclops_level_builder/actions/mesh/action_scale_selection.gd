@@ -22,15 +22,33 @@
 # SOFTWARE.
 
 @tool
-class_name ActionRotateX90Ccw
-extends ActionRotateSelection
+class_name ActionScaleSelection
+extends CyclopsAction
 
-const ACTION_ID:String = "rotate_x_90_ccw"
+var scale:Vector3 = Vector3.ONE
 
-func _get_action_id():
-	return ACTION_ID
+#func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
+	#super._init(plugin, name, accellerator)
+
+func _execute():
+	var blocks:Array[CyclopsBlock] = plugin.get_selected_blocks()
+	if blocks.is_empty():
+		return
+		
+	var pivot:Vector3 = calc_pivot_of_blocks(blocks)
 	
-func _init(plugin:CyclopsLevelBuilder):
-	super._init(plugin, "Rotate 90 Ccw X")
-	rotation_axis = Vector3(1, 0, 0)
-	rotation_angle = deg_to_rad(90)
+	var cmd:CommandTransformVertices = CommandTransformVertices.new()
+	cmd.builder = plugin
+	
+	for block in blocks:
+		cmd.add_block(block.get_path())
+		
+	var xform:Transform3D = Transform3D.IDENTITY
+	xform = xform.translated_local(pivot)
+	xform = xform.scaled_local(scale)
+	xform = xform.translated_local(-pivot)
+	cmd.transform = xform
+	#print("cform %s" % xform)
+	
+	var undo:EditorUndoRedoManager = plugin.get_undo_redo()
+	cmd.add_to_undo_manager(undo)

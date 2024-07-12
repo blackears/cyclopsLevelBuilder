@@ -22,29 +22,20 @@
 # SOFTWARE.
 
 @tool
-class_name ActionDeleteSelectedBlocks
-extends CyclopsAction
+class_name ActionRotateY90Cw
+extends ActionRotateSelection
 
-const ACTION_ID:String = "delete_selected_blocks"
+const ACTION_ID:String = "rotate_y_90_cw"
 
 func _get_action_id():
 	return ACTION_ID
-
-func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	super._init(plugin, "Delete Selected Blocks")
-
-func _execute():
-	var blocks:Array[CyclopsBlock] = plugin.get_selected_blocks()
-	if blocks.is_empty():
-		return
-		
-	var cmd:CommandDeleteBlocks = CommandDeleteBlocks.new()
-	cmd.builder = plugin
 	
-	for block in blocks:
-		cmd.block_paths.append(block.get_path())
-		
+#func _init(plugin:CyclopsLevelBuilder):
+	#super._init(plugin, "Rotate 90 Cw Y")
+	#rotation_axis = Vector3(0, 1, 0)
+	#rotation_angle = deg_to_rad(-90)
 	
-	var undo:EditorUndoRedoManager = plugin.get_undo_redo()
-	cmd.add_to_undo_manager(undo)
-	
+func _init():
+	name = "Rotate 90 Cw Y"
+	rotation_axis = Vector3(0, 1, 0)
+	rotation_angle = deg_to_rad(-90)

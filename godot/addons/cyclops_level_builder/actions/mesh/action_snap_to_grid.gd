@@ -22,28 +22,44 @@
 # SOFTWARE.
 
 @tool
-class_name ActionDuplicateSelectedBlocks
+class_name ActionSnapToGrid
 extends CyclopsAction
 
-const ACTION_ID:String = "duplicate_selected_blocks"
+const ACTION_ID:String = "snap_to_grid"
 
 func _get_action_id():
 	return ACTION_ID
+	
+#func _init(plugin:CyclopsLevelBuilder):
+	#super._init(plugin, "Snap to grid")
+	
+func _init():
+	name = "Snap to grid"
 
-func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	super._init(plugin, "Duplicate Selected Blocks")
 
 func _execute():
 	var blocks:Array[CyclopsBlock] = plugin.get_selected_blocks()
 	if blocks.is_empty():
 		return
 		
-	var cmd:CommandDuplicateBlocks = CommandDuplicateBlocks.new()
+	var pivot:Vector3 = calc_pivot_of_blocks(blocks)
+	
+	var cmd:CommandSnapToGrid = CommandSnapToGrid.new()
 	cmd.builder = plugin
 	
 	for block in blocks:
-		cmd.blocks_to_duplicate.append(block.get_path())
+		cmd.add_block(block.get_path())
 		
+	
+	#cmd.grid_size = pow(2, plugin.get_global_scene().grid_size)
+	#var snap_to_grid_util:SnapToGridUtil = CyclopsAutoload.calc_snap_to_grid_util()
+	#print("snap_to_grid_util  %s" % snap_to_grid_util)
+	#cmd.snap_to_grid_util = snap_to_grid_util
+	
+	
+	#print("cform %s" % xform)
 	
 	var undo:EditorUndoRedoManager = plugin.get_undo_redo()
 	cmd.add_to_undo_manager(undo)
+
+

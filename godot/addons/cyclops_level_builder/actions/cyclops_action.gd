@@ -28,15 +28,18 @@ extends RefCounted
 var plugin:CyclopsLevelBuilder
 
 var name:String = ""
-var accellerator:Key = KEY_NONE
+#var accellerator:Key = KEY_NONE
 
 func _get_action_id():
 	return ""
 
-func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	self.plugin = plugin
-	self.name= name
-	self.accellerator = accellerator
+func _ready():
+	pass
+
+#func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
+	#self.plugin = plugin
+	#self.name= name
+	#self.accellerator = accellerator
 
 func _execute():
 	pass

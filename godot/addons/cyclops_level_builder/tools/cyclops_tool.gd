@@ -22,13 +22,16 @@
 # SOFTWARE.
 
 @tool
-extends Resource
+extends RefCounted
 class_name CyclopsTool
 
 var builder:CyclopsLevelBuilder
 
 #func _init(_editorPlugin:EditorPlugin):
 #	editorPlugin = _editorPlugin
+
+func _ready():
+	pass
 
 func _activate(builder:CyclopsLevelBuilder):
 	self.builder = builder
@@ -67,7 +70,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		if e.keycode == KEY_X:
 			if e.is_pressed():
 				#print("cyc tool X")
-				var action:ActionDeleteSelectedBlocks = ActionDeleteSelectedBlocks.new(builder)
+				var action:ActionDeleteSelectedBlocks = ActionDeleteSelectedBlocks.new()
+				action.plugin = builder
 				action._execute()
 			
 			return true

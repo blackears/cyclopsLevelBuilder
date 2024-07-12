@@ -25,8 +25,8 @@
 class_name ActionImportMeshInstance
 extends CyclopsAction
 
-func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	super._init(plugin, "Import Godot MeshInstance...")
+func _init():
+	name = "Import Godot MeshInstance..."
 
 func _execute():
 	var nodes:Array[Node] = plugin.get_editor_interface().get_selection().get_selected_nodes()

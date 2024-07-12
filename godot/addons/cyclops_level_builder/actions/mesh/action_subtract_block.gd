@@ -22,18 +22,44 @@
 # SOFTWARE.
 
 @tool
-class_name ActionToolDuplicate
+class_name ActionSubtractBlock
 extends CyclopsAction
 
 
-const ACTION_ID:String = "tool_duplicate"
+const ACTION_ID:String = "subtract_block"
 
 func _get_action_id():
 	return ACTION_ID
 	
-func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	super._init(plugin, "Duplicate Selected Blocks")
+#func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
+	#super._init(plugin, "Subtract Block")
+	
+func _init():
+	name = "Subtract Block"
 
 func _execute():
-#	plugin.switch_to_tool(ToolDuplicate.new())
-	plugin.switch_to_tool_id(ToolDuplicate.TOOL_ID)
+	var blocks:Array[CyclopsBlock] = plugin.get_selected_blocks()
+	if blocks.size() < 2:
+		plugin.log("Not enough objects selected")
+		return
+
+	var active:CyclopsBlock = plugin.get_active_block()
+	if !active:
+		plugin.log("No active object selected")
+		return
+		
+	var cmd:CommandSubtractBlock = CommandSubtractBlock.new()
+	cmd.builder = plugin
+
+	for block in blocks:
+		if plugin.is_active_block(block):
+			cmd.block_to_subtract_path = block.get_path()
+		else:
+			cmd.block_paths.append(block.get_path())
+	
+	if cmd.block_to_subtract_path.is_empty():
+		return
+	
+	if cmd.will_change_anything():
+		var undo:EditorUndoRedoManager = plugin.get_undo_redo()
+		cmd.add_to_undo_manager(undo)

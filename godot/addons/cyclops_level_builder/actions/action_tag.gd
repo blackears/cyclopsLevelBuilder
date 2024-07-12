@@ -22,14 +22,9 @@
 # SOFTWARE.
 
 @tool
-class_name ActionMirrorSelectionY2
-extends ActionScaleSelection
+extends Resource
+class_name ActionTag
 
-const ACTION_ID:String = "mirror_selection_y"
-
-func _get_action_id():
-	return ACTION_ID
-
-func _init(plugin:CyclopsLevelBuilder):
-	super._init(plugin, "Mirror Selection Y")
-	scale = Vector3(1, -1, 1)
+#@export var id:String
+@export var enabled:bool
+@export var action_script:Script

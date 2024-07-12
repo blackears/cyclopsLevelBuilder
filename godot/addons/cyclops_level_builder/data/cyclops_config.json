@@ -1,0 +1,84 @@
+{
+	"actions":[
+		"res://addons/cyclops_level_builder/actions/io/action_export_as_cyclops.gd",
+		"res://addons/cyclops_level_builder/actions/io/action_export_as_gltf.gd",
+		"res://addons/cyclops_level_builder/actions/io/action_export_as_godot_scene.gd",
+		"res://addons/cyclops_level_builder/actions/io/action_import_cyclops_file.gd",
+		"res://addons/cyclops_level_builder/actions/io/action_import_mesh_instance.gd",
+		
+		"res://addons/cyclops_level_builder/actions/mesh/action_convert_to_mesh.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_delete_selected_blocks.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_duplicate_selected_blocks.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_intersect_block.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_merge_selected_blocks.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_merge_vertices_center.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_mirror_selection_x.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_mirror_selection_y.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_mirror_selection_z.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_rotate_x_90_ccw.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_rotate_x_90_cw.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_rotate_x_180.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_rotate_y_90_ccw.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_rotate_y_90_cw.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_rotate_y_180.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_rotate_z_90_ccw.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_rotate_z_90_cw.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_rotate_z_180.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_select_tool.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_snap_to_grid.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_subtract_block.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_tool_duplicate.gd",
+		
+	],
+	"tools":[
+		"res://addons/cyclops_level_builder/tools/tool_move.gd",
+		"res://addons/cyclops_level_builder/tools/tool_rotate.gd",
+		"res://addons/cyclops_level_builder/tools/tool_block.gd",
+		"res://addons/cyclops_level_builder/tools/tool_prism.gd",
+		"res://addons/cyclops_level_builder/tools/tool_cylinder.gd",
+		"res://addons/cyclops_level_builder/tools/tool_stairs.gd",
+		"res://addons/cyclops_level_builder/tools/tool_clip.gd",
+		"res://addons/cyclops_level_builder/tools/tool_duplicate.gd",
+		"res://addons/cyclops_level_builder/tools/tool_edit_vertex.gd",
+		"res://addons/cyclops_level_builder/tools/tool_edit_edge.gd",
+		"res://addons/cyclops_level_builder/tools/tool_edit_face.gd",
+		"res://addons/cyclops_level_builder/tools/tool_material_brush.gd",
+		"res://addons/cyclops_level_builder/tools/tool_vertex_color_brush.gd",
+		
+	],
+	"menus":[
+		{
+			"type":"menu",
+			"name": "file",
+			"children":[
+				{
+					"type": "action",
+					"id":"convert_to_mesh",
+					"params": {
+						"tool_id":"duplicate"
+					}
+				},
+				{
+					"type": "action",
+					"id":"delete_selected_blocks"
+				},
+				{
+					"type": "separator"
+				}
+				
+			]
+		},
+		
+		
+	],
+	"keymap": [
+		{
+			"key":"A",
+			"shift": 1,
+			"action_id": "select_tool",
+			"params":{
+				"tool_id":"cylinder"
+			}
+		}
+	]
+}

@@ -27,8 +27,12 @@ extends CyclopsAction
 
 var wizard:ExporterCyclopsWizard = preload("res://addons/cyclops_level_builder/io/exporter/exporter_cyclops_wizard.tscn").instantiate()
 
-func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	super._init(plugin, "Export As Cyclops File...")
+func _init():
+	name = "Export As Cyclops File..."
+
+#func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
+	#name = "Export As Cyclops File..."
+	#super._init(plugin, "Export As Cyclops File...")
 
 func _execute():
 	if !wizard.get_parent():

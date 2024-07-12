@@ -22,40 +22,24 @@
 # SOFTWARE.
 
 @tool
-class_name ActionIntersectBlock
+class_name ActionSelectTool
 extends CyclopsAction
 
-const ACTION_ID:String = "intersect_block"
+@export var tool_id:String
+
+const ACTION_ID:String = "select_tool"
 
 func _get_action_id():
 	return ACTION_ID
 
-func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	super._init(plugin, "Intersect Blocks")
+#func _init(plugin:CyclopsLevelBuilder):
+	#super._init(plugin, "Select tool")
+
+func _init():
+	name = "Select tool"
 
 func _execute():
-	var blocks:Array[CyclopsBlock] = plugin.get_selected_blocks()
-	if blocks.size() < 2:
-		plugin.log("Not enough objects selected")
-		return
+	plugin.switch_to_tool_id(tool_id)
 
-	var active:CyclopsBlock = plugin.get_active_block()
-	if !active:
-		plugin.log("No active object selected")
-		return
-		
-	var cmd:CommandIntersectBlock = CommandIntersectBlock.new()
-	cmd.builder = plugin
 
-	for block in blocks:
-		if plugin.is_active_block(block):
-			cmd.main_block_path = block.get_path()
-		else:
-			cmd.block_paths.append(block.get_path())
-	
-	if cmd.main_block_path.is_empty():
-		return
-	
-	if cmd.will_change_anything():
-		var undo:EditorUndoRedoManager = plugin.get_undo_redo()
-		cmd.add_to_undo_manager(undo)
+

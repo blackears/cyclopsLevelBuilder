@@ -25,6 +25,10 @@
 extends Resource
 class_name CyclopsConfig
 
+#@export var action_script_directories:Array[String] = ["res://addons/cyclops_level_builder/actions/"]
+#@export var tool_script_directories:Array[String] = ["res://addons/cyclops_level_builder/tools/"]
+
+@export var action_scripts:Array[Script]
 @export var tool_scripts:Array[Script]
 #@export var tool_tags:Array[ToolTag]
 @export var snapping_tags:Array[SnappingTag]

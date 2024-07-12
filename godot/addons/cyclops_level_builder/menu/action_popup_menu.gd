@@ -33,7 +33,8 @@ func _ready():
 func add_action_item(action:CyclopsAction):
 #	var id:int = action_map.size()
 	var id:int = action_map.size() + 1000
-	add_item(action.name, id, action.accellerator)
+#	add_item(action.name, id, action.accellerator)
+	add_item(action.name, id)
 	action_map[id] = action
 
 #func add_separator(label:String, id:int = -1):

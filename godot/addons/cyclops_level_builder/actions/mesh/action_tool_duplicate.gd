@@ -22,15 +22,21 @@
 # SOFTWARE.
 
 @tool
-class_name ActionRotateZ90Ccw
-extends ActionRotateSelection
+class_name ActionToolDuplicate
+extends CyclopsAction
 
-const ACTION_ID:String = "rotate_z_90_ccw"
+
+const ACTION_ID:String = "tool_duplicate"
 
 func _get_action_id():
 	return ACTION_ID
 	
-func _init(plugin:CyclopsLevelBuilder):
-	super._init(plugin, "Rotate 90 Ccw Z")
-	rotation_axis = Vector3(0, 0, 1)
-	rotation_angle = deg_to_rad(90)
+#func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
+	#super._init(plugin, "Duplicate Selected Blocks")
+	
+func _init():
+	name = "Duplicate Selected Blocks"
+
+func _execute():
+#	plugin.switch_to_tool(ToolDuplicate.new())
+	plugin.switch_to_tool_id(ToolDuplicate.TOOL_ID)

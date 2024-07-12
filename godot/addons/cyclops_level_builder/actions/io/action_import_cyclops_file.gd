@@ -27,8 +27,11 @@ extends CyclopsAction
 
 var wizard:ImporterCyclopsFileWizard = preload("res://addons/cyclops_level_builder/io/importer/importer_cyclops_file_wizard.tscn").instantiate()
 
-func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	super._init(plugin, "Import Cyclops File...")
+#func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
+	#super._init(plugin, "Import Cyclops File...")
+
+func _init():
+	name = "Import Cyclops File..."
 
 func _execute():
 	if !wizard.get_parent():

@@ -71,6 +71,8 @@ var drag_start_radius:float = 6
 var active_tool:CyclopsTool = null
 var tool_list:Array[CyclopsTool]
 
+var action_list:Array[CyclopsAction]
+
 var overlay_list:Array[CyclopsOverlayObject]
 
 
@@ -132,6 +134,8 @@ func _enter_tree():
 		#print("load text:", text)
 		editor_cache = JSON.parse_string(text)
 	
+	#EditorInterface.get_resource_filesystem().filesystem_changed.connect(on_filesystem_changed)
+	
 	add_child(viewport_3d_manager)
 	viewport_3d_manager.plugin = self
 		
@@ -189,7 +193,8 @@ func _enter_tree():
 	var selection:EditorSelection = editor.get_selection()
 	selection.selection_changed.connect(on_selection_changed)
 	
-	load_tools()
+	load_config()
+	#load_tools()
 	update_activation()
 
 
@@ -210,6 +215,8 @@ func _exit_tree():
 	#print("saving cache:", text)
 	file.store_string(JSON.stringify(editor_cache, "    "))
 	file.close()
+
+	#EditorInterface.get_resource_filesystem().filesystem_changed.disconnect(on_filesystem_changed)
 	
 	remove_child(viewport_3d_manager)
 	
@@ -254,19 +261,118 @@ func _exit_tree():
 	editor_toolbar.queue_free()
 	upgrade_cyclops_blocks_toolbar.queue_free()
 
+#func load_actions():
+	#print("load_actions")
+	#
+	#action_list.clear()
+	#
+	#var ed_fs:EditorFileSystem = EditorInterface.get_resource_filesystem()
+	#var root_fs:EditorFileSystemDirectory = ed_fs.get_filesystem()
+	#load_actions_recursive(root_fs)
+	#
+	#for action in action_list:
+		#action._ready()
+#
+#func load_actions_recursive(root_fs:EditorFileSystemDirectory):
+	#print("load_actions_recursive ", root_fs.get_path())
+	##print("root_fs.get_file_count() ", root_fs.get_file_count())
+	##print("root_fs.get_subdir_count() ", root_fs.get_subdir_count())
+	#
+	#for i in root_fs.get_file_count():
+		#var type:StringName = root_fs.get_file_type(i)
+		#print("type ", type)
+		#if type == "ActionTag":
+			#var path:String = root_fs.get_file(i)
+			#var tag:ActionTag = load(path)
+			#if tag.enabled:
+				#if tag.action_script is GDScript:
+					#var inst:CyclopsAction = tag.action_script.new()
+					#inst.plugin = self
+					#
+					#action_list.append(inst)
+					#print("loading action ", inst.get_script().resource_path)
+					#pass
+			#pass
+		#
+		#
+	#for i in root_fs.get_subdir_count():
+		#var subdir_fs:EditorFileSystemDirectory = root_fs.get_subdir(i)
+		#load_actions_recursive(subdir_fs)
+
+#func load_actions_recursive(dir_path:String):
+	#var dir:DirAccess = DirAccess.open(dir_path)
+	#if dir:
+		#dir.list_dir_begin()
+		#var file_name = dir.get_next()
+		#while file_name != "":
+			#if dir.current_is_dir():
+				##print("Found directory: " + file_name)
+				#load_actions_recursive(file_name)
+			#else:
+				#print("Found file: " + file_name)
+				#var res:Resource = ResourceLoader.load(file_name)
+				#if res is GDScript:
+					#pass
+				#
+			#file_name = dir.get_next()
+
+
 func load_tools():
-	if active_tool:
-		switch_to_tool_id("")
+	#if active_tool:
+		#switch_to_tool_id("")
 	
-	tool_list.clear()
+	#tool_list.clear()
+	var new_tool_list:Array[CyclopsTool]
 	
 	for script:GDScript in config.tool_scripts:
 		#print("script: ", script.resource_path)
 		#print("type: ", typeof(script.get_class()))
 		
 		var tool:CyclopsTool = script.new()
+		tool.builder = self
+		new_tool_list.append(tool)
+
+	tool_list = new_tool_list
+
+	for tool in tool_list:
+		tool._init()
+	
+
+#func on_filesystem_changed():
+	#load_config()
+	
+@export_file("*.json") var config_file:String = "res://addons/cyclops_level_builder/data/cyclops_config.json"
+
+func load_config():
+	#load_actions()
+	var text:String = FileAccess.get_file_as_string(config_file)
+	var config_dict:Dictionary = JSON.parse_string(text)
+		
+	#Load actions
+	action_list.clear()
+
+	for path in config_dict["actions"]:
+		var script:Script = load(path)
+
+		var act:CyclopsAction = script.new()
+		act.plugin = self
+		action_list.append(act)
+
+	for act in action_list:
+		act._ready()
+	
+	#Load tools
+	tool_list.clear()
+
+	for path in config_dict["tools"]:
+		var script:Script = load(path)
+
+		var tool:CyclopsTool = script.new()
+		tool.builder = self
 		tool_list.append(tool)
 
+	for tool in tool_list:
+		tool._ready()
 
 func log(message:String, level:CyclopsLogger.LogLevel = CyclopsLogger.LogLevel.ERROR):
 	logger.log(message, level)

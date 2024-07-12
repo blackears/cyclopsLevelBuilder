@@ -22,35 +22,18 @@
 # SOFTWARE.
 
 @tool
-class_name ActionRotateSelection
-extends CyclopsAction
+class_name ActionMirrorSelectionZ
+extends ActionScaleSelection
 
-var rotation_axis:Vector3 = Vector3.ONE
-var rotation_angle:float
+const ACTION_ID:String = "mirror_selection_z"
 
+func _get_action_id():
+	return ACTION_ID
 
-func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	super._init(plugin, name, accellerator)
+#func _init(plugin:CyclopsLevelBuilder):
+	#super._init(plugin, "Mirror Selection Z")
+	#scale = Vector3(1, 1, -1)
 
-func _execute():
-	var blocks:Array[CyclopsBlock] = plugin.get_selected_blocks()
-	if blocks.is_empty():
-		return
-		
-	var pivot:Vector3 = calc_pivot_of_blocks(blocks)
-	
-	var cmd:CommandTransformVertices = CommandTransformVertices.new()
-	cmd.builder = plugin
-	
-	for block in blocks:
-		cmd.add_block(block.get_path())
-		
-	var xform:Transform3D = Transform3D.IDENTITY
-	xform = xform.translated_local(pivot)
-	xform = xform.rotated_local(rotation_axis, rotation_angle)
-	xform = xform.translated_local(-pivot)
-	cmd.transform = xform
-	#print("cform %s" % xform)
-	
-	var undo:EditorUndoRedoManager = plugin.get_undo_redo()
-	cmd.add_to_undo_manager(undo)
+func _init():
+	name = "Mirror Selection Z"
+	scale = Vector3(1, 1, -1)

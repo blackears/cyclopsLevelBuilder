@@ -22,15 +22,20 @@
 # SOFTWARE.
 
 @tool
-class_name ActionRotateY180
+class_name ActionRotateX90Ccw
 extends ActionRotateSelection
 
-const ACTION_ID:String = "rotate_y_180"
+const ACTION_ID:String = "rotate_x_90_ccw"
 
 func _get_action_id():
 	return ACTION_ID
 	
-func _init(plugin:CyclopsLevelBuilder):
-	super._init(plugin, "Rotate 180 Y")
-	rotation_axis = Vector3(0, 1, 0)
-	rotation_angle = deg_to_rad(180)
+#func _init(plugin:CyclopsLevelBuilder):
+	#super._init(plugin, "Rotate 90 Ccw X")
+	#rotation_axis = Vector3(1, 0, 0)
+	#rotation_angle = deg_to_rad(90)
+	
+func _init():
+	name = "Rotate 90 Ccw X"
+	rotation_axis = Vector3(1, 0, 0)
+	rotation_angle = deg_to_rad(90)

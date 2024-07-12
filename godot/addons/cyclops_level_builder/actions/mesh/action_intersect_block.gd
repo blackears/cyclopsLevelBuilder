@@ -22,33 +22,43 @@
 # SOFTWARE.
 
 @tool
-class_name ActionScaleSelection
+class_name ActionIntersectBlock
 extends CyclopsAction
 
-var scale:Vector3 = Vector3.ONE
+const ACTION_ID:String = "intersect_block"
 
-func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	super._init(plugin, name, accellerator)
+func _get_action_id():
+	return ACTION_ID
+
+#func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
+	#super._init(plugin, "Intersect Blocks")
+
+func _init():
+	name = "Intersect Blocks"
 
 func _execute():
 	var blocks:Array[CyclopsBlock] = plugin.get_selected_blocks()
-	if blocks.is_empty():
+	if blocks.size() < 2:
+		plugin.log("Not enough objects selected")
+		return
+
+	var active:CyclopsBlock = plugin.get_active_block()
+	if !active:
+		plugin.log("No active object selected")
 		return
 		
-	var pivot:Vector3 = calc_pivot_of_blocks(blocks)
-	
-	var cmd:CommandTransformVertices = CommandTransformVertices.new()
+	var cmd:CommandIntersectBlock = CommandIntersectBlock.new()
 	cmd.builder = plugin
-	
+
 	for block in blocks:
-		cmd.add_block(block.get_path())
-		
-	var xform:Transform3D = Transform3D.IDENTITY
-	xform = xform.translated_local(pivot)
-	xform = xform.scaled_local(scale)
-	xform = xform.translated_local(-pivot)
-	cmd.transform = xform
-	#print("cform %s" % xform)
+		if plugin.is_active_block(block):
+			cmd.main_block_path = block.get_path()
+		else:
+			cmd.block_paths.append(block.get_path())
 	
-	var undo:EditorUndoRedoManager = plugin.get_undo_redo()
-	cmd.add_to_undo_manager(undo)
+	if cmd.main_block_path.is_empty():
+		return
+	
+	if cmd.will_change_anything():
+		var undo:EditorUndoRedoManager = plugin.get_undo_redo()
+		cmd.add_to_undo_manager(undo)

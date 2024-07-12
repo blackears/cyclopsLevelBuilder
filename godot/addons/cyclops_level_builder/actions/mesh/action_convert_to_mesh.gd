@@ -31,8 +31,11 @@ func _get_action_id():
 	return ACTION_ID
 
 
-func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	super._init(plugin, "Convert To Godot Mesh")
+#func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
+	#super._init(plugin, "Convert To Godot Mesh")
+
+func _init():
+	name = "Convert To Godot Mesh"
 
 func _execute():
 	var root:Node = plugin.get_editor_interface().get_edited_scene_root()

@@ -22,14 +22,19 @@
 # SOFTWARE.
 
 @tool
-class_name ActionMirrorSelectionX2
-extends ActionScaleSelection
+class_name ActionRotateY180
+extends ActionRotateSelection
 
-const ACTION_ID:String = "mirror_selection_x"
+const ACTION_ID:String = "rotate_y_180"
 
 func _get_action_id():
 	return ACTION_ID
 	
-func _init(plugin:CyclopsLevelBuilder):
-	super._init(plugin, "Mirror Selection X")
-	scale = Vector3(-1, 1, 1)
+#func _init(plugin:CyclopsLevelBuilder):
+	#super._init(plugin, "Rotate 180 Y")
+	#rotation_axis = Vector3(0, 1, 0)
+	#rotation_angle = deg_to_rad(180)
+func _init():
+	name = "Rotate 180 Y"
+	rotation_axis = Vector3(0, 1, 0)
+	rotation_angle = deg_to_rad(180)

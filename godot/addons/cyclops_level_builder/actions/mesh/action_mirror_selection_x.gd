@@ -22,22 +22,18 @@
 # SOFTWARE.
 
 @tool
-extends PanelContainer
-class_name MainToolbar
+class_name ActionMirrorSelectionX2
+extends ActionScaleSelection
 
-var editor_plugin:CyclopsLevelBuilder
+const ACTION_ID:String = "mirror_selection_x"
 
-func init_action(action:CyclopsAction)->CyclopsAction:
-	action.plugin = editor_plugin
-	return action
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	%Cyclops.clear()
-	%Cyclops.add_action_item(init_action(ActionImportMeshInstance.new()))
-	%Cyclops.add_action_item(init_action(ActionImportCyclopsFile.new()))
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+func _get_action_id():
+	return ACTION_ID
+	
+#func _init(plugin:CyclopsLevelBuilder):
+	#super._init(plugin, "Mirror Selection X")
+	#scale = Vector3(-1, 1, 1)
+	
+func _init():
+	name = "Mirror Selection X"
+	scale = Vector3(-1, 1, 1)

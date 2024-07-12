@@ -27,8 +27,10 @@ extends CyclopsAction
 
 var wizard:ExporterGodotSceneWizard = preload("res://addons/cyclops_level_builder/io/exporter/exporter_godot_scene_wizard.tscn").instantiate()
 
-func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	super._init(plugin, "Export As Godot Scene...")
+#func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
+	#super._init(plugin, "Export As Godot Scene...")
+func _init():
+	name = "Export As Godot Scene..."
 
 func _execute():
 	
