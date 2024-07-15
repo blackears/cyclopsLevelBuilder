@@ -22,17 +22,39 @@
 # SOFTWARE.
 
 @tool
-extends Control
-class_name CyclopsConsole
+extends PanelContainer
 
-var editor_plugin:CyclopsLevelBuilder:
+var plugin:CyclopsLevelBuilder:
 	set(value):
-		editor_plugin = value
-		%Keymap.plugin = editor_plugin
+		plugin = value
+		rebuild_display()
+
+func rebuild_display():
+	for child:Node in %keymap_list.get_children():
+		%keymap_list.remove_child(child)
+		child.queue_free()
+	
+	if !plugin:
+		return
+	
+	var grp:KeymapGroup = plugin.keymap
+	for invoker:KeymapInvoker in grp.keymaps:
+		var ctl:KeymapInvokerEditor = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keymap_invoker_editor.tscn").instantiate()
+		ctl.invoker = invoker
+		%keymap_list.add_child(ctl)
+		ctl.delete_invoker.connect(on_delete_invoker)
+	
+
+func on_delete_invoker(invoker:KeymapInvoker):
+	var grp:KeymapGroup = plugin.keymap
+	grp.keymaps.erase(invoker)
+	rebuild_display()
+	
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	pass
+
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -40,31 +62,11 @@ func _process(delta):
 	pass
 
 
-func save_state(state:Dictionary):
-	var substate:Dictionary = {}
-	state["cyclops_console"] = substate
+func _on_bn_add_keymap_pressed():
+	var grp:KeymapGroup = plugin.keymap
+	var invoker:KeymapInvoker = KeymapInvoker.new()
+	invoker.input_event = KeymapKeypress.new()
+	grp.keymaps.append(invoker)
 	
-
-func load_state(state:Dictionary):
-	if state == null || !state.has("cyclops_console"):
-		return
-	
-	var substate:Dictionary = state["cyclops_console"]
-
-func _on_enable_cyclops_toggled(button_pressed):
-	editor_plugin.always_on = button_pressed
-
-
-func _on_bn_create_block_pressed():
-	var cmd:CommandAddBlock = CommandAddBlock.new()
-	cmd.builder = editor_plugin
-
-	var bounds:AABB = AABB(%block_position.value, %block_size.value)
-	cmd.bounds = bounds
-	var scene_root = editor_plugin.get_editor_interface().get_edited_scene_root()
-	cmd.blocks_root_path = scene_root.get_path()
-	cmd.block_name = GeneralUtil.find_unique_name(scene_root, "block")
-	
-	var undo:EditorUndoRedoManager = editor_plugin.get_undo_redo()
-	cmd.add_to_undo_manager(undo)
-
+	rebuild_display()
+	pass # Replace with function body.

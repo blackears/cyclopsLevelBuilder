@@ -38,6 +38,9 @@ var config:CyclopsConfig = preload("res://addons/cyclops_level_builder/data/conf
 
 var logger:CyclopsLogger = CyclopsLogger.new()
 
+#For now, use a single keymap for all operations
+var keymap:KeymapGroup = preload("res://addons/cyclops_level_builder/data/default_keymap.tres")
+
 var material_dock:MaterialPaletteViewport
 var overlays_dock:OverlaysDock
 var convex_face_editor_dock:ConvexFaceEdtiorViewport
@@ -318,25 +321,25 @@ func _exit_tree():
 			#file_name = dir.get_next()
 
 
-func load_tools():
-	#if active_tool:
-		#switch_to_tool_id("")
-	
-	#tool_list.clear()
-	var new_tool_list:Array[CyclopsTool]
-	
-	for script:GDScript in config.tool_scripts:
-		#print("script: ", script.resource_path)
-		#print("type: ", typeof(script.get_class()))
-		
-		var tool:CyclopsTool = script.new()
-		tool.builder = self
-		new_tool_list.append(tool)
-
-	tool_list = new_tool_list
-
-	for tool in tool_list:
-		tool._init()
+#func load_tools():
+	##if active_tool:
+		##switch_to_tool_id("")
+	#
+	##tool_list.clear()
+	#var new_tool_list:Array[CyclopsTool]
+	#
+	#for script:GDScript in config.tool_scripts:
+		##print("script: ", script.resource_path)
+		##print("type: ", typeof(script.get_class()))
+		#
+		#var tool:CyclopsTool = script.new()
+		#tool.builder = self
+		#new_tool_list.append(tool)
+#
+	#tool_list = new_tool_list
+#
+	#for tool in tool_list:
+		#tool._init()
 	
 
 #func on_filesystem_changed():

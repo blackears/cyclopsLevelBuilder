@@ -1,0 +1,53 @@
+[gd_scene load_steps=4 format=3 uid="uid://cbhhhrm156lot"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keymap_invoker_editor.gd" id="1_f0wux"]
+[ext_resource type="PackedScene" uid="uid://c2484sv0ymy2e" path="res://addons/cyclops_level_builder/gui/controls/resource_inspector/resource_inspector.tscn" id="2_1jg0t"]
+[ext_resource type="PackedScene" uid="uid://h0v0u8a6uk0q" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keymap_keypress_editor.tscn" id="2_nkodq"]
+
+[node name="keymap_invoker_editor" type="PanelContainer"]
+size_flags_horizontal = 3
+script = ExtResource("1_f0wux")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="check_enabled" type="CheckBox" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Enabled"
+
+[node name="line_action_id" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="bn_select_action_id" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "..."
+
+[node name="keymap_keypress_editor" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_nkodq")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="bn_show_params" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+text = "Params"
+
+[node name="bn_delete" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Delete"
+text = "Delete"
+
+[node name="param_area" type="PanelContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="object_inspector" parent="VBoxContainer/param_area" instance=ExtResource("2_1jg0t")]
+layout_mode = 2
+
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/bn_show_params" to="." method="_on_bn_show_params_toggled"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/bn_delete" to="." method="_on_bn_delete_pressed"]

@@ -1,0 +1,49 @@
+[gd_resource type="Resource" script_class="KeymapGroup" load_steps=9 format=3 uid="uid://8ual1a8gc2kj"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/keymap/keymap_group.gd" id="1_a6rpb"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/keymap/keymap_invoker.gd" id="1_gnwi5"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/keymap/keymap_keypress.gd" id="1_vurrg"]
+
+[sub_resource type="Resource" id="Resource_61jjj"]
+script = ExtResource("1_vurrg")
+keycode = 71
+shift = false
+ctrl = false
+alt = false
+
+[sub_resource type="Resource" id="Resource_y7w1c"]
+script = ExtResource("1_gnwi5")
+enabled = true
+action_id = "select_tool"
+input_event = SubResource("Resource_61jjj")
+params = {
+"tool_id": "move"
+}
+
+[sub_resource type="Resource" id="Resource_fw2k3"]
+script = ExtResource("1_vurrg")
+keycode = 71
+shift = false
+ctrl = false
+alt = false
+
+[sub_resource type="Resource" id="Resource_v8cy0"]
+script = ExtResource("1_gnwi5")
+enabled = true
+action_id = "select_tool"
+input_event = SubResource("Resource_fw2k3")
+params = {
+"tool_id": "rotate"
+}
+
+[sub_resource type="Resource" id="Resource_skfmb"]
+script = ExtResource("1_gnwi5")
+enabled = true
+action_id = ""
+params = {}
+
+[resource]
+script = ExtResource("1_a6rpb")
+name = "Universal Keymap"
+id = "universal_keymap"
+keymaps = Array[ExtResource("1_gnwi5")]([SubResource("Resource_y7w1c"), SubResource("Resource_v8cy0"), SubResource("Resource_skfmb")])

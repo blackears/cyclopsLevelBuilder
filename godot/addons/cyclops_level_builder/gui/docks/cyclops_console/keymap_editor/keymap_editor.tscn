@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://871vocoppxgu"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keymap_editor.gd" id="1_bb757"]
+[ext_resource type="PackedScene" uid="uid://cbhhhrm156lot" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keymap_invoker_editor.tscn" id="2_r3p8o"]
+
+[node name="Keymap" type="PanelContainer"]
+offset_right = 419.0
+offset_bottom = 171.0
+script = ExtResource("1_bb757")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+
+[node name="keymap_list" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="keymap_invoker_editor" parent="ScrollContainer/VBoxContainer/keymap_list" instance=ExtResource("2_r3p8o")]
+layout_mode = 2
+
+[node name="keymap_invoker_editor2" parent="ScrollContainer/VBoxContainer/keymap_list" instance=ExtResource("2_r3p8o")]
+layout_mode = 2
+
+[node name="bn_add_keymap" type="Button" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Add Keymap"
+
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/bn_add_keymap" to="." method="_on_bn_add_keymap_pressed"]

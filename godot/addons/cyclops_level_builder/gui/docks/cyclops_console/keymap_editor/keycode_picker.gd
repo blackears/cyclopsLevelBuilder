@@ -22,13 +22,29 @@
 # SOFTWARE.
 
 @tool
-extends Control
-class_name CyclopsConsole
+extends Popup
+class_name KeycodePicker
 
-var editor_plugin:CyclopsLevelBuilder:
+signal key_selected(key:Key)
+
+@export var key:Key:
 	set(value):
-		editor_plugin = value
-		%Keymap.plugin = editor_plugin
+		key = value
+		%line_keycode_string.text = OS.get_keycode_string(key)
+
+func _unhandled_input(event):
+	
+#	if %capture.button_pressed:
+	if event is InputEventKey:
+		var e:InputEventKey = event
+		if e.keycode == KEY_SHIFT || e.keycode == KEY_CTRL || e.keycode == KEY_ALT:
+			return
+		
+		if e.is_pressed():
+			key = e.keycode
+			%capture.button_pressed = false
+			key_selected.emit(key)
+		get_viewport().set_input_as_handled()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -40,31 +56,6 @@ func _process(delta):
 	pass
 
 
-func save_state(state:Dictionary):
-	var substate:Dictionary = {}
-	state["cyclops_console"] = substate
-	
-
-func load_state(state:Dictionary):
-	if state == null || !state.has("cyclops_console"):
-		return
-	
-	var substate:Dictionary = state["cyclops_console"]
-
-func _on_enable_cyclops_toggled(button_pressed):
-	editor_plugin.always_on = button_pressed
-
-
-func _on_bn_create_block_pressed():
-	var cmd:CommandAddBlock = CommandAddBlock.new()
-	cmd.builder = editor_plugin
-
-	var bounds:AABB = AABB(%block_position.value, %block_size.value)
-	cmd.bounds = bounds
-	var scene_root = editor_plugin.get_editor_interface().get_edited_scene_root()
-	cmd.blocks_root_path = scene_root.get_path()
-	cmd.block_name = GeneralUtil.find_unique_name(scene_root, "block")
-	
-	var undo:EditorUndoRedoManager = editor_plugin.get_undo_redo()
-	cmd.add_to_undo_manager(undo)
-
+func _on_line_keycode_string_text_submitted(new_text:String):
+	key = OS.find_keycode_from_string(new_text)
+	key_selected.emit(key)

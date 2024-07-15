@@ -22,13 +22,31 @@
 # SOFTWARE.
 
 @tool
-extends Control
-class_name CyclopsConsole
+extends PanelContainer
+class_name KeymapKeypressEditor
 
-var editor_plugin:CyclopsLevelBuilder:
+@export var keypress:KeymapKeypress:
 	set(value):
-		editor_plugin = value
-		%Keymap.plugin = editor_plugin
+		if keypress:
+			keypress.changed.disconnect(on_keypress_changed)
+			
+		keypress = value
+		
+		if keypress:
+			keypress.changed.connect(on_keypress_changed)
+			
+		setup_ui()
+
+func setup_ui():
+	if keypress:
+		%bn_keycode.text = OS.get_keycode_string(keypress.keycode)
+		%check_shift.button_pressed = keypress.shift
+		%check_ctrl.button_pressed = keypress.ctrl
+		%check_alt.button_pressed = keypress.alt
+
+func on_keypress_changed():
+	print("on_keypress_changed()")
+	setup_ui()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -40,31 +58,33 @@ func _process(delta):
 	pass
 
 
-func save_state(state:Dictionary):
-	var substate:Dictionary = {}
-	state["cyclops_console"] = substate
-	
+func _on_bn_keycode_pressed():
+	if keypress:
+		#keypress.keycode = toggled_on
+		var picker:KeycodePicker = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keycode_picker.tscn").instantiate()
+		add_child(picker)
+		picker.key = keypress.keycode
+		picker.key_selected.connect(func(key): 
+			keypress.keycode = key
+			#print("Setting keycode ", OS.get_keycode_string(key))
+			picker.hide()
+			picker.queue_free()
+			)
+		
+		picker.popup_centered()
+		pass
 
-func load_state(state:Dictionary):
-	if state == null || !state.has("cyclops_console"):
-		return
-	
-	var substate:Dictionary = state["cyclops_console"]
 
-func _on_enable_cyclops_toggled(button_pressed):
-	editor_plugin.always_on = button_pressed
+func _on_check_shift_toggled(toggled_on):
+	if keypress:
+		keypress.shift = toggled_on
 
 
-func _on_bn_create_block_pressed():
-	var cmd:CommandAddBlock = CommandAddBlock.new()
-	cmd.builder = editor_plugin
+func _on_check_ctrl_toggled(toggled_on):
+	if keypress:
+		keypress.ctrl = toggled_on
 
-	var bounds:AABB = AABB(%block_position.value, %block_size.value)
-	cmd.bounds = bounds
-	var scene_root = editor_plugin.get_editor_interface().get_edited_scene_root()
-	cmd.blocks_root_path = scene_root.get_path()
-	cmd.block_name = GeneralUtil.find_unique_name(scene_root, "block")
-	
-	var undo:EditorUndoRedoManager = editor_plugin.get_undo_redo()
-	cmd.add_to_undo_manager(undo)
 
+func _on_check_alt_toggled(toggled_on):
+	if keypress:
+		keypress.alt = toggled_on
