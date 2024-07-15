@@ -27,6 +27,11 @@ extends CyclopsAction
 
 var wizard:ExporterGltfWizard = preload("res://addons/cyclops_level_builder/io/exporter/exporter_gltf_wizard.tscn").instantiate()
 
+const ACTION_ID:String = "export_as_gltf"
+
+func _get_action_id():
+	return ACTION_ID
+
 #func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
 	#super._init(plugin, "Export As Gltf...")
 func _init():

@@ -21,10 +21,11 @@ tooltip_text = "Enabled"
 
 [node name="line_action_id" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="bn_select_action_id" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="bn_browse_action_id" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "..."
 
@@ -49,5 +50,6 @@ layout_mode = 2
 [node name="object_inspector" parent="VBoxContainer/param_area" instance=ExtResource("2_1jg0t")]
 layout_mode = 2
 
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/bn_browse_action_id" to="." method="_on_bn_browse_action_id_pressed"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/bn_show_params" to="." method="_on_bn_show_params_toggled"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/bn_delete" to="." method="_on_bn_delete_pressed"]

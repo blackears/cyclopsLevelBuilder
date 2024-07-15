@@ -27,6 +27,8 @@ class_name KeymapInvokerEditor
 
 signal delete_invoker(invoker:KeymapInvoker)
 
+var plugin:CyclopsLevelBuilder
+
 @export var invoker:KeymapInvoker:
 	set(value):
 		invoker = value
@@ -54,3 +56,18 @@ func _on_bn_show_params_toggled(toggled_on):
 
 func _on_bn_delete_pressed():
 	delete_invoker.emit(invoker)
+
+
+func _on_bn_browse_action_id_pressed():
+	var popup:ActionIdSelector = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/action_id_selector.tscn").instantiate()
+	popup.plugin = plugin
+	popup.id_selected.connect(func(id:String): 
+		invoker.action_id = id
+		%line_action_id.text = invoker.action_id
+		popup.hide()
+		popup.queue_free()
+		)
+	
+	add_child(popup)
+	popup.popup_centered()
+	pass # Replace with function body.

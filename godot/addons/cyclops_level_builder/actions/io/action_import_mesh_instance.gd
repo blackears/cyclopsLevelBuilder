@@ -25,6 +25,11 @@
 class_name ActionImportMeshInstance
 extends CyclopsAction
 
+const ACTION_ID:String = "import_mesh_instance"
+
+func _get_action_id():
+	return ACTION_ID
+
 func _init():
 	name = "Import Godot MeshInstance..."
 

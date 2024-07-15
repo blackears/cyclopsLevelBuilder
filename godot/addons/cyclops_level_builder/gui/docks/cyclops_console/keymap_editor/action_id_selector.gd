@@ -22,52 +22,37 @@
 # SOFTWARE.
 
 @tool
-extends PanelContainer
+extends Popup
+class_name ActionIdSelector
 
+signal id_selected(id:String)
 var plugin:CyclopsLevelBuilder:
 	set(value):
 		plugin = value
-		rebuild_display()
+		build_layout()
 
-func rebuild_display():
-	for child:Node in %keymap_list.get_children():
-		%keymap_list.remove_child(child)
+func build_layout():
+	for child in %id_list.get_children():
+		%id_list.remove_child(child)
 		child.queue_free()
 	
-	if !plugin:
-		return
-	
-	var grp:KeymapGroup = plugin.keymap
-	for invoker:KeymapInvoker in grp.keymaps:
-		var ctl:KeymapInvokerEditor = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keymap_invoker_editor.tscn").instantiate()
-		ctl.plugin = plugin
-		ctl.invoker = invoker
-		%keymap_list.add_child(ctl)
-		ctl.delete_invoker.connect(on_delete_invoker)
-	
+	if plugin:
+		for action:CyclopsAction in plugin.action_list:
+			var button:Button = Button.new()
+			var id:String = action._get_action_id()
+			button.text = id			
+			%id_list.add_child(button)
+			button.pressed.connect(func(): on_id_selected(id))
 
-func on_delete_invoker(invoker:KeymapInvoker):
-	var grp:KeymapGroup = plugin.keymap
-	grp.keymaps.erase(invoker)
-	rebuild_display()
-	
+func on_id_selected(id:String):
+	id_selected.emit(id)
+	pass
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
-
+	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
-
-
-func _on_bn_add_keymap_pressed():
-	var grp:KeymapGroup = plugin.keymap
-	var invoker:KeymapInvoker = KeymapInvoker.new()
-	invoker.input_event = KeymapKeypress.new()
-	grp.keymaps.append(invoker)
-	
-	rebuild_display()
-	pass # Replace with function body.

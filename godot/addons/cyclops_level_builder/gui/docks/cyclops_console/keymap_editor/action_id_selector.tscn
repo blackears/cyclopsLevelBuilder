@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://dxfxllm6wvpr8"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/action_id_selector.gd" id="1_asb2v"]
+
+[node name="Popup" type="Popup"]
+size = Vector2i(300, 400)
+visible = true
+script = ExtResource("1_asb2v")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="id_list" type="VBoxContainer" parent="ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/id_list"]
+layout_mode = 2
+text = "foo"

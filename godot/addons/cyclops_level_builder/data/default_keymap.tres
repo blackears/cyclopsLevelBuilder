@@ -39,7 +39,7 @@ params = {
 [sub_resource type="Resource" id="Resource_skfmb"]
 script = ExtResource("1_gnwi5")
 enabled = true
-action_id = ""
+action_id = "export_as_gltf"
 params = {}
 
 [resource]

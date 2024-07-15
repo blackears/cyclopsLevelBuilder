@@ -27,6 +27,11 @@ extends CyclopsAction
 
 var wizard:ExporterCyclopsWizard = preload("res://addons/cyclops_level_builder/io/exporter/exporter_cyclops_wizard.tscn").instantiate()
 
+const ACTION_ID:String = "export_as_cyclops"
+
+func _get_action_id():
+	return ACTION_ID
+
 func _init():
 	name = "Export As Cyclops File..."
 
