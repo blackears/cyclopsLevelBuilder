@@ -107,6 +107,11 @@ var editor_cache_file:String = "user://cyclops_editor_cache.json"
 var viewport_3d_manager:Viewport3DManager = preload("res://addons/cyclops_level_builder/util/viewport_3d_manager.tscn").instantiate()
 
 #var viewport_3d_showing:bool = false
+func get_action(action_id:String)->CyclopsAction:
+	for action in action_list:
+		if action._get_action_id() == action_id:
+			return action
+	return null
 
 func get_overlay(name:String)->CyclopsOverlayObject:
 	for overlay:CyclopsOverlayObject in overlay_list:

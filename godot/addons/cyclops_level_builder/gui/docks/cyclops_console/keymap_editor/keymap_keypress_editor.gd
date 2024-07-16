@@ -39,13 +39,17 @@ class_name KeymapKeypressEditor
 
 func setup_ui():
 	if keypress:
-		%bn_keycode.text = OS.get_keycode_string(keypress.keycode)
+		var text:String = OS.get_keycode_string(keypress.keycode)
+		print("text *", text, "*")
+		if text == "":
+			text = " "
+		%bn_keycode.text = text
 		%check_shift.button_pressed = keypress.shift
 		%check_ctrl.button_pressed = keypress.ctrl
 		%check_alt.button_pressed = keypress.alt
 
 func on_keypress_changed():
-	print("on_keypress_changed()")
+	#print("on_keypress_changed()")
 	setup_ui()
 
 # Called when the node enters the scene tree for the first time.
@@ -60,6 +64,7 @@ func _process(delta):
 
 func _on_bn_keycode_pressed():
 	if keypress:
+		#print("_on_bn_keycode_pressed")
 		#keypress.keycode = toggled_on
 		var picker:KeycodePicker = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keycode_picker.tscn").instantiate()
 		add_child(picker)

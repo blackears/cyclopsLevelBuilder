@@ -1,10 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://cbhhhrm156lot"]
+[gd_scene load_steps=3 format=3 uid="uid://cbhhhrm156lot"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keymap_invoker_editor.gd" id="1_f0wux"]
-[ext_resource type="PackedScene" uid="uid://c2484sv0ymy2e" path="res://addons/cyclops_level_builder/gui/controls/resource_inspector/resource_inspector.tscn" id="2_1jg0t"]
 [ext_resource type="PackedScene" uid="uid://h0v0u8a6uk0q" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keymap_keypress_editor.tscn" id="2_nkodq"]
 
 [node name="keymap_invoker_editor" type="PanelContainer"]
+offset_right = 682.0
+offset_bottom = 35.0
 size_flags_horizontal = 3
 script = ExtResource("1_f0wux")
 
@@ -34,6 +35,7 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="bn_show_params" type="Button" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 text = "Params"
@@ -47,8 +49,10 @@ text = "Delete"
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="object_inspector" parent="VBoxContainer/param_area" instance=ExtResource("2_1jg0t")]
+[node name="param_grid" type="GridContainer" parent="VBoxContainer/param_area"]
+unique_name_in_owner = true
 layout_mode = 2
+columns = 2
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/bn_browse_action_id" to="." method="_on_bn_browse_action_id_pressed"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/bn_show_params" to="." method="_on_bn_show_params_toggled"]
