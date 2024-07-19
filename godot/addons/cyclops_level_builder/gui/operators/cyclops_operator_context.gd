@@ -23,24 +23,6 @@
 
 @tool
 extends Resource
-class_name KeymapGroup
+class_name CyclopsOperatorContext
 
-@export var name:String
-@export var id:String
-@export var keymaps:Array[KeymapInvoker]
-@export var child_groups:Array[KeymapGroup]
-
-func lookup_invoker(context:CyclopsOperatorContext, event:InputEvent)->KeymapInvoker:
-	for group:KeymapGroup in child_groups:
-		var invoker:KeymapInvoker = group.lookup_invoker(context, event)
-		if invoker:
-			return invoker
-		
-	#print("lookup_action ", event)
-	for inv:KeymapInvoker in keymaps:
-		if inv.is_invoked_by(context, event):
-			return inv
-
-	return null
-
-
+var plugin:CyclopsLevelBuilder

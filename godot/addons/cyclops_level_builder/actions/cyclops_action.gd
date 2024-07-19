@@ -41,8 +41,12 @@ func _ready():
 	#self.name= name
 	#self.accellerator = accellerator
 
+func invoke(context:CyclopsOperatorContext, event:InputEvent):
+	_execute()
+	
 func _execute():
 	pass
+
 	
 func calc_pivot_of_blocks(blocks:Array[CyclopsBlock])->Vector3:
 	var snap_to_grid_util:SnapToGridUtil = CyclopsAutoload.calc_snap_to_grid_util()

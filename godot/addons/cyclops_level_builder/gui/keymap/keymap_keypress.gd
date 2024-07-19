@@ -44,3 +44,20 @@ class_name KeymapKeypress
 	set(value):
 		alt = value
 		changed.emit()
+
+func is_invoked_by(context:CyclopsOperatorContext, event:InputEvent)->bool:
+	if event is InputEventKey:
+		var e:InputEventKey = event
+		
+		if e.keycode != keycode:
+			return false
+		if e.shift_pressed != shift:
+			return false
+		if e.ctrl_pressed != ctrl:
+			return false
+		if e.alt_pressed != alt:
+			return false
+	
+		return true
+	
+	return false

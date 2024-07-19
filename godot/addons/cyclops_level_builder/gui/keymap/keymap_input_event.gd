@@ -25,3 +25,6 @@
 extends Resource
 class_name KeymapInputEvent
 
+func is_invoked_by(context:CyclopsOperatorContext, event:InputEvent)->bool:
+	return false
+

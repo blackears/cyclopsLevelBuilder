@@ -273,3 +273,8 @@ func _on_bn_browse_action_id_pressed():
 	add_child(popup)
 	popup.popup_centered()
 
+
+
+func _on_line_action_id_text_submitted(new_text):
+	invoker.action_id = new_text
+	build_parameter_ui(invoker.action_id)

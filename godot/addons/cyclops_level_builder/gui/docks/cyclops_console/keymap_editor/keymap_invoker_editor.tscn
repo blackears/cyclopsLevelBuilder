@@ -54,6 +54,7 @@ unique_name_in_owner = true
 layout_mode = 2
 columns = 2
 
+[connection signal="text_submitted" from="VBoxContainer/HBoxContainer/line_action_id" to="." method="_on_line_action_id_text_submitted"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/bn_browse_action_id" to="." method="_on_bn_browse_action_id_pressed"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/bn_show_params" to="." method="_on_bn_show_params_toggled"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/bn_delete" to="." method="_on_bn_delete_pressed"]

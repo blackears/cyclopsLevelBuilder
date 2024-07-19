@@ -40,7 +40,7 @@ class_name KeymapKeypressEditor
 func setup_ui():
 	if keypress:
 		var text:String = OS.get_keycode_string(keypress.keycode)
-		print("text *", text, "*")
+		#print("text *", text, "*")
 		if text == "":
 			text = " "
 		%bn_keycode.text = text
