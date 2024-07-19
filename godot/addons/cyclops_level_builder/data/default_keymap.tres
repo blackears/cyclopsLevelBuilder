@@ -161,7 +161,7 @@ enabled = true
 action_id = "select_tool"
 input_event = SubResource("Resource_ornmf")
 params = {
-"tool_id": "edit_faces"
+"tool_id": "edit_face"
 }
 
 [sub_resource type="Resource" id="Resource_4m6r8"]
@@ -193,7 +193,7 @@ enabled = true
 action_id = "select_tool"
 input_event = SubResource("Resource_86wn2")
 params = {
-"tool_id": "vertex_brush"
+"tool_id": "vertex_color_brush"
 }
 
 [sub_resource type="Resource" id="Resource_q6kpe"]

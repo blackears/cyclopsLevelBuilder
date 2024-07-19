@@ -60,7 +60,8 @@ func _init():
 	command_name = "Set Face Color"
 
 func will_change_anything()->bool:
-#	print("CommandSetUvTransform will_change_anything")
+	#print("CommandSetFaceColor will_change_anything")
+	print(block_map.keys())
 	for block_path in block_map.keys():
 
 		var rec:BlockFaceChanges = block_map[block_path]
@@ -69,17 +70,23 @@ func will_change_anything()->bool:
 		var vol:ConvexVolume = ConvexVolume.new()
 		vol.init_from_mesh_vector_data(rec.tracked_block_data)
 
+		#print("checking block ", block_path)
 		for f_idx in vol.faces.size():
 			if rec.face_indices.has(f_idx):
 				var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
 				if f.color != color:
 					return true
+				#print("face_vertex_indices ", f.face_vertex_indices)
+				for fv in vol.face_vertices:
+					if fv.face_index == f_idx:
+						if fv.color != color:
+							return true
 
 	return false
 	
 	
 func do_it():
-	#print("sel verts do_it")
+	#print("set face color do_it")
 #	print("sel uv_transform do_it()")
 	for block_path in block_map.keys():
 #		print("path %s" % block_path)
@@ -87,15 +94,22 @@ func do_it():
 		var rec:BlockFaceChanges = block_map[block_path]
 		var block:CyclopsBlock = builder.get_node(block_path)
 			
-#		print("block_path %s" % block_path)
+		#print("block_path %s" % block_path)
 		var vol:ConvexVolume = ConvexVolume.new()
 		vol.init_from_mesh_vector_data(rec.tracked_block_data)
 
 		for f_idx in vol.faces.size():
 			if rec.face_indices.has(f_idx):
-#				print("face_idx %s" % f_idx)
+				#print("face_idx %s" % f_idx)
 				var f:ConvexVolume.FaceInfo = vol.faces[f_idx]
 				f.color = color
+				#print("face_vertex_indices ", f.face_vertex_indices)
+				#for fv_idx in f.face_vertex_indices:
+					#print("setting fv ", fv_idx)
+					#vol.face_vertices[fv_idx].color = color
+				for fv in vol.face_vertices:
+					if fv.face_index == f_idx:
+						fv.color = color
 
 		block.mesh_vector_data = vol.to_mesh_vector_data()
 	builder.selection_changed.emit()

@@ -186,7 +186,7 @@ func apply_color():
 	var face_color:Color = %color_picker_face.color
 	color = face_color
 		
-	#print("apply_uv_transform ", uv_transform)
+	print("apply_face_color ", face_color)
 		
 	var cmd:CommandSetFaceColor = CommandSetFaceColor.new()
 	cmd.builder = builder
@@ -194,7 +194,7 @@ func apply_color():
 
 	var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
 	for block in sel_blocks:
-#		print("sel block %s" % block.name)
+		#print("sel block %s" % block.name)
 
 		var vol:ConvexVolume = block.control_mesh
 		for f_idx in vol.faces.size():
@@ -204,6 +204,7 @@ func apply_color():
 
 
 	if cmd.will_change_anything():
+		print("changing it")
 		var undo:EditorUndoRedoManager = builder.get_undo_redo()
 		cmd.add_to_undo_manager(undo)
 
