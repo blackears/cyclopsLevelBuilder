@@ -17,7 +17,7 @@ columns = 2
 
 [node name="Label3" type="Label" parent="MarginContainer2/GridContainer"]
 layout_mode = 2
-text = "Component type"
+text = "Component mask"
 
 [node name="opbn_mask_type" type="OptionButton" parent="MarginContainer2/GridContainer"]
 unique_name_in_owner = true
