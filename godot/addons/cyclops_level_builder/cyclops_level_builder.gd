@@ -529,7 +529,7 @@ func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent)->int:
 		var context:CyclopsOperatorContext = CyclopsOperatorContext.new()
 		context.plugin = self
 	
-		var invoker:KeymapInvoker = keymap.lookup_invoker(context, event)
+		var invoker:KeymapActionMapper = keymap.lookup_invoker(context, event)
 		if invoker:
 			invoker.invoke(context, event)
 			#var keymap_action:CyclopsAction = keymap.lookup_invoker(context, event)

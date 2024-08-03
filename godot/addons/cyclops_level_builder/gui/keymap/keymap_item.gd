@@ -1,5 +1,3 @@
-# MIT License
-#
 # Copyright (c) 2023 Mark McKay
 # https://github.com/blackears/cyclopsLevelBuilder
 #
@@ -23,34 +21,8 @@
 
 @tool
 extends Resource
-class_name KeymapInvoker
+class_name KeymapItem
 
-@export var enabled:bool = true
-@export var action_id:String
-@export var input_event:KeymapInputEvent
-@export var params:Dictionary
+func lookup_invoker(context:CyclopsOperatorContext, event:InputEvent)->KeymapActionMapper:
+	return null
 
-func is_invoked_by(context:CyclopsOperatorContext, event:InputEvent)->bool:
-	if !enabled:
-		return false
-	
-	return input_event.is_invoked_by(context, event)
-
-func invoke(context:CyclopsOperatorContext, event:InputEvent):
-	
-	var action:CyclopsAction = context.plugin.get_action(action_id)
-	if !action:
-		push_warning("Could not find action with action_id '", action_id, "'")
-		return
-	
-	for name:String in params.keys():
-		action.set(name, params[name])
-		
-	action.invoke(context, event)
-	
-
-#func get_action(context:CyclopsOperatorContext)->CyclopsAction:
-	#var action:CyclopsAction = context.plugin.get_action(action_id)
-	#if !action:
-		#push_warning("Could not find action with action_id '", action_id, "'")
-	#return action

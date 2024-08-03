@@ -22,32 +22,35 @@
 # SOFTWARE.
 
 @tool
-extends KeymapItem
-class_name KeymapGroup
+extends Tree
+class_name KeymapTreeControl
 
-@export var name:String
-@export var id:String
-#@export var keymaps:Array[KeymapInvoker]
-#@export var child_groups:Array[KeymapGroup]
-@export var children:Array[KeymapItem]
+signal drop_tree_item(data:DndData, position:Vector2)
 
-func lookup_invoker(context:CyclopsOperatorContext, event:InputEvent)->KeymapActionMapper:
-	for item:KeymapItem in children:
-		
-		var result:KeymapActionMapper = item.lookup_invoker(context, event)
-		if result:
-			return result
-	
-	#for group:KeymapGroup in child_groups:
-		#var invoker:KeymapInvoker = group.lookup_invoker(context, event)
-		#if invoker:
-			#return invoker
-		#
-	##print("lookup_action ", event)
-	#for inv:KeymapInvoker in keymaps:
-		#if inv.is_invoked_by(context, event):
-			#return inv
+class DndData:
+	var node_index:int
+	var item:TreeItem
 
-	return null
+#func _get_drag_data(at_position):
+	#print("_get_drag_data ", at_position)
+	#pass
+
+func _can_drop_data(at_position:Vector2, data)->bool:
+	if data is DndData:
+		return true
+	#print("_can_drop_data ", at_position)
+	return false
+
+func _drop_data(at_position, data):	
+#	print("_drop_data ", at_position)
+	drop_tree_item.emit(data, at_position)
+	pass
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
 
 
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass

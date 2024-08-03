@@ -25,11 +25,11 @@
 extends PanelContainer
 class_name KeymapInvokerEditor
 
-signal delete_invoker(invoker:KeymapInvoker)
+signal delete_invoker(invoker:KeymapActionMapper)
 
 var plugin:CyclopsLevelBuilder
 
-@export var invoker:KeymapInvoker:
+@export var invoker:KeymapActionMapper:
 	set(value):
 		invoker = value
 		

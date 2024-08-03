@@ -23,22 +23,51 @@
 
 @tool
 extends PanelContainer
-class_name KeymapEditor
 
 var plugin:CyclopsLevelBuilder:
 	set(value):
 		plugin = value
-		if plugin:
-			%KeymapGroupEditor.root_group = plugin.keymap
+		rebuild_display()
 
+func rebuild_display():
+	for child:Node in %keymap_list.get_children():
+		%keymap_list.remove_child(child)
+		child.queue_free()
+	
+	if !plugin:
+		return
+	
+	var grp:KeymapGroup = plugin.keymap
+	for invoker:KeymapActionMapper in grp.keymaps:
+		var ctl:KeymapInvokerEditor = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keymap_invoker_editor.tscn").instantiate()
+		ctl.plugin = plugin
+		#ctl.invoker = invoker
+		%keymap_list.add_child(ctl)
+		#ctl.delete_invoker.connect(on_delete_invoker)
+	
+
+func on_delete_invoker(invoker:KeymapActionMapper):
+	var grp:KeymapGroup = plugin.keymap
+	grp.keymaps.erase(invoker)
+	rebuild_display()
 	
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	pass
+
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 
+
+func _on_bn_add_keymap_pressed():
+	var grp:KeymapGroup = plugin.keymap
+	var invoker:KeymapActionMapper = KeymapActionMapper.new()
+	invoker.input_event = KeymapKeypress.new()
+	grp.keymaps.append(invoker)
+	
+	rebuild_display()
+	pass # Replace with function body.

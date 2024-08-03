@@ -1,0 +1,47 @@
+[gd_scene load_steps=3 format=3 uid="uid://rpx15l2fbu2o"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/keymap/keymap_group_editor.gd" id="1_51m4b"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keymap_tree_control.gd" id="2_wy8dh"]
+
+[node name="KeymapGroupEditor" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_51m4b")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="bn_add_mapping" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Add mapping"
+
+[node name="Tree" type="Tree" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+columns = 3
+column_titles_visible = true
+drop_mode_flags = 3
+script = ExtResource("2_wy8dh")
+
+[node name="popup_actions" type="PopupMenu" parent="."]
+unique_name_in_owner = true
+item_count = 3
+item_0/text = "Add keymap"
+item_0/id = 0
+item_1/text = "Add group"
+item_1/id = 1
+item_2/text = "Remove Item"
+item_2/id = 2
+
+[connection signal="custom_item_clicked" from="VBoxContainer/Tree" to="." method="_on_tree_custom_item_clicked"]
+[connection signal="drop_tree_item" from="VBoxContainer/Tree" to="." method="_on_tree_drop_tree_item"]
+[connection signal="empty_clicked" from="VBoxContainer/Tree" to="." method="_on_tree_empty_clicked"]
+[connection signal="gui_input" from="VBoxContainer/Tree" to="." method="_on_tree_gui_input"]
+[connection signal="item_edited" from="VBoxContainer/Tree" to="." method="_on_tree_item_edited"]
+[connection signal="item_mouse_selected" from="VBoxContainer/Tree" to="." method="_on_tree_item_mouse_selected"]
+[connection signal="item_selected" from="VBoxContainer/Tree" to="." method="_on_tree_item_selected"]
+[connection signal="id_pressed" from="popup_actions" to="." method="_on_popup_actions_id_pressed"]

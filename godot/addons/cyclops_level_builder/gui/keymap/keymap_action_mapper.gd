@@ -23,31 +23,44 @@
 
 @tool
 extends KeymapItem
-class_name KeymapGroup
+class_name KeymapActionMapper
 
+@export var enabled:bool = true
 @export var name:String
-@export var id:String
-#@export var keymaps:Array[KeymapInvoker]
-#@export var child_groups:Array[KeymapGroup]
-@export var children:Array[KeymapItem]
+@export var action_id:String
+@export var keypress:KeymapKeypress
+@export var params:Dictionary
 
 func lookup_invoker(context:CyclopsOperatorContext, event:InputEvent)->KeymapActionMapper:
-	for item:KeymapItem in children:
-		
-		var result:KeymapActionMapper = item.lookup_invoker(context, event)
-		if result:
-			return result
+	if !enabled:
+		return null
 	
-	#for group:KeymapGroup in child_groups:
-		#var invoker:KeymapInvoker = group.lookup_invoker(context, event)
-		#if invoker:
-			#return invoker
-		#
-	##print("lookup_action ", event)
-	#for inv:KeymapInvoker in keymaps:
-		#if inv.is_invoked_by(context, event):
-			#return inv
-
+	if keypress.is_invoked_by(context, event):
+		return self
+		
 	return null
 
+func is_invoked_by(context:CyclopsOperatorContext, event:InputEvent)->bool:
+	if !enabled:
+		return false
+	
+	return keypress.is_invoked_by(context, event)
 
+func invoke(context:CyclopsOperatorContext, event:InputEvent):
+	
+	var action:CyclopsAction = context.plugin.get_action(action_id)
+	if !action:
+		push_warning("Could not find action with action_id '", action_id, "'")
+		return
+	
+	for name:String in params.keys():
+		action.set(name, params[name])
+		
+	action.invoke(context, event)
+	
+
+#func get_action(context:CyclopsOperatorContext)->CyclopsAction:
+	#var action:CyclopsAction = context.plugin.get_action(action_id)
+	#if !action:
+		#push_warning("Could not find action with action_id '", action_id, "'")
+	#return action

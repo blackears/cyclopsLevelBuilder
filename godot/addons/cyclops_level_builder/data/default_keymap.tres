@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="KeymapGroup" load_steps=30 format=3 uid="uid://8ual1a8gc2kj"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/keymap/keymap_group.gd" id="1_a6rpb"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/keymap/keymap_invoker.gd" id="1_gnwi5"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/keymap/keymap_action_mapper.gd" id="1_gnwi5"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/keymap/keymap_keypress.gd" id="1_vurrg"]
 
 [sub_resource type="Resource" id="Resource_61jjj"]

@@ -61,3 +61,9 @@ func is_invoked_by(context:CyclopsOperatorContext, event:InputEvent)->bool:
 		return true
 	
 	return false
+
+func _to_string()->String:
+	return ("SHIFT + " if shift else "") \
+		+ ("CTRL + " if ctrl else "") \
+		+ ("ALT + " if alt else "") \
+		+ OS.get_keycode_string(keycode)

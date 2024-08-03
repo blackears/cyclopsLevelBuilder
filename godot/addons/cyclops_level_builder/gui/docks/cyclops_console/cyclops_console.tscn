@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/cyclops_console.gd" id="1_f4kro"]
 [ext_resource type="PackedScene" uid="uid://cphtpklx81l3w" path="res://addons/cyclops_level_builder/gui/controls/vector3_edit.tscn" id="2_qpx41"]
-[ext_resource type="PackedScene" uid="uid://871vocoppxgu" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keymap_editor.tscn" id="3_aan7p"]
+[ext_resource type="PackedScene" uid="uid://6ox14xmdrbgw" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keymap_editor.tscn" id="3_5uopq"]
 
 [node name="PanelContainer" type="PanelContainer"]
 anchors_preset = 15
@@ -66,7 +66,7 @@ value = Vector3(1, 1, 1)
 layout_mode = 2
 text = "Create Block"
 
-[node name="Keymap" parent="TabContainer" instance=ExtResource("3_aan7p")]
+[node name="Keymap" parent="TabContainer" instance=ExtResource("3_5uopq")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
