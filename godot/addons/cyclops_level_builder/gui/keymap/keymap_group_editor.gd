@@ -238,6 +238,15 @@ func _on_tree_item_edited():
 	var item:TreeItem = %Tree.get_edited()
 	var col:int = %Tree.get_edited_column()
 	
+	var node:KeymapItem = tree_item_map[item]
+	
+	match col:
+		0:
+			if node is KeymapActionMapper:
+				node.name = item.get_text(0)
+			elif node is KeymapGroup:
+				node.name = item.get_text(0)
+			pass
 	pass # Replace with function body.
 
 
@@ -263,6 +272,9 @@ func is_item_same_or_ancestor_of(item:TreeItem, peer:TreeItem)->bool:
 	if item == peer:
 		return true
 	
+	if !peer:
+		return false
+	
 	var parent:TreeItem = peer.get_parent()
 	if !parent:
 		return false
@@ -275,6 +287,8 @@ func _on_tree_drop_tree_item(data:KeymapTreeControl.DndData, position:Vector2):
 	
 	var dragged_node:KeymapItem = tree_item_map[dragged_item]
 	var drop_item:TreeItem = %Tree.get_item_at_position(position)
+	if !drop_item:
+		return
 	#-1 - just before, 0 - on top of, 1 - just after
 	var drop_section:int = %Tree.get_drop_section_at_position(position)
 	
@@ -289,16 +303,18 @@ func _on_tree_drop_tree_item(data:KeymapTreeControl.DndData, position:Vector2):
 	#Reinsert into tree
 	var drop_node:KeymapItem = tree_item_map[drop_item]
 	
-	if !(drop_node is KeymapGroup):
-		return
-	var drop_index:int = drop_node.children.size()
 	
 	if drop_section == 0:
-		drop_node.children.append(dragged_node)
+		if drop_node is KeymapGroup:
+			drop_node.children.append(dragged_node)
+		else:
+			var parent_drop_node:KeymapGroup = tree_item_map[drop_item.get_parent()]
+			var drop_index:int = parent_drop_node.children.find(drop_node)
+			parent_drop_node.children.insert(drop_index, dragged_node)
 	
 	else:
 		var parent_drop_node:KeymapGroup = tree_item_map[drop_item.get_parent()]
-		drop_index = parent_drop_node.children.find(drop_node)
+		var drop_index:int = parent_drop_node.children.find(drop_node)
 		if drop_section == 1:
 			drop_index += 1
 		parent_drop_node.children.insert(drop_index, dragged_node)
