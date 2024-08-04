@@ -259,10 +259,49 @@ func _on_tree_custom_item_clicked(mouse_button_index):
 	pass # Replace with function body.
 
 
+func is_item_same_or_ancestor_of(item:TreeItem, peer:TreeItem)->bool:
+	if item == peer:
+		return true
+	
+	var parent:TreeItem = peer.get_parent()
+	if !parent:
+		return false
+		
+	return is_item_same_or_ancestor_of(item, parent)
+
 func _on_tree_drop_tree_item(data:KeymapTreeControl.DndData, position:Vector2):
 #	var item:TreeItem = %Tree.get_child(data.node_index)
-	var item:TreeItem = data.item
-	var dragged_item:KeymapItem = tree_item_map[item]
+	var dragged_item:TreeItem = data.item
 	
+	var dragged_node:KeymapItem = tree_item_map[dragged_item]
+	var drop_item:TreeItem = %Tree.get_item_at_position(position)
+	#-1 - just before, 0 - on top of, 1 - just after
+	var drop_section:int = %Tree.get_drop_section_at_position(position)
 	
-	pass # Replace with function body.
+	if is_item_same_or_ancestor_of(dragged_item, drop_item):
+		return
+
+	#Remove from current group
+	var parent_dragged_item:TreeItem = dragged_item.get_parent()
+	var parent_dragged_node:KeymapGroup = tree_item_map[parent_dragged_item]
+	parent_dragged_node.children.remove_at(parent_dragged_node.children.find(dragged_node))
+
+	#Reinsert into tree
+	var drop_node:KeymapItem = tree_item_map[drop_item]
+	
+	if !(drop_node is KeymapGroup):
+		return
+	var drop_index:int = drop_node.children.size()
+	
+	if drop_section == 0:
+		drop_node.children.append(dragged_node)
+	
+	else:
+		var parent_drop_node:KeymapGroup = tree_item_map[drop_item.get_parent()]
+		drop_index = parent_drop_node.children.find(drop_node)
+		if drop_section == 1:
+			drop_index += 1
+		parent_drop_node.children.insert(drop_index, dragged_node)
+
+	rebuild_display()
+
