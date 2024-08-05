@@ -26,6 +26,7 @@ extends Popup
 class_name ActionIdSelector
 
 signal id_selected(id:String)
+
 var plugin:CyclopsLevelBuilder:
 	set(value):
 		plugin = value

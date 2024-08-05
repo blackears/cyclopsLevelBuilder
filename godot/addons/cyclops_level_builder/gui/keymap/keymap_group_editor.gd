@@ -28,10 +28,19 @@ class_name KeymapGroupEditor
 
 var tree_item_map:Dictionary
 
+
+var plugin:CyclopsLevelBuilder:
+	set(value):
+		plugin = value
+
+	
 var root_group:KeymapGroup = KeymapGroup.new():
 	set(value):
 		root_group = value
 		rebuild_display()
+
+var action_id_selector:ActionIdSelector = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/action_id_selector.tscn").instantiate()
+
 
 func rebuild_display():
 	var collapsed_groups:Array[KeymapGroup]
@@ -94,7 +103,14 @@ func _ready():
 	%Tree.set_column_title(1, "Action")
 	%Tree.set_column_title(2, "Hotkey")
 	
+	action_id_selector.id_selected.connect(func(action_id:String): 
+		add_keymap_entry(action_id)
+		action_id_selector.hide()
+		)
+	add_child(action_id_selector)
+	
 	rebuild_display()
+	
 	pass # Replace with function body.
 
 
@@ -106,10 +122,15 @@ func _process(delta):
 	#print("_get_drag_data ",at_position)
 	#return null
 
-func show_popup(position:Vector2):
-	%popup_actions.position = position
-#	%popup_actions.popup()
-	%popup_actions.show()
+func show_popup(popup_pos:Vector2):
+	var view_pos = get_viewport().get_screen_transform().origin
+	%popup_actions.position = popup_pos + view_pos
+	
+	#%popup_actions.position = popup_pos + global_position
+#	%popup_actions.popup(Rect2i(popup_pos + global_position, Vector2i.ZERO))
+#	%popup_actions.popup_on_parent(Rect2i(popup_pos + global_position, Vector2i.ZERO))
+#	%popup_actions.show()
+	%popup_actions.popup()
 #	%popup_actions.popup(Rect2i(Vector2i(position), Vector2i(0, 0)))
 #				%popup_actions.popup_on_parent(Rect2i(Vector2i(e.position), Vector2i(0, 0)))
 
@@ -152,9 +173,11 @@ func _on_tree_gui_input(event:InputEvent):
 	
 	pass # Replace with function body.
 
-func add_keymap_entry():
+func add_keymap_entry(action_id:String):
 	var insert_group:KeymapGroup
 	var insert_idx:int
+
+#	print("Addding keymap entry ", action_id)
 
 	var cur_item:TreeItem = %Tree.get_selected()
 	
@@ -176,7 +199,8 @@ func add_keymap_entry():
 			insert_idx = root_group.children.size()
 	
 	var new_map:KeymapActionMapper = KeymapActionMapper.new()
-	new_map.name = "New mapping"
+	new_map.name = action_id
+	new_map.action_id = action_id
 	insert_group.children.insert(insert_idx, new_map)
 	
 	rebuild_display()
@@ -216,7 +240,15 @@ func remove_keymap_entry():
 func _on_popup_actions_id_pressed(id:int):
 	match id:
 		0:
-			add_keymap_entry()
+			#var id_sel:ActionIdSelector = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/action_id_selector.tscn").instantiate()
+			
+			action_id_selector.plugin = plugin
+			#id_sel.close_requested.connect(func():
+				#id_sel.queue_free()
+				#print("closing id pick")
+				#)
+			action_id_selector.popup_centered()
+			
 		1:
 			add_keymap_group_entry()
 		2:

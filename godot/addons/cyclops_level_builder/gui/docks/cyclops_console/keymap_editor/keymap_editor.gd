@@ -28,6 +28,7 @@ class_name KeymapEditor
 var plugin:CyclopsLevelBuilder:
 	set(value):
 		plugin = value
+		%KeymapGroupEditor.plugin = plugin
 		if plugin:
 			%KeymapGroupEditor.root_group = plugin.keymap
 
