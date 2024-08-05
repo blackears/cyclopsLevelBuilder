@@ -25,7 +25,7 @@
 extends Popup
 class_name KeycodePicker
 
-signal key_selected(key:Key)
+signal key_selected(key:Key, modifier_mask:KeyModifierMask)
 
 @export var key:Key:
 	set(value):
@@ -37,13 +37,21 @@ func _unhandled_input(event):
 #	if %capture.button_pressed:
 	if event is InputEventKey:
 		var e:InputEventKey = event
-		if e.keycode == KEY_SHIFT || e.keycode == KEY_CTRL || e.keycode == KEY_ALT:
+		if e.keycode == KEY_SHIFT || e.keycode == KEY_CTRL || e.keycode == KEY_ALT || e.keycode == KEY_META:
 			return
 		
 		if e.is_pressed():
 			key = e.keycode
 			%capture.button_pressed = false
-			key_selected.emit(key)
+			
+			var mask:KeyModifierMask = \
+				(KEY_MASK_SHIFT if Input.is_key_pressed(KEY_SHIFT) else 0) |\
+				(KEY_MASK_CTRL if Input.is_key_pressed(KEY_CTRL) else 0) |\
+				(KEY_MASK_ALT if Input.is_key_pressed(KEY_ALT) else 0) |\
+				(KEY_MASK_META if Input.is_key_pressed(KEY_META) else 0)
+			
+			key_selected.emit(key, mask)
+			
 		get_viewport().set_input_as_handled()
 
 # Called when the node enters the scene tree for the first time.

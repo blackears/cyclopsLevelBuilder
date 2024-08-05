@@ -45,6 +45,12 @@ class_name KeymapKeypress
 		alt = value
 		changed.emit()
 
+@export var meta:bool = false:
+	set(value):
+		meta = value
+		changed.emit()
+		
+
 func is_invoked_by(context:CyclopsOperatorContext, event:InputEvent)->bool:
 	if event is InputEventKey:
 		var e:InputEventKey = event
@@ -57,13 +63,16 @@ func is_invoked_by(context:CyclopsOperatorContext, event:InputEvent)->bool:
 			return false
 		if e.alt_pressed != alt:
 			return false
+		if e.meta_pressed != meta:
+			return false
 	
 		return true
 	
 	return false
 
 func _to_string()->String:
-	return ("SHIFT + " if shift else "") \
-		+ ("CTRL + " if ctrl else "") \
-		+ ("ALT + " if alt else "") \
+	return ("Shift + " if shift else "") \
+		+ ("Ctrl + " if ctrl else "") \
+		+ ("Alt + " if alt else "") \
+		+ ("Meta + " if meta else "") \
 		+ OS.get_keycode_string(keycode)

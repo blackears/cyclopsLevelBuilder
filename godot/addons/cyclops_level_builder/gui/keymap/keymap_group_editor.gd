@@ -74,10 +74,12 @@ func rebuild_display_recursive(grp:KeymapGroup, tree:Tree, root_item:TreeItem, c
 			item.set_text(2, str(am.keypress))
 			item.set_editable(0, true)
 			item.set_editable(1, true)
-			item.set_editable(2, true)
+			#item.set_editable(2, true)
 			item.set_selectable(0, true)
 			item.set_selectable(1, true)
 			item.set_selectable(2, true)
+			
+			item.set_cell_mode(2, TreeItem.CELL_MODE_STRING)
 
 			tree_item_map[item] = child
 			
@@ -86,6 +88,7 @@ func rebuild_display_recursive(grp:KeymapGroup, tree:Tree, root_item:TreeItem, c
 			item.set_text(0, child.name)
 			item.set_editable(0, true)
 			item.set_selectable(0, true)
+			item.set_custom_bg_color(0, Color.DIM_GRAY)
 
 			tree_item_map[item] = child
 			
@@ -108,6 +111,7 @@ func _ready():
 		action_id_selector.hide()
 		)
 	add_child(action_id_selector)
+	action_id_selector.visible = false
 	
 	rebuild_display()
 	
@@ -261,8 +265,48 @@ func _on_tree_empty_clicked(position, mouse_button_index):
 		#show_popup(position)
 	pass # Replace with function body.
 
-
+#func picked_keypress(am:KeymapActionMapper, key:Key):
+	#am.keypress = KeymapKeypress.new()
+	#am.keypress.keycode = key
+	#rebuild_display()
+	
 func _on_tree_cell_selected():
+	#print("_on_tree_cell_selected")
+	var item:TreeItem = %Tree.get_selected()
+	var col:int = %Tree.get_selected_column()
+	
+	if !item:
+		return
+		
+	var node:KeymapItem = tree_item_map[item]
+	
+	match col:
+		2:
+			if node is KeymapActionMapper:
+				var am:KeymapActionMapper = node
+				#print("select col ", am.action_id)
+				
+				var picker:KeycodePicker = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keycode_picker.tscn").instantiate()
+				picker.key_selected.connect(func(key:Key, modifier_mask:KeyModifierMask): 
+					am.keypress = KeymapKeypress.new()
+					am.keypress.keycode = key
+					am.keypress.shift = (modifier_mask & KEY_MASK_SHIFT) != 0
+					am.keypress.ctrl = (modifier_mask & KEY_MASK_CTRL) != 0
+					am.keypress.alt = (modifier_mask & KEY_MASK_ALT) != 0
+					am.keypress.meta = (modifier_mask & KEY_MASK_META) != 0
+					rebuild_display()
+					picker.queue_free()
+					)
+				picker.close_requested.connect(func():
+					picker.queue_free()
+					)
+				
+				add_child(picker)
+				picker.popup_centered()
+				return
+	
+			
+	
 	pass # Replace with function body.
 
 
