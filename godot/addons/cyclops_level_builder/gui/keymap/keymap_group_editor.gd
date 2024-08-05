@@ -127,16 +127,18 @@ func _process(delta):
 	#return null
 
 func show_popup(popup_pos:Vector2):
-	var view_pos = get_viewport().get_screen_transform().origin
-	%popup_actions.position = popup_pos + view_pos
+	#var view_pos = get_viewport().get_screen_transform().origin
+	#%popup_actions.position = popup_pos + view_pos
 	
 	#%popup_actions.position = popup_pos + global_position
 #	%popup_actions.popup(Rect2i(popup_pos + global_position, Vector2i.ZERO))
 #	%popup_actions.popup_on_parent(Rect2i(popup_pos + global_position, Vector2i.ZERO))
 #	%popup_actions.show()
-	%popup_actions.popup()
+#	%popup_actions.popup()
 #	%popup_actions.popup(Rect2i(Vector2i(position), Vector2i(0, 0)))
 #				%popup_actions.popup_on_parent(Rect2i(Vector2i(e.position), Vector2i(0, 0)))
+
+	%popup_actions.popup(Rect2i(get_global_transform() * popup_pos, Vector2i.ZERO))
 
 var dragging:bool = false
 var mouse_down_pos:Vector2
@@ -154,7 +156,7 @@ func _on_tree_gui_input(event:InputEvent):
 			
 		elif e.button_index == MOUSE_BUTTON_RIGHT:
 			if e.pressed:
-				show_popup(e.position)
+				show_popup(get_global_transform() * e.position)
 				%popup_actions.popup(Rect2i(Vector2i(e.position), Vector2i(0, 0)))
 #				%popup_actions.popup_on_parent(Rect2i(Vector2i(e.position), Vector2i(0, 0)))
 				pass
@@ -241,6 +243,109 @@ func add_keymap_group_entry():
 func remove_keymap_entry():
 	pass
 
+func build_parameter_ui(action_mapper:KeymapActionMapper):
+	for child in %param_grid.get_children():
+		%param_grid.remove_child(child)
+		child.queue_free()
+	
+	#if !%bn_show_params.button_pressed:
+		#return
+	if !action_mapper:
+		return
+	
+#	print("action_id, ", action_id)
+	var action:CyclopsAction = plugin.get_action(action_mapper.action_id)
+
+	if action:
+#		print("param props")
+		for prop_dict in action.get_property_list():
+			#print("prop_dict ", prop_dict)
+			var prop_name:String = prop_dict["name"]
+			var usage:PropertyUsageFlags = prop_dict["usage"]
+			var hint:PropertyHint = prop_dict["hint"]
+			var hint_string:String = prop_dict["hint_string"]
+			
+			if !(usage & PROPERTY_USAGE_EDITOR):
+				continue
+				
+			#print("-adding prop ", prop_name)
+			
+			var type:Variant.Type = prop_dict["type"]
+			match type:
+				TYPE_BOOL:
+					var label:Label = Label.new()
+					label.text = prop_name
+					%param_grid.add_child(label)
+					
+					var editor:CheckBox = CheckBox.new()
+					if action_mapper.params.has(prop_name):
+						editor.button_pressed = action_mapper.params[prop_name]
+					editor.toggled.connect(func(state:bool):
+						action_mapper.params[prop_name] = state
+						)
+					%param_grid.add_child(editor)
+					
+				TYPE_INT:
+					var label:Label = Label.new()
+					label.text = prop_name
+					%param_grid.add_child(label)
+					
+					var editor:SpinBox = SpinBox.new()
+					if action_mapper.params.has(prop_name):
+						editor.value = action_mapper.params[prop_name]
+					editor.value_changed.connect(func(value:float):
+						action_mapper.params[prop_name] = int(value)
+						)
+					
+					if hint == PROPERTY_HINT_RANGE:
+						var parts:Array = hint_string.split(",")
+						editor.min_value = int(float(parts[0]))
+						editor.max_value = int(float(parts[1]))
+						if parts.size() >= 2:
+							editor.step = int(float(parts[2]))
+						
+					%param_grid.add_child(editor)
+					
+				TYPE_FLOAT:
+					var label:Label = Label.new()
+					label.text = prop_name
+					%param_grid.add_child(label)
+					
+					var editor:SpinBox = SpinBox.new()
+					if action_mapper.params.has(prop_name):
+						editor.value = action_mapper.params[prop_name]
+					editor.value_changed.connect(func(value:float):
+						action_mapper.params[prop_name] = value
+						)
+					
+					if hint == PROPERTY_HINT_RANGE:
+						var parts:Array = hint_string.split(",")
+						editor.min_value = float(parts[0])
+						editor.max_value = float(parts[1])
+						if parts.size() >= 2:
+							editor.step = float(parts[2])
+						
+					%param_grid.add_child(editor)
+				
+				TYPE_STRING:
+					#print("adding string")
+					var label:Label = Label.new()
+					label.text = prop_name
+					%param_grid.add_child(label)
+					
+					var editor:LineEdit = LineEdit.new()
+					editor.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+					if action_mapper.params.has(prop_name):
+						editor.text = action_mapper.params[prop_name]
+					editor.text_submitted.connect(func(value:String):
+						action_mapper.params[prop_name] = value
+						)
+					editor.focus_exited.connect(func():
+						action_mapper.params[prop_name] = editor.text
+						)
+						
+					%param_grid.add_child(editor)
+
 func _on_popup_actions_id_pressed(id:int):
 	match id:
 		0:
@@ -279,6 +384,11 @@ func _on_tree_cell_selected():
 		return
 		
 	var node:KeymapItem = tree_item_map[item]
+	
+	if node is KeymapActionMapper:
+		build_parameter_ui(node)
+	else:
+		build_parameter_ui(null)
 	
 	match col:
 		2:
