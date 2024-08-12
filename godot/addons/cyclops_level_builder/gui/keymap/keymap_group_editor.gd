@@ -34,7 +34,8 @@ var plugin:CyclopsLevelBuilder:
 		plugin = value
 
 	
-var root_group:KeymapGroup = KeymapGroup.new():
+#var root_group:KeymapGroup = KeymapGroup.new():
+var root_group:KeymapGroup:
 	set(value):
 		root_group = value
 		rebuild_display()
@@ -122,23 +123,13 @@ func _ready():
 func _process(delta):
 	pass
 
-#func _get_drag_data(at_position):
-	#print("_get_drag_data ",at_position)
-	#return null
-
 func show_popup(popup_pos:Vector2):
-	#var view_pos = get_viewport().get_screen_transform().origin
-	#%popup_actions.position = popup_pos + view_pos
-	
-	#%popup_actions.position = popup_pos + global_position
-#	%popup_actions.popup(Rect2i(popup_pos + global_position, Vector2i.ZERO))
-#	%popup_actions.popup_on_parent(Rect2i(popup_pos + global_position, Vector2i.ZERO))
-#	%popup_actions.show()
-#	%popup_actions.popup()
-#	%popup_actions.popup(Rect2i(Vector2i(position), Vector2i(0, 0)))
-#				%popup_actions.popup_on_parent(Rect2i(Vector2i(e.position), Vector2i(0, 0)))
 
-	%popup_actions.popup(Rect2i(get_global_transform() * popup_pos, Vector2i.ZERO))
+	#print("get_screen_transform() ", get_screen_transform())
+	#print("popup_pos ", popup_pos)
+	#print("get_screen_transform() * popup_pos ", get_screen_transform() * popup_pos)
+
+	%popup_actions.popup(Rect2i(get_screen_transform() * popup_pos, Vector2i.ZERO))
 
 var dragging:bool = false
 var mouse_down_pos:Vector2
@@ -156,8 +147,9 @@ func _on_tree_gui_input(event:InputEvent):
 			
 		elif e.button_index == MOUSE_BUTTON_RIGHT:
 			if e.pressed:
-				show_popup(get_global_transform() * e.position)
-				%popup_actions.popup(Rect2i(Vector2i(e.position), Vector2i(0, 0)))
+#				show_popup(get_global_transform() * e.position)
+				show_popup(e.position)
+				#%popup_actions.popup(Rect2i(Vector2i(e.position), Vector2i(0, 0)))
 #				%popup_actions.popup_on_parent(Rect2i(Vector2i(e.position), Vector2i(0, 0)))
 				pass
 				
@@ -209,6 +201,7 @@ func add_keymap_entry(action_id:String):
 	new_map.action_id = action_id
 	insert_group.children.insert(insert_idx, new_map)
 	
+	plugin.save_keymap()
 	rebuild_display()
 
 func add_keymap_group_entry():
@@ -238,9 +231,11 @@ func add_keymap_group_entry():
 	new_group.name = "New group"
 	insert_group.children.insert(insert_idx, new_group)
 	
+	plugin.save_keymap()
 	rebuild_display()
 
 func remove_keymap_entry():
+	plugin.save_keymap()
 	pass
 
 func build_parameter_ui(action_mapper:KeymapActionMapper):
@@ -433,6 +428,9 @@ func _on_tree_item_edited():
 			elif node is KeymapGroup:
 				node.name = item.get_text(0)
 			pass
+
+	plugin.save_keymap()
+
 	pass # Replace with function body.
 
 
@@ -504,6 +502,8 @@ func _on_tree_drop_tree_item(data:KeymapTreeControl.DndData, position:Vector2):
 		if drop_section == 1:
 			drop_index += 1
 		parent_drop_node.children.insert(drop_index, dragged_node)
+
+	plugin.save_keymap()
 
 	rebuild_display()
 

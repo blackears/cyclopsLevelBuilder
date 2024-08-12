@@ -39,7 +39,9 @@ var config:CyclopsConfig = preload("res://addons/cyclops_level_builder/data/conf
 var logger:CyclopsLogger = CyclopsLogger.new()
 
 #For now, use a single keymap for all operations
-var keymap:KeymapGroup = preload("res://addons/cyclops_level_builder/data/default_keymap.tres")
+const default_keymap_path:String = "res://addons/cyclops_level_builder/data/default_keymap.tres"
+const user_keymap_path:String = "res://addons/cyclops_level_builder/data/user_keymap.tres"
+var keymap:KeymapGroup
 
 var material_dock:MaterialPaletteViewport
 var overlays_dock:OverlaysDock
@@ -136,6 +138,10 @@ func _get_plugin_icon()->Texture2D:
 	#print("EditorPlugin::on_main_screen_changed ", screen_name)
 	#pass
 
+func save_keymap():
+	ResourceSaver.save(keymap, user_keymap_path)
+	pass
+
 func _enter_tree():
 	if FileAccess.file_exists(editor_cache_file):
 		#print(">> _enter_tree")
@@ -143,6 +149,16 @@ func _enter_tree():
 		#print("load text:", text)
 		editor_cache = JSON.parse_string(text)
 	
+	#const default_keymap_path:String = "res://addons/cyclops_level_builder/data/default_keymap.tres"
+	#const user_keymap_path:String = "res://addons/cyclops_level_builder/data/user_keymap.tres"
+	if FileAccess.file_exists(user_keymap_path):
+		keymap = load(user_keymap_path)
+	elif FileAccess.file_exists(default_keymap_path):
+		var km:KeymapGroup = load(default_keymap_path)
+		keymap = km.duplicate(true)
+	else:
+		keymap = KeymapGroup.new()
+
 	#EditorInterface.get_resource_filesystem().filesystem_changed.connect(on_filesystem_changed)
 	
 	add_child(viewport_3d_manager)

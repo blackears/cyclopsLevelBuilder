@@ -44,6 +44,14 @@ item_1/id = 1
 item_2/text = "Remove Item"
 item_2/id = 2
 
+[node name="PopupMenu" type="PopupMenu" parent="."]
+unique_name_in_owner = true
+item_count = 2
+item_0/text = "alpha"
+item_0/id = 0
+item_1/text = "beta"
+item_1/id = 1
+
 [connection signal="cell_selected" from="HSplitContainer/Tree" to="." method="_on_tree_cell_selected"]
 [connection signal="custom_item_clicked" from="HSplitContainer/Tree" to="." method="_on_tree_custom_item_clicked"]
 [connection signal="drop_tree_item" from="HSplitContainer/Tree" to="." method="_on_tree_drop_tree_item"]
