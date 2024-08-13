@@ -25,11 +25,46 @@
 extends KeymapItem
 class_name KeymapGroup
 
-@export var name:String
-@export var id:String
-#@export var keymaps:Array[KeymapInvoker]
-#@export var child_groups:Array[KeymapGroup]
-@export var children:Array[KeymapItem]
+@export var name:String:
+	set(value):
+		if name == value:
+			return
+		name == value
+		emit_changed()
+		keymap_tree_changed.emit()
+		
+#@export var id:String
+@export var subgroup:bool = false:
+	set(value):
+		if subgroup == value:
+			return
+		subgroup == value
+		emit_changed()
+		keymap_tree_changed.emit()
+
+@export var children:Array[KeymapItem]:
+	set(value):
+		print("Adding children ", value.size())
+		if children == value:
+			return
+		
+		for child in children:
+			child.keymap_tree_changed.disconnect(on_child_changed)
+			
+		children = value
+
+		for child in children:
+			child.keymap_tree_changed.connect(on_child_changed)
+			print("child.name ", child.name)
+		
+		print("children ", children.size())
+		
+		emit_changed()
+		keymap_tree_changed.emit()
+
+func on_child_changed():
+	keymap_tree_changed.emit()
+	pass
 
 func lookup_invoker(context:CyclopsOperatorContext, event:InputEvent)->KeymapActionMapper:
 	for item:KeymapItem in children:
@@ -38,16 +73,9 @@ func lookup_invoker(context:CyclopsOperatorContext, event:InputEvent)->KeymapAct
 		if result:
 			return result
 	
-	#for group:KeymapGroup in child_groups:
-		#var invoker:KeymapInvoker = group.lookup_invoker(context, event)
-		#if invoker:
-			#return invoker
-		#
-	##print("lookup_action ", event)
-	#for inv:KeymapInvoker in keymaps:
-		#if inv.is_invoked_by(context, event):
-			#return inv
-
 	return null
 
-
+func add_child(new_group:KeymapItem, index:int = 0):
+	children.insert(index, new_group)
+	keymap_tree_changed.emit()
+	emit_changed()

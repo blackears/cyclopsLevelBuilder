@@ -25,11 +25,47 @@
 extends KeymapItem
 class_name KeymapActionMapper
 
-@export var enabled:bool = true
-@export var name:String
-@export var action_id:String
-@export var keypress:KeymapKeypress
-@export var params:Dictionary
+@export var enabled:bool = true:
+	set(value):
+		if enabled == value:
+			return
+		enabled = value
+		emit_changed()
+		keymap_tree_changed.emit()
+	
+@export var name:String:
+	set(value):
+		if name == value:
+			return
+		name = value
+		emit_changed()
+		keymap_tree_changed.emit()
+		
+@export var action_id:String:
+	set(value):
+		if action_id == value:
+			return
+		action_id = value
+		emit_changed()
+		keymap_tree_changed.emit()
+	
+@export var keypress:KeymapKeypress:
+	set(value):
+		if keypress == value:
+			return
+		keypress = value
+		emit_changed()
+		keymap_tree_changed.emit()
+	
+@export var params:Dictionary:
+	set(value):
+		if params == value:
+			return
+			
+		params = value
+		emit_changed()
+		keymap_tree_changed.emit()
+
 
 func lookup_invoker(context:CyclopsOperatorContext, event:InputEvent)->KeymapActionMapper:
 	if !enabled:
@@ -57,6 +93,11 @@ func invoke(context:CyclopsOperatorContext, event:InputEvent):
 		action.set(name, params[name])
 		
 	action.invoke(context, event)
+	
+func set_parameter(key:String, value:Variant):
+	params[key] = value
+	keymap_tree_changed.emit()
+	emit_changed()
 	
 
 #func get_action(context:CyclopsOperatorContext)->CyclopsAction:

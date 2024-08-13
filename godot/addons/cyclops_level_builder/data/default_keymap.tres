@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource("1_a6rpb")
-name = "Universal Keymap"
-id = "universal_keymap"
+name = ""
+subgroup = false
 children = Array[Resource("res://addons/cyclops_level_builder/gui/keymap/keymap_item.gd")]([])

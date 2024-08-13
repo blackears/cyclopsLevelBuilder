@@ -23,6 +23,8 @@
 extends Resource
 class_name KeymapItem
 
+signal keymap_tree_changed
+
 func lookup_invoker(context:CyclopsOperatorContext, event:InputEvent)->KeymapActionMapper:
 	return null
 

@@ -38,12 +38,14 @@ var plugin:CyclopsLevelBuilder:
 var root_group:KeymapGroup:
 	set(value):
 		root_group = value
+		print("var root_group:KeymapGroup: ", root_group.children.size())
 		rebuild_display()
 
 var action_id_selector:ActionIdSelector = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/action_id_selector.tscn").instantiate()
 
 
 func rebuild_display():
+	print("rebuild_display()")
 	var collapsed_groups:Array[KeymapGroup]
 	for key:TreeItem in tree_item_map.keys():
 		if key.collapsed:
@@ -60,16 +62,14 @@ func rebuild_display():
 	tree_item_map[root_item] = root_group
 			
 	rebuild_display_recursive(root_group, tree, root_item, collapsed_groups)
-#	var grp:KeymapGroup = plugin.keymap
-	#for child:KeymapItem in root_group.children:
-		#if child is KeymapActionMapper:
-			#tree.create_item(root_item)
 			
 func rebuild_display_recursive(grp:KeymapGroup, tree:Tree, root_item:TreeItem, collapsed_groups:Array[KeymapGroup]):
+	print("rebuild_display_recursive ", grp.name, " ", grp.children.size())
 	for child:KeymapItem in grp.children:
 		if child is KeymapActionMapper:
 			var am:KeymapActionMapper = child
 			var item:TreeItem = tree.create_item(root_item)
+			print("item ", am.name)
 			item.set_text(0, am.name)
 			item.set_text(1, am.action_id)
 			item.set_text(2, str(am.keypress))
@@ -124,10 +124,6 @@ func _process(delta):
 	pass
 
 func show_popup(popup_pos:Vector2):
-
-	#print("get_screen_transform() ", get_screen_transform())
-	#print("popup_pos ", popup_pos)
-	#print("get_screen_transform() * popup_pos ", get_screen_transform() * popup_pos)
 
 	%popup_actions.popup(Rect2i(get_screen_transform() * popup_pos, Vector2i.ZERO))
 
@@ -199,9 +195,9 @@ func add_keymap_entry(action_id:String):
 	var new_map:KeymapActionMapper = KeymapActionMapper.new()
 	new_map.name = action_id
 	new_map.action_id = action_id
-	insert_group.children.insert(insert_idx, new_map)
+	insert_group.add_child(new_map, insert_idx)
 	
-	plugin.save_keymap()
+#	plugin.save_keymap()
 	rebuild_display()
 
 func add_keymap_group_entry():
@@ -229,13 +225,13 @@ func add_keymap_group_entry():
 	
 	var new_group:KeymapGroup = KeymapGroup.new()
 	new_group.name = "New group"
-	insert_group.children.insert(insert_idx, new_group)
+	insert_group.add_child(new_group, insert_idx)
 	
-	plugin.save_keymap()
+#	plugin.save_keymap()
 	rebuild_display()
 
 func remove_keymap_entry():
-	plugin.save_keymap()
+#	plugin.save_keymap()
 	pass
 
 func build_parameter_ui(action_mapper:KeymapActionMapper):
@@ -276,7 +272,7 @@ func build_parameter_ui(action_mapper:KeymapActionMapper):
 					if action_mapper.params.has(prop_name):
 						editor.button_pressed = action_mapper.params[prop_name]
 					editor.toggled.connect(func(state:bool):
-						action_mapper.params[prop_name] = state
+						action_mapper.set_parameter(prop_name, state)
 						)
 					%param_grid.add_child(editor)
 					
@@ -289,7 +285,7 @@ func build_parameter_ui(action_mapper:KeymapActionMapper):
 					if action_mapper.params.has(prop_name):
 						editor.value = action_mapper.params[prop_name]
 					editor.value_changed.connect(func(value:float):
-						action_mapper.params[prop_name] = int(value)
+						action_mapper.set_parameter(prop_name, int(value))
 						)
 					
 					if hint == PROPERTY_HINT_RANGE:
@@ -310,7 +306,7 @@ func build_parameter_ui(action_mapper:KeymapActionMapper):
 					if action_mapper.params.has(prop_name):
 						editor.value = action_mapper.params[prop_name]
 					editor.value_changed.connect(func(value:float):
-						action_mapper.params[prop_name] = value
+						action_mapper.set_parameter(prop_name, value)
 						)
 					
 					if hint == PROPERTY_HINT_RANGE:
@@ -333,10 +329,10 @@ func build_parameter_ui(action_mapper:KeymapActionMapper):
 					if action_mapper.params.has(prop_name):
 						editor.text = action_mapper.params[prop_name]
 					editor.text_submitted.connect(func(value:String):
-						action_mapper.params[prop_name] = value
+						action_mapper.set_parameter(prop_name, value)
 						)
 					editor.focus_exited.connect(func():
-						action_mapper.params[prop_name] = editor.text
+						action_mapper.set_parameter(prop_name, editor.text)
 						)
 						
 					%param_grid.add_child(editor)
@@ -429,7 +425,7 @@ func _on_tree_item_edited():
 				node.name = item.get_text(0)
 			pass
 
-	plugin.save_keymap()
+#	plugin.save_keymap()
 
 	pass # Replace with function body.
 
@@ -503,7 +499,7 @@ func _on_tree_drop_tree_item(data:KeymapTreeControl.DndData, position:Vector2):
 			drop_index += 1
 		parent_drop_node.children.insert(drop_index, dragged_node)
 
-	plugin.save_keymap()
+#	plugin.save_keymap()
 
 	rebuild_display()
 

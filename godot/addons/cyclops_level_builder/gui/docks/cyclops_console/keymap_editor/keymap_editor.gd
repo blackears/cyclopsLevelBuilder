@@ -27,12 +27,25 @@ class_name KeymapEditor
 
 var plugin:CyclopsLevelBuilder:
 	set(value):
+		print("KeymapEditor set plugin ")
+		if plugin:
+			plugin.keymap_changed.disconnect(on_keymap_changed)
+		
 		plugin = value
+
+		if plugin:
+			plugin.keymap_changed.connect(on_keymap_changed)
+		
 		%KeymapGroupEditor.plugin = plugin
+		
 		if plugin:
 			%KeymapGroupEditor.root_group = plugin.keymap
 
-	
+func on_keymap_changed():
+	print("on_keymap_changed()")
+	if plugin:
+		%KeymapGroupEditor.root_group = plugin.keymap
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
