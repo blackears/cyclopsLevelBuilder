@@ -38,16 +38,15 @@ var plugin:CyclopsLevelBuilder:
 var root_group:KeymapGroup:
 	set(value):
 		root_group = value
-		print("var root_group:KeymapGroup: ", root_group.children.size())
+		#print("var root_group:KeymapGroup: ", root_group.children.size())
 		rebuild_display()
 
-var action_id_selector:ActionIdSelector = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/action_id_selector.tscn").instantiate()
 
 var dragging:bool = false
 var mouse_down_pos:Vector2
 
 func rebuild_display():
-	print("rebuild_display()")
+	#print("rebuild_display()")
 	var collapsed_groups:Array[KeymapGroup]
 	for key:TreeItem in tree_item_map.keys():
 		if key.collapsed:
@@ -66,38 +65,41 @@ func rebuild_display():
 	rebuild_display_recursive(root_group, tree, root_item, collapsed_groups)
 			
 func rebuild_display_recursive(grp:KeymapGroup, tree:Tree, root_item:TreeItem, collapsed_groups:Array[KeymapGroup]):
-	print("rebuild_display_recursive ", grp.name, " ", grp.children.size())
+	#print("rebuild_display_recursive ", grp.name, " ", grp.children.size())
 	for child:KeymapItem in grp.children:
 		if child is KeymapActionMapper:
 			var am:KeymapActionMapper = child
 			var item:TreeItem = tree.create_item(root_item)
-			print("item ", am.name, " am.enabled ", am.enabled)
+			#print("item ", am.name, " am.enabled ", am.enabled)
 
-			item.set_cell_mode(2, TreeItem.CELL_MODE_STRING)
-			item.set_cell_mode(3, TreeItem.CELL_MODE_CHECK)
+			item.set_cell_mode(3, TreeItem.CELL_MODE_STRING)
+			item.set_cell_mode(4, TreeItem.CELL_MODE_CHECK)
 
 			item.set_text(0, am.name)
 			item.set_text(1, am.action_id)
-			item.set_text(2, str(am.keypress))
-			item.set_checked(3, am.enabled)
+			item.set_text(2, "...")
+			item.set_text(3, str(am.keypress))
+			item.set_checked(4, am.enabled)
 			item.set_editable(0, true)
 			item.set_editable(1, true)
 			#item.set_editable(2, true)
-			item.set_editable(3, true)
+			item.set_editable(4, true)
 			item.set_selectable(0, true)
 			item.set_selectable(1, true)
-			item.set_selectable(2, true)
 			item.set_selectable(3, true)
+			item.set_selectable(4, true)
 			
 			tree_item_map[item] = child
 			
 		elif child is KeymapGroup:
 			var item:TreeItem = tree.create_item(root_item)
-			print("group item ", child.name)
+			#print("group item ", child.name)
 			item.set_text(0, child.name)
 			item.set_editable(0, true)
 			item.set_selectable(0, true)
-			item.set_custom_bg_color(0, Color.DIM_GRAY)
+#			item.set_custom_bg_color(0, Color.DIM_GRAY)
+			for i in %Tree.columns:
+				item.set_custom_bg_color(i, Color(.3, .3, .3))
 
 			tree_item_map[item] = child
 			
@@ -113,15 +115,9 @@ func rebuild_display_recursive(grp:KeymapGroup, tree:Tree, root_item:TreeItem, c
 func _ready():
 	%Tree.set_column_title(0, "Display Name")
 	%Tree.set_column_title(1, "Action")
-	%Tree.set_column_title(2, "Hotkey")
-	%Tree.set_column_title(3, "Enabled")
-	
-	action_id_selector.id_selected.connect(func(action_id:String): 
-		add_keymap_entry(action_id)
-		action_id_selector.hide()
-		)
-	add_child(action_id_selector)
-	action_id_selector.visible = false
+	%Tree.set_column_title(3, "Hotkey")
+	%Tree.set_column_title(4, "Enabled")
+
 	
 	rebuild_display()
 	
@@ -373,17 +369,43 @@ func build_parameter_ui(km_item:KeymapItem):
 							
 						%param_grid.add_child(editor)
 
+func show_action_id_selector(callable:Callable):
+	var action_id_selector:ActionIdSelector = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/action_id_selector.tscn").instantiate()
+	
+	action_id_selector.id_selected.connect(func(action_id:String): 
+		#add_keymap_entry(action_id)
+		callable.call(action_id)
+		#action_id_selector.hide()
+		action_id_selector.queue_free()
+		)
+	action_id_selector.close_requested.connect(func():
+		action_id_selector.queue_free()
+		)
+	add_child(action_id_selector)
+	action_id_selector.visible = false
+	
+	action_id_selector.plugin = plugin
+	action_id_selector.popup_centered()
+
 func _on_popup_actions_id_pressed(id:int):
 	match id:
 		0:
-			#var id_sel:ActionIdSelector = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/action_id_selector.tscn").instantiate()
-			
-			action_id_selector.plugin = plugin
-			#id_sel.close_requested.connect(func():
-				#id_sel.queue_free()
-				#print("closing id pick")
+			show_action_id_selector(func(action_id:String):add_keymap_entry(action_id))
+			#var action_id_selector:ActionIdSelector = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/action_id_selector.tscn").instantiate()
+			#
+			#action_id_selector.id_selected.connect(func(action_id:String): 
+				#add_keymap_entry(action_id)
+				##action_id_selector.hide()
+				#action_id_selector.queue_free()
 				#)
-			action_id_selector.popup_centered()
+			#action_id_selector.close_requested.connect(func():
+				#action_id_selector.queue_free()
+				#)
+			#add_child(action_id_selector)
+			#action_id_selector.visible = false
+			#
+			#action_id_selector.plugin = plugin
+			#action_id_selector.popup_centered()
 			
 		1:
 			add_keymap_group_entry()
@@ -419,6 +441,16 @@ func _on_tree_cell_selected():
 	
 	match col:
 		2:
+#			print("...")
+			if node is KeymapActionMapper:
+				var am:KeymapActionMapper = node
+				show_action_id_selector(func(action_id:String):
+					am.action_id = action_id
+					rebuild_display()
+					)
+			
+			return
+		3:
 			if node is KeymapActionMapper:
 				var am:KeymapActionMapper = node
 				#print("select col ", am.action_id)
@@ -441,10 +473,6 @@ func _on_tree_cell_selected():
 				add_child(picker)
 				picker.popup_centered()
 				return
-	
-			
-	
-	pass # Replace with function body.
 
 
 func _on_tree_item_edited():
@@ -459,9 +487,12 @@ func _on_tree_item_edited():
 				node.name = item.get_text(0)
 			elif node is KeymapGroup:
 				node.name = item.get_text(0)
-		3:
+		1:
 			if node is KeymapActionMapper:
-				(node as KeymapActionMapper).enabled = item.is_checked(3)
+				node.action_id = item.get_text(1)
+		4:
+			if node is KeymapActionMapper:
+				(node as KeymapActionMapper).enabled = item.is_checked(4)
 			
 
 #	plugin.save_keymap()
@@ -536,8 +567,6 @@ func _on_tree_drop_tree_item(data:KeymapTreeControl.DndData, position:Vector2):
 		if drop_section == 1:
 			drop_index += 1
 		parent_drop_node.children.insert(drop_index, dragged_node)
-
-#	plugin.save_keymap()
 
 	rebuild_display()
 
