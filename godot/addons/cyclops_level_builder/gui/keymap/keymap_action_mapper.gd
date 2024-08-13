@@ -29,6 +29,7 @@ class_name KeymapActionMapper
 	set(value):
 		if enabled == value:
 			return
+			
 		enabled = value
 		emit_changed()
 		keymap_tree_changed.emit()
@@ -37,6 +38,7 @@ class_name KeymapActionMapper
 	set(value):
 		if name == value:
 			return
+			
 		name = value
 		emit_changed()
 		keymap_tree_changed.emit()
@@ -45,6 +47,7 @@ class_name KeymapActionMapper
 	set(value):
 		if action_id == value:
 			return
+			
 		action_id = value
 		emit_changed()
 		keymap_tree_changed.emit()
@@ -53,6 +56,7 @@ class_name KeymapActionMapper
 	set(value):
 		if keypress == value:
 			return
+			
 		keypress = value
 		emit_changed()
 		keymap_tree_changed.emit()

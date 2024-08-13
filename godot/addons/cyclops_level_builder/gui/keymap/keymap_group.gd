@@ -29,7 +29,7 @@ class_name KeymapGroup
 	set(value):
 		if name == value:
 			return
-		name == value
+		name = value
 		emit_changed()
 		keymap_tree_changed.emit()
 		
@@ -38,13 +38,13 @@ class_name KeymapGroup
 	set(value):
 		if subgroup == value:
 			return
-		subgroup == value
+		subgroup = value
 		emit_changed()
 		keymap_tree_changed.emit()
 
 @export var children:Array[KeymapItem]:
 	set(value):
-		print("Adding children ", value.size())
+#		print("Adding children ", value.size())
 		if children == value:
 			return
 		
@@ -55,9 +55,9 @@ class_name KeymapGroup
 
 		for child in children:
 			child.keymap_tree_changed.connect(on_child_changed)
-			print("child.name ", child.name)
+			#print("child.name ", child.name)
 		
-		print("children ", children.size())
+		#print("children ", children.size())
 		
 		emit_changed()
 		keymap_tree_changed.emit()
@@ -77,5 +77,14 @@ func lookup_invoker(context:CyclopsOperatorContext, event:InputEvent)->KeymapAct
 
 func add_child(new_group:KeymapItem, index:int = 0):
 	children.insert(index, new_group)
+	keymap_tree_changed.emit()
+	emit_changed()
+
+func remove_child(item:KeymapItem):
+	var idx:int = children.find(item)
+	if idx == -1:
+		return
+		
+	children.remove_at(idx)
 	keymap_tree_changed.emit()
 	emit_changed()
