@@ -25,8 +25,12 @@
 class_name ActionScaleSelection
 extends CyclopsAction
 
-var scale:Vector3 = Vector3.ONE
+@export var scale:Vector3 = Vector3.ONE
 
+#const ACTION_ID:String = "scale_selection"
+
+func _get_action_id():
+	return "scale_selection"
 #func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
 	#super._init(plugin, name, accellerator)
 

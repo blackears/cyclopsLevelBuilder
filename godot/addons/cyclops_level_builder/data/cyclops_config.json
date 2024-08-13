@@ -12,6 +12,15 @@
 		"res://addons/cyclops_level_builder/actions/mesh/action_intersect_block.gd",
 		"res://addons/cyclops_level_builder/actions/mesh/action_merge_selected_blocks.gd",
 		"res://addons/cyclops_level_builder/actions/mesh/action_merge_vertices_center.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_scale_selection.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_rotate_selection.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_select_tool.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_snap_to_grid.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_subtract_block.gd",
+		"res://addons/cyclops_level_builder/actions/mesh/action_tool_duplicate.gd",
+		
+	],
+	"unused":[
 		"res://addons/cyclops_level_builder/actions/mesh/action_mirror_selection_x.gd",
 		"res://addons/cyclops_level_builder/actions/mesh/action_mirror_selection_y.gd",
 		"res://addons/cyclops_level_builder/actions/mesh/action_mirror_selection_z.gd",
@@ -24,10 +33,6 @@
 		"res://addons/cyclops_level_builder/actions/mesh/action_rotate_z_90_ccw.gd",
 		"res://addons/cyclops_level_builder/actions/mesh/action_rotate_z_90_cw.gd",
 		"res://addons/cyclops_level_builder/actions/mesh/action_rotate_z_180.gd",
-		"res://addons/cyclops_level_builder/actions/mesh/action_select_tool.gd",
-		"res://addons/cyclops_level_builder/actions/mesh/action_snap_to_grid.gd",
-		"res://addons/cyclops_level_builder/actions/mesh/action_subtract_block.gd",
-		"res://addons/cyclops_level_builder/actions/mesh/action_tool_duplicate.gd",
 		
 	],
 	"tools":[

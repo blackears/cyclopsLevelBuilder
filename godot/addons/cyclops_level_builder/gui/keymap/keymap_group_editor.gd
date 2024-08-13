@@ -163,9 +163,10 @@ func _on_tree_gui_input(event:InputEvent):
 			var data:KeymapTreeControl.DndData = KeymapTreeControl.DndData.new()
 			var item:TreeItem = %Tree.get_item_at_position(e.position)
 			
-			data.node_index = item.get_index()
-			data.item = item
-			force_drag(data, null)
+			if item:
+				data.node_index = item.get_index()
+				data.item = item
+				force_drag(data, null)
 			dragging = false
 	
 	pass # Replace with function body.
@@ -314,6 +315,8 @@ func build_parameter_ui(km_item:KeymapItem):
 						%param_grid.add_child(label)
 						
 						var editor:SpinBox = SpinBox.new()
+						editor.allow_greater = true
+						editor.allow_lesser = true
 						if action_mapper.params.has(prop_name):
 							editor.value = action_mapper.params[prop_name]
 						editor.value_changed.connect(func(value:float):
@@ -335,6 +338,8 @@ func build_parameter_ui(km_item:KeymapItem):
 						%param_grid.add_child(label)
 						
 						var editor:SpinBox = SpinBox.new()
+						editor.allow_greater = true
+						editor.allow_lesser = true
 						if action_mapper.params.has(prop_name):
 							editor.value = action_mapper.params[prop_name]
 						editor.value_changed.connect(func(value:float):
@@ -369,6 +374,22 @@ func build_parameter_ui(km_item:KeymapItem):
 							
 						%param_grid.add_child(editor)
 
+					TYPE_VECTOR3:
+						var label:Label = Label.new()
+						label.text = prop_name
+						%param_grid.add_child(label)
+						
+						var editor:Vector3Edit = preload("res://addons/cyclops_level_builder/gui/controls/vector3_edit.tscn").instantiate()
+						if action_mapper.params.has(prop_name):
+							editor.value = action_mapper.params[prop_name]
+						editor.value_changed.connect(func(value:Vector3):
+							action_mapper.set_parameter(prop_name, value)
+							)
+							
+						%param_grid.add_child(editor)
+						
+						
+
 func show_action_id_selector(callable:Callable):
 	var action_id_selector:ActionIdSelector = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/action_id_selector.tscn").instantiate()
 	
@@ -391,27 +412,10 @@ func _on_popup_actions_id_pressed(id:int):
 	match id:
 		0:
 			show_action_id_selector(func(action_id:String):add_keymap_entry(action_id))
-			#var action_id_selector:ActionIdSelector = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/action_id_selector.tscn").instantiate()
-			#
-			#action_id_selector.id_selected.connect(func(action_id:String): 
-				#add_keymap_entry(action_id)
-				##action_id_selector.hide()
-				#action_id_selector.queue_free()
-				#)
-			#action_id_selector.close_requested.connect(func():
-				#action_id_selector.queue_free()
-				#)
-			#add_child(action_id_selector)
-			#action_id_selector.visible = false
-			#
-			#action_id_selector.plugin = plugin
-			#action_id_selector.popup_centered()
-			
 		1:
 			add_keymap_group_entry()
 		2:
 			remove_keymap_entry()
-	pass # Replace with function body.
 
 
 func _on_tree_empty_clicked(position, mouse_button_index):

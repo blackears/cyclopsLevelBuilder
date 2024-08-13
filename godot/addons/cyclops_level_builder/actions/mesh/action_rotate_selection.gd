@@ -25,10 +25,15 @@
 class_name ActionRotateSelection
 extends CyclopsAction
 
-var rotation_axis:Vector3 = Vector3.ONE
-var rotation_angle:float
+@export var rotation_axis:Vector3 = Vector3.ONE
+@export var rotation_angle:float
 
 
+#const ACTION_ID:String = "rotate_selection"
+
+func _get_action_id():
+	return "rotate_selection"
+	
 #func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
 	#super._init(plugin, name, accellerator)
 

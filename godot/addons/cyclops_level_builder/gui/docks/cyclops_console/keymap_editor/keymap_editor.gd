@@ -27,7 +27,7 @@ class_name KeymapEditor
 
 var plugin:CyclopsLevelBuilder:
 	set(value):
-		print("KeymapEditor set plugin ")
+		#print("KeymapEditor set plugin ")
 		if plugin:
 			plugin.keymap_changed.disconnect(on_keymap_changed)
 		
@@ -42,7 +42,7 @@ var plugin:CyclopsLevelBuilder:
 			%KeymapGroupEditor.root_group = plugin.keymap
 
 func on_keymap_changed():
-	print("on_keymap_changed()")
+	#print("on_keymap_changed()")
 	if plugin:
 		%KeymapGroupEditor.root_group = plugin.keymap
 

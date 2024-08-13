@@ -48,7 +48,7 @@ var keymap:KeymapGroup:
 		if keymap == value:
 			return
 		
-		print("setting cyclops keymap")
+		#print("setting cyclops keymap")
 		if keymap:
 			keymap.keymap_tree_changed.disconnect(on_keymap_changed)
 		
@@ -60,7 +60,7 @@ var keymap:KeymapGroup:
 		keymap_changed.emit()
 
 func on_keymap_changed():
-	print("on_keymap_changed() ", keymap.children.size())
+	#print("on_keymap_changed() ", keymap.children.size())
 	ResourceSaver.save(keymap, user_keymap_path)
 	keymap_updated.emit()
 	
@@ -164,14 +164,14 @@ func _enter_tree():
 		editor_cache = JSON.parse_string(text)
 	
 	if FileAccess.file_exists(user_keymap_path):
-		print("keymap = load(user_keymap_path)")
+		#print("keymap = load(user_keymap_path)")
 		keymap = load(user_keymap_path)
 	elif FileAccess.file_exists(default_keymap_path):
-		print("var km:KeymapGroup = load(default_keymap_path)")
+		#print("var km:KeymapGroup = load(default_keymap_path)")
 		var km:KeymapGroup = load(default_keymap_path)
 		keymap = km.duplicate(true)
 	else:
-		print("keymap = KeymapGroup.new()")
+		#print("keymap = KeymapGroup.new()")
 		keymap = KeymapGroup.new()
 
 	#EditorInterface.get_resource_filesystem().filesystem_changed.connect(on_filesystem_changed)
