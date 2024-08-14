@@ -63,6 +63,7 @@ class_name KeymapGroup
 		keymap_tree_changed.emit()
 
 func on_child_changed():
+	#print("on_child_changed() ", name)
 	keymap_tree_changed.emit()
 	pass
 
@@ -75,8 +76,10 @@ func lookup_invoker(context:CyclopsOperatorContext, event:InputEvent)->KeymapAct
 	
 	return null
 
-func add_child(new_group:KeymapItem, index:int = 0):
-	children.insert(index, new_group)
+func add_child(item:KeymapItem, index:int = 0):
+	children.insert(index, item)
+	item.keymap_tree_changed.connect(on_child_changed)
+	
 	keymap_tree_changed.emit()
 	emit_changed()
 
@@ -86,5 +89,7 @@ func remove_child(item:KeymapItem):
 		return
 		
 	children.remove_at(idx)
+	item.keymap_tree_changed.disconnect(on_child_changed)
+	
 	keymap_tree_changed.emit()
 	emit_changed()

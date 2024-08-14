@@ -34,6 +34,8 @@ var editor_plugin:CyclopsLevelBuilder:
 #			editor_plugin.main_screen_changed.disconnect(_on_main_screen_changed)
 			editor_plugin.active_node_changed.disconnect(on_active_node_changed)
 			editor_plugin.tool_changed.disconnect(on_tool_changed)
+			editor_plugin.keymap_changed.disconnect(on_keymap_updated)
+			editor_plugin.keymap_updated.disconnect(on_keymap_updated)
 		
 		editor_plugin = value
 		
@@ -42,6 +44,8 @@ var editor_plugin:CyclopsLevelBuilder:
 			editor_plugin.xray_mode_changed.connect(on_xray_mode_changed)
 #			editor_plugin.main_screen_changed.connect(_on_main_screen_changed)
 			editor_plugin.tool_changed.connect(on_tool_changed)
+			editor_plugin.keymap_changed.connect(on_keymap_updated)
+			editor_plugin.keymap_updated.connect(on_keymap_updated)
 		
 		build_ui()
 
@@ -49,6 +53,10 @@ var editor_plugin:CyclopsLevelBuilder:
 func on_active_node_changed():
 	update_grid()
 	
+func on_keymap_updated():
+	print("on_keymap_updated():")
+	build_menu()
+	pass
 
 func init_action(action:CyclopsAction)->CyclopsAction:
 	action.plugin = editor_plugin
@@ -110,6 +118,61 @@ func _ready():
 	#new_line.name = 'line'
 	#prev_button_pressed = button
 
+#var menu_map:Array[KeymapActionMapper]
+
+func build_menu():
+	for child in %MenuBar.get_children():
+		%MenuBar.remove_child(child)
+		child.queue_free()
+	
+	#menu_map.clear()
+	
+	if !editor_plugin:
+		return
+	
+	var keymap_root:KeymapGroup = editor_plugin.keymap
+	for child in keymap_root.children:
+		#var popup:PopupMenu = PopupMenu.new()
+		#popup.name = child.name
+		
+		var popup:PopupMenu = build_menu_recursive(child)
+		%MenuBar.add_child(popup)
+	
+func build_menu_recursive(base_node:KeymapGroup)->PopupMenu:
+	var action_list:Array[KeymapActionMapper]
+	var base_menu:PopupMenu = PopupMenu.new()
+	base_menu.name = base_node.name
+	base_menu.id_pressed.connect(func(id:int):
+		var ctx:CyclopsOperatorContext = CyclopsOperatorContext.new()
+		ctx.plugin = editor_plugin
+		action_list[id].invoke(ctx, null)
+		)
+	
+	
+	for child in base_node.children:
+		if child is KeymapGroup:
+			var child_menu:PopupMenu = build_menu_recursive(child)
+			
+			base_menu.add_child(child_menu)
+			base_menu.add_submenu_item(child.name, child.name)
+
+			#if child.subgroup:
+				#var child_menu:PopupMenu = build_menu_recursive(child)
+				#
+				#base_menu.add_child(child_menu)
+				#base_menu.add_submenu_item(child.name, child.name)
+#
+			#else:
+				#base_menu.add_separator()
+				#build_menu_recursive(base_menu, child)
+				
+		elif child is KeymapActionMapper:
+			var am:KeymapActionMapper = child
+	
+			base_menu.add_item(am.name, action_list.size())
+			action_list.append(am)
+#			menu_map.append(am)
+	return base_menu
 
 func build_ui():
 	#print("build_ui")
@@ -149,6 +212,8 @@ func build_ui():
 			%snap_options.add_icon_item(tag.icon, tag.name)
 		else:
 			%snap_options.add_item(tag.name)
+
+	build_menu()
 
 func update_grid():
 	if !editor_plugin:

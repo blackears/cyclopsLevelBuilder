@@ -75,7 +75,7 @@ func lookup_invoker(context:CyclopsOperatorContext, event:InputEvent)->KeymapAct
 	if !enabled:
 		return null
 	
-	if keypress.is_invoked_by(context, event):
+	if keypress && keypress.is_invoked_by(context, event):
 		return self
 		
 	return null

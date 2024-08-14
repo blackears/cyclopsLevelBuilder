@@ -21,10 +21,14 @@ script = ExtResource("1_o71fd")
 layout_mode = 2
 
 [node name="MenuBar" type="MenuBar" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MenuBar_old" type="MenuBar" parent="HBoxContainer"]
 layout_mode = 2
 prefer_global_menu = false
 
-[node name="Menu" type="PopupMenu" parent="HBoxContainer/MenuBar"]
+[node name="Menu" type="PopupMenu" parent="HBoxContainer/MenuBar_old"]
 unique_name_in_owner = true
 item_count = 27
 item_0/text = "Duplicate Selected Blocks"
