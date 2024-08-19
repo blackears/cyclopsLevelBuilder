@@ -15,6 +15,7 @@ dest_files=["res://.godot/imported/Roboto-ThinItalic.ttf-73ae85a31d5331b097d04b5
 Rendering=null
 antialiasing=1
 generate_mipmaps=false
+disable_embedded_bitmaps=true
 multichannel_signed_distance_field=false
 msdf_pixel_range=8
 msdf_size=48
