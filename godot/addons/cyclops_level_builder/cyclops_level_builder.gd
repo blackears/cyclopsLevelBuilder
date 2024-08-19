@@ -98,7 +98,8 @@ var viewport_renderings:Array[ViewportRenderings]
 
 func get_snapping_manager()->SnappingManager:
 	var mgr:SnappingManager = SnappingManager.new()
-	mgr.snap_enabled = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_ENABLED)
+#	mgr.snap_enabled = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_ENABLED)
+	mgr.snap_enabled = true
 	mgr.snap_tool = snapping_system
 	
 	return mgr
@@ -574,4 +575,3 @@ func intersect_frustum_all(frustum:Array[Plane])->Array[CyclopsBlock]:
 			result.append(block)
 	
 	return result
-
