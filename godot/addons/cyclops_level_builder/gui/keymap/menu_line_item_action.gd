@@ -21,9 +21,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+#Call an action_id with parmaeter list
+#Call a script
+
+#In MEL, the base name is the name of a function in globals space that can be called..
+# Later MEL lets you specify a command which is either a string that is executable or 
+#    a Python lambda expression
+
+
 @tool
-extends KeymapItem
-class_name KeymapActionMapper
+extends MenuLineItem
+class_name MenuLineItemAction
 
 @export var enabled:bool = true:
 	set(value):
@@ -32,8 +40,8 @@ class_name KeymapActionMapper
 			
 		enabled = value
 		emit_changed()
-		keymap_tree_changed.emit()
-	
+		menu_tree_changed.emit()
+
 @export var name:String:
 	set(value):
 		if name == value:
@@ -41,17 +49,17 @@ class_name KeymapActionMapper
 			
 		name = value
 		emit_changed()
-		keymap_tree_changed.emit()
+		menu_tree_changed.emit()
 
-@export var action_id:String:
+@export var tooltip:String:
 	set(value):
-		if action_id == value:
+		if tooltip == value:
 			return
 			
-		action_id = value
+		tooltip = value
 		emit_changed()
-		keymap_tree_changed.emit()
-	
+		menu_tree_changed.emit()
+
 @export var keypress:KeymapKeypress:
 	set(value):
 		if keypress == value:
@@ -59,8 +67,18 @@ class_name KeymapActionMapper
 			
 		keypress = value
 		emit_changed()
-		keymap_tree_changed.emit()
-	
+		menu_tree_changed.emit()
+
+#global id of action to run
+@export var action_id:String:
+	set(value):
+		if action_id == value:
+			return
+			
+		action_id = value
+		emit_changed()
+		menu_tree_changed.emit()
+
 @export var params:Dictionary:
 	set(value):
 		if params == value:
@@ -68,44 +86,7 @@ class_name KeymapActionMapper
 			
 		params = value
 		emit_changed()
-		keymap_tree_changed.emit()
-
-
-func lookup_invoker(context:CyclopsOperatorContext, event:InputEvent)->KeymapActionMapper:
-	if !enabled:
-		return null
-	
-	if keypress && keypress.is_invoked_by(context, event):
-		return self
+		menu_tree_changed.emit()
 		
-	return null
-
-func is_invoked_by(context:CyclopsOperatorContext, event:InputEvent)->bool:
-	if !enabled:
-		return false
-	
-	return keypress.is_invoked_by(context, event)
-
-func invoke(context:CyclopsOperatorContext, event:InputEvent):
-	
-	var action:CyclopsAction = context.plugin.get_action(action_id)
-	if !action:
-		push_warning("Could not find action with action_id '", action_id, "'")
-		return
-	
-	for name:String in params.keys():
-		action.set(name, params[name])
 		
-	action.invoke(context, event)
-	
-func set_parameter(key:String, value:Variant):
-	params[key] = value
-	keymap_tree_changed.emit()
-	emit_changed()
-	
-
-#func get_action(context:CyclopsOperatorContext)->CyclopsAction:
-	#var action:CyclopsAction = context.plugin.get_action(action_id)
-	#if !action:
-		#push_warning("Could not find action with action_id '", action_id, "'")
-	#return action
+		

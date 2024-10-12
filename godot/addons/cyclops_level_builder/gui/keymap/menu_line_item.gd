@@ -19,11 +19,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+#Can be added to any container that has menus.  Each view should have it's own base menu.
+
 @tool
 extends Resource
-class_name KeymapItem
+class_name MenuLineItem
 
-signal keymap_tree_changed
+signal menu_tree_changed
 
-func lookup_invoker(context:CyclopsOperatorContext, event:InputEvent)->KeymapActionMapper:
+func get_line_item(path:String)->MenuLineItem:
+	var parts:PackedStringArray = path.split(".")
+	return _get_line_item_split_paths(parts, 0)
+
+func _get_line_item_split_paths(path:PackedStringArray, index:int)->MenuLineItem:
 	return null
+	

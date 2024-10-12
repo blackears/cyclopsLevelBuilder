@@ -1,3 +1,5 @@
+# MIT License
+#
 # Copyright (c) 2023 Mark McKay
 # https://github.com/blackears/cyclopsLevelBuilder
 #
@@ -20,10 +22,5 @@
 # SOFTWARE.
 
 @tool
-extends Resource
-class_name KeymapItem
-
-signal keymap_tree_changed
-
-func lookup_invoker(context:CyclopsOperatorContext, event:InputEvent)->KeymapActionMapper:
-	return null
+extends MenuLineItem
+class_name MenuLineItemSeparator

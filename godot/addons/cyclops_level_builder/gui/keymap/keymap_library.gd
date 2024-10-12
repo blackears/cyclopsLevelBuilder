@@ -1,3 +1,5 @@
+# MIT License
+#
 # Copyright (c) 2023 Mark McKay
 # https://github.com/blackears/cyclopsLevelBuilder
 #
@@ -21,9 +23,7 @@
 
 @tool
 extends Resource
-class_name KeymapItem
+class_name KeymapLibrary
 
-signal keymap_tree_changed
-
-func lookup_invoker(context:CyclopsOperatorContext, event:InputEvent)->KeymapActionMapper:
-	return null
+var keymaps:Array[KeymapGroup]
+var active_keymap_index:int

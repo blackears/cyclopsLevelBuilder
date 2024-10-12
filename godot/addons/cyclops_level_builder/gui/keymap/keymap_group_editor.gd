@@ -577,4 +577,3 @@ func _on_tree_drop_tree_item(data:KeymapTreeControl.DndData, position:Vector2):
 		parent_drop_node.add_child(dragged_node, drop_index)
 
 	rebuild_display()
-
