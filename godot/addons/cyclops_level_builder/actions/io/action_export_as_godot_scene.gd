@@ -33,7 +33,8 @@ func _get_action_id():
 	return ACTION_ID
 
 func _init():
-	name = "Export As Godot Scene..."
+#	name = "Export As Godot Scene..."
+	pass
 
 func _execute():
 	

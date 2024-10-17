@@ -33,41 +33,43 @@
 extends MenuLineItem
 class_name MenuLineItemAction
 
-@export var enabled:bool = true:
-	set(value):
-		if enabled == value:
-			return
-			
-		enabled = value
-		emit_changed()
-		menu_tree_changed.emit()
+#@export var enabled:bool = true:
+	#set(value):
+		#if enabled == value:
+			#return
+			#
+		#enabled = value
+		##emit_changed()
+		#menu_tree_changed.emit()
 
-@export var name:String:
-	set(value):
-		if name == value:
-			return
-			
-		name = value
-		emit_changed()
-		menu_tree_changed.emit()
+@export var action:CyclopsAction
 
-@export var tooltip:String:
-	set(value):
-		if tooltip == value:
-			return
-			
-		tooltip = value
-		emit_changed()
-		menu_tree_changed.emit()
+#@export var name:String:
+	#set(value):
+		#if name == value:
+			#return
+			#
+		#name = value
+		#emit_changed()
+		#menu_tree_changed.emit()
 
-@export var keypress:KeymapKeypress:
-	set(value):
-		if keypress == value:
-			return
-			
-		keypress = value
-		emit_changed()
-		menu_tree_changed.emit()
+#@export var tooltip:String:
+	#set(value):
+		#if tooltip == value:
+			#return
+			#
+		#tooltip = value
+		##emit_changed()
+		#menu_tree_changed.emit()
+#
+#@export var keypress:KeymapKeypress:
+	#set(value):
+		#if keypress == value:
+			#return
+			#
+		#keypress = value
+		##emit_changed()
+		#menu_tree_changed.emit()
 
 #global id of action to run
 @export var action_id:String:
@@ -76,7 +78,7 @@ class_name MenuLineItemAction
 			return
 			
 		action_id = value
-		emit_changed()
+		#emit_changed()
 		menu_tree_changed.emit()
 
 @export var params:Dictionary:
@@ -85,7 +87,7 @@ class_name MenuLineItemAction
 			return
 			
 		params = value
-		emit_changed()
+		#emit_changed()
 		menu_tree_changed.emit()
 		
 		

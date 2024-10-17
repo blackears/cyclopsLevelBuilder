@@ -35,7 +35,8 @@ func _get_action_id():
 #func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
 	#super._init(plugin, "Export As Gltf...")
 func _init():
-	name = "Export As Gltf..."
+#	name = "Export As Gltf..."
+	pass
 
 func _execute():
 	if !wizard.get_parent():

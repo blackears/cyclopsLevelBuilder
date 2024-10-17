@@ -33,7 +33,8 @@ func _get_action_id():
 	return ACTION_ID
 
 func _init():
-	name = "Export As Cyclops File..."
+#	name = "Export As Cyclops File..."
+	pass
 
 #func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
 	#name = "Export As Cyclops File..."

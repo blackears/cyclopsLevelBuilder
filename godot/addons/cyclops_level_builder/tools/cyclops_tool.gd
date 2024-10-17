@@ -22,7 +22,7 @@
 # SOFTWARE.
 
 @tool
-extends RefCounted
+extends Node
 class_name CyclopsTool
 
 var builder:CyclopsLevelBuilder

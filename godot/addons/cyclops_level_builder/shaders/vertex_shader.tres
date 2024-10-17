@@ -56,5 +56,4 @@ void fragment() {
 	ALPHA_ANTIALIASING_EDGE = alpha_antialiasing_edge;
 	ALPHA_TEXTURE_COORDINATE = UV;
 }
-
 "

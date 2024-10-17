@@ -139,5 +139,3 @@ func _activate(builder:CyclopsLevelBuilder):
 	
 	cmd_duplicate.do_it()
 	
-
-

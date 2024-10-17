@@ -23,11 +23,13 @@
 
 @tool
 class_name CyclopsAction
-extends RefCounted
+extends Node
+
+@export_multiline var tooltip:String
 
 var plugin:CyclopsLevelBuilder
 
-var name:String = ""
+#var name:String = ""
 #var accellerator:Key = KEY_NONE
 
 func _get_action_id():

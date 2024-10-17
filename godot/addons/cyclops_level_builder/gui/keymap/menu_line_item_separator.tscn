@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://rfwc7ptt2jlp"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/keymap/menu_line_item_separator.gd" id="1_brqxc"]
+
+[node name="Separator" type="Node"]
+script = ExtResource("1_brqxc")

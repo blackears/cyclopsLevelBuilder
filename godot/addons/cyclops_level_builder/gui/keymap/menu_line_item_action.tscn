@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://3bofw5ja324o"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/keymap/menu_line_item_action.gd" id="1_xil7k"]
+
+[node name="MenuLineItemAction" type="Node"]
+script = ExtResource("1_xil7k")

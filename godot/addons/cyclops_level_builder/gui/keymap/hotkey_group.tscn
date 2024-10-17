@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://xw6bq4jaq65g"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/keymap/hotkey_group.gd" id="1_nj8cp"]
+
+[node name="HotkeyGroup" type="Node"]
+script = ExtResource("1_nj8cp")

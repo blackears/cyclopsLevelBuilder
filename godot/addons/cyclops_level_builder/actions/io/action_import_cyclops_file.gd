@@ -33,7 +33,8 @@ func _get_action_id():
 	return ACTION_ID
 
 func _init():
-	name = "Import Cyclops File..."
+#	name = "Import Cyclops File..."
+	pass
 
 func _execute():
 	if !wizard.get_parent():

@@ -26,6 +26,7 @@ class_name ActionSelectTool
 extends CyclopsAction
 
 @export var tool_id:String
+@export var tool:CyclopsTool
 
 const ACTION_ID:String = "select_tool"
 
@@ -36,10 +37,8 @@ func _get_action_id():
 	#super._init(plugin, "Select tool")
 
 func _init():
-	name = "Select tool"
+#	name = "Select tool"
+	pass
 
 func _execute():
 	plugin.switch_to_tool_id(tool_id)
-
-
-

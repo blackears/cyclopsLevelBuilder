@@ -25,47 +25,47 @@
 extends MenuLineItem
 class_name MenuLineItemGroup
 
-@export var name:String:
-	set(value):
-		if name == value:
-			return
-		name = value
-		emit_changed()
-		menu_tree_changed.emit()
+#@export var name:String:
+	#set(value):
+		#if name == value:
+			#return
+		#name = value
+		##emit_changed()
+		#menu_tree_changed.emit()
 		
 #@export var id:String
-@export var subgroup:bool = false:
-	set(value):
-		if subgroup == value:
-			return
-		subgroup = value
-		emit_changed()
-		menu_tree_changed.emit()
+#@export var subgroup:bool = false:
+	#set(value):
+		#if subgroup == value:
+			#return
+		#subgroup = value
+		##emit_changed()
+		#menu_tree_changed.emit()
+#
+#@export var children:Array[MenuLineItem]:
+	#set(value):
+##		print("Adding children ", value.size())
+		#if children == value:
+			#return
+		#
+		#for child in children:
+			#child.keymap_tree_changed.disconnect(on_child_changed)
+			#
+		#children = value
+#
+		#for child in children:
+			#child.keymap_tree_changed.connect(on_child_changed)
+			##print("child.name ", child.name)
+		#
+		##print("children ", children.size())
+		#
+		##emit_changed()
+		#menu_tree_changed.emit()
 
-@export var children:Array[MenuLineItem]:
-	set(value):
-#		print("Adding children ", value.size())
-		if children == value:
-			return
-		
-		for child in children:
-			child.keymap_tree_changed.disconnect(on_child_changed)
-			
-		children = value
-
-		for child in children:
-			child.keymap_tree_changed.connect(on_child_changed)
-			#print("child.name ", child.name)
-		
-		#print("children ", children.size())
-		
-		emit_changed()
-		menu_tree_changed.emit()
-
-func on_child_changed():
-	#print("on_child_changed() ", name)
-	menu_tree_changed.emit()
-	pass
+#func on_child_changed():
+	##print("on_child_changed() ", name)
+	#menu_tree_changed.emit()
+	#pass
 
 #func lookup_invoker(context:CyclopsOperatorContext, event:InputEvent)->KeymapActionMapper:
 	#for item:KeymapItem in children:
@@ -76,20 +76,20 @@ func on_child_changed():
 	#
 	#return null
 
-func add_child(item:MenuLineItem, index:int = 0):
-	children.insert(index, item)
-	item.keymap_tree_changed.connect(on_child_changed)
-	
-	menu_tree_changed.emit()
-	emit_changed()
-
-func remove_child(item:MenuLineItem):
-	var idx:int = children.find(item)
-	if idx == -1:
-		return
-		
-	children.remove_at(idx)
-	item.keymap_tree_changed.disconnect(on_child_changed)
-	
-	menu_tree_changed.emit()
-	emit_changed()
+#func add_child(item:MenuLineItem, index:int = 0):
+	#children.insert(index, item)
+	#item.keymap_tree_changed.connect(on_child_changed)
+	#
+	#menu_tree_changed.emit()
+	##emit_changed()
+#
+#func remove_child(item:MenuLineItem):
+	#var idx:int = children.find(item)
+	#if idx == -1:
+		#return
+		#
+	#children.remove_at(idx)
+	#item.keymap_tree_changed.disconnect(on_child_changed)
+	#
+	#menu_tree_changed.emit()
+	##emit_changed()

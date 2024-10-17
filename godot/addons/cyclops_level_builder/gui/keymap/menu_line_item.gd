@@ -22,7 +22,7 @@
 #Can be added to any container that has menus.  Each view should have it's own base menu.
 
 @tool
-extends Resource
+extends Node
 class_name MenuLineItem
 
 signal menu_tree_changed

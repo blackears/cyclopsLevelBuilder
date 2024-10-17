@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://d1q536mp4gca8"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/keymap/toolbar_button_ref.gd" id="1_rjt84"]
+
+[node name="ToolbarButton" type="Node"]
+script = ExtResource("1_rjt84")

@@ -102,6 +102,8 @@ var action_list:Array[CyclopsAction]
 
 var overlay_list:Array[CyclopsOverlayObject]
 
+const config_scene_path:String = "res://addons/cyclops_level_builder/gui/configuration.tscn"
+var config_scene:Node = preload(config_scene_path).instantiate()
 
 enum Mode { OBJECT, EDIT }
 var mode:Mode = Mode.OBJECT
@@ -150,6 +152,9 @@ func get_snapping_manager()->SnappingManager:
 	
 	return mgr
 
+func _ready():
+	add_child(config_scene)
+
 func _get_plugin_name()->String:
 	return "CyclopsLevelBuilder"
 
@@ -158,6 +163,7 @@ func _get_plugin_icon()->Texture2D:
 
 
 func _enter_tree():
+	
 	if FileAccess.file_exists(editor_cache_file):
 		#print(">> _enter_tree")
 		var text:String = FileAccess.get_file_as_string(editor_cache_file)
