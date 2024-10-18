@@ -58,86 +58,14 @@ func on_keymap_updated():
 	build_menu()
 	pass
 
-#func init_action(action:CyclopsAction)->CyclopsAction:
-	#action.plugin = editor_plugin
-	#return action
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	EditorInterface.get_selection().selection_changed.connect(_on_selection_changed)
 
-	#%Menu.clear()
-	#%Menu.add_action_item(init_action(ActionToolDuplicate.new()))
-	#%Menu.add_action_item(init_action(ActionMergeSelectedBlocks.new()))
-	#%Menu.add_action_item(init_action(ActionSubtractBlock.new()))
-	#%Menu.add_action_item(init_action(ActionIntersectBlock.new()))
-	#%Menu.add_action_item(init_action(ActionDeleteSelectedBlocks.new()))
-	#%Menu.add_action_item(init_action(ActionSnapToGrid.new()))
-	#%Menu.add_action_item(init_action(ActionMergeVerticesCenter.new()))
-	#%Menu.add_separator()
-	#%Menu.add_action_item(init_action(ActionConvertToMesh.new()))
-	#%Menu.add_action_item(init_action(ActionExportAsGltf.new()))
-	#%Menu.add_action_item(init_action(ActionExportAsGodotScene.new()))
-	#%Menu.add_action_item(init_action(ActionExportAsCyclops.new()))
-	#%Menu.add_separator()
-	#%Menu.add_action_item(init_action(ActionRotateX90Ccw.new()))
-	#%Menu.add_action_item(init_action(ActionRotateX90Cw.new()))
-	#%Menu.add_action_item(init_action(ActionRotateX180.new()))
-	#%Menu.add_action_item(init_action(ActionMirrorSelectionX2.new()))
-	#%Menu.add_separator()
-	#%Menu.add_action_item(init_action(ActionRotateY90Ccw.new()))
-	#%Menu.add_action_item(init_action(ActionRotateY90Cw.new()))
-	#%Menu.add_action_item(init_action(ActionRotateY180.new()))
-	#%Menu.add_action_item(init_action(ActionMirrorSelectionY2.new()))
-	#%Menu.add_separator()
-	#%Menu.add_action_item(init_action(ActionRotateZ90Ccw.new()))
-	#%Menu.add_action_item(init_action(ActionRotateZ90Cw.new()))
-	#%Menu.add_action_item(init_action(ActionRotateZ180.new()))
-	#%Menu.add_action_item(init_action(ActionMirrorSelectionZ.new()))
-	
-	#var global_scene = get_node("/root/CyclopsAutoload")
-#
 	update_grid()
 	
-#var prev_button_pressed: Button = null
-#
-#func _press_button_line(button: Button) -> void:
-	#if prev_button_pressed != null:
-		#var line := prev_button_pressed.get_node_or_null('line')
-		#if line != null:
-			#prev_button_pressed.remove_child(line)
-			#line.queue_free()
-		#prev_button_pressed = null
-	#
-	#var new_line := ColorRect.new()
-	#new_line.anchor_left = 0.05
-	#new_line.anchor_top = 0.9
-	#new_line.anchor_right = 0.95
-	#new_line.anchor_bottom = 0.94
-	#button.add_child(new_line)
-	#new_line.name = 'line'
-	#prev_button_pressed = button
-
-#var menu_map:Array[KeymapActionMapper]
 
 func build_menu():
-	#for child in %MenuBar.get_children():
-		#%MenuBar.remove_child(child)
-		#child.queue_free()
-	#
-	##menu_map.clear()
-	#
-	#if !editor_plugin:
-		#return
-	#
-	#var keymap_root:KeymapGroup = editor_plugin.keymap
-	#for child in keymap_root.children:
-		##var popup:PopupMenu = PopupMenu.new()
-		##popup.name = child.name
-		#
-		#var popup:PopupMenu = build_menu_recursive(child)
-		#%MenuBar.add_child(popup)
-	#
 	
 	###########
 	# This is the new rewrite of the action menu
@@ -165,46 +93,10 @@ func build_menu():
 						print("Action link not found: ", action.name)
 				)
 	
-#func build_menu_recursive(base_node:KeymapGroup)->PopupMenu:
-	#var action_list:Array[KeymapActionMapper]
-	#var base_menu:PopupMenu = PopupMenu.new()
-	#base_menu.name = base_node.name
-	#base_menu.id_pressed.connect(func(id:int):
-		#var ctx:CyclopsOperatorContext = CyclopsOperatorContext.new()
-		#ctx.plugin = editor_plugin
-		#action_list[id].invoke(ctx, null)
-		#)
-	#
-	#
-	#for child in base_node.children:
-		#if child is KeymapGroup:
-			#var child_menu:PopupMenu = build_menu_recursive(child)
-			#
-			#base_menu.add_child(child_menu)
-			#base_menu.add_submenu_item(child.name, child.name)
-#
-			##if child.subgroup:
-				##var child_menu:PopupMenu = build_menu_recursive(child)
-				##
-				##base_menu.add_child(child_menu)
-				##base_menu.add_submenu_item(child.name, child.name)
-##
-			##else:
-				##base_menu.add_separator()
-				##build_menu_recursive(base_menu, child)
-				#
-		#elif child is KeymapActionMapper:
-			#var am:KeymapActionMapper = child
-	#
-			#base_menu.add_item(am.name, action_list.size())
-			#action_list.append(am)
-##			menu_map.append(am)
-	#return base_menu
 
 func build_ui():
 	build_menu()
 	
-	#print("build_ui")
 	#Tools
 	for child in %ToolButtonContainer.get_children():
 		%ToolButtonContainer.remove_child(child)
@@ -218,20 +110,7 @@ func build_ui():
 	%bn_xray.button_pressed = editor_plugin.xray_mode
 		
 	set_process_input(true)
-	
-	#var active_block:CyclopsBlock = editor_plugin.get_active_block()
-	#for tool:CyclopsTool in editor_plugin.tool_list:
-		#if tool._show_in_toolbar() && tool._can_handle_object(active_block):
-			#var bn:ToolButton = preload("res://addons/cyclops_level_builder/gui/menu/tool_button.tscn").instantiate()
-			#bn.plugin = editor_plugin
-			#bn.tool_id = tool._get_tool_id()
-			#bn.icon = tool._get_tool_icon()
-			#if !bn.icon:
-				#bn.text = tool._get_tool_name()
-			#bn.tooltip_text = tool._get_tool_tooltip()
-			#
-			#%ToolButtonContainer.add_child(bn)
-	
+		
 	##########
 	# New tool buttons setup
 	var active_block:CyclopsBlock = editor_plugin.get_active_block()
@@ -241,7 +120,6 @@ func build_ui():
 			var tool:CyclopsTool = child.tool
 
 			if tool._show_in_toolbar() && tool._can_handle_object(active_block):
-#			if true:
 				var bn:ToolButton = preload("res://addons/cyclops_level_builder/gui/menu/tool_button.tscn").instantiate()
 				bn.plugin = editor_plugin
 				bn.tool_id = tool._get_tool_id()
