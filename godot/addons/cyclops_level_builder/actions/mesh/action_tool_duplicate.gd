@@ -37,6 +37,7 @@ func _get_action_id():
 func _init():
 	name = "Duplicate Selected Blocks"
 
-func _execute():
+func _execute(event:CyclopsActionEvent):
+	var plugin:CyclopsLevelBuilder = event.plugin
 #	plugin.switch_to_tool(ToolDuplicate.new())
 	plugin.switch_to_tool_id(ToolDuplicate.TOOL_ID)

@@ -38,7 +38,8 @@ func _init():
 #	name = "Export As Gltf..."
 	pass
 
-func _execute():
+func _execute(event:CyclopsActionEvent):
+	var plugin:CyclopsLevelBuilder = event.plugin
 	if !wizard.get_parent():
 		var base_control:Node = plugin.get_editor_interface().get_base_control()
 		base_control.add_child(wizard)

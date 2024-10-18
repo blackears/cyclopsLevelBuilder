@@ -22,35 +22,15 @@
 # SOFTWARE.
 
 @tool
-class_name ActionExportAsCyclops
-extends CyclopsAction
+extends PopupMenu
+class_name LineItemPopupMenu
 
-var wizard:ExporterCyclopsWizard = preload("res://addons/cyclops_level_builder/io/exporter/exporter_cyclops_wizard.tscn").instantiate()
+signal action_chosen(action:CyclopsAction)
 
-const ACTION_ID:String = "export_as_cyclops"
+var action_list:Array[CyclopsAction] = []
 
-func _get_action_id():
-	return ACTION_ID
+func _on_id_pressed(id: int) -> void:
+	action_chosen.emit(action_list[id])
 
-func _init():
-#	name = "Export As Cyclops File..."
-	pass
-
-#func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	#name = "Export As Cyclops File..."
-	#super._init(plugin, "Export As Cyclops File...")
-
-func _execute(event:CyclopsActionEvent):
-	var plugin:CyclopsLevelBuilder = event.plugin
-	
-	if !wizard.get_parent():
-		var base_control:Node = plugin.get_editor_interface().get_base_control()
-		base_control.add_child(wizard)
-	
-	wizard.plugin = plugin
-	wizard.popup_centered()
-	
-	
-	
-	
-	
+func on_submenu_action_chosen(action):
+	action_chosen.emit(action)

@@ -33,8 +33,8 @@ var builder:CyclopsLevelBuilder
 func _ready():
 	pass
 
-func _activate(builder:CyclopsLevelBuilder):
-	self.builder = builder
+func _activate(plugin:CyclopsLevelBuilder):
+	self.builder = plugin
 	
 func _deactivate():
 	pass
@@ -72,7 +72,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				#print("cyc tool X")
 				var action:ActionDeleteSelectedBlocks = ActionDeleteSelectedBlocks.new()
 				action.plugin = builder
-				action._execute()
+				action._execute(CyclopsActionEvent.new(builder))
 			
 			return true
 				

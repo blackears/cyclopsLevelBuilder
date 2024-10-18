@@ -22,35 +22,10 @@
 # SOFTWARE.
 
 @tool
-class_name ActionExportAsCyclops
-extends CyclopsAction
+extends Resource
+class_name CyclopsActionEvent
 
-var wizard:ExporterCyclopsWizard = preload("res://addons/cyclops_level_builder/io/exporter/exporter_cyclops_wizard.tscn").instantiate()
+var plugin:CyclopsLevelBuilder
 
-const ACTION_ID:String = "export_as_cyclops"
-
-func _get_action_id():
-	return ACTION_ID
-
-func _init():
-#	name = "Export As Cyclops File..."
-	pass
-
-#func _init(plugin:CyclopsLevelBuilder, name:String = "", accellerator:Key = KEY_NONE):
-	#name = "Export As Cyclops File..."
-	#super._init(plugin, "Export As Cyclops File...")
-
-func _execute(event:CyclopsActionEvent):
-	var plugin:CyclopsLevelBuilder = event.plugin
-	
-	if !wizard.get_parent():
-		var base_control:Node = plugin.get_editor_interface().get_base_control()
-		base_control.add_child(wizard)
-	
-	wizard.plugin = plugin
-	wizard.popup_centered()
-	
-	
-	
-	
-	
+func _init(_plugin:CyclopsLevelBuilder = null):
+	self.plugin = _plugin

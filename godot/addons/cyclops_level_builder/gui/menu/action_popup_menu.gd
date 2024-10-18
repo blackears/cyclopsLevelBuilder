@@ -21,6 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+##@deprecated
 @tool
 extends PopupMenu
 class_name ActionPopupMenu
@@ -33,15 +34,14 @@ func _ready():
 func add_action_item(action:CyclopsAction):
 #	var id:int = action_map.size()
 	var id:int = action_map.size() + 1000
-#	add_item(action.name, id, action.accellerator)
-	add_item(action.name, id)
+#	add_item(action.name, id)
 	action_map[id] = action
 
 #func add_separator(label:String, id:int = -1):
 #	pass
 
-func  on_id_pressed(id:int):
+func on_id_pressed(id:int):
 	var action:CyclopsAction = action_map[id]
-	action._execute()
+	action._execute(null)
 	
 	

@@ -28,7 +28,7 @@ class_name MainToolbar
 var editor_plugin:CyclopsLevelBuilder
 
 func init_action(action:CyclopsAction)->CyclopsAction:
-	action.plugin = editor_plugin
+	#action.plugin = editor_plugin
 	return action
 
 # Called when the node enters the scene tree for the first time.

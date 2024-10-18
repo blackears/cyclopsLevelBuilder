@@ -20,75 +20,31 @@ script = ExtResource("1_o71fd")
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="MenuBar" type="MenuBar" parent="HBoxContainer"]
+[node name="MenuBar2" type="MenuBar" parent="HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="MenuBar" type="MenuBar" parent="HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
 [node name="MenuBar_old" type="MenuBar" parent="HBoxContainer"]
+visible = false
 layout_mode = 2
 prefer_global_menu = false
 
 [node name="Menu" type="PopupMenu" parent="HBoxContainer/MenuBar_old"]
 unique_name_in_owner = true
-item_count = 27
-item_0/text = "Duplicate Selected Blocks"
-item_0/id = 1000
-item_1/text = "Merge Selected Blocks"
-item_1/id = 1001
-item_2/text = "Subtract Block"
-item_2/id = 1002
-item_3/text = "Intersect Blocks"
-item_3/id = 1003
-item_4/text = "Delete Selected Blocks"
-item_4/id = 1004
-item_5/text = "Snap to grid"
-item_5/id = 1005
-item_6/text = "Merge Vertices Center"
-item_6/id = 1006
-item_7/text = ""
-item_7/id = -1
-item_7/separator = true
-item_8/text = "Convert To Godot Mesh"
-item_8/id = 1007
-item_9/text = "Export As Gltf..."
-item_9/id = 1008
-item_10/text = "Export As Godot Scene..."
-item_10/id = 1009
-item_11/text = "Export As Cyclops File..."
-item_11/id = 1010
-item_12/text = ""
-item_12/id = -1
-item_12/separator = true
-item_13/text = "Rotate 90 Ccw X"
-item_13/id = 1011
-item_14/text = "Rotate 90 Cw X"
-item_14/id = 1012
-item_15/text = "Rotate 180 X"
-item_15/id = 1013
-item_16/text = "Mirror Selection X"
-item_16/id = 1014
-item_17/text = ""
-item_17/id = -1
-item_17/separator = true
-item_18/text = "Rotate 90 Ccw Y"
-item_18/id = 1015
-item_19/text = "Rotate 90 Cw Y"
-item_19/id = 1016
-item_20/text = "Rotate 180 Y"
-item_20/id = 1017
-item_21/text = "Mirror Selection Y"
-item_21/id = 1018
-item_22/text = ""
-item_22/id = -1
-item_22/separator = true
-item_23/text = "Rotate 90 Ccw Z"
-item_23/id = 1019
-item_24/text = "Rotate 90 Cw Z"
-item_24/id = 1020
-item_25/text = "Rotate 180 Z"
-item_25/id = 1021
-item_26/text = "Mirror Selection Z"
-item_26/id = 1022
+item_count = 4
+item_0/id = -1
+item_0/separator = true
+item_1/id = -1
+item_1/separator = true
+item_2/id = -1
+item_2/separator = true
+item_3/id = -1
+item_3/separator = true
 script = ExtResource("2_ni0c8")
 
 [node name="ToolButtonContainer" type="HBoxContainer" parent="HBoxContainer"]
@@ -111,10 +67,9 @@ tooltip_text = "Snapping system"
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "How the mesh is shown in the viewport."
-item_count = 3
 selected = 1
+item_count = 3
 popup/item_0/text = "Wireframe"
-popup/item_0/id = 0
 popup/item_1/text = "Mesh"
 popup/item_1/id = 1
 popup/item_2/text = "Materials"

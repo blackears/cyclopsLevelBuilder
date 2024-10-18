@@ -36,7 +36,8 @@ func _get_action_id():
 func _init():
 	name = "Merge Selected Blocks"
 
-func _execute():
+func _execute(event:CyclopsActionEvent):
+	var plugin:CyclopsLevelBuilder = event.plugin
 	var blocks:Array[CyclopsBlock] = plugin.get_selected_blocks()
 	if blocks.is_empty():
 		return

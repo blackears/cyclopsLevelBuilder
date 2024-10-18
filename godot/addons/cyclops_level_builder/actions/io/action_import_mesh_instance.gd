@@ -34,7 +34,8 @@ func _init():
 #	name = "Import Godot MeshInstance..."
 	pass
 
-func _execute():
+func _execute(event:CyclopsActionEvent):
+	var plugin:CyclopsLevelBuilder = event.plugin
 	var nodes:Array[Node] = plugin.get_editor_interface().get_selection().get_selected_nodes()
 
 	if nodes.is_empty():

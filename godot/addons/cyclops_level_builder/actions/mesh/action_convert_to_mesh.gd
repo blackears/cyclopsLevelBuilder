@@ -37,7 +37,8 @@ func _get_action_id():
 func _init():
 	name = "Convert To Godot Mesh"
 
-func _execute():
+func _execute(event:CyclopsActionEvent):
+	var plugin:CyclopsLevelBuilder = event.plugin
 	var root:Node = plugin.get_editor_interface().get_edited_scene_root()
 	
 	var ed_sel:EditorSelection = EditorInterface.get_selection()

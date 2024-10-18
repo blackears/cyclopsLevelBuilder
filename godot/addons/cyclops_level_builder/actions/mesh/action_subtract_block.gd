@@ -37,7 +37,8 @@ func _get_action_id():
 func _init():
 	name = "Subtract Block"
 
-func _execute():
+func _execute(event:CyclopsActionEvent):
+	var plugin:CyclopsLevelBuilder = event.plugin
 	var blocks:Array[CyclopsBlock] = plugin.get_selected_blocks()
 	if blocks.size() < 2:
 		plugin.log("Not enough objects selected")

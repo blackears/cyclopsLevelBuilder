@@ -37,7 +37,8 @@ func _init():
 	name = "Snap to grid"
 
 
-func _execute():
+func _execute(event:CyclopsActionEvent):
+	var plugin:CyclopsLevelBuilder = event.plugin
 	var blocks:Array[CyclopsBlock] = plugin.get_selected_blocks()
 	if blocks.is_empty():
 		return
@@ -61,5 +62,3 @@ func _execute():
 	
 	var undo:EditorUndoRedoManager = plugin.get_undo_redo()
 	cmd.add_to_undo_manager(undo)
-
-

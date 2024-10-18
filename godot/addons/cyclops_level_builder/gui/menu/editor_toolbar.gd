@@ -58,42 +58,42 @@ func on_keymap_updated():
 	build_menu()
 	pass
 
-func init_action(action:CyclopsAction)->CyclopsAction:
-	action.plugin = editor_plugin
-	return action
+#func init_action(action:CyclopsAction)->CyclopsAction:
+	#action.plugin = editor_plugin
+	#return action
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	EditorInterface.get_selection().selection_changed.connect(_on_selection_changed)
 
-	%Menu.clear()
-	%Menu.add_action_item(init_action(ActionToolDuplicate.new()))
-	%Menu.add_action_item(init_action(ActionMergeSelectedBlocks.new()))
-	%Menu.add_action_item(init_action(ActionSubtractBlock.new()))
-	%Menu.add_action_item(init_action(ActionIntersectBlock.new()))
-	%Menu.add_action_item(init_action(ActionDeleteSelectedBlocks.new()))
-	%Menu.add_action_item(init_action(ActionSnapToGrid.new()))
-	%Menu.add_action_item(init_action(ActionMergeVerticesCenter.new()))
-	%Menu.add_separator()
-	%Menu.add_action_item(init_action(ActionConvertToMesh.new()))
-	%Menu.add_action_item(init_action(ActionExportAsGltf.new()))
-	%Menu.add_action_item(init_action(ActionExportAsGodotScene.new()))
-	%Menu.add_action_item(init_action(ActionExportAsCyclops.new()))
-	%Menu.add_separator()
-	%Menu.add_action_item(init_action(ActionRotateX90Ccw.new()))
-	%Menu.add_action_item(init_action(ActionRotateX90Cw.new()))
-	%Menu.add_action_item(init_action(ActionRotateX180.new()))
-	%Menu.add_action_item(init_action(ActionMirrorSelectionX2.new()))
-	%Menu.add_separator()
-	%Menu.add_action_item(init_action(ActionRotateY90Ccw.new()))
-	%Menu.add_action_item(init_action(ActionRotateY90Cw.new()))
-	%Menu.add_action_item(init_action(ActionRotateY180.new()))
-	%Menu.add_action_item(init_action(ActionMirrorSelectionY2.new()))
-	%Menu.add_separator()
-	%Menu.add_action_item(init_action(ActionRotateZ90Ccw.new()))
-	%Menu.add_action_item(init_action(ActionRotateZ90Cw.new()))
-	%Menu.add_action_item(init_action(ActionRotateZ180.new()))
-	%Menu.add_action_item(init_action(ActionMirrorSelectionZ.new()))
+	#%Menu.clear()
+	#%Menu.add_action_item(init_action(ActionToolDuplicate.new()))
+	#%Menu.add_action_item(init_action(ActionMergeSelectedBlocks.new()))
+	#%Menu.add_action_item(init_action(ActionSubtractBlock.new()))
+	#%Menu.add_action_item(init_action(ActionIntersectBlock.new()))
+	#%Menu.add_action_item(init_action(ActionDeleteSelectedBlocks.new()))
+	#%Menu.add_action_item(init_action(ActionSnapToGrid.new()))
+	#%Menu.add_action_item(init_action(ActionMergeVerticesCenter.new()))
+	#%Menu.add_separator()
+	#%Menu.add_action_item(init_action(ActionConvertToMesh.new()))
+	#%Menu.add_action_item(init_action(ActionExportAsGltf.new()))
+	#%Menu.add_action_item(init_action(ActionExportAsGodotScene.new()))
+	#%Menu.add_action_item(init_action(ActionExportAsCyclops.new()))
+	#%Menu.add_separator()
+	#%Menu.add_action_item(init_action(ActionRotateX90Ccw.new()))
+	#%Menu.add_action_item(init_action(ActionRotateX90Cw.new()))
+	#%Menu.add_action_item(init_action(ActionRotateX180.new()))
+	#%Menu.add_action_item(init_action(ActionMirrorSelectionX2.new()))
+	#%Menu.add_separator()
+	#%Menu.add_action_item(init_action(ActionRotateY90Ccw.new()))
+	#%Menu.add_action_item(init_action(ActionRotateY90Cw.new()))
+	#%Menu.add_action_item(init_action(ActionRotateY180.new()))
+	#%Menu.add_action_item(init_action(ActionMirrorSelectionY2.new()))
+	#%Menu.add_separator()
+	#%Menu.add_action_item(init_action(ActionRotateZ90Ccw.new()))
+	#%Menu.add_action_item(init_action(ActionRotateZ90Cw.new()))
+	#%Menu.add_action_item(init_action(ActionRotateZ180.new()))
+	#%Menu.add_action_item(init_action(ActionMirrorSelectionZ.new()))
 	
 	#var global_scene = get_node("/root/CyclopsAutoload")
 #
@@ -121,22 +121,47 @@ func _ready():
 #var menu_map:Array[KeymapActionMapper]
 
 func build_menu():
-	for child in %MenuBar.get_children():
-		%MenuBar.remove_child(child)
+	#for child in %MenuBar.get_children():
+		#%MenuBar.remove_child(child)
+		#child.queue_free()
+	#
+	##menu_map.clear()
+	#
+	#if !editor_plugin:
+		#return
+	#
+	#var keymap_root:KeymapGroup = editor_plugin.keymap
+	#for child in keymap_root.children:
+		##var popup:PopupMenu = PopupMenu.new()
+		##popup.name = child.name
+		#
+		#var popup:PopupMenu = build_menu_recursive(child)
+		#%MenuBar.add_child(popup)
+	#
+	
+	###########
+	# This is the new rewrite of the action menu
+	
+	for child in %MenuBar2.get_children():
+		%MenuBar2.remove_child(child)
 		child.queue_free()
 	
-	#menu_map.clear()
-	
-	if !editor_plugin:
-		return
-	
-	var keymap_root:KeymapGroup = editor_plugin.keymap
-	for child in keymap_root.children:
-		#var popup:PopupMenu = PopupMenu.new()
-		#popup.name = child.name
-		
-		var popup:PopupMenu = build_menu_recursive(child)
-		%MenuBar.add_child(popup)
+	var menu_root = editor_plugin.config_scene.get_node("Views/View3D/Menu")
+	for child in menu_root.get_children():
+		var event:CyclopsActionEvent = CyclopsActionEvent.new()
+		event.plugin = editor_plugin
+			
+		if child is MenuLineItemGroup:
+			var popup:LineItemPopupMenu = child.create_popup_menu()
+			%MenuBar2.add_child(popup)
+			
+			popup.action_chosen.connect(
+				func(action:CyclopsAction): \
+					if action: \
+						action._execute(event) \
+					else: \
+						print("Action link not found: ", action.name)
+				)
 	
 func build_menu_recursive(base_node:KeymapGroup)->PopupMenu:
 	var action_list:Array[KeymapActionMapper]

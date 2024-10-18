@@ -314,17 +314,17 @@ func load_config():
 	var config_dict:Dictionary = JSON.parse_string(text)
 		
 	#Load actions
-	action_list.clear()
-
-	for path in config_dict["actions"]:
-		var script:Script = load(path)
-
-		var act:CyclopsAction = script.new()
-		act.plugin = self
-		action_list.append(act)
-
-	for act in action_list:
-		act._ready()
+	#action_list.clear()
+#
+	#for path in config_dict["actions"]:
+		#var script:Script = load(path)
+#
+		#var act:CyclopsAction = script.new()
+		#act.plugin = self
+		#action_list.append(act)
+#
+	#for act in action_list:
+		#act._ready()
 	
 	#Load tools
 	tool_list.clear()

@@ -40,5 +40,6 @@ func _init():
 #	name = "Select tool"
 	pass
 
-func _execute():
+func _execute(event:CyclopsActionEvent):
+	var plugin:CyclopsLevelBuilder = event.plugin
 	plugin.switch_to_tool_id(tool_id)

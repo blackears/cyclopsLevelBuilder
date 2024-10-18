@@ -25,6 +25,33 @@
 extends MenuLineItem
 class_name MenuLineItemGroup
 
+func create_popup_menu()->LineItemPopupMenu:
+	var menu:LineItemPopupMenu = _build_menu_recursive(self)
+	menu.name = name
+	return menu
+	
+
+func _build_menu_recursive(group:MenuLineItemGroup)->LineItemPopupMenu:
+	var menu:LineItemPopupMenu = preload("res://addons/cyclops_level_builder/gui/keymap/line_item_popup_menu.tscn").instantiate()
+	
+	for child in group.get_children():
+		if child is MenuLineItemGroup:
+			var submenu = _build_menu_recursive(child)
+			menu.add_submenu_node_item(child.name, submenu)
+			submenu.action_chosen.connect(func(action):menu.on_submenu_action_chosen(action))
+			
+		elif child is MenuLineItemAction:
+			var item:MenuLineItemAction = child
+			var id:int = menu.action_list.size()
+			
+			menu.add_item(child.name, id)
+			menu.action_list.append(child.action)
+			
+		if child is MenuLineItemSeparator:
+			menu.add_separator()
+
+	return menu
+
 #@export var name:String:
 	#set(value):
 		#if name == value:

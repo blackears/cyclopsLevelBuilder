@@ -22,12 +22,12 @@
 # SOFTWARE.
 
 @tool
-class_name CyclopsAction
 extends Node
+class_name CyclopsAction
 
 @export_multiline var tooltip:String
 
-var plugin:CyclopsLevelBuilder
+#var plugin:CyclopsLevelBuilder
 
 #var name:String = ""
 #var accellerator:Key = KEY_NONE
@@ -43,10 +43,14 @@ func _ready():
 	#self.name= name
 	#self.accellerator = accellerator
 
+#func _run(event:CyclopsActionEvent):
+	#pass
+
 func invoke(context:CyclopsOperatorContext, event:InputEvent):
-	_execute()
+	#_execute()
+	pass
 	
-func _execute():
+func _execute(event:CyclopsActionEvent):
 	pass
 
 	
