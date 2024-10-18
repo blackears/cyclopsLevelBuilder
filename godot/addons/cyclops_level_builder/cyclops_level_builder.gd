@@ -70,7 +70,7 @@ var convex_face_editor_dock:ConvexFaceEdtiorViewport
 var tool_properties_dock:ToolPropertiesDock
 var snapping_properties_dock:SnappingPropertiesDock
 var cyclops_console_dock:CyclopsConsole
-var main_toolbar:MainToolbar
+#var main_toolbar:MainToolbar
 var editor_toolbar:EditorToolbar
 var upgrade_cyclops_blocks_toolbar:UpgradeCyclopsBlocksToolbar
 var activated:bool = false
@@ -220,8 +220,8 @@ func _enter_tree():
 	cyclops_console_dock = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/cyclops_console.tscn").instantiate()
 	cyclops_console_dock.editor_plugin = self
 	
-	main_toolbar = preload("gui/menu/main_toolbar.tscn").instantiate()
-	main_toolbar.editor_plugin = self
+	#main_toolbar = preload("gui/menu/main_toolbar.tscn").instantiate()
+	#main_toolbar.editor_plugin = self
 	
 	editor_toolbar = preload("gui/menu/editor_toolbar.tscn").instantiate()
 	editor_toolbar.editor_plugin = self
@@ -231,7 +231,7 @@ func _enter_tree():
 
 	add_control_to_bottom_panel(cyclops_console_dock, "Cyclops")
 	
-	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, main_toolbar)
+#	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, main_toolbar)
 
 	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
 	add_control_to_bottom_panel(material_dock, "Materials")
@@ -284,7 +284,7 @@ func _exit_tree():
 	remove_custom_type("CyclopsConvexBlockBody")
 	
 	remove_control_from_bottom_panel(cyclops_console_dock)
-	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, main_toolbar)
+#	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, main_toolbar)
 	remove_control_from_bottom_panel(material_dock)
 	
 	if activated:
@@ -304,7 +304,7 @@ func _exit_tree():
 	overlays_dock.queue_free()
 	snapping_properties_dock.queue_free()
 	cyclops_console_dock.queue_free()
-	main_toolbar.queue_free()
+#	main_toolbar.queue_free()
 	editor_toolbar.queue_free()
 	upgrade_cyclops_blocks_toolbar.queue_free()
 

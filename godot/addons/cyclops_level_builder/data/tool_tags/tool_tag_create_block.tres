@@ -20,14 +20,6 @@ tooltip = "Block
 
 Click and drag in empty space or on unselected block to create a new block.
 
-Click and drag on a selected block to move it in the XZ plane.  Hold Alt to drag along the Y axis.
-
-Ctrl-click and drag on the face of a block to move the face along its normal.
-
-Escape or right click to cancel drawing the block.
-
-Click on block to select it.  Shift-Click toggles, Ctrl-Click adds and Shift-Ctrl Click subtracts.
-
-Click in empty space to clear selection."
+Escape or right click to cancel drawing the block."
 icon = ExtResource("1_qojcl")
 tool_script = ExtResource("3_52q4h")

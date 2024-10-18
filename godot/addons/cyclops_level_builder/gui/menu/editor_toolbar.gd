@@ -141,6 +141,8 @@ func build_menu():
 	
 	###########
 	# This is the new rewrite of the action menu
+	if !editor_plugin:
+		return
 	
 	for child in %MenuBar2.get_children():
 		%MenuBar2.remove_child(child)
@@ -163,43 +165,45 @@ func build_menu():
 						print("Action link not found: ", action.name)
 				)
 	
-func build_menu_recursive(base_node:KeymapGroup)->PopupMenu:
-	var action_list:Array[KeymapActionMapper]
-	var base_menu:PopupMenu = PopupMenu.new()
-	base_menu.name = base_node.name
-	base_menu.id_pressed.connect(func(id:int):
-		var ctx:CyclopsOperatorContext = CyclopsOperatorContext.new()
-		ctx.plugin = editor_plugin
-		action_list[id].invoke(ctx, null)
-		)
-	
-	
-	for child in base_node.children:
-		if child is KeymapGroup:
-			var child_menu:PopupMenu = build_menu_recursive(child)
-			
-			base_menu.add_child(child_menu)
-			base_menu.add_submenu_item(child.name, child.name)
-
-			#if child.subgroup:
-				#var child_menu:PopupMenu = build_menu_recursive(child)
-				#
-				#base_menu.add_child(child_menu)
-				#base_menu.add_submenu_item(child.name, child.name)
+#func build_menu_recursive(base_node:KeymapGroup)->PopupMenu:
+	#var action_list:Array[KeymapActionMapper]
+	#var base_menu:PopupMenu = PopupMenu.new()
+	#base_menu.name = base_node.name
+	#base_menu.id_pressed.connect(func(id:int):
+		#var ctx:CyclopsOperatorContext = CyclopsOperatorContext.new()
+		#ctx.plugin = editor_plugin
+		#action_list[id].invoke(ctx, null)
+		#)
+	#
+	#
+	#for child in base_node.children:
+		#if child is KeymapGroup:
+			#var child_menu:PopupMenu = build_menu_recursive(child)
+			#
+			#base_menu.add_child(child_menu)
+			#base_menu.add_submenu_item(child.name, child.name)
 #
-			#else:
-				#base_menu.add_separator()
-				#build_menu_recursive(base_menu, child)
-				
-		elif child is KeymapActionMapper:
-			var am:KeymapActionMapper = child
-	
-			base_menu.add_item(am.name, action_list.size())
-			action_list.append(am)
-#			menu_map.append(am)
-	return base_menu
+			##if child.subgroup:
+				##var child_menu:PopupMenu = build_menu_recursive(child)
+				##
+				##base_menu.add_child(child_menu)
+				##base_menu.add_submenu_item(child.name, child.name)
+##
+			##else:
+				##base_menu.add_separator()
+				##build_menu_recursive(base_menu, child)
+				#
+		#elif child is KeymapActionMapper:
+			#var am:KeymapActionMapper = child
+	#
+			#base_menu.add_item(am.name, action_list.size())
+			#action_list.append(am)
+##			menu_map.append(am)
+	#return base_menu
 
 func build_ui():
+	build_menu()
+	
 	#print("build_ui")
 	#Tools
 	for child in %ToolButtonContainer.get_children():
@@ -215,19 +219,40 @@ func build_ui():
 		
 	set_process_input(true)
 	
+	#var active_block:CyclopsBlock = editor_plugin.get_active_block()
+	#for tool:CyclopsTool in editor_plugin.tool_list:
+		#if tool._show_in_toolbar() && tool._can_handle_object(active_block):
+			#var bn:ToolButton = preload("res://addons/cyclops_level_builder/gui/menu/tool_button.tscn").instantiate()
+			#bn.plugin = editor_plugin
+			#bn.tool_id = tool._get_tool_id()
+			#bn.icon = tool._get_tool_icon()
+			#if !bn.icon:
+				#bn.text = tool._get_tool_name()
+			#bn.tooltip_text = tool._get_tool_tooltip()
+			#
+			#%ToolButtonContainer.add_child(bn)
+	
+	##########
+	# New tool buttons setup
 	var active_block:CyclopsBlock = editor_plugin.get_active_block()
-	for tool:CyclopsTool in editor_plugin.tool_list:
-		if tool._show_in_toolbar() && tool._can_handle_object(active_block):
-			var bn:ToolButton = preload("res://addons/cyclops_level_builder/gui/menu/tool_button.tscn").instantiate()
-			bn.plugin = editor_plugin
-			bn.tool_id = tool._get_tool_id()
-			bn.icon = tool._get_tool_icon()
-			if !bn.icon:
-				bn.text = tool._get_tool_name()
-			bn.tooltip_text = tool._get_tool_tooltip()
-			
-			%ToolButtonContainer.add_child(bn)
-		
+	var menu_root = editor_plugin.config_scene.get_node("Views/View3D/Toolbar")
+	for child in menu_root.get_children():
+		if child is ToolbarButtonRef:
+			var tool:CyclopsTool = child.tool
+
+			if tool._show_in_toolbar() && tool._can_handle_object(active_block):
+#			if true:
+				var bn:ToolButton = preload("res://addons/cyclops_level_builder/gui/menu/tool_button.tscn").instantiate()
+				bn.plugin = editor_plugin
+				bn.tool_id = tool._get_tool_id()
+				bn.icon = tool._get_tool_icon()
+				if !bn.icon:
+					bn.text = tool._get_tool_name()
+				bn.tooltip_text = tool._get_tool_tooltip()
+				
+				%ToolButtonContainer.add_child(bn)
+
+	
 	%display_mode.select(editor_plugin.display_mode)
 	
 	#Snapping
@@ -238,7 +263,6 @@ func build_ui():
 		else:
 			%snap_options.add_item(tag.name)
 
-	build_menu()
 
 func update_grid():
 	if !editor_plugin:

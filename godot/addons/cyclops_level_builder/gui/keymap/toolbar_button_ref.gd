@@ -1,5 +1,6 @@
 @tool
 extends Node
+class_name ToolbarButtonRef
 
 @export var tool:CyclopsTool
 
