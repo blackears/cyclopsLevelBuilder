@@ -416,55 +416,66 @@ action = NodePath("../../../../../../Actions/Mesh/Transforms/Rotate 90 Cw Z")
 [node name="Rotate 180 Z" parent="Views/View3D/Menu/File/Transforms" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../../Actions/Mesh/Transforms/Rotate 180 Z")
 
-[node name="HotkeyGroup" parent="Views/View3D" instance=ExtResource("29_erm3v")]
+[node name="Hotkeys" parent="Views/View3D" instance=ExtResource("29_erm3v")]
 
-[node name="sel tool move" parent="Views/View3D/HotkeyGroup" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="delete selection" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+editor_description = "X"
+key = 88
+action = NodePath("../../../../Actions/Mesh/Delete Selected Blocks")
+
+[node name="duplicate selection" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+editor_description = "D + shift"
+key = 68
+shift = true
+action = NodePath("../../../../Actions/Mesh/Select Tools/select tool duplicate")
+
+[node name="sel tool move" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "G"
 key = 71
 action = NodePath("../../../../Actions/Mesh/Select Tools/select tool move")
 
-[node name="sel tool rotate" parent="Views/View3D/HotkeyGroup" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="sel tool rotate" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "R"
 key = 82
 action = NodePath("../../../../Actions/Mesh/Select Tools/select tool rotate")
 
-[node name="sel tool block" parent="Views/View3D/HotkeyGroup" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="sel tool block" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "1 + alt"
 key = 49
 alt = true
 action = NodePath("../../../../Actions/Mesh/Select Tools/select tool block")
 
-[node name="sel tool cylinder" parent="Views/View3D/HotkeyGroup" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="sel tool cylinder" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "2 + alt"
 key = 50
 alt = true
 action = NodePath("../../../../Actions/Mesh/Select Tools/select tool cylinder")
 
-[node name="sel tool prism" parent="Views/View3D/HotkeyGroup" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="sel tool prism" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "3 + alt"
 key = 51
 alt = true
 action = NodePath("../../../../Actions/Mesh/Select Tools/select tool prism")
 
-[node name="sel tool stairs" parent="Views/View3D/HotkeyGroup" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="sel tool stairs" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "4 + alt"
 key = 52
 alt = true
 action = NodePath("../../../../Actions/Mesh/Select Tools/select tool stairs")
 
-[node name="sel tool edit vertices" parent="Views/View3D/HotkeyGroup" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="sel tool edit vertices" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "5 + alt"
 key = 53
 alt = true
 action = NodePath("../../../../Actions/Mesh/Select Tools/select tool edit vertex")
 
-[node name="sel tool edit edges" parent="Views/View3D/HotkeyGroup" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="sel tool edit edges" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "6 + alt"
 key = 54
 alt = true
 action = NodePath("../../../../Actions/Mesh/Select Tools/select tool edit edge")
 
-[node name="sel tool edit faces" parent="Views/View3D/HotkeyGroup" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="sel tool edit faces" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "7 + alt"
 key = 55
 alt = true

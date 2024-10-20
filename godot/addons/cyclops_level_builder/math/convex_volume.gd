@@ -1478,4 +1478,3 @@ func get_camera_facing_edges(viewport_camera:Camera3D, local_to_world:Transform3
 	
 	
 	return result
-

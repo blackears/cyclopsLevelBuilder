@@ -87,4 +87,3 @@ func undo_it():
 	for path in blocks_to_duplicate:
 		var block:CyclopsBlock = builder.get_node(path)
 		#block.selected = true
-

@@ -23,11 +23,27 @@
 
 @tool
 extends Node
+class_name HotkeyGroup
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
 
+func lookup_action(event:InputEvent)->CyclopsAction:
+	if event is InputEventKey:
+		var e:InputEventKey = event
+		
+#		print("keycode ", e.keycode)
+		for child in get_children():
+			if child is HotkeyItem:
+#				if child.key == e.keycode:
+				if child.key == e.keycode \
+					&& child.shift == e.shift_pressed \
+					&& child.ctrl == e.ctrl_pressed \
+					&& child.alt == e.alt_pressed:
+						return child.action
+	
+	return null
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

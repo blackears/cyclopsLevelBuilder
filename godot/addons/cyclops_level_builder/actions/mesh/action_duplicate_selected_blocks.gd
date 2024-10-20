@@ -38,6 +38,7 @@ func _init():
 
 func _execute(event:CyclopsActionEvent):
 	var plugin:CyclopsLevelBuilder = event.plugin
+	
 	var blocks:Array[CyclopsBlock] = plugin.get_selected_blocks()
 	if blocks.is_empty():
 		return
@@ -47,7 +48,8 @@ func _execute(event:CyclopsActionEvent):
 	
 	for block in blocks:
 		cmd.blocks_to_duplicate.append(block.get_path())
-		
+	
+	cmd.blocks_root_path = blocks[0].get_parent().get_path()
 	
 	var undo:EditorUndoRedoManager = plugin.get_undo_redo()
 	cmd.add_to_undo_manager(undo)

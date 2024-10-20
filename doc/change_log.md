@@ -11,6 +11,8 @@
 * Creating overlay system to draw overlays on viewport.
 * Creating overlay to display edge lengths.
 * Now using config file to organize loading load tools and actions.
+* New system for organizing actions and tools.
+* Moving most of what was in CyclopsAutoload to other objects.
 
 
 ### v1.0.4

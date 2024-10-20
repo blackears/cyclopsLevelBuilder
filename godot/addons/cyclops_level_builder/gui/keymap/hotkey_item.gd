@@ -23,6 +23,7 @@
 
 @tool
 extends Node
+class_name HotkeyItem
 
 ## Key to press
 @export var key:Key:

@@ -103,7 +103,7 @@ var action_list:Array[CyclopsAction]
 var overlay_list:Array[CyclopsOverlayObject]
 
 const config_scene_path:String = "res://addons/cyclops_level_builder/gui/configuration.tscn"
-var config_scene:Node = preload(config_scene_path).instantiate()
+var config_scene:Node
 
 enum Mode { OBJECT, EDIT }
 var mode:Mode = Mode.OBJECT
@@ -153,6 +153,7 @@ func get_snapping_manager()->SnappingManager:
 	return mgr
 
 func _ready():
+	config_scene = preload(config_scene_path).instantiate()
 	add_child(config_scene)
 
 func _get_plugin_name()->String:
@@ -473,6 +474,9 @@ func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent)->int:
 	var sel_nodes:Array[Node] = EditorInterface.get_selection().get_selected_nodes()
 	var active_node:Node = null if sel_nodes.is_empty() else sel_nodes.back()
 	
+	#if event is InputEventKey:
+		#print("processing key ", event)
+	
 	if active_tool && active_tool._can_handle_object(active_node):
 		var result:bool = active_tool._gui_input(viewport_camera, event)
 		active_tool._draw_tool(viewport_camera)
@@ -483,16 +487,16 @@ func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent)->int:
 	#print("_forward_3d_gui_input")
 
 	#Check default keymap
-	if event is InputEventKey && event.is_pressed():
-		var context:CyclopsOperatorContext = CyclopsOperatorContext.new()
-		context.plugin = self
-	
-		var invoker:KeymapActionMapper = keymap.lookup_invoker(context, event)
-		if invoker:
-			invoker.invoke(context, event)
-			#var keymap_action:CyclopsAction = keymap.lookup_invoker(context, event)
-			#keymap_action._execute()
-			return EditorPlugin.AFTER_GUI_INPUT_STOP
+	#if event is InputEventKey && event.is_pressed():
+		#var context:CyclopsOperatorContext = CyclopsOperatorContext.new()
+		#context.plugin = self
+	#
+		#var invoker:KeymapActionMapper = keymap.lookup_invoker(context, event)
+		#if invoker:
+			#invoker.invoke(context, event)
+			##var keymap_action:CyclopsAction = keymap.lookup_invoker(context, event)
+			##keymap_action._execute()
+			#return EditorPlugin.AFTER_GUI_INPUT_STOP
 	
 	return EditorPlugin.AFTER_GUI_INPUT_PASS
 

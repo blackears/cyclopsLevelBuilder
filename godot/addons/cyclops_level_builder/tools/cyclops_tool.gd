@@ -64,60 +64,86 @@ func _can_handle_object(node:Node)->bool:
 	return false
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
-	if event is InputEventKey:
-		var e:InputEventKey = event
-
-		if e.keycode == KEY_X:
-			if e.is_pressed():
-				#print("cyc tool X")
-				var action:ActionDeleteSelectedBlocks = ActionDeleteSelectedBlocks.new()
-				action.plugin = builder
-				action._execute(CyclopsActionEvent.new(builder))
-			
-			return true
-				
-		if e.keycode == KEY_D:
-			if e.is_pressed():
-				if e.shift_pressed && !Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
-					
-					var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
-					if !sel_blocks.is_empty():
-											
-#						builder.switch_to_tool(ToolDuplicate.new())
-						builder.switch_to_tool_id(ToolDuplicate.TOOL_ID)
-					
-			return true
+	#print("hotkey  check ", event)
 	
-	if event is InputEventMouseButton:
-		var e:InputEventMouseButton = event
-		
-		if e.button_index == MOUSE_BUTTON_MIDDLE:
-			if e.alt_pressed:
-				if e.is_pressed():
-					if builder.get_active_block():
-
-						var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
-						var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
-						
-#						var start_pos:Vector3 = origin + builder.block_create_distance * dir
-#						var w2l = builder.active_node.global_transform.inverse()
-#						var origin_local:Vector3 = w2l * origin
-#						var dir_local:Vector3 = w2l.basis * dir
-						
-						var result:IntersectResults = builder.active_node.intersect_ray_closest(origin, dir)
-						if result:
-							var ed_iface:EditorInterface = builder.get_editor_interface()
-							var base_control:Control = ed_iface.get_base_control()
-							
-							#viewport_camera
-							var new_cam_origin:Vector3 = result.position + \
-								viewport_camera.global_transform.basis.z * builder.block_create_distance
-							viewport_camera.global_transform.origin = new_cam_origin
-					return true
+	var hotkey_group:HotkeyGroup = builder.config_scene.get_node("Views/View3D/Hotkeys")
+	var _action:CyclopsAction = hotkey_group.lookup_action(event)
+	if _action:
+#		print("found  action  ", _action.name)
+		_action._execute(CyclopsActionEvent.new(builder))
+		return true
+	
+	
+	#if event is InputEventKey:
+		#var e:InputEventKey = event
+#
+		#if e.keycode == KEY_X:
+			#if e.is_pressed():
+				##print("cyc tool X")
+				#var action:ActionDeleteSelectedBlocks = ActionDeleteSelectedBlocks.new()
+				#action.plugin = builder
+				#action._execute(CyclopsActionEvent.new(builder))
+			#
+			#return true
+				#
+		#if e.keycode == KEY_D:
+			#if e.is_pressed():
+				#if e.shift_pressed && !Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+					#
+					#var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
+					#if !sel_blocks.is_empty():
+											#
+##						builder.switch_to_tool(ToolDuplicate.new())
+						#builder.switch_to_tool_id(ToolDuplicate.TOOL_ID)
+					#
+			#return true
+	#
+	#if event is InputEventMouseButton:
+		#var e:InputEventMouseButton = event
+		#
+		#if e.button_index == MOUSE_BUTTON_MIDDLE:
+			#if e.alt_pressed:
+				#if e.is_pressed():
+					#if builder.get_active_block():
+#
+						#var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
+						#var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+						#
+##						var start_pos:Vector3 = origin + builder.block_create_distance * dir
+##						var w2l = builder.active_node.global_transform.inverse()
+##						var origin_local:Vector3 = w2l * origin
+##						var dir_local:Vector3 = w2l.basis * dir
+						#
+						#var result:IntersectResults = builder.active_node.intersect_ray_closest(origin, dir)
+						#if result:
+							#var ed_iface:EditorInterface = builder.get_editor_interface()
+							#var base_control:Control = ed_iface.get_base_control()
+							#
+							##viewport_camera
+							#var new_cam_origin:Vector3 = result.position + \
+								#viewport_camera.global_transform.basis.z * builder.block_create_distance
+							#viewport_camera.global_transform.origin = new_cam_origin
+					#return true
 	
 	return false
 
 
+func focus_on_active_block(viewport_camera:Camera3D, mouse_pos:Vector2):
+	if builder.get_active_block():
+
+		var origin:Vector3 = viewport_camera.project_ray_origin(mouse_pos)
+		var dir:Vector3 = viewport_camera.project_ray_normal(mouse_pos)
+		
+		var result:IntersectResults = builder.active_node.intersect_ray_closest(origin, dir)
+		if result:
+			var ed_iface:EditorInterface = builder.get_editor_interface()
+			var base_control:Control = ed_iface.get_base_control()
+			
+			#viewport_camera
+			var new_cam_origin:Vector3 = result.position + \
+				viewport_camera.global_transform.basis.z * builder.block_create_distance
+			viewport_camera.global_transform.origin = new_cam_origin
+	
 
 func to_local(point:Vector3, world_to_local:Transform3D, grid_step_size:float)->Vector3:
 	var p_local:Vector3 = world_to_local * point

@@ -490,4 +490,3 @@ func _deactivate():
 
 	var cache:Dictionary = settings.save_to_cache()
 	builder.set_tool_cache(TOOL_ID, cache)
-

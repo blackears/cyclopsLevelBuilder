@@ -176,16 +176,11 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 	
 	#print("pick_closest_handle")
 	for h in handles:
-		#print("<<0>>")
-		#print("h ", h)
 		var block:CyclopsBlock = builder.get_node(h.block_path)
-		#print("<<0.1>>")
 		var ctl_mesh:ConvexVolume = block.control_mesh
-		#print("<<0.2>>")
 		if ctl_mesh.edges.size() <= h.edge_index:
 			continue
 		var edge:ConvexVolume.EdgeInfo = ctl_mesh.edges[h.edge_index]
-		#print("<<1>>")
 
 		var p0 = ctl_mesh.vertices[edge.start_index].point
 		var p1 = ctl_mesh.vertices[edge.end_index].point
@@ -197,12 +192,9 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 		
 		var dist_to_seg_2d_sq = MathUtil.dist_to_segment_squared_2d(position, p0_screen, p1_screen)
 		
-		#print("<<2>>")
 		if dist_to_seg_2d_sq > radius * radius:
-			#print("<<2.5>>")
 			#Failed handle radius test
 			continue
-		#print("<<3>>")
 
 		var point_on_seg:Vector3 = MathUtil.closest_point_on_segment(pick_origin, pick_dir, p0_world, p1_world)
 		#print("dist_to_seg_2d_sq ", dist_to_seg_2d_sq)
@@ -213,23 +205,19 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 		#print("offset ", offset)
 		#print("parallel ", parallel)
 		#print("dist ", dist)
-		#print("<<4>>")
 		if dist <= 0:
 			#Behind camera
 			continue
 		
-		#print("<<5>>")
 		#print("best_dist ", best_dist)
 		#print("h pos %s ray orig %s ray dir %s offset %s para %s dist %s" % [str(h.position), pick_origin, pick_dir, offset, parallel, dist])
 		if dist >= best_dist:
 			continue
 		
-		#print("<<6>>")
 		best_pick_position = point_on_seg
 		best_dist = dist
 		best_handle = h
 		#print("best_handle ", best_handle)
-		#print("<<7>>")
 	
 	#print("bar")
 	if !best_handle:
