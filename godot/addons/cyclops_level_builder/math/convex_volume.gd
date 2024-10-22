@@ -88,7 +88,7 @@ class FaceInfo extends RefCounted:
 	var triangulation_indices:Array[int]
 	var lightmap_uvs:PackedVector2Array
 	
-	func _init(mesh:ConvexVolume, normal:Vector3, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0, visible:bool = true, color:Color = Color.WHITE, selected:bool = false):
+	func _init(mesh:ConvexVolume, normal:Vector3 = Vector3.UP, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0, visible:bool = true, color:Color = Color.WHITE, selected:bool = false):
 		self.mesh = mesh
 		#self.id = id
 		self.normal = normal
@@ -146,7 +146,15 @@ class FaceInfo extends RefCounted:
 			var v_idx:int = vertex_indices[fv_idx]
 			result.append(mesh.vertices[v_idx].point)
 
-#		print("triangules %s" % result)
+		return result
+		
+	func get_trianges_v_idx()->PackedInt32Array:
+		var indices:Array[int] = get_triangulation()
+		var result:PackedInt32Array
+
+		for fv_idx in indices:
+			var v_idx:int = vertex_indices[fv_idx]
+			result.append(v_idx)
 
 		return result
 	
@@ -176,6 +184,7 @@ class FaceVertexInfo extends RefCounted:
 	var face_index:int
 	var vertex_index:int
 	var vertex_local_index:int #Position of vertex within this face loop - eg, if this face has 5 verts, the local vert numbers are in order [0, 1, 2, 3, 4]
+	var uv0:Vector2
 	var color:Color = Color.WHITE
 	var normal:Vector3
 
@@ -342,17 +351,17 @@ func init_from_convex_block_data(data:ConvexBlockData):
 			break
 	
 	if data.face_vertex_face_index.size() == 0 || all_zero:
-		#print("<<0>>")
 		#Face vertices not initialized - generate new ones
 		build_face_vertices()
 	else:
-		#print("<<1>>")
 		for fv_idx in data.face_vertex_face_index.size():
 			var f_idx:int = data.face_vertex_face_index[fv_idx]
 			var v_idx:int = data.face_vertex_vertex_index[fv_idx]
 			var fv:FaceVertexInfo = FaceVertexInfo.new()
 			face_vertices.append(fv)
 			#faces[f_idx].face_vertex_indices.append(fv_idx)
+			
+			var v:VertexInfo = vertices[v_idx]
 			
 			fv.face_index = f_idx
 			fv.vertex_index = v_idx
@@ -362,6 +371,15 @@ func init_from_convex_block_data(data:ConvexBlockData):
 			var f:FaceInfo = faces[f_idx]
 			fv.normal = data.face_vertex_normal[fv_idx] if data.face_vertex_normal.size() > fv_idx else f.normal
 			fv.color = data.face_vertex_color[fv_idx] if data.face_vertex_color.size() > fv_idx else Color(1, 1, 1, 1)
+			match (MathUtil.get_longest_axis(f.normal)):
+				MathUtil.Axis.X:
+					fv.uv0 = Vector2(-v.point.z, -v.point.y)
+				MathUtil.Axis.Y:
+					fv.uv0 = Vector2(-v.point.x, -v.point.z)
+				MathUtil.Axis.Z:
+					fv.uv0 = Vector2(-v.point.x, -v.point.y)
+			fv.uv0 = data.face_uv_transform[f_idx] * fv.uv0
+			
 	#print("init_from_convex_block_data face_vertex_coord_map ", face_vertex_coord_map)
 		for f_idx in faces.size():
 			var face:FaceInfo = faces[f_idx]
@@ -374,10 +392,183 @@ func init_from_convex_block_data(data:ConvexBlockData):
 	#print("init_from_convex_block_data %s" % format_faces_string())
 	
 func init_from_mesh_vector_data(mvd:MeshVectorData):
-	#print("init_from_mesh_vector_data")
-	var block_data:ConvexBlockData = ConvexBlockData.new()
-	block_data.init_from_mesh_vector_data(mvd)
-	init_from_convex_block_data(block_data)
+	vertices = []
+	edges = []
+	faces = []
+	face_vertices = []
+	face_vertex_coord_map.clear()
+	bounds = AABB()
+	
+	if !mvd:
+		return
+	
+	active_vertex = mvd.active_vertex
+	active_edge = mvd.active_edge
+	active_face = mvd.active_face
+	active_face_vertex = mvd.active_face_vertex
+
+	var v_pos:DataVectorFloat = mvd.get_vertex_data(MeshVectorData.V_POSITION)
+	var vertex_points:PackedVector3Array = v_pos.to_vec3_array()
+
+	bounds = MathUtil.calc_bounds(vertex_points)
+
+	var v_normal:DataVectorFloat
+	var vertex_normals:PackedVector3Array
+	if mvd.has_vertex_data(MeshVectorData.V_NORMAL):
+		v_normal = mvd.get_vertex_data(MeshVectorData.V_NORMAL)
+		vertex_normals = v_normal.to_vec3_array()
+
+	var v_sel:DataVectorByte = mvd.get_vertex_data(MeshVectorData.V_SELECTED)
+	var vertex_selected:PackedByteArray = v_sel.data
+
+	var e_sel:DataVectorByte = mvd.get_edge_data(MeshVectorData.E_SELECTED)
+	var edge_selected:PackedByteArray = e_sel.data
+	
+	var f_mat:DataVectorInt = mvd.get_face_data(MeshVectorData.F_MATERIAL_INDEX)
+	var face_material_indices:PackedInt32Array = f_mat.data
+	
+	var f_vis:DataVectorByte = mvd.get_face_data(MeshVectorData.F_VISIBLE)
+	var face_visible:PackedByteArray = f_vis.data
+	
+	var f_sel:DataVectorByte = mvd.get_face_data(MeshVectorData.F_SELECTED)
+	var face_selected:PackedByteArray = f_sel.data
+	
+	var f_normal:DataVectorByte
+	var face_normal:PackedVector3Array
+	if mvd.has_face_data(MeshVectorData.F_NORMAL):
+		f_normal = mvd.get_face_data(MeshVectorData.F_NORMAL)
+		face_normal = f_normal.to_vec3_array()
+	
+	var f_uv_xform:DataVectorFloat
+	var face_uv_transform:Array[Transform2D]
+	if mvd.has_face_data(MeshVectorData.F_UV_XFORM):
+		f_uv_xform = mvd.get_face_data(MeshVectorData.F_UV_XFORM)
+		face_uv_transform = f_uv_xform.to_transform2d_array()
+	
+	var fv_fidx:DataVectorInt = mvd.get_face_vertex_data(MeshVectorData.FV_FACE_INDEX)
+	var face_vertex_face_index:PackedInt32Array = fv_fidx.data
+	
+	var fv_vidx:DataVectorInt = mvd.get_face_vertex_data(MeshVectorData.FV_VERTEX_INDEX)
+	var face_vertex_vertex_index:PackedInt32Array = fv_vidx.data
+	
+	var fv_norm:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_NORMAL)
+	var face_vertex_normal:PackedVector3Array = fv_norm.to_vec3_array()
+	
+	var fv_col:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_COLOR)
+	var face_vertex_color:PackedColorArray = fv_col.to_color_array()
+
+	var fv_uv0:DataVectorFloat
+	var face_vertex_uv0:PackedVector2Array
+	if mvd.has_face_vertex_data(MeshVectorData.FV_UV0):	
+		fv_uv0 = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+		face_vertex_uv0 = fv_uv0.to_vec2_array()
+	
+	for i in mvd.num_vertices:
+		var v:VertexInfo = VertexInfo.new(self)
+		vertices.append(v)
+		v.index = i
+		
+		v.point = vertex_points[i]
+		v.selected = vertex_selected[i] != 0
+		if v_normal:
+			#Old models don't precalculate vertex normals
+			v.normal = vertex_normals[i]
+	
+	for e_idx in mvd.num_edges:
+		var edge:EdgeInfo = EdgeInfo.new(self, mvd.edge_vertex_indices[e_idx * 2], mvd.edge_vertex_indices[e_idx * 2 + 1])
+		edges.append(edge)
+		edge.index = edges.size()
+		
+		edge.face_indices.append(mvd.edge_face_indices[e_idx * 2])
+		edge.face_indices.append(mvd.edge_face_indices[e_idx * 2 + 1])
+		
+		vertices[edge.start_index].edge_indices.append(e_idx)
+		vertices[edge.end_index].edge_indices.append(e_idx)
+		
+		edge.selected = edge_selected[e_idx]
+	
+	#var fv_face_indices:PackedInt32Array
+	#var fv_vertex_indices:PackedInt32Array
+	var face_vertex_index_offset:int = 0
+	for face_idx in mvd.num_faces:
+		var num_verts:int = mvd.face_vertex_count[face_idx]
+		var vert_indices:Array[int]
+		for i in num_verts:
+			var vert_idx:int = mvd.face_vertex_indices[face_vertex_index_offset + i]
+			vert_indices.append(vert_idx)
+			
+			#fv_face_indices.append(face_idx)
+			#fv_vertex_indices.append(vert_idx)
+			
+		face_vertex_index_offset += num_verts
+
+		var f:FaceInfo = FaceInfo.new(self)
+		faces.append(f)
+		f.index = face_idx
+		f.vertex_indices = vert_indices
+		
+		if !f_normal:
+			#Older models don't have precomputed normals
+			var vert_points:PackedVector3Array
+			for vert_idx in vert_indices:
+				vert_points.append(vertices[vert_idx].point)
+			
+			f.normal = MathUtil.face_area_x2(vert_points).normalized()
+		else:
+			f.normal = face_normal[face_idx]
+		
+		if f_uv_xform:
+			#For now, save the transform from the older uv layout system
+			f.uv_transform = face_uv_transform[face_idx]
+
+		f.material_id = face_material_indices[face_idx]
+		f.selected = face_selected[face_idx]
+		f.visible = face_visible[face_idx]
+		
+		
+	for fv_idx in mvd.num_face_vertices:
+		var fv:FaceVertexInfo = FaceVertexInfo.new()
+		face_vertices.append(fv)
+		fv.index = fv_idx
+		
+		#fv.face_index = fv_face_indices[fv_idx]
+		#fv.vertex_index = fv_vertex_indices[fv_idx]
+		fv.face_index = face_vertex_face_index[fv_idx]
+		fv.vertex_index = face_vertex_vertex_index[fv_idx]
+#		fv.vertex_local_index = 
+		
+		var coord:Vector2i = Vector2i(fv.face_index, fv.vertex_index)
+		face_vertex_coord_map[coord] = fv
+		
+		if face_vertex_normal.size() > 0:
+			fv.normal = face_vertex_normal[fv_idx]
+			
+		fv.color = face_vertex_color[fv_idx]
+		if fv_uv0:
+			fv.uv0 = face_vertex_uv0[fv_idx]
+		else:
+			#Old models need to be converted from uv_transform system
+			var f:FaceInfo = faces[fv.face_index]
+			var v:VertexInfo = vertices[fv.vertex_index]
+			match (MathUtil.get_longest_axis(f.normal)):
+				MathUtil.Axis.X:
+					fv.uv0 = Vector2(-v.point.z, -v.point.y)
+				MathUtil.Axis.Y:
+					fv.uv0 = Vector2(-v.point.x, -v.point.z)
+				MathUtil.Axis.Z:
+					fv.uv0 = Vector2(-v.point.x, -v.point.y)
+			fv.uv0 = f.uv_transform * fv.uv0
+
+	
+	for f_idx in faces.size():
+		var face:FaceInfo = faces[f_idx]
+		for v_idx in face.vertex_indices:
+			face.face_vertex_indices.append(face_vertex_coord_map[Vector2i(f_idx, v_idx)].index)
+
+	if !v_normal || face_vertex_normal.size() == 0:
+		calc_vertex_normals()
+	
+	#Calculate edge -> neighbor faces map
 	
 
 #Calc convex hull bouding points
@@ -482,6 +673,15 @@ func build_face_vertices():
 			fv.vertex_index = v_idx
 			fv.vertex_local_index = v_local_idx
 			fv.color = face.color
+			
+			match (MathUtil.get_longest_axis(face.normal)):
+				MathUtil.Axis.X:
+					fv.uv0 = Vector2(-vert.point.z, -vert.point.y)
+				MathUtil.Axis.Y:
+					fv.uv0 = Vector2(-vert.point.x, -vert.point.z)
+				MathUtil.Axis.Z:
+					fv.uv0 = Vector2(-vert.point.x, -vert.point.y)
+			fv.uv0 = face.uv_transform * fv.uv0
 			
 			face.face_vertex_indices.append(fv_idx)
 
@@ -596,6 +796,7 @@ func copy_face_attributes(ref_vol:ConvexVolume):
 			
 			fv.normal = fv_ref.normal
 			fv.color = fv_ref.color
+			fv.uv0 = fv_ref.uv0
 
 func to_convex_block_data()->ConvexBlockData:
 	var result:ConvexBlockData = ConvexBlockData.new()
@@ -732,6 +933,8 @@ func transformed(xform:Transform3D, lock_uvs:bool = false)->ConvexVolume:
 func transform_uvs(xform:Transform3D):
 #	var xform:Transform3D = obj_xform.affine_inverse()
 	
+	#deprecated
+	#Old face matrix setup
 	for f in faces:
 		var axis:MathUtil.Axis = MathUtil.get_longest_axis(f.normal)
 		
@@ -767,6 +970,28 @@ func transform_uvs(xform:Transform3D):
 				
 				f.uv_transform = f.uv_transform * move_xform
 
+	#####################
+	#New Face-vertex uv setup
+	for f in faces:
+		var axis:MathUtil.Axis = MathUtil.get_longest_axis(f.normal)
+		
+		for fv_idx in f.face_vertex_indices:
+			var fv:FaceVertexInfo = face_vertices[fv_idx]
+			var v_idx:int = fv.vertex_index
+			var v:VertexInfo = vertices[v_idx]
+			
+			var new_point:Vector3 = xform * v.point
+			var offset:Vector3 = new_point - v.point
+			
+			match axis:
+				MathUtil.Axis.X:
+					fv.uv0 += Vector2(-offset.z, -offset.y)
+					
+				MathUtil.Axis.Y:
+					fv.uv0 += Vector2(-offset.x, -offset.z)
+					
+				MathUtil.Axis.Z:
+					fv.uv0 += Vector2(-offset.x, -offset.y)
 
 func transform(xform:Transform3D, lock_uvs:bool = false):
 	for v in vertices:
@@ -777,7 +1002,8 @@ func transform(xform:Transform3D, lock_uvs:bool = false):
 			f.reverse()
 
 	if lock_uvs:
-		
+		#@deprecated
+		#Old matrix based uv system
 		for f in faces:
 			var axis:MathUtil.Axis = MathUtil.get_longest_axis(f.normal)
 			
@@ -812,15 +1038,29 @@ func transform(xform:Transform3D, lock_uvs:bool = false):
 						Vector2(orig_p.x, orig_p.y))
 					
 					f.uv_transform = f.uv_transform * move_xform
-		
-	#calc_lightmap_uvs()
 
-#@deprecated
-#func unused_face_id()->int:
-	#var idx = 0
-	#for p in faces:
-		#idx = max(idx, p.id)
-	#return idx + 1
+		#####################
+		#New Face-vertex uv setup
+		for f in faces:
+			var axis:MathUtil.Axis = MathUtil.get_longest_axis(f.normal)
+			
+			for fv_idx in f.face_vertex_indices:
+				var fv:FaceVertexInfo = face_vertices[fv_idx]
+				var v_idx:int = fv.vertex_index
+				var v:VertexInfo = vertices[v_idx]
+				
+				var new_point:Vector3 = xform * v.point
+				var offset:Vector3 = new_point - v.point
+				
+				match axis:
+					MathUtil.Axis.X:
+						fv.uv0 += Vector2(-offset.z, -offset.y)
+						
+					MathUtil.Axis.Y:
+						fv.uv0 += Vector2(-offset.x, -offset.z)
+						
+					MathUtil.Axis.Z:
+						fv.uv0 += Vector2(-offset.x, -offset.y)
 
 func contains_point(point:Vector3)->bool:
 	for f in faces:
@@ -937,7 +1177,7 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 		var tangents:PackedFloat32Array
 		var colors:PackedColorArray
 		var uv1s:PackedVector2Array
-		var uv2s:PackedVector2Array
+#		var uv2s:PackedVector2Array
 
 		var material = default_material
 		if !override_with_default_material:
@@ -958,30 +1198,14 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 			for v_local_idx in fv_trianglation:
 
 				var v_idx:int = face.vertex_indices[v_local_idx]
-#				var fv_idx:int = face.face_vertex_indices[v_local_idx]
-#				var fv_idx:int = face_vertex_coord_map[Vector2i(f_idx, v_idx)].index
 				var fv:FaceVertexInfo = face_vertex_coord_map[Vector2i(f_idx, v_idx)]
-				#var fv:ConvexVolume.FaceVertexInfo = face
-				#vol.get_face_vertex(f_idx, v_idx)
 	
 				var p:Vector3 = vertices[v_idx].point
 
-				var uv:Vector2
-				if axis == MathUtil.Axis.X:
-					uv = Vector2(-p.z, -p.y)
-				elif axis == MathUtil.Axis.Y:
-					uv = Vector2(-p.x, -p.z)
-				elif axis == MathUtil.Axis.Z:
-					uv = Vector2(-p.x, -p.y)
+				uv1s.append(fv.uv0)
+#				uv2s.append(face.lightmap_uvs[v_local_idx])
 
-				uv = face.uv_transform * uv
-				uv1s.append(uv)
-				uv2s.append(face.lightmap_uvs[v_local_idx])
-
-#				normals.append(face.normal)
 				normals.append(fv.normal)
-#				colors.append(face.color)
-#				colors.append(face_vertices[fv_idx].color)
 				colors.append(fv.color)
 
 				points.append(p)
@@ -1017,7 +1241,8 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 				tangents.append(t.z)
 				tangents.append(-1.0 if t.cross(b).dot(n) > 0 else 1.0)
 		
-		var arrays:Array = create_indexed_vertex_array(points, normals, tangents, colors, uv1s, uv2s)
+#		var arrays:Array = create_indexed_vertex_array(points, normals, tangents, colors, uv1s, uv2s)
+		var arrays:Array = create_indexed_vertex_array(points, normals, tangents, colors, uv1s)
 		
 		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 		mesh.surface_set_material(surface_idx, material)
@@ -1038,7 +1263,8 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 
 
 
-func create_indexed_vertex_array(points:PackedVector3Array, normals:PackedVector3Array, tangents:PackedFloat32Array, colors:PackedColorArray, uv1s:PackedVector2Array, uv2s:PackedVector2Array)->Array:
+#func create_indexed_vertex_array(points:PackedVector3Array, normals:PackedVector3Array, tangents:PackedFloat32Array, colors:PackedColorArray, uv1s:PackedVector2Array, uv2s:PackedVector2Array)->Array:
+func create_indexed_vertex_array(points:PackedVector3Array, normals:PackedVector3Array, tangents:PackedFloat32Array, colors:PackedColorArray, uv1s:PackedVector2Array)->Array:
 	var vert_idx_map:Dictionary
 	var indices:PackedInt32Array
 	var points_indexed:PackedVector3Array
@@ -1046,7 +1272,7 @@ func create_indexed_vertex_array(points:PackedVector3Array, normals:PackedVector
 	var tangents_indexed:PackedFloat32Array
 	var colors_indexed:PackedColorArray
 	var uv1s_indexed:PackedVector2Array
-	var uv2s_indexed:PackedVector2Array
+#	var uv2s_indexed:PackedVector2Array
 	
 	for v_idx in points.size():
 		var vertex:PackedFloat32Array
@@ -1071,8 +1297,8 @@ func create_indexed_vertex_array(points:PackedVector3Array, normals:PackedVector
 		vertex.append(uv1s[v_idx].x)
 		vertex.append(uv1s[v_idx].y)
 
-		vertex.append(uv2s[v_idx].x)
-		vertex.append(uv2s[v_idx].y)
+		#vertex.append(uv2s[v_idx].x)
+		#vertex.append(uv2s[v_idx].y)
 
 		var new_index:int
 		if !vert_idx_map.has(vertex):
@@ -1088,7 +1314,7 @@ func create_indexed_vertex_array(points:PackedVector3Array, normals:PackedVector
 			tangents_indexed.append(tangents[v_idx * 4 + 3])
 			colors_indexed.append(colors[v_idx])
 			uv1s_indexed.append(uv1s[v_idx])
-			uv2s_indexed.append(uv2s[v_idx])
+#			uv2s_indexed.append(uv2s[v_idx])
 		else:
 			new_index = vert_idx_map[vertex]
 		
@@ -1103,7 +1329,7 @@ func create_indexed_vertex_array(points:PackedVector3Array, normals:PackedVector
 	arrays[Mesh.ARRAY_NORMAL] = normals_indexed
 	arrays[Mesh.ARRAY_TANGENT] = tangents_indexed
 	arrays[Mesh.ARRAY_TEX_UV] = uv1s_indexed
-	arrays[Mesh.ARRAY_TEX_UV2] = uv2s_indexed
+#	arrays[Mesh.ARRAY_TEX_UV2] = uv2s_indexed
 	arrays[Mesh.ARRAY_COLOR] = colors_indexed
 	arrays[Mesh.ARRAY_INDEX] = indices
 
@@ -1251,16 +1477,28 @@ func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 	if bounds.intersects_ray(origin, dir) == null:
 		return null
 	
+	
 	var best_result:IntersectResults
 	
 	for f_idx in faces.size():
 		var face:FaceInfo = faces[f_idx]
-#		var tris:PackedVector3Array = MathUtil.trianglate_face(face.get_points(), face.normal)
-		var tris:PackedVector3Array = face.get_trianges()
-		for i in range(0, tris.size(), 3):
-			var p0:Vector3 = tris[i]
-			var p1:Vector3 = tris[i + 1]
-			var p2:Vector3 = tris[i + 2]
+#
+		#var local_fv_indices:Array[int] = face.get_triangulation()
+#
+##		var tris:PackedVector3Array
+		#var tri_verts:Array[VertexInfo]
+		#for local_fv_idx in local_fv_indices:
+			#var v_idx:int = face.vertex_indices[local_fv_idx]
+			#tri_verts.append(vertices[v_idx])
+##			tris.append(vertices[v_idx].point)
+
+#		var tris:PackedVector3Array = face.get_trianges()
+		var tris_v_idx:PackedInt32Array = face.get_trianges_v_idx()
+		
+		for i in range(0, tris_v_idx.size(), 3):
+			var p0:Vector3 = vertices[tris_v_idx[i]].point
+			var p1:Vector3 = vertices[tris_v_idx[i + 1]].point
+			var p2:Vector3 = vertices[tris_v_idx[i + 2]].point
 			
 			#Godot uses clockwise winding
 			var tri_area_x2:Vector3 = MathUtil.triangle_area_x2(p0, p1, p2)
@@ -1286,6 +1524,11 @@ func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 				result.normal = face.normal
 				result.position = p_hit
 				result.distance_squared = dist_sq
+				result.tessellated_vertex_indices_of_hit = [
+					tris_v_idx[i], 
+					tris_v_idx[i + 1], 
+					tris_v_idx[i + 2]
+					]
 				
 				best_result = result
 					
@@ -1434,17 +1677,7 @@ func make_convex():
 		var new_f:FaceInfo = new_vol.get_face_at_position(centroid)
 		if new_f:
 			new_vol.active_face = new_f.index
-		
-	
-	#for v_idx in new_vol.vertices.size():
-		#var v:ConvexVolume.VertexInfo = new_vol.vertices[v_idx]
-##			print ("vol point %s " % v.point)
-		#if selected_points.has(v.point):
-##				print("set sel")
-			#v.selected = true
-#
-	#block.mesh_vector_data = new_vol.to_mesh_vector_data()
-	
+			
 	
 func get_camera_facing_edges(viewport_camera:Camera3D, local_to_world:Transform3D)->Array[EdgeInfo]:
 	var result:Array[EdgeInfo]
@@ -1471,10 +1704,5 @@ func get_camera_facing_edges(viewport_camera:Camera3D, local_to_world:Transform3
 				continue
 
 		result.append(e)
-		#var focus_2d:Vector2 = viewport_camera.unproject_position(focus)
-		#
-		#var v0:ConvexVolume.VertexInfo = vertices[e.start_index]
-		#var v1:ConvexVolume.VertexInfo = vertices[e.end_index]
-	
 	
 	return result

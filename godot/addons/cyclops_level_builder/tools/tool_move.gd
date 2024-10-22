@@ -184,7 +184,7 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 				
 				cmd_xform_blocks = CommandTransformBlocks.new()
 				cmd_xform_blocks.builder = builder
-				cmd_xform_blocks.lock_uvs = settings.correct_uvs
+				cmd_xform_blocks.lock_uvs = !settings.correct_uvs
 				for child in sel_blocks:
 					cmd_xform_blocks.add_block(child.get_path())
 
@@ -216,7 +216,7 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 			
 			cmd_xform_blocks = CommandTransformBlocks.new()
 			cmd_xform_blocks.builder = builder
-			cmd_xform_blocks.lock_uvs = settings.correct_uvs
+			cmd_xform_blocks.lock_uvs = !settings.correct_uvs
 			for child in builder.get_selected_blocks():
 				cmd_xform_blocks.add_block(child.get_path())
 			
@@ -251,7 +251,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				
 				cmd_xform_blocks = CommandTransformBlocks.new()
 				cmd_xform_blocks.builder = builder
-				cmd_xform_blocks.lock_uvs = settings.correct_uvs
+				cmd_xform_blocks.lock_uvs = !settings.correct_uvs
 				for child in builder.get_selected_blocks():
 					cmd_xform_blocks.add_block(child.get_path())
 					
@@ -302,7 +302,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			return true
 				
 	elif event is InputEventMouseButton:
-		
+
 		var e:InputEventMouseButton = event
 		if e.button_index == MOUSE_BUTTON_LEFT:
 
@@ -320,6 +320,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				
 			else:
 				if tool_state == ToolState.READY:
+					#print("move tool mouse button event ", event)
 					
 					#We just clicked with the mouse
 					var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
@@ -328,27 +329,16 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 					
 					if result:
-						#print("Invokke select %s" % result)
 						var cmd:CommandSelectBlocks = CommandSelectBlocks.new()
 						cmd.builder = builder
 						cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
-
+						
+#						print("Invoke select %s" % result)
 						cmd.block_paths.append(result.object.get_path())
 						
 						if cmd.will_change_anything():
 							var undo:EditorUndoRedoManager = builder.get_undo_redo()
 							cmd.add_to_undo_manager(undo)
-					#else:
-						#var space_state = EditorInterface.get_editor_viewport_3d().find_world_3d().direct_space_state
-						#var query = PhysicsRayQueryParameters3D.create(origin, origin + dir * 1000)
-						#var pick_result = space_state.intersect_ray(query)
-						#print(pick_result)
-						#if pick_result.has("collider"):
-							#EditorInterface.get_selection().clear()
-							#EditorInterface.get_selection().add_node(pick_result["collider"])
-						#var viewport:SubViewport = EditorInterface.get_editor_viewport_3d()
-						#viewport.push_input()
-						#Input.parse_input_event()
 							
 					#print("tool state up")
 					tool_state = ToolState.NONE

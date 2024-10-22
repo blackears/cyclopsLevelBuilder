@@ -49,6 +49,11 @@ class_name MeshVectorData
 @export var face_vertex_count:PackedInt32Array #Number of verts in each face
 @export var face_vertex_indices:PackedInt32Array #Vertex index per face
 
+#Face-vertex indices are determined by traversing the face array
+#  For a face-vertex with on face fi and vertex vi, the index is calculated as
+#      sum(num verts in faces with index less than fi) 
+#          + local index of vi as you traverse face points about face fi
+
 @export var vertex_data:Dictionary
 @export var edge_data:Dictionary
 @export var face_data:Dictionary
@@ -56,7 +61,8 @@ class_name MeshVectorData
 
 const V_POSITION: StringName = "position"
 const V_SELECTED: StringName = "selected"
-const V_COLOR: StringName = "color"
+#const V_COLOR: StringName = "color"
+const V_NORMAL: StringName = "normal"
 
 const E_SELECTED: StringName = "selected"
 
@@ -64,6 +70,7 @@ const F_MATERIAL_INDEX: StringName = "material_index"
 const F_UV_XFORM: StringName = "uv_transform"
 const F_VISIBLE: StringName = "visible"
 const F_COLOR: StringName = "color"
+const F_NORMAL: StringName = "normal"
 const F_SELECTED: StringName = "selected"
 
 const FV_VERTEX_INDEX: StringName = "vertex_index"
@@ -72,23 +79,18 @@ const FV_VERTEX_LOCAL_INDEX: StringName = "vertex_local_index"
 const FV_SELECTED: StringName = "selected"
 const FV_COLOR: StringName = "color"
 const FV_NORMAL: StringName = "normal"
+const FV_UV0: StringName = "uv0"
 const FV_UV1: StringName = "uv1"
 const FV_UV2: StringName = "uv2"
 
 
 func create_from_convex_block(block_data:ConvexBlockData):
 
-	#selected = block_data.selected
-	#active = block_data.active
-	#collision = block_data.collision
-	#physics_layer = block_data.physics_layer
-	#physics_mask = block_data.physics_mask
-
 	active_vertex = block_data.active_vertex
 	active_edge = block_data.active_edge
 	active_face = block_data.active_face
 	active_face_vertex = block_data.active_face_vertex
-		
+	
 	num_vertices = block_data.vertex_points.size()
 	num_edges = block_data.edge_vertex_indices.size() / 2
 	num_faces = block_data.face_vertex_count.size()
@@ -167,10 +169,6 @@ func create_from_convex_block(block_data:ConvexBlockData):
 	set_face_vertex_data(DataVectorInt.new(FV_VERTEX_INDEX, 
 		vert_indices, 
 		DataVector.DataType.INT))
-
-	#set_face_vertex_data(DataVectorInt.new(FV_VERTEX_LOCAL_INDEX, 
-		#fv_local_indices, 
-		#DataVector.DataType.INT))
 	
 	if block_data.face_vertex_color.is_empty():
 		#Construct face vertex colors from old face colors system
@@ -194,18 +192,32 @@ func create_from_convex_block(block_data:ConvexBlockData):
 		block_data.face_vertex_normal.to_byte_array().to_float32_array(), 
 		DataVector.DataType.VECTOR3))
 			
+func has_vertex_data(vector_name:String)->bool:
+	return vertex_data.has(vector_name)
 
 func get_vertex_data(vector_name:String)->DataVector:
 	return vertex_data[vector_name]
 
+func has_edge_data(vector_name:String)->bool:
+	return edge_data.has(vector_name)
+
 func get_edge_data(vector_name:String)->DataVector:
 	return edge_data[vector_name]
+
+func has_face_data(vector_name:String)->bool:
+	return face_data.has(vector_name)
 
 func get_face_data(vector_name:String)->DataVector:
 	return face_data[vector_name]
 
+func has_face_vertex_data(vector_name:String)->bool:
+	return face_vertex_data.has(vector_name)
+
 func get_face_vertex_data(vector_name:String)->DataVector:
 	return face_vertex_data[vector_name]
+
+#func get_face_vertex_index(f_idx:int, v_idx:int)->int:
+	#return 0
 
 func set_vertex_data(data_vector:DataVector):
 	vertex_data[data_vector.name] = data_vector
@@ -264,12 +276,6 @@ func to_xml()->XMLElement:
 	var rec_ele:XMLElement = XMLElement.new("record")
 	rec_ele.set_attribute("type", "mesh")
 	
-	#rec_ele.set_attribute("selected", str(selected))
-	#rec_ele.set_attribute("active", str(active))
-	#rec_ele.set_attribute("collision", str(collision))	
-	#rec_ele.set_attribute("physics_layer", str(physics_layer))
-	#rec_ele.set_attribute("physics_mask", str(physics_mask))
-
 	rec_ele.set_attribute("num_vertices", str(num_vertices))
 	rec_ele.set_attribute("num_edges", str(num_edges))
 	rec_ele.set_attribute("num_faces", str(num_faces))
@@ -311,16 +317,10 @@ func to_dictionary(file_builder:CyclopsFileBuilder)->Dictionary:
 	result["active_face"] = active_face
 	result["active_face_vertex"] = active_face_vertex
 	
-#	vectors["face_vertices"].append(file_builder.export_vector(data_vec))
 	result["edge_vertex_index_buffer"] = file_builder.export_byte_array(edge_vertex_indices.to_byte_array())
 	result["edge_face_index_buffer"] = file_builder.export_byte_array(edge_face_indices.to_byte_array())
 	result["face_vertex_count_buffer"] = file_builder.export_byte_array(face_vertex_count.to_byte_array())
 	result["face_vertex_index_buffer"] = file_builder.export_byte_array(face_vertex_indices.to_byte_array())
-	#result["edge_vertex_indices"] = edge_vertex_indices
-	#result["edge_face_indices"] = edge_face_indices
-	#
-	#result["face_vertex_count"] = face_vertex_count
-	#result["face_vertex_indices"] = face_vertex_indices
 
 	var vectors:Dictionary = {
 		"vertices": [],
@@ -332,38 +332,18 @@ func to_dictionary(file_builder:CyclopsFileBuilder)->Dictionary:
 	
 	for key in vertex_data.keys():
 		var data_vec:DataVector = vertex_data[key]
-#		vectors["vertices"].append(data_vec.to_dictionary(buf_ar))
 		vectors["vertices"].append(file_builder.export_vector(data_vec))
 	
 	for key in edge_data.keys():
 		var data_vec:DataVector = edge_data[key]
-#		vectors["edges"].append(data_vec.to_dictionary(buf_ar))
 		vectors["edges"].append(file_builder.export_vector(data_vec))
 	
 	for key in face_data.keys():
 		var data_vec:DataVector = face_data[key]
-#		vectors["faces"].append(data_vec.to_dictionary(buf_ar))
 		vectors["faces"].append(file_builder.export_vector(data_vec))
 	
 	for key in face_vertex_data.keys():
 		var data_vec:DataVector = face_vertex_data[key]
-#		vectors["face_vertices"].append(data_vec.to_dictionary(buf_ar))
 		vectors["face_vertices"].append(file_builder.export_vector(data_vec))
 	
 	return result
-
-#func export_vector(vec:DataVector, file_builder:CyclopsFileBuilder)->Dictionary:
-	#var result:Dictionary
-	#
-	#result["name"] = vec.name
-	#result["data_type"] = DataVector.DataType.values()[vec.data_type]
-	#if vec.stride != 1:
-		#result["stride"] = vec.stride
-	#if !vec.category.is_empty():
-		#result["category"] = vec.category
-	#
-	#var region:BufferArchive.BufferRegion = file_builder.buf_ar.store_buffer(vec.get_buffer_byte_data())
-	#result["data_buffer"] = region.index
-	#
-	#return result
-	

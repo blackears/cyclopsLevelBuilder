@@ -46,6 +46,7 @@ class_name ConvexBlockData
 @export var face_vertex_vertex_index:PackedInt32Array  #Vertex index of this face-vertex
 @export var face_vertex_normal:PackedVector3Array  #Per face-vertex
 @export var face_vertex_color:PackedColorArray  #Per face-vertex
+@export var face_vertex_uv0:PackedVector2Array  #Per face-vertex
 
 
 @export var edge_vertex_indices:PackedInt32Array
@@ -86,12 +87,6 @@ func init_from_mesh_vector_data(mvd:MeshVectorData):
 	active_face = mvd.active_face
 	active_face_vertex = mvd.active_face_vertex
 	
-	#selected = mvd.selected
-	#active = mvd.active
-	#collision = mvd.collision
-	#physics_layer = mvd.physics_layer
-	#physics_mask = mvd.physics_mask
-	
 	var v_pos:DataVectorFloat = mvd.get_vertex_data(MeshVectorData.V_POSITION)
 	vertex_points = v_pos.to_vec3_array()
 	
@@ -103,11 +98,6 @@ func init_from_mesh_vector_data(mvd:MeshVectorData):
 	
 	var f_mat:DataVectorInt = mvd.get_face_data(MeshVectorData.F_MATERIAL_INDEX)
 	face_material_indices = f_mat.data
-	
-#	print("+build convex_block_data")
-	var f_uv_xform:DataVectorFloat = mvd.get_face_data(MeshVectorData.F_UV_XFORM)
-	face_uv_transform = f_uv_xform.to_transform2d_array()
-#	print("-build convex_block_data")
 	
 	var f_vis:DataVectorByte = mvd.get_face_data(MeshVectorData.F_VISIBLE)
 	face_visible = f_vis.data
@@ -129,6 +119,21 @@ func init_from_mesh_vector_data(mvd:MeshVectorData):
 	
 	var fv_col:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_COLOR)
 	face_vertex_color = fv_col.to_color_array()
+
+#	print("+build convex_block_data")
+	var f_uv_xform:DataVectorFloat = mvd.get_face_data(MeshVectorData.F_UV_XFORM)
+	face_uv_transform = f_uv_xform.to_transform2d_array()
+#	print("-build convex_block_data")
+	
+	
+	if mvd.face_vertex_data.has(MeshVectorData.FV_UV0):
+		var fv_uv0:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+		face_vertex_uv0 = fv_uv0.to_vec2_array()
+	else:
+		#var f_uv_xform:DataVectorFloat = mvd.get_face_data(MeshVectorData.F_UV_XFORM)
+		for fv_idx in mvd.num_face_vertices:
+			
+			pass
 
 	edge_vertex_indices = mvd.edge_vertex_indices
 	edge_face_indices = mvd.edge_face_indices

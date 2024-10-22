@@ -31,6 +31,8 @@ var face_index:int
 var position:Vector3 #local space of block
 var normal:Vector3
 var distance_squared:float
+#The indicies of the three vertices of the tessellated face tri where the hit occurred
+var tessellated_vertex_indices_of_hit:Array[int]
 
 func get_world_position()->Vector3:
 	return object.global_transform * position

@@ -149,4 +149,3 @@ func undo_it():
 
 	for tracked in start_blocks:
 		restore_tracked_block(tracked)
-

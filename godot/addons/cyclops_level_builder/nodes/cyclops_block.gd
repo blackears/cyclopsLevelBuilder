@@ -264,7 +264,7 @@ func append_mesh_wire(mesh:ImmediateMesh):
 func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 	if !mesh_vector_data:
 		return null
-	
+
 	var xform:Transform3D = global_transform.affine_inverse()
 	var origin_local:Vector3 = xform * origin
 	var dir_local:Vector3 = xform.basis * dir

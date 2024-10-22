@@ -354,4 +354,3 @@ func _activate(builder:CyclopsLevelBuilder):
 func _deactivate():
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
 	global_scene.set_custom_gizmo(null)
-

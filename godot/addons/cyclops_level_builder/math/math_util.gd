@@ -292,12 +292,16 @@ static func get_longest_axis(vector:Vector3)->Axis:
 		
 static func calc_bounds(points:PackedVector3Array)->AABB:
 	if points.is_empty():
-		return AABB(Vector3.ZERO, Vector3.ZERO)
+		return AABB()
 	
-	var result:AABB = AABB(points[0], Vector3.ZERO)
+	var p_min:Vector3 = points[0]
+	var p_max:Vector3 = points[0]
+	
 	for i in range(1, points.size()):
-		result = result.expand(points[i])
-	return result
+		p_min = p_min.min(points[i])
+		p_max = p_max.max(points[i])
+
+	return AABB(p_min, p_max - p_min)
 
 #Returns value equal to twise the area between the two vectors.  Clockwise windings have negative area
 static func triange_area_2x_2d(a:Vector2, b:Vector2)->float:

@@ -649,4 +649,3 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			return true
 								
 	return false
-

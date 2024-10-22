@@ -628,12 +628,12 @@ func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 			continue
 		
 		var result:IntersectResults = block.intersect_ray_closest(origin, dir)
-#			print("isect %s %s" % [node.name, result])
+#		print("isect %s %s" % [block.name, result])
 		if result:
 			if !best_result or result.distance_squared < best_result.distance_squared:
-#				print("setting best result %s" % node.name)
+#				print("setting best result %s" % block.name)
 				best_result = result
-#				print("best_result %s" % ray_best_result)
+#				print("best_result ", best_result)
 		
 #	print("returning best result %s" % ray_best_result)
 	return best_result
