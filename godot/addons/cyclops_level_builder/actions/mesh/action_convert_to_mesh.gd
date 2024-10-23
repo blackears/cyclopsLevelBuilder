@@ -87,7 +87,8 @@ func clone_branch(node:Node3D)->Node3D:
 		
 
 		var vol:ConvexVolume = ConvexVolume.new()
-		vol.init_from_convex_block_data(block.block_data)
+#		vol.init_from_convex_block_data(block.block_data)
+		vol.init_from_mesh_vector_data(block.mesh_vector_data)
 		
 
 		var collision_body:PhysicsBody3D
