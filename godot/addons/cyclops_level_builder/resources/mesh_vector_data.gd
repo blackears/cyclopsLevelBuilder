@@ -65,6 +65,7 @@ const V_SELECTED: StringName = "selected"
 const V_NORMAL: StringName = "normal"
 
 const E_SELECTED: StringName = "selected"
+const E_UV_SEAM: StringName = "uv_seam"
 
 const F_MATERIAL_INDEX: StringName = "material_index"
 const F_UV_XFORM: StringName = "uv_transform"
@@ -300,7 +301,6 @@ func to_xml()->XMLElement:
 	rec_ele.add_child(section_to_xml("edge", edge_data))
 	rec_ele.add_child(section_to_xml("face", face_data))
 	rec_ele.add_child(section_to_xml("faceVertex", face_vertex_data))
-				
 	
 	return rec_ele
 

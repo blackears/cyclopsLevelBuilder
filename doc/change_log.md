@@ -13,6 +13,9 @@
 * Now using config file to organize loading load tools and actions.
 * New system for organizing actions and tools.
 * Moving most of what was in CyclopsAutoload to other objects.
+* UVs now stored per face-vertex instead of being calculated based on vertex coords and a face transform.
+* Adding triplanar UV generation option.
+* Adding data layer for marking uv seams.
 
 
 ### v1.0.4

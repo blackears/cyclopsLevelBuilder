@@ -53,6 +53,7 @@ class EdgeInfo extends RefCounted:
 	var end_index:int
 	var face_indices:Array[int] = []
 	var selected:bool
+	var uv_seam:bool
 	
 	func _init(mesh:ConvexVolume, start:int = 0, end:int = 0):
 		self.mesh = mesh
@@ -423,7 +424,14 @@ func init_from_mesh_vector_data(mvd:MeshVectorData):
 
 	var e_sel:DataVectorByte = mvd.get_edge_data(MeshVectorData.E_SELECTED)
 	var edge_selected:PackedByteArray = e_sel.data
+
+	var e_uv_seam:DataVectorByte
+	var edge_uv_seam:PackedByteArray
+	if mvd.has_edge_data(MeshVectorData.E_UV_SEAM):
+		e_uv_seam = mvd.get_edge_data(MeshVectorData.E_UV_SEAM)
+		edge_uv_seam = e_uv_seam.data
 	
+
 	var f_mat:DataVectorInt = mvd.get_face_data(MeshVectorData.F_MATERIAL_INDEX)
 	var face_material_indices:PackedInt32Array = f_mat.data
 	
@@ -433,7 +441,7 @@ func init_from_mesh_vector_data(mvd:MeshVectorData):
 	var f_sel:DataVectorByte = mvd.get_face_data(MeshVectorData.F_SELECTED)
 	var face_selected:PackedByteArray = f_sel.data
 	
-	var f_normal:DataVectorByte
+	var f_normal:DataVectorFloat
 	var face_normal:PackedVector3Array
 	if mvd.has_face_data(MeshVectorData.F_NORMAL):
 		f_normal = mvd.get_face_data(MeshVectorData.F_NORMAL)
@@ -486,6 +494,8 @@ func init_from_mesh_vector_data(mvd:MeshVectorData):
 		vertices[edge.end_index].edge_indices.append(e_idx)
 		
 		edge.selected = edge_selected[e_idx]
+		if e_uv_seam:
+			edge.uv_seam = edge_uv_seam[e_idx]
 	
 	#var fv_face_indices:PackedInt32Array
 	#var fv_vertex_indices:PackedInt32Array
@@ -840,9 +850,129 @@ func to_convex_block_data()->ConvexBlockData:
 	return result
 
 func to_mesh_vector_data()->MeshVectorData:
+	#var mvd:MeshVectorData = MeshVectorData.new()
+	#var block_data:ConvexBlockData = to_convex_block_data()
+	#mvd.create_from_convex_block(block_data)
+	#return mvd
+
 	var mvd:MeshVectorData = MeshVectorData.new()
-	var block_data:ConvexBlockData = to_convex_block_data()
-	mvd.create_from_convex_block(block_data)
+	
+	mvd.active_vertex = active_vertex
+	mvd.active_edge = active_edge
+	mvd.active_face = active_face
+	mvd.active_face_vertex = active_face_vertex
+	
+	mvd.num_vertices = vertices.size()
+	mvd.num_edges = edges.size()
+	mvd.num_faces = faces.size()
+	mvd.num_face_vertices = face_vertices.size()
+	
+	var vertex_points:PackedVector3Array
+	var vertex_normals:PackedVector3Array
+	var vertex_selected:PackedByteArray
+	for v:VertexInfo in vertices:
+		vertex_points.append(v.point)
+		vertex_normals.append(v.normal)
+		vertex_selected.append(v.selected)
+		
+	mvd.set_vertex_data(DataVectorFloat.new(MeshVectorData.V_POSITION, 
+		vertex_points.to_byte_array().to_float32_array(), 
+		DataVector.DataType.VECTOR3))
+	mvd.set_vertex_data(DataVectorFloat.new(MeshVectorData.V_NORMAL, 
+		vertex_normals.to_byte_array().to_float32_array(),
+		DataVector.DataType.VECTOR3))
+	mvd.set_vertex_data(DataVectorByte.new(MeshVectorData.V_SELECTED, 
+		vertex_selected,
+		DataVector.DataType.BOOL))
+	
+	var edge_selected:PackedByteArray
+	var edge_uv_seam:PackedByteArray
+	var edge_vertex_indices:PackedInt32Array
+	var edge_face_indices:PackedInt32Array
+	for e:EdgeInfo in edges:
+		edge_selected.append(e.selected)
+		edge_uv_seam.append(e.uv_seam)
+		
+		edge_vertex_indices.append(e.start_index)
+		edge_vertex_indices.append(e.end_index)
+		edge_face_indices.append(e.face_indices[0])
+		edge_face_indices.append(e.face_indices[1])
+		
+	mvd.set_edge_data(DataVectorByte.new(MeshVectorData.E_SELECTED, 
+		edge_selected,
+		DataVector.DataType.BOOL))
+	mvd.set_edge_data(DataVectorByte.new(MeshVectorData.E_UV_SEAM, 
+		edge_uv_seam,
+		DataVector.DataType.BOOL))
+	mvd.edge_vertex_indices = edge_vertex_indices
+	mvd.edge_face_indices = edge_face_indices
+		
+	var face_selected:PackedByteArray
+	var face_visible:PackedByteArray
+	var face_mat_id:PackedInt32Array
+	var face_normal:PackedVector3Array
+	var face_vertex_count:PackedInt32Array
+	var face_vertex_indices:PackedInt32Array
+
+#@export var face_vertex_count:PackedInt32Array #Number of verts in each face
+#@export var face_vertex_indices:PackedInt32Array #Vertex index per face
+	
+	for f:FaceInfo in faces:
+		face_selected.append(f.selected)
+		face_visible.append(f.visible)
+		face_mat_id.append(f.material_id)
+		face_normal.append(f.normal)
+		
+		face_vertex_count.append(f.vertex_indices.size())
+		face_vertex_indices.append_array(f.vertex_indices)
+
+	mvd.face_vertex_count = face_vertex_count
+	mvd.face_vertex_indices = face_vertex_indices
+
+	mvd.set_face_data(DataVectorByte.new(MeshVectorData.F_SELECTED, 
+		face_selected,
+		DataVector.DataType.BOOL))
+	mvd.set_face_data(DataVectorByte.new(MeshVectorData.F_VISIBLE, 
+		face_visible,
+		DataVector.DataType.BOOL))
+	mvd.set_face_data(DataVectorFloat.new(MeshVectorData.F_NORMAL, 
+		face_normal.to_byte_array().to_float32_array(),
+		DataVector.DataType.VECTOR3))
+	mvd.set_face_data(DataVectorInt.new(MeshVectorData.F_MATERIAL_INDEX, 
+		face_mat_id.to_byte_array().to_int32_array(),
+		DataVector.DataType.INT))
+	
+	var face_vertex_face_index:PackedInt32Array
+	var face_vertex_vertex_index:PackedInt32Array
+	var face_vertex_normal:PackedVector3Array
+	var face_vertex_color:PackedFloat32Array
+	var face_vertex_uv0:PackedVector2Array
+	for fv:FaceVertexInfo in face_vertices:
+		face_vertex_face_index.append(fv.face_index)
+		face_vertex_vertex_index.append(fv.vertex_index)
+		face_vertex_normal.append(fv.normal)
+		face_vertex_color.append(fv.color.r)
+		face_vertex_color.append(fv.color.g)
+		face_vertex_color.append(fv.color.b)
+		face_vertex_color.append(fv.color.a)
+		face_vertex_uv0.append(fv.uv0)
+	
+	mvd.set_face_vertex_data(DataVectorInt.new(MeshVectorData.FV_FACE_INDEX, 
+		face_vertex_face_index.to_byte_array().to_int32_array(),
+		DataVector.DataType.INT))
+	mvd.set_face_vertex_data(DataVectorInt.new(MeshVectorData.FV_VERTEX_INDEX, 
+		face_vertex_vertex_index.to_byte_array().to_int32_array(),
+		DataVector.DataType.INT))
+	mvd.set_face_vertex_data(DataVectorFloat.new(MeshVectorData.FV_NORMAL, 
+		face_vertex_normal.to_byte_array().to_float32_array(),
+		DataVector.DataType.VECTOR3))
+	mvd.set_face_vertex_data(DataVectorFloat.new(MeshVectorData.FV_COLOR, 
+		face_vertex_color.to_byte_array().to_float32_array(),
+		DataVector.DataType.COLOR))
+	mvd.set_face_vertex_data(DataVectorFloat.new(MeshVectorData.FV_UV0, 
+		face_vertex_uv0.to_byte_array().to_float32_array(),
+		DataVector.DataType.VECTOR2))
+	
 	return mvd
 
 func get_face(face_index:int)->FaceInfo:
@@ -1706,3 +1836,24 @@ func get_camera_facing_edges(viewport_camera:Camera3D, local_to_world:Transform3
 		result.append(e)
 	
 	return result
+
+func generate_uv_triplanar(selected_faces_only:bool = false, point_transform:Transform3D = Transform3D.IDENTITY):
+	for face:FaceInfo in faces:
+		if selected_faces_only && !face.selected:
+			continue
+		
+		for v_idx in face.vertex_indices:
+			var vert:VertexInfo = vertices[v_idx]
+			var pt:Vector3 = point_transform * vert.point
+			
+			var uv:Vector2
+			match (MathUtil.get_longest_axis(face.normal)):
+				MathUtil.Axis.X:
+					uv = Vector2(-pt.z, -pt.y)
+				MathUtil.Axis.Y:
+					uv = Vector2(-pt.x, -pt.z)
+				MathUtil.Axis.Z:
+					uv = Vector2(-pt.x, -pt.y)
+			
+			var fv:FaceVertexInfo = get_face_vertex(face.index, v_idx)
+			fv.uv0 = uv

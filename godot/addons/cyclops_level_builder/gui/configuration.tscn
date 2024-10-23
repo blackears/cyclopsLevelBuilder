@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://nke18tf4e83i"]
+[gd_scene load_steps=47 format=3 uid="uid://nke18tf4e83i"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/actions/mesh/action_convert_to_mesh.gd" id="1_0hgma"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/actions/mesh/action_delete_selected_blocks.gd" id="2_emaam"]
@@ -22,6 +22,7 @@
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/actions/mesh/action_snap_to_grid.gd" id="20_e2ed5"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/actions/mesh/action_subtract_block.gd" id="21_p6w58"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/actions/io/action_export_as_cyclops.gd" id="22_dy3rm"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/actions/mesh/action_uv_gen_triplanar.gd" id="22_vggen"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/actions/io/action_export_as_gltf.gd" id="23_nnsqu"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/actions/io/action_export_as_godot_scene.gd" id="24_m0xgf"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/actions/io/action_import_cyclops_file.gd" id="25_4g35j"]
@@ -202,6 +203,9 @@ script = ExtResource("20_e2ed5")
 [node name="Subtract Block" type="Node" parent="Actions/Mesh"]
 script = ExtResource("21_p6w58")
 
+[node name="Generate UVs Triplanar" type="Node" parent="Actions/Mesh"]
+script = ExtResource("22_vggen")
+
 [node name="IO" type="Node" parent="Actions"]
 
 [node name="Export As Cyclops File___" type="Node" parent="Actions/IO"]
@@ -366,6 +370,9 @@ action = NodePath("../../../../../Actions/Mesh/Snap to grid")
 
 [node name="Snap Block" parent="Views/View3D/Menu/File" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../Actions/Mesh/Snap to grid")
+
+[node name="Generate UVs Triplanar" parent="Views/View3D/Menu/File" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+action = NodePath("../../../../../Actions/Mesh/Generate UVs Triplanar")
 
 [node name="Boolean" parent="Views/View3D/Menu/File" instance=ExtResource("27_s523r")]
 

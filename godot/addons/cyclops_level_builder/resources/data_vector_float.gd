@@ -47,33 +47,40 @@ func get_value(index:int)->float:
 
 func to_vec2_array()->PackedVector2Array:
 	var result:PackedVector2Array
-	for i in num_components():
-		result.append(get_value_vec2(i))
+	for i in range(0, data.size(), 2):
+		result.append(Vector2(data[i], data[i + 1]))
 	return result
 
 func to_vec3_array()->PackedVector3Array:
 	var result:PackedVector3Array
-	for i in num_components():
-		result.append(get_value_vec3(i))
+	for i in range(0, data.size(), 3):
+		result.append(Vector3(data[i], data[i + 1], data[i + 2]))
 	return result
 
 func to_vec4_array()->Array[Vector4]:
 	var result:Array[Vector4]
-	for i in num_components():
-		result.append(get_value_vec4(i))
+	for i in range(0, data.size(), 4):
+		result.append(Vector4(data[i], data[i + 1], data[i + 2], data[i + 3]))
 	return result
 
 func to_color_array()->PackedColorArray:
 	var result:PackedColorArray
-	for i in num_components():
-		result.append(get_value_color(i))
+	for i in range(0, data.size(), 4):
+		result.append(Color(data[i], data[i + 1], data[i + 2], data[i + 3]))
 	return result
 
 func to_transform2d_array()->Array[Transform2D]:
 	#print("to_transform2d_array num_components() ", num_components())
 	var result:Array[Transform2D]
-	for i in num_components():
-		result.append(get_value_transform2d(i))
+	for i in range(0, data.size(), 6):
+		result.append(Transform2D(
+			Vector2(data[i], data[i + 1]), 
+			Vector2(data[i + 2], data[i + 3]),
+			Vector2(data[i + 4], data[i + 5])
+			))
+	
+	#for i in num_components():
+		#result.append(get_value_transform2d(i))
 	return result
 
 func get_value_vec2(index:int)->Vector2:
