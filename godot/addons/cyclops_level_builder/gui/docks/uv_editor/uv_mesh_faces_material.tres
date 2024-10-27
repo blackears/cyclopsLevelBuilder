@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://o73kkc2hlx6j"]
+
+[ext_resource type="Shader" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_mesh_faces_shader.gdshader" id="1_y6wqs"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_y6wqs")
+shader_parameter/face_color = Color(1, 1, 1, 0.2)

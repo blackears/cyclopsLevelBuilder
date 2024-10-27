@@ -147,8 +147,9 @@ func build_from_block():
 
 	if Engine.is_editor_hint():
 #		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
-		var global_scene = get_node("/root/CyclopsAutoload")
-		display_mode = global_scene.builder.display_mode
+		if has_node("/root/CyclopsAutoload"):
+			var global_scene = get_node("/root/CyclopsAutoload")
+			display_mode = global_scene.builder.display_mode
 	
 #	print("block_data %s" % block_data)
 #	print("vert points %s" % block_data.vertex_points)
@@ -168,16 +169,17 @@ func build_from_block():
 	var mesh:ArrayMesh
 
 	if Engine.is_editor_hint():
-		var global_scene = get_node("/root/CyclopsAutoload")
-		mesh_wire.mesh = vol.create_mesh_wire(global_scene.outline_material)
-		#print ("added wireframe")
+		if has_node("/root/CyclopsAutoload"):
+			var global_scene = get_node("/root/CyclopsAutoload")
+			mesh_wire.mesh = vol.create_mesh_wire(global_scene.outline_material)
+			#print ("added wireframe")
 
-		#print("rebuilding mesh")
-		if display_mode == DisplayMode.Type.MATERIAL:
-			mesh = vol.create_mesh(materials, default_material)
-		if display_mode == DisplayMode.Type.MESH:
-			mesh = vol.create_mesh(materials, default_material, true)
-			#print ("added faces")
+			#print("rebuilding mesh")
+			if display_mode == DisplayMode.Type.MATERIAL:
+				mesh = vol.create_mesh(materials, default_material)
+			if display_mode == DisplayMode.Type.MESH:
+				mesh = vol.create_mesh(materials, default_material, true)
+				#print ("added faces")
 	else:
 		mesh = vol.create_mesh(materials, default_material)
 	
@@ -201,32 +203,18 @@ func _process(delta):
 		build_from_block()
 
 	if Engine.is_editor_hint():
-#		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
-		var global_scene = get_node("/root/CyclopsAutoload")
+		if has_node("/root/CyclopsAutoload"):
+	#		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
+			var global_scene = get_node("/root/CyclopsAutoload")
 
-		if display_mode != global_scene.builder.display_mode:
-			dirty = true
-			return
+			if display_mode != global_scene.builder.display_mode:
+				dirty = true
+				return
 
-#func get_edge_labels(viewport_camera:Camera3D, local_to_world:Transform3D):
-	#var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
-#
-	#var font:Font = global_scene.units_font
-	#var font_size:float = global_scene.units_font_size	
-	#var descent:float = font.get_descent(font_size)
-	#var text_offset:Vector2 = Vector2(0, -global_scene.vertex_radius - descent)
-	#
-	#if control_mesh:
-		#var edges:Array[ConvexVolume.EdgeInfo] = control_mesh.get_camera_facing_edges(viewport_camera, local_to_world)
-		#for e in edges:
-			#var focus:Vector3 = edges[0].get_midpoint()
-			#var focus_2d:Vector2 = viewport_camera.unproject_position(focus)
-		#
-			##var v0:ConvexVolume.VertexInfo = vertices[e.start_index]
-			##var v1:ConvexVolume.VertexInfo = vertices[e.end_index]
-	#pass
-	
 func draw_unit_labels(viewport_camera:Camera3D, local_to_world:Transform3D):
+	if !has_node("/root/CyclopsAutoload"):
+		return
+		
 	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 
 	var font:Font = global_scene.units_font
@@ -249,12 +237,14 @@ func draw_unit_labels(viewport_camera:Camera3D, local_to_world:Transform3D):
 		
 
 func append_mesh_outline(mesh:ImmediateMesh, viewport_camera:Camera3D, local_to_world:Transform3D, mat:Material):
-	#var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 	
 	if control_mesh:
 		control_mesh.append_mesh_outline(mesh, viewport_camera, local_to_world, mat)
 
 func append_mesh_wire(mesh:ImmediateMesh):
+	if !has_node("/root/CyclopsAutoload"):
+		return
+		
 	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 	
 	var mat:Material = global_scene.outline_material

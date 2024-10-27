@@ -66,11 +66,11 @@ func on_keymap_changed():
 	
 var material_dock:MaterialPaletteViewport
 var overlays_dock:OverlaysDock
+var view_uv_editor:ViewUvEditor
 var convex_face_editor_dock:ConvexFaceEdtiorViewport
 var tool_properties_dock:ToolPropertiesDock
 var snapping_properties_dock:SnappingPropertiesDock
 var cyclops_console_dock:CyclopsConsole
-#var main_toolbar:MainToolbar
 var editor_toolbar:EditorToolbar
 var upgrade_cyclops_blocks_toolbar:UpgradeCyclopsBlocksToolbar
 var activated:bool = false
@@ -146,7 +146,6 @@ func get_overlay(name:String)->CyclopsOverlayObject:
 	
 func get_snapping_manager()->SnappingManager:
 	var mgr:SnappingManager = SnappingManager.new()
-#	mgr.snap_enabled = CyclopsAutoload.settings.get_property(CyclopsGlobalScene.SNAPPING_ENABLED)
 	mgr.snap_enabled = true
 	mgr.snap_tool = snapping_system
 	
@@ -197,7 +196,6 @@ func _enter_tree():
 	add_custom_type("CyclopsConvexBlockBody", "Node", preload("nodes/cyclops_convex_block_body.gd"), preload("nodes/cyclops_blocks_icon.png"))
 
 	add_autoload_singleton(AUTOLOAD_NAME, "res://addons/cyclops_level_builder/cyclops_global_scene.tscn")
-	#add_autoload_singleton(CYCLOPS_HUD_NAME, "res://addons/cyclops_level_builder/cyclops_global_hud.tscn")
 
 	var overlay:ObjectInfoOverlay = ObjectInfoOverlay.new()
 	overlay.plugin = self
@@ -205,6 +203,9 @@ func _enter_tree():
 	
 	material_dock = preload("res://addons/cyclops_level_builder/gui/docks/material_palette/material_palette_viewport.tscn").instantiate()
 	material_dock.builder = self
+
+	view_uv_editor = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/view_uv_editor.tscn").instantiate()
+	view_uv_editor.plugin = self
 	
 	overlays_dock = preload("res://addons/cyclops_level_builder/gui/docks/overlays/overlays_dock.tscn").instantiate()
 	overlays_dock.plugin = self
@@ -221,9 +222,6 @@ func _enter_tree():
 	cyclops_console_dock = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/cyclops_console.tscn").instantiate()
 	cyclops_console_dock.editor_plugin = self
 	
-	#main_toolbar = preload("gui/menu/main_toolbar.tscn").instantiate()
-	#main_toolbar.editor_plugin = self
-	
 	editor_toolbar = preload("gui/menu/editor_toolbar.tscn").instantiate()
 	editor_toolbar.editor_plugin = self
 
@@ -232,10 +230,9 @@ func _enter_tree():
 
 	add_control_to_bottom_panel(cyclops_console_dock, "Cyclops")
 	
-#	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, main_toolbar)
-
 	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
 	add_control_to_bottom_panel(material_dock, "Materials")
+	add_control_to_bottom_panel(view_uv_editor, "UV Editor")
 	
 	var editor:EditorInterface = get_editor_interface()
 	var selection:EditorSelection = editor.get_selection()
@@ -264,18 +261,11 @@ func _exit_tree():
 	file.store_string(JSON.stringify(editor_cache, "    "))
 	file.close()
 
-	#EditorInterface.get_resource_filesystem().filesystem_changed.disconnect(on_filesystem_changed)
-	
 	remove_child(viewport_3d_manager)
 	
-	#for i in 4:
-		#var vr:ViewportRenderings = viewport_renderings[i]
-		#vr.dispose()
-	#viewport_renderings.clear()
 	
 	# Clean-up of the plugin goes here.
 	remove_autoload_singleton(AUTOLOAD_NAME)
-	#remove_autoload_singleton(CYCLOPS_HUD_NAME)
 	
 	remove_custom_type("CyclopsScene")
 	
@@ -285,27 +275,26 @@ func _exit_tree():
 	remove_custom_type("CyclopsConvexBlockBody")
 	
 	remove_control_from_bottom_panel(cyclops_console_dock)
-#	remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, main_toolbar)
 	remove_control_from_bottom_panel(material_dock)
+	remove_control_from_bottom_panel(view_uv_editor)
 	
 	if activated:
 		remove_control_from_docks(convex_face_editor_dock)
 		remove_control_from_docks(tool_properties_dock)
 		remove_control_from_docks(snapping_properties_dock)
 		remove_control_from_docks(overlays_dock)
-		remove_control_from_docks(cyclops_console_dock)
 		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
 
 	if upgrade_cyclops_blocks_toolbar.activated:
 		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, upgrade_cyclops_blocks_toolbar)
 
 	material_dock.queue_free()
+	view_uv_editor.queue_free()
 	convex_face_editor_dock.queue_free()
 	tool_properties_dock.queue_free()
 	overlays_dock.queue_free()
 	snapping_properties_dock.queue_free()
 	cyclops_console_dock.queue_free()
-#	main_toolbar.queue_free()
 	editor_toolbar.queue_free()
 	upgrade_cyclops_blocks_toolbar.queue_free()
 
@@ -418,8 +407,6 @@ func update_activation():
 	if node is CyclopsBlock || always_on:
 		#print("updarting activation")
 		if !activated:
-			#add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
-			#add_control_to_bottom_panel(material_dock, "Materials")
 			add_control_to_dock(DOCK_SLOT_RIGHT_BL, convex_face_editor_dock)
 			add_control_to_dock(DOCK_SLOT_RIGHT_BL, tool_properties_dock)
 			add_control_to_dock(DOCK_SLOT_RIGHT_BL, snapping_properties_dock)
@@ -427,8 +414,6 @@ func update_activation():
 			activated = true
 	else:
 		if activated:
-			#remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
-			#remove_control_from_bottom_panel(material_dock)
 			remove_control_from_docks(convex_face_editor_dock)
 			remove_control_from_docks(tool_properties_dock)
 			remove_control_from_docks(snapping_properties_dock)
@@ -507,6 +492,7 @@ func _get_state()->Dictionary:
 	#state["editor_cache"] = editor_cache.duplicate()
 	
 	material_dock.save_state(state)
+	view_uv_editor.save_state(state)
 	convex_face_editor_dock.save_state(state)
 	tool_properties_dock.save_state(state)
 	snapping_properties_dock.save_state(state)
@@ -521,6 +507,7 @@ func _set_state(state):
 	#editor_cache = state.get("editor_cache", {}).duplicate()
 	
 	material_dock.load_state(state)
+	view_uv_editor.load_state(state)
 	convex_face_editor_dock.load_state(state)
 	tool_properties_dock.load_state(state)
 	snapping_properties_dock.load_state(state)
@@ -613,6 +600,8 @@ func switch_to_snapping_system(_snapping_system:CyclopsSnappingSystem):
 	snapping_tool_changed.emit()
 
 func get_global_scene()->CyclopsGlobalScene:
+	if !has_node("/root/CyclopsAutoload"):
+		return null
 	var scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 	return scene
 

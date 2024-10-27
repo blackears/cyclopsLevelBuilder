@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://i7aq8s61y0mk"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_mesh_renderer.gd" id="1_w7w2b"]
+[ext_resource type="Material" uid="uid://o73kkc2hlx6j" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_mesh_faces_material.tres" id="2_a3p2g"]
+[ext_resource type="Material" uid="uid://cag61rfyg5p1l" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_mesh_edges_material.tres" id="2_oga25"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_mw6g3"]
+lightmap_size_hint = Vector2i(14, 21)
+
+[sub_resource type="PrismMesh" id="PrismMesh_52s6e"]
+lightmap_size_hint = Vector2i(14, 21)
+
+[node name="uv_mesh_renderer" type="Node3D"]
+script = ExtResource("1_w7w2b")
+
+[node name="test" type="Node3D" parent="."]
+visible = false
+
+[node name="test_mesh_faces" type="MeshInstance3D" parent="test"]
+mesh = SubResource("PrismMesh_mw6g3")
+skeleton = NodePath("")
+surface_material_override/0 = ExtResource("2_a3p2g")
+
+[node name="test_mesh_edges" type="MeshInstance3D" parent="test"]
+mesh = SubResource("PrismMesh_52s6e")
+skeleton = NodePath("")
+surface_material_override/0 = ExtResource("2_oga25")
+
+[node name="meshes" type="Node3D" parent="."]
+unique_name_in_owner = true

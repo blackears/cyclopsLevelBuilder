@@ -140,5 +140,6 @@ face_vertex_data = {
 [node name="Node3D" type="Node3D"]
 
 [node name="block0" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.36404)
 script = ExtResource("1_fg2s4")
 mesh_vector_data = SubResource("Resource_inawy")

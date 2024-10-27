@@ -1272,6 +1272,50 @@ func calc_lightmap_uvs():
 		var face:FaceInfo = faces[ft.face_index]
 		face.lightmap_uvs = xform_inv * ft.points
 
+#func create_mesh_wire_old(material:Material)->ImmediateMesh:
+##	if Engine.is_editor_hint():
+##		return
+	#var mesh:ImmediateMesh = ImmediateMesh.new()
+#
+	#mesh.surface_begin(Mesh.PRIMITIVE_LINES, material)
+#
+	#for e in edges:
+		#var v0:VertexInfo = vertices[e.start_index]
+		#var v1:VertexInfo = vertices[e.end_index]
+#
+		#mesh.surface_add_vertex(v0.point)
+		#mesh.surface_add_vertex(v1.point)
+#
+	#mesh.surface_end()
+	#
+	#return mesh
+
+
+func create_mesh_wire(material:Material)->ArrayMesh:
+
+	var mesh:ArrayMesh = ArrayMesh.new()
+
+	var indices:PackedInt32Array
+	var points_indexed:PackedVector3Array
+
+	for v in vertices:
+		points_indexed.append(v.point)
+		
+	for e in edges:
+		indices.append(e.start_index)
+		indices.append(e.end_index)
+		
+	var arrays:Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = points_indexed
+	arrays[Mesh.ARRAY_INDEX] = indices
+	
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_LINES, arrays)
+	mesh.surface_set_material(0, material)
+	
+	return mesh
+
+
 func create_mesh(material_list:Array[Material], default_material:Material, override_with_default_material:bool = false)->ArrayMesh:
 
 	var mesh:ArrayMesh = ArrayMesh.new()
@@ -1582,26 +1626,6 @@ func append_mesh_outline(mesh:ImmediateMesh, viewport_camera:Camera3D, local_to_
 			
 		mesh.surface_end()
 		
-		
-		
-func create_mesh_wire(material:Material)->ImmediateMesh:
-#	if Engine.is_editor_hint():
-#		return
-	var mesh:ImmediateMesh = ImmediateMesh.new()
-
-	mesh.surface_begin(Mesh.PRIMITIVE_LINES, material)
-
-	for e in edges:
-		var v0:VertexInfo = vertices[e.start_index]
-		var v1:VertexInfo = vertices[e.end_index]
-
-		mesh.surface_add_vertex(v0.point)
-		mesh.surface_add_vertex(v1.point)
-
-	mesh.surface_end()
-	
-	return mesh
-
 
 func intersect_ray_closest(origin:Vector3, dir:Vector3)->IntersectResults:
 	if bounds.intersects_ray(origin, dir) == null:
