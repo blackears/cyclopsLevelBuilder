@@ -66,6 +66,8 @@ func _snap_point(point:Vector3, query:SnappingQuery)->Vector3:
 		
 		#print("check block ", block.name)
 		var ctrl_mesh:ConvexVolume = block.control_mesh
+		if !ctrl_mesh:
+			continue
 		var bounds_local:AABB = ctrl_mesh.bounds
 		
 		var obj_center:Vector3 = block.global_transform * bounds_local.get_center()
@@ -114,4 +116,3 @@ func _get_properties_editor()->Control:
 	
 	return ed
 	
-
