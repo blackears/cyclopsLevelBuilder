@@ -31,6 +31,7 @@ signal snapping_tool_changed
 signal tool_changed(tool:CyclopsTool)
 signal keymap_updated
 signal keymap_changed
+signal config_changed
 
 const AUTOLOAD_NAME = "CyclopsAutoload"
 const CYCLOPS_HUD_NAME = "CyclopsGlobalHud"
@@ -152,8 +153,11 @@ func get_snapping_manager()->SnappingManager:
 	return mgr
 
 func _ready():
-	config_scene = preload(config_scene_path).instantiate()
-	add_child(config_scene)
+	#config_scene = preload(config_scene_path).instantiate()
+	#print("adding config scene")
+#
+	#add_child(config_scene)
+	pass
 
 func _get_plugin_name()->String:
 	return "CyclopsLevelBuilder"
@@ -163,6 +167,8 @@ func _get_plugin_icon()->Texture2D:
 
 
 func _enter_tree():
+	config_scene = preload(config_scene_path).instantiate()
+	add_child(config_scene)
 	
 	if FileAccess.file_exists(editor_cache_file):
 		#print(">> _enter_tree")
@@ -255,6 +261,7 @@ func _enter_tree():
 
 
 func _exit_tree():
+	
 	var file:FileAccess = FileAccess.open(editor_cache_file, FileAccess.WRITE)
 	#var text:String = JSON.stringify(editor_cache, "  ")
 	#print("saving cache:", text)
@@ -297,6 +304,9 @@ func _exit_tree():
 	cyclops_console_dock.queue_free()
 	editor_toolbar.queue_free()
 	upgrade_cyclops_blocks_toolbar.queue_free()
+
+	remove_child(config_scene)
+	config_scene.queue_free()
 
 func load_config():
 	#load_actions()

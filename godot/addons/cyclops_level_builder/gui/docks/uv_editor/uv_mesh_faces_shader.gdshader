@@ -1,7 +1,7 @@
 shader_type spatial;
-render_mode blend_mix, unshaded, depth_draw_never, cull_disabled, shadows_disabled;
+render_mode blend_mix, unshaded, depth_draw_never, depth_test_disabled, cull_disabled, shadows_disabled, ambient_light_disabled, fog_disabled;
 
-uniform vec4 face_color : source_color = vec4(1.0, 1.0, 1.0, 0.2);
+uniform vec4 face_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 
 void vertex() {
 	// Called for every vertex the material is visible on.
@@ -11,8 +11,8 @@ void vertex() {
 
 void fragment() {
 	// Called for every pixel the material is visible on.
-	ALBEDO = face_color.rgb;
-	ALPHA = face_color.a;
+	ALBEDO = (face_color * COLOR).rgb;
+	ALPHA = (face_color * COLOR).a;
 }
 
 //void light() {

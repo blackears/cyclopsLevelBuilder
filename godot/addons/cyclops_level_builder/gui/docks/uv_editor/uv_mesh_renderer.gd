@@ -25,8 +25,8 @@
 @tool
 extends Node3D
 
-@export var face_sel_color:Color = Color(1, .5, 0, .2)
-@export var face_unsel_color:Color = Color(.5, .5, .5, .2)
+@export var face_sel_color:Color = Color(1, .5, 0, .4)
+@export var face_unsel_color:Color = Color(.5, .5, .5, .4)
 @export var edge_sel_color:Color = Color(1, .5, 0, 1)
 @export var edge_unsel_color:Color = Color(.5, .5, .5, 1)
 
@@ -69,15 +69,17 @@ func create_mesh_faces(cv:ConvexVolume, material:Material,
 		
 		var color:Color = sel_color if f.selected else unsel_color
 		
-		for local_fv_idx_0:int in f.face_vertex_indices.size():
-			
-			var fv0:ConvexVolume.FaceVertexInfo = cv.face_vertices[f.face_vertex_indices[local_fv_idx_0]]
-			var v0:ConvexVolume.VertexInfo = cv.vertices[fv0.vertex_index]
+		var v_idx_arr:PackedInt32Array = f.get_trianges_v_idx()
+		for v_idx in v_idx_arr:
+			var fv0:ConvexVolume.FaceVertexInfo = cv.get_face_vertex(f.index, v_idx)
+			var v0:ConvexVolume.VertexInfo = cv.vertices[v_idx]
 			
 			points_indexed.append(v0.point)
 			uvs_indexed.append(fv0.uv0)
 			colors_indexed.append(color)
 			indices.append(indices.size())
+		
+		
 		
 	var arrays:Array = []
 	arrays.resize(Mesh.ARRAY_MAX)
@@ -86,7 +88,7 @@ func create_mesh_faces(cv:ConvexVolume, material:Material,
 	arrays[Mesh.ARRAY_TEX_UV] = uvs_indexed
 	arrays[Mesh.ARRAY_COLOR] = colors_indexed
 	
-	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_LINES, arrays)
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	mesh.surface_set_material(0, material)
 	
 	return mesh
@@ -107,13 +109,14 @@ func create_mesh_edges(cv:ConvexVolume, material:Material,
 		if selected_faces_only && !f.selected:
 			continue
 		
+#		print("face")
 		for local_fv_idx_0:int in f.face_vertex_indices.size():
 			var local_fv_idx_1:int = wrap(local_fv_idx_0 + 1, 0, f.face_vertex_indices.size())
 			
 			var fv0:ConvexVolume.FaceVertexInfo = cv.face_vertices[f.face_vertex_indices[local_fv_idx_0]]
 			var fv1:ConvexVolume.FaceVertexInfo = cv.face_vertices[f.face_vertex_indices[local_fv_idx_1]]
 			
-			var e:ConvexVolume.EdgeInfo = cv.get_edge(fv0.index, fv1.index)
+			var e:ConvexVolume.EdgeInfo = cv.get_edge(fv0.vertex_index, fv1.vertex_index)
 			var color:Color = edge_sel_color if e.selected else edge_unsel_color
 			
 			var v0:ConvexVolume.VertexInfo = cv.vertices[fv0.vertex_index]
@@ -125,6 +128,7 @@ func create_mesh_edges(cv:ConvexVolume, material:Material,
 			uvs_indexed.append(fv0.uv0)
 			uvs_indexed.append(fv1.uv0)
 			
+#			print("v0.point ", v0.point, " v1.point ", v1.point)
 			points_indexed.append(v0.point)
 			points_indexed.append(v1.point)
 			
@@ -172,7 +176,7 @@ func _process(delta: float) -> void:
 			
 			var edge_mesh:MeshInstance3D = MeshInstance3D.new()
 			%meshes.add_child(edge_mesh)
-			edge_mesh.mesh = create_mesh_faces(cv, uv_mesh_edges_mat, edge_sel_color, edge_unsel_color)
+			edge_mesh.mesh = create_mesh_edges(cv, uv_mesh_edges_mat, edge_sel_color, edge_unsel_color)
 		
 		dirty = false
 	pass

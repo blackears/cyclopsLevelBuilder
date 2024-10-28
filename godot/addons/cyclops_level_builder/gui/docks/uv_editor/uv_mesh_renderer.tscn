@@ -12,6 +12,8 @@ lightmap_size_hint = Vector2i(14, 21)
 
 [node name="uv_mesh_renderer" type="Node3D"]
 script = ExtResource("1_w7w2b")
+face_sel_color = Color(1, 0.5, 0, 0.2)
+face_unsel_color = Color(0.5, 0.5, 0.5, 0.2)
 
 [node name="test" type="Node3D" parent="."]
 visible = false

@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://nke18tf4e83i"]
+[gd_scene load_steps=48 format=3 uid="uid://nke18tf4e83i"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/actions/mesh/action_convert_to_mesh.gd" id="1_0hgma"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/actions/mesh/action_delete_selected_blocks.gd" id="2_emaam"]
@@ -43,6 +43,7 @@
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_material_brush.gd" id="38_r23xl"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_move.gd" id="39_d3762"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_prism.gd" id="40_hiraq"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_move.gd" id="41_1e7oi"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_rotate.gd" id="41_unjic"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_stairs.gd" id="42_l6okp"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_vertex_color_brush.gd" id="43_36wj4"]
@@ -76,67 +77,67 @@ script = ExtResource("6_qqbvp")
 [node name="select tool block" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "cube"
-tool = NodePath("../../../../Tools/Block")
+tool = NodePath("../../../../Tools/View3D/Block")
 
 [node name="select tool clip" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "cube"
-tool = NodePath("../../../../Tools/Clip")
+tool = NodePath("../../../../Tools/View3D/Clip")
 
 [node name="select tool cylinder" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "cylinder"
-tool = NodePath("../../../../Tools/Cylinder")
+tool = NodePath("../../../../Tools/View3D/Cylinder")
 
 [node name="select tool duplicate" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
-tool = NodePath("../../../../Tools/Duplicate")
+tool = NodePath("../../../../Tools/View3D/Duplicate")
 
 [node name="select tool edit edge" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
-tool = NodePath("../../../../Tools/Edit Edge")
+tool = NodePath("../../../../Tools/View3D/Edit Edge")
 
 [node name="select tool edit face" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
-tool = NodePath("../../../../Tools/Edit Face")
+tool = NodePath("../../../../Tools/View3D/Edit Face")
 
 [node name="select tool edit vertex" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
-tool = NodePath("../../../../Tools/Edit Vertex")
+tool = NodePath("../../../../Tools/View3D/Edit Vertex")
 
 [node name="select tool material brush" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
-tool = NodePath("../../../../Tools/Material Brush")
+tool = NodePath("../../../../Tools/View3D/Material Brush")
 
 [node name="select tool move" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
-tool = NodePath("../../../../Tools/Move")
+tool = NodePath("../../../../Tools/View3D/Move")
 
 [node name="select tool prism" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
-tool = NodePath("../../../../Tools/Prism")
+tool = NodePath("../../../../Tools/View3D/Prism")
 
 [node name="select tool rotate" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
-tool = NodePath("../../../../Tools/Rotate")
+tool = NodePath("../../../../Tools/View3D/Rotate")
 
 [node name="select tool stairs" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
-tool = NodePath("../../../../Tools/Stairs")
+tool = NodePath("../../../../Tools/View3D/Stairs")
 
 [node name="select tool vertex color brush" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
-tool = NodePath("../../../../Tools/Vertex Color Brush")
+tool = NodePath("../../../../Tools/View3D/Vertex Color Brush")
 
 [node name="Transforms" type="Node" parent="Actions/Mesh"]
 
@@ -225,44 +226,51 @@ script = ExtResource("26_fi00w")
 
 [node name="Tools" type="Node" parent="."]
 
-[node name="Move" type="Node" parent="Tools"]
+[node name="View3D" type="Node" parent="Tools"]
+
+[node name="Move" type="Node" parent="Tools/View3D"]
 script = ExtResource("39_d3762")
 
-[node name="Rotate" type="Node" parent="Tools"]
+[node name="Rotate" type="Node" parent="Tools/View3D"]
 script = ExtResource("41_unjic")
 
-[node name="Block" type="Node" parent="Tools"]
+[node name="Block" type="Node" parent="Tools/View3D"]
 script = ExtResource("31_i0r0b")
 
-[node name="Cylinder" type="Node" parent="Tools"]
+[node name="Cylinder" type="Node" parent="Tools/View3D"]
 script = ExtResource("33_d3xxe")
 
-[node name="Prism" type="Node" parent="Tools"]
+[node name="Prism" type="Node" parent="Tools/View3D"]
 script = ExtResource("40_hiraq")
 
-[node name="Stairs" type="Node" parent="Tools"]
+[node name="Stairs" type="Node" parent="Tools/View3D"]
 script = ExtResource("42_l6okp")
 
-[node name="Clip" type="Node" parent="Tools"]
+[node name="Clip" type="Node" parent="Tools/View3D"]
 script = ExtResource("32_o11u8")
 
-[node name="Duplicate" type="Node" parent="Tools"]
+[node name="Duplicate" type="Node" parent="Tools/View3D"]
 script = ExtResource("34_bxx15")
 
-[node name="Edit Vertex" type="Node" parent="Tools"]
+[node name="Edit Vertex" type="Node" parent="Tools/View3D"]
 script = ExtResource("37_vfe51")
 
-[node name="Edit Edge" type="Node" parent="Tools"]
+[node name="Edit Edge" type="Node" parent="Tools/View3D"]
 script = ExtResource("35_rsoxq")
 
-[node name="Edit Face" type="Node" parent="Tools"]
+[node name="Edit Face" type="Node" parent="Tools/View3D"]
 script = ExtResource("36_0crd5")
 
-[node name="Material Brush" type="Node" parent="Tools"]
+[node name="Material Brush" type="Node" parent="Tools/View3D"]
 script = ExtResource("38_r23xl")
 
-[node name="Vertex Color Brush" type="Node" parent="Tools"]
+[node name="Vertex Color Brush" type="Node" parent="Tools/View3D"]
 script = ExtResource("43_36wj4")
+
+[node name="UvEditor" type="Node" parent="Tools"]
+
+[node name="Move" type="Node" parent="Tools/UvEditor"]
+script = ExtResource("41_1e7oi")
 
 [node name="Views" type="Node" parent="."]
 
@@ -281,56 +289,56 @@ action = NodePath("../../../../../Actions/IO/Import Godot MeshInstance___")
 [node name="Toolbar" type="Node" parent="Views/Default"]
 
 [node name="Block" parent="Views/Default/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
-tool = NodePath("../../../../Tools/Block")
+tool = NodePath("../../../../Tools/View3D/Block")
 
 [node name="Cylinder" parent="Views/Default/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
-tool = NodePath("../../../../Tools/Cylinder")
+tool = NodePath("../../../../Tools/View3D/Cylinder")
 
 [node name="Prism" parent="Views/Default/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
-tool = NodePath("../../../../Tools/Prism")
+tool = NodePath("../../../../Tools/View3D/Prism")
 
 [node name="Stairs" parent="Views/Default/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
-tool = NodePath("../../../../Tools/Stairs")
+tool = NodePath("../../../../Tools/View3D/Stairs")
 
 [node name="View3D" type="Node" parent="Views"]
 
 [node name="Toolbar" type="Node" parent="Views/View3D"]
 
 [node name="Move" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
-tool = NodePath("../../../../Tools/Move")
+tool = NodePath("../../../../Tools/View3D/Move")
 
 [node name="Rotate" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
-tool = NodePath("../../../../Tools/Rotate")
+tool = NodePath("../../../../Tools/View3D/Rotate")
 
 [node name="Block" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
-tool = NodePath("../../../../Tools/Block")
+tool = NodePath("../../../../Tools/View3D/Block")
 
 [node name="Cylinder" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
-tool = NodePath("../../../../Tools/Cylinder")
+tool = NodePath("../../../../Tools/View3D/Cylinder")
 
 [node name="Prism" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
-tool = NodePath("../../../../Tools/Prism")
+tool = NodePath("../../../../Tools/View3D/Prism")
 
 [node name="Stairs" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
-tool = NodePath("../../../../Tools/Stairs")
+tool = NodePath("../../../../Tools/View3D/Stairs")
 
 [node name="Clip" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
-tool = NodePath("../../../../Tools/Clip")
+tool = NodePath("../../../../Tools/View3D/Clip")
 
 [node name="Edit Vertex" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
-tool = NodePath("../../../../Tools/Edit Vertex")
+tool = NodePath("../../../../Tools/View3D/Edit Vertex")
 
 [node name="Edit Edge" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
-tool = NodePath("../../../../Tools/Edit Edge")
+tool = NodePath("../../../../Tools/View3D/Edit Edge")
 
 [node name="Edit Face" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
-tool = NodePath("../../../../Tools/Edit Face")
+tool = NodePath("../../../../Tools/View3D/Edit Face")
 
 [node name="Material Brush" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
-tool = NodePath("../../../../Tools/Material Brush")
+tool = NodePath("../../../../Tools/View3D/Material Brush")
 
 [node name="Vertex Color Brush" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
-tool = NodePath("../../../../Tools/Vertex Color Brush")
+tool = NodePath("../../../../Tools/View3D/Vertex Color Brush")
 
 [node name="Menu" type="Node" parent="Views/View3D"]
 
@@ -487,3 +495,14 @@ editor_description = "7 + alt"
 key = 55
 alt = true
 action = NodePath("../../../../Actions/Mesh/Select Tools/select tool edit face")
+
+[node name="UvEditor" type="Node" parent="Views"]
+
+[node name="Toolbar" type="Node" parent="Views/UvEditor"]
+
+[node name="Move" parent="Views/UvEditor/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+tool = NodePath("../../../../Tools/UvEditor/Move")
+
+[node name="Menu" type="Node" parent="Views/UvEditor"]
+
+[node name="Hotkeys" type="Node" parent="Views/UvEditor"]
