@@ -173,9 +173,9 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 	
 	var pick_origin:Vector3 = viewport_camera.project_ray_origin(position)
 	var pick_dir:Vector3 = viewport_camera.project_ray_normal(position)
-	
+
 	#print("pick_closest_handle")
-	for h in handles:
+	for h:HandleEdge in handles:
 		var block:CyclopsBlock = builder.get_node(h.block_path)
 		var ctl_mesh:ConvexVolume = block.control_mesh
 		if ctl_mesh.edges.size() <= h.edge_index:
@@ -198,6 +198,11 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 
 		var point_on_seg:Vector3 = MathUtil.closest_point_on_segment(pick_origin, pick_dir, p0_world, p1_world)
 		#print("dist_to_seg_2d_sq ", dist_to_seg_2d_sq)
+
+		if !MathUtil.point_in_camera_frustum(point_on_seg, viewport_camera):
+			continue
+
+#		viewport_camera.global_transform * viewport_camera.projection
 		
 		var offset:Vector3 = point_on_seg - pick_origin
 		var parallel:Vector3 = offset.project(pick_dir)

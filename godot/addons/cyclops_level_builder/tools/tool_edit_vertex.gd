@@ -113,7 +113,7 @@ func _draw_tool(viewport_camera:Camera3D):
 		#global_scene.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
 		builder.viewport_3d_manager.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
 	
-	for h in handles:
+	for h:HandleVertex in handles:
 		var node:Node = builder.get_node(h.block_path)
 		if node is CyclopsBlock:
 			var block:CyclopsBlock = node
@@ -173,12 +173,15 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 	var origin:Vector3 = viewport_camera.project_ray_origin(position)
 	var dir:Vector3 = viewport_camera.project_ray_normal(position)
 	
-	for h in handles:
+	for h:HandleVertex in handles:
 #		var h_world_pos:Vector3 = blocks_root.global_transform * h.position
 		var h_world_pos:Vector3 = h.position
 		var h_screen_pos:Vector2 = viewport_camera.unproject_position(h_world_pos)
 		if position.distance_squared_to(h_screen_pos) > radius * radius:
 			#Failed handle radius test
+			continue
+		
+		if !MathUtil.point_in_camera_frustum(h_world_pos, viewport_camera):
 			continue
 		
 		var offset:Vector3 = h_world_pos - origin

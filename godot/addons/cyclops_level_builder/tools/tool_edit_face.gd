@@ -116,7 +116,7 @@ func _draw_tool(viewport_camera:Camera3D):
 		builder.viewport_3d_manager.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
 	
 	#var blocks_root:CyclopsBlocks = builder.active_node
-	for h in handles:
+	for h:HandleFace in handles:
 #		print("draw face %s" % h)
 		if Engine.is_editor_hint() && !builder.has_node(h.block_path):
 			continue
@@ -190,7 +190,7 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 	if builder.display_mode == DisplayMode.Type.MATERIAL || builder.display_mode == DisplayMode.Type.MESH:
 		var result:IntersectResults = builder.intersect_ray_closest_selected_only(pick_origin, pick_dir)
 		if result:
-			for h in handles:
+			for h:HandleFace in handles:
 				if h.block_path == result.object.get_path() && h.face_index == result.face_index:
 					var ret:PickHandleResult = PickHandleResult.new()
 					ret.handle = h
@@ -203,14 +203,17 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 		var best_position:Vector3
 		
 		
-		for h in handles:
+		for h:HandleFace in handles:
 #			var h_world_pos:Vector3 = blocks_root.global_transform * h.p_ref
 			var h_world_pos:Vector3 = h.p_center
 			var h_screen_pos:Vector2 = viewport_camera.unproject_position(h_world_pos)
 			if position.distance_squared_to(h_screen_pos) > radius * radius:
 				#Failed handle radius test
 				continue
-			
+
+			if !MathUtil.point_in_camera_frustum(h_world_pos, viewport_camera):
+				continue
+
 			var offset:Vector3 = h_world_pos - pick_origin
 			var parallel:Vector3 = offset.project(pick_dir)
 			var dist = parallel.dot(pick_dir)

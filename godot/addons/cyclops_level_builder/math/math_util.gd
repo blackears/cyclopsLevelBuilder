@@ -963,3 +963,13 @@ static func blend_colors_with_alpha(src:Color, dest:Color, weight:float)->Color:
 static func blend_colors_ignore_alpha(src:Color, dest:Color, weight:float)->Color:
 	return weight * src + (1 - weight) * dest
 	
+static func point_in_camera_frustum(p:Vector3, camera:Camera3D)->bool:
+	var p_cam:Vector3 = camera.global_transform.affine_inverse() * p
+	var p_proj:Vector4 = Vector4(p_cam.x, p_cam.y, p_cam.z, 1)
+	p_proj = camera.get_camera_projection() * p_proj
+	p_proj /= p_proj.w
+
+	return p_proj.x >= -1 && p_proj.x < 1 && \
+		p_proj.y >= -1 && p_proj.y < 1 && \
+		p_proj.z >= -1 && p_proj.z < 1
+	

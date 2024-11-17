@@ -44,6 +44,12 @@ var plugin:CyclopsLevelBuilder:
 
 		build_menus()
 
+
+#func _input(event: InputEvent) -> void:
+	#print("view uv ed ", event)
+	##input_passthrough.emit(event)
+	#pass
+	
 func build_menus():
 #	print("uv editor build_menus()")
 	
@@ -139,9 +145,15 @@ func load_state(state:Dictionary):
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	build_menus()
+	%SubViewportContainer.set_process_input(true)
 	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+
+func _on_sub_viewport_container_gui_input(event: InputEvent) -> void:
+	#print("_on_sub_viewport_container_gui_input ", event)
+	pass # Replace with function body.
