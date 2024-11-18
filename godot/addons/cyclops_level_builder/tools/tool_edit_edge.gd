@@ -187,16 +187,19 @@ func pick_closest_handle(viewport_camera:Camera3D, position:Vector2, radius:floa
 		var p0_world:Vector3 = block.global_transform * p0
 		var p1_world:Vector3 = block.global_transform * p1
 		
-		var p0_screen:Vector2 = viewport_camera.unproject_position(p0_world)
-		var p1_screen:Vector2 = viewport_camera.unproject_position(p1_world)
+		#
+		#var dist_to_seg_2d_sq = MathUtil.dist_to_segment_squared_2d(position, p0_screen, p1_screen)
+		var point_on_seg:Vector3 = MathUtil.closest_point_on_segment(pick_origin, pick_dir, p0_world, p1_world)
+		var point_on_screen:Vector2 = viewport_camera.unproject_position(point_on_seg)
+		var dist_to_seg_2d_sq = point_on_screen.distance_squared_to(position)
 		
-		var dist_to_seg_2d_sq = MathUtil.dist_to_segment_squared_2d(position, p0_screen, p1_screen)
+		#MathUtil.dist_to_segment_squared_2d(position, p0_screen, p1_screen)
 		
 		if dist_to_seg_2d_sq > radius * radius:
 			#Failed handle radius test
 			continue
 
-		var point_on_seg:Vector3 = MathUtil.closest_point_on_segment(pick_origin, pick_dir, p0_world, p1_world)
+#		var point_on_seg:Vector3 = MathUtil.closest_point_on_segment(pick_origin, pick_dir, p0_world, p1_world)
 		#print("dist_to_seg_2d_sq ", dist_to_seg_2d_sq)
 
 		if !MathUtil.point_in_camera_frustum(point_on_seg, viewport_camera):
