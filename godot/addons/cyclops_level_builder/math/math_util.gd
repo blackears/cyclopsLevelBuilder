@@ -973,3 +973,112 @@ static func point_in_camera_frustum(p:Vector3, camera:Camera3D)->bool:
 		p_proj.y >= -1 && p_proj.y < 1 && \
 		p_proj.z >= -1 && p_proj.z < 1
 	
+static func intersects_2d_segment_segment(p0:Vector2, p1:Vector2, q0:Vector2, q1:Vector2)->bool:
+	var q_dir:Vector2 = q1 - q0
+	var q_norm:Vector2 = Vector2(q_dir.y, -q_dir.x)
+	var p_dir:Vector2 = p1 - p0
+	var p_norm:Vector2 = Vector2(p_dir.y, -p_dir.x)
+	
+	var p_det:float = (p1 - p0).dot(q_norm)
+	if is_zero_approx(p_det):
+		return false
+	else:
+		var s:float = (q0 - p0).dot(q_norm) / p_det
+		if s < 0 || s > 1:
+			return false
+
+	var q_det:float = (q1 - q0).dot(p_norm)
+	if is_zero_approx(q_det):
+		return false
+	else:
+		var s:float = (p0 - q0).dot(p_norm) / q_det
+		if s < 0 || s > 1:
+			return false
+			
+	return true
+	
+static func intersects_2d_segment_region(p0:Vector2, p1:Vector2, region:Rect2)->bool:
+	if region.has_point(p0) || region.has_point(p1):
+		return true
+	
+	var r00:Vector2 = region.position
+	var r10:Vector2 = region.position + Vector2(region.size.x, 0)
+	var r11:Vector2 = region.position + Vector2(region.size.x, region.size.y)
+	var r01:Vector2 = region.position + Vector2(0, region.size.y)
+	
+	if intersects_2d_segment_segment(p0, p1, r00, r10) \
+		|| intersects_2d_segment_segment(p0, p1, r10, r11) \
+		|| intersects_2d_segment_segment(p0, p1, r11, r01) \
+		|| intersects_2d_segment_segment(p0, p1, r01, r00):
+			return true
+		
+	return false
+
+static func intersects_2d_point_polygon(p:Vector2, poly_verts:PackedVector2Array)->bool:
+	#Count number of times we enter or exit the line y = p.y from above and where x > p.x
+	var crossings:int = 0
+	var above:int = 0
+	
+	for i0:int in poly_verts.size():
+		var i1:int = wrap(i0 + 1, 0, poly_verts.size())
+		
+		var v0:Vector2 = poly_verts[i0] - p
+		var v1:Vector2 = poly_verts[i1] - p
+		
+		if (v0.y < p.y && v1.y < p.y) || (v0.y > p.y && v1.y > p.y):
+			#Segment entirely above or below mediant
+			continue
+		
+		if is_equal_approx(v0.y, p.y) && is_equal_approx(v1.y, p.y): 
+			#Segment coincident with mediant
+			continue
+			
+		if is_equal_approx(v0.y, p.y):
+			if v1.y < p.y && v0.x > p.x:
+				#Leaving median
+				crossings -= 1
+			continue
+			
+		if is_equal_approx(v1.y, p.y):
+			if v0.y < p.y && v1.x > p.x:
+				#Entering median
+				crossings += 1
+			continue
+	
+		#We are crossing the mediant
+		
+		if is_equal_approx(v0.x, v1.x):
+			#Vertical
+			if v0.y > p.y:
+				crossings -= 1
+			else:
+				crossings += 1
+			continue
+		
+		#Find coeff for line y = m * x + b
+		var m:float = (v1.y - v0.y) / (v1.x - v0.x)
+		var b:float = v0.y - m * v0.x
+		
+		#Solve for x at y = p.y
+		var x_cross:float = (p.y - b) / m
+		
+		if x_cross > p.x:
+			if v0.y > p.y:
+				crossings -= 1
+			else:
+				crossings += 1
+	
+	#Inside if even number of crossings
+	return (crossings & 0x1) == 1
+
+static func intersects_2d_segment_polygon(p0:Vector2, p1:Vector2, poly_verts:PackedVector2Array)->bool:
+	if intersects_2d_point_polygon(p0, poly_verts) || \
+		intersects_2d_point_polygon(p1, poly_verts):
+		return true
+	
+	for i0:int in poly_verts.size():
+		var i1:int = wrap(i0 + 1, 0, poly_verts.size())
+		if intersects_2d_segment_segment(p0, p1, poly_verts[i0], poly_verts[i1]):
+			return true
+	
+	return false

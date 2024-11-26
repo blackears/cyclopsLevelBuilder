@@ -32,24 +32,65 @@ extends Node3D
 
 @export var block_nodes:Array[CyclopsBlock]:
 	set(value):
+		for node in block_nodes:
+			node.mesh_changed.disconnect(on_node_mesh_changed)
+			
 		block_nodes = value
+		
+		for node in block_nodes:
+			node.mesh_changed.connect(on_node_mesh_changed)
+			
 		dirty = true
 		
 var dirty:bool = true
 
-#func build_mesh():
-	#var uv_mesh_faces_mat:ShaderMaterial = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_mesh_faces_material.tres")
-	#var uv_mesh_edges_mat:ShaderMaterial = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_mesh_edges_material.tres")
-	#
-	#var cv:ConvexVolume = ConvexVolume.new()
-	#var mesh_faces:ArrayMesh = create_mesh_faces(cv, uv_mesh_faces_mat, face_sel_color, face_unsel_color)
-	#
-	#var mesh_edges:ArrayMesh = create_mesh_edges(cv, uv_mesh_edges_mat, edge_sel_color, edge_unsel_color)
-	#
-	#%mesh_faces.mesh = mesh_faces
-	#%mesh_edges.mesh = mesh_edges
-	#pass
+#var block_edit_handles:Array[UvEditingState]
+var block_edit_handles:Dictionary #[nodePath, UvEditingState]
 
+func on_node_mesh_changed(node:Node3D):
+	block_edit_handles.clear()
+	
+	rebuild_block_handles(node)
+
+func rebuild_handles():
+	for block in block_nodes:
+		rebuild_block_handles(block)
+
+func rebuild_block_handles(block:CyclopsBlock):
+	var mvd:MeshVectorData = block.mesh_vector_data
+	var cv:ConvexVolume = ConvexVolume.new()
+	cv.init_from_mesh_vector_data(mvd)
+	
+	var state:UvEditingState = UvEditingState.new()
+	
+	for f:ConvexVolume.FaceInfo in cv.faces:
+		var h_f:HandleUvFace = HandleUvFace.new()
+		h_f.object_path = block.get_path()
+		h_f.face_index = f.index
+		
+		state.handle_faces.append(h_f)
+		
+		for e_idx in f.edge_indices:
+			var h_e:HandleUvEdge = HandleUvEdge.new()
+			h_e.object_path = block.get_path()
+			h_e.face_index = f.index
+			h_e.edge_index = e_idx
+			
+			state.handle_edges.append(h_e)
+		
+		for v_idx in f.vertex_indices:
+			var h_v:HandleUvVertex = HandleUvVertex.new()
+			h_v.object_path = block.get_path()
+			h_v.face_index = f.index
+			h_v.vertex_index = v_idx
+			
+			state.handle_edges.append(h_v)
+	
+	block_edit_handles[block.get_path()] = state
+	
+	#queue_redraw()
+
+####################
 
 func create_mesh_faces(cv:ConvexVolume, material:Material, 
 	sel_color:Color = Color.ORANGE, 

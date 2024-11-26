@@ -84,6 +84,9 @@ func draw_gizmo(viewport_camera:Camera3D):
 	var count:int = 0
 	for h in handles:
 		var block:CyclopsBlock = builder.get_node(h.block_path)
+		if !block:
+			printerr("handle path invalid: " + str(h.block_path))
+			continue
 		var l2w:Transform3D = block.global_transform
 		
 		if h.edge_index >= block.control_mesh.edges.size():
@@ -117,6 +120,9 @@ func _draw_tool(viewport_camera:Camera3D):
 	
 	for h in handles:
 		var block:CyclopsBlock = builder.get_node(h.block_path)
+		if !block:
+			printerr("handle path invalid: " + str(h.block_path))
+			continue
 		if h.edge_index >= block.control_mesh.edges.size():
 			#TODO: Sometimes we are retaining handles that do not corepond to the correct edges after an undo operation.
 			continue

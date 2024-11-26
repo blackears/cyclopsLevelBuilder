@@ -84,6 +84,7 @@ class FaceInfo extends RefCounted:
 	var color:Color
 	var visible:bool
 	var selected:bool
+	#var selected_uv_face:bool
 	var vertex_indices:Array[int]
 	var face_vertex_indices:Array[int]
 	var triangulation_indices:Array[int]
@@ -99,8 +100,27 @@ class FaceInfo extends RefCounted:
 		self.visible = visible
 		self.color = color
 	
+	func is_selected():
+		return selected
+	
+	func is_selected_uv_map():
+		for fv_idx in face_vertex_indices:
+			if !mesh.face_vertices[fv_idx].selected:
+				return false
+		return true
+	
 	func get_plane()->Plane:
 		return Plane(normal, mesh.vertices[vertex_indices[0]].point)
+	
+	func get_edges()->Array[EdgeInfo]:
+		var result:Array[EdgeInfo]
+		for i:int in vertex_indices.size():
+			var v0_idx:int = vertex_indices[i]
+			var v1_idx:int = vertex_indices[wrap(i + 1, 0, vertex_indices.size())]
+			
+			var e = mesh.get_edge(v0_idx, v1_idx)
+			result.append(e)
+		return result
 	
 	func get_points()->PackedVector3Array:
 		var result:PackedVector3Array
@@ -188,6 +208,8 @@ class FaceVertexInfo extends RefCounted:
 	var uv0:Vector2
 	var color:Color = Color.WHITE
 	var normal:Vector3
+	var selected:bool
+	#var selected_uv_edge:bool
 
 
 var vertices:Array[VertexInfo] = []
@@ -470,6 +492,12 @@ func init_from_mesh_vector_data(mvd:MeshVectorData):
 	if mvd.has_face_vertex_data(MeshVectorData.FV_UV0):	
 		fv_uv0 = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
 		face_vertex_uv0 = fv_uv0.to_vec2_array()
+
+	var fv_selected:DataVectorByte
+	var face_vertex_selected:PackedByteArray
+	if mvd.has_face_vertex_data(MeshVectorData.FV_SELECTED):	
+		fv_selected = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+		face_vertex_selected = fv_selected.data
 	
 	for i in mvd.num_vertices:
 		var v:VertexInfo = VertexInfo.new(self)
@@ -552,6 +580,9 @@ func init_from_mesh_vector_data(mvd:MeshVectorData):
 		
 		if face_vertex_normal.size() > 0:
 			fv.normal = face_vertex_normal[fv_idx]
+
+		if face_vertex_selected.size() > 0:
+			fv.selected = face_vertex_selected[fv_idx]
 			
 		fv.color = face_vertex_color[fv_idx]
 		if fv_uv0:
@@ -945,12 +976,14 @@ func to_mesh_vector_data()->MeshVectorData:
 	var face_vertex_face_index:PackedInt32Array
 	var face_vertex_vertex_index:PackedInt32Array
 	var face_vertex_normal:PackedVector3Array
+	var face_vertex_selected:PackedByteArray
 	var face_vertex_color:PackedFloat32Array
 	var face_vertex_uv0:PackedVector2Array
 	for fv:FaceVertexInfo in face_vertices:
 		face_vertex_face_index.append(fv.face_index)
 		face_vertex_vertex_index.append(fv.vertex_index)
 		face_vertex_normal.append(fv.normal)
+		face_vertex_selected.append(fv.selected)
 		face_vertex_color.append(fv.color.r)
 		face_vertex_color.append(fv.color.g)
 		face_vertex_color.append(fv.color.b)
@@ -966,6 +999,9 @@ func to_mesh_vector_data()->MeshVectorData:
 	mvd.set_face_vertex_data(DataVectorFloat.new(MeshVectorData.FV_NORMAL, 
 		face_vertex_normal.to_byte_array().to_float32_array(),
 		DataVector.DataType.VECTOR3))
+	mvd.set_face_vertex_data(DataVectorByte.new(MeshVectorData.FV_SELECTED, 
+		face_vertex_selected,
+		DataVector.DataType.BOOL))
 	mvd.set_face_vertex_data(DataVectorFloat.new(MeshVectorData.FV_COLOR, 
 		face_vertex_color.to_byte_array().to_float32_array(),
 		DataVector.DataType.COLOR))

@@ -313,19 +313,6 @@ func load_config():
 	var text:String = FileAccess.get_file_as_string(config_file)
 	var config_dict:Dictionary = JSON.parse_string(text)
 		
-	#Load actions
-	#action_list.clear()
-#
-	#for path in config_dict["actions"]:
-		#var script:Script = load(path)
-#
-		#var act:CyclopsAction = script.new()
-		#act.plugin = self
-		#action_list.append(act)
-#
-	#for act in action_list:
-		#act._ready()
-	
 	#Load tools
 	tool_list.clear()
 
@@ -477,22 +464,9 @@ func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent)->int:
 		active_tool._draw_tool(viewport_camera)
 		if result:
 			return EditorPlugin.AFTER_GUI_INPUT_STOP
-#		return EditorPlugin.AFTER_GUI_INPUT_STOP if result else EditorPlugin.AFTER_GUI_INPUT_PASS
 	
 	#print("_forward_3d_gui_input")
 
-	#Check default keymap
-	#if event is InputEventKey && event.is_pressed():
-		#var context:CyclopsOperatorContext = CyclopsOperatorContext.new()
-		#context.plugin = self
-	#
-		#var invoker:KeymapActionMapper = keymap.lookup_invoker(context, event)
-		#if invoker:
-			#invoker.invoke(context, event)
-			##var keymap_action:CyclopsAction = keymap.lookup_invoker(context, event)
-			##keymap_action._execute()
-			#return EditorPlugin.AFTER_GUI_INPUT_STOP
-	
 	return EditorPlugin.AFTER_GUI_INPUT_PASS
 
 func _get_state()->Dictionary:

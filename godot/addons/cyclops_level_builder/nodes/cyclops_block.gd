@@ -25,7 +25,7 @@
 extends Node3D
 class_name CyclopsBlock
 
-signal mesh_changed
+signal mesh_changed(node:CyclopsBlock)
 
 var mesh_instance:MeshInstance3D
 var mesh_wire:MeshInstance3D
@@ -64,7 +64,7 @@ var control_mesh:ConvexVolume
 			control_mesh.init_from_mesh_vector_data(mesh_vector_data)
 
 			dirty = true
-			mesh_changed.emit()
+			mesh_changed.emit(self)
 
 @export var materials:Array[Material]
 
@@ -277,7 +277,7 @@ func select_face(face_idx:int, select_type:Selection.Type = Selection.Type.REPLA
 	elif select_type == Selection.Type.TOGGLE:
 		control_mesh.faces[face_idx].selected = !control_mesh.faces[face_idx].selected
 
-	mesh_changed.emit()
+	mesh_changed.emit(self)
 
 func export_to_cyclops_file(file_builder:CyclopsFileBuilder)->Dictionary:
 	var result:Dictionary

@@ -109,8 +109,11 @@ func build_menus():
 					
 					%tool_buttons.add_child(bn)
 	
-
+#var foo:int = 0
 func on_block_selection_changed():
+	#print("uv editor: on_block_selection_changed()", foo)
+	#foo += 1
+	
 	#return
 	build_menus()
 	
