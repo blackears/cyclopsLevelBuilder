@@ -1,7 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://cw1yjv8t33ii0"]
+[gd_scene load_steps=10 format=3 uid="uid://cw1yjv8t33ii0"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/view_uv_editor.gd" id="1_bjwq8"]
-[ext_resource type="PackedScene" uid="uid://b2570xdm0jehg" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_editor_scene.tscn" id="2_btnfy"]
+[ext_resource type="PackedScene" uid="uid://dlouwod012q17" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_editor.tscn" id="2_iavjh"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_3l330"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_5ra4s"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_qvwo0"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_f6vr0"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_yj81a"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_pifmi"]
 
 [sub_resource type="World3D" id="World3D_bxn6v"]
 
@@ -25,13 +37,78 @@ grow_vertical = 2
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="MenuBar" type="MenuBar" parent="VBoxContainer/PanelContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="MenuBar" type="MenuBar" parent="VBoxContainer/PanelContainer/HBoxContainer3"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="tool_buttons" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
+[node name="tool_buttons" type="HBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer3"]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="feature" type="HBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer3"]
+layout_mode = 2
+
+[node name="feature_vertex" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer3/feature"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Vertex"
+toggle_mode = true
+button_pressed = true
+button_group = SubResource("ButtonGroup_3l330")
+text = "V"
+
+[node name="feature_edge" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer3/feature"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Edge"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_5ra4s")
+text = "E"
+
+[node name="feature_face" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer3/feature"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Face"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_qvwo0")
+text = "F"
+
+[node name="sticky" type="HBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer3"]
+layout_mode = 2
+
+[node name="sticky_disabled" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer3/sticky"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Disabled"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_f6vr0")
+text = "D"
+
+[node name="sticky_shared_location" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer3/sticky"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Shared Location"
+toggle_mode = true
+button_pressed = true
+button_group = SubResource("ButtonGroup_yj81a")
+text = "L"
+
+[node name="sticky_shared_vertex" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer3/sticky"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Shared Vertex"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_pifmi")
+text = "V"
+
+[node name="check_sync_with_mesh" type="CheckBox" parent="VBoxContainer/PanelContainer/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Synchronize UV selection with selected mesh elements."
+text = "Sync"
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="VBoxContainer"]
 unique_name_in_owner = true
@@ -43,10 +120,25 @@ stretch = true
 own_world_3d = true
 world_3d = SubResource("World3D_bxn6v")
 handle_input_locally = false
-size = Vector2i(1152, 644)
+size = Vector2i(1152, 613)
 render_target_update_mode = 4
 
-[node name="uv_editor_scene" parent="VBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("2_btnfy")]
+[node name="uv_editor" parent="VBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("2_iavjh")]
 unique_name_in_owner = true
+face_sel_color = Color(0.5, 0.5, 0.5, 0.4)
+face_unsel_color = Color(0.5, 0.5, 0.5, 0.4)
+edge_sel_color = Color(1, 0.5, 0, 1)
+edge_unsel_color = Color(0.5, 0.5, 0.5, 1)
+select_feature = 0
+sticky_state = 1
+uv_map = ""
+select_margin = 4.0
 
+[connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer3/feature/feature_vertex" to="." method="_on_feature_vertex_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer3/feature/feature_edge" to="." method="_on_feature_edge_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer3/feature/feature_face" to="." method="_on_feature_face_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer3/sticky/sticky_disabled" to="." method="_on_sticky_disabled_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer3/sticky/sticky_shared_location" to="." method="_on_sticky_shared_location_pressed"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer3/sticky/sticky_shared_vertex" to="." method="_on_sticky_shared_vertex_pressed"]
+[connection signal="toggled" from="VBoxContainer/PanelContainer/HBoxContainer3/check_sync_with_mesh" to="." method="_on_check_sync_with_mesh_toggled"]
 [connection signal="gui_input" from="VBoxContainer/SubViewportContainer" to="." method="_on_sub_viewport_container_gui_input"]

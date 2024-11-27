@@ -33,7 +33,7 @@ var settings:ToolMoveSettings = ToolMoveSettings.new()
 var mouse_hover_pos:Vector2
 
 func _get_tool_name()->String:
-	return "Move"
+	return "Move UVs"
 
 func _get_tool_icon()->Texture2D:
 	#return preload("res://addons/cyclops_level_builder/art/icons/move.svg")

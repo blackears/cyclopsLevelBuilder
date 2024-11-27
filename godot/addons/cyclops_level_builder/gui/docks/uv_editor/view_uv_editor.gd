@@ -129,7 +129,7 @@ func on_block_selection_changed():
 #				print("sel: ", node.name)
 		
 #		%uv_mesh_renderer.block_nodes = nodes
-		%uv_editor_scene.block_nodes = nodes
+		%uv_editor.block_nodes = nodes
 #	pass
 	
 
@@ -160,3 +160,31 @@ func _process(delta: float) -> void:
 func _on_sub_viewport_container_gui_input(event: InputEvent) -> void:
 	#print("_on_sub_viewport_container_gui_input ", event)
 	pass # Replace with function body.
+
+
+func _on_feature_vertex_pressed() -> void:
+	%uv_editor.select_feature = UvEditor.SelectFeature.VERTEX
+
+
+func _on_feature_edge_pressed() -> void:
+	%uv_editor.select_feature = UvEditor.SelectFeature.EDGE
+
+
+func _on_feature_face_pressed() -> void:
+	%uv_editor.select_feature = UvEditor.SelectFeature.FACE
+
+
+func _on_sticky_disabled_pressed() -> void:
+	%uv_editor.sticky_state = UvEditor.StickyState.DISABLED
+
+
+func _on_sticky_shared_location_pressed() -> void:
+	%uv_editor.sticky_state = UvEditor.StickyState.SHARED_LOCATION
+
+
+func _on_sticky_shared_vertex_pressed() -> void:
+	%uv_editor.sticky_state = UvEditor.StickyState.SHARED_VERTEX
+
+
+func _on_check_sync_with_mesh_toggled(toggled_on: bool) -> void:
+	%uv_editor.sync_selection = toggled_on

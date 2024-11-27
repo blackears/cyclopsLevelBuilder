@@ -24,6 +24,7 @@
 
 @tool
 extends Node2D
+class_name UvEditor
 
 @export var face_sel_color:Color = Color(1, .5, 0, .4):
 	set(value):
@@ -60,7 +61,8 @@ extends Node2D
 		vertex_radius = value
 		queue_redraw()
 
-@export var view_transform:Transform2D = Transform2D.IDENTITY:
+#@export var view_transform:Transform2D = Transform2D.IDENTITY:
+@export var view_transform:Transform2D = Transform2D(0, Vector2(100, 100), 0, Vector2.ZERO):
 	set(value):
 		view_transform = value
 		queue_redraw()
@@ -75,6 +77,7 @@ extends Node2D
 
 @export var block_nodes:Array[CyclopsBlock]:
 	set(value):
+		#print("uv_editor setting block nodes ", value.size() )
 		for node in block_nodes:
 			node.mesh_changed.disconnect(on_node_mesh_changed)
 			
@@ -108,6 +111,9 @@ enum StickyState { DISABLED, SHARED_LOCATION, SHARED_VERTEX }
 		queue_redraw()
 
 @export var select_margin:float = 4
+
+#func _input(event: InputEvent) -> void:
+	#pass
 
 func on_node_mesh_changed(node:Node3D):
 	block_edit_handles.clear()
@@ -154,7 +160,7 @@ func rebuild_block_handles(block:CyclopsBlock):
 			h_v.face_index = f.index
 			h_v.vertex_index = v_idx
 			
-			state.handle_edges.append(h_v)
+			state.handle_vertices.append(h_v)
 	
 	block_edit_handles[block.get_path()] = state
 	
@@ -281,8 +287,10 @@ func draw_uv_mesh(mesh_face_selection_only:bool, draw_vertices:bool, draw_face_c
 
 	if draw_vertices:
 		for uv in verts_unsel:
+			print("unsel vert ", uv)
 			draw_vertex(uv, false)
 		for uv in verts_sel:
+			print("sel vert ", uv)
 			draw_vertex(uv, true)
 
 

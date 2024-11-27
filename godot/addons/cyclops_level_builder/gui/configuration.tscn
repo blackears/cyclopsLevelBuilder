@@ -269,7 +269,7 @@ script = ExtResource("43_36wj4")
 
 [node name="UvEditor" type="Node" parent="Tools"]
 
-[node name="Move" type="Node" parent="Tools/UvEditor"]
+[node name="Move UV" type="Node" parent="Tools/UvEditor"]
 script = ExtResource("41_1e7oi")
 
 [node name="Views" type="Node" parent="."]
@@ -500,8 +500,8 @@ action = NodePath("../../../../Actions/Mesh/Select Tools/select tool edit face")
 
 [node name="Toolbar" type="Node" parent="Views/UvEditor"]
 
-[node name="Move" parent="Views/UvEditor/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
-tool = NodePath("../../../../Tools/UvEditor/Move")
+[node name="Move UVs" parent="Views/UvEditor/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+tool = NodePath("../../../../Tools/UvEditor/Move UV")
 
 [node name="Menu" type="Node" parent="Views/UvEditor"]
 
