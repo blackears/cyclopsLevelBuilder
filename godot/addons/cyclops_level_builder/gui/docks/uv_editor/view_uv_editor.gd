@@ -51,7 +51,10 @@ var plugin:CyclopsLevelBuilder:
 	#print("view uv ed ", event)
 	##input_passthrough.emit(event)
 	#pass
-	
+
+func get_uv_editor()->UvEditor:
+	return %uv_editor
+
 func build_menus():
 #	print("uv editor build_menus()")
 	

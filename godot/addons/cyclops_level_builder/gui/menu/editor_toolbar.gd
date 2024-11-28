@@ -126,6 +126,7 @@ func build_ui():
 				if tool_inst.is_inside_tree() && tool_inst._show_in_toolbar() && tool_inst._can_handle_object(active_block):
 					var bn:ToolButton = preload("res://addons/cyclops_level_builder/gui/menu/tool_button.tscn").instantiate()
 					bn.plugin = editor_plugin
+					#print("tool path ", tool_inst.get_path())
 					bn.tool_path = tool_inst.get_path()
 					bn.icon = tool_inst._get_tool_icon()
 					if !bn.icon:

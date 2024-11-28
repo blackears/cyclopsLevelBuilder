@@ -63,10 +63,10 @@ class_name UvEditor
 		vertex_radius = value
 		queue_redraw()
 
-#@export var view_transform:Transform2D = Transform2D.IDENTITY:
-@export var view_transform:Transform2D = Transform2D(0, Vector2(100, 100), 0, Vector2.ZERO):
+#@export var proj_transform:Transform2D = Transform2D.IDENTITY:
+@export var proj_transform:Transform2D = Transform2D(0, Vector2(100, 100), 0, Vector2.ZERO):
 	set(value):
-		view_transform = value
+		proj_transform = value
 		queue_redraw()
 		
 ##Selecting a UV feature will also select the coresponding mesh 
@@ -224,11 +224,23 @@ func draw_edge(p0:Vector2, p1:Vector2, selected:bool):
 	draw_colored_polygon(points, fill_color)
 	draw_polyline(points, outline_color)
 
+func get_view_transform()->Transform2D:
+	var view_rect:Rect2 = get_viewport_rect()
+	return Transform2D(0, Vector2(1, -1), 0, view_rect.get_center())
+
+func get_uv_to_viewport_xform()->Transform2D:
+	return get_view_transform() * proj_transform
+	
+
+func set_uv_to_viewport_xform(xform:Transform2D):
+	var v:Transform2D = get_view_transform()
+	v = v.affine_inverse()
+
+	proj_transform = v * xform
 
 func draw_uv_mesh(mesh_face_selection_only:bool, draw_vertices:bool, draw_face_centers:bool):
 	#Edges and faces are considered selected if all member vertices are selected
-	var view_rect:Rect2 = get_viewport_rect()
-	var xform:Transform2D = Transform2D(0, Vector2(1, -1), 0, view_rect.get_center()) * view_transform
+	var xform:Transform2D = get_uv_to_viewport_xform()
 	
 	var verts_sel:PackedVector2Array
 	var verts_unsel:PackedVector2Array

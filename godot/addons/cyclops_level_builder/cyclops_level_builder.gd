@@ -245,7 +245,7 @@ func _enter_tree():
 	var selection:EditorSelection = editor.get_selection()
 	selection.selection_changed.connect(on_selection_changed)
 	
-	load_config()
+	#load_config()
 	#load_tools()
 	update_activation()
 
@@ -312,24 +312,24 @@ func _exit_tree():
 	config_scene.queue_free()
 
 #@deprecated
-func load_config():
-	#load_actions()
-	var text:String = FileAccess.get_file_as_string(config_file)
-	var config_dict:Dictionary = JSON.parse_string(text)
-		
-	#Load tools
-	tool_list.clear()
-
-	for path in config_dict["tools"]:
-		#print("Loading tool ", path)
-		var script:Script = load(path)
-
-		var tool:CyclopsTool = script.new()
-		tool.builder = self
-		tool_list.append(tool)
-
-	for tool in tool_list:
-		tool._ready()
+#func load_config():
+	##load_actions()
+	#var text:String = FileAccess.get_file_as_string(config_file)
+	#var config_dict:Dictionary = JSON.parse_string(text)
+		#
+	##Load tools
+	#tool_list.clear()
+#
+	#for path in config_dict["tools"]:
+		##print("Loading tool ", path)
+		#var script:Script = load(path)
+#
+		#var tool:CyclopsTool = script.new()
+		#tool.builder = self
+		#tool_list.append(tool)
+#
+	#for tool in tool_list:
+		#tool._ready()
 
 func log(message:String, level:CyclopsLogger.LogLevel = CyclopsLogger.LogLevel.ERROR):
 	logger.log(message, level)
@@ -478,10 +478,10 @@ func on_uv_editor_forward_input(event:InputEvent):
 	var active_node:Node = null if sel_nodes.is_empty() else sel_nodes.back()
 	
 	#print("on_uv_editor_forward_input ", event)
-	if active_tool:
-		print("active tool ", active_tool.name)
-	else:
-		print("no active tool")
+	#if active_tool:
+		#print("active tool ", active_tool.name)
+	#else:
+		#print("no active tool")
 	if active_tool && active_tool._can_handle_object(active_node)\
 		&& active_tool.is_uv_tool():
 			
