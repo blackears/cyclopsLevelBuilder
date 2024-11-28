@@ -25,13 +25,16 @@
 extends CyclopsTool
 class_name ToolUvMove
 
-enum ToolState { NONE, READY, MOVE_BLOCK, MOVE_BLOCK_CLICK, DRAG_SELECTION }
-var tool_state:ToolState = ToolState.NONE
+enum ToolState { READY }
+var tool_state:ToolState = ToolState.READY
 
-var settings:ToolMoveSettings = ToolMoveSettings.new()
+var settings:ToolMoveUvSettings = ToolMoveUvSettings.new()
 
 var mouse_hover_pos:Vector2
 
+func is_uv_tool():
+	return true
+	
 func _get_tool_name()->String:
 	return "Move UVs"
 
@@ -60,7 +63,13 @@ func _draw_tool(viewport_camera:Camera3D):
 	
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
-				
+	if !builder:
+		return false
+	
+	var view:ViewUvEditor = builder.view_uv_editor
+	
+	
+	
 	if event is InputEventMouseButton:
 
 		var e:InputEventMouseButton = event
@@ -71,11 +80,13 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 		elif e.button_index == MOUSE_BUTTON_WHEEL_UP:
 			if e.pressed:
+				print("uv_move wheel up")
 				
 				pass
 
 		elif e.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			if e.pressed:
+				print("uv_move wheel down")
 				
 				pass
 

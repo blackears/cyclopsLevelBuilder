@@ -25,6 +25,8 @@
 extends Control
 class_name ViewUvEditor
 
+signal forward_input(event:InputEvent)
+
 var plugin:CyclopsLevelBuilder:
 	set(value):
 		if value == plugin:
@@ -94,18 +96,18 @@ func build_menus():
 		var toolbar_root = plugin.config_scene.get_node("Views/UvEditor/Toolbar")
 		for child in toolbar_root.get_children():
 			if child is ToolbarButtonRef:
-				var tool:CyclopsTool = child.tool
+				var tool_inst:CyclopsTool = child.tool
 
-				if tool._show_in_toolbar() && tool._can_handle_object(active_block):
+				if tool_inst.is_inside_tree() && tool_inst._show_in_toolbar() && tool_inst._can_handle_object(active_block):
 #					print("Adding tool")
 					var bn:ToolButton = preload("res://addons/cyclops_level_builder/gui/menu/tool_button.tscn").instantiate()
 					bn.plugin = plugin
-					bn.tool_id = tool._get_tool_id()
-					bn.icon = tool._get_tool_icon()
+					bn.tool_path = tool_inst.get_path()
+					bn.icon = tool_inst._get_tool_icon()
 #					print("Adding button ", tool._get_tool_name())
 					if !bn.icon:
-						bn.text = tool._get_tool_name()
-					bn.tooltip_text = tool._get_tool_tooltip()
+						bn.text = tool_inst._get_tool_name()
+					bn.tooltip_text = tool_inst._get_tool_tooltip()
 					
 					%tool_buttons.add_child(bn)
 	
@@ -158,7 +160,9 @@ func _process(delta: float) -> void:
 
 
 func _on_sub_viewport_container_gui_input(event: InputEvent) -> void:
-	#print("_on_sub_viewport_container_gui_input ", event)
+	forward_input.emit(event)
+	#if event is InputEventKey:
+		#print("_on_sub_viewport_container_gui_input ", event)
 	pass # Replace with function body.
 
 
@@ -188,3 +192,8 @@ func _on_sticky_shared_vertex_pressed() -> void:
 
 func _on_check_sync_with_mesh_toggled(toggled_on: bool) -> void:
 	%uv_editor.sync_selection = toggled_on
+
+
+#func _on_uv_editor_forward_input(event: InputEvent) -> void:
+	#forward_input.emit(event)
+	#pass # Replace with function body.

@@ -63,6 +63,10 @@ func _get_tool_properties_editor()->Control:
 func _can_handle_object(node:Node)->bool:
 	return false
 
+#Work around for new UV editor.  Should be removed when multiple views are implemented.
+func is_uv_tool():
+	return false
+
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	#print("hotkey  check ", event)
 	

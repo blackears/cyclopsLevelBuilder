@@ -36,14 +36,15 @@ var plugin:CyclopsLevelBuilder:
 		if plugin:
 			plugin.tool_changed.connect(on_tool_changed)
 
-var tool_id:String
+#var tool_id:String
+var tool_path:NodePath
 
 func on_tool_changed(tool:CyclopsTool):
 	update_selection()
 
 func update_selection():
 	if plugin && plugin.active_tool:
-		if plugin.active_tool._get_tool_id() == tool_id:
+		if plugin.active_tool.get_path() == tool_path:
 			%hilight.visible = true
 			return
 		
@@ -65,9 +66,10 @@ func _on_pressed():
 #		if plugin.active_tool:
 #			print("cur tool id ", plugin.active_tool._get_tool_id())
 			
-		if plugin.active_tool && plugin.active_tool._get_tool_id() == tool_id:
+		if plugin.active_tool && plugin.active_tool.get_path() == tool_path:
 #			print("unclick ", tool_id)
-			plugin.switch_to_tool_id("")
+			plugin.switch_to_tool(null)
 			return
 			
-		plugin.switch_to_tool_id(tool_id)
+		var tool:CyclopsTool = get_node(tool_path)
+		plugin.switch_to_tool(tool)

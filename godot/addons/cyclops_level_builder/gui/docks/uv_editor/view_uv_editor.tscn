@@ -126,13 +126,6 @@ render_target_update_mode = 4
 [node name="uv_editor" parent="VBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("2_iavjh")]
 unique_name_in_owner = true
 face_sel_color = Color(0.5, 0.5, 0.5, 0.4)
-face_unsel_color = Color(0.5, 0.5, 0.5, 0.4)
-edge_sel_color = Color(1, 0.5, 0, 1)
-edge_unsel_color = Color(0.5, 0.5, 0.5, 1)
-select_feature = 0
-sticky_state = 1
-uv_map = ""
-select_margin = 4.0
 
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer3/feature/feature_vertex" to="." method="_on_feature_vertex_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer3/feature/feature_edge" to="." method="_on_feature_edge_pressed"]

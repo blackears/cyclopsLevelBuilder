@@ -4,11 +4,3 @@
 
 [node name="UvEditor" type="Node2D"]
 script = ExtResource("1_v805t")
-face_sel_color = null
-face_unsel_color = null
-edge_sel_color = null
-edge_unsel_color = null
-select_feature = null
-sticky_state = null
-uv_map = null
-select_margin = null

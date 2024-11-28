@@ -26,6 +26,8 @@
 extends Node2D
 class_name UvEditor
 
+#signal forward_input(event:InputEvent)
+
 @export var face_sel_color:Color = Color(1, .5, 0, .4):
 	set(value):
 		face_sel_color = value
@@ -113,6 +115,9 @@ enum StickyState { DISABLED, SHARED_LOCATION, SHARED_VERTEX }
 @export var select_margin:float = 4
 
 #func _input(event: InputEvent) -> void:
+	#print("uv_editor ", event)
+	#forward_input.emit(event)
+	#get_viewport().set_input_as_handled()
 	#pass
 
 func on_node_mesh_changed(node:Node3D):
@@ -287,10 +292,10 @@ func draw_uv_mesh(mesh_face_selection_only:bool, draw_vertices:bool, draw_face_c
 
 	if draw_vertices:
 		for uv in verts_unsel:
-			print("unsel vert ", uv)
+#			print("unsel vert ", uv)
 			draw_vertex(uv, false)
 		for uv in verts_sel:
-			print("sel vert ", uv)
+#			print("sel vert ", uv)
 			draw_vertex(uv, true)
 
 

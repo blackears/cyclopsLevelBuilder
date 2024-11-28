@@ -118,18 +118,19 @@ func build_ui():
 	var active_block:CyclopsBlock = editor_plugin.get_active_block()
 	if editor_plugin.config_scene:
 		var menu_root = editor_plugin.config_scene.get_node("Views/View3D/Toolbar")
+	
 		for child in menu_root.get_children():
 			if child is ToolbarButtonRef:
-				var tool:CyclopsTool = child.tool
+				var tool_inst:CyclopsTool = child.tool
 
-				if tool._show_in_toolbar() && tool._can_handle_object(active_block):
+				if tool_inst.is_inside_tree() && tool_inst._show_in_toolbar() && tool_inst._can_handle_object(active_block):
 					var bn:ToolButton = preload("res://addons/cyclops_level_builder/gui/menu/tool_button.tscn").instantiate()
 					bn.plugin = editor_plugin
-					bn.tool_id = tool._get_tool_id()
-					bn.icon = tool._get_tool_icon()
+					bn.tool_path = tool_inst.get_path()
+					bn.icon = tool_inst._get_tool_icon()
 					if !bn.icon:
-						bn.text = tool._get_tool_name()
-					bn.tooltip_text = tool._get_tool_tooltip()
+						bn.text = tool_inst._get_tool_name()
+					bn.tooltip_text = tool_inst._get_tool_tooltip()
 					
 					%ToolButtonContainer.add_child(bn)
 
