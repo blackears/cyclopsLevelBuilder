@@ -272,7 +272,8 @@ func draw_uv_mesh(mesh_face_selection_only:bool, draw_vertices:bool, draw_face_c
 			
 			var face_points:PackedVector2Array
 			var face_center:Vector2
-			for fv_idx in f.face_vertex_indices.size():
+			for fv_local_idx in f.face_vertex_indices.size():
+				var fv_idx:int = f.face_vertex_indices[fv_local_idx]
 				var fv:ConvexVolume.FaceVertexInfo = cv.face_vertices[fv_idx]
 				var uv:Vector2 = xform * fv.uv0
 				face_points.append(uv)
@@ -349,3 +350,91 @@ func _draw() -> void:
 	if show_selection_rect:
 		draw_rect(selection_rect, selection_rect_fill_color, true)
 		draw_rect(selection_rect, selection_rect_border_color, false)
+
+func get_uv_indices_in_region(region:Rect2, best_only:bool = false)->PackedInt32Array:
+	var result:PackedInt32Array
+	
+	var viewport_xform = get_uv_to_viewport_xform()
+	
+	for block in block_nodes:
+		var mvd:MeshVectorData = block.mesh_vector_data
+		var cv:ConvexVolume = ConvexVolume.new()
+		cv.init_from_mesh_vector_data(mvd)
+		
+		var best_dist:float = INF
+		var pick_center:Vector2 = region.get_center()
+		
+		for f:ConvexVolume.FaceInfo in cv.faces:
+			if !sync_selection:
+				if !f.is_selected():
+					continue
+			
+				match select_feature:
+					SelectFeature.VERTEX:
+						for fv_local_idx in f.face_vertex_indices.size():
+							var fv_idx:int = f.face_vertex_indices[fv_local_idx]
+							var fv:ConvexVolume.FaceVertexInfo = cv.face_vertices[fv_idx]
+							var uv_screen:Vector2 = viewport_xform * fv.uv0
+							
+							if region.has_point(uv_screen):
+								if best_only:
+									var dist:float = uv_screen.distance_squared_to(pick_center)
+									if dist < best_dist:
+										best_dist = dist
+										result.clear()
+										result.append(fv.index)
+								else:
+									result.append(fv.index)
+								
+					SelectFeature.EDGE:
+						for fv0_local_idx in f.face_vertex_indices.size():
+							var fv1_local_idx:int = wrap(fv0_local_idx + 1, 0, f.face_vertex_indices.size())
+							var fv0_idx:int = f.face_vertex_indices[fv0_local_idx]
+							var fv1_idx:int = f.face_vertex_indices[fv1_local_idx]
+							var fv0:ConvexVolume.FaceVertexInfo = cv.face_vertices[fv0_idx]
+							var fv1:ConvexVolume.FaceVertexInfo = cv.face_vertices[fv1_idx]
+							var uv0_screen:Vector2 = viewport_xform * fv0.uv0
+							var uv1_screen:Vector2 = viewport_xform * fv1.uv0
+							
+							if MathUtil.intersects_2d_segment_region(uv0_screen, uv1_screen, region):
+								if best_only:
+									var dist:float = MathUtil.dist_to_segment_squared_2d(pick_center, uv0_screen, uv1_screen)
+									if dist < best_dist:
+										best_dist = dist
+										result.clear()
+										result.append(fv0.index)
+										result.append(fv1.index)
+										
+								else:
+									if !result.has(fv0.index):
+										result.append(fv0.index)
+									if !result.has(fv1.index):
+										result.append(fv1.index)
+					
+					SelectFeature.FACE:
+						var points:PackedVector2Array
+						var uv_center:Vector2
+						for fv_local_idx in f.face_vertex_indices.size():
+							var fv_idx:int = f.face_vertex_indices[fv_local_idx]
+							var fv:ConvexVolume.FaceVertexInfo = cv.face_vertices[fv_idx]
+							var uv_screen:Vector2 = viewport_xform * fv.uv0
+							uv_center += uv_screen
+							points.append(uv_screen)
+						
+						uv_center /= f.face_vertex_indices.size()
+						
+						if MathUtil.intersects_2d_region_polygon(region, points):
+							if best_only:
+								var dist:float = uv_center.distance_squared_to(pick_center)
+								if dist < best_dist:
+									best_dist = dist
+									result.clear()
+									result.append_array(f.face_vertex_indices)
+								
+							else:
+								result.append_array(f.face_vertex_indices)
+
+	return result
+
+	
+	

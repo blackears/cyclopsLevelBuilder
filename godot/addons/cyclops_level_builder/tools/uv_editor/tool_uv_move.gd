@@ -77,7 +77,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	
 	
 	if event is InputEventMouseButton:
-		print("mouse bn ", event)
+		#print("mouse bn ", event)
 
 		var e:InputEventMouseButton = event
 		if e.button_index == MOUSE_BUTTON_LEFT:
@@ -93,6 +93,17 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			else:
 				if tool_state == ToolState.READY:
 					#Do single click
+					var indices:PackedInt32Array = uv_ed.get_uv_indices_in_region(
+							Rect2(e.position - Vector2.ONE * builder.drag_start_radius / 2, 
+							Vector2.ONE * builder.drag_start_radius),
+							true)
+					#var cmd:CommandSelectFaceVertices = CommandSelectFaceVertices.new()
+					#cmd.builder = builder
+					#cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
+						#
+					#if cmd.will_change_anything():
+						#var undo:EditorUndoRedoManager = builder.get_undo_redo()
+						#cmd.add_to_undo_manager(undo)
 
 					tool_state = ToolState.NONE
 					return true
@@ -101,6 +112,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					#Finish drag rect
 					uv_ed.show_selection_rect = false
 					tool_state = ToolState.NONE
+					
+					uv_ed.select_region(uv_ed.selection_rect)
 				
 					pass
 					return true

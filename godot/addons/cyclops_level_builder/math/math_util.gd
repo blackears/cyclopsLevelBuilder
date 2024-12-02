@@ -1082,3 +1082,33 @@ static func intersects_2d_segment_polygon(p0:Vector2, p1:Vector2, poly_verts:Pac
 			return true
 	
 	return false
+
+static func intersects_2d_region_polygon(r:Rect2, poly_verts:PackedVector2Array)->bool:
+	return intersects_2d_polygon_polygon([
+		r.position, 
+		Vector2(r.position.x, r.end.y),
+		r.end, 
+		Vector2(r.end.x, r.position.y)], 
+		poly_verts)
+
+static func intersects_2d_polygon_polygon(poly0:PackedVector2Array, poly1:PackedVector2Array)->bool:
+	for p0 in poly0:
+		if intersects_2d_point_polygon(p0, poly1):
+			return true
+
+	for p1 in poly1:
+		if intersects_2d_point_polygon(p1, poly0):
+			return true
+			
+	for i0:int in poly0.size():
+		var i1:int = wrap(i0 + 1, 0, poly0.size())
+		
+		for j0:int in poly1.size():
+			var j1:int = wrap(j0 + 1, 0, poly1.size())
+			
+			if intersects_2d_segment_segment(poly0[i0], poly0[i1], poly1[j0], poly1[j1]):
+				return true
+	
+	return false
+		
+	
