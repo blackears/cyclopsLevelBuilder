@@ -25,12 +25,15 @@
 extends CyclopsTool
 class_name ToolUvMove
 
-enum ToolState { READY }
-var tool_state:ToolState = ToolState.READY
+enum ToolState { NONE, READY, DRAG_VIEW }
+var tool_state:ToolState = ToolState.NONE
 
 var settings:ToolMoveUvSettings = ToolMoveUvSettings.new()
 
 var mouse_hover_pos:Vector2
+var mouse_down_pos:Vector2
+
+var drag_start_view_xform:Transform2D
 
 var zoom_wheel_amount:float = 1.2
 
@@ -74,6 +77,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	
 	
 	if event is InputEventMouseButton:
+		print("mouse bn ", event)
 
 		var e:InputEventMouseButton = event
 		if e.button_index == MOUSE_BUTTON_LEFT:
@@ -82,6 +86,25 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				
 				
 				pass
+
+		elif e.button_index == MOUSE_BUTTON_MIDDLE:
+
+			if e.is_pressed():
+				if tool_state == ToolState.NONE:
+					mouse_down_pos = e.position
+					
+					tool_state = ToolState.DRAG_VIEW
+					drag_start_view_xform = uv_ed.proj_transform
+
+					return true
+				
+				
+				pass
+			else:
+				if tool_state == ToolState.DRAG_VIEW:
+					tool_state = ToolState.NONE
+					return true
+				
 
 		elif e.button_index == MOUSE_BUTTON_WHEEL_UP:
 			if e.pressed:
@@ -120,6 +143,15 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		var e:InputEventMouseMotion = event
 		
 		mouse_hover_pos = e.position
+		
+		if tool_state == ToolState.DRAG_VIEW:
+			var offset:Vector2 = e.position - mouse_down_pos
+			var view_xform:Transform2D = uv_ed.get_view_transform()
+			var new_xform:Transform2D = (view_xform * drag_start_view_xform).translated(offset)
+			
+			uv_ed.proj_transform = view_xform.affine_inverse() * new_xform
+			
+			return true
 
 	return false
 
