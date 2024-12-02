@@ -114,6 +114,19 @@ enum StickyState { DISABLED, SHARED_LOCATION, SHARED_VERTEX }
 
 @export var select_margin:float = 4
 
+@export var show_selection_rect:bool:
+	set(value):
+		show_selection_rect = value
+		queue_redraw()
+
+@export var selection_rect:Rect2:
+	set(value):
+		selection_rect = value
+		queue_redraw()
+
+@export var selection_rect_border_color:Color = Color(.5, .5, 1, 1)
+@export var selection_rect_fill_color:Color = Color(.5, .5, 1, .2)
+
 #func _input(event: InputEvent) -> void:
 	#print("uv_editor ", event)
 	#forward_input.emit(event)
@@ -332,4 +345,7 @@ func _draw() -> void:
 				draw_uv_mesh(false, true, true)
 			else:
 				draw_uv_mesh(true, true, true)
-	pass
+	
+	if show_selection_rect:
+		draw_rect(selection_rect, selection_rect_fill_color, true)
+		draw_rect(selection_rect, selection_rect_border_color, false)

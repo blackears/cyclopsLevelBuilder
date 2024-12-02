@@ -25,7 +25,7 @@
 extends CyclopsTool
 class_name ToolUvMove
 
-enum ToolState { NONE, READY, DRAG_VIEW }
+enum ToolState { NONE, READY, DRAG_VIEW, DRAG_SELECTION }
 var tool_state:ToolState = ToolState.NONE
 
 var settings:ToolMoveUvSettings = ToolMoveUvSettings.new()
@@ -83,9 +83,27 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		if e.button_index == MOUSE_BUTTON_LEFT:
 
 			if e.is_pressed():
+				if tool_state == ToolState.NONE:
+					mouse_down_pos = e.position
+					
+					tool_state = ToolState.READY
+					#print("mouse ready")
+
+					return true
+			else:
+				if tool_state == ToolState.READY:
+					#Do single click
+
+					tool_state = ToolState.NONE
+					return true
+					
+				elif tool_state == ToolState.DRAG_SELECTION:
+					#Finish drag rect
+					uv_ed.show_selection_rect = false
+					tool_state = ToolState.NONE
 				
-				
-				pass
+					pass
+					return true
 
 		elif e.button_index == MOUSE_BUTTON_MIDDLE:
 
@@ -151,6 +169,23 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			uv_ed.proj_transform = view_xform.affine_inverse() * new_xform
 			
+			return true
+
+		if tool_state == ToolState.READY:
+			var offset:Vector2 = e.position - mouse_down_pos
+			if offset.length_squared() > MathUtil.square(builder.drag_start_radius):
+#				print("start drag")
+				
+				tool_state = ToolState.DRAG_SELECTION
+				uv_ed.show_selection_rect = true
+				uv_ed.selection_rect = Rect2(mouse_down_pos, e.position - mouse_down_pos)
+#				print("sel rect ", uv_ed.selection_rect)
+
+			return true
+
+		elif tool_state == ToolState.DRAG_SELECTION:
+			
+			uv_ed.selection_rect = Rect2(mouse_down_pos, e.position - mouse_down_pos)
 			return true
 
 	return false
