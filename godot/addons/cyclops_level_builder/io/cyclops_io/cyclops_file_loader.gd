@@ -178,9 +178,9 @@ func load_data_vector(vec_dict)->DataVector:
 		"FLOAT":
 			var buf:PackedFloat32Array = load_buffer(vec_dict["data_buffer"]).to_float32_array()
 			return DataVectorFloat.new(vec_dict["name"], buf, DataVector.DataType.FLOAT)
-		"STRING":
-			var buf:PackedStringArray = bytes_to_var(load_buffer(vec_dict["data_buffer"]))
-			return DataVectorString.new(vec_dict["name"], buf, DataVector.DataType.STRING)
+		#"STRING":
+			#var buf:PackedStringArray = bytes_to_var(load_buffer(vec_dict["data_buffer"]))
+			#return DataVectorString.new(vec_dict["name"], buf, DataVector.DataType.STRING)
 		"COLOR":
 			var buf:PackedFloat32Array = load_buffer(vec_dict["data_buffer"]).to_float32_array()
 			return DataVectorFloat.new(vec_dict["name"], buf, DataVector.DataType.COLOR)

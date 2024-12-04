@@ -76,10 +76,20 @@ func set_value_ivec4(value:Vector4i, index:int):
 func get_buffer_byte_data()->PackedByteArray:
 	return data.to_byte_array()
 
-#func to_dictionary(buffer_ar:BufferArchive)->Dictionary:
-	#var result:Dictionary = super(buffer_ar)
-	#var region:BufferArchive.BufferRegion = buffer_ar.store_buffer(data.to_byte_array())
-	#
-	#result["data_buffer"] = region.index
-	#
-	#return result
+func append_int(value:int):
+	data.append(value)
+
+func append_vector2i(value:Vector2i):
+	data.append(value.x)
+	data.append(value.y)
+
+func append_vector3i(value:Vector3i):
+	data.append(value.x)
+	data.append(value.y)
+	data.append(value.z)
+
+func append_vector4i(value:Vector4i):
+	data.append(value.x)
+	data.append(value.y)
+	data.append(value.z)
+	data.append(value.w)

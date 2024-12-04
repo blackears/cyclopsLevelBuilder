@@ -138,6 +138,30 @@ func set_value_color(value:Color, index:int):
 func get_buffer_byte_data()->PackedByteArray:
 	return data.to_byte_array()
 
+func append_float(value:float):
+	data.append(value)
+
+func append_vector2(value:Vector2):
+	data.append(value.x)
+	data.append(value.y)
+
+func append_vector3(value:Vector3):
+	data.append(value.x)
+	data.append(value.y)
+	data.append(value.z)
+
+func append_vector4(value:Vector4):
+	data.append(value.x)
+	data.append(value.y)
+	data.append(value.z)
+	data.append(value.w)
+
+func append_color(value:Color):
+	data.append(value.r)
+	data.append(value.g)
+	data.append(value.b)
+	data.append(value.a)
+
 #func to_dictionary(buffer_ar:BufferArchive)->Dictionary:
 	#var result:Dictionary = super(buffer_ar)
 	#var region:BufferArchive.BufferRegion = buffer_ar.store_buffer(data.to_byte_array())

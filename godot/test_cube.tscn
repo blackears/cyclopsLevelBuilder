@@ -9,7 +9,6 @@
 [sub_resource type="Resource" id="Resource_oj2aa"]
 script = ExtResource("2_n4fcx")
 data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0)
-name = &"selected"
 category = ""
 data_type = 0
 stride = 1
@@ -17,7 +16,6 @@ stride = 1
 [sub_resource type="Resource" id="Resource_43iva"]
 script = ExtResource("2_n4fcx")
 data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-name = &"uv_seam"
 category = ""
 data_type = 0
 stride = 1
@@ -25,7 +23,6 @@ stride = 1
 [sub_resource type="Resource" id="Resource_e36o8"]
 script = ExtResource("3_8lw76")
 data = PackedInt32Array(-1, -1, -1, -1, -1, -1)
-name = &"material_index"
 category = ""
 data_type = 1
 stride = 1
@@ -33,7 +30,6 @@ stride = 1
 [sub_resource type="Resource" id="Resource_apthm"]
 script = ExtResource("4_mip3e")
 data = PackedFloat32Array(-1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0, 0, 0, -1)
-name = &"normal"
 category = ""
 data_type = 6
 stride = 3
@@ -41,7 +37,6 @@ stride = 3
 [sub_resource type="Resource" id="Resource_d70hm"]
 script = ExtResource("2_n4fcx")
 data = PackedByteArray(0, 0, 0, 0, 0, 1)
-name = &"selected"
 category = ""
 data_type = 0
 stride = 1
@@ -49,7 +44,6 @@ stride = 1
 [sub_resource type="Resource" id="Resource_5pp3b"]
 script = ExtResource("2_n4fcx")
 data = PackedByteArray(1, 1, 1, 1, 1, 1)
-name = &"visible"
 category = ""
 data_type = 0
 stride = 1
@@ -57,7 +51,6 @@ stride = 1
 [sub_resource type="Resource" id="Resource_7g5s4"]
 script = ExtResource("4_mip3e")
 data = PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
-name = &"color"
 category = ""
 data_type = 4
 stride = 4
@@ -65,7 +58,6 @@ stride = 4
 [sub_resource type="Resource" id="Resource_hm1tr"]
 script = ExtResource("3_8lw76")
 data = PackedInt32Array(0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5)
-name = &"face_index"
 category = ""
 data_type = 1
 stride = 1
@@ -73,7 +65,6 @@ stride = 1
 [sub_resource type="Resource" id="Resource_fdgtm"]
 script = ExtResource("4_mip3e")
 data = PackedFloat32Array(-1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1)
-name = &"normal"
 category = ""
 data_type = 6
 stride = 3
@@ -81,7 +72,6 @@ stride = 3
 [sub_resource type="Resource" id="Resource_a6ql0"]
 script = ExtResource("2_n4fcx")
 data = PackedByteArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
-name = &"selected"
 category = ""
 data_type = 0
 stride = 1
@@ -89,7 +79,6 @@ stride = 1
 [sub_resource type="Resource" id="Resource_whacr"]
 script = ExtResource("4_mip3e")
 data = PackedFloat32Array(0, -1, -1, -1, -1, 0, 0, 0, 0, 0, -1, 0, -1, -1, 0, -1, 0, -1, 0, 0, -1, 0, -1, -1, 0, 0, 0, -1, -1, -1, -1, 0, 0, 0, 0, -1, -1, -1, -1, 0, 0, -1, 0, 0, -1, 0, -1, -1)
-name = &"uv0"
 category = ""
 data_type = 5
 stride = 2
@@ -97,7 +86,6 @@ stride = 2
 [sub_resource type="Resource" id="Resource_bqiev"]
 script = ExtResource("3_8lw76")
 data = PackedInt32Array(0, 1, 2, 3, 7, 6, 5, 4, 1, 0, 4, 5, 2, 1, 5, 6, 3, 2, 6, 7, 0, 3, 7, 4)
-name = &"vertex_index"
 category = ""
 data_type = 1
 stride = 1
@@ -105,7 +93,6 @@ stride = 1
 [sub_resource type="Resource" id="Resource_vrv6b"]
 script = ExtResource("4_mip3e")
 data = PackedFloat32Array(-0.57735, 0.57735, -0.57735, -0.57735, 0.57735, 0.57735, -0.57735, -0.57735, 0.57735, -0.57735, -0.57735, -0.57735, 0.57735, 0.57735, -0.57735, 0.57735, 0.57735, 0.57735, 0.57735, -0.57735, 0.57735, 0.57735, -0.57735, -0.57735)
-name = &"normal"
 category = ""
 data_type = 6
 stride = 3
@@ -113,7 +100,6 @@ stride = 3
 [sub_resource type="Resource" id="Resource_x733n"]
 script = ExtResource("4_mip3e")
 data = PackedFloat32Array(0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0)
-name = &"position"
 category = ""
 data_type = 6
 stride = 3
@@ -121,7 +107,6 @@ stride = 3
 [sub_resource type="Resource" id="Resource_wkmj6"]
 script = ExtResource("2_n4fcx")
 data = PackedByteArray(0, 0, 0, 0, 0, 1, 0, 0)
-name = &"selected"
 category = ""
 data_type = 0
 stride = 1

@@ -60,3 +60,6 @@ func get_value(index:int)->int:
 
 func set_value(value:int, index:int):
 	data[index] = value
+
+func append_byte(value:int):
+	data.append(value)

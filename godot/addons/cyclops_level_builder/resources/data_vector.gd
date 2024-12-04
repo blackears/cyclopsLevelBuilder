@@ -33,6 +33,7 @@ enum DataType { BOOL, INT, FLOAT, STRING, COLOR, VECTOR2, VECTOR3, VECTOR4, TRAN
 @export var data_type:DataType
 @export var stride:int = 1
 
+
 func get_data_format_type()->DataFormatType:
 	return DataFormatType.BYTE
 	
