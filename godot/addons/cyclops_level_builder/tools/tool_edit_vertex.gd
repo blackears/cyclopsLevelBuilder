@@ -126,7 +126,7 @@ func _draw_tool(viewport_camera:Camera3D):
 	
 	draw_gizmo(viewport_camera)
 	
-func on_block_changed():
+func on_block_changed(node:CyclopsBlock):
 	setup_tool()
 
 func setup_tool():

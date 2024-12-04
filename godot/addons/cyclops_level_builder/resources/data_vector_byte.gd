@@ -27,8 +27,8 @@ class_name DataVectorByte
 
 @export var data:PackedByteArray
 
-func _init(name:StringName = "", data:PackedByteArray = [], data_type:DataType = DataType.BOOL):
-	self.name = name
+func _init(data:PackedByteArray = [], data_type:DataType = DataType.BOOL):
+#	self.name = name
 	self.data = data
 	self.data_type = data_type
 	self.stride = data_type_num_components(data_type)

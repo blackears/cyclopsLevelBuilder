@@ -906,13 +906,13 @@ func to_mesh_vector_data()->MeshVectorData:
 		vertex_normals.append(v.normal)
 		vertex_selected.append(v.selected)
 		
-	mvd.set_vertex_data(DataVectorFloat.new(MeshVectorData.V_POSITION, 
+	mvd.set_vertex_data(MeshVectorData.V_POSITION, DataVectorFloat.new(
 		vertex_points.to_byte_array().to_float32_array(), 
 		DataVector.DataType.VECTOR3))
-	mvd.set_vertex_data(DataVectorFloat.new(MeshVectorData.V_NORMAL, 
+	mvd.set_vertex_data(MeshVectorData.V_NORMAL, DataVectorFloat.new(
 		vertex_normals.to_byte_array().to_float32_array(),
 		DataVector.DataType.VECTOR3))
-	mvd.set_vertex_data(DataVectorByte.new(MeshVectorData.V_SELECTED, 
+	mvd.set_vertex_data(MeshVectorData.V_SELECTED, DataVectorByte.new(
 		vertex_selected,
 		DataVector.DataType.BOOL))
 	
@@ -929,10 +929,10 @@ func to_mesh_vector_data()->MeshVectorData:
 		edge_face_indices.append(e.face_indices[0])
 		edge_face_indices.append(e.face_indices[1])
 		
-	mvd.set_edge_data(DataVectorByte.new(MeshVectorData.E_SELECTED, 
+	mvd.set_edge_data(MeshVectorData.E_SELECTED, DataVectorByte.new(
 		edge_selected,
 		DataVector.DataType.BOOL))
-	mvd.set_edge_data(DataVectorByte.new(MeshVectorData.E_UV_SEAM, 
+	mvd.set_edge_data(MeshVectorData.E_UV_SEAM, DataVectorByte.new(
 		edge_uv_seam,
 		DataVector.DataType.BOOL))
 	mvd.edge_vertex_indices = edge_vertex_indices
@@ -960,16 +960,16 @@ func to_mesh_vector_data()->MeshVectorData:
 	mvd.face_vertex_count = face_vertex_count
 	mvd.face_vertex_indices = face_vertex_indices
 
-	mvd.set_face_data(DataVectorByte.new(MeshVectorData.F_SELECTED, 
+	mvd.set_face_data(MeshVectorData.F_SELECTED, DataVectorByte.new(
 		face_selected,
 		DataVector.DataType.BOOL))
-	mvd.set_face_data(DataVectorByte.new(MeshVectorData.F_VISIBLE, 
+	mvd.set_face_data(MeshVectorData.F_VISIBLE, DataVectorByte.new(
 		face_visible,
 		DataVector.DataType.BOOL))
-	mvd.set_face_data(DataVectorFloat.new(MeshVectorData.F_NORMAL, 
+	mvd.set_face_data(MeshVectorData.F_NORMAL, DataVectorFloat.new(
 		face_normal.to_byte_array().to_float32_array(),
 		DataVector.DataType.VECTOR3))
-	mvd.set_face_data(DataVectorInt.new(MeshVectorData.F_MATERIAL_INDEX, 
+	mvd.set_face_data(MeshVectorData.F_MATERIAL_INDEX, DataVectorInt.new(
 		face_mat_id.to_byte_array().to_int32_array(),
 		DataVector.DataType.INT))
 	
@@ -990,22 +990,22 @@ func to_mesh_vector_data()->MeshVectorData:
 		face_vertex_color.append(fv.color.a)
 		face_vertex_uv0.append(fv.uv0)
 	
-	mvd.set_face_vertex_data(DataVectorInt.new(MeshVectorData.FV_FACE_INDEX, 
+	mvd.set_face_vertex_data(MeshVectorData.FV_FACE_INDEX, DataVectorInt.new(
 		face_vertex_face_index.to_byte_array().to_int32_array(),
 		DataVector.DataType.INT))
-	mvd.set_face_vertex_data(DataVectorInt.new(MeshVectorData.FV_VERTEX_INDEX, 
+	mvd.set_face_vertex_data(MeshVectorData.FV_VERTEX_INDEX, DataVectorInt.new(
 		face_vertex_vertex_index.to_byte_array().to_int32_array(),
 		DataVector.DataType.INT))
-	mvd.set_face_vertex_data(DataVectorFloat.new(MeshVectorData.FV_NORMAL, 
+	mvd.set_face_vertex_data(MeshVectorData.FV_NORMAL, DataVectorFloat.new(
 		face_vertex_normal.to_byte_array().to_float32_array(),
 		DataVector.DataType.VECTOR3))
-	mvd.set_face_vertex_data(DataVectorByte.new(MeshVectorData.FV_SELECTED, 
+	mvd.set_face_vertex_data(MeshVectorData.FV_SELECTED, DataVectorByte.new(
 		face_vertex_selected,
 		DataVector.DataType.BOOL))
-	mvd.set_face_vertex_data(DataVectorFloat.new(MeshVectorData.FV_COLOR, 
+	mvd.set_face_vertex_data(MeshVectorData.FV_COLOR, DataVectorFloat.new(
 		face_vertex_color.to_byte_array().to_float32_array(),
 		DataVector.DataType.COLOR))
-	mvd.set_face_vertex_data(DataVectorFloat.new(MeshVectorData.FV_UV0, 
+	mvd.set_face_vertex_data(MeshVectorData.FV_UV0, DataVectorFloat.new(
 		face_vertex_uv0.to_byte_array().to_float32_array(),
 		DataVector.DataType.VECTOR2))
 	

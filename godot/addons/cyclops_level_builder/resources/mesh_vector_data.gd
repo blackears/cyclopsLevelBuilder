@@ -96,43 +96,43 @@ func create_from_convex_block(block_data:ConvexBlockData):
 	num_edges = block_data.edge_vertex_indices.size() / 2
 	num_faces = block_data.face_vertex_count.size()
 	
-	set_vertex_data(DataVectorFloat.new(V_POSITION, 
+	set_vertex_data(V_POSITION, DataVectorFloat.new(
 		block_data.vertex_points.to_byte_array().to_float32_array(), 
 		DataVector.DataType.VECTOR3))
 
-	set_vertex_data(DataVectorByte.new(V_SELECTED, 
+	set_vertex_data(V_SELECTED, DataVectorByte.new(
 		block_data.vertex_selected, 
 		DataVector.DataType.BOOL))
 
-	set_edge_data(DataVectorByte.new(E_SELECTED, 
+	set_edge_data(E_SELECTED, DataVectorByte.new(
 		block_data.edge_selected, 
 		DataVector.DataType.BOOL))
 
-	set_face_data(DataVectorInt.new(F_MATERIAL_INDEX, 
+	set_face_data(F_MATERIAL_INDEX, DataVectorInt.new(
 		block_data.face_material_indices, 
 		DataVector.DataType.INT))
 
-	set_face_data(DataVectorByte.new(F_VISIBLE, 
+	set_face_data(F_VISIBLE, DataVectorByte.new(
 		block_data.face_visible, 
 		DataVector.DataType.BOOL))
 
-	set_face_data(DataVectorFloat.new(F_COLOR,
+	set_face_data(F_COLOR,DataVectorFloat.new(
 		block_data.face_color.to_byte_array().to_float32_array(),
 		DataVector.DataType.COLOR))
 
 	var f_uv_xform:PackedFloat32Array	
 	for t in block_data.face_uv_transform:
 		f_uv_xform.append_array([t.x.x, t.x.y, t.y.x, t.y.y, t.origin.x, t.origin.y])
-	set_face_data(DataVectorFloat.new(F_UV_XFORM, 
+	set_face_data(F_UV_XFORM, DataVectorFloat.new(
 		f_uv_xform,
 		DataVector.DataType.TRANSFORM_2D))
 		
 		
-	set_face_data(DataVectorByte.new(F_SELECTED, 
+	set_face_data(F_SELECTED, DataVectorByte.new(
 		block_data.face_selected, 
 		DataVector.DataType.BOOL))
 
-	set_face_data(DataVectorFloat.new(F_COLOR, 
+	set_face_data(F_COLOR, DataVectorFloat.new(
 		block_data.face_color.to_byte_array().to_float32_array(), 
 		DataVector.DataType.COLOR))
 
@@ -163,11 +163,11 @@ func create_from_convex_block(block_data:ConvexBlockData):
 		fv_array_offset += num_verts_in_face
 	
 
-	set_face_vertex_data(DataVectorInt.new(FV_FACE_INDEX, 
+	set_face_vertex_data(FV_FACE_INDEX, DataVectorInt.new(
 		face_indices, 
 		DataVector.DataType.INT))
 
-	set_face_vertex_data(DataVectorInt.new(FV_VERTEX_INDEX, 
+	set_face_vertex_data(FV_VERTEX_INDEX, DataVectorInt.new(
 		vert_indices, 
 		DataVector.DataType.INT))
 	
@@ -180,16 +180,16 @@ func create_from_convex_block(block_data:ConvexBlockData):
 			col_fv_data.append(block_data.face_color[f_idx])
 			
 
-		set_face_vertex_data(DataVectorFloat.new(FV_COLOR, 
+		set_face_vertex_data(FV_COLOR, DataVectorFloat.new(
 			col_fv_data.to_byte_array().to_float32_array(), 
 			DataVector.DataType.COLOR))
 	else:
 		#Copy face vertex colors
-		set_face_vertex_data(DataVectorFloat.new(FV_COLOR, 
+		set_face_vertex_data(FV_COLOR, DataVectorFloat.new(
 			block_data.face_vertex_color.to_byte_array().to_float32_array(), 
 			DataVector.DataType.COLOR))
 			
-	set_face_vertex_data(DataVectorFloat.new(FV_NORMAL, 
+	set_face_vertex_data(FV_NORMAL, DataVectorFloat.new(
 		block_data.face_vertex_normal.to_byte_array().to_float32_array(), 
 		DataVector.DataType.VECTOR3))
 			
@@ -220,17 +220,17 @@ func get_face_vertex_data(vector_name:String)->DataVector:
 #func get_face_vertex_index(f_idx:int, v_idx:int)->int:
 	#return 0
 
-func set_vertex_data(data_vector:DataVector):
-	vertex_data[data_vector.name] = data_vector
+func set_vertex_data(layer_name:String, data_vector:DataVector):
+	vertex_data[layer_name] = data_vector
 
-func set_edge_data(data_vector:DataVector):
-	edge_data[data_vector.name] = data_vector
+func set_edge_data(layer_name:String, data_vector:DataVector):
+	edge_data[layer_name] = data_vector
 
-func set_face_data(data_vector:DataVector):
-	face_data[data_vector.name] = data_vector
+func set_face_data(layer_name:String, data_vector:DataVector):
+	face_data[layer_name] = data_vector
 	
-func set_face_vertex_data(data_vector:DataVector):
-	face_vertex_data[data_vector.name] = data_vector
+func set_face_vertex_data(layer_name:String, data_vector:DataVector):
+	face_vertex_data[layer_name] = data_vector
 
 func validate()->bool:
 	return true

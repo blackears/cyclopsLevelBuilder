@@ -28,7 +28,7 @@ class_name DataVector
 enum DataFormatType { BYTE, INT32, FLOAT32, STRING }
 enum DataType { BOOL, INT, FLOAT, STRING, COLOR, VECTOR2, VECTOR3, VECTOR4, TRANSFORM_2D, TRANSFORM_3D }
 
-@export var name:StringName
+#@export var name:StringName
 @export var category:String #uv, color, weights, etc.
 @export var data_type:DataType
 @export var stride:int = 1

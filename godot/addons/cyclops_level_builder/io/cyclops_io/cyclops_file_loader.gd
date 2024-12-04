@@ -171,34 +171,34 @@ func load_data_vector(vec_dict)->DataVector:
 	match vec_dict["data_type"]:
 		"BOOL":
 			var buf:PackedByteArray = load_buffer(vec_dict["data_buffer"])
-			return DataVectorByte.new(vec_dict["name"], buf, DataVector.DataType.BOOL)
+			return DataVectorByte.new(buf, DataVector.DataType.BOOL)
 		"INT":
 			var buf:PackedInt32Array = load_buffer(vec_dict["data_buffer"]).to_int32_array()
-			return DataVectorInt.new(vec_dict["name"], buf, DataVector.DataType.INT)
+			return DataVectorInt.new(buf, DataVector.DataType.INT)
 		"FLOAT":
 			var buf:PackedFloat32Array = load_buffer(vec_dict["data_buffer"]).to_float32_array()
-			return DataVectorFloat.new(vec_dict["name"], buf, DataVector.DataType.FLOAT)
+			return DataVectorFloat.new(buf, DataVector.DataType.FLOAT)
 		#"STRING":
 			#var buf:PackedStringArray = bytes_to_var(load_buffer(vec_dict["data_buffer"]))
 			#return DataVectorString.new(vec_dict["name"], buf, DataVector.DataType.STRING)
 		"COLOR":
 			var buf:PackedFloat32Array = load_buffer(vec_dict["data_buffer"]).to_float32_array()
-			return DataVectorFloat.new(vec_dict["name"], buf, DataVector.DataType.COLOR)
+			return DataVectorFloat.new(buf, DataVector.DataType.COLOR)
 		"TRANSFORM_2D":
 			var buf:PackedFloat32Array = load_buffer(vec_dict["data_buffer"]).to_float32_array()
-			return DataVectorFloat.new(vec_dict["name"], buf, DataVector.DataType.TRANSFORM_2D)
+			return DataVectorFloat.new(buf, DataVector.DataType.TRANSFORM_2D)
 		"TRANSFORM_3D":
 			var buf:PackedFloat32Array = load_buffer(vec_dict["data_buffer"]).to_float32_array()
-			return DataVectorFloat.new(vec_dict["name"], buf, DataVector.DataType.TRANSFORM_3D)
+			return DataVectorFloat.new(buf, DataVector.DataType.TRANSFORM_3D)
 		"VECTOR2":
 			var buf:PackedFloat32Array = load_buffer(vec_dict["data_buffer"]).to_float32_array()
-			return DataVectorFloat.new(vec_dict["name"], buf, DataVector.DataType.VECTOR2)
+			return DataVectorFloat.new(buf, DataVector.DataType.VECTOR2)
 		"VECTOR3":
 			var buf:PackedFloat32Array = load_buffer(vec_dict["data_buffer"]).to_float32_array()
-			return DataVectorFloat.new(vec_dict["name"], buf, DataVector.DataType.VECTOR3)
+			return DataVectorFloat.new(buf, DataVector.DataType.VECTOR3)
 		"VECTOR4":
 			var buf:PackedFloat32Array = load_buffer(vec_dict["data_buffer"]).to_float32_array()
-			return DataVectorFloat.new(vec_dict["name"], buf, DataVector.DataType.VECTOR4)
+			return DataVectorFloat.new(buf, DataVector.DataType.VECTOR4)
 		_:
 			return null
 			

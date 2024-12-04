@@ -27,8 +27,8 @@ class_name DataVectorFloat
 
 @export var data:PackedFloat32Array
 
-func _init(name:StringName = "", data:PackedFloat32Array = [], data_type:DataType = DataType.FLOAT):
-	self.name = name
+func _init(data:PackedFloat32Array = [], data_type:DataType = DataType.FLOAT):
+#	self.name = name
 	self.data = data
 	self.data_type = data_type
 	self.stride = data_type_num_components(data_type)

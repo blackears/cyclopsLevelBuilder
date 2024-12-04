@@ -27,8 +27,8 @@ class_name DataVectorInt
 
 @export var data:PackedInt32Array
 
-func _init(name:StringName = "", data:PackedInt32Array = [], data_type:DataType = DataType.INT):
-	self.name = name
+func _init(data:PackedInt32Array = [], data_type:DataType = DataType.INT):
+#	self.name = name
 	self.data = data
 	self.data_type = data_type
 	self.stride = data_type_num_components(data_type)
