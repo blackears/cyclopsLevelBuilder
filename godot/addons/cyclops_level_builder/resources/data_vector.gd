@@ -33,6 +33,21 @@ enum DataType { BOOL, INT, FLOAT, STRING, COLOR, VECTOR2, VECTOR3, VECTOR4, TRAN
 @export var data_type:DataType
 @export var stride:int = 1
 
+func duplicate_explicit()->DataVector:
+	
+	return null
+
+func equals_data_at_indices(peer:DataVector, indices:PackedInt32Array)->bool:
+	return false
+
+func set_data_at_indices(peer:DataVector, indices:PackedInt32Array)->void:
+	return
+
+func equals_data(peer:DataVector)->bool:
+	return false
+
+func set_data(peer:DataVector)->void:
+	return
 
 func get_data_format_type()->DataFormatType:
 	return DataFormatType.BYTE

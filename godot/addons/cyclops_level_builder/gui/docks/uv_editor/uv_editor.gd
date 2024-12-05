@@ -351,12 +351,13 @@ func _draw() -> void:
 		draw_rect(selection_rect, selection_rect_fill_color, true)
 		draw_rect(selection_rect, selection_rect_border_color, false)
 
-func get_uv_indices_in_region(region:Rect2, best_only:bool = false)->PackedInt32Array:
-	var result:PackedInt32Array
+func get_uv_indices_in_region(region:Rect2, best_only:bool = false)->Dictionary:
+	var result_blocks:Dictionary #NodePath-> PackedInt32Array
 	
 	var viewport_xform = get_uv_to_viewport_xform()
 	
 	for block in block_nodes:
+		var result:PackedInt32Array
 		var mvd:MeshVectorData = block.mesh_vector_data
 		var cv:ConvexVolume = ConvexVolume.new()
 		cv.init_from_mesh_vector_data(mvd)
@@ -433,8 +434,11 @@ func get_uv_indices_in_region(region:Rect2, best_only:bool = false)->PackedInt32
 								
 							else:
 								result.append_array(f.face_vertex_indices)
+		
+		if !result.is_empty():
+			result_blocks[block.get_path()] = result
 
-	return result
+	return result_blocks
 
 	
 	

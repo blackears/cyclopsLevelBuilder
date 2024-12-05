@@ -59,6 +59,8 @@ class_name MeshVectorData
 @export var face_data:Dictionary
 @export var face_vertex_data:Dictionary
 
+enum Feature { VERTEX, EDGE, FACE, FACE_VERTEX }
+
 const V_POSITION: StringName = "position"
 const V_SELECTED: StringName = "selected"
 #const V_COLOR: StringName = "color"
@@ -84,6 +86,44 @@ const FV_UV0: StringName = "uv0"
 const FV_UV1: StringName = "uv1"
 const FV_UV2: StringName = "uv2"
 
+
+#@export var vertex_data:Dictionary
+#@export var edge_data:Dictionary
+#@export var face_data:Dictionary
+#@export var face_vertex_data:Dictionary
+
+func duplicate_explicit()->MeshVectorData:
+	var mvd:MeshVectorData = MeshVectorData.new()
+	
+	mvd.num_vertices = num_vertices
+	mvd.num_edges = num_edges
+	mvd.num_faces = num_faces
+	mvd.num_face_vertices = num_face_vertices
+	
+	mvd.active_vertex = active_vertex
+	mvd.active_edge = active_edge
+	mvd.active_face = active_face
+	mvd.active_face_vertex = active_face_vertex
+	
+	mvd.edge_vertex_indices = edge_vertex_indices.duplicate()
+	mvd.edge_face_indices = edge_face_indices.duplicate()
+	mvd.face_vertex_count = face_vertex_count.duplicate()
+	mvd.face_vertex_indices = face_vertex_indices.duplicate()
+	
+	for f in vertex_data.keys():
+		mvd.vertex_data[f] = vertex_data[f].duplicate_explicit()
+	
+	for f in edge_data.keys():
+		mvd.edge_data[f] = edge_data[f].duplicate_explicit()
+	
+	for f in face_data.keys():
+		mvd.face_data[f] = face_data[f].duplicate_explicit()
+	
+	for f in face_vertex_data.keys():
+		mvd.face_vertex_data[f] = face_vertex_data[f].duplicate_explicit()
+	
+	return mvd
+	
 
 func create_from_convex_block(block_data:ConvexBlockData):
 
@@ -193,6 +233,30 @@ func create_from_convex_block(block_data:ConvexBlockData):
 		block_data.face_vertex_normal.to_byte_array().to_float32_array(), 
 		DataVector.DataType.VECTOR3))
 			
+func has_feature_data(feature:Feature, vector_name:String)->bool:
+	match feature:
+		Feature.VERTEX:
+			return vertex_data.has(vector_name)
+		Feature.EDGE:
+			return edge_data.has(vector_name)
+		Feature.FACE:
+			return face_data.has(vector_name)
+		Feature.FACE_VERTEX:
+			return face_vertex_data.has(vector_name)
+	return false
+			
+func get_feature_data(feature:Feature, vector_name:String)->DataVector:
+	match feature:
+		Feature.VERTEX:
+			return vertex_data[vector_name]
+		Feature.EDGE:
+			return edge_data[vector_name]
+		Feature.FACE:
+			return face_data[vector_name]
+		Feature.FACE_VERTEX:
+			return face_vertex_data[vector_name]
+	return null
+	
 func has_vertex_data(vector_name:String)->bool:
 	return vertex_data.has(vector_name)
 

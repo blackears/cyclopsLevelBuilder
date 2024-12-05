@@ -67,6 +67,85 @@ func _draw_tool(viewport_camera:Camera3D):
 	return
 	
 
+func select_face_vertices(block_index_map:Dictionary, sel_type:Selection.Type):
+	var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
+	cmd.builder = builder
+	print("block_index_map ", block_index_map)
+	
+	for block in builder.get_selected_blocks():
+		var block_path:NodePath = block.get_path()
+
+		var fc:CommandSetMeshFeatureData.FeatureChanges = CommandSetMeshFeatureData.FeatureChanges.new()
+		
+		var mvd:MeshVectorData = block.mesh_vector_data
+		var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+#		print("source sel ", sel_vec.data)
+		
+		var new_sel_vec:PackedByteArray
+		#new_sel_vec.resize(sel_vec.size())
+		new_sel_vec = sel_vec.get_buffer_byte_data().duplicate()
+#		print("start tgt sel ", new_sel_vec)
+		#new_sel_vec.set(
+		match sel_type:
+			Selection.Type.REPLACE:
+				new_sel_vec.fill(false)
+				if block_index_map.has(block_path):
+					var sel_indices:PackedInt32Array = block_index_map[block_path]
+					for i in sel_indices:
+						new_sel_vec[i] = true
+
+			Selection.Type.ADD:
+				if block_index_map.has(block_path):
+					var sel_indices:PackedInt32Array = block_index_map[block_path]
+					for i in sel_indices:
+						new_sel_vec[i] = true
+
+			Selection.Type.SUBTRACT:
+				if block_index_map.has(block_path):
+					var sel_indices:PackedInt32Array = block_index_map[block_path]
+					for i in sel_indices:
+						new_sel_vec[i] = false
+
+			Selection.Type.TOGGLE:
+				if block_index_map.has(block_path):
+					var sel_indices:PackedInt32Array = block_index_map[block_path]
+					for i in sel_indices:
+						new_sel_vec[i] = !new_sel_vec[i]
+		
+		print("end tgt sel ", new_sel_vec)
+		fc.new_data_values[MeshVectorData.FV_SELECTED] = DataVectorByte.new(new_sel_vec, DataVector.DataType.BOOL)
+					
+		cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
+		
+	if cmd.will_change_anything():
+		print("cmd.will_change_anything() true")
+		var undo:EditorUndoRedoManager = builder.get_undo_redo()
+		cmd.add_to_undo_manager(undo)
+
+	
+	
+	
+	#for block_path:NodePath in block_indices.keys():
+		#var block:CyclopsBlock = builder.get_node(block_path)
+		#var cur_sel_vec:DataVectorByte = block.mesh_vector_data.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+		#
+		#
+		#var chosen_indices = block_indices[block_path]
+		#var fc:CommandSetMeshFeatureData.FeatureChanges = CommandSetMeshFeatureData.FeatureChanges.new()
+		#fc.new_data_values[MeshVectorData.FV_SELECTED] = DataVectorByte.new()
+		#
+		#cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
+	
+	#var cmd:CommandSelectFaceVertices = CommandSelectFaceVertices.new()
+	#cmd.builder = builder
+	#cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
+		#
+	#if cmd.will_change_anything():
+		#var undo:EditorUndoRedoManager = builder.get_undo_redo()
+		#cmd.add_to_undo_manager(undo)
+	pass
+	
+
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	if !builder:
 		return false
@@ -93,29 +172,40 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			else:
 				if tool_state == ToolState.READY:
 					#Do single click
-					var indices:PackedInt32Array = uv_ed.get_uv_indices_in_region(
+					var block_indices:Dictionary = uv_ed.get_uv_indices_in_region(
 							Rect2(e.position - Vector2.ONE * builder.drag_start_radius / 2, 
 							Vector2.ONE * builder.drag_start_radius),
 							true)
-					#var cmd:CommandSelectFaceVertices = CommandSelectFaceVertices.new()
-					#cmd.builder = builder
-					#cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
-						#
-					#if cmd.will_change_anything():
-						#var undo:EditorUndoRedoManager = builder.get_undo_redo()
-						#cmd.add_to_undo_manager(undo)
+					
+					select_face_vertices(block_indices,
+						Selection.choose_type(e.shift_pressed, e.ctrl_pressed))
+					#for block in builder.get_selected_blocks():
+						#var block_path:NodePath = block.get_path()
+						
+						
 
 					tool_state = ToolState.NONE
 					return true
 					
 				elif tool_state == ToolState.DRAG_SELECTION:
 					#Finish drag rect
+#					print("finish drag rect")
+					var p0:Vector2 = Vector2(min(mouse_down_pos.x, e.position.x), 
+						min(mouse_down_pos.y, e.position.y))
+					var p1:Vector2 = Vector2(max(mouse_down_pos.x, e.position.x), 
+						max(mouse_down_pos.y, e.position.y))
+					
+					var block_indices:Dictionary = uv_ed.get_uv_indices_in_region(
+							Rect2(p0, p1 - p0),
+							false)
+					
+#					print("block_indices ", block_indices)
+					select_face_vertices(block_indices,
+						Selection.choose_type(e.shift_pressed, e.ctrl_pressed))
+					
 					uv_ed.show_selection_rect = false
 					tool_state = ToolState.NONE
-					
-					uv_ed.select_region(uv_ed.selection_rect)
 				
-					pass
 					return true
 
 		elif e.button_index == MOUSE_BUTTON_MIDDLE:

@@ -33,6 +33,11 @@ func _init(data:PackedFloat32Array = [], data_type:DataType = DataType.FLOAT):
 	self.data_type = data_type
 	self.stride = data_type_num_components(data_type)
 
+func duplicate_explicit()->DataVectorFloat:
+	var v:DataVectorFloat = DataVectorFloat.new(data.duplicate(), data_type)
+	v.category = category
+	return v
+
 func get_data_format_type()->DataFormatType:
 	return DataFormatType.FLOAT32
 	
@@ -41,6 +46,27 @@ func size()->int:
 
 func resize(size:int):
 	data.resize(size * stride)
+
+func equals_data(peer:DataVector)->bool:
+	if data_type != peer.data_type:
+		return false
+	
+	if data.size() != peer.data.size():
+		return false
+	
+	for i in data.size():
+		if data[i] != peer.data[i]:
+			return false
+			
+	return true
+
+func set_data(peer:DataVector)->void:
+	if data_type != peer.data_type:
+		printerr("vector data type mismatch")
+		return
+		
+	data = peer.data.duplicate()
+	return
 	
 func get_value(index:int)->float:
 	return data[index]

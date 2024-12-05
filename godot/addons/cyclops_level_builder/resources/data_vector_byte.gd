@@ -34,9 +34,35 @@ func _init(data:PackedByteArray = [], data_type:DataType = DataType.BOOL):
 	self.stride = data_type_num_components(data_type)
 
 
+func duplicate_explicit()->DataVectorByte:
+	var v:DataVectorByte = DataVectorByte.new(data.duplicate(), data_type)
+	v.category = category
+	return v
+
 func get_buffer_byte_data()->PackedByteArray:
 	return data
 
+func equals_data(peer:DataVector)->bool:
+	if data_type != peer.data_type:
+		return false
+	
+	if data.size() != peer.data.size():
+		return false
+	
+	for i in data.size():
+		if data[i] != peer.data[i]:
+			return false
+			
+	return true
+
+func set_data(peer:DataVector)->void:
+	if data_type != peer.data_type:
+		printerr("vector data type mismatch")
+		return
+		
+	data = peer.data.duplicate()
+	return
+	
 #func to_dictionary(buffer_ar:BufferArchive)->Dictionary:
 	#var result:Dictionary = super(buffer_ar)
 	#var region:BufferArchive.BufferRegion = buffer_ar.store_buffer(data)

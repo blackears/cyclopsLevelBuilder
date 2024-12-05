@@ -71,7 +71,7 @@ stride = 3
 
 [sub_resource type="Resource" id="Resource_a6ql0"]
 script = ExtResource("2_n4fcx")
-data = PackedByteArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0)
 category = ""
 data_type = 0
 stride = 1
@@ -111,7 +111,7 @@ category = ""
 data_type = 0
 stride = 1
 
-[sub_resource type="Resource" id="Resource_tkk3y"]
+[sub_resource type="Resource" id="Resource_pg81o"]
 script = ExtResource("5_ybjck")
 num_vertices = 8
 num_edges = 12
@@ -154,4 +154,4 @@ face_vertex_data = {
 [node name="block0" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.36404)
 script = ExtResource("1_fg2s4")
-mesh_vector_data = SubResource("Resource_tkk3y")
+mesh_vector_data = SubResource("Resource_pg81o")
