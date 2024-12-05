@@ -43,6 +43,38 @@ func duplicate_explicit()->DataVectorFloat:
 	v.category = category
 	return v
 
+func add(peer:DataVector)->DataVectorFloat:
+	if peer.data_type != data_type:
+		printerr("mismatching data_type")
+		return null
+		
+	if peer.data.size() != data.size():
+		printerr("mismatching vector size")
+		return null
+	
+	var values:PackedFloat32Array
+	values.resize(data.size())
+	for i in data.size():
+		values[i] = data[i] + peer.data[i]
+	
+	return DataVectorFloat.new(values, data_type)
+
+func subtract(peer:DataVector)->DataVectorFloat:
+	if peer.data_type != data_type:
+		printerr("mismatching data_type")
+		return null
+		
+	if peer.data.size() != data.size():
+		printerr("mismatching vector size")
+		return null
+	
+	var values:PackedFloat32Array
+	values.resize(data.size())
+	for i in data.size():
+		values[i] = data[i] - peer.data[i]
+	
+	return DataVectorFloat.new(values, data_type)
+
 func get_data_format_type()->DataFormatType:
 	return DataFormatType.FLOAT32
 	
@@ -200,3 +232,6 @@ func append_color(value:Color):
 	#result["data_buffer"] = region.index
 	#
 	#return result
+
+func _to_string() -> String:
+	return "DataVectorFloat " + DataType.keys()[data_type] + " " + str(data)

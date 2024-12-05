@@ -44,6 +44,38 @@ func duplicate_explicit()->DataVectorByte:
 	v.category = category
 	return v
 
+func add(peer:DataVector)->DataVectorByte:
+	if peer.data_type != data_type:
+		printerr("mismatching data_type")
+		return null
+		
+	if peer.data.size() != data.size():
+		printerr("mismatching vector size")
+		return null
+	
+	var values:PackedByteArray
+	values.resize(data.size())
+	for i in data.size():
+		values[i] = data[i] + peer.data[i]
+	
+	return DataVectorByte.new(values, data_type)
+
+func subtract(peer:DataVector)->DataVectorByte:
+	if peer.data_type != data_type:
+		printerr("mismatching data_type")
+		return null
+		
+	if peer.data.size() != data.size():
+		printerr("mismatching vector size")
+		return null
+	
+	var values:PackedByteArray
+	values.resize(data.size())
+	for i in data.size():
+		values[i] = data[i] - peer.data[i]
+	
+	return DataVectorByte.new(values, data_type)
+
 func get_buffer_byte_data()->PackedByteArray:
 	return data
 
@@ -94,3 +126,7 @@ func set_value(value:int, index:int):
 
 func append_byte(value:int):
 	data.append(value)
+
+func _to_string() -> String:
+	return "DataVectorByte " + DataType.keys()[data_type] + " " + str(data)
+	

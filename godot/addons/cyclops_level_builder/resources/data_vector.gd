@@ -41,6 +41,14 @@ func get_data_raw()->PackedByteArray:
 func set_data_raw(data:PackedByteArray):
 	data_base = data
 
+func add(peer:DataVector)->DataVector:
+	printerr("not implemented on base")
+	return null
+
+func subtract(peer:DataVector)->DataVector:
+	printerr("not implemented on base")
+	return null
+
 func duplicate_explicit()->DataVector:
 	
 	return null

@@ -42,7 +42,39 @@ func duplicate_explicit()->DataVectorInt:
 	var v:DataVectorInt = DataVectorInt.new(data.duplicate(), data_type)
 	v.category = category
 	return v
+
+func add(peer:DataVector)->DataVectorInt:
+	if peer.data_type != data_type:
+		printerr("mismatching data_type")
+		return null
 		
+	if peer.data.size() != data.size():
+		printerr("mismatching vector size")
+		return null
+	
+	var values:PackedInt32Array
+	values.resize(data.size())
+	for i in data.size():
+		values[i] = data[i] + peer.data[i]
+	
+	return DataVectorInt.new(values, data_type)
+
+func subtract(peer:DataVector)->DataVectorInt:
+	if peer.data_type != data_type:
+		printerr("mismatching data_type")
+		return null
+		
+	if peer.data.size() != data.size():
+		printerr("mismatching vector size")
+		return null
+	
+	var values:PackedInt32Array
+	values.resize(data.size())
+	for i in data.size():
+		values[i] = data[i] - peer.data[i]
+	
+	return DataVectorInt.new(values, data_type)
+
 func get_data_format_type()->DataFormatType:
 	return DataFormatType.INT32
 	
@@ -124,3 +156,6 @@ func append_vector4i(value:Vector4i):
 	data.append(value.y)
 	data.append(value.z)
 	data.append(value.w)
+
+func _to_string() -> String:
+	return "DataVectorInt " + DataType.keys()[data_type] + " " + str(data)
