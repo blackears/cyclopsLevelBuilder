@@ -27,18 +27,28 @@ extends CyclopsCommand
 
 class BlockFeatureChanges extends RefCounted:
 	var block_path:NodePath
-	var old_block_data:MeshVectorData
+#	var old_block_data:MeshVectorData
 
-	var feature_changes:Dictionary #MeshVectorData.Feature -> FeatureChanges
+#	var feature_changes:Dictionary #MeshVectorData.Feature -> FeatureChanges
 	var feature_change_deltas:Dictionary #MeshVectorData.Feature -> FeatureChanges
+	
+	func is_empty()->bool:
+		for feature in feature_change_deltas.keys():
+			if !feature_change_deltas[feature].is_empty():
+				return false
+		return true
 
 class FeatureChanges extends RefCounted:
 #	var indices:PackedInt32Array
 	var new_data_values:Dictionary = {} # String -> DataVector
+	
 
 class FeatureChangeDeltas extends RefCounted:
 #	var indices:PackedInt32Array
 	var new_data_values:Dictionary = {} # String -> DataVector
+	
+	func is_empty():
+		return new_data_values.is_empty()
 	
 
 #Private
@@ -62,19 +72,18 @@ func set_data(block_path:NodePath, feature:MeshVectorData.Feature,
 		
 		block_changes.block_path = block_path
 		
-		block_changes.old_block_data = mvd
+#		block_changes.old_block_data = mvd
 		
 	else:
 		block_changes = block_map[block_path]
 	
-	block_changes.feature_changes[feature] = changes
+#	block_changes.feature_changes[feature] = changes
 	
 	var delta_changes:FeatureChangeDeltas = FeatureChangeDeltas.new()
-	block_changes.feature_change_deltas[feature] = delta_changes
 	
 	#Calulate deltas to reduce memory footprint
 	for vector_name:String in changes.new_data_values.keys():
-		print("setting data for ", vector_name)
+#		print("setting data for ", vector_name)
 		var block_vec:DataVector = mvd.get_feature_data(feature, vector_name)
 		if !block_vec:
 			printerr("no vector layer in existing mesh: ", feature, " ", vector_name)
@@ -83,20 +92,29 @@ func set_data(block_path:NodePath, feature:MeshVectorData.Feature,
 		var change_to_vec:DataVector = changes.new_data_values[vector_name]
 		var delta_vec:DataVector = block_vec.subtract(change_to_vec)
 #		var compressed_data:PackedByteArray = delta.get_data_raw().compress()
+		if delta_vec.is_zero():
+			continue
 		
 		delta_changes.new_data_values[vector_name] = delta_vec
 		
-		print("block_vec ", block_vec)
-		print("change_to_vec ", change_to_vec)
-		print("delta_vec ", delta_vec)
-		
-		pass
+		#print("block_vec ", block_vec)
+		#print("change_to_vec ", change_to_vec)
+		#print("delta_vec ", delta_vec)
+	
+	if !delta_changes.is_empty():
+		block_changes.feature_change_deltas[feature] = delta_changes
+
 
 func _init():
 	command_name = "Set Mesh Feature Data"
 
 func will_change_anything()->bool:
 #	print("will_change_anything()")
+	for key:NodePath in block_map.keys():
+		if !block_map[key].is_empty():
+			return true
+		
+	return false
 	
 	for block_path in block_map.keys():
 		var changes:BlockFeatureChanges = block_map[block_path]
@@ -127,7 +145,7 @@ func do_it():
 		var block:CyclopsBlock = builder.get_node(block_path)
 		var block_mvd:MeshVectorData = block.mesh_vector_data.duplicate_explicit()
 		
-		for feature:MeshVectorData.Feature in changes.feature_changes.keys():
+		for feature:MeshVectorData.Feature in changes.feature_change_deltas.keys():
 #			var fc:FeatureChanges = changes.feature_changes[feature]
 			var fcd:FeatureChangeDeltas = changes.feature_change_deltas[feature]
 			for vector_name:String in fcd.new_data_values.keys():
@@ -154,7 +172,7 @@ func do_it():
 #		var block:CyclopsBlock = builder.get_node(changes.block_path)
 #		block.mesh_vector_data = new_mvd
 	
-	builder.selection_changed.emit()
+	#builder.selection_changed.emit()
 	
 
 func undo_it():
@@ -171,7 +189,7 @@ func undo_it():
 		var block:CyclopsBlock = builder.get_node(block_path)
 		var block_mvd:MeshVectorData = block.mesh_vector_data.duplicate_explicit()
 		
-		for feature:MeshVectorData.Feature in changes.feature_changes.keys():
+		for feature:MeshVectorData.Feature in changes.feature_change_deltas.keys():
 #			var fc:FeatureChanges = changes.feature_changes[feature]
 			var fcd:FeatureChangeDeltas = changes.feature_change_deltas[feature]
 			for vector_name:String in fcd.new_data_values.keys():
@@ -194,5 +212,5 @@ func undo_it():
 	
 		block.mesh_vector_data = block_mvd
 	
-	builder.selection_changed.emit()
+	#builder.selection_changed.emit()
 	

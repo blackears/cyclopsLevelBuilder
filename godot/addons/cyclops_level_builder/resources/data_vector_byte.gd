@@ -76,6 +76,12 @@ func subtract(peer:DataVector)->DataVectorByte:
 	
 	return DataVectorByte.new(values, data_type)
 
+func is_zero()->bool:
+	for i in data.size():
+		if data[i] != 0:
+			return false
+	return true
+
 func get_buffer_byte_data()->PackedByteArray:
 	return data
 

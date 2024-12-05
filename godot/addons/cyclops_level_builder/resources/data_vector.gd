@@ -49,6 +49,9 @@ func subtract(peer:DataVector)->DataVector:
 	printerr("not implemented on base")
 	return null
 
+func is_zero()->bool:
+	return true
+
 func duplicate_explicit()->DataVector:
 	
 	return null

@@ -75,6 +75,12 @@ func subtract(peer:DataVector)->DataVectorFloat:
 	
 	return DataVectorFloat.new(values, data_type)
 
+func is_zero()->bool:
+	for i in data.size():
+		if data[i] != 0:
+			return false
+	return true
+
 func get_data_format_type()->DataFormatType:
 	return DataFormatType.FLOAT32
 	
