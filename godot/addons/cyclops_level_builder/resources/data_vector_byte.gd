@@ -25,7 +25,12 @@
 extends DataVector
 class_name DataVectorByte
 
-@export var data:PackedByteArray
+#@export var data:PackedByteArray
+@export var data:PackedByteArray:
+	get():
+		return data_base
+	set(value):
+		data_base = value
 
 func _init(data:PackedByteArray = [], data_type:DataType = DataType.BOOL):
 #	self.name = name

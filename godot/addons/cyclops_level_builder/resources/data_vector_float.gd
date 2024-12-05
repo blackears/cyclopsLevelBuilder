@@ -25,7 +25,12 @@
 extends DataVector
 class_name DataVectorFloat
 
-@export var data:PackedFloat32Array
+#@export var data:PackedFloat32Array
+@export var data:PackedFloat32Array:
+	get():
+		return data_base.to_float32_array()
+	set(value):
+		data_base = value.to_byte_array()
 
 func _init(data:PackedFloat32Array = [], data_type:DataType = DataType.FLOAT):
 #	self.name = name

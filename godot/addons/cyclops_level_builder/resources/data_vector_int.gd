@@ -25,7 +25,12 @@
 extends DataVector
 class_name DataVectorInt
 
-@export var data:PackedInt32Array
+#@export var data:PackedInt32Array
+@export var data:PackedInt32Array:
+	get():
+		return data_base.to_int32_array()
+	set(value):
+		data_base = value.to_byte_array()
 
 func _init(data:PackedInt32Array = [], data_type:DataType = DataType.INT):
 #	self.name = name
