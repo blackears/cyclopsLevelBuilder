@@ -123,16 +123,12 @@ signal xray_mode_changed(value:bool)
 
 var display_mode:DisplayMode.Type = DisplayMode.Type.MATERIAL
 
-#var cached_viewport_camera:Camera3D
 
 var editor_cache:Dictionary
 var editor_cache_file:String = "user://cyclops_editor_cache.json"
 
-#var viewport_renderings:Array[ViewportViewManager]
-#var viewport_3d_manager:Viewport3DManager = Viewport3DManager.new()
 var viewport_3d_manager:Viewport3DManager = preload("res://addons/cyclops_level_builder/util/viewport_3d_manager.tscn").instantiate()
 
-#var viewport_3d_showing:bool = false
 func get_action(action_id:String)->CyclopsAction:
 	for action in action_list:
 		if action._get_action_id() == action_id:
@@ -258,7 +254,7 @@ func _enter_tree():
 	
 	switch_to_snapping_system(SnappingSystemGrid.new())
 #	switch_to_tool(ToolBlock.new())
-	switch_to_tool_id(ToolBlock.TOOL_ID)
+	switch_to_tool(get_tool_by_id(ToolBlock.TOOL_ID))
 
 
 func _exit_tree():
@@ -556,25 +552,25 @@ func get_tool_by_id(tool_id:String)->CyclopsTool:
 			return tool
 	return null
 
-func switch_to_tool_id(tool_id:String):
-	var next_tool:CyclopsTool = get_tool_by_id(tool_id)
-	
-	if active_tool:
-		if active_tool._get_tool_id() == tool_id:
-			return
-		
-		active_tool._deactivate()
-		tool_properties_dock.set_editor(null)
-	#print("switching to ", tool_id)
-	active_tool = next_tool
-
-	if active_tool:
-		active_tool._activate(self)
-		var control:Control = active_tool._get_tool_properties_editor()
-		tool_properties_dock.set_editor(control)
-	
-	#print("emittng ", tool_id)
-	tool_changed.emit(active_tool)
+#func switch_to_tool_id(tool_id:String):
+	#var next_tool:CyclopsTool = get_tool_by_id(tool_id)
+	#
+	#if active_tool:
+		#if active_tool._get_tool_id() == tool_id:
+			#return
+		#
+		#active_tool._deactivate()
+		#tool_properties_dock.set_editor(null)
+	##print("switching to ", tool_id)
+	#active_tool = next_tool
+#
+	#if active_tool:
+		#active_tool._activate(self)
+		#var control:Control = active_tool._get_tool_properties_editor()
+		#tool_properties_dock.set_editor(control)
+	#
+	##print("emittng ", tool_id)
+	#tool_changed.emit(active_tool)
 
 func switch_to_tool(_tool:CyclopsTool):
 	#print(">> switch to tool")

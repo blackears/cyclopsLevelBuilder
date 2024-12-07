@@ -300,6 +300,126 @@ func init_prism(base_points:Array[Vector3], extrude_dir:Vector3, uv_transform:Tr
 	
 	bounds = calc_bounds()
 	calc_lightmap_uvs()
+	
+func init_sphere(block_bounds:AABB, segments:int, rings:int, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = -1, visible:bool = true, color:Color = Color.WHITE):
+	vertices = []
+	edges = []
+	faces = []
+	face_vertices = []
+	face_vertex_coord_map.clear()
+	
+	var bounds_xform:Transform3D
+	bounds_xform = bounds_xform.translated_local(block_bounds.position)
+	bounds_xform = bounds_xform.scaled_local(block_bounds.size)
+	bounds_xform = bounds_xform.translated_local(Vector3(.5, .5, .5))
+	bounds_xform = bounds_xform.scaled_local(Vector3(.5, .5, .5))
+	
+	var angle_seg_increment:float = (PI * 2) / segments
+	for r0_idx in range(1, rings):
+#		print("r0_idx ", r0_idx)
+		var ring_height:float = (float(r0_idx) / rings) * 2 - 1
+		var ring_radius:float = sqrt(1 - ring_height * ring_height)
+		
+		for s0_idx in segments:
+#			print("s0_idx ", s0_idx)
+
+			var unit_sphere_pt:Vector3 = Vector3(
+				sin(s0_idx * angle_seg_increment) * ring_radius, 
+				(float(r0_idx) / rings) * 2 - 1, 
+				cos(s0_idx * angle_seg_increment) * ring_radius)
+			
+			var v:VertexInfo = VertexInfo.new(self, bounds_xform * unit_sphere_pt)
+			v.index = vertices.size()
+			vertices.append(v)
+			
+	var v_bottom:VertexInfo = VertexInfo.new(self, bounds_xform * Vector3(0, -1, 0))
+	v_bottom.index = vertices.size()
+	vertices.append(v_bottom)
+
+	var v_top:VertexInfo = VertexInfo.new(self, bounds_xform * Vector3(0, 1, 0))
+	v_top.index = vertices.size()
+	vertices.append(v_top)
+	
+#	print("added verts ", vertices.size())
+	
+	#Build middle rings
+	for r0_idx in range(1, rings - 1):
+		var r1_idx:int = r0_idx + 1
+#		print("r0_idx ", r0_idx, " r1_idx ", r1_idx)
+		
+		for s0_idx in segments:
+			var s1_idx:int = wrap(s0_idx + 1, 0, segments)
+#			print("s0_idx ", s0_idx, " s1_idx ", s1_idx)
+			
+			var v00:VertexInfo = vertices[(r0_idx - 1) * segments + s0_idx]
+			var v01:VertexInfo = vertices[(r0_idx - 1) * segments + s1_idx]
+			var v10:VertexInfo = vertices[(r1_idx - 1) * segments + s0_idx]
+			var v11:VertexInfo = vertices[(r1_idx - 1) * segments + s1_idx]
+			
+			var base_normal:Vector3 = (v01.point - v00.point).cross(v11.point - v00.point).normalized()
+			var f:FaceInfo = FaceInfo.new(self, base_normal, uv_transform, material_id, visible, color)
+			f.index = faces.size()
+			f.vertex_indices = [
+				v00.index,
+				v10.index,
+				v11.index,
+				v01.index,
+			]
+#			print("f.vertex_indices ", f.vertex_indices)
+			
+			faces.append(f)
+
+#	print("added face rings ", faces.size())
+	
+	#Bottom cap
+	for s0_idx in segments:
+		var s1_idx:int = wrap(s0_idx + 1, 0, segments)
+		
+		var v00:VertexInfo = vertices[s0_idx]
+		var v01:VertexInfo = vertices[s1_idx]
+		
+		var base_normal:Vector3 = (v01.point - v_bottom.point).cross(v00.point - v_bottom.point).normalized()
+		var f:FaceInfo = FaceInfo.new(self, base_normal, uv_transform, material_id, visible, color)
+		f.index = faces.size()
+		f.vertex_indices = [
+			v_bottom.index,
+			v00.index,
+			v01.index,
+		]
+
+#		print("f.vertex_indices ", f.vertex_indices)
+		faces.append(f)
+
+#	print("added bottom cap ", faces.size())
+	
+	#Top cap
+	for s0_idx in segments:
+		var s1_idx:int = wrap(s0_idx + 1, 0, segments)
+		
+		var v00:VertexInfo = vertices[(rings - 2) * segments + s0_idx]
+		var v01:VertexInfo = vertices[(rings - 2) * segments + s1_idx]
+		
+		var base_normal:Vector3 = (v00.point - v_top.point).cross(v01.point - v_top.point).normalized()
+		var f:FaceInfo = FaceInfo.new(self, base_normal, uv_transform, material_id, visible, color)
+		f.index = faces.size()
+		f.vertex_indices = [
+			v_top.index,
+			v01.index,
+			v00.index,
+		]
+
+#		print("f.vertex_indices ", f.vertex_indices)
+		faces.append(f)
+
+#	print("added top cap ", faces.size())
+
+	build_edges()
+	build_face_vertices()
+	calc_vertex_normals()
+	
+#	print("extra calc")
+	
+	bounds = calc_bounds()
 
 func init_from_convex_block_data(data:ConvexBlockData):
 	#print("init_from_convex_block_data")
@@ -727,17 +847,24 @@ func build_face_vertices():
 			face.face_vertex_indices.append(fv_idx)
 
 func build_edges():
+	
+#	print("build_edges()")
 			
 	#Calculate edges
 	for face in faces:
+#		print("face idx ", face.index)
+		
 		var num_corners = face.vertex_indices.size()
 		for i0 in num_corners:
 			var i1:int = wrap(i0 + 1, 0, num_corners)
 			var v0_idx:int = face.vertex_indices[i0]
 			var v1_idx:int = face.vertex_indices[i1]
+	
+#			print("v0_idx ", v0_idx, " v1_idx ", v1_idx)
 			
 			var edge:EdgeInfo = get_edge(v0_idx, v1_idx)
 			if !edge:
+#				print("miss")
 				var edge_idx = edges.size()
 				edge = EdgeInfo.new(self, v0_idx, v1_idx)
 				edge.index = edges.size()
@@ -749,7 +876,6 @@ func build_edges():
 				var v1:VertexInfo = vertices[v1_idx]
 				v1.edge_indices.append(edge_idx)
 
-#			edge.face_indices.append(face.id)
 			edge.face_indices.append(face.index)
 
 func get_face_coincident_with_plane(plane:Plane)->FaceInfo:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://nke18tf4e83i"]
+[gd_scene load_steps=49 format=3 uid="uid://nke18tf4e83i"]
 
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/actions/mesh/action_convert_to_mesh.gd" id="1_0hgma"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/actions/mesh/action_delete_selected_blocks.gd" id="2_emaam"]
@@ -33,6 +33,7 @@
 [ext_resource type="PackedScene" uid="uid://d1q536mp4gca8" path="res://addons/cyclops_level_builder/gui/keymap/toolbar_button_ref.tscn" id="29_ly0y2"]
 [ext_resource type="PackedScene" uid="uid://rfwc7ptt2jlp" path="res://addons/cyclops_level_builder/gui/keymap/menu_line_item_separator.tscn" id="30_sbask"]
 [ext_resource type="PackedScene" uid="uid://bt6jtfpwhfj6q" path="res://addons/cyclops_level_builder/gui/keymap/hotkey_item.tscn" id="30_u8e7a"]
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_sphere.gd" id="31_3jwb6"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_block.gd" id="31_i0r0b"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_clip.gd" id="32_o11u8"]
 [ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_cylinder.gd" id="33_d3xxe"]
@@ -237,6 +238,9 @@ script = ExtResource("41_unjic")
 [node name="Block" type="Node" parent="Tools/View3D"]
 script = ExtResource("31_i0r0b")
 
+[node name="Sphere" type="Node" parent="Tools/View3D"]
+script = ExtResource("31_3jwb6")
+
 [node name="Cylinder" type="Node" parent="Tools/View3D"]
 script = ExtResource("33_d3xxe")
 
@@ -312,6 +316,9 @@ tool = NodePath("../../../../Tools/View3D/Rotate")
 
 [node name="Block" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/View3D/Block")
+
+[node name="Sphere" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+tool = NodePath("../../../../Tools/View3D/Sphere")
 
 [node name="Cylinder" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/View3D/Cylinder")

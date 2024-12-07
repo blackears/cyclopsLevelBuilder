@@ -160,9 +160,9 @@ func calc_empty_space_draw_plane_origin(viewport_camera:Camera3D, draw_plane_poi
 	if !active_block:
 		return draw_plane_point
 	
-	var block_xfrom:Transform3D = active_block.global_transform
+	var block_xform:Transform3D = active_block.global_transform
 	var vol:ConvexVolume = active_block.control_mesh
-	var bounds:AABB = vol.calc_bounds_xform(block_xfrom)
+	var bounds:AABB = vol.calc_bounds_xform(block_xform)
 	var plane:Plane = Plane(draw_plane_normal, bounds.get_center())
 	
 	var p0:Vector3 = bounds.position
