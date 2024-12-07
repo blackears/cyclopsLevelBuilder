@@ -317,15 +317,19 @@ func init_sphere(block_bounds:AABB, segments:int, rings:int, uv_transform:Transf
 	var angle_seg_increment:float = (PI * 2) / segments
 	for r0_idx in range(1, rings):
 #		print("r0_idx ", r0_idx)
-		var ring_height:float = (float(r0_idx) / rings) * 2 - 1
-		var ring_radius:float = sqrt(1 - ring_height * ring_height)
+		var latitude_angle:float = (float(r0_idx) / rings) * PI * 2 - PI
+		var ring_height:float = sin(latitude_angle)
+		var ring_radius:float= cos(latitude_angle)
+		
+#		var ring_height:float = (float(r0_idx) / rings) * 2 - 1
+#		var ring_radius:float = sqrt(1 - ring_height * ring_height)
 		
 		for s0_idx in segments:
 #			print("s0_idx ", s0_idx)
 
 			var unit_sphere_pt:Vector3 = Vector3(
 				sin(s0_idx * angle_seg_increment) * ring_radius, 
-				(float(r0_idx) / rings) * 2 - 1, 
+				ring_height, 
 				cos(s0_idx * angle_seg_increment) * ring_radius)
 			
 			var v:VertexInfo = VertexInfo.new(self, bounds_xform * unit_sphere_pt)

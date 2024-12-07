@@ -16,6 +16,8 @@
 * UVs now stored per face-vertex instead of being calculated based on vertex coords and a face transform.
 * Adding triplanar UV generation option.
 * Adding data layer for marking uv seams.
+* Adding tool for creating spheres
+* Adding UV editor
 
 
 ### v1.0.4
