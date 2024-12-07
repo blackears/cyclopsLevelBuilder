@@ -1014,6 +1014,30 @@ static func intersects_2d_segment_region(p0:Vector2, p1:Vector2, region:Rect2)->
 		
 	return false
 
+static func fraction_along_segment_2d(p:Vector2, s0:Vector2, s1:Vector2)->float:
+	var a:Vector2 = p - s0
+	var b:Vector2 = s1 - s0
+	return a.dot(b) / b.dot(b)
+
+static func closest_point_on_segment_2d(p:Vector2, s0:Vector2, s1:Vector2)->Vector2:
+	var ratio:float = fraction_along_segment_2d(p, s0, s1)
+	ratio = clamp(ratio, 0, 1)
+	
+	return (s1 - s0) * ratio + s0
+	
+static func intersects_2d_point_polyline(p:Vector2, radius:float, poly_verts:PackedVector2Array)->bool:
+	for i0:int in poly_verts.size():
+		var i1:int = wrap(i0 + 1, 0, poly_verts.size())
+		
+		var v0:Vector2 = poly_verts[i0]
+		var v1:Vector2 = poly_verts[i1]
+
+		var closest_point:Vector2 = closest_point_on_segment_2d(p, v0, v1)
+		if closest_point.distance_squared_to(p) <= radius * radius:
+			return true
+		
+	return false
+	
 static func intersects_2d_point_polygon(p:Vector2, poly_verts:PackedVector2Array)->bool:
 	#Count number of times we enter or exit the line y = p.y from above and where x > p.x
 	var crossings:int = 0

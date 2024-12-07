@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b603dpvw374p0"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_ring_2d.gd" id="1_4ygnn"]
+
+[node name="GizmoCircle2d" type="Node2D"]
+script = ExtResource("1_4ygnn")

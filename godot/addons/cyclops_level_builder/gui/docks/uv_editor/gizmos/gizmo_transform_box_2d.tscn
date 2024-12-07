@@ -1,0 +1,64 @@
+[gd_scene load_steps=3 format=3 uid="uid://f8rglmdeaplp"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_transform_box_2d.gd" id="1_oeixp"]
+[ext_resource type="PackedScene" uid="uid://cqeuqgat4gbol" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_rect_2d.tscn" id="1_oq6jn"]
+
+[node name="GizmoBoxTransform2d" type="Node2D"]
+script = ExtResource("1_oeixp")
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="handle_00" parent="Node2D" instance=ExtResource("1_oq6jn")]
+unique_name_in_owner = true
+color = Color(1, 1, 1, 1)
+color_outline = Color(0, 0, 0, 1)
+rect = Rect2(-4, -4, 8, 8)
+
+[node name="handle_01" parent="Node2D" instance=ExtResource("1_oq6jn")]
+unique_name_in_owner = true
+position = Vector2(0, 30)
+color = Color(1, 1, 1, 1)
+color_outline = Color(0, 0, 0, 1)
+rect = Rect2(-4, -4, 8, 8)
+
+[node name="handle_02" parent="Node2D" instance=ExtResource("1_oq6jn")]
+unique_name_in_owner = true
+position = Vector2(0, 60)
+color = Color(1, 1, 1, 1)
+color_outline = Color(0, 0, 0, 1)
+rect = Rect2(-4, -4, 8, 8)
+
+[node name="handle_10" parent="Node2D" instance=ExtResource("1_oq6jn")]
+unique_name_in_owner = true
+position = Vector2(30, 0)
+color = Color(1, 1, 1, 1)
+color_outline = Color(0, 0, 0, 1)
+rect = Rect2(-4, -4, 8, 8)
+
+[node name="handle_12" parent="Node2D" instance=ExtResource("1_oq6jn")]
+unique_name_in_owner = true
+position = Vector2(30, 60)
+color = Color(1, 1, 1, 1)
+color_outline = Color(0, 0, 0, 1)
+rect = Rect2(-4, -4, 8, 8)
+
+[node name="handle_20" parent="Node2D" instance=ExtResource("1_oq6jn")]
+unique_name_in_owner = true
+position = Vector2(60, 0)
+color = Color(1, 1, 1, 1)
+color_outline = Color(0, 0, 0, 1)
+rect = Rect2(-4, -4, 8, 8)
+
+[node name="handle_21" parent="Node2D" instance=ExtResource("1_oq6jn")]
+unique_name_in_owner = true
+position = Vector2(60, 30)
+color = Color(1, 1, 1, 1)
+color_outline = Color(0, 0, 0, 1)
+rect = Rect2(-4, -4, 8, 8)
+
+[node name="handle_22" parent="Node2D" instance=ExtResource("1_oq6jn")]
+unique_name_in_owner = true
+position = Vector2(60, 60)
+color = Color(1, 1, 1, 1)
+color_outline = Color(0, 0, 0, 1)
+rect = Rect2(-4, -4, 8, 8)
