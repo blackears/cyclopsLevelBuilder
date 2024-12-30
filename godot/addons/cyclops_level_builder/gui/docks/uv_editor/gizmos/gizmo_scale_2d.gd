@@ -22,7 +22,7 @@
 # SOFTWARE.
 
 @tool
-extends Node2D
+extends Gizmo2D
 class_name GizmoScale2D
 
 # Called when the node enters the scene tree for the first time.

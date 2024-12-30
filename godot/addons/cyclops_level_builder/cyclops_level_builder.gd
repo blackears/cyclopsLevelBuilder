@@ -208,7 +208,7 @@ func _enter_tree():
 
 	view_uv_editor = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/view_uv_editor.tscn").instantiate()
 	view_uv_editor.plugin = self
-	view_uv_editor.forward_input.connect(on_uv_editor_forward_input)
+#	view_uv_editor.forward_input.connect(on_uv_editor_forward_input)
 	
 	overlays_dock = preload("res://addons/cyclops_level_builder/gui/docks/overlays/overlays_dock.tscn").instantiate()
 	overlays_dock.plugin = self
@@ -292,7 +292,7 @@ func _exit_tree():
 	if upgrade_cyclops_blocks_toolbar.activated:
 		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, upgrade_cyclops_blocks_toolbar)
 
-	view_uv_editor.forward_input.disconnect(on_uv_editor_forward_input)
+#	view_uv_editor.forward_input.disconnect(on_uv_editor_forward_input)
 
 	material_dock.queue_free()
 	view_uv_editor.queue_free()
@@ -469,21 +469,15 @@ func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent)->int:
 
 	return EditorPlugin.AFTER_GUI_INPUT_PASS
 
-func on_uv_editor_forward_input(event:InputEvent):
-	var sel_nodes:Array[Node] = EditorInterface.get_selection().get_selected_nodes()
-	var active_node:Node = null if sel_nodes.is_empty() else sel_nodes.back()
-	
-	#print("on_uv_editor_forward_input ", event)
-	#if active_tool:
-		#print("active tool ", active_tool.name)
-	#else:
-		#print("no active tool")
-	if active_tool && active_tool._can_handle_object(active_node)\
-		&& active_tool.is_uv_tool():
-			
-		var result:bool = active_tool._gui_input(null, event)
-#		active_tool._draw_tool(viewport_camera)
-	pass
+#func on_uv_editor_forward_input(event:InputEvent):
+	#var sel_nodes:Array[Node] = EditorInterface.get_selection().get_selected_nodes()
+	#var active_node:Node = null if sel_nodes.is_empty() else sel_nodes.back()
+	#
+	#if active_tool && active_tool._can_handle_object(active_node)\
+		#&& active_tool.is_uv_tool():
+			#
+		#var result:bool = active_tool._gui_input(null, event)
+	#pass
 
 
 func _get_state()->Dictionary:

@@ -127,3 +127,5 @@ face_sel_color = Color(0.5, 0.5, 0.5, 0.4)
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer3/sticky/sticky_shared_vertex" to="." method="_on_sticky_shared_vertex_pressed"]
 [connection signal="toggled" from="VBoxContainer/PanelContainer/HBoxContainer3/check_sync_with_mesh" to="." method="_on_check_sync_with_mesh_toggled"]
 [connection signal="gui_input" from="VBoxContainer/SubViewportContainer" to="." method="_on_sub_viewport_container_gui_input"]
+[connection signal="resized" from="VBoxContainer/SubViewportContainer" to="." method="_on_sub_viewport_container_resized"]
+[connection signal="proj_transform_changed" from="VBoxContainer/SubViewportContainer/SubViewport/uv_editor" to="." method="_on_uv_editor_proj_transform_changed"]

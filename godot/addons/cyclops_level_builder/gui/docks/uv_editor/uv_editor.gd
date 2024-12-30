@@ -27,6 +27,7 @@ extends Node2D
 class_name UvEditor
 
 #signal forward_input(event:InputEvent)
+signal proj_transform_changed(xform:Transform2D)
 
 @export var face_sel_color:Color = Color(1, .5, 0, .4):
 	set(value):
@@ -67,6 +68,12 @@ class_name UvEditor
 @export var proj_transform:Transform2D = Transform2D(0, Vector2(100, 100), 0, Vector2.ZERO):
 	set(value):
 		proj_transform = value
+		
+		#if is_node_ready():
+			#var xform:Transform2D = get_uv_to_viewport_xform()
+			#%gizmo_area.transform = xform
+		proj_transform_changed.emit(value)
+		
 		queue_redraw()
 		
 ##Selecting a UV feature will also select the coresponding mesh 
@@ -134,6 +141,12 @@ enum StickyState { DISABLED, SHARED_LOCATION, SHARED_VERTEX }
 	#forward_input.emit(event)
 	#get_viewport().set_input_as_handled()
 	#pass
+
+var gizmo_list:Array[Gizmo2D]
+
+func add_gizmo(gizmo:Gizmo2D):
+	%gizmo_area.add_child(gizmo)
+	gizmo_list.append(gizmo)
 
 func on_node_mesh_changed(node:Node3D):
 	block_edit_handles.clear()
@@ -332,6 +345,20 @@ func _ready() -> void:
 	pass
 
 func _draw() -> void:
+
+	#var viewport_xform:Transform2D = get_uv_to_viewport_xform()
+	#for gizmo in gizmo_list:
+		#var giz_xform:Transform2D
+		#giz_xform.origin = viewport_xform.origin * gizmo.gizmo_transform.origin
+		#gizmo.transform = giz_xform
+		
+		##var giz_xform:Transform2D
+		##giz_xform.origin = 
+		##gizmo.gizmo_transform = 
+##		gizmo.transform = viewport_xform * gizmo.gizmo_transform
+		#gizmo.transform = gizmo.gizmo_transform
+		#pass
+	
 	match select_feature:
 		SelectFeature.VERTEX:
 			if sync_selection:

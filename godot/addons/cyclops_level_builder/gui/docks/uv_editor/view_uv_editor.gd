@@ -25,7 +25,7 @@
 extends Control
 class_name ViewUvEditor
 
-signal forward_input(event:InputEvent)
+#signal forward_input(event:InputEvent)
 signal tool_changed(tool:CyclopsTool)
 
 var plugin:CyclopsLevelBuilder:
@@ -230,3 +230,15 @@ func _on_focus_entered() -> void:
 func _on_focus_exited() -> void:
 	print("view uv editor._on_focus_exited()")
 	pass # Replace with function body.
+
+
+func _on_sub_viewport_container_resized() -> void:
+	viewport_transform_changed()
+
+
+func _on_uv_editor_proj_transform_changed(xform: Transform2D) -> void:
+	viewport_transform_changed()
+
+func viewport_transform_changed():
+	if active_tool:
+		active_tool._draw_tool(null)

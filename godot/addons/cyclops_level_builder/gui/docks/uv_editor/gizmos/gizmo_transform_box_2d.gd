@@ -22,7 +22,7 @@
 # SOFTWARE.
 
 @tool
-extends Node2D
+extends Gizmo2D
 class_name GizmoTransformBox2D
 
 @export var color:Color = Color.WHITE:

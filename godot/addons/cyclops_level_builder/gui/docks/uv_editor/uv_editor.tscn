@@ -4,3 +4,6 @@
 
 [node name="UvEditor" type="Node2D"]
 script = ExtResource("1_v805t")
+
+[node name="gizmo_area" type="Node2D" parent="."]
+unique_name_in_owner = true

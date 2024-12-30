@@ -22,7 +22,7 @@
 # SOFTWARE.
 
 @tool
-extends Node2D
+extends Gizmo2D
 class_name GizmoRotate2D
 
 @export var center_point_color:Color = Color.WHITE:

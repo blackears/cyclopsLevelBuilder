@@ -68,20 +68,32 @@ var gizmo:GizmoTranslate2D
 func _draw_tool(viewport_camera:Camera3D):
 	var view:ViewUvEditor = builder.view_uv_editor
 	var uv_ed:UvEditor = view.get_uv_editor()
+	var uv_to_viewport_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 	
-	#if !gizmo:
-		#gizmo = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_translate_2d.tscn").instantiate()
-		#uv_ed.add_child(gizmo)
+	var center_struct:Dictionary = get_selected_uv_center()
 	
-	var centroid:Vector2 = get_selected_uv_center()
-	var xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
-	
-	var view_pos:Vector2 = xform * centroid
-	gizmo.position = view_pos
+	if center_struct["count"] > 0:
+		var centroid:Vector2 = center_struct["centroid"]
+		gizmo.position = uv_to_viewport_xform * centroid
+		print("gizmo.position ", gizmo.position)
+		
+		#var xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
+		#
+		#var view_pos:Vector2 = xform * centroid
+		#var giz_xform:Transform2D
+		#giz_xform.origin = uv_to_viewport_xform * centroid
+		#gizmo.gizmo_transform = giz_xform
+#		gizmo.position = view_pos
+		#print("centroid ", centroid)
+		#gizmo.position = centroid
+		gizmo.visible = true
+	else:
+		gizmo.visible = false
 	
 	return
 	
-func get_selected_uv_center()->Vector2:
+func get_selected_uv_center()->Dictionary:
+	#print("get_selected_uv_center()")
 	var count:int = 0
 	var sum:Vector2
 	
@@ -93,18 +105,20 @@ func get_selected_uv_center()->Vector2:
 		
 		var uv_vec:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
 		for i in sel_vec.size():
-			if mvd.sel_vec[i]:
+			#print("uv sel ", i)
+			if sel_vec.data[i]:
+				
 				sum += uv_vec.get_value_vec2(i)
 				count += 1
-				
-	return sum / count
+	
+	return {"centroid": sum / count, "count": count}
 
 	
 
 func select_face_vertices(block_index_map:Dictionary, sel_type:Selection.Type):
 	var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
 	cmd.builder = builder
-	print("block_index_map ", block_index_map)
+#	print("block_index_map ", block_index_map)
 	
 	for block in builder.get_selected_blocks():
 		var block_path:NodePath = block.get_path()
@@ -147,13 +161,13 @@ func select_face_vertices(block_index_map:Dictionary, sel_type:Selection.Type):
 					for i in sel_indices:
 						new_sel_vec[i] = !new_sel_vec[i]
 		
-		print("end tgt sel ", new_sel_vec)
+#		print("end tgt sel ", new_sel_vec)
 		fc.new_data_values[MeshVectorData.FV_SELECTED] = DataVectorByte.new(new_sel_vec, DataVector.DataType.BOOL)
 					
 		cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
 		
 	if cmd.will_change_anything():
-		print("cmd.will_change_anything() true")
+#		print("cmd.will_change_anything() true")
 		var undo:EditorUndoRedoManager = builder.get_undo_redo()
 		cmd.add_to_undo_manager(undo)
 
@@ -317,11 +331,15 @@ func _activate(tool_owner:Node):
 	var uv_ed:UvEditor = view.get_uv_editor()
 	
 	gizmo = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_translate_2d.tscn").instantiate()
-	uv_ed.add_child(gizmo)
+	uv_ed.add_gizmo(gizmo)
 
 	var ed_iface:EditorInterface = builder.get_editor_interface()
 	var ed_sel:EditorSelection = ed_iface.get_selection()
 	ed_sel.selection_changed.connect(on_block_selection_changed)
+	
+	track_selected_blocks()
+	
+	_draw_tool(null)
 
 func _deactivate():
 	super._deactivate()
@@ -362,5 +380,6 @@ func track_selected_blocks():
 
 
 func on_mesh_changed(block:CyclopsBlock):
+	print("on_mesh_changed")
 	_draw_tool(null)
 	pass

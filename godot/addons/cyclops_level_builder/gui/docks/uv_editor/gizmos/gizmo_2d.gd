@@ -22,31 +22,7 @@
 # SOFTWARE.
 
 @tool
-extends Gizmo2D
-class_name GizmoRect2D
+extends Node2D
+class_name Gizmo2D
 
-@export var color:Color = Color(1, 1, 1, .5):
-	set(value):
-		color = value
-		queue_redraw()
-
-@export var color_outline:Color = Color.WHITE:
-	set(value):
-		color_outline = value
-		queue_redraw()
-
-@export var rect:Rect2 = Rect2(-10, -10, 20, 20):
-	set(value):
-		rect = value
-		queue_redraw()
-
-func pick(p:Vector2, radius:float)->bool:
-	return rect.has_point(p)
-
-func _draw():
-	var colors:PackedColorArray
-	
-	draw_rect(rect, color)
-	draw_rect(rect, color_outline, false)
-	
-		
+@export var gizmo_transform:Transform2D
