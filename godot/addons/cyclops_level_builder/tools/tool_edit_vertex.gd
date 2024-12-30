@@ -207,8 +207,8 @@ func active_node_changed():
 func active_node_updated():
 	setup_tool()
 
-func _activate(builder:CyclopsLevelBuilder):
-	super._activate(builder)
+func _activate(tool_owner:Node):
+	super._activate(tool_owner)
 	
 	builder.mode = CyclopsLevelBuilder.Mode.EDIT
 	builder.edit_mode = CyclopsLevelBuilder.EditMode.VERTEX

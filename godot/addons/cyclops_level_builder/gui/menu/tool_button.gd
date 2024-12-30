@@ -38,6 +38,7 @@ var plugin:CyclopsLevelBuilder:
 
 #var tool_id:String
 var tool_path:NodePath
+var tool_owner:Node
 
 func on_tool_changed(tool:CyclopsTool):
 	update_selection()
@@ -62,14 +63,17 @@ func _process(delta):
 
 func _on_pressed():
 	#print("click ", tool_id)
-	if plugin:
+	var target = tool_owner if tool_owner else plugin
+	
+	
+	if target:
 #		if plugin.active_tool:
 #			print("cur tool id ", plugin.active_tool._get_tool_id())
 			
-		if plugin.active_tool && plugin.active_tool.get_path() == tool_path:
+		if target.active_tool && target.active_tool.get_path() == tool_path:
 #			print("unclick ", tool_id)
-			plugin.switch_to_tool(null)
+			target.switch_to_tool(null)
 			return
 			
 		var tool:CyclopsTool = get_node(tool_path)
-		plugin.switch_to_tool(tool)
+		target.switch_to_tool(tool)

@@ -81,12 +81,14 @@ class_name UvEditor
 	set(value):
 		#print("uv_editor setting block nodes ", value.size() )
 		for node in block_nodes:
-			node.mesh_changed.disconnect(on_node_mesh_changed)
+			if is_instance_valid(node):
+				node.mesh_changed.disconnect(on_node_mesh_changed)
 			
 		block_nodes = value
 		
 		for node in block_nodes:
-			node.mesh_changed.connect(on_node_mesh_changed)
+			if is_instance_valid(node):
+				node.mesh_changed.connect(on_node_mesh_changed)
 			
 		if is_node_ready():
 			rebuild_handles()

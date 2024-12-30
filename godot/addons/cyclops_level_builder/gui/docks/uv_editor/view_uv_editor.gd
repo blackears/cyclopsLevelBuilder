@@ -26,6 +26,7 @@ extends Control
 class_name ViewUvEditor
 
 signal forward_input(event:InputEvent)
+signal tool_changed(tool:CyclopsTool)
 
 var plugin:CyclopsLevelBuilder:
 	set(value):
@@ -46,11 +47,27 @@ var plugin:CyclopsLevelBuilder:
 
 		build_menus()
 
+var active_tool:CyclopsTool
+
+
 #func _input(event: InputEvent) -> void:
 	#print("view uv ed ", event)
 	##input_passthrough.emit(event)
 	#pass
 
+func switch_to_tool(_tool:CyclopsTool):
+	if active_tool:
+		active_tool._deactivate()
+	
+	active_tool = _tool
+
+	if active_tool:
+		active_tool._activate(self)
+		var control:Control = active_tool._get_tool_properties_editor()
+		plugin.tool_properties_dock.set_editor(control)
+	
+	tool_changed.emit(active_tool)
+	
 func get_uv_editor()->UvEditor:
 	return %uv_editor
 
@@ -100,11 +117,12 @@ func build_menus():
 			if child is ToolbarButtonRef:
 				var tool_inst:CyclopsTool = child.tool
 
-				if tool_inst.is_inside_tree() && tool_inst._show_in_toolbar() && tool_inst._can_handle_object(active_block):
+				if tool_inst && tool_inst.is_inside_tree() && tool_inst._show_in_toolbar() && tool_inst._can_handle_object(active_block):
 #					print("Adding tool")
 					var bn:ToolButton = preload("res://addons/cyclops_level_builder/gui/menu/tool_button.tscn").instantiate()
 					bn.plugin = plugin
 					bn.tool_path = tool_inst.get_path()
+					bn.tool_owner = self
 					bn.icon = tool_inst._get_tool_icon()
 #					print("Adding button ", tool._get_tool_name())
 					if !bn.icon:

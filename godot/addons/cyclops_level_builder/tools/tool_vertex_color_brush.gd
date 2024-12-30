@@ -206,8 +206,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	return false
 
 
-func _activate(builder:CyclopsLevelBuilder):
-	super._activate(builder)
+func _activate(tool_owner:Node):
+	super._activate(tool_owner)
 
 	var cache:Dictionary = builder.get_tool_cache(TOOL_ID)
 	settings.load_from_cache(cache)

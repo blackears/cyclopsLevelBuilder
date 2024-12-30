@@ -63,8 +63,42 @@ func _can_handle_object(node:Node)->bool:
 	#return node is CyclopsBlock
 	return true
 
+var gizmo:GizmoTranslate2D
+
 func _draw_tool(viewport_camera:Camera3D):
+	var view:ViewUvEditor = builder.view_uv_editor
+	var uv_ed:UvEditor = view.get_uv_editor()
+	
+	#if !gizmo:
+		#gizmo = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_translate_2d.tscn").instantiate()
+		#uv_ed.add_child(gizmo)
+	
+	var centroid:Vector2 = get_selected_uv_center()
+	var xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
+	
+	var view_pos:Vector2 = xform * centroid
+	gizmo.position = view_pos
+	
 	return
+	
+func get_selected_uv_center()->Vector2:
+	var count:int = 0
+	var sum:Vector2
+	
+	for block in builder.get_selected_blocks():
+		var block_path:NodePath = block.get_path()
+		var mvd:MeshVectorData = block.mesh_vector_data
+		#Get selection mask
+		var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+		
+		var uv_vec:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+		for i in sel_vec.size():
+			if mvd.sel_vec[i]:
+				sum += uv_vec.get_value_vec2(i)
+				count += 1
+				
+	return sum / count
+
 	
 
 func select_face_vertices(block_index_map:Dictionary, sel_type:Selection.Type):
@@ -78,6 +112,7 @@ func select_face_vertices(block_index_map:Dictionary, sel_type:Selection.Type):
 		var fc:CommandSetMeshFeatureData.FeatureChanges = CommandSetMeshFeatureData.FeatureChanges.new()
 		
 		var mvd:MeshVectorData = block.mesh_vector_data
+		#Get selection mask
 		var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
 #		print("source sel ", sel_vec.data)
 		
@@ -294,14 +329,57 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	return false
 
 
-func _activate(builder:CyclopsLevelBuilder):
-	super._activate(builder)
+func _activate(tool_owner:Node):
+	super._activate(tool_owner)
+
+	var view:ViewUvEditor = builder.view_uv_editor
+	var uv_ed:UvEditor = view.get_uv_editor()
+	
+	gizmo = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_translate_2d.tscn").instantiate()
+	uv_ed.add_child(gizmo)
+
+	var ed_iface:EditorInterface = builder.get_editor_interface()
+	var ed_sel:EditorSelection = ed_iface.get_selection()
+	ed_sel.selection_changed.connect(on_block_selection_changed)
 
 func _deactivate():
 	super._deactivate()
+
+	clear_tracked_blocks()
 	
-	#var global_scene:CyclopsGlobalScene = builder.get_global_scene()
-	#global_scene.set_custom_gizmo(null)
+	gizmo.queue_free()
+	gizmo = null
+	
+	var ed_iface:EditorInterface = builder.get_editor_interface()
+	var ed_sel:EditorSelection = ed_iface.get_selection()
+	ed_sel.selection_changed.disconnect(on_block_selection_changed)
+
+func on_block_selection_changed():
+	track_selected_blocks()
+	
 	pass
 
+var tracked_blocks:Array[CyclopsBlock]
+
+func clear_tracked_blocks():
+	for block in tracked_blocks:
+		if is_instance_valid(block):
+			block.mesh_changed.disconnect(on_mesh_changed)
+
+	tracked_blocks.clear()
+
+func track_selected_blocks():
+	clear_tracked_blocks()
 	
+	var ed_iface:EditorInterface = builder.get_editor_interface()
+	var ed_sel:EditorSelection = ed_iface.get_selection()
+	
+	for node in ed_sel.get_selected_nodes():
+		if node is CyclopsBlock:
+			tracked_blocks.append(node)
+			node.mesh_changed.connect(on_mesh_changed)
+
+
+func on_mesh_changed(block:CyclopsBlock):
+	_draw_tool(null)
+	pass

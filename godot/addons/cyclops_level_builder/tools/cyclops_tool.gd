@@ -26,6 +26,7 @@ extends Node
 class_name CyclopsTool
 
 var builder:CyclopsLevelBuilder
+var tool_owner:Node
 
 #func _init(_editorPlugin:EditorPlugin):
 #	editorPlugin = _editorPlugin
@@ -33,8 +34,10 @@ var builder:CyclopsLevelBuilder
 func _ready():
 	pass
 
-func _activate(plugin:CyclopsLevelBuilder):
-	self.builder = plugin
+#func _activate(plugin:CyclopsLevelBuilder):
+func _activate(tool_owner:Node):
+	self.builder = tool_owner if tool_owner is CyclopsLevelBuilder else tool_owner.plugin
+	self.tool_owner = tool_owner
 	
 func _deactivate():
 	pass
