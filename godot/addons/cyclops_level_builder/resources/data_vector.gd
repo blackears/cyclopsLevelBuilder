@@ -100,8 +100,8 @@ static func data_type_num_components(type:DataType)->int:
 			return 1
 		DataType.FLOAT:
 			return 1
-		DataType.STRING:
-			return 1
+		#DataType.STRING:
+			#return 1
 		DataType.COLOR:
 			return 4
 		DataType.VECTOR2:

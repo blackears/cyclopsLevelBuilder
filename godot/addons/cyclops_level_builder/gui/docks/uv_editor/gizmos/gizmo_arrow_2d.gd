@@ -25,6 +25,10 @@
 extends Gizmo2D
 class_name GizmoArrow2D
 
+signal pressed(pos:Vector2)
+signal released(pos:Vector2)
+signal dragged_to(pos:Vector2)
+
 @export var color:Color = Color.WHITE:
 	set(value):
 		color = value
@@ -49,6 +53,35 @@ class_name GizmoArrow2D
 	set(value):
 		head_length = value
 		queue_redraw()
+
+var dragging:bool = false
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		var e:InputEventMouseButton = event
+		
+		if e.is_pressed():
+			var local_pos:Vector2 = global_transform.affine_inverse() * e.position
+			var hit:bool = pick(local_pos, 0)
+			
+			if hit:
+				dragging = true
+				pressed.emit(e.position)
+				
+				get_viewport().set_input_as_handled()
+		else:
+			if dragging:
+				dragging = false
+				released.emit(e.position)
+				get_viewport().set_input_as_handled()
+
+	elif event is InputEventMouseMotion:
+		var e:InputEventMouseMotion = event
+		
+		if dragging:
+			dragged_to.emit(e.position)
+			get_viewport().set_input_as_handled()
+			
 
 func calc_mesh_points()->PackedVector2Array:
 	var points:PackedVector2Array = [

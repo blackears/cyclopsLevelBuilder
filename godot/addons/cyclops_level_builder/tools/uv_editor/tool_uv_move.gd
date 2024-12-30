@@ -25,7 +25,7 @@
 extends CyclopsTool
 class_name ToolUvMove
 
-enum ToolState { NONE, READY, DRAG_VIEW, DRAG_SELECTION }
+enum ToolState { NONE, READY, DRAG_VIEW, DRAG_SELECTION, DRAG_UVS }
 var tool_state:ToolState = ToolState.NONE
 
 var settings:ToolUvMoveSettings = ToolUvMoveSettings.new()
@@ -36,6 +36,9 @@ var mouse_down_pos:Vector2
 var drag_start_view_xform:Transform2D
 
 var zoom_wheel_amount:float = 1.2
+
+var move_constraint:MoveConstraint.Type
+var mvd_cache:Dictionary
 
 func is_uv_tool():
 	return true
@@ -65,6 +68,14 @@ func _can_handle_object(node:Node)->bool:
 
 var gizmo:GizmoTranslate2D
 
+func cache_selected_blocks():
+	mvd_cache.clear()
+	
+	for block in builder.get_selected_blocks():
+		var block_path:NodePath = block.get_path()
+		var mvd:MeshVectorData = block.mesh_vector_data
+		mvd_cache[block_path] = mvd.duplicate_explicit()
+
 func _draw_tool(viewport_camera:Camera3D):
 	var view:ViewUvEditor = builder.view_uv_editor
 	var uv_ed:UvEditor = view.get_uv_editor()
@@ -75,17 +86,7 @@ func _draw_tool(viewport_camera:Camera3D):
 	if center_struct["count"] > 0:
 		var centroid:Vector2 = center_struct["centroid"]
 		gizmo.position = uv_to_viewport_xform * centroid
-		print("gizmo.position ", gizmo.position)
-		
-		#var xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
-		#
-		#var view_pos:Vector2 = xform * centroid
-		#var giz_xform:Transform2D
-		#giz_xform.origin = uv_to_viewport_xform * centroid
-		#gizmo.gizmo_transform = giz_xform
-#		gizmo.position = view_pos
-		#print("centroid ", centroid)
-		#gizmo.position = centroid
+#		print("gizmo.position ", gizmo.position)
 		gizmo.visible = true
 	else:
 		gizmo.visible = false
@@ -114,6 +115,42 @@ func get_selected_uv_center()->Dictionary:
 	return {"centroid": sum / count, "count": count}
 
 	
+func move_uvs(offset:Vector2, commit:bool):
+	
+	if commit:
+		var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
+		cmd.builder = builder
+		var fc:CommandSetMeshFeatureData.FeatureChanges = CommandSetMeshFeatureData.FeatureChanges.new()
+	#	print("block_index_map ", block_index_map)
+		
+		for block in builder.get_selected_blocks():
+			var block_path:NodePath = block.get_path()
+			var mvd:MeshVectorData = mvd_cache[block_path]
+			
+			var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+			var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
+
+			var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+			
+			for i in uv_arr.num_components():
+				if !sel_vec.get_value(i):
+					continue
+				var val:Vector2 = uv_arr.get_value_vec2(i)
+				new_uv_arr.set_value_vec2(val + offset, i)
+			
+			fc.new_data_values[MeshVectorData.FV_UV0] = new_uv_arr
+
+			cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
+		
+			print("uv_arr ", uv_arr.data)
+			print("new_uv_arr ", new_uv_arr.data)
+		
+		if cmd.will_change_anything():
+	#		print("cmd.will_change_anything() true")
+			var undo:EditorUndoRedoManager = builder.get_undo_redo()
+			cmd.add_to_undo_manager(undo)
+			
+	pass
 
 func select_face_vertices(block_index_map:Dictionary, sel_type:Selection.Type):
 	var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
@@ -163,7 +200,7 @@ func select_face_vertices(block_index_map:Dictionary, sel_type:Selection.Type):
 		
 #		print("end tgt sel ", new_sel_vec)
 		fc.new_data_values[MeshVectorData.FV_SELECTED] = DataVectorByte.new(new_sel_vec, DataVector.DataType.BOOL)
-					
+
 		cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
 		
 	if cmd.will_change_anything():
@@ -182,8 +219,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	
 	var view:ViewUvEditor = builder.view_uv_editor
 	var uv_ed:UvEditor = view.get_uv_editor()
+	var uv_to_view_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 	
-	
+	#if gizmo.handle_input(event):
+		#pass
 	
 	if event is InputEventMouseButton:
 		#print("mouse bn ", event)
@@ -194,6 +233,27 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			if e.is_pressed():
 				if tool_state == ToolState.NONE:
 					mouse_down_pos = e.position
+					
+					var part:GizmoTranslate2D.Part = gizmo.pick_part(e.position)
+					
+#					print("GizmoTranslate2D.Part ", part)
+					if part == GizmoTranslate2D.Part.AXIS_X:
+						tool_state = ToolState.DRAG_UVS
+						move_constraint = MoveConstraint.Type.AXIS_X
+						cache_selected_blocks()
+						return true
+						
+					if part == GizmoTranslate2D.Part.AXIS_Y:
+						tool_state = ToolState.DRAG_UVS
+						move_constraint = MoveConstraint.Type.AXIS_Y
+						cache_selected_blocks()
+						return true
+						
+					if part == GizmoTranslate2D.Part.PLANE_Z:
+						tool_state = ToolState.DRAG_UVS
+						move_constraint = MoveConstraint.Type.PLANE_XY
+						cache_selected_blocks()
+						return true
 					
 					tool_state = ToolState.READY
 					#print("mouse ready")
@@ -209,11 +269,23 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 					select_face_vertices(block_indices,
 						Selection.choose_type(e.shift_pressed, e.ctrl_pressed))
-					#for block in builder.get_selected_blocks():
-						#var block_path:NodePath = block.get_path()
-						
-						
 
+					tool_state = ToolState.NONE
+					return true
+					
+				elif tool_state == ToolState.DRAG_UVS:
+					var offset:Vector2 = e.position - mouse_down_pos
+					if move_constraint == MoveConstraint.Type.AXIS_X:
+						offset.y = 0
+					elif move_constraint == MoveConstraint.Type.AXIS_Y:
+						offset.x = 0
+					
+					var view_to_uv_vec_xform:Transform2D = uv_to_view_xform.affine_inverse()
+					view_to_uv_vec_xform.origin = Vector2.ZERO
+					offset = view_to_uv_vec_xform * offset
+					
+					move_uvs(offset, true)
+					
 					tool_state = ToolState.NONE
 					return true
 					
@@ -331,6 +403,9 @@ func _activate(tool_owner:Node):
 	var uv_ed:UvEditor = view.get_uv_editor()
 	
 	gizmo = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_translate_2d.tscn").instantiate()
+	gizmo.pressed.connect(on_gizmo_pressed)
+	gizmo.released.connect(on_gizmo_pressed)
+	gizmo.dragged_to.connect(on_gizmo_pressed)
 	uv_ed.add_gizmo(gizmo)
 
 	var ed_iface:EditorInterface = builder.get_editor_interface()
@@ -344,6 +419,8 @@ func _activate(tool_owner:Node):
 func _deactivate():
 	super._deactivate()
 
+	mvd_cache.clear()
+	
 	clear_tracked_blocks()
 	
 	gizmo.queue_free()
@@ -383,3 +460,13 @@ func on_mesh_changed(block:CyclopsBlock):
 	print("on_mesh_changed")
 	_draw_tool(null)
 	pass
+
+func on_gizmo_pressed(part:GizmoTranslate2D, pos:Vector2):
+	print("on_gizmo_pressed ", part, pos)
+
+func on_gizmo_released(part:GizmoTranslate2D, pos:Vector2):
+	print("on_gizmo_released ", part, pos)
+
+func on_gizmo_dragged_to(part:GizmoTranslate2D, pos:Vector2):
+	print("on_gizmo_dragged_to ", part, pos)
+	

@@ -25,4 +25,3 @@
 class_name MoveConstraint
 
 enum Type { NONE, AXIS_X, AXIS_Y, AXIS_Z, PLANE_XY, PLANE_XZ, PLANE_YZ, PLANE_VIEWPORT }
-

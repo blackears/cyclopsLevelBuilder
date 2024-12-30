@@ -83,7 +83,10 @@ func is_zero()->bool:
 
 func get_data_format_type()->DataFormatType:
 	return DataFormatType.FLOAT32
-	
+
+func num_components()->int:
+	return data.size() / stride
+
 func size()->int:
 	return data.size()
 
