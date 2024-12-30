@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://bpgq80jfbpph"]
+
+[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_move_settings_editor.gd" id="1_8ca4j"]
+
+[node name="ToolUvMoveSettings" type="PanelContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_8ca4j")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Uv Move Settings"

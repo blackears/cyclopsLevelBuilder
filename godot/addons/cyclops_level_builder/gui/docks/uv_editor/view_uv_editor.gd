@@ -180,7 +180,10 @@ func _process(delta: float) -> void:
 
 
 func _on_sub_viewport_container_gui_input(event: InputEvent) -> void:
-	forward_input.emit(event)
+	#forward_input.emit(event)
+	
+	if active_tool:
+		active_tool._gui_input(null, event)
 	#if event is InputEventKey:
 		#print("_on_sub_viewport_container_gui_input ", event)
 	pass # Replace with function body.
@@ -217,3 +220,13 @@ func _on_check_sync_with_mesh_toggled(toggled_on: bool) -> void:
 #func _on_uv_editor_forward_input(event: InputEvent) -> void:
 	#forward_input.emit(event)
 	#pass # Replace with function body.
+
+
+func _on_focus_entered() -> void:
+	print("view uv editor._on_focus_entered()")
+	pass # Replace with function body.
+
+
+func _on_focus_exited() -> void:
+	print("view uv editor._on_focus_exited()")
+	pass # Replace with function body.

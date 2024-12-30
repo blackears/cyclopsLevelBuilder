@@ -22,18 +22,24 @@
 # SOFTWARE.
 
 @tool
-extends Resource
-class_name ToolUvMoveSettings
+extends PanelContainer
+class_name ToolUvMoveSettingsEditor
 
-@export var transform_space:TransformSpace.Type = TransformSpace.Type.GLOBAL
-@export var correct_uvs:bool = true
+var settings:ToolUvMoveSettings:
+	get:
+		return settings
+	set(value):
+		settings = value
+		dirty = true
 
-func load_from_cache(cache:Dictionary):
-	transform_space = cache.get("transform_space", TransformSpace.Type.GLOBAL)
-	correct_uvs = cache.get("correct_uvs", true)
-	
-func save_to_cache():
-	return {
-		"transform_space": transform_space,
-		"correct_uvs": correct_uvs,
-	}
+var dirty:bool = true
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass

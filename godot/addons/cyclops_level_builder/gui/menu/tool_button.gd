@@ -27,25 +27,35 @@ class_name ToolButton
 
 var plugin:CyclopsLevelBuilder:
 	set(value):
-		if plugin:
-			plugin.tool_changed.disconnect(on_tool_changed)
+		#if plugin:
+			#plugin.tool_changed.disconnect(on_tool_changed)
 			
 		plugin = value
+#		update_selection()
+
+		#if plugin:
+			#plugin.tool_changed.connect(on_tool_changed)
+
+var tool_owner:Node:
+	set(v):
+		if tool_owner:
+			tool_owner.tool_changed.disconnect(on_tool_changed)
+		
+		tool_owner = v
 		update_selection()
 
-		if plugin:
-			plugin.tool_changed.connect(on_tool_changed)
+		if tool_owner:
+			tool_owner.tool_changed.connect(on_tool_changed)
 
 #var tool_id:String
 var tool_path:NodePath
-var tool_owner:Node
 
 func on_tool_changed(tool:CyclopsTool):
 	update_selection()
 
 func update_selection():
-	if plugin && plugin.active_tool:
-		if plugin.active_tool.get_path() == tool_path:
+	if tool_owner && tool_owner.active_tool:
+		if tool_owner.active_tool.get_path() == tool_path:
 			%hilight.visible = true
 			return
 		

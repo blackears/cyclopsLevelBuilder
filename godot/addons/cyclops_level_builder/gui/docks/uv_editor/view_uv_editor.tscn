@@ -117,6 +117,8 @@ render_target_update_mode = 4
 unique_name_in_owner = true
 face_sel_color = Color(0.5, 0.5, 0.5, 0.4)
 
+[connection signal="focus_entered" from="." to="." method="_on_focus_entered"]
+[connection signal="focus_exited" from="." to="." method="_on_focus_exited"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer3/feature/feature_vertex" to="." method="_on_feature_vertex_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer3/feature/feature_edge" to="." method="_on_feature_edge_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer3/feature/feature_face" to="." method="_on_feature_face_pressed"]

@@ -28,7 +28,7 @@ class_name ToolUvMove
 enum ToolState { NONE, READY, DRAG_VIEW, DRAG_SELECTION }
 var tool_state:ToolState = ToolState.NONE
 
-var settings:ToolMoveUvSettings = ToolMoveUvSettings.new()
+var settings:ToolUvMoveSettings = ToolUvMoveSettings.new()
 
 var mouse_hover_pos:Vector2
 var mouse_down_pos:Vector2
@@ -51,12 +51,12 @@ func _get_tool_icon()->Texture2D:
 func _get_tool_tooltip()->String:
 	return "Move UVs"
 
-#func _get_tool_properties_editor()->Control:
-	#var ed:ToolMoveSettingsEditor = preload("res://addons/cyclops_level_builder/tools/tool_move_settings_editor.tscn").instantiate()
-	#
-	#ed.settings = settings
-	#
-	#return ed
+func _get_tool_properties_editor()->Control:
+	var ed:ToolUvMoveSettingsEditor = preload("res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_move_settings_editor.tscn").instantiate()
+	
+	ed.settings = settings
+	
+	return ed
 
 func _can_handle_object(node:Node)->bool:
 	#print("_can_handle_object -- uv move")
@@ -159,31 +159,12 @@ func select_face_vertices(block_index_map:Dictionary, sel_type:Selection.Type):
 
 	
 	
-	
-	#for block_path:NodePath in block_indices.keys():
-		#var block:CyclopsBlock = builder.get_node(block_path)
-		#var cur_sel_vec:DataVectorByte = block.mesh_vector_data.get_face_vertex_data(MeshVectorData.FV_SELECTED)
-		#
-		#
-		#var chosen_indices = block_indices[block_path]
-		#var fc:CommandSetMeshFeatureData.FeatureChanges = CommandSetMeshFeatureData.FeatureChanges.new()
-		#fc.new_data_values[MeshVectorData.FV_SELECTED] = DataVectorByte.new()
-		#
-		#cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
-	
-	#var cmd:CommandSelectFaceVertices = CommandSelectFaceVertices.new()
-	#cmd.builder = builder
-	#cmd.selection_type = Selection.choose_type(e.shift_pressed, e.ctrl_pressed)
-		#
-	#if cmd.will_change_anything():
-		#var undo:EditorUndoRedoManager = builder.get_undo_redo()
-		#cmd.add_to_undo_manager(undo)
-	pass
-	
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	if !builder:
 		return false
+		
+	#print("tool_uv_move._gui_input()")
 	
 	var view:ViewUvEditor = builder.view_uv_editor
 	var uv_ed:UvEditor = view.get_uv_editor()
