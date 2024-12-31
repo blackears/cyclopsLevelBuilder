@@ -144,8 +144,7 @@ func focus_on_selected_uvs():
 		return
 
 	if count == 1:
-		bounds.position -= min_focus_size / 2
-		bounds.size = min_focus_size
+		bounds = Rect2(bounds.position - min_focus_size / 2.0, min_focus_size)
 	
 	var view:ViewUvEditor = builder.view_uv_editor
 	var uv_ed:UvEditor = view.get_uv_editor()
