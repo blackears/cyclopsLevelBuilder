@@ -149,8 +149,27 @@ func move_uvs(offset:Vector2, commit:bool):
 	#		print("cmd.will_change_anything() true")
 			var undo:EditorUndoRedoManager = builder.get_undo_redo()
 			cmd.add_to_undo_manager(undo)
+	else:
+		for block in builder.get_selected_blocks():
+			var block_path:NodePath = block.get_path()
+			var mvd:MeshVectorData = mvd_cache[block_path]
 			
-	pass
+			var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+			var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
+
+			var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+			
+			for i in uv_arr.num_components():
+				if !sel_vec.get_value(i):
+					continue
+				var val:Vector2 = uv_arr.get_value_vec2(i)
+				new_uv_arr.set_value_vec2(val + offset, i)
+			
+			var new_mvd:MeshVectorData = mvd.duplicate_explicit()
+			new_mvd.set_face_vertex_data(MeshVectorData.FV_UV0, new_uv_arr)
+			
+			block.mesh_vector_data = new_mvd
+
 
 func select_face_vertices(block_index_map:Dictionary, sel_type:Selection.Type):
 	var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
@@ -224,7 +243,32 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	#if gizmo.handle_input(event):
 		#pass
 	
-	if event is InputEventMouseButton:
+	if event is InputEventKey:
+		var e:InputEventKey = event
+		
+		if e.keycode == KEY_ESCAPE:
+			if tool_state == ToolState.DRAG_UVS:
+				move_uvs(Vector2.ZERO, false)
+				
+				tool_state = ToolState.NONE
+				return true
+
+		elif e.keycode == KEY_A:
+			var block_indices:Dictionary
+			if e.alt_pressed:
+				block_indices = {}
+			else:
+				block_indices = uv_ed.get_uv_indices_in_region(
+					Rect2(-Vector2.INF, Vector2.INF),
+					false)
+			
+#					print("block_indices ", block_indices)
+			select_face_vertices(block_indices, Selection.Type.REPLACE)
+
+			get_viewport().set_input_as_handled()
+			pass
+	
+	elif event is InputEventMouseButton:
 		#print("mouse bn ", event)
 
 		var e:InputEventMouseButton = event
@@ -284,6 +328,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					view_to_uv_vec_xform.origin = Vector2.ZERO
 					offset = view_to_uv_vec_xform * offset
 					
+					move_uvs(Vector2.ZERO, false)
 					move_uvs(offset, true)
 					
 					tool_state = ToolState.NONE
@@ -387,7 +432,20 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 #				print("sel rect ", uv_ed.selection_rect)
 
 			return true
-
+			
+		elif tool_state == ToolState.DRAG_UVS:
+			var offset:Vector2 = e.position - mouse_down_pos
+			if move_constraint == MoveConstraint.Type.AXIS_X:
+				offset.y = 0
+			elif move_constraint == MoveConstraint.Type.AXIS_Y:
+				offset.x = 0
+			
+			var view_to_uv_vec_xform:Transform2D = uv_to_view_xform.affine_inverse()
+			view_to_uv_vec_xform.origin = Vector2.ZERO
+			offset = view_to_uv_vec_xform * offset
+			
+			move_uvs(offset, false)
+					
 		elif tool_state == ToolState.DRAG_SELECTION:
 			
 			uv_ed.selection_rect = Rect2(mouse_down_pos, e.position - mouse_down_pos)
@@ -403,9 +461,9 @@ func _activate(tool_owner:Node):
 	var uv_ed:UvEditor = view.get_uv_editor()
 	
 	gizmo = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_translate_2d.tscn").instantiate()
-	gizmo.pressed.connect(on_gizmo_pressed)
-	gizmo.released.connect(on_gizmo_pressed)
-	gizmo.dragged_to.connect(on_gizmo_pressed)
+	#gizmo.pressed.connect(on_gizmo_pressed)
+	#gizmo.released.connect(on_gizmo_pressed)
+	#gizmo.dragged_to.connect(on_gizmo_pressed)
 	uv_ed.add_gizmo(gizmo)
 
 	var ed_iface:EditorInterface = builder.get_editor_interface()
@@ -457,16 +515,16 @@ func track_selected_blocks():
 
 
 func on_mesh_changed(block:CyclopsBlock):
-	print("on_mesh_changed")
+#	print("on_mesh_changed")
 	_draw_tool(null)
 	pass
 
-func on_gizmo_pressed(part:GizmoTranslate2D, pos:Vector2):
-	print("on_gizmo_pressed ", part, pos)
-
-func on_gizmo_released(part:GizmoTranslate2D, pos:Vector2):
-	print("on_gizmo_released ", part, pos)
-
-func on_gizmo_dragged_to(part:GizmoTranslate2D, pos:Vector2):
-	print("on_gizmo_dragged_to ", part, pos)
+#func on_gizmo_pressed(part:GizmoTranslate2D, pos:Vector2):
+	#print("on_gizmo_pressed ", part, pos)
+#
+#func on_gizmo_released(part:GizmoTranslate2D, pos:Vector2):
+	#print("on_gizmo_released ", part, pos)
+#
+#func on_gizmo_dragged_to(part:GizmoTranslate2D, pos:Vector2):
+	#print("on_gizmo_dragged_to ", part, pos)
 	
