@@ -40,6 +40,9 @@ var zoom_wheel_amount:float = 1.2
 var move_constraint:MoveConstraint.Type
 var mvd_cache:Dictionary
 
+@export var min_focus_size:Vector2 = Vector2(.5, .5)
+
+
 func is_uv_tool():
 	return true
 	
@@ -114,7 +117,54 @@ func get_selected_uv_center()->Dictionary:
 	
 	return {"centroid": sum / count, "count": count}
 
+func focus_on_selected_uvs():
+	var count:int = 0
+	var bounds:Rect2
 	
+	for block in builder.get_selected_blocks():
+		var block_path:NodePath = block.get_path()
+		var mvd:MeshVectorData = block.mesh_vector_data
+		
+		var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+
+		var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+		for i in sel_vec.num_components():
+			if !sel_vec.get_value(i):
+				continue
+			
+			var uv:Vector2 = uv_arr.get_value_vec2(i)
+			if count == 0:
+				bounds = Rect2(uv, Vector2.ZERO)
+			else:
+				bounds = bounds.expand(uv)
+			
+			count += 1
+	
+	if count == 0:
+		return
+
+	if count == 1:
+		bounds.position -= min_focus_size / 2
+		bounds.size = min_focus_size
+	
+	var view:ViewUvEditor = builder.view_uv_editor
+	var uv_ed:UvEditor = view.get_uv_editor()
+	var viewport_size:Vector2 = view.get_uv_editor_viewport_size()
+	
+	var uv_bounds_size:float = max(bounds.size.x, bounds.size.y)
+	var view_bounds_size:float = min(viewport_size.x, viewport_size.y)
+	
+	#print("uv_bounds_size ", uv_bounds_size)
+	#print("view_bounds_size ", view_bounds_size)
+	
+	var xform:Transform2D
+	xform = xform.translated_local(viewport_size / 2)
+	xform = xform.scaled_local(Vector2(view_bounds_size, -view_bounds_size))
+	xform = xform.scaled_local(Vector2(1.0 / uv_bounds_size, 1.0 / uv_bounds_size))
+	xform = xform.translated_local(-bounds.get_center())
+	
+	uv_ed.set_uv_to_viewport_xform(xform)
+
 func move_uvs(offset:Vector2, commit:bool):
 	
 	if commit:
@@ -142,8 +192,8 @@ func move_uvs(offset:Vector2, commit:bool):
 
 			cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
 		
-			print("uv_arr ", uv_arr.data)
-			print("new_uv_arr ", new_uv_arr.data)
+			#print("uv_arr ", uv_arr.data)
+			#print("new_uv_arr ", new_uv_arr.data)
 		
 		if cmd.will_change_anything():
 	#		print("cmd.will_change_anything() true")
@@ -250,6 +300,13 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			if tool_state == ToolState.DRAG_UVS:
 				move_uvs(Vector2.ZERO, false)
 				
+				get_viewport().set_input_as_handled()
+				tool_state = ToolState.NONE
+				return true
+				
+			elif tool_state == ToolState.DRAG_SELECTION:
+				uv_ed.show_selection_rect = false
+				
 				tool_state = ToolState.NONE
 				return true
 
@@ -266,8 +323,14 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			select_face_vertices(block_indices, Selection.Type.REPLACE)
 
 			get_viewport().set_input_as_handled()
-			pass
+			return true
+
+		elif e.keycode == KEY_F:
+			focus_on_selected_uvs()
 	
+			get_viewport().set_input_as_handled()
+			return true
+			
 	elif event is InputEventMouseButton:
 		#print("mouse bn ", event)
 

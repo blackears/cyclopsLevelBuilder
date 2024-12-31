@@ -178,6 +178,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
+func get_uv_editor_viewport_size()->Vector2:
+	return %SubViewportContainer.size
 
 func _on_sub_viewport_container_gui_input(event: InputEvent) -> void:
 	#forward_input.emit(event)

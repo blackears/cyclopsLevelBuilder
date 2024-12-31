@@ -27,9 +27,7 @@ extends CyclopsCommand
 
 class BlockFeatureChanges extends RefCounted:
 	var block_path:NodePath
-#	var old_block_data:MeshVectorData
 
-#	var feature_changes:Dictionary #MeshVectorData.Feature -> FeatureChanges
 	var feature_change_deltas:Dictionary #MeshVectorData.Feature -> FeatureChanges
 	
 	func is_empty()->bool:
@@ -39,12 +37,10 @@ class BlockFeatureChanges extends RefCounted:
 		return true
 
 class FeatureChanges extends RefCounted:
-#	var indices:PackedInt32Array
 	var new_data_values:Dictionary = {} # String -> DataVector
 	
 
 class FeatureChangeDeltas extends RefCounted:
-#	var indices:PackedInt32Array
 	var new_data_values:Dictionary = {} # String -> DataVector
 	
 	func is_empty():
@@ -54,9 +50,6 @@ class FeatureChangeDeltas extends RefCounted:
 #Private
 var block_map:Dictionary = {}
 
-#class BlockChangeDelta:
-	#var feature_changes:Dictionary #MeshVectorData.Feature -> FeatureChanges
-	
 
 func set_data(block_path:NodePath, feature:MeshVectorData.Feature,
 		changes:FeatureChanges):
@@ -72,12 +65,8 @@ func set_data(block_path:NodePath, feature:MeshVectorData.Feature,
 		
 		block_changes.block_path = block_path
 		
-#		block_changes.old_block_data = mvd
-		
 	else:
 		block_changes = block_map[block_path]
-	
-#	block_changes.feature_changes[feature] = changes
 	
 	var delta_changes:FeatureChangeDeltas = FeatureChangeDeltas.new()
 	
@@ -91,7 +80,6 @@ func set_data(block_path:NodePath, feature:MeshVectorData.Feature,
 		
 		var change_to_vec:DataVector = changes.new_data_values[vector_name]
 		var delta_vec:DataVector = block_vec.subtract(change_to_vec)
-#		var compressed_data:PackedByteArray = delta.get_data_raw().compress()
 		if delta_vec.is_zero():
 			continue
 		
@@ -131,37 +119,33 @@ func will_change_anything()->bool:
 #				print("target_vector ", target_vector.data)
 				
 				if target_vector && target_vector.data_type == source_vector.data_type:
-#					if !target_vector.equals_data_at_indices(source_vector, fc.indices):
 					if !target_vector.equals_data(source_vector):
 						return true
 	
 	return false
 
 func do_it():
-	print("CommandSetMeshFeatureData do_it()")
+#	print("CommandSetMeshFeatureData do_it()")
 	for block_path in block_map.keys():
 		var changes:BlockFeatureChanges = block_map[block_path]
-#		var new_mvd:MeshVectorData = changes.old_block_data.duplicate_explicit()
 		var block:CyclopsBlock = builder.get_node(block_path)
 		var block_mvd:MeshVectorData = block.mesh_vector_data.duplicate_explicit()
 		
 		for feature:MeshVectorData.Feature in changes.feature_change_deltas.keys():
-#			var fc:FeatureChanges = changes.feature_changes[feature]
 			var fcd:FeatureChangeDeltas = changes.feature_change_deltas[feature]
 			for vector_name:String in fcd.new_data_values.keys():
-				print("setting data vector_name ", vector_name)
+#				print("setting data vector_name ", vector_name)
 				var delta_vector:DataVector = fcd.new_data_values[vector_name]
 				var block_vector:DataVector = block_mvd.get_feature_data(feature, vector_name)
 				
 				var source_vector:DataVector = block_vector.subtract(delta_vector)
 				
-				print("block_vector ", block_vector)
-				print("delta_vector ", delta_vector)
-				print("source_vector ", source_vector)
+				#print("block_vector ", block_vector)
+				#print("delta_vector ", delta_vector)
+				#print("source_vector ", source_vector)
 				
 				
 				if block_vector && block_vector.data_type == source_vector.data_type:
-#					target_vector.set_data_at_indices(source_vector, fc.indices)
 					#print("setting data ", layer_name, " ")
 					#print("src ", source_vector.data)
 					#print("tgt ", target_vector.data)
@@ -169,42 +153,30 @@ func do_it():
 
 		block.mesh_vector_data = block_mvd
 	
-#		var block:CyclopsBlock = builder.get_node(changes.block_path)
-#		block.mesh_vector_data = new_mvd
-	
-	#builder.selection_changed.emit()
 	
 
 func undo_it():
-	print("CommandSetMeshFeatureData undo_it()")
-	#for block_path in block_map.keys():
-		#var changes:BlockFeatureChanges = block_map[block_path]
-	#
-		#var block:CyclopsBlock = builder.get_node(changes.block_path)
-		#block.mesh_vector_data = changes.old_block_data
+#	print("CommandSetMeshFeatureData undo_it()")
 
 	for block_path in block_map.keys():
 		var changes:BlockFeatureChanges = block_map[block_path]
-#		var new_mvd:MeshVectorData = changes.old_block_data.duplicate_explicit()
 		var block:CyclopsBlock = builder.get_node(block_path)
 		var block_mvd:MeshVectorData = block.mesh_vector_data.duplicate_explicit()
 		
 		for feature:MeshVectorData.Feature in changes.feature_change_deltas.keys():
-#			var fc:FeatureChanges = changes.feature_changes[feature]
 			var fcd:FeatureChangeDeltas = changes.feature_change_deltas[feature]
 			for vector_name:String in fcd.new_data_values.keys():
-				print("unsetting data vector_name ", vector_name)
+#				print("unsetting data vector_name ", vector_name)
 				var delta_vector:DataVector = fcd.new_data_values[vector_name]
 				var block_vector:DataVector = block_mvd.get_feature_data(feature, vector_name)
 				
 				var source_vector:DataVector = block_vector.add(delta_vector)
 
-				print("block_vector ", block_vector)
-				print("delta_vector ", delta_vector)
-				print("source_vector ", source_vector)
+				#print("block_vector ", block_vector)
+				#print("delta_vector ", delta_vector)
+				#print("source_vector ", source_vector)
 				
 				if block_vector && block_vector.data_type == source_vector.data_type:
-#					target_vector.set_data_at_indices(source_vector, fc.indices)
 					#print("setting data ", layer_name, " ")
 					#print("src ", source_vector.data)
 					#print("tgt ", target_vector.data)
@@ -212,5 +184,4 @@ func undo_it():
 	
 		block.mesh_vector_data = block_mvd
 	
-	#builder.selection_changed.emit()
 	
