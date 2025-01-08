@@ -331,6 +331,44 @@ func draw_uv_mesh(mesh_face_selection_only:bool, draw_vertices:bool, draw_face_c
 #			print("sel vert ", uv)
 			draw_vertex(uv, true)
 
+func draw_image_underlay(tex:Texture2D):
+	var view_rect:Rect2 = get_viewport_rect()
+	var uv_to_view_xform:Transform2D = get_uv_to_viewport_xform()
+	var view_to_uv_xform:Transform2D = uv_to_view_xform.affine_inverse()
+	
+	var p00_uv = view_to_uv_xform * view_rect.position
+	var p11_uv = view_to_uv_xform * view_rect.end
+	
+	var points:PackedVector2Array = [
+		view_rect.position,
+		Vector2(view_rect.position.x, view_rect.end.y),
+		view_rect.end,
+		Vector2(view_rect.end.x, view_rect.position.y),
+		]
+	var colors:PackedColorArray = [Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE]
+	var uvs:PackedVector2Array = [
+		p00_uv,
+		Vector2(p00_uv.x, p11_uv.y),
+		p11_uv,
+		Vector2(p11_uv.x, p00_uv.y),
+	]
+	draw_polygon(points, colors, uvs, tex)
+	
+func draw_material_underlay():
+	if block_nodes.is_empty():
+		return
+	
+	var mvd:MeshVectorData = block_nodes[0].mesh_vector_data
+	if mvd.active_face != -1:
+		var vec:DataVectorInt = mvd.get_face_data(MeshVectorData.F_MATERIAL_INDEX)
+		var mat_idx:int = vec.get_value(mvd.active_face)
+		if mat_idx != -1 && mat_idx < block_nodes[0].materials.size():
+			var mat:Material = block_nodes[0].materials[mat_idx]
+			if mat is StandardMaterial3D:
+				if mat.albedo_texture:
+					draw_image_underlay(mat.albedo_texture)
+	
+		
 
 @export var min_grid_spacing:float = 100
 @export var grid_color_major_axis:Color = Color.WHITE
@@ -406,6 +444,8 @@ func draw_grid():
 			-1, grid_font_size)
 
 func _draw() -> void:
+	draw_material_underlay()
+	
 	draw_grid()
 
 	
