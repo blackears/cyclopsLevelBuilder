@@ -40,7 +40,7 @@ var zoom_wheel_amount:float = 1.2
 var move_constraint:MoveConstraint.Type
 var mvd_cache:Dictionary
 
-@export var min_focus_size:Vector2 = Vector2(.5, .5)
+#@export var min_focus_size:Vector2 = Vector2(.5, .5)
 
 
 func is_uv_tool():
@@ -141,10 +141,11 @@ func focus_on_selected_uvs():
 			count += 1
 	
 	if count == 0:
-		return
+		bounds = Rect2(Vector2.ZERO, Vector2.ONE)
 
 	if count == 1:
-		bounds = Rect2(bounds.position - min_focus_size / 2.0, min_focus_size)
+#		bounds = Rect2(bounds.position - min_focus_size / 2.0, min_focus_size)
+		bounds = Rect2(bounds.position - Vector2.ONE / 2.0, Vector2.ONE)
 	
 	var view:ViewUvEditor = builder.view_uv_editor
 	var uv_ed:UvEditor = view.get_uv_editor()

@@ -64,14 +64,10 @@ signal proj_transform_changed(xform:Transform2D)
 		vertex_radius = value
 		queue_redraw()
 
-#@export var proj_transform:Transform2D = Transform2D.IDENTITY:
 @export var proj_transform:Transform2D = Transform2D(0, Vector2(100, 100), 0, Vector2.ZERO):
 	set(value):
 		proj_transform = value
 		
-		#if is_node_ready():
-			#var xform:Transform2D = get_uv_to_viewport_xform()
-			#%gizmo_area.transform = xform
 		proj_transform_changed.emit(value)
 		
 		queue_redraw()
@@ -101,7 +97,6 @@ signal proj_transform_changed(xform:Transform2D)
 			rebuild_handles()
 		queue_redraw()
 		
-#var dirty:bool = true
 var block_edit_handles:Dictionary #[nodePath, UvEditingState]
 
 enum SelectFeature { VERTEX, EDGE, FACE }
@@ -136,13 +131,11 @@ enum StickyState { DISABLED, SHARED_LOCATION, SHARED_VERTEX }
 @export var selection_rect_border_color:Color = Color(.5, .5, 1, 1)
 @export var selection_rect_fill_color:Color = Color(.5, .5, 1, .2)
 
-#func _input(event: InputEvent) -> void:
-	#print("uv_editor ", event)
-	#forward_input.emit(event)
-	#get_viewport().set_input_as_handled()
-	#pass
-
 var gizmo_list:Array[Gizmo2D]
+
+func _ready() -> void:
+	rebuild_handles()
+	pass
 
 func add_gizmo(gizmo:Gizmo2D):
 	%gizmo_area.add_child(gizmo)
@@ -258,7 +251,6 @@ func get_view_transform()->Transform2D:
 
 func get_uv_to_viewport_xform()->Transform2D:
 	return get_view_transform() * proj_transform
-	
 
 func set_uv_to_viewport_xform(xform:Transform2D):
 	var v:Transform2D = get_view_transform()
@@ -340,24 +332,82 @@ func draw_uv_mesh(mesh_face_selection_only:bool, draw_vertices:bool, draw_face_c
 			draw_vertex(uv, true)
 
 
-func _ready() -> void:
-	rebuild_handles()
-	pass
+@export var min_grid_spacing:float = 100
+@export var grid_color_major_axis:Color = Color.WHITE
+@export var grid_color_major:Color = Color.GRAY
+@export var grid_width_major_axis:float = 2
+@export var grid_width_major:float = 1
+@export var grid_font:Font = preload("res://addons/cyclops_level_builder/art/fonts/Roboto/Roboto-Regular.ttf")
+@export var grid_font_size:float = 10
+
+
+func draw_grid():
+	var view_rect:Rect2 = get_viewport_rect()
+	var uv_to_view_xform:Transform2D = get_uv_to_viewport_xform()
+	var view_to_uv_xform:Transform2D = uv_to_view_xform.affine_inverse()
+	
+	var p00_uv = view_to_uv_xform * view_rect.position
+	var p11_uv = view_to_uv_xform * view_rect.end
+	
+	#print("p00_uv  ", p00_uv)
+	#print("p11_uv  ", p11_uv)
+	
+	var view_to_uv_vector_xform = view_to_uv_xform
+	view_to_uv_vector_xform.origin = Vector2.ZERO
+	
+	var min_uv_grid_spacing:Vector2 = view_to_uv_vector_xform * Vector2(min_grid_spacing, min_grid_spacing)
+	
+#	print("min_uv_grid_spacing  ", min_uv_grid_spacing)
+	
+	var grid_min_x:int = floor(p00_uv.x)
+	var grid_max_x:int = ceil(p11_uv.x)
+	var grid_min_y:int = floor(p11_uv.y) #xform flipped on vertical axis
+	var grid_max_y:int = ceil(p00_uv.y) #xform flipped on vertical axis
+
+	var skip_x:int = ceil(abs(min_uv_grid_spacing.x))
+	var skip_y:int = ceil(abs(min_uv_grid_spacing.y))
+
+	grid_min_x = floor(float(grid_min_x) / skip_x) * skip_x
+	grid_min_y = floor(float(grid_min_y) / skip_y) * skip_y
+
+	#print("grid_min_x ", grid_min_x)
+	#print("grid_max_x ", grid_max_x)
+	#print("grid_min_y ", grid_min_y)
+	#print("grid_max_y ", grid_max_y)
+
+	for line_idx:int in range(grid_min_x, grid_max_x + 1, skip_x):
+		var pl0 = Vector2(line_idx, p00_uv.y)
+		var pl1 = Vector2(line_idx, p11_uv.y)
+		
+		var plv0 = uv_to_view_xform * pl0
+		var plv1 = uv_to_view_xform * pl1
+		
+		draw_line(plv0, 
+			plv1, 
+			grid_color_major_axis if line_idx == 0 else grid_color_major, 
+			grid_width_major_axis if line_idx == 0 else grid_width_major)
+			
+		draw_string(grid_font, plv0 + Vector2(2, grid_font_size), str(line_idx), HORIZONTAL_ALIGNMENT_LEFT, 
+			-1, grid_font_size)
+
+	for line_idx:int in range(grid_min_y, grid_max_y + 1, skip_y):
+		var pl0 = Vector2(p00_uv.x, line_idx)
+		var pl1 = Vector2(p11_uv.x, line_idx)
+		
+		var plv0 = uv_to_view_xform * pl0
+		var plv1 = uv_to_view_xform * pl1
+
+		draw_line(plv0, 
+			plv1, 
+			grid_color_major_axis if line_idx == 0 else grid_color_major, 
+			grid_width_major_axis if line_idx == 0 else grid_width_major)
+
+		draw_string(grid_font, plv0 + Vector2(2, grid_font_size), str(line_idx), HORIZONTAL_ALIGNMENT_LEFT, 
+			-1, grid_font_size)
 
 func _draw() -> void:
+	draw_grid()
 
-	#var viewport_xform:Transform2D = get_uv_to_viewport_xform()
-	#for gizmo in gizmo_list:
-		#var giz_xform:Transform2D
-		#giz_xform.origin = viewport_xform.origin * gizmo.gizmo_transform.origin
-		#gizmo.transform = giz_xform
-		
-		##var giz_xform:Transform2D
-		##giz_xform.origin = 
-		##gizmo.gizmo_transform = 
-##		gizmo.transform = viewport_xform * gizmo.gizmo_transform
-		#gizmo.transform = gizmo.gizmo_transform
-		#pass
 	
 	match select_feature:
 		SelectFeature.VERTEX:
