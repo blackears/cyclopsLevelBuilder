@@ -22,7 +22,6 @@
 # SOFTWARE.
 
 @tool
-
 extends CyclopsSnappingSystem
 class_name SnappingSystemGrid
 

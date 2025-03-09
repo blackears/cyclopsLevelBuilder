@@ -124,7 +124,7 @@ signal xray_mode_changed(value:bool)
 var display_mode:DisplayMode.Type = DisplayMode.Type.MATERIAL
 
 var snap_node_list:Array[CyclopsSnappingSystem]
-
+var snapping_enabled:bool = false
 
 var editor_cache:Dictionary
 var editor_cache_file:String = "user://cyclops_editor_cache.json"

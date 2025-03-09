@@ -21,6 +21,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+##@deprecated: Replaced by cyclops_block.tres
+
 @tool
 extends Node3D
 class_name CyclopsConvexBlockBody
@@ -75,7 +77,6 @@ func build_from_block():
 	collision_shape.shape = null
 
 	if Engine.is_editor_hint():
-#		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 		var global_scene = get_node("/root/CyclopsAutoload")
 		display_mode = global_scene.builder.display_mode
 	

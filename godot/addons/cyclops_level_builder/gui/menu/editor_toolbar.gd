@@ -146,27 +146,6 @@ func build_ui():
 		else:
 			%snap_options.add_item(snap_node.name)
 	
-	#snap_node_list.clear()
-	#var snap_tool_root = editor_plugin.config_scene.get_node("Views/View3D/Snapping")
-	#if snap_tool_root:
-		#for child in snap_tool_root.get_children():
-			#if child is SnapButtonRef && child.snapping_node:
-				#
-				#var snap_node:CyclopsSnappingSystem = child.snapping_node
-				#snap_node_list.append(snap_node)
-				#if snap_node.icon:
-					#%snap_options.add_icon_item(snap_node.icon, snap_node.name)
-				#else:
-					#%snap_options.add_item(snap_node.name)
-				
-		
-	#var config:CyclopsConfig = editor_plugin.config
-	#for tag in config.snapping_tags:
-		#if tag.icon:
-			#%snap_options.add_icon_item(tag.icon, tag.name)
-		#else:
-			#%snap_options.add_item(tag.name)
-
 func update_grid():
 	if !editor_plugin:
 		return
@@ -210,5 +189,6 @@ func _on_snap_options_item_selected(index:int):
 
 
 func _on_bn_snap_toggled(toggled_on):
-	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_ENABLED, toggled_on)
+	editor_plugin.snapping_enabled = toggled_on
+	#CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_ENABLED, toggled_on)
 	pass # Replace with function body.
