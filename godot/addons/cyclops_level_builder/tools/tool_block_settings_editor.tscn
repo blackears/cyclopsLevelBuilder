@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://baccfnd0b5yqv"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_block_settings_editor.gd" id="1_nvmrk"]
+[ext_resource type="Script" uid="uid://dvw7k42u5jja5" path="res://addons/cyclops_level_builder/tools/tool_block_settings_editor.gd" id="1_nvmrk"]
 [ext_resource type="PackedScene" uid="uid://diibmlqy1mpqb" path="res://addons/cyclops_level_builder/gui/controls/numeric_line_edit.tscn" id="2_1r7f8"]
 
 [node name="ToolBlockSettings" type="PanelContainer"]

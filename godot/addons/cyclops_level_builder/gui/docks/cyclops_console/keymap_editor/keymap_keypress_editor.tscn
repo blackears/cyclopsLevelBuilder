@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://h0v0u8a6uk0q"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keymap_keypress_editor.gd" id="1_8yg65"]
+[ext_resource type="Script" uid="uid://c0ajsbv3cgosf" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keymap_keypress_editor.gd" id="1_8yg65"]
 
 [node name="keymap_keypress_editor" type="PanelContainer"]
 size_flags_horizontal = 3

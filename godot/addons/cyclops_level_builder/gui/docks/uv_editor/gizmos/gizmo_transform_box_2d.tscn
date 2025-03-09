@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://f8rglmdeaplp"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_transform_box_2d.gd" id="1_oeixp"]
+[ext_resource type="Script" uid="uid://c3jpxik4gmolp" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_transform_box_2d.gd" id="1_oeixp"]
 [ext_resource type="PackedScene" uid="uid://cqeuqgat4gbol" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_rect_2d.tscn" id="1_oq6jn"]
 
 [node name="GizmoBoxTransform2d" type="Node2D"]

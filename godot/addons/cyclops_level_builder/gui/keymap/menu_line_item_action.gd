@@ -33,45 +33,9 @@
 extends MenuLineItem
 class_name MenuLineItemAction
 
-#@export var enabled:bool = true:
-	#set(value):
-		#if enabled == value:
-			#return
-			#
-		#enabled = value
-		##emit_changed()
-		#menu_tree_changed.emit()
 
 @export var action:CyclopsAction
 
-#@export var name:String:
-	#set(value):
-		#if name == value:
-			#return
-			#
-		#name = value
-		#emit_changed()
-		#menu_tree_changed.emit()
-
-#@export var tooltip:String:
-	#set(value):
-		#if tooltip == value:
-			#return
-			#
-		#tooltip = value
-		##emit_changed()
-		#menu_tree_changed.emit()
-#
-#@export var keypress:KeymapKeypress:
-	#set(value):
-		#if keypress == value:
-			#return
-			#
-		#keypress = value
-		##emit_changed()
-		#menu_tree_changed.emit()
-
-#global id of action to run
 @export var action_id:String:
 	set(value):
 		if action_id == value:

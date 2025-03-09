@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dlouwod012q17"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_editor.gd" id="1_v805t"]
+[ext_resource type="Script" uid="uid://wla1iubfhcf8" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_editor.gd" id="1_v805t"]
 
 [node name="UvEditor" type="Node2D"]
 script = ExtResource("1_v805t")

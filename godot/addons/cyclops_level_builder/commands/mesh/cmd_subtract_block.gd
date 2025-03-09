@@ -87,7 +87,7 @@ func will_change_anything()->bool:
 
 func do_it():
 	var subtrahend_block:CyclopsBlock = builder.get_node(block_to_subtract_path)
-	var snap_to_grid_util:SnapToGridUtil = CyclopsAutoload.calc_snap_to_grid_util()
+	var snap_to_grid_util:SnapToGridUtil = builder.calc_snap_to_grid_util()
 	
 	if start_blocks.is_empty():
 		var subtrahend_vol:ConvexVolume = subtrahend_block.control_mesh

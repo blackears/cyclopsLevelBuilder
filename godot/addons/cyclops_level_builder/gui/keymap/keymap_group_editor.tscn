@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://rpx15l2fbu2o"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/keymap/keymap_group_editor.gd" id="1_51m4b"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keymap_tree_control.gd" id="2_wy8dh"]
+[ext_resource type="Script" uid="uid://c8pf5vu8okw3a" path="res://addons/cyclops_level_builder/gui/keymap/keymap_group_editor.gd" id="1_51m4b"]
+[ext_resource type="Script" uid="uid://bv3rt2x7fy6al" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keymap_tree_control.gd" id="2_wy8dh"]
 
 [node name="KeymapGroupEditor" type="PanelContainer"]
 anchors_preset = 15

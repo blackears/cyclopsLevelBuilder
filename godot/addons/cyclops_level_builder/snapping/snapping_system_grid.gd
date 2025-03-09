@@ -26,14 +26,38 @@
 extends CyclopsSnappingSystem
 class_name SnappingSystemGrid
 
-const SNAPPING_TOOL_ID:String = "grid"
+@export var unit_size:float = 1
 
+@export var use_subdivisions:bool = false
+@export var grid_subdivisions:int = 10
+
+@export var power_of_two_scale:int = 0 #Scaling 2^n
+
+#local transform matrix for grid
+@export var grid_transform:Transform3D = Transform3D.IDENTITY:
+	set(value):
+		grid_transform = value
+#		grid_transform_inv = grid_transform.affine_inverse()
+		
+const SNAPPING_TOOL_ID:String = "grid"
 var snap_to_grid_util:SnapToGridUtil = SnapToGridUtil.new()
 
+func calc_snap_to_grid_util():
+	var snap_to_grid_util:SnapToGridUtil = SnapToGridUtil.new()
+	#print("calc_snap_to_grid_util")
+	snap_to_grid_util.unit_size = unit_size
+	#print("unit_size ", snap_to_grid_util.unit_size)
+	snap_to_grid_util.power_of_two_scale = power_of_two_scale
+	#print("power_of_two_scale ", snap_to_grid_util.power_of_two_scale)
+	snap_to_grid_util.use_subdivisions = use_subdivisions
+	snap_to_grid_util.grid_subdivisions = grid_subdivisions
+	snap_to_grid_util.grid_transform = grid_transform
+	return snap_to_grid_util
+	
 func _activate(plugin:CyclopsLevelBuilder):
 	super._activate(plugin)
 	
-	snap_to_grid_util = plugin.get_global_scene().calc_snap_to_grid_util()
+	snap_to_grid_util = calc_snap_to_grid_util()
 
 	var cache:Dictionary = plugin.get_snapping_cache(SNAPPING_TOOL_ID)
 	snap_to_grid_util.load_from_cache(cache)
@@ -64,5 +88,3 @@ func _get_properties_editor()->Control:
 	
 	return ed
 	
-
-

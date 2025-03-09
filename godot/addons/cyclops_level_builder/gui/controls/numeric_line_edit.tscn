@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://diibmlqy1mpqb"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/controls/numeric_line_edit.gd" id="1_u8bpo"]
+[ext_resource type="Script" uid="uid://pcf2ij8eycw5" path="res://addons/cyclops_level_builder/gui/controls/numeric_line_edit.gd" id="1_u8bpo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o7f15"]
 bg_color = Color(0.0627451, 0.0627451, 0.0627451, 1)

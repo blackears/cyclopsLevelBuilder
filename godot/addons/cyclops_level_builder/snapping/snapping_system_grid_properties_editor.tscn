@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://c165arqp73p1k"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/snapping/snapping_system_grid_properties_editor.gd" id="1_jva1e"]
+[ext_resource type="Script" uid="uid://csxvget1i4ano" path="res://addons/cyclops_level_builder/snapping/snapping_system_grid_properties_editor.gd" id="1_jva1e"]
 [ext_resource type="PackedScene" uid="uid://diibmlqy1mpqb" path="res://addons/cyclops_level_builder/gui/controls/numeric_line_edit.tscn" id="2_3bhn6"]
 [ext_resource type="PackedScene" uid="uid://cphtpklx81l3w" path="res://addons/cyclops_level_builder/gui/controls/vector3_edit.tscn" id="2_beo4d"]
 

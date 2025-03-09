@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://tkp4i7e1fs5"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/line_input.gd" id="1_5x46h"]
+[ext_resource type="Script" uid="uid://sx007ta0m3qt" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/line_input.gd" id="1_5x46h"]
 
 [node name="LineInput" type="PopupPanel"]
 title = "Input"

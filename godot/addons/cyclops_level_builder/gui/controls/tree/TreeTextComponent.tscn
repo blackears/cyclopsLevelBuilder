@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://7xg6fyk4dust"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/controls/tree/TreeTextComponent.gd" id="1_eruho"]
+[ext_resource type="Script" uid="uid://dppysjxqork7q" path="res://addons/cyclops_level_builder/gui/controls/tree/TreeTextComponent.gd" id="1_eruho"]
 
 [node name="TreeTextLine" type="PanelContainer"]
 offset_right = 216.0

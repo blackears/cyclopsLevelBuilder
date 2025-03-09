@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b5gbl43t5l1f"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/overlays/overlays_dock.gd" id="1_e80t4"]
+[ext_resource type="Script" uid="uid://cxu4huubbg7wk" path="res://addons/cyclops_level_builder/gui/docks/overlays/overlays_dock.gd" id="1_e80t4"]
 
 [node name="Overlays" type="PanelContainer"]
 anchors_preset = 15

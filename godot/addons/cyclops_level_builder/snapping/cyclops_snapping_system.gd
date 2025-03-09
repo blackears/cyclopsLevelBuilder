@@ -22,9 +22,11 @@
 # SOFTWARE.
 
 @tool
-
-extends Resource
+extends Node
 class_name CyclopsSnappingSystem
+
+@export var icon:Texture2D
+@export_multiline var tooltip:String
 
 var move_constraint:MoveConstraint.Type = MoveConstraint.Type.NONE
 
@@ -63,5 +65,3 @@ func constrain_point(point:Vector3, target_point:Vector3, move_constraint:MoveCo
 			return Vector3(point.x, target_point.y, target_point.z)
 		_:
 			return point
-
-

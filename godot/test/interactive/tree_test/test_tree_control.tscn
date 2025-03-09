@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bhuaw5k7xsl4i"]
 
-[ext_resource type="Script" path="res://test/interactive/tree_test/test_tree_control.gd" id="1_wp26p"]
+[ext_resource type="Script" uid="uid://h0v800axj245" path="res://test/interactive/tree_test/test_tree_control.gd" id="1_wp26p"]
 [ext_resource type="PackedScene" uid="uid://tkp4i7e1fs5" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/line_input.tscn" id="2_q2qc1"]
 
 [node name="Tree" type="Tree"]

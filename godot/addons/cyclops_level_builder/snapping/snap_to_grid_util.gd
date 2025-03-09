@@ -88,5 +88,3 @@ func snap_point(point:Vector3)->Vector3:
 func _to_string():
 	return "unit_size %s  use_subdiv %s  subdiv %s  pot %s  xform %s" \
 		% [unit_size, use_subdivisions, grid_subdivisions, power_of_two_scale, grid_transform]
-
-

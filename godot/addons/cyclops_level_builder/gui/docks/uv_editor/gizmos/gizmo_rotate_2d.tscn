@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cog5ydvgh415s"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_rotate_2d.gd" id="1_ym4v0"]
+[ext_resource type="Script" uid="uid://boo7xbir7iwej" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_rotate_2d.gd" id="1_ym4v0"]
 [ext_resource type="PackedScene" uid="uid://b603dpvw374p0" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_ring_2d.tscn" id="2_xa4cn"]
 
 [node name="GizmoRotate" type="Node2D"]

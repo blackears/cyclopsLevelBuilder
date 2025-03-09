@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cuykufmlg2unb"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/controls/vertex_billboard.gd" id="1_cman8"]
+[ext_resource type="Script" uid="uid://dba05bltvkfep" path="res://addons/cyclops_level_builder/gui/controls/vertex_billboard.gd" id="1_cman8"]
 [ext_resource type="Material" uid="uid://rtk56g3h03nt" path="res://addons/cyclops_level_builder/materials/vertex_active_material.tres" id="2_ov23w"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_5jfb0"]

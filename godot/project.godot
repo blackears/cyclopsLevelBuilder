@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="Cyclops Level Builder"
-run/main_scene="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_editor_test.tscn"
-config/features=PackedStringArray("4.3", "GL Compatibility")
+run/main_scene="uid://b4ju5h8ydm0jh"
+config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]

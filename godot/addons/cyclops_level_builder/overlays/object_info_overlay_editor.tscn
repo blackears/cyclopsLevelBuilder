@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cp1paeksdjjmg"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/overlays/object_info_overlay_editor.gd" id="1_tapmw"]
+[ext_resource type="Script" uid="uid://cvpiljrvdj37h" path="res://addons/cyclops_level_builder/overlays/object_info_overlay_editor.gd" id="1_tapmw"]
 
 [node name="InfoOverlay" type="PanelContainer"]
 anchors_preset = 15

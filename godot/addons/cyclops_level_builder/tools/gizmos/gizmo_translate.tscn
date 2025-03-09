@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://2pi622xycrd6"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/gizmos/gizmo_translate.gd" id="1_fyqe0"]
+[ext_resource type="Script" uid="uid://bhg4iw3miqrf2" path="res://addons/cyclops_level_builder/tools/gizmos/gizmo_translate.gd" id="1_fyqe0"]
 [ext_resource type="PackedScene" uid="uid://ujq3kes2sdfu" path="res://addons/cyclops_level_builder/art/gizmos/gizmo_translate.glb" id="1_ljs46"]
 [ext_resource type="Material" uid="uid://bv4k8o22vl6ub" path="res://addons/cyclops_level_builder/materials/gizmo_axis_y_material.tres" id="3_tsii4"]
 [ext_resource type="Material" uid="uid://divsg4lq712rw" path="res://addons/cyclops_level_builder/materials/gizmo_axis_z_material.tres" id="4_0qd8v"]

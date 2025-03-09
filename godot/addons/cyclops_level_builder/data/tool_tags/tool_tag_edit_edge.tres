@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="ToolTag" load_steps=5 format=3 uid="uid://dub6oyal5fxly"]
 
 [ext_resource type="Texture2D" uid="uid://d2da2j8ve48rt" path="res://addons/cyclops_level_builder/art/icons/select_edge.svg" id="1_6o0d8"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/tool_tag.gd" id="1_w2hsk"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_edit_edge.gd" id="3_6rili"]
+[ext_resource type="Script" uid="uid://c6mrqg0hgbe04" path="res://addons/cyclops_level_builder/resources/tool_tag.gd" id="1_w2hsk"]
+[ext_resource type="Script" uid="uid://d2o35e4g3b7af" path="res://addons/cyclops_level_builder/tools/tool_edit_edge.gd" id="3_6rili"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_k6fuk"]
 device = -1

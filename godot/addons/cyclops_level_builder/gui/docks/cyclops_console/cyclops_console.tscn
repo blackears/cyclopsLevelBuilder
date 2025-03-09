@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cbo80g1hbom2"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/cyclops_console.gd" id="1_f4kro"]
+[ext_resource type="Script" uid="uid://cgdu3bkbagstk" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/cyclops_console.gd" id="1_f4kro"]
 [ext_resource type="PackedScene" uid="uid://cphtpklx81l3w" path="res://addons/cyclops_level_builder/gui/controls/vector3_edit.tscn" id="2_qpx41"]
 [ext_resource type="PackedScene" uid="uid://6ox14xmdrbgw" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keymap_editor.tscn" id="3_5uopq"]
 

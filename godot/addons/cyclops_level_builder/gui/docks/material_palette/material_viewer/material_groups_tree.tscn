@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cchlfqbh0djdn"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/material_groups_tree.gd" id="1_u4dlj"]
+[ext_resource type="Script" uid="uid://nbqh0sd2p0vh" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/material_groups_tree.gd" id="1_u4dlj"]
 [ext_resource type="PackedScene" uid="uid://b510d4yme5xtx" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/create_material_dialog.tscn" id="2_adfk6"]
 
 [node name="MatGroupTree" type="Tree"]
