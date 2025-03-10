@@ -1,0 +1,49 @@
+[gd_scene load_steps=2 format=3 uid="uid://sm5ha5rexkwl"]
+
+[ext_resource type="Script" uid="uid://dya1isa1h7fvy" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping_grid_editor.gd" id="1_kuusj"]
+
+[node name="UvEditorSnappingGridEditor" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -963.0
+offset_bottom = -512.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kuusj")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Grid Spacing"
+
+[node name="spin_grid_spacing" type="SpinBox" parent="GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Grid Offset X"
+
+[node name="spin_grid_offset_x" type="SpinBox" parent="GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Grid Offset Y"
+
+[node name="spin_grid_offset_y" type="SpinBox" parent="GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label4" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Rotation"
+
+[node name="spin_rotation" type="SpinBox" parent="GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2

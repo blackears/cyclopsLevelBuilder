@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c5foyyiey2ts6"]
+
+[ext_resource type="Script" uid="uid://5shtfh4pg660" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping_vertex.gd" id="1_6emvt"]
+
+[node name="UvEditorSnappingVertex" type="Node"]
+script = ExtResource("1_6emvt")

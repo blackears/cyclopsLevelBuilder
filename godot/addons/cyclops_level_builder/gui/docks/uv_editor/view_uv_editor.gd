@@ -77,6 +77,10 @@ func build_menus():
 	if !is_node_ready():
 		return
 	
+	%option_snapping.clear()
+	for child in %snapping.get_children():
+		%option_snapping.add_icon_item(child.icon, child.name)
+	
 	for child in %MenuBar.get_children():
 		%MenuBar.remove_child(child)
 		child.queue_free()
@@ -171,6 +175,12 @@ func load_state(state:Dictionary):
 func _ready() -> void:
 	build_menus()
 	%SubViewportContainer.set_process_input(true)
+	
+	var snapping_node = %snapping.get_child(0)
+	var ed:Control = snapping_node.get_editor()
+	%snapping_panel.add_child(ed)
+	%tab_insets.current_tab = -1
+
 	pass # Replace with function body.
 
 
@@ -244,3 +254,17 @@ func _on_uv_editor_proj_transform_changed(xform: Transform2D) -> void:
 func viewport_transform_changed():
 	if active_tool:
 		active_tool._draw_tool(null)
+
+
+func _on_option_snapping_item_selected(index: int) -> void:
+	var snapping_node = %snapping.get_child(index)
+	var ed:Control = snapping_node.get_editor()
+	
+	if %snapping_panel.get_child_count() > 0:
+		var child = %snapping_panel.get_child(0)
+		child.queue_free()
+	
+	#print("swithing to ed ", ed.name, " ")
+	%snapping_panel.add_child(ed)
+	
+	pass # Replace with function body.

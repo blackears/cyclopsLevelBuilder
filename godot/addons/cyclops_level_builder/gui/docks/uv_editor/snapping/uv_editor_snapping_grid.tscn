@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://c0lu4ngf886yl"]
+
+[ext_resource type="Script" uid="uid://b3wl2p04rjkyy" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping_grid.gd" id="1_ns5dq"]
+
+[node name="UvEditorSnappingGrid" type="Node"]
+script = ExtResource("1_ns5dq")
+icon = null
