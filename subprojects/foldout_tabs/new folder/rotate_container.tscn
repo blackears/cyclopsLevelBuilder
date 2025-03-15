@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bkhqdo54nlqkn"]
+
+[ext_resource type="Script" uid="uid://2c5xd0fwaucl" path="res://new folder/rotate_container.gd" id="1_qlx1e"]
+
+[node name="RotationContainer" type="Container"]
+script = ExtResource("1_qlx1e")

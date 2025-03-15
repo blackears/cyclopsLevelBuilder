@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://cvxqtmwu55gpd"]
+
+[node name="PanelContainer" type="PanelContainer"]
+metadata/_tab_index = 2
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="GridContainer"]
+layout_mode = 2
+text = "fffff"
