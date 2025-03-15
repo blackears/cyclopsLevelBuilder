@@ -35,6 +35,7 @@ func _ready() -> void:
 	h_drag_bar.color = Color.GREEN
 	h_drag_bar.custom_minimum_size = Vector2(drag_bar_width, 0)
 	add_child(h_drag_bar)
+	h_drag_bar.mouse_default_cursor_shape = Control.CURSOR_HSIZE
 	
 	h_drag_bar.gui_input.connect(on_h_drag_bar_gui_input)
 
@@ -98,7 +99,7 @@ func reposition_children():
 		if child == h_drag_bar:
 			continue
 	
-		var rect:Rect2 = Rect2(drag_bar_width, 0, cur_size.x - drag_bar_width, cur_size.y)
+		var rect:Rect2 = Rect2(drag_bar_width, v_scroll, cur_size.x - drag_bar_width, cur_size.y)
 		fit_child_in_rect(child, rect)
 		print("fit rect ", rect)
 		#child.size = rect.size
@@ -123,12 +124,17 @@ func _on_gui_input(event: InputEvent) -> void:
 		
 		if e.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			if e.is_pressed():
-				v_scroll -= v_scroll_increment
+				v_scroll = min(0, v_scroll + v_scroll_increment)
 				accept_event()
+				reposition_children()
 				pass
 		
 		if e.button_index == MOUSE_BUTTON_WHEEL_UP:
 			if e.is_pressed():
-				v_scroll += v_scroll_increment
+				var child_size:Vector2 = get_min_combined_child_size()
+				var overflow:float = max(child_size.y - size.y, 0)
+				
+				v_scroll = max(-overflow, v_scroll - v_scroll_increment)
 				accept_event()
+				reposition_children()
 				pass
