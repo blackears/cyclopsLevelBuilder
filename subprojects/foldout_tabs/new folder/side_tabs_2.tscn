@@ -13,7 +13,17 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_3jxh3")
 
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Background"
+
 [node name="ColorRect" type="ColorRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,6 +32,12 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.712129, 0.712129, 0.712129, 1)
 metadata/_edit_lock_ = true
+
+[node name="Control" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 274.0
+offset_bottom = 254.0
+mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -32,107 +48,118 @@ anchor_bottom = 1.0
 offset_left = -42.0
 grow_horizontal = 0
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="side_slide_container" parent="HBoxContainer" instance=ExtResource("2_tomd8")]
 custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="HBoxContainer/side_slide_container"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/side_slide_container"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/side_slide_container/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 columns = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="Label" type="Label" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "width"
 
-[node name="CheckBox" type="CheckBox" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="CheckBox" type="CheckBox" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="Label2" type="Label" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "height"
 
-[node name="CheckButton" type="CheckButton" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="CheckButton" type="CheckButton" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="Label3" type="Label" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "foobar"
 
-[node name="SpinBox" type="SpinBox" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="SpinBox" type="SpinBox" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 
-[node name="Label4" type="Label" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="Label4" type="Label" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "width
 "
 
-[node name="CheckBox2" type="CheckBox" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="CheckBox2" type="CheckBox" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 
-[node name="Label5" type="Label" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="Label5" type="Label" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "height"
 
-[node name="CheckButton2" type="CheckButton" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="CheckButton2" type="CheckButton" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 
-[node name="Label6" type="Label" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="Label6" type="Label" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "foobar"
 
-[node name="SpinBox2" type="SpinBox" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="SpinBox2" type="SpinBox" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 
-[node name="Label7" type="Label" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="Label7" type="Label" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "width
 "
 
-[node name="CheckBox3" type="CheckBox" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="CheckBox3" type="CheckBox" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 
-[node name="Label8" type="Label" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="Label8" type="Label" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "height"
 
-[node name="CheckButton3" type="CheckButton" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="CheckButton3" type="CheckButton" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 
-[node name="Label9" type="Label" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="Label9" type="Label" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "foobar"
 
-[node name="SpinBox3" type="SpinBox" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="SpinBox3" type="SpinBox" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 
-[node name="Label10" type="Label" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="Label10" type="Label" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "width
 "
 
-[node name="CheckBox4" type="CheckBox" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="CheckBox4" type="CheckBox" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 
-[node name="Label11" type="Label" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="Label11" type="Label" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "height"
 
-[node name="CheckButton4" type="CheckButton" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="CheckButton4" type="CheckButton" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 
-[node name="Label12" type="Label" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="Label12" type="Label" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "foobar"
 
-[node name="SpinBox4" type="SpinBox" parent="HBoxContainer/side_slide_container/GridContainer"]
+[node name="SpinBox4" type="SpinBox" parent="HBoxContainer/side_slide_container/VBoxContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="Control" type="Control" parent="HBoxContainer/side_slide_container/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
+mouse_filter = 2
 horizontal_scroll_mode = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ScrollContainer"]

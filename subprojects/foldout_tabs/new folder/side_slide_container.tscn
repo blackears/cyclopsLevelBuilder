@@ -4,6 +4,7 @@
 
 [node name="side_slide_container" type="Container"]
 clip_contents = true
+mouse_filter = 2
 script = ExtResource("1_6kpx5")
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
