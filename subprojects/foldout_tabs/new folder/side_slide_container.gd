@@ -138,3 +138,15 @@ func _on_gui_input(event: InputEvent) -> void:
 				accept_event()
 				reposition_children()
 				pass
+
+
+func _on_resized() -> void:
+	if !is_node_ready():
+		return
+		
+	var child_size:Vector2 = get_min_combined_child_size()
+	var overflow:float = max(child_size.y - size.y, 0)
+	v_scroll = max(-overflow, v_scroll)
+	
+	reposition_children()
+	pass # Replace with function body.

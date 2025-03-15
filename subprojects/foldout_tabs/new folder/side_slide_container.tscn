@@ -7,3 +7,4 @@ clip_contents = true
 script = ExtResource("1_6kpx5")
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="resized" from="." to="." method="_on_resized"]
