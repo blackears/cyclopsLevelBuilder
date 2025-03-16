@@ -1,0 +1,53 @@
+[gd_scene load_steps=3 format=3 uid="uid://bxow6w186vd5c"]
+
+[ext_resource type="Script" uid="uid://dsbcwya5to3y4" path="res://new folder/vertical_tab_bar.gd" id="1_jq162"]
+[ext_resource type="PackedScene" uid="uid://bkhqdo54nlqkn" path="res://new folder/rotate_container.tscn" id="1_p2umk"]
+
+[node name="vertical_tab_bar" type="ScrollContainer"]
+offset_right = 31.0
+offset_bottom = 416.0
+size_flags_horizontal = 10
+mouse_filter = 2
+horizontal_scroll_mode = 0
+script = ExtResource("1_jq162")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="RotationContainer" parent="VBoxContainer" instance=ExtResource("1_p2umk")]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Button" parent="VBoxContainer/RotationContainer"]
+layout_mode = 2
+toggle_mode = true
+text = "Option 1"
+
+[node name="RotationContainer2" parent="VBoxContainer" instance=ExtResource("1_p2umk")]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Button" parent="VBoxContainer/RotationContainer2"]
+layout_mode = 2
+toggle_mode = true
+text = "Option 2"
+
+[node name="RotationContainer3" parent="VBoxContainer" instance=ExtResource("1_p2umk")]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Button" parent="VBoxContainer/RotationContainer3"]
+layout_mode = 2
+toggle_mode = true
+text = "bbbbb"
+
+[node name="RotationContainer4" parent="VBoxContainer" instance=ExtResource("1_p2umk")]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Button" parent="VBoxContainer/RotationContainer4"]
+layout_mode = 2
+toggle_mode = true
+text = "vvvvv"

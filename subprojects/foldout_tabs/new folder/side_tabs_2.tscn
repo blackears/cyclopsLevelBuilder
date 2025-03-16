@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://iv3ptsbfdd1b"]
+[gd_scene load_steps=5 format=3 uid="uid://iv3ptsbfdd1b"]
 
 [ext_resource type="Script" uid="uid://jolotbgel0xe" path="res://new folder/side_tabs.gd" id="1_3jxh3"]
 [ext_resource type="PackedScene" uid="uid://bkhqdo54nlqkn" path="res://new folder/rotate_container.tscn" id="2_qgdoc"]
 [ext_resource type="PackedScene" uid="uid://bfbrxtkx738bi" path="res://new folder/side_slide_container.tscn" id="2_tomd8"]
+[ext_resource type="PackedScene" uid="uid://bxow6w186vd5c" path="res://new folder/vertical_tab_bar.tscn" id="3_tomd8"]
 
 [node name="SideTabs" type="Control"]
 layout_mode = 3
@@ -21,6 +22,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Background"
+
+[node name="OptionButton" type="OptionButton" parent="."]
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 20.0
+selected = 0
+item_count = 2
+popup/item_0/text = "Foo"
+popup/item_0/id = 0
+popup/item_1/text = "Bar"
+popup/item_1/id = 1
 
 [node name="ColorRect" type="ColorRect" parent="."]
 visible = false
@@ -53,6 +65,8 @@ mouse_filter = 2
 [node name="side_slide_container" parent="HBoxContainer" instance=ExtResource("2_tomd8")]
 custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
+mouse_filter = 1
+active_tab_index = -1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/side_slide_container"]
 layout_mode = 2
@@ -156,27 +170,52 @@ layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer"]
+[node name="vertical_tab_bar" parent="HBoxContainer" instance=ExtResource("3_tomd8")]
+layout_mode = 2
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="HBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 10
 mouse_filter = 2
 horizontal_scroll_mode = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ScrollContainer2"]
 layout_mode = 2
+mouse_filter = 2
 
-[node name="RotationContainer" parent="HBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("2_qgdoc")]
+[node name="RotationContainer" parent="HBoxContainer/ScrollContainer2/VBoxContainer" instance=ExtResource("2_qgdoc")]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/RotationContainer"]
+[node name="Label" type="Button" parent="HBoxContainer/ScrollContainer2/VBoxContainer/RotationContainer"]
 layout_mode = 2
+toggle_mode = true
 text = "Option 1"
 
-[node name="RotationContainer2" parent="HBoxContainer/ScrollContainer/VBoxContainer" instance=ExtResource("2_qgdoc")]
+[node name="RotationContainer2" parent="HBoxContainer/ScrollContainer2/VBoxContainer" instance=ExtResource("2_qgdoc")]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Label" type="Label" parent="HBoxContainer/ScrollContainer/VBoxContainer/RotationContainer2"]
+[node name="Label" type="Button" parent="HBoxContainer/ScrollContainer2/VBoxContainer/RotationContainer2"]
 layout_mode = 2
+toggle_mode = true
+text = "Option 2"
+
+[node name="RotationContainer3" parent="HBoxContainer/ScrollContainer2/VBoxContainer" instance=ExtResource("2_qgdoc")]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Button" parent="HBoxContainer/ScrollContainer2/VBoxContainer/RotationContainer3"]
+layout_mode = 2
+toggle_mode = true
+text = "Option 2"
+
+[node name="RotationContainer4" parent="HBoxContainer/ScrollContainer2/VBoxContainer" instance=ExtResource("2_qgdoc")]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Button" parent="HBoxContainer/ScrollContainer2/VBoxContainer/RotationContainer4"]
+layout_mode = 2
+toggle_mode = true
 text = "Option 2"

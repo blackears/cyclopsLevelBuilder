@@ -20,7 +20,12 @@ extends Container
 		if is_node_ready():
 			update_min_size()
 
+@export var active_tab_index:int = -1:
+	set(v):
+		active_tab_index = v
+
 var h_drag_bar:ColorRect
+var vert_tab_bar:VerticalTabBar
 
 var dragging:bool = false
 var drag_start:Vector2
@@ -38,6 +43,14 @@ func _ready() -> void:
 	h_drag_bar.mouse_default_cursor_shape = Control.CURSOR_HSIZE
 	
 	h_drag_bar.gui_input.connect(on_h_drag_bar_gui_input)
+	
+	vert_tab_bar = preload("res://new folder/vertical_tab_bar.tscn").instantiate()
+	add_child(vert_tab_bar)
+
+#	vert_tab_bar.add_item("george")
+	
+	build_tabs()
+
 
 func on_h_drag_bar_gui_input(event:InputEvent):
 	if event is InputEventMouseButton:
@@ -67,14 +80,14 @@ func on_h_drag_bar_gui_input(event:InputEvent):
 	#print("min_siize ", min_size)
 	#return min_size
 func update_min_size():
-	var min_size = Vector2(drag_bar_width + content_width, 0)
+	var min_size = Vector2(drag_bar_width + content_width + vert_tab_bar.get_button_width(), 0)
 	print("min_size ", min_size)
 	custom_minimum_size = min_size
 
 func get_min_combined_child_size()->Vector2:
 	var children_size:Vector2
 	for child in get_children():
-		if child == h_drag_bar:
+		if child == h_drag_bar || child == vert_tab_bar:
 			continue
 		
 		var min_size:Vector2 = child.get_minimum_size()
@@ -91,15 +104,19 @@ func reposition_children():
 	
 	var min_child_size:Vector2 = get_min_combined_child_size()
 	
+	var tab_width:float = vert_tab_bar.get_button_width()
 	
 	h_drag_bar.position = Vector2(0, 0)
 	h_drag_bar.size = Vector2(drag_bar_width, min(cur_size.y, min_child_size.y))
 	
+	vert_tab_bar.position = Vector2(size.x - tab_width, 0)
+	vert_tab_bar.size = Vector2(tab_width, cur_size.y)
+	
 	for child in get_children():
-		if child == h_drag_bar:
+		if child == h_drag_bar || child == vert_tab_bar:
 			continue
 	
-		var rect:Rect2 = Rect2(drag_bar_width, v_scroll, cur_size.x - drag_bar_width, cur_size.y)
+		var rect:Rect2 = Rect2(drag_bar_width, v_scroll, cur_size.x - drag_bar_width - tab_width, cur_size.y)
 		fit_child_in_rect(child, rect)
 		print("fit rect ", rect)
 		#child.size = rect.size
@@ -149,4 +166,31 @@ func _on_resized() -> void:
 	v_scroll = max(-overflow, v_scroll)
 	
 	reposition_children()
+	pass # Replace with function body.
+
+func build_tabs():
+	if !vert_tab_bar:
+		return
+	
+	vert_tab_bar.clear()
+	
+	for child in get_children():
+		if child == vert_tab_bar || child == h_drag_bar:
+			continue
+		vert_tab_bar.add_item(child.name)
+	
+	pass
+
+func _on_child_entered_tree(node: Node) -> void:
+	build_tabs()
+	pass # Replace with function body.
+
+
+func _on_child_exiting_tree(node: Node) -> void:
+	build_tabs()
+	pass # Replace with function body.
+
+
+func _on_child_order_changed() -> void:
+	build_tabs()
 	pass # Replace with function body.
