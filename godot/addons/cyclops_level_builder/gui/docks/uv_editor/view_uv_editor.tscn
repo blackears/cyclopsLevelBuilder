@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cw1yjv8t33ii0"]
+[gd_scene load_steps=12 format=3 uid="uid://cw1yjv8t33ii0"]
 
 [ext_resource type="Script" uid="uid://5l6u428jo0ce" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/view_uv_editor.gd" id="1_bjwq8"]
 [ext_resource type="PackedScene" uid="uid://dlouwod012q17" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_editor.tscn" id="2_iavjh"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://c0x011okomj8n" path="res://addons/cyclops_level_builder/art/icons/snap_vertex.svg" id="5_uwi28"]
 [ext_resource type="Script" uid="uid://b3wl2p04rjkyy" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping_grid.gd" id="6_nc8ii"]
 [ext_resource type="Script" uid="uid://5shtfh4pg660" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping_vertex.gd" id="7_t0xtm"]
+[ext_resource type="PackedScene" uid="uid://ndnt8ct4y5mq" path="res://addons/cyclops_level_builder/gui/controls/side_tab_container.tscn" id="8_68wq3"]
 
 [sub_resource type="World3D" id="World3D_bxn6v"]
 
@@ -122,39 +123,39 @@ popup/item_1/text = "Vertex"
 popup/item_1/icon = ExtResource("5_uwi28")
 popup/item_1/id = 1
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="VBoxContainer"]
-unique_name_in_owner = true
+[node name="Control" type="Control" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="VBoxContainer/Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_vertical = 3
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="VBoxContainer/SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="VBoxContainer/Control/SubViewportContainer"]
 own_world_3d = true
 world_3d = SubResource("World3D_bxn6v")
 handle_input_locally = false
 size = Vector2i(1152, 612)
 render_target_update_mode = 4
 
-[node name="uv_editor" parent="VBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("2_iavjh")]
+[node name="uv_editor" parent="VBoxContainer/Control/SubViewportContainer/SubViewport" instance=ExtResource("2_iavjh")]
 unique_name_in_owner = true
 face_sel_color = Color(0.5, 0.5, 0.5, 0.4)
 
-[node name="tab_insets" type="TabContainer" parent="."]
+[node name="SideTabContainer" parent="VBoxContainer/Control" instance=ExtResource("8_68wq3")]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 0
-current_tab = 0
-deselect_enabled = true
-
-[node name="snapping_panel" type="PanelContainer" parent="tab_insets"]
-unique_name_in_owner = true
-layout_mode = 2
-metadata/_tab_index = 0
+anchors_preset = 11
+anchor_left = 1.0
+offset_left = -4.0
+grow_horizontal = 0
 
 [node name="snapping" type="Node" parent="."]
 unique_name_in_owner = true
@@ -177,6 +178,6 @@ metadata/_custom_type_script = "uid://5shtfh4pg660"
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer3/sticky/sticky_shared_vertex" to="." method="_on_sticky_shared_vertex_pressed"]
 [connection signal="toggled" from="VBoxContainer/PanelContainer/HBoxContainer3/check_sync_with_mesh" to="." method="_on_check_sync_with_mesh_toggled"]
 [connection signal="item_selected" from="VBoxContainer/PanelContainer/HBoxContainer3/option_snapping" to="." method="_on_option_snapping_item_selected"]
-[connection signal="gui_input" from="VBoxContainer/SubViewportContainer" to="." method="_on_sub_viewport_container_gui_input"]
-[connection signal="resized" from="VBoxContainer/SubViewportContainer" to="." method="_on_sub_viewport_container_resized"]
-[connection signal="proj_transform_changed" from="VBoxContainer/SubViewportContainer/SubViewport/uv_editor" to="." method="_on_uv_editor_proj_transform_changed"]
+[connection signal="gui_input" from="VBoxContainer/Control/SubViewportContainer" to="." method="_on_sub_viewport_container_gui_input"]
+[connection signal="resized" from="VBoxContainer/Control/SubViewportContainer" to="." method="_on_sub_viewport_container_resized"]
+[connection signal="proj_transform_changed" from="VBoxContainer/Control/SubViewportContainer/SubViewport/uv_editor" to="." method="_on_uv_editor_proj_transform_changed"]

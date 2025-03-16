@@ -49,6 +49,7 @@ var plugin:CyclopsLevelBuilder:
 
 var active_tool:CyclopsTool
 
+var snapping_panel:PanelContainer
 
 #func _input(event: InputEvent) -> void:
 	#print("view uv ed ", event)
@@ -169,17 +170,22 @@ func load_state(state:Dictionary):
 		return
 	
 	var substate:Dictionary = state["uv_editor"]
-#
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	build_menus()
 	%SubViewportContainer.set_process_input(true)
 	
+	snapping_panel = PanelContainer.new()
+	snapping_panel.name = "Snapping"
+	%SideTabContainer.add_control(snapping_panel)
+	
 	var snapping_node = %snapping.get_child(0)
 	var ed:Control = snapping_node.get_editor()
-	%snapping_panel.add_child(ed)
-	%tab_insets.current_tab = -1
+#	%snapping_panel.add_child(ed)
+	snapping_panel.add_child(ed)
+#	%tab_insets.current_tab = -1
 
 	pass # Replace with function body.
 
@@ -260,11 +266,11 @@ func _on_option_snapping_item_selected(index: int) -> void:
 	var snapping_node = %snapping.get_child(index)
 	var ed:Control = snapping_node.get_editor()
 	
-	if %snapping_panel.get_child_count() > 0:
-		var child = %snapping_panel.get_child(0)
+	if snapping_panel.get_child_count() > 0:
+		var child = snapping_panel.get_child(0)
 		child.queue_free()
 	
 	#print("swithing to ed ", ed.name, " ")
-	%snapping_panel.add_child(ed)
+	snapping_panel.add_child(ed)
 	
 	pass # Replace with function body.
