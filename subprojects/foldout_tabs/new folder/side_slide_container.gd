@@ -20,9 +20,12 @@ extends Container
 		if is_node_ready():
 			update_min_size()
 
-@export var active_tab_index:int = -1:
+@export var active_tab_index:int = 0:
 	set(v):
 		active_tab_index = v
+		
+		if is_node_ready():
+			update_active_child()
 
 var h_drag_bar:ColorRect
 var vert_tab_bar:VerticalTabBar
@@ -34,6 +37,12 @@ var drag_start_content_width:float
 
 var v_scroll:float = 0
 var v_scroll_increment:float = 10
+
+func update_active_child():
+	for i in get_child_count():
+		var child = get_child(i)
+		if "visible" in child:
+			child.visible = i == active_tab_index
 
 func _ready() -> void:
 	h_drag_bar = ColorRect.new()
@@ -75,12 +84,22 @@ func on_h_drag_bar_gui_input(event:InputEvent):
 			content_width = max(drag_start_content_width - offset.x, 0)
 			#%foldout_base_panel.custom_minimum_size.x = start_min_size.x - offset.x
 
+func get_active_child_size()->Vector2:
+	if active_tab_index != -1 && active_tab_index < get_child_count():
+		var active_child = get_child(active_tab_index)
+		if active_child is Control:
+			return active_child.get_minimum_size()
+	return Vector2.ZERO
+	
+
 #func _get_minimum_size() -> Vector2:
 	#var min_size = Vector2(drag_bar_width + content_width, 0)
 	#print("min_siize ", min_size)
 	#return min_size
 func update_min_size():
-	var min_size = Vector2(drag_bar_width + content_width + vert_tab_bar.get_button_width(), 0)
+	var middle:float = max(content_width, get_active_child_size().x)
+	
+	var min_size = Vector2(drag_bar_width + middle + vert_tab_bar.get_button_width(), 0)
 	print("min_size ", min_size)
 	custom_minimum_size = min_size
 
@@ -102,7 +121,8 @@ func reposition_children():
 	var cur_size = size
 	print("size ", size)
 	
-	var min_child_size:Vector2 = get_min_combined_child_size()
+#	var min_child_size:Vector2 = get_min_combined_child_size()
+	var min_child_size:Vector2 = get_active_child_size()
 	
 	var tab_width:float = vert_tab_bar.get_button_width()
 	
@@ -119,6 +139,7 @@ func reposition_children():
 		var rect:Rect2 = Rect2(drag_bar_width, v_scroll, cur_size.x - drag_bar_width - tab_width, cur_size.y)
 		fit_child_in_rect(child, rect)
 		print("fit rect ", rect)
+		#child.clip_contents = true
 		#child.size = rect.size
 	pass
 
@@ -148,7 +169,7 @@ func _on_gui_input(event: InputEvent) -> void:
 		
 		if e.button_index == MOUSE_BUTTON_WHEEL_UP:
 			if e.is_pressed():
-				var child_size:Vector2 = get_min_combined_child_size()
+				var child_size:Vector2 = get_active_child_size()
 				var overflow:float = max(child_size.y - size.y, 0)
 				
 				v_scroll = max(-overflow, v_scroll - v_scroll_increment)
@@ -161,7 +182,7 @@ func _on_resized() -> void:
 	if !is_node_ready():
 		return
 		
-	var child_size:Vector2 = get_min_combined_child_size()
+	var child_size:Vector2 = get_active_child_size()
 	var overflow:float = max(child_size.y - size.y, 0)
 	v_scroll = max(-overflow, v_scroll)
 	

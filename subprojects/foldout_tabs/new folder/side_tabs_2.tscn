@@ -63,10 +63,11 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="side_slide_container" parent="HBoxContainer" instance=ExtResource("2_tomd8")]
-custom_minimum_size = Vector2(110, 0)
+custom_minimum_size = Vector2(201, 0)
 layout_mode = 2
 mouse_filter = 1
-active_tab_index = -1
+content_width = 160.0
+active_tab_index = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/side_slide_container"]
 layout_mode = 2
@@ -169,6 +170,10 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
+
+[node name="SpinBox" type="SpinBox" parent="HBoxContainer/side_slide_container"]
+visible = false
+layout_mode = 2
 
 [node name="vertical_tab_bar" parent="HBoxContainer" instance=ExtResource("3_tomd8")]
 layout_mode = 2

@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://c55r3gtksrpcy"]
+
+[ext_resource type="PackedScene" uid="uid://bkhqdo54nlqkn" path="res://new folder/rotate_container.tscn" id="1_2chuj"]
+[ext_resource type="Script" uid="uid://ds06e61yrlfvv" path="res://side_tab_panel/side_tab_panel.gd" id="1_nsiy8"]
+
+[node name="side_tab_panel" type="HBoxContainer"]
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -35.0
+grow_horizontal = 0
+grow_vertical = 2
+script = ExtResource("1_nsiy8")
+
+[node name="RotationContainer" parent="." instance=ExtResource("1_2chuj")]
+layout_mode = 2
+
+[node name="TabBar" type="TabBar" parent="RotationContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[connection signal="tab_selected" from="RotationContainer/TabBar" to="." method="_on_tab_bar_tab_selected"]
