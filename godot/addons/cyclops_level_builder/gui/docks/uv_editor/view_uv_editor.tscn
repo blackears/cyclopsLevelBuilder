@@ -1,15 +1,17 @@
-[gd_scene load_steps=12 format=3 uid="uid://cw1yjv8t33ii0"]
+[gd_scene load_steps=14 format=3 uid="uid://cw1yjv8t33ii0"]
 
 [ext_resource type="Script" uid="uid://5l6u428jo0ce" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/view_uv_editor.gd" id="1_bjwq8"]
 [ext_resource type="PackedScene" uid="uid://dlouwod012q17" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_editor.tscn" id="2_iavjh"]
 [ext_resource type="ButtonGroup" uid="uid://bl5lk7tapf3fo" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/bn_grp_feature.tres" id="2_s00w6"]
 [ext_resource type="ButtonGroup" uid="uid://b5oy526v08suc" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/bn_group_sticky.tres" id="3_r8vmy"]
+[ext_resource type="Texture2D" uid="uid://cuds4haino51b" path="res://addons/cyclops_level_builder/art/icons/snap_off.svg" id="4_ou5d4"]
 [ext_resource type="Texture2D" uid="uid://dloyvoq8piwx0" path="res://addons/cyclops_level_builder/art/icons/snap.svg" id="4_tcddb"]
 [ext_resource type="Texture2D" uid="uid://c6mucdu7wcbkm" path="res://addons/cyclops_level_builder/art/icons/snap_grid.svg" id="5_dhpq5"]
 [ext_resource type="Texture2D" uid="uid://c0x011okomj8n" path="res://addons/cyclops_level_builder/art/icons/snap_vertex.svg" id="5_uwi28"]
 [ext_resource type="Script" uid="uid://b3wl2p04rjkyy" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping_grid.gd" id="6_nc8ii"]
 [ext_resource type="Script" uid="uid://5shtfh4pg660" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping_vertex.gd" id="7_t0xtm"]
 [ext_resource type="PackedScene" uid="uid://ndnt8ct4y5mq" path="res://addons/cyclops_level_builder/gui/controls/side_tab_container.tscn" id="8_68wq3"]
+[ext_resource type="Script" uid="uid://beli1atd0sieb" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping.gd" id="9_v4lie"]
 
 [sub_resource type="World3D" id="World3D_bxn6v"]
 
@@ -106,10 +108,12 @@ layout_mode = 2
 tooltip_text = "Synchronize UV selection with selected mesh elements."
 text = "Sync"
 
-[node name="bn_snap" type="TextureButton" parent="VBoxContainer/PanelContainer/HBoxContainer3"]
+[node name="bn_use_snap" type="TextureButton" parent="VBoxContainer/PanelContainer/HBoxContainer3"]
+unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
-texture_normal = ExtResource("4_tcddb")
+texture_normal = ExtResource("4_ou5d4")
+texture_pressed = ExtResource("4_tcddb")
 
 [node name="option_snapping" type="OptionButton" parent="VBoxContainer/PanelContainer/HBoxContainer3"]
 unique_name_in_owner = true
@@ -159,6 +163,7 @@ grow_horizontal = 0
 
 [node name="snapping" type="Node" parent="."]
 unique_name_in_owner = true
+script = ExtResource("9_v4lie")
 
 [node name="Grid" type="Node" parent="snapping"]
 script = ExtResource("6_nc8ii")
@@ -177,7 +182,9 @@ metadata/_custom_type_script = "uid://5shtfh4pg660"
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer3/sticky/sticky_shared_location" to="." method="_on_sticky_shared_location_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer3/sticky/sticky_shared_vertex" to="." method="_on_sticky_shared_vertex_pressed"]
 [connection signal="toggled" from="VBoxContainer/PanelContainer/HBoxContainer3/check_sync_with_mesh" to="." method="_on_check_sync_with_mesh_toggled"]
+[connection signal="toggled" from="VBoxContainer/PanelContainer/HBoxContainer3/bn_use_snap" to="." method="_on_bn_use_snap_toggled"]
 [connection signal="item_selected" from="VBoxContainer/PanelContainer/HBoxContainer3/option_snapping" to="." method="_on_option_snapping_item_selected"]
 [connection signal="gui_input" from="VBoxContainer/Control/SubViewportContainer" to="." method="_on_sub_viewport_container_gui_input"]
 [connection signal="resized" from="VBoxContainer/Control/SubViewportContainer" to="." method="_on_sub_viewport_container_resized"]
 [connection signal="proj_transform_changed" from="VBoxContainer/Control/SubViewportContainer/SubViewport/uv_editor" to="." method="_on_uv_editor_proj_transform_changed"]
+[connection signal="use_snap_changed" from="snapping" to="." method="_on_snapping_use_snap_changed"]

@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://dg084gk1mmlev"]
+[gd_scene load_steps=4 format=3 uid="uid://dg084gk1mmlev"]
 
 [ext_resource type="Script" uid="uid://brmalqjewwi5f" path="res://tabs_test.gd" id="1_kwjla"]
 [ext_resource type="PackedScene" uid="uid://c55r3gtksrpcy" path="res://side_tab_panel/side_tab_panel.tscn" id="2_fwrs4"]
+[ext_resource type="FontFile" uid="uid://4inc6xnb3ayk" path="res://font/Gin-Regular.otf" id="3_kwjla"]
 
 [node name="TabsTest" type="Control"]
 layout_mode = 3
@@ -22,3 +23,10 @@ text = "ttttt"
 [node name="side_tabs" parent="." instance=ExtResource("2_fwrs4")]
 unique_name_in_owner = true
 layout_mode = 1
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_fonts/font = ExtResource("3_kwjla")
+text = "RRRRRRRR$$$$$"

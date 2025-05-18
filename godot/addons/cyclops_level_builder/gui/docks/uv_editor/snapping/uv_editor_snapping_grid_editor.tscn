@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://sm5ha5rexkwl"]
+[gd_scene load_steps=3 format=3 uid="uid://sm5ha5rexkwl"]
 
 [ext_resource type="Script" uid="uid://dya1isa1h7fvy" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping_grid_editor.gd" id="1_kuusj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vstoc"]
+bg_color = Color(0, 0, 0, 1)
 
 [node name="UvEditorSnappingGridEditor" type="PanelContainer"]
 anchors_preset = 15
@@ -10,6 +13,7 @@ offset_right = -963.0
 offset_bottom = -512.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_vstoc")
 script = ExtResource("1_kuusj")
 
 [node name="GridContainer" type="GridContainer" parent="."]

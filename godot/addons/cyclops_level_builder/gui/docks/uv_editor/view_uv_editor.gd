@@ -28,6 +28,9 @@ class_name ViewUvEditor
 #signal forward_input(event:InputEvent)
 signal tool_changed(tool:CyclopsTool)
 
+@onready var side_tab_container:SideTabContainer = %SideTabContainer
+@onready var bn_use_snap:TextureButton = %bn_use_snap
+
 var plugin:CyclopsLevelBuilder:
 	set(value):
 		if value == plugin:
@@ -171,7 +174,6 @@ func load_state(state:Dictionary):
 	
 	var substate:Dictionary = state["uv_editor"]
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	build_menus()
@@ -179,13 +181,15 @@ func _ready() -> void:
 	
 	snapping_panel = PanelContainer.new()
 	snapping_panel.name = "Snapping"
-	%SideTabContainer.add_control(snapping_panel)
+	side_tab_container.add_control(snapping_panel)
 	
 	var snapping_node = %snapping.get_child(0)
 	var ed:Control = snapping_node.get_editor()
 #	%snapping_panel.add_child(ed)
 	snapping_panel.add_child(ed)
 #	%tab_insets.current_tab = -1
+
+	bn_use_snap.set_pressed_no_signal(%snapping.use_snap)
 
 	pass # Replace with function body.
 
@@ -274,3 +278,13 @@ func _on_option_snapping_item_selected(index: int) -> void:
 	snapping_panel.add_child(ed)
 	
 	pass # Replace with function body.
+
+
+func _on_bn_use_snap_toggled(toggled_on: bool) -> void:
+	%snapping.use_snap = toggled_on
+	pass # Replace with function body.
+
+
+func _on_snapping_use_snap_changed(use_snap: bool) -> void:
+	bn_use_snap.set_pressed_no_signal(use_snap)
+	

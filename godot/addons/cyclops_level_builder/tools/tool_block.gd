@@ -112,7 +112,7 @@ func start_block_drag(viewport_camera:Camera3D, event:InputEvent):
 			cmd_move_face.block_path = result.object.get_path()
 			cmd_move_face.face_index = result.face_index
 			cmd_move_face.lock_uvs = builder.lock_uvs
-			cmd_move_face.move_dir_normal = result.object.control_mesh.faces[result.face_id].normal
+			cmd_move_face.move_dir_normal = result.object.control_mesh.faces[result.face_index].normal
 
 			move_face_origin = result.object.global_transform * result.position
 			#print("moving face move_face_origin %s" % move_face_origin)

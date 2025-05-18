@@ -10,9 +10,9 @@ Cyclops Level Builder 1.0.2 works with Godot version 4.2 and later.  Versions 1.
 
 * [Download the latest release](https://github.com/blackears/cyclopsLevelBuilder/releases) from the releases page.  Unzip it into a temporary directory.
 * Copy the /addons/cyclops_level_builder folder and everything in it into the root of the project you want to use Cyclops Level Builder in.
-* Click on Project/Project Settings.  
-    * Select the Autoload tab.  Select the folder icon next to the Path field and browse to the res://addons/cyclops_level_builder/cyclops_global_scene.tscn file.  Set the Node Name to CyclopsAutoload (this is case sensitive, so make sure only the C and A are capitalized).  Then press Add to add it to the autoloads and make sure the Enable box is checked.
-    ![Enable addon](doc/cyclops_1_0_2_autoload_setup.png)
+* Click on Project/Project Settings.
+    * Select the Globals tab.  Select the folder icon next to the Path field and browse to the res://addons/cyclops_level_builder/cyclops_global_scene.tscn file.  Set the Node Name to CyclopsAutoload (this is case sensitive, so make sure only the C and A are capitalized).  Then press Add to add it to the autoloads and make sure the Enable box is checked.
+    ![Enable addon](doc/cyclops_1_5_0_globals_setup.png)
     * Select the Plugins tab and check Enable next to the Cyclops Level Builder entry.
     ![Enable addon](doc/enable_addon.jpg)
 
