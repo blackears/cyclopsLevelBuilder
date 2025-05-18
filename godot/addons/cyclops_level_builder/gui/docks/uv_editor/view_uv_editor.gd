@@ -48,7 +48,10 @@ var plugin:CyclopsLevelBuilder:
 			var ed_sel:EditorSelection = ed_iface.get_selection()
 			ed_sel.selection_changed.connect(on_block_selection_changed)
 
-		build_menus()
+		#build_menus()
+
+func get_snapping_manager()->UvEditorSnapping:
+	return %snapping
 
 var active_tool:CyclopsTool
 
@@ -81,10 +84,6 @@ func build_menus():
 	if !is_node_ready():
 		return
 	
-	%option_snapping.clear()
-	for child in %snapping.get_children():
-		%option_snapping.add_icon_item(child.icon, child.name)
-	
 	for child in %MenuBar.get_children():
 		%MenuBar.remove_child(child)
 		child.queue_free()
@@ -92,6 +91,19 @@ func build_menus():
 	for child in %tool_buttons.get_children():
 		%tool_buttons.remove_child(child)
 		child.queue_free()
+	
+	#Snap drop down
+	%option_snapping.clear()
+	for child in %snapping.get_children():
+		%option_snapping.add_icon_item(child.icon, child.name)
+	
+	#Select current snapping tool
+	var snap_node:Node = %snapping.cur_snap_tool_path
+	if snap_node:
+		var idx = snap_node.get_index()
+		%option_snapping.selected = idx
+	
+	update_snap_display()
 	
 #	print("plugin check")
 	if !plugin || !plugin.config_scene:
@@ -267,15 +279,17 @@ func viewport_transform_changed():
 
 
 func _on_option_snapping_item_selected(index: int) -> void:
-	var snapping_node = %snapping.get_child(index)
-	var ed:Control = snapping_node.get_editor()
+	var snapping_node:Node = %snapping.get_child(index)
+	%snapping.cur_snap_tool_path = snapping_node.get_path()
 	
-	if snapping_panel.get_child_count() > 0:
-		var child = snapping_panel.get_child(0)
-		child.queue_free()
-	
-	#print("swithing to ed ", ed.name, " ")
-	snapping_panel.add_child(ed)
+	#var ed:Control = snapping_node.get_editor()
+	#
+	#if snapping_panel.get_child_count() > 0:
+		#var child = snapping_panel.get_child(0)
+		#child.queue_free()
+	#
+	##print("swithing to ed ", ed.name, " ")
+	#snapping_panel.add_child(ed)
 	
 	pass # Replace with function body.
 
@@ -287,4 +301,32 @@ func _on_bn_use_snap_toggled(toggled_on: bool) -> void:
 
 func _on_snapping_use_snap_changed(use_snap: bool) -> void:
 	bn_use_snap.set_pressed_no_signal(use_snap)
+	
+
+
+func _on_snapping_snap_tool_changed(path: NodePath) -> void:
+	var node:Node = get_node(%snapping.cur_snap_tool_path)
+	if node:
+		var idx:int = node.get_index()
+		if %option_snapping.selected != idx:
+			%option_snapping.set_block_signals(true)
+			%option_snapping.selected = idx
+			%option_snapping.set_block_signals(false)
+	
+	update_snap_display()
+	pass # Replace with function body.
+
+func update_snap_display():
+	#var snapping_node:Node = %snapping.get_child(index)
+	#%snapping.cur_snap_tool_path = snapping_node.get_path()
+
+	var snapping_node = get_node(%snapping.cur_snap_tool_path)
+	
+	if snapping_node:
+		for child in snapping_panel.get_children():
+			child.queue_free()
+		
+		var ed:Control = snapping_node.get_editor()
+		#print("swithing to ed ", ed.name, " ")
+		snapping_panel.add_child(ed)
 	

@@ -507,6 +507,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			view_to_uv_vec_xform.origin = Vector2.ZERO
 			offset = view_to_uv_vec_xform * offset
 			
+			if tool_owner is ViewUvEditor:
+				var view_ed:ViewUvEditor = tool_owner
+				var snap_mgr:UvEditorSnapping = view_ed.get_snapping_manager()
+				if snap_mgr.use_snap:
+					pass
+			
 			move_uvs(offset, false)
 					
 		elif tool_state == ToolState.DRAG_SELECTION:

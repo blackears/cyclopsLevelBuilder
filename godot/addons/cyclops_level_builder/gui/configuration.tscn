@@ -281,6 +281,15 @@ script = ExtResource("43_36wj4")
 [node name="Move UV" type="Node" parent="Tools/UvEditor"]
 script = ExtResource("41_1e7oi")
 
+[node name="Rotate UV" type="Node" parent="Tools/UvEditor"]
+script = ExtResource("41_1e7oi")
+
+[node name="Scale UV" type="Node" parent="Tools/UvEditor"]
+script = ExtResource("41_1e7oi")
+
+[node name="Box Transform UV" type="Node" parent="Tools/UvEditor"]
+script = ExtResource("41_1e7oi")
+
 [node name="Views" type="Node" parent="."]
 
 [node name="Default" type="Node" parent="Views"]
@@ -522,6 +531,15 @@ snapping_node = NodePath("../../../../Snapping/View3D/Snap Vertex")
 
 [node name="Move UVs" parent="Views/UvEditor/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/UvEditor/Move UV")
+
+[node name="Rotate UVs" parent="Views/UvEditor/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+tool = NodePath("../../../../Tools/UvEditor/Rotate UV")
+
+[node name="Scale UVs" parent="Views/UvEditor/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+tool = NodePath("../../../../Tools/UvEditor/Scale UV")
+
+[node name="Box Transform UVs" parent="Views/UvEditor/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+tool = NodePath("../../../../Tools/UvEditor/Box Transform UV")
 
 [node name="Menu" type="Node" parent="Views/UvEditor"]
 

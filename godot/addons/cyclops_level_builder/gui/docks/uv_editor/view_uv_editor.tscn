@@ -164,6 +164,7 @@ grow_horizontal = 0
 [node name="snapping" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("9_v4lie")
+cur_snap_tool_path = NodePath("Grid")
 
 [node name="Grid" type="Node" parent="snapping"]
 script = ExtResource("6_nc8ii")
@@ -187,4 +188,5 @@ metadata/_custom_type_script = "uid://5shtfh4pg660"
 [connection signal="gui_input" from="VBoxContainer/Control/SubViewportContainer" to="." method="_on_sub_viewport_container_gui_input"]
 [connection signal="resized" from="VBoxContainer/Control/SubViewportContainer" to="." method="_on_sub_viewport_container_resized"]
 [connection signal="proj_transform_changed" from="VBoxContainer/Control/SubViewportContainer/SubViewport/uv_editor" to="." method="_on_uv_editor_proj_transform_changed"]
+[connection signal="snap_tool_changed" from="snapping" to="." method="_on_snapping_snap_tool_changed"]
 [connection signal="use_snap_changed" from="snapping" to="." method="_on_snapping_use_snap_changed"]
