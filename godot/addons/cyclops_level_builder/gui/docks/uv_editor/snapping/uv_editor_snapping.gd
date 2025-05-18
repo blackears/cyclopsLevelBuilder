@@ -3,7 +3,7 @@ extends Node
 class_name UvEditorSnapping
 
 signal use_snap_changed(use_snap:bool)
-signal snap_tool_changed(path:NodePath)
+signal snap_tool_changed(snap_tool:Node)
 
 @export var use_snap:bool = false:
 	set(v):
@@ -12,12 +12,12 @@ signal snap_tool_changed(path:NodePath)
 		use_snap = v
 		use_snap_changed.emit(use_snap)
 
-@export var cur_snap_tool_path:NodePath:
+@export var cur_snap_tool:Node:
 	set(v):
-		if v == cur_snap_tool_path:
+		if v == cur_snap_tool:
 			return
-		cur_snap_tool_path = v
-		snap_tool_changed.emit(cur_snap_tool_path)
+		cur_snap_tool = v
+		snap_tool_changed.emit(cur_snap_tool)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

@@ -98,7 +98,7 @@ func build_menus():
 		%option_snapping.add_icon_item(child.icon, child.name)
 	
 	#Select current snapping tool
-	var snap_node:Node = %snapping.cur_snap_tool_path
+	var snap_node:Node = %snapping.cur_snap_tool
 	if snap_node:
 		var idx = snap_node.get_index()
 		%option_snapping.selected = idx
@@ -188,7 +188,6 @@ func load_state(state:Dictionary):
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	build_menus()
 	%SubViewportContainer.set_process_input(true)
 	
 	snapping_panel = PanelContainer.new()
@@ -202,6 +201,8 @@ func _ready() -> void:
 #	%tab_insets.current_tab = -1
 
 	bn_use_snap.set_pressed_no_signal(%snapping.use_snap)
+
+	build_menus()
 
 	pass # Replace with function body.
 
@@ -304,10 +305,9 @@ func _on_snapping_use_snap_changed(use_snap: bool) -> void:
 	
 
 
-func _on_snapping_snap_tool_changed(path: NodePath) -> void:
-	var node:Node = get_node(%snapping.cur_snap_tool_path)
-	if node:
-		var idx:int = node.get_index()
+func _on_snapping_snap_tool_changed(snap_node: Node) -> void:
+	if snap_node:
+		var idx:int = snap_node.get_index()
 		if %option_snapping.selected != idx:
 			%option_snapping.set_block_signals(true)
 			%option_snapping.selected = idx
@@ -320,7 +320,7 @@ func update_snap_display():
 	#var snapping_node:Node = %snapping.get_child(index)
 	#%snapping.cur_snap_tool_path = snapping_node.get_path()
 
-	var snapping_node = get_node(%snapping.cur_snap_tool_path)
+	var snapping_node = %snapping.cur_snap_tool
 	
 	if snapping_node:
 		for child in snapping_panel.get_children():

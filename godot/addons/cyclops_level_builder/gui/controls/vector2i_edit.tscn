@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=3 uid="uid://c4vymg8o1fg6t"]
+
+[ext_resource type="Script" uid="uid://dpdq60q2mgp5e" path="res://addons/cyclops_level_builder/gui/controls/vector2i_edit.gd" id="1_6vpgl"]
+
+[node name="Vector2Edit" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -918.0
+offset_bottom = -617.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6vpgl")
+
+[node name="spin_x" type="SpinBox" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+rounded = true
+allow_greater = true
+allow_lesser = true
+
+[node name="spin_y" type="SpinBox" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+rounded = true
+allow_greater = true
+allow_lesser = true
+
+[connection signal="value_changed" from="spin_x" to="." method="_on_spin_x_value_changed"]
+[connection signal="value_changed" from="spin_y" to="." method="_on_spin_y_value_changed"]

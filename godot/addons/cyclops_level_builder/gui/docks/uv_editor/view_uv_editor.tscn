@@ -161,10 +161,10 @@ anchor_left = 1.0
 offset_left = -4.0
 grow_horizontal = 0
 
-[node name="snapping" type="Node" parent="."]
+[node name="snapping" type="Node" parent="." node_paths=PackedStringArray("cur_snap_tool")]
 unique_name_in_owner = true
 script = ExtResource("9_v4lie")
-cur_snap_tool_path = NodePath("Grid")
+cur_snap_tool = NodePath("Grid")
 
 [node name="Grid" type="Node" parent="snapping"]
 script = ExtResource("6_nc8ii")
