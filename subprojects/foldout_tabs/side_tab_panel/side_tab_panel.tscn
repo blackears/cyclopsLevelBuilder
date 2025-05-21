@@ -1,14 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://c55r3gtksrpcy"]
+[gd_scene load_steps=4 format=3 uid="uid://c55r3gtksrpcy"]
 
 [ext_resource type="PackedScene" uid="uid://bkhqdo54nlqkn" path="res://new folder/rotate_container.tscn" id="1_2chuj"]
 [ext_resource type="Script" uid="uid://ds06e61yrlfvv" path="res://side_tab_panel/side_tab_panel.gd" id="1_nsiy8"]
+[ext_resource type="PackedScene" uid="uid://y5n7h7xo6isu" path="res://new folder/h_slide_container.tscn" id="3_nsiy8"]
 
 [node name="side_tab_panel" type="HBoxContainer"]
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -35.0
+offset_left = -10.0
 grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("1_nsiy8")
@@ -20,7 +21,11 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="HSlideContainer" parent="." instance=ExtResource("3_nsiy8")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HSlideContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 horizontal_scroll_mode = 0

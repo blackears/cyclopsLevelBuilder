@@ -15,14 +15,16 @@ var drag_start_size:Vector2
 #@export var container_width:float = 100:set = set_container_width
 #@export var container_width:float = 100: set = set_container_width
 
-#func set_container_width(v:float):
-	#if v == container_width:
-		#return
-	#container_width = v
-	#
+@export var view_width:float = 100: set = set_view_width
+
+func set_view_width(v:float):
+	if v == view_width:
+		return
+	view_width = v
+	
 	#queue_sort()
-	#
-	##update_minimum_size()
+	
+	update_minimum_size()
 
 func set_bar_width(v:float):
 	if v == bar_width:
@@ -68,27 +70,24 @@ func _on_slide_bar_gui_input(event: InputEvent) -> void:
 			var min_size:Vector2 = get_minimum_size()
 			
 			var offset_x:float = e.global_position.x - drag_mouse_pos_start.x
-			#size = drag_start_size + Vector2(offset.x, 0)
-			#container_width = drag_start_container_width + offset.x
-			offset_x
 			
 			var new_position = drag_start_position + Vector2(offset_x, 0)
 			var new_size = drag_start_size - Vector2(offset_x, 0)
 			
-			if new_size.x < min_size.x:
-				
-			#max(new_size.x, min_size.x)
-				new_position = Vector2(drag_start_position.x + drag_start_size.x - min_size.x, drag_start_position.y)
-				new_size.x = min_size.x
+			#if new_size.x < min_size.x:
+				#new_position = Vector2(drag_start_position.x + drag_start_size.x - min_size.x, drag_start_position.y)
+				#new_size.x = min_size.x
 			
-			position = new_position
-			size = new_size
+			#position = new_position
+			#size = new_size
+			view_width = new_size.x
+			
 			queue_sort()
 			#%foldout_base_panel.custom_minimum_size.x = start_min_size.x - offset.x
 			
 func _get_minimum_size() -> Vector2:
 #	var children_size:Vector2 = Vector2(container_width, 0)
-	var children_size:Vector2 = Vector2(0, 0)
+	var children_size:Vector2 = Vector2(view_width, 0)
 	
 	for child in get_children():
 		if child == slide_bar:
