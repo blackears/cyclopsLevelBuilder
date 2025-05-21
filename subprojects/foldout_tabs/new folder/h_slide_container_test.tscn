@@ -23,7 +23,6 @@ offset_bottom = 29.0
 grow_horizontal = 1
 grow_vertical = 1
 bar_width = 10.0
-view_width = null
 
 [node name="Label" type="Label" parent="HSlideContainer"]
 layout_mode = 2

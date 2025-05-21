@@ -14,6 +14,7 @@ offset_right = -963.0
 offset_bottom = -512.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_vstoc")
 script = ExtResource("1_kuusj")
 

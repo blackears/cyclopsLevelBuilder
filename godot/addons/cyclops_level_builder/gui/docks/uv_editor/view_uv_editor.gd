@@ -28,7 +28,8 @@ class_name ViewUvEditor
 #signal forward_input(event:InputEvent)
 signal tool_changed(tool:CyclopsTool)
 
-@onready var side_tab_container:SideTabContainer = %SideTabContainer
+#@onready var side_tab_container:SideTabContainer = %SideTabContainer
+@onready var side_tab_panel:SideTabPanel = %side_tab_panel
 @onready var bn_use_snap:TextureButton = %bn_use_snap
 
 var plugin:CyclopsLevelBuilder:
@@ -192,7 +193,7 @@ func _ready() -> void:
 	
 	snapping_panel = PanelContainer.new()
 	snapping_panel.name = "Snapping"
-	side_tab_container.add_control(snapping_panel)
+	side_tab_panel.add_control(snapping_panel)
 	
 	var snapping_node = %snapping.get_child(0)
 	var ed:Control = snapping_node.get_editor()
@@ -201,6 +202,7 @@ func _ready() -> void:
 #	%tab_insets.current_tab = -1
 
 	bn_use_snap.set_pressed_no_signal(%snapping.use_snap)
+	snapping_panel.active_tab = -1
 
 	build_menus()
 

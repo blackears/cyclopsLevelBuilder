@@ -10,8 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://c0x011okomj8n" path="res://addons/cyclops_level_builder/art/icons/snap_vertex.svg" id="5_uwi28"]
 [ext_resource type="Script" uid="uid://b3wl2p04rjkyy" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping_grid.gd" id="6_nc8ii"]
 [ext_resource type="Script" uid="uid://5shtfh4pg660" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping_vertex.gd" id="7_t0xtm"]
-[ext_resource type="PackedScene" uid="uid://ndnt8ct4y5mq" path="res://addons/cyclops_level_builder/gui/controls/side_tab_container.tscn" id="8_68wq3"]
 [ext_resource type="Script" uid="uid://beli1atd0sieb" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping.gd" id="9_v4lie"]
+[ext_resource type="PackedScene" uid="uid://c55r3gtksrpcy" path="res://addons/cyclops_level_builder/gui/controls/side_tab_panel.tscn" id="10_mvj8m"]
 
 [sub_resource type="World3D" id="World3D_bxn6v"]
 
@@ -153,13 +153,10 @@ render_target_update_mode = 4
 unique_name_in_owner = true
 face_sel_color = Color(0.5, 0.5, 0.5, 0.4)
 
-[node name="SideTabContainer" parent="VBoxContainer/Control" instance=ExtResource("8_68wq3")]
+[node name="side_tab_panel" parent="VBoxContainer/Control" instance=ExtResource("10_mvj8m")]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
-offset_left = -4.0
-grow_horizontal = 0
+offset_left = -31.0
 
 [node name="snapping" type="Node" parent="." node_paths=PackedStringArray("cur_snap_tool")]
 unique_name_in_owner = true
