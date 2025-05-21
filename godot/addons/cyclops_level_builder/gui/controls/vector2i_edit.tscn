@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dpdq60q2mgp5e" path="res://addons/cyclops_level_builder/gui/controls/vector2i_edit.gd" id="1_6vpgl"]
 
-[node name="Vector2Edit" type="HBoxContainer"]
+[node name="Vector2Edit" type="HFlowContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

@@ -136,4 +136,3 @@ func _on_line_edit_text_submitted(new_text):
 	if line_input:
 		line_input.visible = false
 		line_display.visible = true
-

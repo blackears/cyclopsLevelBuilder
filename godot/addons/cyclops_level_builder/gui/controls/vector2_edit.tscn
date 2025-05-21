@@ -2,29 +2,45 @@
 
 [ext_resource type="Script" uid="uid://peqweancs1mv" path="res://addons/cyclops_level_builder/gui/controls/vector2_edit.gd" id="1_txwsp"]
 
-[node name="Vector2Edit" type="HBoxContainer"]
+[node name="Vector2Edit" type="HFlowContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -918.0
+offset_right = -905.0
 offset_bottom = -617.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_txwsp")
 
-[node name="spin_x" type="SpinBox" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "x"
+
+[node name="spin_x" type="SpinBox" parent="HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 allow_greater = true
 allow_lesser = true
 
-[node name="spin_y" type="SpinBox" parent="."]
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HBoxContainer2"]
+layout_mode = 2
+text = "y"
+
+[node name="spin_y" type="SpinBox" parent="HBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 allow_greater = true
 allow_lesser = true
 
-[connection signal="value_changed" from="spin_x" to="." method="_on_spin_x_value_changed"]
-[connection signal="value_changed" from="spin_y" to="." method="_on_spin_y_value_changed"]
+[connection signal="value_changed" from="HBoxContainer/spin_x" to="." method="_on_spin_x_value_changed"]
+[connection signal="value_changed" from="HBoxContainer2/spin_y" to="." method="_on_spin_y_value_changed"]
