@@ -1,13 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://xganp03k5qlp"]
+[gd_scene load_steps=3 format=3 uid="uid://xganp03k5qlp"]
 
 [ext_resource type="Script" uid="uid://peqweancs1mv" path="res://addons/cyclops_level_builder/gui/controls/vector2_edit.gd" id="1_txwsp"]
+[ext_resource type="PackedScene" uid="uid://dcbxelosum70b" path="res://addons/cyclops_level_builder/gui/controls/float_line_edit.tscn" id="2_cxmj5"]
 
 [node name="Vector2Edit" type="HFlowContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = -905.0
-offset_bottom = -617.0
+offset_bottom = -582.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_txwsp")
@@ -20,12 +21,12 @@ size_flags_horizontal = 3
 layout_mode = 2
 text = "x"
 
-[node name="spin_x" type="SpinBox" parent="HBoxContainer"]
+[node name="edit_x" parent="HBoxContainer" instance=ExtResource("2_cxmj5")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-allow_greater = true
-allow_lesser = true
+text = "0"
+round_digits = 3
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -35,12 +36,12 @@ size_flags_horizontal = 3
 layout_mode = 2
 text = "y"
 
-[node name="spin_y" type="SpinBox" parent="HBoxContainer2"]
+[node name="edit_y" parent="HBoxContainer2" instance=ExtResource("2_cxmj5")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-allow_greater = true
-allow_lesser = true
+text = "0"
+round_digits = 3
 
-[connection signal="value_changed" from="HBoxContainer/spin_x" to="." method="_on_spin_x_value_changed"]
-[connection signal="value_changed" from="HBoxContainer2/spin_y" to="." method="_on_spin_y_value_changed"]
+[connection signal="value_changed" from="HBoxContainer/edit_x" to="." method="_on_edit_x_value_changed"]
+[connection signal="value_changed" from="HBoxContainer2/edit_y" to="." method="_on_edit_y_value_changed"]

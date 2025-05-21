@@ -38,7 +38,7 @@ enum BoundsCheck { NONE, HARD, SFOT }
 @export var bounds_check_min:BoundsCheck
 @export var bounds_check_max:BoundsCheck
 @export var drag_step:float = .1
-@export var round_digits:int = 3
+@export var round_digits:int = 4
 
 var dragging:bool = false
 var mouse_down_pos:Vector2

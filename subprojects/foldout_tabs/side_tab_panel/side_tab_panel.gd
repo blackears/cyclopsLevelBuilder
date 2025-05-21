@@ -30,7 +30,6 @@ func update_visibility():
 		
 		if "visible" in child:
 			child.visible = i == active_tab
-	
 
 func _on_tab_bar_tab_selected(tab: int) -> void:
 	if tab == active_tab:

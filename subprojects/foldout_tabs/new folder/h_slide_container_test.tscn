@@ -1,0 +1,42 @@
+[gd_scene load_steps=2 format=3 uid="uid://cthqa5itrhvc8"]
+
+[ext_resource type="PackedScene" uid="uid://y5n7h7xo6isu" path="res://new folder/h_slide_container.tscn" id="1_k3icd"]
+
+[node name="HSlideContainerTest" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="HSlideContainer" parent="." instance=ExtResource("1_k3icd")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 1019.0
+offset_top = 6.0
+offset_right = 1151.0
+offset_bottom = 29.0
+grow_horizontal = 1
+grow_vertical = 1
+bar_width = 10.0
+
+[node name="Label" type="Label" parent="HSlideContainer"]
+layout_mode = 2
+text = "qwerty"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 91.0
+offset_top = 129.0
+offset_right = 136.0
+offset_bottom = 152.0
+text = "ggggg"
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
