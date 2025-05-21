@@ -56,7 +56,7 @@ func get_snapping_manager()->UvEditorSnapping:
 
 var active_tool:CyclopsTool
 
-var snapping_panel:PanelContainer
+var snapping_panel:Control
 
 #func _input(event: InputEvent) -> void:
 	#print("view uv ed ", event)
@@ -191,18 +191,30 @@ func load_state(state:Dictionary):
 func _ready() -> void:
 	%SubViewportContainer.set_process_input(true)
 	
-	snapping_panel = PanelContainer.new()
+	snapping_panel = Control.new()
 	snapping_panel.name = "Snapping"
+#	snapping_panel.size_flags_horizontal = Control.SIZE_EXPAND
+	snapping_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	snapping_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	side_tab_panel.add_control(snapping_panel)
+	
+	#var test_label:Label = Label.new()
+	#test_label.text = "asdfgghhj"
+	#side_tab_panel.add_control(test_label)
 	
 	var snapping_node = %snapping.get_child(0)
 	var ed:Control = snapping_node.get_editor()
-#	%snapping_panel.add_child(ed)
+	ed.size_flags_horizontal = Control.SIZE_EXPAND
+	ed.size_flags_vertical = Control.SIZE_EXPAND
+
 	snapping_panel.add_child(ed)
+	
+#	side_tab_panel.add_control(ed)
+
 #	%tab_insets.current_tab = -1
 
 	bn_use_snap.set_pressed_no_signal(%snapping.use_snap)
-	snapping_panel.active_tab = -1
+	#side_tab_panel.active_tab = -1
 
 	build_menus()
 

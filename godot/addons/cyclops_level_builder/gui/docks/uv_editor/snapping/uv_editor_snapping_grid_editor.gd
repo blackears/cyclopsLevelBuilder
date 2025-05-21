@@ -22,6 +22,7 @@
 # SOFTWARE.
 
 @tool
+#extends HBoxContainer
 extends PanelContainer
 class_name UvEditorSnappingGridEditor
 

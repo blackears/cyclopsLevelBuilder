@@ -157,6 +157,7 @@ face_sel_color = Color(0.5, 0.5, 0.5, 0.4)
 unique_name_in_owner = true
 layout_mode = 1
 offset_left = -31.0
+active_tab = 0
 
 [node name="snapping" type="Node" parent="." node_paths=PackedStringArray("cur_snap_tool")]
 unique_name_in_owner = true

@@ -9,7 +9,7 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -10.0
+offset_left = -110.0
 grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("1_nsiy8")
@@ -28,6 +28,7 @@ layout_mode = 2
 [node name="ScrollContainer" type="ScrollContainer" parent="HSlideContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 horizontal_scroll_mode = 0
 
 [connection signal="tab_selected" from="RotationContainer/TabBar" to="." method="_on_tab_bar_tab_selected"]
