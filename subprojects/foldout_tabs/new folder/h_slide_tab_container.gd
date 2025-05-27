@@ -99,6 +99,7 @@ func update_child_visibility():
 		child.visible = child_count == active_tab
 		child_count += 1
 	
+	slide_bar.visible = active_tab != -1
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -138,40 +139,52 @@ func _on_slide_bar_gui_input(event: InputEvent) -> void:
 			queue_sort()
 			
 func _get_minimum_size() -> Vector2:
-	var children_size:Vector2 = Vector2(view_width, 0)
-	
-	for child in get_children():
-		if child == slide_bar || child == tab_rot_bar:
-			continue
+	if active_tab == -1:
+		if tab_rot_bar:
+			return tab_rot_bar.get_minimum_size()
+		else:
+			return Vector2.ZERO
 		
-		if child.visible:
-			children_size.x = max(children_size.x, tab_min_size.x)
-			children_size.y = max(children_size.y, tab_min_size.y)
-	
-	if tab_rot_bar:
-		tab_min_size = tab_rot_bar.get_minimum_size()
+	else:
+		var children_size:Vector2 = Vector2(view_width, 0)
+		
+		for child in get_children():
+			if child == slide_bar || child == tab_rot_bar:
+				continue
+			
+			if child.visible:
+				children_size.x = max(children_size.x, tab_min_size.x)
+				children_size.y = max(children_size.y, tab_min_size.y)
+		
+		if tab_rot_bar:
+			tab_min_size = tab_rot_bar.get_minimum_size()
 
-	return children_size + Vector2(bar_width + tab_min_size.x, tab_min_size.y)
+		return children_size + Vector2(bar_width + tab_min_size.x, tab_min_size.y)
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_SORT_CHILDREN:
 		var s:Vector2 = size
-		
-		for child in get_children():
-			if child is CanvasItem:
-				if child == tab_rot_bar:
-					tab_rot_bar.position = Vector2(0, 0)
-					tab_rot_bar.size = Vector2(tab_min_size.x, s.y)
 
-				elif child == slide_bar:
-					slide_bar.position = Vector2(tab_min_size.x, 0)
-					slide_bar.size = Vector2(bar_width, s.y)
+		if active_tab == -1:
+			tab_rot_bar.position = Vector2(0, 0)
+			tab_rot_bar.size = Vector2(tab_min_size.x, s.y)
+			
+		else:
+			for child in get_children():
+				if child is CanvasItem:
+					if child == tab_rot_bar:
+						tab_rot_bar.position = Vector2(0, 0)
+						tab_rot_bar.size = Vector2(tab_min_size.x, s.y)
 
-				else:
-					var min_size:Vector2 = child.get_minimum_size()
-					child.position = Vector2(tab_min_size.x + bar_width, 0)
-#					child.size = Vector2(min(s.x - bar_width - tab_min_size.x, min_size.x), min(s.y, min_size.y))
-					child.size = Vector2(s.x - bar_width - tab_min_size.x, s.y)
+					elif child == slide_bar:
+						slide_bar.position = Vector2(tab_min_size.x, 0)
+						slide_bar.size = Vector2(bar_width, s.y)
+
+					else:
+						var min_size:Vector2 = child.get_minimum_size()
+						child.position = Vector2(tab_min_size.x + bar_width, 0)
+	#					child.size = Vector2(min(s.x - bar_width - tab_min_size.x, min_size.x), min(s.y, min_size.y))
+						child.size = Vector2(s.x - bar_width - tab_min_size.x, s.y)
 
 	if what == NOTIFICATION_THEME_CHANGED:
 		update_minimum_size()
