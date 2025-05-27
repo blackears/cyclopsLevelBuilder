@@ -25,8 +25,111 @@ anchors_preset = 11
 anchor_left = 1.0
 offset_left = -106.0
 grow_horizontal = 0
+active_tab = -1
 
 [node name="Label2" type="Label" parent="HSlideContainer2"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "qwerty"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSlideContainer2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="GridContainer" type="GridContainer" parent="HSlideContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="Label" type="Label" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "width"
+
+[node name="CheckBox" type="CheckBox" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "height"
+
+[node name="CheckButton" type="CheckButton" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "foobar"
+
+[node name="SpinBox" type="SpinBox" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label4" type="Label" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "width
+"
+
+[node name="CheckBox2" type="CheckBox" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label5" type="Label" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "height"
+
+[node name="CheckButton2" type="CheckButton" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label6" type="Label" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "foobar"
+
+[node name="SpinBox2" type="SpinBox" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label7" type="Label" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "width
+"
+
+[node name="CheckBox3" type="CheckBox" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label8" type="Label" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "height"
+
+[node name="CheckButton3" type="CheckButton" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label9" type="Label" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "foobar"
+
+[node name="SpinBox3" type="SpinBox" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label10" type="Label" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "width
+"
+
+[node name="CheckBox4" type="CheckBox" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label11" type="Label" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "height"
+
+[node name="CheckButton4" type="CheckButton" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label12" type="Label" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "foobar"
+
+[node name="SpinBox4" type="SpinBox" parent="HSlideContainer2/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control" type="Control" parent="HSlideContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2

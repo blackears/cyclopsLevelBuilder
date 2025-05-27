@@ -1,0 +1,70 @@
+[gd_scene load_steps=2 format=3 uid="uid://dv1pcgy1qkkx8"]
+
+[ext_resource type="PackedScene" uid="uid://bkhqdo54nlqkn" path="res://new folder/rotate_container.tscn" id="1_8n38u"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 92.0
+offset_top = 66.0
+offset_right = 156.0
+offset_bottom = 97.0
+text = "aaaaaa"
+
+[node name="Button2" type="Button" parent="."]
+layout_mode = 0
+offset_left = 508.0
+offset_top = 262.0
+offset_right = 572.0
+offset_bottom = 293.0
+text = "aaaaaa"
+
+[node name="Button3" type="Button" parent="."]
+layout_mode = 0
+offset_left = 302.0
+offset_top = 464.0
+offset_right = 366.0
+offset_bottom = 495.0
+text = "aaaaaa"
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+split_offset = 600
+
+[node name="Control" type="Control" parent="HSplitContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="RotationContainer" parent="HSplitContainer/Control" instance=ExtResource("1_8n38u")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -31.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="TabBar" type="TabBar" parent="HSplitContainer/Control/RotationContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+current_tab = 0
+tab_count = 1
+tab_0/title = "rrrr"
+
+[node name="PanelContainer" type="PanelContainer" parent="HSplitContainer"]
+layout_mode = 2

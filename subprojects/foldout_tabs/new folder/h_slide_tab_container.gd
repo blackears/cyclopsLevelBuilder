@@ -37,10 +37,20 @@ var drag_start_position:Vector2
 var drag_start_size:Vector2
 
 @export var bar_width:float = 6: set = set_bar_width
-
 @export var view_width:float = 100: set = set_view_width
+@export var active_tab:int = -1: set = set_active_tab
 
 var tab_min_size:Vector2
+#var suspend_tabs:bool = false
+
+func set_active_tab(v:float):
+	if v == active_tab:
+		return
+	active_tab = v
+	
+	update_minimum_size()
+	#if !suspend_tabs:
+		#update_tab_layout()
 
 func set_view_width(v:float):
 	if v == view_width:
@@ -57,9 +67,44 @@ func set_bar_width(v:float):
 	update_minimum_size()
 	pass
 
+func update_tab_layout():
+	#suspend_tabs = true
+	if !tab_bar:
+		return
+		
+	tab_bar.clear_tabs()
+	
+	#var child_count:int = 0
+	for child in get_children():
+		if child == tab_rot_bar || child == slide_bar:
+			continue
+		
+		tab_bar.add_tab(child.name)
+		
+	tab_bar.current_tab = active_tab
+	
+	#suspend_tabs = false
+	
+	update_minimum_size()	
+
+func update_child_visibility():
+	if !is_node_ready():
+		return
+	
+	var child_count:int = 0
+	for child in get_children():
+		if child == tab_rot_bar || child == slide_bar:
+			continue
+		
+		child.visible = child_count == active_tab
+		child_count += 1
+	
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	slide_bar.mouse_default_cursor_shape = Control.CURSOR_HSIZE
+	update_tab_layout()
+	update_child_visibility()
 	
 
 func _on_slide_bar_gui_input(event: InputEvent) -> void:
@@ -105,6 +150,7 @@ func _get_minimum_size() -> Vector2:
 	
 	if tab_rot_bar:
 		tab_min_size = tab_rot_bar.get_minimum_size()
+
 	return children_size + Vector2(bar_width + tab_min_size.x, tab_min_size.y)
 
 func _notification(what: int) -> void:
@@ -124,7 +170,28 @@ func _notification(what: int) -> void:
 				else:
 					var min_size:Vector2 = child.get_minimum_size()
 					child.position = Vector2(tab_min_size.x + bar_width, 0)
-					child.size = Vector2(min(s.x - bar_width - tab_min_size.x, min_size.x), min(s.y, min_size.y))
+#					child.size = Vector2(min(s.x - bar_width - tab_min_size.x, min_size.x), min(s.y, min_size.y))
+					child.size = Vector2(s.x - bar_width - tab_min_size.x, s.y)
 
 	if what == NOTIFICATION_THEME_CHANGED:
 		update_minimum_size()
+
+
+
+func _on_tab_bar_tab_selected(tab: int) -> void:
+	if tab == active_tab:
+		active_tab = -1
+	else:
+		active_tab = tab
+	
+	update_child_visibility()
+
+
+func _on_child_entered_tree(node: Node) -> void:
+	update_tab_layout()
+	update_child_visibility()
+
+
+func _on_child_exiting_tree(node: Node) -> void:
+	update_tab_layout()
+	update_child_visibility()

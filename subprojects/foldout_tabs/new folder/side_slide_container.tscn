@@ -6,7 +6,6 @@
 clip_contents = true
 mouse_filter = 2
 script = ExtResource("1_6kpx5")
-active_tab_index = null
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="resized" from="." to="." method="_on_resized"]
