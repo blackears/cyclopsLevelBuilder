@@ -25,6 +25,8 @@
 extends HBoxContainer
 class_name SideTabPanel
 
+@onready var hslide_container:HSlideContainer = %HSlideContainer
+
 @export var active_tab:int = -1:
 	set(v):
 		active_tab = v
@@ -54,7 +56,7 @@ func update_visibility():
 		if "visible" in child:
 			child.visible = i == active_tab
 			
-	%HSlideContainer.visible = active_tab != -1
+	hslide_container.visible = active_tab != -1
 
 func _on_tab_bar_tab_selected(tab: int) -> void:
 	if tab == active_tab:

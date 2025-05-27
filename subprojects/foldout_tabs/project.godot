@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="FoldoutTabs"
-run/main_scene="uid://dg084gk1mmlev"
+run/main_scene="uid://cu2ny10ticpcw"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
 
