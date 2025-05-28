@@ -29,7 +29,9 @@ class_name ViewUvEditor
 signal tool_changed(tool:CyclopsTool)
 
 #@onready var side_tab_container:SideTabContainer = %SideTabContainer
-@onready var side_tab_panel:SideTabPanel = %side_tab_panel
+#@onready var side_tab_panel:SideTabPanel = %side_tab_panel
+@onready var snapping_panel:PanelContainer = %Snapping
+@onready var slide_tab_container:HSlideTabContainer = %slide_tab_container
 @onready var bn_use_snap:TextureButton = %bn_use_snap
 
 var plugin:CyclopsLevelBuilder:
@@ -56,7 +58,7 @@ func get_snapping_manager()->UvEditorSnapping:
 
 var active_tool:CyclopsTool
 
-var snapping_panel:Control
+#var snapping_panel:Control
 
 #func _input(event: InputEvent) -> void:
 	#print("view uv ed ", event)
@@ -191,12 +193,11 @@ func load_state(state:Dictionary):
 func _ready() -> void:
 	%SubViewportContainer.set_process_input(true)
 	
-	snapping_panel = Control.new()
-	snapping_panel.name = "Snapping"
-#	snapping_panel.size_flags_horizontal = Control.SIZE_EXPAND
-	snapping_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	snapping_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	side_tab_panel.add_control(snapping_panel)
+	#snapping_panel = Control.new()
+	#snapping_panel.name = "Snapping"
+	#snapping_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	#snapping_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	#side_tab_panel.add_control(snapping_panel)
 	
 	#var test_label:Label = Label.new()
 	#test_label.text = "asdfgghhj"
@@ -206,8 +207,9 @@ func _ready() -> void:
 	var ed:Control = snapping_node.get_editor()
 	ed.size_flags_horizontal = Control.SIZE_EXPAND
 	ed.size_flags_vertical = Control.SIZE_EXPAND
-
+	
 	snapping_panel.add_child(ed)
+	#slide_tab_container.add_child(snapping_panel)
 	
 #	side_tab_panel.add_control(ed)
 

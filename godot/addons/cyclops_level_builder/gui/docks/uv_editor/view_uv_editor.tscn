@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cw1yjv8t33ii0"]
+[gd_scene load_steps=15 format=3 uid="uid://cw1yjv8t33ii0"]
 
 [ext_resource type="Script" uid="uid://5l6u428jo0ce" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/view_uv_editor.gd" id="1_bjwq8"]
 [ext_resource type="PackedScene" uid="uid://dlouwod012q17" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_editor.tscn" id="2_iavjh"]
@@ -11,7 +11,8 @@
 [ext_resource type="Script" uid="uid://b3wl2p04rjkyy" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping_grid.gd" id="6_nc8ii"]
 [ext_resource type="Script" uid="uid://5shtfh4pg660" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping_vertex.gd" id="7_t0xtm"]
 [ext_resource type="Script" uid="uid://beli1atd0sieb" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping.gd" id="9_v4lie"]
-[ext_resource type="PackedScene" uid="uid://c55r3gtksrpcy" path="res://addons/cyclops_level_builder/gui/controls/side_tab_panel.tscn" id="10_mvj8m"]
+[ext_resource type="PackedScene" uid="uid://c7qoththgg6wp" path="res://addons/cyclops_level_builder/gui/controls/h_slide_tab_container.tscn" id="10_mcgkv"]
+[ext_resource type="PackedScene" uid="uid://cxvieo0800p4g" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_editor_layout.tscn" id="11_mcgkv"]
 
 [sub_resource type="World3D" id="World3D_bxn6v"]
 
@@ -153,11 +154,22 @@ render_target_update_mode = 4
 unique_name_in_owner = true
 face_sel_color = Color(0.5, 0.5, 0.5, 0.4)
 
-[node name="side_tab_panel" parent="VBoxContainer/Control" instance=ExtResource("10_mvj8m")]
+[node name="slide_tab_container" parent="VBoxContainer/Control" instance=ExtResource("10_mcgkv")]
 unique_name_in_owner = true
 layout_mode = 1
-offset_left = -31.0
-active_tab = 0
+anchors_preset = 11
+anchor_left = 1.0
+grow_horizontal = 0
+view_width = 200.0
+
+[node name="Layout" parent="VBoxContainer/Control/slide_tab_container" instance=ExtResource("11_mcgkv")]
+visible = false
+layout_mode = 2
+
+[node name="Snapping" type="PanelContainer" parent="VBoxContainer/Control/slide_tab_container"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
 
 [node name="snapping" type="Node" parent="." node_paths=PackedStringArray("cur_snap_tool")]
 unique_name_in_owner = true
