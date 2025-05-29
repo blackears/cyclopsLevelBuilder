@@ -153,6 +153,7 @@ render_target_update_mode = 4
 [node name="uv_editor" parent="VBoxContainer/Control/SubViewportContainer/SubViewport" instance=ExtResource("2_iavjh")]
 unique_name_in_owner = true
 face_sel_color = Color(0.5, 0.5, 0.5, 0.4)
+min_grid_spacing = 100.0
 
 [node name="slide_tab_container" parent="VBoxContainer/Control" instance=ExtResource("10_mcgkv")]
 unique_name_in_owner = true
@@ -162,9 +163,10 @@ anchor_left = 1.0
 grow_horizontal = 0
 view_width = 200.0
 
-[node name="Layout" parent="VBoxContainer/Control/slide_tab_container" instance=ExtResource("11_mcgkv")]
+[node name="Layout" parent="VBoxContainer/Control/slide_tab_container" node_paths=PackedStringArray("uv_editor") instance=ExtResource("11_mcgkv")]
 visible = false
 layout_mode = 2
+uv_editor = NodePath("../../SubViewportContainer/SubViewport/uv_editor")
 
 [node name="Snapping" type="PanelContainer" parent="VBoxContainer/Control/slide_tab_container"]
 unique_name_in_owner = true

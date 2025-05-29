@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://cxvieo0800p4g"]
+[gd_scene load_steps=3 format=3 uid="uid://cxvieo0800p4g"]
 
+[ext_resource type="Script" uid="uid://bt4vxli2rebya" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_editor_layout.gd" id="1_gddga"]
 [ext_resource type="PackedScene" uid="uid://xganp03k5qlp" path="res://addons/cyclops_level_builder/gui/controls/vector2_edit.tscn" id="1_obnea"]
 
 [node name="Layout" type="PanelContainer"]
@@ -8,23 +9,28 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_gddga")
 
 [node name="GridContainer" type="GridContainer" parent="."]
 layout_mode = 2
 columns = 2
 
+[node name="Label2" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Subdivisions"
+
+[node name="vectorEdit_subdiv" parent="GridContainer" instance=ExtResource("1_obnea")]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="Label" type="Label" parent="GridContainer"]
 layout_mode = 2
 text = "Offset"
 
-[node name="Vector2Edit" parent="GridContainer" instance=ExtResource("1_obnea")]
+[node name="vectorEdit_offset" parent="GridContainer" instance=ExtResource("1_obnea")]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label2" type="Label" parent="GridContainer"]
-layout_mode = 2
-text = "Line 
-Spacing"
-
-[node name="Vector2Edit2" parent="GridContainer" instance=ExtResource("1_obnea")]
-layout_mode = 2
+[connection signal="value_changed" from="GridContainer/vectorEdit_subdiv" to="." method="_on_vector_edit_subdiv_value_changed"]
+[connection signal="value_changed" from="GridContainer/vectorEdit_offset" to="." method="_on_vector_edit_offset_value_changed"]

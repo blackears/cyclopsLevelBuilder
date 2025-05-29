@@ -26,6 +26,7 @@ extends Control
 class_name ViewUvEditor
 
 #signal forward_input(event:InputEvent)
+#signal property_changed(name:StringName, value)
 signal tool_changed(tool:CyclopsTool)
 
 #@onready var side_tab_container:SideTabContainer = %SideTabContainer

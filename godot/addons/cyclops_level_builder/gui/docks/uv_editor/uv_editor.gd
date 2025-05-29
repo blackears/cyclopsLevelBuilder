@@ -28,6 +28,27 @@ class_name UvEditor
 
 #signal forward_input(event:InputEvent)
 signal proj_transform_changed(xform:Transform2D)
+signal subdivisions_changed(value:Vector2)
+signal subdivisions_offset_changed(value:Vector2)
+
+var subdivisions:Vector2 = Vector2(.1, .1):
+	set(v):
+		if v == subdivisions:
+			return
+		subdivisions = v
+		
+		subdivisions_changed.emit(v)
+		queue_redraw()
+		#property_changed.emit("subdivisions", v)
+
+var subdivisions_offset:Vector2:
+	set(v):
+		if v == subdivisions_offset:
+			return
+		subdivisions_offset = v
+		
+		subdivisions_offset_changed.emit(v)
+		queue_redraw()
 
 @export var face_sel_color:Color = Color(1, .5, 0, .4):
 	set(value):
@@ -71,6 +92,7 @@ signal proj_transform_changed(xform:Transform2D)
 		proj_transform_changed.emit(value)
 		
 		queue_redraw()
+
 		
 ##Selecting a UV feature will also select the coresponding mesh 
 ## feature.  Also will display entire uv mesh instead of just 
@@ -171,14 +193,6 @@ func rebuild_block_handles(block:CyclopsBlock):
 			h_e.edge_index = e.index
 			
 			state.handle_edges.append(h_e)
-			
-		#for e_idx in f.edge_indices:
-			#var h_e:HandleUvEdge = HandleUvEdge.new()
-			#h_e.object_path = block.get_path()
-			#h_e.face_index = f.index
-			#h_e.edge_index = e_idx
-			#
-			#state.handle_edges.append(h_e)
 		
 		for v_idx in f.vertex_indices:
 			var h_v:HandleUvVertex = HandleUvVertex.new()
@@ -196,7 +210,6 @@ func pick_uv_vertices(cv:ConvexVolume, region:Rect2, uv_map_name:String)->Packed
 	var result:PackedInt32Array
 	
 	for f:ConvexVolume.FaceInfo in cv.faces:
-#		for v_idx:int in f.vertex_indices:
 		for fv_idx:int in f.face_vertex_indices:
 			var fv:ConvexVolume.FaceVertexInfo = cv.face_vertices[fv_idx]
 			if region.has_point(fv.uv0):
@@ -370,13 +383,64 @@ func draw_material_underlay():
 	
 		
 
-@export var min_grid_spacing:float = 100
+@export var min_grid_spacing:float = 16
 @export var grid_color_major_axis:Color = Color.WHITE
-@export var grid_color_major:Color = Color.GRAY
 @export var grid_width_major_axis:float = 2
+@export var grid_color_major:Color = Color.GRAY
 @export var grid_width_major:float = 1
+@export var grid_color_minor:Color = Color(.7, .7, .7, .5)
+@export var grid_width_minor:float = 1
+
 @export var grid_font:Font = preload("res://addons/cyclops_level_builder/art/fonts/Roboto/Roboto-Regular.ttf")
 @export var grid_font_size:float = 10
+
+func draw_subdiv_grid():
+#	var minor_grid_xform = Transform2D(0, Vector2(1 / subdivisions.x, 1 / subdivisions.y), 0, subdivisions_offset)
+	var minor_grid_xform = Transform2D(0, subdivisions, 0, subdivisions_offset)
+	
+	var view_rect:Rect2 = get_viewport_rect()
+	var uv_to_view_xform:Transform2D = get_uv_to_viewport_xform() * minor_grid_xform
+	var view_to_uv_xform:Transform2D = uv_to_view_xform.affine_inverse()
+	
+	var p00_uv = view_to_uv_xform * view_rect.position
+	var p11_uv = view_to_uv_xform * view_rect.end
+	
+	var view_to_uv_vector_xform = view_to_uv_xform
+	view_to_uv_vector_xform.origin = Vector2.ZERO
+	
+	var min_uv_grid_spacing:Vector2 = view_to_uv_vector_xform * Vector2(min_grid_spacing, min_grid_spacing) * subdivisions
+	
+#	print("min_uv_grid_spacing  ", min_uv_grid_spacing)
+	
+	var grid_min_x:int = floor(p00_uv.x)
+	var grid_max_x:int = ceil(p11_uv.x)
+	var grid_min_y:int = floor(p11_uv.y) #xform flipped on vertical axis
+	var grid_max_y:int = ceil(p00_uv.y) #xform flipped on vertical axis
+
+	var skip_x:int = ceil(abs(min_uv_grid_spacing.x))
+	var skip_y:int = ceil(abs(min_uv_grid_spacing.y))
+
+	grid_min_x = floor(float(grid_min_x) / skip_x) * skip_x
+	grid_min_y = floor(float(grid_min_y) / skip_y) * skip_y
+
+
+	for line_idx:int in range(grid_min_x, grid_max_x + 1, skip_x):
+		var pl0 = Vector2(line_idx, p00_uv.y)
+		var pl1 = Vector2(line_idx, p11_uv.y)
+		
+		var plv0 = uv_to_view_xform * pl0
+		var plv1 = uv_to_view_xform * pl1
+		
+		draw_dashed_line(plv0, plv1, grid_color_minor, grid_width_minor)
+
+	for line_idx:int in range(grid_min_y, grid_max_y + 1, skip_y):
+		var pl0 = Vector2(p00_uv.x, line_idx)
+		var pl1 = Vector2(p11_uv.x, line_idx)
+		
+		var plv0 = uv_to_view_xform * pl0
+		var plv1 = uv_to_view_xform * pl1
+
+		draw_dashed_line(plv0, plv1, grid_color_minor, grid_width_minor)
 
 
 func draw_grid():
@@ -412,6 +476,7 @@ func draw_grid():
 	#print("grid_max_x ", grid_max_x)
 	#print("grid_min_y ", grid_min_y)
 	#print("grid_max_y ", grid_max_y)
+	
 
 	for line_idx:int in range(grid_min_x, grid_max_x + 1, skip_x):
 		var pl0 = Vector2(line_idx, p00_uv.y)
@@ -446,6 +511,7 @@ func draw_grid():
 func _draw() -> void:
 	draw_material_underlay()
 	
+	draw_subdiv_grid()
 	draw_grid()
 
 	
