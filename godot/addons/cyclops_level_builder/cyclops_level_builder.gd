@@ -212,7 +212,6 @@ func _enter_tree():
 
 	view_uv_editor = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/view_uv_editor.tscn").instantiate()
 	view_uv_editor.plugin = self
-#	view_uv_editor.forward_input.connect(on_uv_editor_forward_input)
 	
 	overlays_dock = preload("res://addons/cyclops_level_builder/gui/docks/overlays/overlays_dock.tscn").instantiate()
 	overlays_dock.plugin = self
@@ -257,6 +256,8 @@ func _enter_tree():
 	
 	switch_to_snapping_system(SnappingSystemGrid.new())
 	switch_to_tool(get_tool_by_id(ToolBlock.TOOL_ID))
+	
+	view_uv_editor.activate()
 
 func init_view3d_snapping_tools():
 	snap_node_list.clear()

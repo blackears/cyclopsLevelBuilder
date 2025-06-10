@@ -36,7 +36,7 @@ signal tool_changed(tool:CyclopsTool)
 @onready var bn_use_snap:TextureButton = %bn_use_snap
 
 @onready var theme_tool_button:Theme = preload("res://addons/cyclops_level_builder/themes/tool_button_theme.tres")
-	
+
 var active_tool:CyclopsTool
 
 var plugin:CyclopsLevelBuilder:
@@ -58,6 +58,10 @@ var plugin:CyclopsLevelBuilder:
 
 
 		#build_menus()
+		#for child in %tools.get_children():
+			#if child is CyclopsTool:
+				#switch_to_tool(child)
+				#break
 
 func get_snapping_manager()->UvEditorSnapping:
 	return %snapping
@@ -258,10 +262,10 @@ func _ready() -> void:
 
 	build_menus()
 	
-	for child in %tools.get_children():
-		if child is CyclopsTool:
-			switch_to_tool(child)
-			break
+	#for child in %tools.get_children():
+		#if child is CyclopsTool:
+			#switch_to_tool(child)
+			#break
 
 	pass # Replace with function body.
 
@@ -388,4 +392,10 @@ func update_snap_display():
 		var ed:Control = snapping_node.get_editor()
 		#print("swithing to ed ", ed.name, " ")
 		snapping_panel.add_child(ed)
+
+func activate():
+	for child in %tools.get_children():
+		if child is CyclopsTool:
+			switch_to_tool(child)
+			break
 	

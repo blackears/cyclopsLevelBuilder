@@ -93,6 +93,7 @@ var subdivisions_offset:Vector2:
 		
 		queue_redraw()
 
+var pivot_cursor_position:Vector2
 		
 ##Selecting a UV feature will also select the coresponding mesh 
 ## feature.  Also will display entire uv mesh instead of just 
@@ -158,6 +159,10 @@ var gizmo_list:Array[Gizmo2D]
 func _ready() -> void:
 	rebuild_handles()
 	pass
+
+func _process(delta: float) -> void:
+	var uv_to_vp_xform:Transform2D = get_uv_to_viewport_xform()
+	%pivot_cursor.position = uv_to_vp_xform * pivot_cursor_position
 
 func add_gizmo(gizmo:Gizmo2D):
 	%gizmo_area.add_child(gizmo)
