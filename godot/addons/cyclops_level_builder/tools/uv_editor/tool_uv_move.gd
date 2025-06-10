@@ -40,22 +40,35 @@ var zoom_wheel_amount:float = 1.2
 var move_constraint:MoveConstraint.Type
 var mvd_cache:Dictionary
 
-#@export var min_focus_size:Vector2 = Vector2(.5, .5)
+@export var tool_name:String = "Move UVs"
+@export var tool_icon:Texture2D = preload("res://addons/cyclops_level_builder/art/icons/move.svg")
+@export_multiline var tool_tooltip:String = "Move UVs"
+
+@export var view:ViewUvEditor
 
 
 func is_uv_tool():
 	return true
-	
+
 func _get_tool_name()->String:
-	return "Move UVs"
+	return tool_name
 
 func _get_tool_icon()->Texture2D:
-	#return preload("res://addons/cyclops_level_builder/art/icons/move.svg")
-	var tag_:ToolTag = load("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_move.tres")
-	return tag_.icon
+	return tool_icon
 
 func _get_tool_tooltip()->String:
-	return "Move UVs"
+	return tool_tooltip
+
+#func _get_tool_name()->String:
+	#return "Move UVs"
+#
+#func _get_tool_icon()->Texture2D:
+	##return preload("res://addons/cyclops_level_builder/art/icons/move.svg")
+	#var tag_:ToolTag = load("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_move.tres")
+	#return tag_.icon
+#
+#func _get_tool_tooltip()->String:
+	#return "Move UVs"
 
 func _get_tool_properties_editor()->Control:
 	var ed:ToolUvMoveSettingsEditor = preload("res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_move_settings_editor.tscn").instantiate()
@@ -80,7 +93,7 @@ func cache_selected_blocks():
 		mvd_cache[block_path] = mvd.duplicate_explicit()
 
 func _draw_tool(viewport_camera:Camera3D):
-	var view:ViewUvEditor = builder.view_uv_editor
+	#var view:ViewUvEditor = builder.view_uv_editor
 	var uv_ed:UvEditor = view.get_uv_editor()
 	var uv_to_viewport_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 	
@@ -147,7 +160,7 @@ func focus_on_selected_uvs():
 #		bounds = Rect2(bounds.position - min_focus_size / 2.0, min_focus_size)
 		bounds = Rect2(bounds.position - Vector2.ONE / 2.0, Vector2.ONE)
 	
-	var view:ViewUvEditor = builder.view_uv_editor
+#	var view:ViewUvEditor = builder.view_uv_editor
 	var uv_ed:UvEditor = view.get_uv_editor()
 	var viewport_size:Vector2 = view.get_uv_editor_viewport_size()
 	
@@ -286,7 +299,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		
 	#print("tool_uv_move._gui_input()")
 	
-	var view:ViewUvEditor = builder.view_uv_editor
+#	var view:ViewUvEditor = builder.view_uv_editor
 	var uv_ed:UvEditor = view.get_uv_editor()
 	var uv_to_view_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 	
@@ -441,7 +454,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			if e.pressed:
 #				print("uv_move wheel up")
 				
-#				var uv_to_view_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 				var view_xform:Transform2D = uv_ed.get_view_transform()
 				
 				var new_xform:Transform2D
@@ -526,7 +538,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 func _activate(tool_owner:Node):
 	super._activate(tool_owner)
 
-	var view:ViewUvEditor = builder.view_uv_editor
+#	var view:ViewUvEditor = builder.view_uv_editor
 	var uv_ed:UvEditor = view.get_uv_editor()
 	
 	gizmo = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_translate_2d.tscn").instantiate()

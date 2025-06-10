@@ -35,6 +35,10 @@ signal tool_changed(tool:CyclopsTool)
 @onready var slide_tab_container:HSlideTabContainer = %slide_tab_container
 @onready var bn_use_snap:TextureButton = %bn_use_snap
 
+@onready var theme_tool_button:Theme = preload("res://addons/cyclops_level_builder/themes/tool_button_theme.tres")
+	
+var active_tool:CyclopsTool
+
 var plugin:CyclopsLevelBuilder:
 	set(value):
 		if value == plugin:
@@ -52,19 +56,12 @@ var plugin:CyclopsLevelBuilder:
 			var ed_sel:EditorSelection = ed_iface.get_selection()
 			ed_sel.selection_changed.connect(on_block_selection_changed)
 
+
 		#build_menus()
 
 func get_snapping_manager()->UvEditorSnapping:
 	return %snapping
 
-var active_tool:CyclopsTool
-
-#var snapping_panel:Control
-
-#func _input(event: InputEvent) -> void:
-	#print("view uv ed ", event)
-	##input_passthrough.emit(event)
-	#pass
 
 func switch_to_tool(_tool:CyclopsTool):
 	if active_tool:
@@ -74,8 +71,19 @@ func switch_to_tool(_tool:CyclopsTool):
 
 	if active_tool:
 		active_tool._activate(self)
+
+		for child in %Tool.get_children():
+			child.queue_free()
+		
 		var control:Control = active_tool._get_tool_properties_editor()
-		plugin.tool_properties_dock.set_editor(control)
+		if control:
+			control.size_flags_horizontal = Control.SIZE_EXPAND
+			#control.size_flags_vertical = Control.SIZE_EXPAND
+		
+			%Tool.add_child(control)
+		
+		var idx:int = active_tool.get_index()
+		%tool_buttons.get_child(idx).button_pressed = true
 	
 	tool_changed.emit(active_tool)
 	
@@ -115,7 +123,8 @@ func build_menus():
 
 #	print("Build menu")
 	#Build view menu
-	var menu_root = plugin.config_scene.get_node("Views/UvEditor/Menu")
+#	var menu_root = plugin.config_scene.get_node("Views/UvEditor/Menu")
+	var menu_root = %menu
 	for child in menu_root.get_children():
 		var event:CyclopsActionEvent = CyclopsActionEvent.new()
 		event.plugin = plugin
@@ -131,29 +140,57 @@ func build_menus():
 					else: \
 						print("Action link not found: ", action.name)
 				)
+	
+	build_tool_buttons()
 
+func build_tool_buttons():
 	#Build tool buttons
 #	print("Build tool bns")
 	var active_block:CyclopsBlock = plugin.get_active_block()
-	if plugin.config_scene:
-		var toolbar_root = plugin.config_scene.get_node("Views/UvEditor/Toolbar")
-		for child in toolbar_root.get_children():
-			if child is ToolbarButtonRef:
-				var tool_inst:CyclopsTool = child.tool
+	
+	var tool_button_group:ButtonGroup = ButtonGroup.new()
+	
+	var toolbar_root = %tools
+	for child in toolbar_root.get_children():
+		if child is CyclopsTool:
+			var tool_inst:CyclopsTool = child
+			var bn:Button = Button.new()
+			bn.button_group = tool_button_group
+			bn.theme = theme_tool_button
+			bn.toggle_mode = true
+			bn.button_pressed = child == active_tool
+			bn.icon = tool_inst._get_tool_icon()
+			if !bn.icon:
+				bn.text = tool_inst._get_tool_name()
+			bn.tooltip_text = tool_inst._get_tool_tooltip()
+			
+			bn.pressed.connect(func():
+				switch_to_tool(tool_inst)
+			)
+			
+			%tool_buttons.add_child(bn)
 
-				if tool_inst && tool_inst.is_inside_tree() && tool_inst._show_in_toolbar() && tool_inst._can_handle_object(active_block):
-#					print("Adding tool")
-					var bn:ToolButton = preload("res://addons/cyclops_level_builder/gui/menu/tool_button.tscn").instantiate()
-					bn.plugin = plugin
-					bn.tool_path = tool_inst.get_path()
-					bn.tool_owner = self
-					bn.icon = tool_inst._get_tool_icon()
-#					print("Adding button ", tool._get_tool_name())
-					if !bn.icon:
-						bn.text = tool_inst._get_tool_name()
-					bn.tooltip_text = tool_inst._get_tool_tooltip()
-					
-					%tool_buttons.add_child(bn)
+	#####
+	#if plugin.config_scene:
+##		var toolbar_root = plugin.config_scene.get_node("Views/UvEditor/Toolbar")
+		#var toolbar_root = %tools
+		#for child in toolbar_root.get_children():
+			#if child is CyclopsTool:
+				#var tool_inst:CyclopsTool = child
+#
+				#if tool_inst && tool_inst.is_inside_tree() && tool_inst._show_in_toolbar() && tool_inst._can_handle_object(active_block):
+##					print("Adding tool")
+					#var bn:ToolButton = preload("res://addons/cyclops_level_builder/gui/menu/tool_button.tscn").instantiate()
+					#bn.plugin = plugin
+					#bn.tool_path = tool_inst.get_path()
+					#bn.tool_owner = self
+					#bn.icon = tool_inst._get_tool_icon()
+##					print("Adding button ", tool._get_tool_name())
+					#if !bn.icon:
+						#bn.text = tool_inst._get_tool_name()
+					#bn.tooltip_text = tool_inst._get_tool_tooltip()
+					#
+					#%tool_buttons.add_child(bn)
 	
 #var foo:int = 0
 func on_block_selection_changed():
@@ -220,6 +257,11 @@ func _ready() -> void:
 	#side_tab_panel.active_tab = -1
 
 	build_menus()
+	
+	for child in %tools.get_children():
+		if child is CyclopsTool:
+			switch_to_tool(child)
+			break
 
 	pass # Replace with function body.
 

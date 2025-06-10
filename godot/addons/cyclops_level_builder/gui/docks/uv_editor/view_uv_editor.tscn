@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cw1yjv8t33ii0"]
+[gd_scene load_steps=19 format=3 uid="uid://cw1yjv8t33ii0"]
 
 [ext_resource type="Script" uid="uid://5l6u428jo0ce" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/view_uv_editor.gd" id="1_bjwq8"]
 [ext_resource type="PackedScene" uid="uid://dlouwod012q17" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_editor.tscn" id="2_iavjh"]
@@ -13,10 +13,14 @@
 [ext_resource type="Script" uid="uid://beli1atd0sieb" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping.gd" id="9_v4lie"]
 [ext_resource type="PackedScene" uid="uid://c7qoththgg6wp" path="res://addons/cyclops_level_builder/gui/controls/h_slide_tab_container.tscn" id="10_mcgkv"]
 [ext_resource type="PackedScene" uid="uid://cxvieo0800p4g" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_editor_layout.tscn" id="11_mcgkv"]
+[ext_resource type="Script" uid="uid://ceics6oooyp10" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_move.gd" id="14_mcgkv"]
+[ext_resource type="Script" uid="uid://c0tl2kn33andn" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_rotate.gd" id="15_oec2b"]
+[ext_resource type="Script" uid="uid://bp7b6y48sxsbt" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_scale.gd" id="16_uxymb"]
+[ext_resource type="Script" uid="uid://blspcyewd8ue6" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_box_transform.gd" id="17_dd6m4"]
 
 [sub_resource type="World3D" id="World3D_bxn6v"]
 
-[node name="UvEditor" type="Control"]
+[node name="ViewUvEditor" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -168,6 +172,11 @@ visible = false
 layout_mode = 2
 uv_editor = NodePath("../../SubViewportContainer/SubViewport/uv_editor")
 
+[node name="Tool" type="PanelContainer" parent="VBoxContainer/Control/slide_tab_container"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
 [node name="Snapping" type="PanelContainer" parent="VBoxContainer/Control/slide_tab_container"]
 unique_name_in_owner = true
 visible = false
@@ -185,6 +194,28 @@ metadata/_custom_type_script = "uid://b3wl2p04rjkyy"
 [node name="Vertex" type="Node" parent="snapping"]
 script = ExtResource("7_t0xtm")
 metadata/_custom_type_script = "uid://5shtfh4pg660"
+
+[node name="tools" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="Move UV" type="Node" parent="tools" node_paths=PackedStringArray("view")]
+script = ExtResource("14_mcgkv")
+view = NodePath("../..")
+
+[node name="Rotate UV" type="Node" parent="tools" node_paths=PackedStringArray("view")]
+script = ExtResource("15_oec2b")
+view = NodePath("../..")
+
+[node name="Scale UV" type="Node" parent="tools" node_paths=PackedStringArray("view")]
+script = ExtResource("16_uxymb")
+view = NodePath("../..")
+
+[node name="Box Transform UV" type="Node" parent="tools" node_paths=PackedStringArray("view")]
+script = ExtResource("17_dd6m4")
+view = NodePath("../..")
+
+[node name="menu" type="Node" parent="."]
+unique_name_in_owner = true
 
 [connection signal="focus_entered" from="." to="." method="_on_focus_entered"]
 [connection signal="focus_exited" from="." to="." method="_on_focus_exited"]

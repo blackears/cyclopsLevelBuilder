@@ -37,7 +37,7 @@ enum BoundsCheck { NONE, HARD, SFOT }
 @export var soft_max_value:float = 100
 @export var bounds_check_min:BoundsCheck
 @export var bounds_check_max:BoundsCheck
-@export var drag_step:float = .1
+@export var drag_step:float = .01
 @export var round_digits:int = 4
 
 var dragging:bool = false
@@ -77,20 +77,21 @@ func _ready() -> void:
 
 func _on_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
-		if event.is_pressed():
-			dragging = true
-			mouse_down_pos = event.position
-			
-			var exp:Expression = Expression.new()
-			var err = exp.parse(text)
-			
-			if err:
-				start_drag_value = 0
+		if event.button_index == MOUSE_BUTTON_MIDDLE:
+			if event.is_pressed():
+				dragging = true
+				mouse_down_pos = event.position
+				
+				var exp:Expression = Expression.new()
+				var err = exp.parse(text)
+				
+				if err:
+					start_drag_value = 0
+				else:
+					var result = exp.execute()
+					start_drag_value = result if (result is float || result is int) else 0
 			else:
-				var result = exp.execute()
-				start_drag_value = result if (result is float || result is int) else 0
-		else:
-			dragging = false
+				dragging = false
 			
 	if event is InputEventMouseMotion:
 		if dragging:
@@ -103,6 +104,16 @@ func _on_gui_input(event: InputEvent) -> void:
 
 
 func _on_text_submitted(new_text: String) -> void:
+	var exp:Expression = Expression.new()
+	var err = exp.parse(text)
+	
+	if err:
+		value = 0
+	else:
+		value = exp.execute()
+
+
+func _on_focus_exited() -> void:
 	var exp:Expression = Expression.new()
 	var err = exp.parse(text)
 	

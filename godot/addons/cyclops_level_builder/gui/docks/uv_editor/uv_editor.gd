@@ -424,7 +424,7 @@ func draw_subdiv_grid():
 	grid_min_y = floor(float(grid_min_y) / skip_y) * skip_y
 
 
-	for line_idx:int in range(grid_min_x, grid_max_x + 1, skip_x):
+	for line_idx:int in range(grid_min_x, grid_max_x + 1, max(skip_x, 1)):
 		var pl0 = Vector2(line_idx, p00_uv.y)
 		var pl1 = Vector2(line_idx, p11_uv.y)
 		
@@ -433,7 +433,7 @@ func draw_subdiv_grid():
 		
 		draw_dashed_line(plv0, plv1, grid_color_minor, grid_width_minor)
 
-	for line_idx:int in range(grid_min_y, grid_max_y + 1, skip_y):
+	for line_idx:int in range(grid_min_y, grid_max_y + 1, max(skip_y, 1)):
 		var pl0 = Vector2(p00_uv.x, line_idx)
 		var pl1 = Vector2(p11_uv.x, line_idx)
 		
@@ -478,7 +478,7 @@ func draw_grid():
 	#print("grid_max_y ", grid_max_y)
 	
 
-	for line_idx:int in range(grid_min_x, grid_max_x + 1, skip_x):
+	for line_idx:int in range(grid_min_x, grid_max_x + 1, max(skip_x, 1)):
 		var pl0 = Vector2(line_idx, p00_uv.y)
 		var pl1 = Vector2(line_idx, p11_uv.y)
 		
@@ -493,7 +493,7 @@ func draw_grid():
 		draw_string(grid_font, plv0 + Vector2(2, grid_font_size), str(line_idx), HORIZONTAL_ALIGNMENT_LEFT, 
 			-1, grid_font_size)
 
-	for line_idx:int in range(grid_min_y, grid_max_y + 1, skip_y):
+	for line_idx:int in range(grid_min_y, grid_max_y + 1, max(skip_y, 1)):
 		var pl0 = Vector2(p00_uv.x, line_idx)
 		var pl1 = Vector2(p11_uv.x, line_idx)
 		
