@@ -449,6 +449,14 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					tool_state = ToolState.NONE
 					return true
 				
+		elif e.button_index == MOUSE_BUTTON_RIGHT:
+			if e.is_pressed():
+				if e.shift_pressed:
+					var uv_editor:UvEditor = view.get_uv_editor()
+					var xform:Transform2D = uv_editor.get_uv_to_viewport_xform()
+					uv_editor.pivot_cursor_position = xform.affine_inverse() * e.position
+					
+			return true
 
 		elif e.button_index == MOUSE_BUTTON_WHEEL_UP:
 			if e.pressed:
