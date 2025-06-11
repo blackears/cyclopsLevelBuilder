@@ -25,6 +25,8 @@
 extends Gizmo2D
 class_name GizmoRotate2D
 
+@onready var ring_z:GizmoCircle2D = %rotate_z
+
 @export var center_point_color:Color = Color.WHITE:
 	set(value):
 		center_point_color = value
@@ -35,7 +37,16 @@ class_name GizmoRotate2D
 		center_point_radius = value
 		queue_redraw()
 
+enum Part { NONE, RING }
 
+func pick_part(pos:Vector2)->Part:
+	#print("pick_part ", pos)
+	
+	if ring_z.pick(ring_z.global_transform.affine_inverse() * pos, 4):
+		return Part.RING
+
+	return Part.NONE
+	
 func _draw():
 	draw_circle(Vector2.ZERO, center_point_radius, center_point_color)
 	pass

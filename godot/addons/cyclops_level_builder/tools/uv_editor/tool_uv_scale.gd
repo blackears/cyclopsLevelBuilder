@@ -22,7 +22,7 @@
 # SOFTWARE.
 
 @tool
-extends CyclopsTool
+extends ToolUv
 class_name ToolUvScale
 
 enum ToolState { NONE, READY, DRAG_VIEW, DRAG_SELECTION, DRAG_UVS }
@@ -32,7 +32,6 @@ var tool_state:ToolState = ToolState.NONE
 @export var tool_icon:Texture2D = preload("res://addons/cyclops_level_builder/art/icons/scale.svg")
 @export_multiline var tool_tooltip:String = "Scale UVs"
 
-@export var view:ViewUvEditor
 
 func _get_tool_name()->String:
 	return tool_name

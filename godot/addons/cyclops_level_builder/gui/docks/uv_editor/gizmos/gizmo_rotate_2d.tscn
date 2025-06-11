@@ -5,9 +5,8 @@
 
 [node name="GizmoRotate" type="Node2D"]
 script = ExtResource("1_ym4v0")
-center_point_color = null
-center_point_radius = null
 
 [node name="rotate_z" parent="." instance=ExtResource("2_xa4cn")]
+unique_name_in_owner = true
 color = Color(0, 0, 1, 1)
 radius = 50.0
