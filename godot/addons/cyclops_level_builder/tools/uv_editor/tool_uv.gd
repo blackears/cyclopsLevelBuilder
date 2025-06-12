@@ -36,8 +36,14 @@ var zoom_wheel_amount:float = 1.2
 var tracked_blocks:Array[CyclopsBlock]
 var mvd_cache:Dictionary
 
+var focused:bool
+
 @export var view:ViewUvEditor
 
+## @return if tool should appear in toolbar
+func _is_selectable()->bool:
+	return true
+	
 func clear_tracked_blocks():
 	for block in tracked_blocks:
 		if is_instance_valid(block):
@@ -197,52 +203,31 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	if !builder:
 		return false
 
-	var uv_ed:UvEditor = view.get_uv_editor()
-	var uv_to_view_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
-		
-	if event is InputEventKey:
-		var e:InputEventKey = event
-		
-		if e.keycode == KEY_A:
-			var block_indices:Dictionary
-			if e.alt_pressed:
-				block_indices = {}
-			else:
-				block_indices = uv_ed.get_uv_indices_in_region(
-					Rect2(-Vector2.INF, Vector2.INF),
-					false)
-			
-#					print("block_indices ", block_indices)
-			select_face_vertices(block_indices, Selection.Type.REPLACE)
-
-			get_viewport().set_input_as_handled()
-			return true
-
-		elif e.keycode == KEY_F:
-			focus_on_selected_uvs()
-	
-			get_viewport().set_input_as_handled()
-			return true
-
-	#elif event is InputEventMouseButton:
-#
-		#var e:InputEventMouseButton = event
-		#if e.button_index == MOUSE_BUTTON_MIDDLE:
-#
-			#if e.is_pressed():
-				#if tool_state == ToolState.NONE:
-					#mouse_down_pos = e.position
-					#
-					#tool_state = ToolState.DRAG_VIEW
-					#drag_start_view_xform = uv_ed.proj_transform
-#
-					#return true
-				#
-				#
-				#pass
+	#var uv_ed:UvEditor = view.get_uv_editor()
+	#var uv_to_view_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
+		#
+	#if event is InputEventKey:
+		#var e:InputEventKey = event
+		#
+		#if e.keycode == KEY_A:
+			#var block_indices:Dictionary
+			#if e.alt_pressed:
+				#block_indices = {}
 			#else:
-				#if tool_state == ToolState.DRAG_VIEW:
-					#tool_state = ToolState.NONE
-					#return true
+				#block_indices = uv_ed.get_uv_indices_in_region(
+					#Rect2(-Vector2.INF, Vector2.INF),
+					#false)
+			#
+##					print("block_indices ", block_indices)
+			#select_face_vertices(block_indices, Selection.Type.REPLACE)
+#
+			#get_viewport().set_input_as_handled()
+			#return true
+#
+		#elif e.keycode == KEY_F:
+			#focus_on_selected_uvs()
+	#
+			#get_viewport().set_input_as_handled()
+			#return true
 
 	return false

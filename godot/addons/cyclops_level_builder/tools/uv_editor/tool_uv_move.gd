@@ -84,6 +84,9 @@ func _can_handle_object(node:Node)->bool:
 	return true
 
 func _draw_tool(viewport_camera:Camera3D):
+	if !focused:
+		return
+		
 	var uv_ed:UvEditor = view.get_uv_editor()
 	var uv_to_viewport_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 	
@@ -156,7 +159,7 @@ func move_uvs(offset:Vector2, commit:bool):
 	
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
-	if !builder:
+	if !builder || !focused:
 		return false
 		
 	#print("tool_uv_move._gui_input()")
@@ -288,65 +291,65 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					tool_state = ToolState.NONE
 				
 					return true
-
-		elif e.button_index == MOUSE_BUTTON_MIDDLE:
-
-			if e.is_pressed():
-				if tool_state == ToolState.NONE:
-					mouse_down_pos = e.position
-					
-					tool_state = ToolState.DRAG_VIEW
-					drag_start_view_xform = uv_ed.proj_transform
-
-					return true
-				
-				
-				pass
-			else:
-				if tool_state == ToolState.DRAG_VIEW:
-					tool_state = ToolState.NONE
-					return true
-				
-		elif e.button_index == MOUSE_BUTTON_RIGHT:
-			if e.is_pressed():
-				if e.shift_pressed:
-					var uv_editor:UvEditor = view.get_uv_editor()
-					var xform:Transform2D = uv_editor.get_uv_to_viewport_xform()
-					uv_editor.pivot_cursor_position = xform.affine_inverse() * e.position
-					
 			return true
 
-		elif e.button_index == MOUSE_BUTTON_WHEEL_UP:
-			if e.pressed:
-#				print("uv_move wheel up")
+		#elif e.button_index == MOUSE_BUTTON_MIDDLE:
+#
+			#if e.is_pressed():
+				#if tool_state == ToolState.NONE:
+					#mouse_down_pos = e.position
+					#
+					#tool_state = ToolState.DRAG_VIEW
+					#drag_start_view_xform = uv_ed.proj_transform
+#
+					#return true
+				#
+			#else:
+				#if tool_state == ToolState.DRAG_VIEW:
+					#tool_state = ToolState.NONE
+					#return true
 				
-				var view_xform:Transform2D = uv_ed.get_view_transform()
-				
-				var new_xform:Transform2D
-#				print("uv_to_view_xform ", uv_to_view_xform)
-				new_xform = new_xform.translated_local(e.position)
-				new_xform = new_xform.scaled_local(Vector2(zoom_wheel_amount, zoom_wheel_amount))
-				new_xform = new_xform.translated_local(-e.position)
-				new_xform = new_xform * view_xform * uv_ed.proj_transform
-				
-				uv_ed.proj_transform = view_xform.affine_inverse() * new_xform
+		#elif e.button_index == MOUSE_BUTTON_RIGHT:
+			#if e.is_pressed():
+				#if e.shift_pressed:
+					#var uv_editor:UvEditor = view.get_uv_editor()
+					#var xform:Transform2D = uv_editor.get_uv_to_viewport_xform()
+					#uv_editor.pivot_cursor_position = xform.affine_inverse() * e.position
+					#
+			#return true
 
-				return true
-
-		elif e.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			if e.pressed:
-				var view_xform:Transform2D = uv_ed.get_view_transform()
-				
-				var new_xform:Transform2D
-#				print("uv_to_view_xform ", uv_to_view_xform)
-				new_xform = new_xform.translated_local(e.position)
-				new_xform = new_xform.scaled_local(Vector2(1 / zoom_wheel_amount, 1 / zoom_wheel_amount))
-				new_xform = new_xform.translated_local(-e.position)
-				new_xform = new_xform * view_xform * uv_ed.proj_transform
-				
-				uv_ed.proj_transform = view_xform.affine_inverse() * new_xform
-				
-				return true
+		#elif e.button_index == MOUSE_BUTTON_WHEEL_UP:
+			#if e.pressed:
+##				print("uv_move wheel up")
+				#
+				#var view_xform:Transform2D = uv_ed.get_view_transform()
+				#
+				#var new_xform:Transform2D
+##				print("uv_to_view_xform ", uv_to_view_xform)
+				#new_xform = new_xform.translated_local(e.position)
+				#new_xform = new_xform.scaled_local(Vector2(zoom_wheel_amount, zoom_wheel_amount))
+				#new_xform = new_xform.translated_local(-e.position)
+				#new_xform = new_xform * view_xform * uv_ed.proj_transform
+				#
+				#uv_ed.proj_transform = view_xform.affine_inverse() * new_xform
+#
+				#return true
+#
+		#elif e.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			#if e.pressed:
+				#var view_xform:Transform2D = uv_ed.get_view_transform()
+				#
+				#var new_xform:Transform2D
+##				print("uv_to_view_xform ", uv_to_view_xform)
+				#new_xform = new_xform.translated_local(e.position)
+				#new_xform = new_xform.scaled_local(Vector2(1 / zoom_wheel_amount, 1 / zoom_wheel_amount))
+				#new_xform = new_xform.translated_local(-e.position)
+				#new_xform = new_xform * view_xform * uv_ed.proj_transform
+				#
+				#uv_ed.proj_transform = view_xform.affine_inverse() * new_xform
+				#
+				#return true
+		return false
 
 	elif event is InputEventMouseMotion:
 		var e:InputEventMouseMotion = event

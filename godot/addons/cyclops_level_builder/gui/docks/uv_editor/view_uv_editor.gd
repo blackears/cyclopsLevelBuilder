@@ -69,11 +69,13 @@ func get_snapping_manager()->UvEditorSnapping:
 
 func switch_to_tool(_tool:CyclopsTool):
 	if active_tool:
+		active_tool.focused = false
 		active_tool._deactivate()
 	
 	active_tool = _tool
 
 	if active_tool:
+		active_tool.focused = true
 		active_tool._activate(self)
 
 		for child in %Tool.get_children():
@@ -155,14 +157,16 @@ func build_tool_buttons():
 	var tool_button_group:ButtonGroup = ButtonGroup.new()
 	
 	var toolbar_root = %tools
-	for child in toolbar_root.get_children():
-		if child is CyclopsTool:
-			var tool_inst:CyclopsTool = child
+	for tool_inst in toolbar_root.get_children():
+		if tool_inst is ToolUv:
+			if !tool_inst._is_selectable():
+				continue
+			
 			var bn:Button = Button.new()
 			bn.button_group = tool_button_group
 			bn.theme = theme_tool_button
 			bn.toggle_mode = true
-			bn.button_pressed = child == active_tool
+			bn.button_pressed = tool_inst == active_tool
 			bn.icon = tool_inst._get_tool_icon()
 			if !bn.icon:
 				bn.text = tool_inst._get_tool_name()
@@ -173,35 +177,8 @@ func build_tool_buttons():
 			)
 			
 			%tool_buttons.add_child(bn)
-
-	#####
-	#if plugin.config_scene:
-##		var toolbar_root = plugin.config_scene.get_node("Views/UvEditor/Toolbar")
-		#var toolbar_root = %tools
-		#for child in toolbar_root.get_children():
-			#if child is CyclopsTool:
-				#var tool_inst:CyclopsTool = child
-#
-				#if tool_inst && tool_inst.is_inside_tree() && tool_inst._show_in_toolbar() && tool_inst._can_handle_object(active_block):
-##					print("Adding tool")
-					#var bn:ToolButton = preload("res://addons/cyclops_level_builder/gui/menu/tool_button.tscn").instantiate()
-					#bn.plugin = plugin
-					#bn.tool_path = tool_inst.get_path()
-					#bn.tool_owner = self
-					#bn.icon = tool_inst._get_tool_icon()
-##					print("Adding button ", tool._get_tool_name())
-					#if !bn.icon:
-						#bn.text = tool_inst._get_tool_name()
-					#bn.tooltip_text = tool_inst._get_tool_tooltip()
-					#
-					#%tool_buttons.add_child(bn)
 	
-#var foo:int = 0
 func on_block_selection_changed():
-	#print("uv editor: on_block_selection_changed()", foo)
-	#foo += 1
-	
-	#return
 	build_menus()
 	
 	if is_node_ready():
@@ -215,7 +192,6 @@ func on_block_selection_changed():
 				nodes.append(node)
 #				print("sel: ", node.name)
 		
-#		%uv_mesh_renderer.block_nodes = nodes
 		%uv_editor.block_nodes = nodes
 #	pass
 	
@@ -235,37 +211,16 @@ func load_state(state:Dictionary):
 func _ready() -> void:
 	%SubViewportContainer.set_process_input(true)
 	
-	#snapping_panel = Control.new()
-	#snapping_panel.name = "Snapping"
-	#snapping_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	#snapping_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	#side_tab_panel.add_control(snapping_panel)
-	
-	#var test_label:Label = Label.new()
-	#test_label.text = "asdfgghhj"
-	#side_tab_panel.add_control(test_label)
-	
 	var snapping_node = %snapping.get_child(0)
 	var ed:Control = snapping_node.get_editor()
 	ed.size_flags_horizontal = Control.SIZE_EXPAND
 	ed.size_flags_vertical = Control.SIZE_EXPAND
 	
 	snapping_panel.add_child(ed)
-	#slide_tab_container.add_child(snapping_panel)
-	
-#	side_tab_panel.add_control(ed)
-
-#	%tab_insets.current_tab = -1
 
 	bn_use_snap.set_pressed_no_signal(%snapping.use_snap)
-	#side_tab_panel.active_tab = -1
 
 	build_menus()
-	
-	#for child in %tools.get_children():
-		#if child is CyclopsTool:
-			#switch_to_tool(child)
-			#break
 
 	pass # Replace with function body.
 
@@ -280,11 +235,19 @@ func get_uv_editor_viewport_size()->Vector2:
 func _on_sub_viewport_container_gui_input(event: InputEvent) -> void:
 	#forward_input.emit(event)
 	
-	if active_tool:
-		active_tool._gui_input(null, event)
-	#if event is InputEventKey:
-		#print("_on_sub_viewport_container_gui_input ", event)
-	pass # Replace with function body.
+	for tool in %tools.get_children():
+		if tool is ToolUv:
+			#print("chheck tool ", tool.name)
+			var result:bool = tool._gui_input(null, event)
+			
+			#Stop propagation if event is consumed
+			if result:
+				break
+				
+			
+	
+	#if active_tool:
+		#active_tool._gui_input(null, event)
 
 
 func _on_feature_vertex_pressed() -> void:
@@ -338,8 +301,12 @@ func _on_uv_editor_proj_transform_changed(xform: Transform2D) -> void:
 	viewport_transform_changed()
 
 func viewport_transform_changed():
-	if active_tool:
-		active_tool._draw_tool(null)
+	for tool in %tools.get_children():
+		if tool is ToolUv:
+			tool._draw_tool(null)
+	
+	#if active_tool:
+		#active_tool._draw_tool(null)
 
 
 func _on_option_snapping_item_selected(index: int) -> void:

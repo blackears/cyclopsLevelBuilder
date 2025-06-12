@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cw1yjv8t33ii0"]
+[gd_scene load_steps=20 format=3 uid="uid://cw1yjv8t33ii0"]
 
 [ext_resource type="Script" uid="uid://5l6u428jo0ce" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/view_uv_editor.gd" id="1_bjwq8"]
 [ext_resource type="PackedScene" uid="uid://dlouwod012q17" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_editor.tscn" id="2_iavjh"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" uid="uid://c0tl2kn33andn" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_rotate.gd" id="15_oec2b"]
 [ext_resource type="Script" uid="uid://bp7b6y48sxsbt" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_scale.gd" id="16_uxymb"]
 [ext_resource type="Script" uid="uid://blspcyewd8ue6" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_box_transform.gd" id="17_dd6m4"]
+[ext_resource type="Script" uid="uid://ba7db0xvjky6y" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_viewport_navigation.gd" id="18_uxymb"]
 
 [sub_resource type="World3D" id="World3D_bxn6v"]
 
@@ -212,6 +213,10 @@ view = NodePath("../..")
 
 [node name="Box Transform UV" type="Node" parent="tools" node_paths=PackedStringArray("view")]
 script = ExtResource("17_dd6m4")
+view = NodePath("../..")
+
+[node name="Navigation" type="Node" parent="tools" node_paths=PackedStringArray("view")]
+script = ExtResource("18_uxymb")
 view = NodePath("../..")
 
 [node name="menu" type="Node" parent="."]
