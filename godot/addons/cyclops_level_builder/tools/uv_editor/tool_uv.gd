@@ -54,6 +54,7 @@ func clear_tracked_blocks():
 func track_selected_blocks():
 	clear_tracked_blocks()
 	
+	var builder:CyclopsLevelBuilder = view.plugin
 	var ed_iface:EditorInterface = builder.get_editor_interface()
 	var ed_sel:EditorSelection = ed_iface.get_selection()
 	
@@ -69,6 +70,7 @@ func on_mesh_changed(block:CyclopsBlock):
 func cache_selected_blocks():
 	mvd_cache.clear()
 	
+	var builder:CyclopsLevelBuilder = view.plugin
 	for block in builder.get_selected_blocks():
 		var block_path:NodePath = block.get_path()
 		var mvd:MeshVectorData = block.mesh_vector_data
@@ -79,6 +81,7 @@ func get_selected_uv_center()->Dictionary:
 	var count:int = 0
 	var sum:Vector2
 	
+	var builder:CyclopsLevelBuilder = view.plugin
 	for block in builder.get_selected_blocks():
 		var block_path:NodePath = block.get_path()
 		var mvd:MeshVectorData = block.mesh_vector_data
@@ -98,6 +101,7 @@ func focus_on_selected_uvs():
 	var count:int = 0
 	var bounds:Rect2
 	
+	var builder:CyclopsLevelBuilder = view.plugin
 	for block in builder.get_selected_blocks():
 		var block_path:NodePath = block.get_path()
 		var mvd:MeshVectorData = block.mesh_vector_data
@@ -143,6 +147,8 @@ func focus_on_selected_uvs():
 
 
 func select_face_vertices(block_index_map:Dictionary, sel_type:Selection.Type):
+	var builder:CyclopsLevelBuilder = view.plugin
+	
 	var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
 	cmd.builder = builder
 #	print("block_index_map ", block_index_map)
@@ -200,34 +206,5 @@ func select_face_vertices(block_index_map:Dictionary, sel_type:Selection.Type):
 
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
-	if !builder:
-		return false
-
-	#var uv_ed:UvEditor = view.get_uv_editor()
-	#var uv_to_view_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
-		#
-	#if event is InputEventKey:
-		#var e:InputEventKey = event
-		#
-		#if e.keycode == KEY_A:
-			#var block_indices:Dictionary
-			#if e.alt_pressed:
-				#block_indices = {}
-			#else:
-				#block_indices = uv_ed.get_uv_indices_in_region(
-					#Rect2(-Vector2.INF, Vector2.INF),
-					#false)
-			#
-##					print("block_indices ", block_indices)
-			#select_face_vertices(block_indices, Selection.Type.REPLACE)
-#
-			#get_viewport().set_input_as_handled()
-			#return true
-#
-		#elif e.keycode == KEY_F:
-			#focus_on_selected_uvs()
-	#
-			#get_viewport().set_input_as_handled()
-			#return true
 
 	return false
