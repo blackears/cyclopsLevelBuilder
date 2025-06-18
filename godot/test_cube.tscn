@@ -71,14 +71,14 @@ stride = 3
 
 [sub_resource type="Resource" id="Resource_1hnib"]
 script = ExtResource("2_n4fcx")
-data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1)
 category = ""
 data_type = 0
 stride = 1
 
 [sub_resource type="Resource" id="Resource_wni2g"]
 script = ExtResource("4_mip3e")
-data = PackedFloat32Array(0, -1, -1, -1, -1, 0, 0, 0, 0, 0, -1, 0, -1, -1, 0, -1, 0, -1, 0, 0, -1, 0, -1, -1, 0, 0, 0, -1, -1, -1, -1, 0, 0, 0, 0, -1, -1, -1, -1, 0, -0.143985, -0.169674, 0.974815, 0.248099, 0.699064, 1.05494, -0.295447, 0.862273)
+data = PackedFloat32Array(0, -1, -1, -1, -1, 0, 0, 0, 0, 0, -1, 0, -1, -1, 0, -1, 0, -1, 0, 0, -1, 0, -1, -1, 0, 0, 0, -1, -1, -1, -1, 0, 0, 0, 0, -1, -1, -1, -1, 0, -0.83626, -0.903969, 1.44241, -0.076704, 0.880785, 1.52098, -0.932485, 1.01533)
 category = ""
 data_type = 5
 stride = 2

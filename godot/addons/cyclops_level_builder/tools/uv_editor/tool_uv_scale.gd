@@ -32,12 +32,13 @@ var gizmo:GizmoScale2D
 
 var move_constraint:MoveConstraint.Type
 var uv_pivot:Vector2
+var drag_dir:Vector2
 
 @export var tool_name:String = "Scale UVs"
 @export var tool_icon:Texture2D = preload("res://addons/cyclops_level_builder/art/icons/scale.svg")
 @export_multiline var tool_tooltip:String = "Scale UVs"
 
-@export var scale_ratio:float = .02
+@export var scale_ratio:float = .005
 
 func _get_tool_name()->String:
 	return tool_name
@@ -174,6 +175,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				if tool_state == ToolState.NONE:
 					mouse_down_pos = e.position
 					uv_pivot = get_selected_uv_center()["centroid"]
+					drag_dir = Vector2.ZERO
 					
 					var part:GizmoScale2D.Part = gizmo.pick_part(e.position)
 					
@@ -215,25 +217,19 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					return true
 					
 				elif tool_state == ToolState.DRAG_UVS:
-					var axis_scale:Vector2 = e.position - mouse_down_pos
-					axis_scale = Vector2(axis_scale.x, -axis_scale.y)
+					var offset:Vector2 = e.position - mouse_down_pos
+					
+					var amount:float = offset.dot(drag_dir)
+					
+					var axis_scale = Vector2(amount, amount)
 					
 					if move_constraint == MoveConstraint.Type.AXIS_X:
 						axis_scale.y = 0
 					elif move_constraint == MoveConstraint.Type.AXIS_Y:
 						axis_scale.x = 0
-					elif move_constraint == MoveConstraint.Type.PLANE_XY:
-						if abs(axis_scale.x) > abs(axis_scale.y):
-							axis_scale = Vector2(axis_scale.x, axis_scale.x)
-						else:
-							axis_scale = Vector2(axis_scale.y, axis_scale.y)
 
 					axis_scale = axis_scale * scale_ratio + Vector2.ONE
 			
-					#var view_to_uv_vec_xform:Transform2D = uv_to_view_xform.affine_inverse()
-					#view_to_uv_vec_xform.origin = Vector2.ZERO
-					#axis_scale = view_to_uv_vec_xform * axis_scale
-					
 					scale_uvs(Vector2.ONE, uv_pivot, false)
 					scale_uvs(axis_scale, uv_pivot, true)
 					
@@ -282,24 +278,19 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			return true
 			
 		elif tool_state == ToolState.DRAG_UVS:
-			var axis_scale:Vector2 = e.position - mouse_down_pos
-			axis_scale = Vector2(axis_scale.x, -axis_scale.y)
-					
+			var offset:Vector2 = e.position - mouse_down_pos
+			if drag_dir.is_zero_approx():
+				drag_dir = offset.normalized()
+			var amount:float = offset.dot(drag_dir)
+			
+			var axis_scale = Vector2(amount, amount)
+			
 			if move_constraint == MoveConstraint.Type.AXIS_X:
 				axis_scale.y = 0
 			elif move_constraint == MoveConstraint.Type.AXIS_Y:
 				axis_scale.x = 0
-			elif move_constraint == MoveConstraint.Type.PLANE_XY:
-				if abs(axis_scale.x) > abs(axis_scale.y):
-					axis_scale = Vector2(axis_scale.x, axis_scale.x)
-				else:
-					axis_scale = Vector2(axis_scale.y, axis_scale.y)
-			
+
 			axis_scale = axis_scale * scale_ratio + Vector2.ONE
-			
-			#var view_to_uv_vec_xform:Transform2D = uv_to_view_xform.affine_inverse()
-			#view_to_uv_vec_xform.origin = Vector2.ZERO
-			#axis_scale = view_to_uv_vec_xform * axis_scale
 			
 			if tool_owner is ViewUvEditor:
 				var view_ed:ViewUvEditor = tool_owner
