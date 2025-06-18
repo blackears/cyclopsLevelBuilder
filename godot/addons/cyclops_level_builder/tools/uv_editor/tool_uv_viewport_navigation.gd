@@ -52,7 +52,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	#if !builder:
 		#return false
 		
-	print("nav event")
+#	print("nav event")
 
 	var uv_ed:UvEditor = view.get_uv_editor()
 	var uv_to_view_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()

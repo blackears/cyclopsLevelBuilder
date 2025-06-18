@@ -1037,63 +1037,36 @@ static func intersects_2d_point_polyline(p:Vector2, radius:float, poly_verts:Pac
 			return true
 		
 	return false
-	
+
 static func intersects_2d_point_polygon(p:Vector2, poly_verts:PackedVector2Array)->bool:
 	#Count number of times we enter or exit the line y = p.y from above and where x > p.x
 	var crossings:int = 0
 	var above:int = 0
-	
+
+	#Count how many segments are above point
 	for i0:int in poly_verts.size():
 		var i1:int = wrap(i0 + 1, 0, poly_verts.size())
 		
-		var v0:Vector2 = poly_verts[i0] - p
-		var v1:Vector2 = poly_verts[i1] - p
+		var v0:Vector2 = poly_verts[i0]
+		var v1:Vector2 = poly_verts[i1]
 		
-		if (v0.y < p.y && v1.y < p.y) || (v0.y > p.y && v1.y > p.y):
-			#Segment entirely above or below mediant
+		if (v0.x < p.x && v1.x < p.x) || (v0.x > p.x && v1.x > p.x):
+			#Segment entirely not over top of point
 			continue
 		
-		if is_equal_approx(v0.y, p.y) && is_equal_approx(v1.y, p.y): 
-			#Segment coincident with mediant
+		if is_equal_approx(v0.x, v1.x): 
+			#Vertical line
 			continue
-			
-		if is_equal_approx(v0.y, p.y):
-			if v1.y < p.y && v0.x > p.x:
-				#Leaving median
-				crossings -= 1
-			continue
-			
-		if is_equal_approx(v1.y, p.y):
-			if v0.y < p.y && v1.x > p.x:
-				#Entering median
-				crossings += 1
-			continue
-	
-		#We are crossing the mediant
+
+		var frac:float = (p.x - v0.x) / (v1.x - v0.x)
+		var y_intercept:float = (v1.y - v0.y) * frac + v0.y
 		
-		if is_equal_approx(v0.x, v1.x):
-			#Vertical
-			if v0.y > p.y:
-				crossings -= 1
-			else:
-				crossings += 1
-			continue
-		
-		#Find coeff for line y = m * x + b
-		var m:float = (v1.y - v0.y) / (v1.x - v0.x)
-		var b:float = v0.y - m * v0.x
-		
-		#Solve for x at y = p.y
-		var x_cross:float = (p.y - b) / m
-		
-		if x_cross > p.x:
-			if v0.y > p.y:
-				crossings -= 1
-			else:
-				crossings += 1
-	
+		if y_intercept > p.y:
+			crossings += 1
+
 	#Inside if even number of crossings
 	return (crossings & 0x1) == 1
+
 
 static func intersects_2d_segment_polygon(p0:Vector2, p1:Vector2, poly_verts:PackedVector2Array)->bool:
 	if intersects_2d_point_polygon(p0, poly_verts) || \

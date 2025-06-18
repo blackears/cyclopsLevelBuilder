@@ -31,27 +31,22 @@ signal dragged_to(pos:Vector2, part:Part)
 
 enum Part { NONE, AXIS_X, AXIS_Y, PLANE_Z }
 
+@onready var axis_x:GizmoArrow2D = $axis_x
+@onready var axis_y:GizmoArrow2D = $axis_y
+@onready var plane_z:GizmoRect2D = $plane_z
+
 func pick_part(pos:Vector2)->Part:
 #	print("pick_part ", pos)
-	if %axis_x.pick(%axis_x.global_transform.affine_inverse() * pos, 0):
+	if axis_x.pick(axis_x.global_transform.affine_inverse() * pos, 0):
 		return Part.AXIS_X
 
-	if %axis_y.pick(%axis_y.global_transform.affine_inverse() * pos, 0):
+	if axis_y.pick(axis_y.global_transform.affine_inverse() * pos, 0):
 		return Part.AXIS_Y
 
-	if %plane_z.pick(%plane_z.global_transform.affine_inverse() * pos, 0):
+	if plane_z.pick(plane_z.global_transform.affine_inverse() * pos, 0):
 		return Part.PLANE_Z
 		
 	return Part.NONE
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
 
 
 func _on_axis_x_pressed(pos: Vector2) -> void:

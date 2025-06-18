@@ -25,7 +25,8 @@
 extends ToolUv
 class_name ToolUvMove
 
-enum ToolState { NONE, READY, DRAG_VIEW, DRAG_SELECTION, DRAG_UVS }
+#enum ToolState { NONE, READY, DRAG_VIEW, DRAG_SELECTION, DRAG_UVS }
+enum ToolState { NONE, READY, DRAG_SELECTION, DRAG_UVS }
 var tool_state:ToolState = ToolState.NONE
 
 var settings:ToolUvMoveSettings = ToolUvMoveSettings.new()
@@ -155,8 +156,6 @@ func move_uvs(offset:Vector2, commit:bool):
 			new_mvd.set_face_vertex_data(MeshVectorData.FV_UV0, new_uv_arr)
 			
 			block.mesh_vector_data = new_mvd
-
-	
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	if !builder || !focused:
@@ -356,14 +355,14 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		
 		mouse_hover_pos = e.position
 		
-		if tool_state == ToolState.DRAG_VIEW:
-			var offset:Vector2 = e.position - mouse_down_pos
-			var view_xform:Transform2D = uv_ed.get_view_transform()
-			var new_xform:Transform2D = (view_xform * drag_start_view_xform).translated(offset)
-			
-			uv_ed.proj_transform = view_xform.affine_inverse() * new_xform
-			
-			return true
+		#if tool_state == ToolState.DRAG_VIEW:
+			#var offset:Vector2 = e.position - mouse_down_pos
+			#var view_xform:Transform2D = uv_ed.get_view_transform()
+			#var new_xform:Transform2D = (view_xform * drag_start_view_xform).translated(offset)
+			#
+			#uv_ed.proj_transform = view_xform.affine_inverse() * new_xform
+			#
+			#return true
 
 		if tool_state == ToolState.READY:
 			var offset:Vector2 = e.position - mouse_down_pos

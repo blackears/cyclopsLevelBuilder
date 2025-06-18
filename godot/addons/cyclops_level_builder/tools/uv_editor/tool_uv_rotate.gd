@@ -30,7 +30,7 @@ var tool_state:ToolState = ToolState.NONE
 
 var gizmo:GizmoRotate2D
 
-var rot_uv_center:Vector2
+var uv_pivot:Vector2
 
 @export var tool_name:String = "Rotate UVs"
 @export var tool_icon:Texture2D = preload("res://addons/cyclops_level_builder/art/icons/rotate.svg")
@@ -172,7 +172,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 #					print("GizmoTranslate2D.Part ", part)
 					if part == GizmoRotate2D.Part.RING:
-						rot_uv_center = get_selected_uv_center()["centroid"]
+						uv_pivot = get_selected_uv_center()["centroid"]
 						
 						tool_state = ToolState.DRAG_UVS
 						cache_selected_blocks()
@@ -202,8 +202,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var start_pos_uv:Vector2 = view_to_uv_xform * mouse_down_pos
 					var cur_pos_uv:Vector2 = view_to_uv_xform * e.position
 					
-					var start_ang:float = (start_pos_uv - rot_uv_center).angle()
-					var cur_ang:float = (cur_pos_uv - rot_uv_center).angle()
+					var start_ang:float = (start_pos_uv - uv_pivot).angle()
+					var cur_ang:float = (cur_pos_uv - uv_pivot).angle()
 					var delta_angle:float = fposmod(cur_ang - start_ang, PI * 2)
 					
 					var view_to_uv_vec_xform:Transform2D = uv_to_view_xform.affine_inverse()
@@ -211,7 +211,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					#offset = view_to_uv_vec_xform * offset
 					
 					rotate_uvs(Vector2.ZERO, 0, false)
-					rotate_uvs(rot_uv_center, delta_angle, true)
+					rotate_uvs(uv_pivot, delta_angle, true)
 					
 					tool_state = ToolState.NONE
 					return true
@@ -331,8 +331,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var start_pos_uv:Vector2 = view_to_uv_xform * mouse_down_pos
 			var cur_pos_uv:Vector2 = view_to_uv_xform * e.position
 			
-			var start_ang:float = (start_pos_uv - rot_uv_center).angle()
-			var cur_ang:float = (cur_pos_uv - rot_uv_center).angle()
+			var start_ang:float = (start_pos_uv - uv_pivot).angle()
+			var cur_ang:float = (cur_pos_uv - uv_pivot).angle()
 			var delta_angle:float = fposmod(cur_ang - start_ang, PI * 2)
 			
 			
@@ -342,7 +342,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				if snap_mgr.use_snap:
 					pass
 			
-			rotate_uvs(rot_uv_center, delta_angle, false)
+			rotate_uvs(uv_pivot, delta_angle, false)
 			
 			return true
 		

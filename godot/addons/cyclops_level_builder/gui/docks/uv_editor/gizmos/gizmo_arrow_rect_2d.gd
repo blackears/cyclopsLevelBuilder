@@ -65,10 +65,15 @@ func calc_mesh_points()->PackedVector2Array:
 
 func pick(p:Vector2, radius:float)->bool:
 	var points:PackedVector2Array = calc_mesh_points()
+	print("points ", points)
+	print("grect pick point local ", p, " name ", name)
+	
 	
 	if MathUtil.intersects_2d_point_polygon(p, points):
+		print("hit <1>")
 		return true
 	if MathUtil.intersects_2d_point_polyline(p, radius, points):
+		print("hit <2>")
 		return true
 	
 	return false
