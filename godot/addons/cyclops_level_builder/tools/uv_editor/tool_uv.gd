@@ -64,7 +64,7 @@ func track_selected_blocks():
 			node.mesh_changed.connect(on_mesh_changed)
 
 func on_mesh_changed(block:CyclopsBlock):
-#	print("on_mesh_changed")
+	print("tool_uv: on_mesh_changed")
 	_draw_tool(null)
 
 func cache_selected_blocks():
@@ -145,7 +145,35 @@ func focus_on_selected_uvs():
 	
 	uv_ed.set_uv_to_viewport_xform(xform)
 
+func get_uv_bounds()->Rect2:
+	var count:int = 0
+	var bounds:Rect2
+	
+	var builder:CyclopsLevelBuilder = view.plugin
+	for block in builder.get_selected_blocks():
+		var block_path:NodePath = block.get_path()
+		var mvd:MeshVectorData = block.mesh_vector_data
+		
+		var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
 
+		var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+		for i in sel_vec.num_components():
+			if !sel_vec.get_value(i):
+				continue
+			
+			var uv:Vector2 = uv_arr.get_value_vec2(i)
+			if count == 0:
+				bounds = Rect2(uv, Vector2.ZERO)
+			else:
+				bounds = bounds.expand(uv)
+			
+			count += 1
+	
+	if count == 0:
+		bounds = Rect2(Vector2.ZERO, Vector2.ZERO)
+	
+	return bounds
+	
 func select_face_vertices(block_index_map:Dictionary, sel_type:Selection.Type):
 	var builder:CyclopsLevelBuilder = view.plugin
 	

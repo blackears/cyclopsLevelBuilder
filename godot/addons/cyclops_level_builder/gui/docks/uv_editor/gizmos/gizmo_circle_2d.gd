@@ -23,7 +23,7 @@
 
 @tool
 extends Gizmo2D
-class_name GizmoRect2D
+class_name GizmoCircle2D
 
 signal pressed(pos:Vector2)
 signal released(pos:Vector2)
@@ -39,9 +39,9 @@ signal dragged_to(pos:Vector2)
 		color_outline = value
 		queue_redraw()
 
-@export var rect:Rect2 = Rect2(-10, -10, 20, 20):
+@export var radius:float = 10:
 	set(value):
-		rect = value
+		radius = value
 		queue_redraw()
 
 var dragging:bool = false
@@ -74,13 +74,13 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			
 
-func pick(p:Vector2, radius:float)->bool:
-	return rect.has_point(p)
+func pick(p:Vector2, pick_radius:float)->bool:
+	return p.length() <= radius + pick_radius
 
 func _draw():
 	var colors:PackedColorArray
 	
-	draw_rect(rect, color)
-	draw_rect(rect, color_outline, false)
+	draw_circle(Vector2.ZERO, radius, color)
+	draw_circle(Vector2.ZERO, radius, color_outline, false)
 	
 		

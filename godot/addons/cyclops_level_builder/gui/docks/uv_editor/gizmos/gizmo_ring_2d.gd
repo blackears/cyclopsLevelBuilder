@@ -23,7 +23,7 @@
 
 @tool
 extends Gizmo2D
-class_name GizmoCircle2D
+class_name GizmoRing2D
 
 @export var color:Color = Color(1, 1, 1, 1):
 	set(value):
