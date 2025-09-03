@@ -86,6 +86,7 @@ enum Part { NONE, PLANE_Z,
 
 @onready var handle_pivot:GizmoCircle2D = %handle_pivot
 
+@onready var dashed_polgon:DashedPolygon = %dashed_polygon
 
 func pick_part(pos:Vector2)->Part:
 #	print("pick_part ", pos)
@@ -131,17 +132,17 @@ func pick_part(pos:Vector2)->Part:
 
 	return Part.NONE
 
-func _draw() -> void:
-	pass
-	#print("gizmo_transform_box _draw()")
-	#print("rect ", rect)
-	#
-	##draw_rect(rect, color, false)
+#func _draw() -> void:
+	#pass
+	##print("gizmo_transform_box _draw()")
+	##print("rect ", rect)
+	##
+	###draw_rect(rect, color, false)
 	#var points_edges = [
-		#rect.position,
-		#Vector2(rect.position.x, rect.end.y),
-		#rect.end,
-		#Vector2(rect.end.x, rect.position.y),
+		#handle_00.position,
+		#handle_02.position,
+		#handle_22.position,
+		#handle_20.position,
 		#]
 		#
 	#for p_idx in points_edges.size():
@@ -149,17 +150,7 @@ func _draw() -> void:
 		#var p1:Vector2 = points_edges[wrap(p_idx + 1, 0, points_edges.size())]
 		#
 		#draw_dashed_line(p0, p1, color, dash_width, dash_size)
-	#
-	#handle_00.position = rect.position
-	#handle_01.position = rect.position + rect.size * Vector2(0, .5)
-	#handle_02.position = rect.position + rect.size * Vector2(0, 1)
-	#handle_10.position = rect.position + rect.size * Vector2(.5, 0)
-	#handle_12.position = rect.position + rect.size * Vector2(.5, 1)
-	#handle_20.position = rect.position + rect.size * Vector2(1, 0)
-	#handle_21.position = rect.position + rect.size * Vector2(1, .5)
-	#handle_22.position = rect.position + rect.size * Vector2(1, 1)
-	#
-	#handle_pivot.position = pivot
+	
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -168,4 +159,13 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	var points_edges = [
+		handle_00.position,
+		handle_02.position,
+		handle_22.position,
+		handle_20.position,
+		handle_00.position,
+		]
+		
+	dashed_polgon.points = points_edges
 	pass

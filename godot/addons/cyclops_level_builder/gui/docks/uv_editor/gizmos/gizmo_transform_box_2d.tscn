@@ -1,11 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://f8rglmdeaplp"]
+[gd_scene load_steps=5 format=3 uid="uid://f8rglmdeaplp"]
 
 [ext_resource type="Script" uid="uid://c3jpxik4gmolp" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_transform_box_2d.gd" id="1_oeixp"]
 [ext_resource type="PackedScene" uid="uid://cqeuqgat4gbol" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_rect_2d.tscn" id="1_oq6jn"]
 [ext_resource type="PackedScene" uid="uid://dca71bjhyx554" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_circle_2d.tscn" id="3_8ngjf"]
+[ext_resource type="PackedScene" uid="uid://d1jcavlel4oc" path="res://addons/cyclops_level_builder/gui/controls/dashed_polygon.tscn" id="4_py61l"]
 
 [node name="GizmoBoxTransform2d" type="Node2D"]
 script = ExtResource("1_oeixp")
+
+[node name="dashed_polygon" parent="." instance=ExtResource("4_py61l")]
+unique_name_in_owner = true
 
 [node name="Node2D" type="Node2D" parent="."]
 

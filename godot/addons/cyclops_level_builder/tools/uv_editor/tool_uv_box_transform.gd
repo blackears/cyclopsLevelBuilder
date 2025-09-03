@@ -37,7 +37,7 @@ var drag_pivot_pos_uv:Vector2
 var tool_xform_start:Transform2D
 var tool_xform_cur:Transform2D
 
-var visible:bool = false
+#var visible:bool = false
 var gizmo:GizmoTransformBox2D
 
 @export var tool_name:String = "Box Transform UVs"
@@ -86,7 +86,8 @@ func reset_tool():
 	
 	var uv_rect:Rect2 = get_uv_bounds()
 	if uv_rect.size.is_zero_approx():
-		visible = false
+#		visible = false
+		gizmo.visible = false
 		return
 	
 	var origin:Vector2 = uv_rect.position
@@ -111,9 +112,12 @@ func reset_tool():
 	#var view_11:Vector2 = view_a.max(view_b)
 	
 	
-	visible = true
+	gizmo.visible = true
+#	visible = true
 #	gizmo.rect = Rect2(view_00, view_11 - view_00)
 
+	_draw_tool(null)
+	
 	
 	pass
 
@@ -135,6 +139,7 @@ func _draw_tool(viewport_camera:Camera3D):
 		if handle.viewport_handle:
 			handle.viewport_handle.position = uv_to_viewport_xform * handle.uv_position
 	
+	#gizmo.queue_redraw()
 #var transform_base:Transform2D
 #var transform_center:Vector2
 #var transform_axis:Vector2
@@ -248,6 +253,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						Selection.choose_type(e.shift_pressed, e.ctrl_pressed))
 
 					tool_state = ToolState.NONE
+					
+					#reset_tool()
 					return true
 					
 				elif tool_state == ToolState.DRAG_SELECTION:
