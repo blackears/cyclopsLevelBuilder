@@ -28,6 +28,8 @@ class_name ToolUvViewportNavigation
 enum ToolState { NONE, READY, DRAG_VIEW }
 var tool_state:ToolState = ToolState.NONE
 
+var drag_start_view_xform:Transform2D
+
 @export var tool_name:String = "UV Viewport Navigation"
 @export var tool_icon:Texture2D = null
 @export_multiline var tool_tooltip:String = "UV Viewport Navigation"

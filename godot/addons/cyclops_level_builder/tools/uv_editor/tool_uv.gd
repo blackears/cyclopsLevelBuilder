@@ -29,7 +29,6 @@ class_name ToolUv
 var mouse_hover_pos:Vector2
 var mouse_down_pos:Vector2
 
-var drag_start_view_xform:Transform2D
 
 var zoom_wheel_amount:float = 1.2
 

@@ -304,9 +304,6 @@ func viewport_transform_changed():
 	for tool in %tools.get_children():
 		if tool is ToolUv:
 			tool._draw_tool(null)
-	
-	#if active_tool:
-		#active_tool._draw_tool(null)
 
 
 func _on_option_snapping_item_selected(index: int) -> void:

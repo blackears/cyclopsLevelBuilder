@@ -25,15 +25,39 @@
 extends ToolUv
 class_name ToolUvBoxTransform
 
-enum ToolState { NONE, READY, DRAG_VIEW, DRAG_SELECTION, DRAG_UVS }
+enum ToolState { NONE, READY, DRAG_VIEW, DRAG_SELECTION, DRAG_HANDLE }
 var tool_state:ToolState = ToolState.NONE
+
+enum DragHandleStyle { NONE, TRANSLATE, ROTATE, SCALE_FREE, SCALE_UNIFORM, SCALE_AXIS_X, SCALE_AXIS_Y }
+var drag_uv_style:DragHandleStyle
+
+var drag_handle_start_pos_uv:Vector2
+var drag_pivot_pos_uv:Vector2
+
+var tool_xform_start:Transform2D
+var tool_xform_cur:Transform2D
+
+var visible:bool = false
+var gizmo:GizmoTransformBox2D
 
 @export var tool_name:String = "Box Transform UVs"
 @export var tool_icon:Texture2D = preload("res://addons/cyclops_level_builder/art/icons/box_transform.svg")
 @export_multiline var tool_tooltip:String = "Box Transform UVs"
 
+@onready var handle_scale_00:ToolUvBoxHandle = %handle_scale_00
+@onready var handle_scale_01:ToolUvBoxHandle = %handle_scale_01
+@onready var handle_scale_02:ToolUvBoxHandle = %handle_scale_02
+@onready var handle_scale_10:ToolUvBoxHandle = %handle_scale_10
+@onready var handle_scale_12:ToolUvBoxHandle = %handle_scale_12
+@onready var handle_scale_20:ToolUvBoxHandle = %handle_scale_20
+@onready var handle_scale_21:ToolUvBoxHandle = %handle_scale_21
+@onready var handle_scale_22:ToolUvBoxHandle = %handle_scale_22
+@onready var handle_pivot:ToolUvBoxHandle = %handle_pivot
+@onready var handle_transform:ToolUvBoxHandle = %handle_transform
 
-var gizmo:GizmoTransformBox2D
+#enum ToolConstraint { NONE, AXIS_X, AXIS_Y, UNIFORM }
+
+#var drag_constraint:ToolConstraint
 
 func _get_tool_name()->String:
 	return tool_name
@@ -52,26 +76,44 @@ func _can_handle_object(node:Node)->bool:
 	#return node is CyclopsBlock
 	return true
 
-func reset_gizmo():
-	print("reset_gizmo()")
-	var uv_ed:UvEditor = view.get_uv_editor()
+func reset_tool():
+	print("reset_tool()")
+	tool_xform_start = Transform2D.IDENTITY
+	tool_xform_cur = Transform2D.IDENTITY
 
-	var uv_to_viewport_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
+	#var uv_ed:UvEditor = view.get_uv_editor()
+	#var uv_to_viewport_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 	
 	var uv_rect:Rect2 = get_uv_bounds()
 	if uv_rect.size.is_zero_approx():
-		gizmo.visible = false
+		visible = false
 		return
 	
-	var view_a:Vector2 = uv_to_viewport_xform * uv_rect.position
-	var view_b:Vector2 = uv_to_viewport_xform * uv_rect.end
+	var origin:Vector2 = uv_rect.position
+	var x_span:Vector2 = Vector2(uv_rect.size.x, 0)
+	var y_span:Vector2 = Vector2(0, uv_rect.size.y)
 	
-	var view_00:Vector2 = view_a.min(view_b)
-	var view_11:Vector2 = view_a.max(view_b)
+	handle_scale_00.uv_position = origin
+	handle_scale_01.uv_position = origin + y_span / 2
+	handle_scale_02.uv_position = origin + y_span
+	handle_scale_10.uv_position = origin + x_span / 2
+	handle_scale_12.uv_position = origin + x_span / 2 + y_span
+	handle_scale_20.uv_position = origin + x_span
+	handle_scale_21.uv_position = origin + x_span + y_span / 2
+	handle_scale_22.uv_position = origin + x_span + y_span
+	
+	handle_pivot.uv_position = origin + x_span / 2 + y_span / 2
+	
+	#var view_a:Vector2 = uv_to_viewport_xform * uv_rect.position
+	#var view_b:Vector2 = uv_to_viewport_xform * uv_rect.end
+	#
+	#var view_00:Vector2 = view_a.min(view_b)
+	#var view_11:Vector2 = view_a.max(view_b)
 	
 	
-	gizmo.visible = true
-	gizmo.rect = Rect2(view_00, view_11 - view_00)
+	visible = true
+#	gizmo.rect = Rect2(view_00, view_11 - view_00)
+
 	
 	pass
 
@@ -83,24 +125,20 @@ func _draw_tool(viewport_camera:Camera3D):
 
 	var uv_to_viewport_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 	
-	var uv_rect:Rect2 = get_uv_bounds()
-	if uv_rect.size.is_zero_approx():
-		gizmo.visible = false
-		return
-	
-	gizmo.visible = true
-	
-	
-	#var center_struct:Dictionary = get_selected_uv_center()
-	#
-	#if center_struct["count"] >= 2:
-		#var centroid:Vector2 = center_struct["centroid"]
-		#gizmo.position = uv_to_viewport_xform * centroid
-##		print("gizmo.position ", gizmo.position)
-		#gizmo.visible = true
-	#else:
+	#var uv_rect:Rect2 = get_uv_bounds()
+	#if uv_rect.size.is_zero_approx():
 		#gizmo.visible = false
-		
+		#return
+	
+#	gizmo.visible = true
+	for handle:ToolUvBoxHandle in get_children():
+		if handle.viewport_handle:
+			handle.viewport_handle.position = uv_to_viewport_xform * handle.uv_position
+	
+#var transform_base:Transform2D
+#var transform_center:Vector2
+#var transform_axis:Vector2
+
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	if !builder || !focused:
 		return false
@@ -113,11 +151,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		var e:InputEventKey = event
 		
 		if e.keycode == KEY_ESCAPE:
-			if tool_state == ToolState.DRAG_UVS:
+			if tool_state == ToolState.DRAG_HANDLE:
 				#scale_uvs(Vector2.ONE, uv_pivot, false)
 				
 				get_viewport().set_input_as_handled()
 				tool_state = ToolState.NONE
+				
 				return true
 				
 			elif tool_state == ToolState.DRAG_SELECTION:
@@ -135,9 +174,62 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			if e.is_pressed():
 				if tool_state == ToolState.NONE:
 					mouse_down_pos = e.position
+
+					var uv_to_viewport_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
+					var viewport_to_uv_xform:Transform2D = uv_to_viewport_xform.affine_inverse()
+					drag_handle_start_pos_uv = viewport_to_uv_xform * mouse_down_pos
 					
 					var part:GizmoTransformBox2D.Part = gizmo.pick_part(e.position)
+					var shift_down:bool = e.shift_pressed
 					
+					match part:
+						GizmoTransformBox2D.Part.PLANE_Z:
+							drag_uv_style = DragHandleStyle.TRANSLATE
+							cache_selected_blocks()
+							return true
+						GizmoTransformBox2D.Part.CORNER_00:
+							drag_uv_style = DragHandleStyle.SCALE_UNIFORM if shift_down else DragHandleStyle.SCALE_FREE
+							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_22.global_position
+							cache_selected_blocks()
+							return true
+						GizmoTransformBox2D.Part.CORNER_01:
+							drag_uv_style = DragHandleStyle.SCALE_AXIS_X
+							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_21.global_position
+							cache_selected_blocks()
+							return true
+						GizmoTransformBox2D.Part.CORNER_02:
+							drag_uv_style = DragHandleStyle.SCALE_UNIFORM if shift_down else DragHandleStyle.SCALE_FREE
+							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_20.global_position
+							cache_selected_blocks()
+							return true
+							
+						GizmoTransformBox2D.Part.CORNER_10:
+							drag_uv_style = DragHandleStyle.SCALE_AXIS_Y
+							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_12.global_position
+							cache_selected_blocks()
+							return true
+						GizmoTransformBox2D.Part.CORNER_12:
+							drag_uv_style = DragHandleStyle.SCALE_AXIS_Y
+							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_10.global_position
+							cache_selected_blocks()
+							return true
+							
+						GizmoTransformBox2D.Part.CORNER_20:
+							drag_uv_style = DragHandleStyle.SCALE_UNIFORM if shift_down else DragHandleStyle.SCALE_FREE
+							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_02.global_position
+							cache_selected_blocks()
+							return true
+						GizmoTransformBox2D.Part.CORNER_21:
+							drag_uv_style = DragHandleStyle.SCALE_AXIS_X
+							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_01.global_position
+							cache_selected_blocks()
+							return true
+						GizmoTransformBox2D.Part.CORNER_22:
+							drag_uv_style = DragHandleStyle.SCALE_UNIFORM if shift_down else DragHandleStyle.SCALE_FREE
+							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_00.global_position
+							cache_selected_blocks()
+							return true
+							
 					###########
 					
 					tool_state = ToolState.READY
@@ -176,6 +268,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 					uv_ed.show_selection_rect = false
 					tool_state = ToolState.NONE
+					
+					#reset_tool()
+					#view.queue_redraw()
 				
 					return true
 			return true
@@ -213,14 +308,26 @@ func _activate(tool_owner:Node):
 	
 	gizmo = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_transform_box_2d.tscn").instantiate()
 	uv_ed.add_gizmo(gizmo)
+	
+	handle_scale_00.viewport_handle = gizmo.handle_00
+	handle_scale_01.viewport_handle = gizmo.handle_01
+	handle_scale_02.viewport_handle = gizmo.handle_02
+	handle_scale_10.viewport_handle = gizmo.handle_10
+	handle_scale_12.viewport_handle = gizmo.handle_12
+	handle_scale_20.viewport_handle = gizmo.handle_20
+	handle_scale_21.viewport_handle = gizmo.handle_21
+	handle_scale_22.viewport_handle = gizmo.handle_22
+	handle_pivot.viewport_handle = gizmo.handle_pivot
 
 	var ed_iface:EditorInterface = builder.get_editor_interface()
 	var ed_sel:EditorSelection = ed_iface.get_selection()
 	ed_sel.selection_changed.connect(on_block_selection_changed)
 	
 	track_selected_blocks()
+
+	reset_tool()
 	
-	_draw_tool(null)
+	#_draw_tool(null)
 
 func _deactivate():
 	super._deactivate()
@@ -240,11 +347,17 @@ func _deactivate():
 func on_block_selection_changed():
 	print("on_block_selection_changed()")
 	track_selected_blocks()
-	reset_gizmo()
+#	reset_gizmo()
+	reset_tool()
+	_draw_tool(null)
+	#view.queue_redraw()
 
 #Override mesh changed signal
 func on_mesh_changed(block:CyclopsBlock):
 	print("on_mesh_changed(block:CyclopsBlock)")
 	super.on_mesh_changed(block)
-	reset_gizmo()
+#	reset_gizmo()
+	reset_tool()
+	_draw_tool(null)
+#	view.queue_redraw()
 	

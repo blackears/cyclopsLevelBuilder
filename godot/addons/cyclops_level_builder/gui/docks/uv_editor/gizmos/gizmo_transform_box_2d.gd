@@ -46,10 +46,10 @@ enum Part { NONE, PLANE_Z,
 		outline_color = value
 		queue_redraw()
 
-@export var rect:Rect2 = Rect2(0, 0, 60, 60):
-	set(value):
-		rect = value
-		queue_redraw()
+#@export var rect:Rect2 = Rect2(0, 0, 60, 60):
+	#set(value):
+		#rect = value
+		#queue_redraw()
 
 @export var dash_width:float = 2:
 	set(value):
@@ -126,39 +126,40 @@ func pick_part(pos:Vector2)->Part:
 	if handle_pivot.pick(handle_pivot.global_transform.affine_inverse() * pos, 0):
 		return Part.PIVOT
 
-	if rect.has_point(global_transform.affine_inverse() * pos):
-		return Part.PLANE_Z
+	#if rect.has_point(global_transform.affine_inverse() * pos):
+		#return Part.PLANE_Z
 
 	return Part.NONE
 
 func _draw() -> void:
-	print("gizmo_transform_box _draw()")
-	print("rect ", rect)
-	
-	#draw_rect(rect, color, false)
-	var points_edges = [
-		rect.position,
-		Vector2(rect.position.x, rect.end.y),
-		rect.end,
-		Vector2(rect.end.x, rect.position.y),
-		]
-		
-	for p_idx in points_edges.size():
-		var p0:Vector2 = points_edges[p_idx]
-		var p1:Vector2 = points_edges[wrap(p_idx + 1, 0, points_edges.size())]
-		
-		draw_dashed_line(p0, p1, color, dash_width, dash_size)
-	
-	handle_00.position = rect.position
-	handle_01.position = rect.position + rect.size * Vector2(0, .5)
-	handle_02.position = rect.position + rect.size * Vector2(0, 1)
-	handle_10.position = rect.position + rect.size * Vector2(.5, 0)
-	handle_12.position = rect.position + rect.size * Vector2(.5, 1)
-	handle_20.position = rect.position + rect.size * Vector2(1, 0)
-	handle_21.position = rect.position + rect.size * Vector2(1, .5)
-	handle_22.position = rect.position + rect.size * Vector2(1, 1)
-	
-	handle_pivot.position = pivot
+	pass
+	#print("gizmo_transform_box _draw()")
+	#print("rect ", rect)
+	#
+	##draw_rect(rect, color, false)
+	#var points_edges = [
+		#rect.position,
+		#Vector2(rect.position.x, rect.end.y),
+		#rect.end,
+		#Vector2(rect.end.x, rect.position.y),
+		#]
+		#
+	#for p_idx in points_edges.size():
+		#var p0:Vector2 = points_edges[p_idx]
+		#var p1:Vector2 = points_edges[wrap(p_idx + 1, 0, points_edges.size())]
+		#
+		#draw_dashed_line(p0, p1, color, dash_width, dash_size)
+	#
+	#handle_00.position = rect.position
+	#handle_01.position = rect.position + rect.size * Vector2(0, .5)
+	#handle_02.position = rect.position + rect.size * Vector2(0, 1)
+	#handle_10.position = rect.position + rect.size * Vector2(.5, 0)
+	#handle_12.position = rect.position + rect.size * Vector2(.5, 1)
+	#handle_20.position = rect.position + rect.size * Vector2(1, 0)
+	#handle_21.position = rect.position + rect.size * Vector2(1, .5)
+	#handle_22.position = rect.position + rect.size * Vector2(1, 1)
+	#
+	#handle_pivot.position = pivot
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
