@@ -37,6 +37,12 @@ var drag_pivot_pos_uv:Vector2
 var tool_xform_start:Transform2D
 var tool_xform_cur:Transform2D
 
+#var start_drag_bounds:Rect2
+var start_drag_bound_xform:Transform2D
+
+#Manual pivot in tool space
+var rotate_pivot_tool:Vector2
+
 #var visible:bool = false
 var gizmo:GizmoTransformBox2D
 
@@ -76,8 +82,22 @@ func _can_handle_object(node:Node)->bool:
 	#return node is CyclopsBlock
 	return true
 
+func update_uv_handles():
+	var handle_xform:Transform2D = tool_xform_cur * start_drag_bound_xform
+	handle_scale_00.uv_position = handle_xform * Vector2(0, 0)
+	handle_scale_01.uv_position = handle_xform * Vector2(0, .5)
+	handle_scale_02.uv_position = handle_xform * Vector2(0, 1)
+	handle_scale_10.uv_position = handle_xform * Vector2(.5, 0)
+	handle_scale_12.uv_position = handle_xform * Vector2(.5, 1)
+	handle_scale_20.uv_position = handle_xform * Vector2(1, 0)
+	handle_scale_21.uv_position = handle_xform * Vector2(1, .5)
+	handle_scale_22.uv_position = handle_xform * Vector2(1, 1)
+
+	handle_pivot.uv_position = handle_xform * rotate_pivot_tool
+	
+
 func reset_tool():
-	print("reset_tool()")
+	#print("reset_tool()")
 	tool_xform_start = Transform2D.IDENTITY
 	tool_xform_cur = Transform2D.IDENTITY
 
@@ -89,32 +109,25 @@ func reset_tool():
 #		visible = false
 		gizmo.visible = false
 		return
+		
+	rotate_pivot_tool = Vector2(.5, .5)
+	
+	#start_drag_bounds = uv_rect
+	#Map [0 1] unit square to inital selection rectangle
+	start_drag_bound_xform = Transform2D(0, uv_rect.size, 0, uv_rect.position)
+	#print("start_drag_bound_xform ", start_drag_bound_xform)
+	#print("uv_rect ", uv_rect)
+	
 	
 	var origin:Vector2 = uv_rect.position
 	var x_span:Vector2 = Vector2(uv_rect.size.x, 0)
 	var y_span:Vector2 = Vector2(0, uv_rect.size.y)
+
+	#update_uv_handles()
 	
-	handle_scale_00.uv_position = origin
-	handle_scale_01.uv_position = origin + y_span / 2
-	handle_scale_02.uv_position = origin + y_span
-	handle_scale_10.uv_position = origin + x_span / 2
-	handle_scale_12.uv_position = origin + x_span / 2 + y_span
-	handle_scale_20.uv_position = origin + x_span
-	handle_scale_21.uv_position = origin + x_span + y_span / 2
-	handle_scale_22.uv_position = origin + x_span + y_span
-	
-	handle_pivot.uv_position = origin + x_span / 2 + y_span / 2
-	
-	#var view_a:Vector2 = uv_to_viewport_xform * uv_rect.position
-	#var view_b:Vector2 = uv_to_viewport_xform * uv_rect.end
-	#
-	#var view_00:Vector2 = view_a.min(view_b)
-	#var view_11:Vector2 = view_a.max(view_b)
 	
 	
 	gizmo.visible = true
-#	visible = true
-#	gizmo.rect = Rect2(view_00, view_11 - view_00)
 
 	_draw_tool(null)
 	
@@ -124,6 +137,8 @@ func reset_tool():
 func _draw_tool(viewport_camera:Camera3D):
 	if !gizmo:
 		return
+
+	update_uv_handles()
 	
 	var uv_ed:UvEditor = view.get_uv_editor()
 
@@ -171,7 +186,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				return true
 
 	elif event is InputEventMouseButton:
-		#print("mouse bn ", event)
+#		print("mouse bn ", event)
 
 		var e:InputEventMouseButton = event
 		if e.button_index == MOUSE_BUTTON_LEFT:
@@ -179,6 +194,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			if e.is_pressed():
 				if tool_state == ToolState.NONE:
 					mouse_down_pos = e.position
+					print("mouse down ", mouse_down_pos)
 
 					var uv_to_viewport_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 					var viewport_to_uv_xform:Transform2D = uv_to_viewport_xform.affine_inverse()
@@ -187,58 +203,61 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var part:GizmoTransformBox2D.Part = gizmo.pick_part(e.position)
 					var shift_down:bool = e.shift_pressed
 					
+					#print("part <0>", part)
+					drag_uv_style = DragHandleStyle.NONE
+					
 					match part:
 						GizmoTransformBox2D.Part.PLANE_Z:
 							drag_uv_style = DragHandleStyle.TRANSLATE
 							cache_selected_blocks()
-							return true
 						GizmoTransformBox2D.Part.CORNER_00:
 							drag_uv_style = DragHandleStyle.SCALE_UNIFORM if shift_down else DragHandleStyle.SCALE_FREE
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_22.global_position
+							tool_xform_start = tool_xform_cur
 							cache_selected_blocks()
-							return true
 						GizmoTransformBox2D.Part.CORNER_01:
 							drag_uv_style = DragHandleStyle.SCALE_AXIS_X
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_21.global_position
+							tool_xform_start = tool_xform_cur
 							cache_selected_blocks()
-							return true
 						GizmoTransformBox2D.Part.CORNER_02:
 							drag_uv_style = DragHandleStyle.SCALE_UNIFORM if shift_down else DragHandleStyle.SCALE_FREE
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_20.global_position
+							tool_xform_start = tool_xform_cur
 							cache_selected_blocks()
-							return true
 							
 						GizmoTransformBox2D.Part.CORNER_10:
 							drag_uv_style = DragHandleStyle.SCALE_AXIS_Y
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_12.global_position
+							tool_xform_start = tool_xform_cur
 							cache_selected_blocks()
-							return true
 						GizmoTransformBox2D.Part.CORNER_12:
 							drag_uv_style = DragHandleStyle.SCALE_AXIS_Y
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_10.global_position
+							tool_xform_start = tool_xform_cur
 							cache_selected_blocks()
-							return true
 							
 						GizmoTransformBox2D.Part.CORNER_20:
 							drag_uv_style = DragHandleStyle.SCALE_UNIFORM if shift_down else DragHandleStyle.SCALE_FREE
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_02.global_position
+							tool_xform_start = tool_xform_cur
 							cache_selected_blocks()
-							return true
 						GizmoTransformBox2D.Part.CORNER_21:
 							drag_uv_style = DragHandleStyle.SCALE_AXIS_X
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_01.global_position
+							tool_xform_start = tool_xform_cur
 							cache_selected_blocks()
-							return true
 						GizmoTransformBox2D.Part.CORNER_22:
 							drag_uv_style = DragHandleStyle.SCALE_UNIFORM if shift_down else DragHandleStyle.SCALE_FREE
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_00.global_position
+							tool_xform_start = tool_xform_cur
 							cache_selected_blocks()
-							return true
 							
-					###########
 					
 					tool_state = ToolState.READY
-					#print("mouse ready")
+					print("part <1>", part)
+					print("drag_uv_style", drag_uv_style)
+					print("drag_pivot_pos_uv", drag_pivot_pos_uv)
 
 					return true
 			else:
@@ -257,6 +276,10 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					#reset_tool()
 					return true
 					
+				elif tool_state == ToolState.DRAG_HANDLE:
+					
+					tool_state = ToolState.NONE
+					pass
 				elif tool_state == ToolState.DRAG_SELECTION:
 					#Finish drag rect
 #					print("finish drag rect")
@@ -293,14 +316,60 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var offset:Vector2 = e.position - mouse_down_pos
 			if offset.length_squared() > MathUtil.square(builder.drag_start_radius):
 #				print("start drag")
-				
-				tool_state = ToolState.DRAG_SELECTION
-				uv_ed.show_selection_rect = true
-				uv_ed.selection_rect = Rect2(mouse_down_pos, e.position - mouse_down_pos)
-#				print("sel rect ", uv_ed.selection_rect)
+				print("drag_uv_style ", drag_uv_style)
+
+				if drag_uv_style == DragHandleStyle.NONE:
+					tool_state = ToolState.DRAG_SELECTION
+					uv_ed.show_selection_rect = true
+					uv_ed.selection_rect = Rect2(mouse_down_pos, e.position - mouse_down_pos)
+	#				print("sel rect ", uv_ed.selection_rect)
+				else:
+					tool_state = ToolState.DRAG_HANDLE
 
 			return true
+				
 			
+		elif tool_state == ToolState.DRAG_HANDLE:
+			var uv_to_viewport_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
+			var viewport_to_uv_xform:Transform2D = uv_to_viewport_xform.affine_inverse()
+			
+			var mouse_uv_pos:Vector2 = viewport_to_uv_xform * e.position
+			
+			var drag_offset_uv = mouse_uv_pos - drag_handle_start_pos_uv
+			
+			#drag_pivot_pos_uv
+			
+			#start_drag_bound_xform
+#			tool_xform_start = tool_xform_cur
+			var start_tool_bounds_xform =  tool_xform_start * start_drag_bound_xform
+			var proj_x:Vector2 = drag_offset_uv.project(start_tool_bounds_xform.x)
+			var proj_y:Vector2 = drag_offset_uv.project(start_tool_bounds_xform.y)
+			
+			match drag_uv_style:
+				DragHandleStyle.SCALE_AXIS_X:
+					proj_y = Vector2(0, 0)
+				DragHandleStyle.SCALE_AXIS_Y:
+					proj_y = Vector2(0, 0)
+				DragHandleStyle.SCALE_UNIFORM:
+					var len_x:float = proj_x.length()
+					var len_y:float = proj_y.length()
+					if len_x < len_y:
+						proj_y = proj_y.normalized() * len_x
+					else:
+						proj_x = proj_x.normalized() * len_y
+				
+			var init_handle_offset:Vector2 = drag_handle_start_pos_uv - drag_pivot_pos_uv
+			var cur_handle_offset:Vector2 = init_handle_offset + proj_x + proj_y
+			
+			var xform:Transform2D
+			xform = xform.translated_local(drag_pivot_pos_uv)
+			xform = xform.scaled_local(cur_handle_offset / init_handle_offset)
+			xform = xform.translated_local(-drag_pivot_pos_uv)
+			tool_xform_cur = xform * tool_xform_start
+			
+			_draw_tool(null)
+			
+			return true
 		elif tool_state == ToolState.DRAG_SELECTION:
 			
 			uv_ed.selection_rect = Rect2(mouse_down_pos, e.position - mouse_down_pos)

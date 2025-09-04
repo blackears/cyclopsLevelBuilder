@@ -89,8 +89,16 @@ enum Part { NONE, PLANE_Z,
 @onready var dashed_polgon:DashedPolygon = %dashed_polygon
 
 func pick_part(pos:Vector2)->Part:
-#	print("pick_part ", pos)
+	#print("pick_part pos: ", pos)
+	#var local_pos_00 = handle_00.global_transform.affine_inverse() * pos
+	#print("local_pos_00 ", local_pos_00)
+	#print("handle_00.rect ", handle_00.rect)
+	
+	#if handle_00.pick(local_pos_00, 0):
+		#print("pick corner 00")
+		#return Part.CORNER_00
 	if handle_00.pick(handle_00.global_transform.affine_inverse() * pos, 0):
+		#print("pick corner 00")
 		return Part.CORNER_00
 	if handle_01.pick(handle_01.global_transform.affine_inverse() * pos, 0):
 		return Part.CORNER_01
