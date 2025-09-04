@@ -34,8 +34,11 @@ var drag_uv_style:DragHandleStyle
 var drag_handle_start_pos_uv:Vector2
 var drag_pivot_pos_uv:Vector2
 
+#var tool_xform_init:Transform2D
 var tool_xform_start:Transform2D
 var tool_xform_cur:Transform2D
+
+var session_started:bool = false
 
 #var start_drag_bounds:Rect2
 var start_drag_bound_xform:Transform2D
@@ -97,12 +100,9 @@ func update_uv_handles():
 	
 
 func reset_tool():
-	print("reset_tool()")
+#	print("reset_tool()")
 	tool_xform_start = Transform2D.IDENTITY
 	tool_xform_cur = Transform2D.IDENTITY
-
-	#var uv_ed:UvEditor = view.get_uv_editor()
-	#var uv_to_viewport_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 	
 	var uv_rect:Rect2 = get_uv_bounds()
 	if uv_rect.size.is_zero_approx():
@@ -122,17 +122,12 @@ func reset_tool():
 	var origin:Vector2 = uv_rect.position
 	var x_span:Vector2 = Vector2(uv_rect.size.x, 0)
 	var y_span:Vector2 = Vector2(0, uv_rect.size.y)
-
-	#update_uv_handles()
-	
 	
 	
 	gizmo.visible = true
 
 	_draw_tool(null)
 	
-	
-	pass
 
 func _draw_tool(viewport_camera:Camera3D):
 	if !gizmo:
@@ -144,20 +139,14 @@ func _draw_tool(viewport_camera:Camera3D):
 
 	var uv_to_viewport_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 	
-	#var uv_rect:Rect2 = get_uv_bounds()
-	#if uv_rect.size.is_zero_approx():
-		#gizmo.visible = false
-		#return
-	
-#	gizmo.visible = true
 	for handle:ToolUvBoxHandle in get_children():
 		if handle.viewport_handle:
 			handle.viewport_handle.position = uv_to_viewport_xform * handle.uv_position
 	
 
 func transform_uvs(uv_xform:Transform2D, commit:bool):
-	print("transform_uvs uv_xform ", uv_xform)
-	print("commit ", commit)
+	#print("transform_uvs uv_xform ", uv_xform)
+	#print("commit ", commit)
 	
 	if commit:
 		var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
@@ -227,17 +216,27 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		
 		if e.keycode == KEY_ESCAPE:
 			if tool_state == ToolState.DRAG_HANDLE:
-				#scale_uvs(Vector2.ONE, uv_pivot, false)
+				transform_uvs(Transform2D.IDENTITY, false)
 				
 				get_viewport().set_input_as_handled()
 				tool_state = ToolState.NONE
+				session_started = false
 				
+				reset_tool()
 				return true
 				
 			elif tool_state == ToolState.DRAG_SELECTION:
 				uv_ed.show_selection_rect = false
 				
 				tool_state = ToolState.NONE
+				get_viewport().set_input_as_handled()
+				return true
+
+		elif e.keycode == KEY_ENTER:
+			if tool_state == ToolState.DRAG_HANDLE:
+				session_started = false
+				reset_tool()
+				get_viewport().set_input_as_handled()
 				return true
 
 	elif event is InputEventMouseButton:
@@ -253,6 +252,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					var uv_to_viewport_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 					var viewport_to_uv_xform:Transform2D = uv_to_viewport_xform.affine_inverse()
+					#tool_xform_init = viewport_to_uv_xform * mouse_down_pos
 					drag_handle_start_pos_uv = viewport_to_uv_xform * mouse_down_pos
 					
 					var part:GizmoTransformBox2D.Part = gizmo.pick_part(e.position)
@@ -264,51 +264,48 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					match part:
 						GizmoTransformBox2D.Part.PLANE_Z:
 							drag_uv_style = DragHandleStyle.TRANSLATE
-							cache_selected_blocks()
 						GizmoTransformBox2D.Part.CORNER_00:
 							drag_uv_style = DragHandleStyle.SCALE_UNIFORM if shift_down else DragHandleStyle.SCALE_FREE
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_22.global_position
 							tool_xform_start = tool_xform_cur
-							cache_selected_blocks()
 						GizmoTransformBox2D.Part.CORNER_01:
 							drag_uv_style = DragHandleStyle.SCALE_AXIS_X
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_21.global_position
 							tool_xform_start = tool_xform_cur
-							cache_selected_blocks()
 						GizmoTransformBox2D.Part.CORNER_02:
 							drag_uv_style = DragHandleStyle.SCALE_UNIFORM if shift_down else DragHandleStyle.SCALE_FREE
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_20.global_position
 							tool_xform_start = tool_xform_cur
-							cache_selected_blocks()
 							
 						GizmoTransformBox2D.Part.CORNER_10:
 							drag_uv_style = DragHandleStyle.SCALE_AXIS_Y
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_12.global_position
 							tool_xform_start = tool_xform_cur
-							cache_selected_blocks()
 						GizmoTransformBox2D.Part.CORNER_12:
 							drag_uv_style = DragHandleStyle.SCALE_AXIS_Y
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_10.global_position
 							tool_xform_start = tool_xform_cur
-							cache_selected_blocks()
 							
 						GizmoTransformBox2D.Part.CORNER_20:
 							drag_uv_style = DragHandleStyle.SCALE_UNIFORM if shift_down else DragHandleStyle.SCALE_FREE
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_02.global_position
 							tool_xform_start = tool_xform_cur
-							cache_selected_blocks()
 						GizmoTransformBox2D.Part.CORNER_21:
 							drag_uv_style = DragHandleStyle.SCALE_AXIS_X
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_01.global_position
 							tool_xform_start = tool_xform_cur
-							cache_selected_blocks()
 						GizmoTransformBox2D.Part.CORNER_22:
 							drag_uv_style = DragHandleStyle.SCALE_UNIFORM if shift_down else DragHandleStyle.SCALE_FREE
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_00.global_position
 							tool_xform_start = tool_xform_cur
-							cache_selected_blocks()
 							
 					
+					if !session_started:
+						if drag_uv_style != DragHandleStyle.NONE:
+							session_started = true
+							cache_selected_blocks()
+						
+						
 					tool_state = ToolState.READY
 					print("part <1>", part)
 					print("drag_uv_style", drag_uv_style)
@@ -354,6 +351,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 					uv_ed.show_selection_rect = false
 					tool_state = ToolState.NONE
+					session_started = false
 					
 					reset_tool()
 					#view.queue_redraw()
@@ -400,7 +398,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				DragHandleStyle.SCALE_AXIS_X:
 					proj_y = Vector2(0, 0)
 				DragHandleStyle.SCALE_AXIS_Y:
-					proj_y = Vector2(0, 0)
+					proj_x = Vector2(0, 0)
 				DragHandleStyle.SCALE_UNIFORM:
 					var len_x:float = proj_x.length()
 					var len_y:float = proj_y.length()
