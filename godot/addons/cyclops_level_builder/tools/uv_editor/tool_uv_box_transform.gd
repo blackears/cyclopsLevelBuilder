@@ -97,7 +97,7 @@ func update_uv_handles():
 	
 
 func reset_tool():
-	#print("reset_tool()")
+	print("reset_tool()")
 	tool_xform_start = Transform2D.IDENTITY
 	tool_xform_cur = Transform2D.IDENTITY
 
@@ -154,10 +154,65 @@ func _draw_tool(viewport_camera:Camera3D):
 		if handle.viewport_handle:
 			handle.viewport_handle.position = uv_to_viewport_xform * handle.uv_position
 	
-	#gizmo.queue_redraw()
-#var transform_base:Transform2D
-#var transform_center:Vector2
-#var transform_axis:Vector2
+
+func transform_uvs(uv_xform:Transform2D, commit:bool):
+	print("transform_uvs uv_xform ", uv_xform)
+	print("commit ", commit)
+	
+	if commit:
+		var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
+		cmd.builder = builder
+		var fc:CommandSetMeshFeatureData.FeatureChanges = CommandSetMeshFeatureData.FeatureChanges.new()
+	#	print("block_index_map ", block_index_map)
+		
+		for block in builder.get_selected_blocks():
+			var block_path:NodePath = block.get_path()
+			var mvd:MeshVectorData = mvd_cache[block_path]
+			
+			var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+			var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
+
+			var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+			
+			for i in uv_arr.num_components():
+				if !sel_vec.get_value(i):
+					continue
+				var val:Vector2 = uv_arr.get_value_vec2(i)
+#				new_uv_arr.set_value_vec2(val + offset, i)
+				new_uv_arr.set_value_vec2(uv_xform * val, i)
+			
+			fc.new_data_values[MeshVectorData.FV_UV0] = new_uv_arr
+
+			cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
+		
+			#print("uv_arr ", uv_arr.data)
+			#print("new_uv_arr ", new_uv_arr.data)
+		
+		if cmd.will_change_anything():
+	#		print("cmd.will_change_anything() true")
+			var undo:EditorUndoRedoManager = builder.get_undo_redo()
+			cmd.add_to_undo_manager(undo)
+	else:
+		for block in builder.get_selected_blocks():
+			var block_path:NodePath = block.get_path()
+			var mvd:MeshVectorData = mvd_cache[block_path]
+			
+			var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+			var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
+
+			var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+			
+			for i in uv_arr.num_components():
+				if !sel_vec.get_value(i):
+					continue
+				var val:Vector2 = uv_arr.get_value_vec2(i)
+#				new_uv_arr.set_value_vec2(val + offset, i)
+				new_uv_arr.set_value_vec2(uv_xform * val, i)
+			
+			var new_mvd:MeshVectorData = mvd.duplicate_explicit()
+			new_mvd.set_face_vertex_data(MeshVectorData.FV_UV0, new_uv_arr)
+			
+			block.mesh_vector_data = new_mvd
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	if !builder || !focused:
@@ -277,6 +332,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					return true
 					
 				elif tool_state == ToolState.DRAG_HANDLE:
+					transform_uvs(tool_xform_cur, true)
 					
 					tool_state = ToolState.NONE
 					pass
@@ -299,7 +355,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					uv_ed.show_selection_rect = false
 					tool_state = ToolState.NONE
 					
-					#reset_tool()
+					reset_tool()
 					#view.queue_redraw()
 				
 					return true
@@ -327,7 +383,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					tool_state = ToolState.DRAG_HANDLE
 
 			return true
-				
 			
 		elif tool_state == ToolState.DRAG_HANDLE:
 			var uv_to_viewport_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
@@ -337,10 +392,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			var drag_offset_uv = mouse_uv_pos - drag_handle_start_pos_uv
 			
-			#drag_pivot_pos_uv
-			
-			#start_drag_bound_xform
-#			tool_xform_start = tool_xform_cur
 			var start_tool_bounds_xform =  tool_xform_start * start_drag_bound_xform
 			var proj_x:Vector2 = drag_offset_uv.project(start_tool_bounds_xform.x)
 			var proj_y:Vector2 = drag_offset_uv.project(start_tool_bounds_xform.y)
@@ -366,6 +417,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			xform = xform.scaled_local(cur_handle_offset / init_handle_offset)
 			xform = xform.translated_local(-drag_pivot_pos_uv)
 			tool_xform_cur = xform * tool_xform_start
+			
+			transform_uvs(tool_xform_cur, false)
 			
 			_draw_tool(null)
 			
@@ -423,17 +476,13 @@ func _deactivate():
 func on_block_selection_changed():
 	print("on_block_selection_changed()")
 	track_selected_blocks()
-#	reset_gizmo()
 	reset_tool()
 	_draw_tool(null)
-	#view.queue_redraw()
 
 #Override mesh changed signal
 func on_mesh_changed(block:CyclopsBlock):
 	print("on_mesh_changed(block:CyclopsBlock)")
 	super.on_mesh_changed(block)
-#	reset_gizmo()
-	reset_tool()
-	_draw_tool(null)
-#	view.queue_redraw()
+	#reset_tool()
+	#_draw_tool(null)
 	
