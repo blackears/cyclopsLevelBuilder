@@ -28,7 +28,7 @@ class_name ToolUvBoxTransform
 enum ToolState { NONE, READY, DRAG_VIEW, DRAG_SELECTION, DRAG_HANDLE }
 var tool_state:ToolState = ToolState.NONE
 
-enum DragHandleStyle { NONE, TRANSLATE, ROTATE, SCALE_FREE, SCALE_UNIFORM, SCALE_AXIS_X, SCALE_AXIS_Y }
+enum DragHandleStyle { NONE, TRANSLATE, ROTATE, SCALE_FREE, SCALE_UNIFORM, SCALE_AXIS_X, SCALE_AXIS_Y, PIVOT }
 var drag_uv_style:DragHandleStyle
 
 var drag_handle_start_pos_uv:Vector2
@@ -298,6 +298,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 							drag_uv_style = DragHandleStyle.SCALE_UNIFORM if shift_down else DragHandleStyle.SCALE_FREE
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_00.global_position
 							tool_xform_start = tool_xform_cur
+
+						GizmoTransformBox2D.Part.PIVOT:
+							drag_uv_style = DragHandleStyle.PIVOT
+							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_pivot.global_position
+							tool_xform_start = tool_xform_cur
 							
 					
 					if !session_started:
@@ -307,9 +312,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						
 						
 					tool_state = ToolState.READY
-					print("part <1>", part)
-					print("drag_uv_style", drag_uv_style)
-					print("drag_pivot_pos_uv", drag_pivot_pos_uv)
+					#print("part <1>", part)
+					#print("drag_uv_style", drag_uv_style)
+					#print("drag_pivot_pos_uv", drag_pivot_pos_uv)
 
 					return true
 			else:
@@ -389,38 +394,52 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var mouse_uv_pos:Vector2 = viewport_to_uv_xform * e.position
 			
 			var drag_offset_uv = mouse_uv_pos - drag_handle_start_pos_uv
-			
+				
 			var start_tool_bounds_xform =  tool_xform_start * start_drag_bound_xform
 			var proj_x:Vector2 = drag_offset_uv.project(start_tool_bounds_xform.x)
 			var proj_y:Vector2 = drag_offset_uv.project(start_tool_bounds_xform.y)
 			
-			match drag_uv_style:
-				DragHandleStyle.SCALE_AXIS_X:
-					proj_y = Vector2(0, 0)
-				DragHandleStyle.SCALE_AXIS_Y:
-					proj_x = Vector2(0, 0)
-				DragHandleStyle.SCALE_UNIFORM:
-					var len_x:float = proj_x.length()
-					var len_y:float = proj_y.length()
-					if len_x < len_y:
-						proj_y = proj_y.normalized() * len_x
-					else:
-						proj_x = proj_x.normalized() * len_y
+			if drag_uv_style == DragHandleStyle.SCALE_FREE \
+				|| drag_uv_style == DragHandleStyle.SCALE_AXIS_X \
+				|| drag_uv_style == DragHandleStyle.SCALE_AXIS_Y \
+				|| drag_uv_style == DragHandleStyle.SCALE_UNIFORM:
 				
-			var init_handle_offset:Vector2 = drag_handle_start_pos_uv - drag_pivot_pos_uv
-			var cur_handle_offset:Vector2 = init_handle_offset + proj_x + proj_y
+				match drag_uv_style:
+					DragHandleStyle.SCALE_AXIS_X:
+						proj_y = Vector2(0, 0)
+					DragHandleStyle.SCALE_AXIS_Y:
+						proj_x = Vector2(0, 0)
+					DragHandleStyle.SCALE_UNIFORM:
+						var len_x:float = proj_x.length()
+						var len_y:float = proj_y.length()
+						if len_x < len_y:
+							proj_y = proj_y.normalized() * len_x
+						else:
+							proj_x = proj_x.normalized() * len_y
+					
+				var init_handle_offset:Vector2 = drag_handle_start_pos_uv - drag_pivot_pos_uv
+				var cur_handle_offset:Vector2 = init_handle_offset + proj_x + proj_y
+				
+				var xform:Transform2D
+				xform = xform.translated_local(drag_pivot_pos_uv)
+				xform = xform.scaled_local(cur_handle_offset / init_handle_offset)
+				xform = xform.translated_local(-drag_pivot_pos_uv)
+				tool_xform_cur = xform * tool_xform_start
+				
+				transform_uvs(tool_xform_cur, false)
+				
+				_draw_tool(null)
+				
+				return true
+			elif drag_uv_style == DragHandleStyle.PIVOT:
+				var tool_to_uv_xform = start_tool_bounds_xform.affine_inverse()
+				var mouse_tool_pos = tool_to_uv_xform * mouse_uv_pos
+				#handle_pivot.uv_position = mouse_uv_pos
+				rotate_pivot_tool = mouse_tool_pos
+				
+				_draw_tool(null)
+				return true
 			
-			var xform:Transform2D
-			xform = xform.translated_local(drag_pivot_pos_uv)
-			xform = xform.scaled_local(cur_handle_offset / init_handle_offset)
-			xform = xform.translated_local(-drag_pivot_pos_uv)
-			tool_xform_cur = xform * tool_xform_start
-			
-			transform_uvs(tool_xform_cur, false)
-			
-			_draw_tool(null)
-			
-			return true
 		elif tool_state == ToolState.DRAG_SELECTION:
 			
 			uv_ed.selection_rect = Rect2(mouse_down_pos, e.position - mouse_down_pos)
