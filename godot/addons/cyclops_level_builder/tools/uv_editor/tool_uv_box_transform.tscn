@@ -30,6 +30,30 @@ unique_name_in_owner = true
 [node name="handle_scale_22" parent="." instance=ExtResource("2_wuylr")]
 unique_name_in_owner = true
 
+[node name="handle_rot_00" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_rot_01" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_rot_02" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_rot_10" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_rot_12" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_rot_20" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_rot_21" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_rot_22" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
 [node name="handle_transform" parent="." instance=ExtResource("2_wuylr")]
 unique_name_in_owner = true
 style = 1

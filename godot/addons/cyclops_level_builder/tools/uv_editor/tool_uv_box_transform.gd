@@ -53,6 +53,8 @@ var gizmo:GizmoTransformBox2D
 @export var tool_icon:Texture2D = preload("res://addons/cyclops_level_builder/art/icons/box_transform.svg")
 @export_multiline var tool_tooltip:String = "Box Transform UVs"
 
+@export var rotate_handle_offset:float = 15
+
 @onready var handle_scale_00:ToolUvBoxHandle = %handle_scale_00
 @onready var handle_scale_01:ToolUvBoxHandle = %handle_scale_01
 @onready var handle_scale_02:ToolUvBoxHandle = %handle_scale_02
@@ -61,6 +63,14 @@ var gizmo:GizmoTransformBox2D
 @onready var handle_scale_20:ToolUvBoxHandle = %handle_scale_20
 @onready var handle_scale_21:ToolUvBoxHandle = %handle_scale_21
 @onready var handle_scale_22:ToolUvBoxHandle = %handle_scale_22
+@onready var handle_rot_00:ToolUvBoxHandle = %handle_rot_00
+@onready var handle_rot_01:ToolUvBoxHandle = %handle_rot_01
+@onready var handle_rot_02:ToolUvBoxHandle = %handle_rot_02
+@onready var handle_rot_10:ToolUvBoxHandle = %handle_rot_10
+@onready var handle_rot_12:ToolUvBoxHandle = %handle_rot_12
+@onready var handle_rot_20:ToolUvBoxHandle = %handle_rot_20
+@onready var handle_rot_21:ToolUvBoxHandle = %handle_rot_21
+@onready var handle_rot_22:ToolUvBoxHandle = %handle_rot_22
 @onready var handle_pivot:ToolUvBoxHandle = %handle_pivot
 @onready var handle_transform:ToolUvBoxHandle = %handle_transform
 
@@ -86,17 +96,38 @@ func _can_handle_object(node:Node)->bool:
 	return true
 
 func update_uv_handles():
-	var handle_xform:Transform2D = tool_xform_cur * start_drag_bound_xform
-	handle_scale_00.uv_position = handle_xform * Vector2(0, 0)
-	handle_scale_01.uv_position = handle_xform * Vector2(0, .5)
-	handle_scale_02.uv_position = handle_xform * Vector2(0, 1)
-	handle_scale_10.uv_position = handle_xform * Vector2(.5, 0)
-	handle_scale_12.uv_position = handle_xform * Vector2(.5, 1)
-	handle_scale_20.uv_position = handle_xform * Vector2(1, 0)
-	handle_scale_21.uv_position = handle_xform * Vector2(1, .5)
-	handle_scale_22.uv_position = handle_xform * Vector2(1, 1)
+	var handle_to_uv_xform:Transform2D = tool_xform_cur * start_drag_bound_xform
+	
+	var uv_ed:UvEditor = view.get_uv_editor()
+	var uv_to_viewport_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
+	var viewport_to_uv_xform:Transform2D = uv_to_viewport_xform.affine_inverse()
+	
+	var handle_to_viewport_xform:Transform2D = uv_to_viewport_xform * handle_to_uv_xform
+	var handle_offset_x:Vector2 = viewport_to_uv_xform.basis_xform(
+		handle_to_viewport_xform.x.normalized())
+	var handle_offset_y:Vector2 = viewport_to_uv_xform.basis_xform(
+		handle_to_viewport_xform.y.normalized())
+	var viewport_handle_xform:Transform2D = Transform2D(handle_offset_x, handle_offset_y, Vector2.ZERO)
+	
+	handle_scale_00.uv_position = handle_to_uv_xform * Vector2(0, 0)
+	handle_scale_01.uv_position = handle_to_uv_xform * Vector2(0, .5)
+	handle_scale_02.uv_position = handle_to_uv_xform * Vector2(0, 1)
+	handle_scale_10.uv_position = handle_to_uv_xform * Vector2(.5, 0)
+	handle_scale_12.uv_position = handle_to_uv_xform * Vector2(.5, 1)
+	handle_scale_20.uv_position = handle_to_uv_xform * Vector2(1, 0)
+	handle_scale_21.uv_position = handle_to_uv_xform * Vector2(1, .5)
+	handle_scale_22.uv_position = handle_to_uv_xform * Vector2(1, 1)
+	
+	handle_rot_00.uv_position = handle_scale_00.uv_position + viewport_handle_xform * Vector2(-1, -1) * rotate_handle_offset
+	handle_rot_01.uv_position = handle_scale_01.uv_position + viewport_handle_xform * Vector2(-1, 0) * rotate_handle_offset
+	handle_rot_02.uv_position = handle_scale_02.uv_position + viewport_handle_xform * Vector2(-1, 1) * rotate_handle_offset
+	handle_rot_10.uv_position = handle_scale_10.uv_position + viewport_handle_xform * Vector2(0, -1) * rotate_handle_offset
+	handle_rot_12.uv_position = handle_scale_12.uv_position + viewport_handle_xform * Vector2(0, 1) * rotate_handle_offset
+	handle_rot_20.uv_position = handle_scale_20.uv_position + viewport_handle_xform * Vector2(1, -1) * rotate_handle_offset
+	handle_rot_21.uv_position = handle_scale_21.uv_position + viewport_handle_xform * Vector2(1, 0) * rotate_handle_offset
+	handle_rot_22.uv_position = handle_scale_22.uv_position + viewport_handle_xform * Vector2(1, 1) * rotate_handle_offset
 
-	handle_pivot.uv_position = handle_xform * rotate_pivot_tool
+	handle_pivot.uv_position = handle_to_uv_xform * rotate_pivot_tool
 	
 
 func reset_tool():
@@ -136,7 +167,6 @@ func _draw_tool(viewport_camera:Camera3D):
 	update_uv_handles()
 	
 	var uv_ed:UvEditor = view.get_uv_editor()
-
 	var uv_to_viewport_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 	
 	for handle:ToolUvBoxHandle in get_children():
@@ -248,7 +278,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			if e.is_pressed():
 				if tool_state == ToolState.NONE:
 					mouse_down_pos = e.position
-					print("mouse down ", mouse_down_pos)
+					#print("mouse down ", mouse_down_pos)
 
 					var uv_to_viewport_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 					var viewport_to_uv_xform:Transform2D = uv_to_viewport_xform.affine_inverse()
@@ -264,6 +294,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					match part:
 						GizmoTransformBox2D.Part.PLANE_Z:
 							drag_uv_style = DragHandleStyle.TRANSLATE
+							
 						GizmoTransformBox2D.Part.CORNER_00:
 							drag_uv_style = DragHandleStyle.SCALE_UNIFORM if shift_down else DragHandleStyle.SCALE_FREE
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_22.global_position
@@ -297,6 +328,39 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 						GizmoTransformBox2D.Part.CORNER_22:
 							drag_uv_style = DragHandleStyle.SCALE_UNIFORM if shift_down else DragHandleStyle.SCALE_FREE
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_00.global_position
+							tool_xform_start = tool_xform_cur
+
+						GizmoTransformBox2D.Part.CORNER_ROT_00:
+							drag_uv_style = DragHandleStyle.ROTATE
+							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_pivot.global_position
+							tool_xform_start = tool_xform_cur
+						GizmoTransformBox2D.Part.CORNER_ROT_01:
+							drag_uv_style = DragHandleStyle.ROTATE
+							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_pivot.global_position
+							tool_xform_start = tool_xform_cur
+						GizmoTransformBox2D.Part.CORNER_ROT_02:
+							drag_uv_style = DragHandleStyle.ROTATE
+							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_pivot.global_position
+							tool_xform_start = tool_xform_cur
+						GizmoTransformBox2D.Part.CORNER_ROT_10:
+							drag_uv_style = DragHandleStyle.ROTATE
+							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_pivot.global_position
+							tool_xform_start = tool_xform_cur
+						GizmoTransformBox2D.Part.CORNER_ROT_12:
+							drag_uv_style = DragHandleStyle.ROTATE
+							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_pivot.global_position
+							tool_xform_start = tool_xform_cur
+						GizmoTransformBox2D.Part.CORNER_ROT_20:
+							drag_uv_style = DragHandleStyle.ROTATE
+							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_pivot.global_position
+							tool_xform_start = tool_xform_cur
+						GizmoTransformBox2D.Part.CORNER_ROT_21:
+							drag_uv_style = DragHandleStyle.ROTATE
+							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_pivot.global_position
+							tool_xform_start = tool_xform_cur
+						GizmoTransformBox2D.Part.CORNER_ROT_22:
+							drag_uv_style = DragHandleStyle.ROTATE
+							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_pivot.global_position
 							tool_xform_start = tool_xform_cur
 
 						GizmoTransformBox2D.Part.PIVOT:
@@ -375,7 +439,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var offset:Vector2 = e.position - mouse_down_pos
 			if offset.length_squared() > MathUtil.square(builder.drag_start_radius):
 #				print("start drag")
-				print("drag_uv_style ", drag_uv_style)
+#				print("drag_uv_style ", drag_uv_style)
 
 				if drag_uv_style == DragHandleStyle.NONE:
 					tool_state = ToolState.DRAG_SELECTION
@@ -392,7 +456,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var viewport_to_uv_xform:Transform2D = uv_to_viewport_xform.affine_inverse()
 			
 			var mouse_uv_pos:Vector2 = viewport_to_uv_xform * e.position
-			
 			var drag_offset_uv = mouse_uv_pos - drag_handle_start_pos_uv
 				
 			var start_tool_bounds_xform =  tool_xform_start * start_drag_bound_xform
@@ -433,7 +496,28 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				
 				_draw_tool(null)
 				return true
+				
+			elif drag_uv_style == DragHandleStyle.ROTATE:
+				#mouse_uv_pos - drag_handle_start_pos_uv
+				#drag_offset_uv
+				#drag_pivot_pos_uv
+				var a:Vector2 = drag_handle_start_pos_uv - drag_pivot_pos_uv
+				var b:Vector2 = mouse_uv_pos - drag_pivot_pos_uv
+				var angle:float = a.angle_to(b)
+				
+				var xform:Transform2D
+				xform = xform.translated_local(drag_pivot_pos_uv)
+				xform = xform.rotated_local(angle)
+				xform = xform.translated_local(-drag_pivot_pos_uv)
+				tool_xform_cur = xform * tool_xform_start
+				
+				transform_uvs(tool_xform_cur, false)
+				
+				_draw_tool(null)
+				
 			
+				return true
+				
 		elif tool_state == ToolState.DRAG_SELECTION:
 			
 			uv_ed.selection_rect = Rect2(mouse_down_pos, e.position - mouse_down_pos)
@@ -457,6 +541,14 @@ func _activate(tool_owner:Node):
 	handle_scale_20.viewport_handle = gizmo.handle_20
 	handle_scale_21.viewport_handle = gizmo.handle_21
 	handle_scale_22.viewport_handle = gizmo.handle_22
+	handle_rot_00.viewport_handle = gizmo.handle_rot_00
+	handle_rot_01.viewport_handle = gizmo.handle_rot_01
+	handle_rot_02.viewport_handle = gizmo.handle_rot_02
+	handle_rot_10.viewport_handle = gizmo.handle_rot_10
+	handle_rot_12.viewport_handle = gizmo.handle_rot_12
+	handle_rot_20.viewport_handle = gizmo.handle_rot_20
+	handle_rot_21.viewport_handle = gizmo.handle_rot_21
+	handle_rot_22.viewport_handle = gizmo.handle_rot_22
 	handle_pivot.viewport_handle = gizmo.handle_pivot
 
 	var ed_iface:EditorInterface = builder.get_editor_interface()
@@ -485,14 +577,14 @@ func _deactivate():
 	
 
 func on_block_selection_changed():
-	print("on_block_selection_changed()")
+#	print("on_block_selection_changed()")
 	track_selected_blocks()
 	reset_tool()
 	_draw_tool(null)
 
 #Override mesh changed signal
 func on_mesh_changed(block:CyclopsBlock):
-	print("on_mesh_changed(block:CyclopsBlock)")
+#	print("on_mesh_changed(block:CyclopsBlock)")
 	super.on_mesh_changed(block)
 	#reset_tool()
 	#_draw_tool(null)

@@ -10,19 +10,68 @@ script = ExtResource("1_oeixp")
 
 [node name="dashed_polygon" parent="." instance=ExtResource("4_py61l")]
 unique_name_in_owner = true
+points = PackedVector2Array(0, 0, 0, 60, 60, 60, 60, 0, 0, 0)
 
 [node name="Node2D" type="Node2D" parent="."]
 
-[node name="handle_00" parent="Node2D" instance=ExtResource("1_oq6jn")]
+[node name="handle_rot_00" parent="Node2D" instance=ExtResource("1_oq6jn")]
 unique_name_in_owner = true
+position = Vector2(-10, -10)
 color = Color(1, 1, 1, 1)
 color_outline = Color(0, 0, 0, 1)
 rect = Rect2(-4, -4, 8, 8)
 
-[node name="handle_rot_00" parent="Node2D/handle_00" instance=ExtResource("1_oq6jn")]
+[node name="handle_rot_01" parent="Node2D" instance=ExtResource("1_oq6jn")]
 unique_name_in_owner = true
-visible = false
-position = Vector2(-10, -10)
+position = Vector2(-10, 30)
+color = Color(1, 1, 1, 1)
+color_outline = Color(0, 0, 0, 1)
+rect = Rect2(-4, -4, 8, 8)
+
+[node name="handle_rot_02" parent="Node2D" instance=ExtResource("1_oq6jn")]
+unique_name_in_owner = true
+position = Vector2(-10, 70)
+color = Color(1, 1, 1, 1)
+color_outline = Color(0, 0, 0, 1)
+rect = Rect2(-4, -4, 8, 8)
+
+[node name="handle_rot_10" parent="Node2D" instance=ExtResource("1_oq6jn")]
+unique_name_in_owner = true
+position = Vector2(30, -10)
+color = Color(1, 1, 1, 1)
+color_outline = Color(0, 0, 0, 1)
+rect = Rect2(-4, -4, 8, 8)
+
+[node name="handle_rot_12" parent="Node2D" instance=ExtResource("1_oq6jn")]
+unique_name_in_owner = true
+position = Vector2(30, 70)
+color = Color(1, 1, 1, 1)
+color_outline = Color(0, 0, 0, 1)
+rect = Rect2(-4, -4, 8, 8)
+
+[node name="handle_rot_20" parent="Node2D" instance=ExtResource("1_oq6jn")]
+unique_name_in_owner = true
+position = Vector2(70, -10)
+color = Color(1, 1, 1, 1)
+color_outline = Color(0, 0, 0, 1)
+rect = Rect2(-4, -4, 8, 8)
+
+[node name="handle_rot_21" parent="Node2D" instance=ExtResource("1_oq6jn")]
+unique_name_in_owner = true
+position = Vector2(70, 30)
+color = Color(1, 1, 1, 1)
+color_outline = Color(0, 0, 0, 1)
+rect = Rect2(-4, -4, 8, 8)
+
+[node name="handle_rot_22" parent="Node2D" instance=ExtResource("1_oq6jn")]
+unique_name_in_owner = true
+position = Vector2(70, 70)
+color = Color(1, 1, 1, 1)
+color_outline = Color(0, 0, 0, 1)
+rect = Rect2(-4, -4, 8, 8)
+
+[node name="handle_00" parent="Node2D" instance=ExtResource("1_oq6jn")]
+unique_name_in_owner = true
 color = Color(1, 1, 1, 1)
 color_outline = Color(0, 0, 0, 1)
 rect = Rect2(-4, -4, 8, 8)
@@ -34,25 +83,9 @@ color = Color(1, 1, 1, 1)
 color_outline = Color(0, 0, 0, 1)
 rect = Rect2(-4, -4, 8, 8)
 
-[node name="handle_rot_01" parent="Node2D/handle_01" instance=ExtResource("1_oq6jn")]
-unique_name_in_owner = true
-visible = false
-position = Vector2(-10, 0)
-color = Color(1, 1, 1, 1)
-color_outline = Color(0, 0, 0, 1)
-rect = Rect2(-4, -4, 8, 8)
-
 [node name="handle_02" parent="Node2D" instance=ExtResource("1_oq6jn")]
 unique_name_in_owner = true
 position = Vector2(0, 60)
-color = Color(1, 1, 1, 1)
-color_outline = Color(0, 0, 0, 1)
-rect = Rect2(-4, -4, 8, 8)
-
-[node name="handle_rot_02" parent="Node2D/handle_02" instance=ExtResource("1_oq6jn")]
-unique_name_in_owner = true
-visible = false
-position = Vector2(-10, 10)
 color = Color(1, 1, 1, 1)
 color_outline = Color(0, 0, 0, 1)
 rect = Rect2(-4, -4, 8, 8)
@@ -64,25 +97,9 @@ color = Color(1, 1, 1, 1)
 color_outline = Color(0, 0, 0, 1)
 rect = Rect2(-4, -4, 8, 8)
 
-[node name="handle_rot_10" parent="Node2D/handle_10" instance=ExtResource("1_oq6jn")]
-unique_name_in_owner = true
-visible = false
-position = Vector2(0, -10)
-color = Color(1, 1, 1, 1)
-color_outline = Color(0, 0, 0, 1)
-rect = Rect2(-4, -4, 8, 8)
-
 [node name="handle_12" parent="Node2D" instance=ExtResource("1_oq6jn")]
 unique_name_in_owner = true
 position = Vector2(30, 60)
-color = Color(1, 1, 1, 1)
-color_outline = Color(0, 0, 0, 1)
-rect = Rect2(-4, -4, 8, 8)
-
-[node name="handle_rot_12" parent="Node2D/handle_12" instance=ExtResource("1_oq6jn")]
-unique_name_in_owner = true
-visible = false
-position = Vector2(0, 10)
 color = Color(1, 1, 1, 1)
 color_outline = Color(0, 0, 0, 1)
 rect = Rect2(-4, -4, 8, 8)
@@ -94,14 +111,6 @@ color = Color(1, 1, 1, 1)
 color_outline = Color(0, 0, 0, 1)
 rect = Rect2(-4, -4, 8, 8)
 
-[node name="handle_rot_20" parent="Node2D/handle_20" instance=ExtResource("1_oq6jn")]
-unique_name_in_owner = true
-visible = false
-position = Vector2(10, -10)
-color = Color(1, 1, 1, 1)
-color_outline = Color(0, 0, 0, 1)
-rect = Rect2(-4, -4, 8, 8)
-
 [node name="handle_21" parent="Node2D" instance=ExtResource("1_oq6jn")]
 unique_name_in_owner = true
 position = Vector2(60, 30)
@@ -109,25 +118,9 @@ color = Color(1, 1, 1, 1)
 color_outline = Color(0, 0, 0, 1)
 rect = Rect2(-4, -4, 8, 8)
 
-[node name="handle_rot_21" parent="Node2D/handle_21" instance=ExtResource("1_oq6jn")]
-unique_name_in_owner = true
-visible = false
-position = Vector2(10, 0)
-color = Color(1, 1, 1, 1)
-color_outline = Color(0, 0, 0, 1)
-rect = Rect2(-4, -4, 8, 8)
-
 [node name="handle_22" parent="Node2D" instance=ExtResource("1_oq6jn")]
 unique_name_in_owner = true
 position = Vector2(60, 60)
-color = Color(1, 1, 1, 1)
-color_outline = Color(0, 0, 0, 1)
-rect = Rect2(-4, -4, 8, 8)
-
-[node name="handle_rot_22" parent="Node2D/handle_22" instance=ExtResource("1_oq6jn")]
-unique_name_in_owner = true
-visible = false
-position = Vector2(10, 10)
 color = Color(1, 1, 1, 1)
 color_outline = Color(0, 0, 0, 1)
 rect = Rect2(-4, -4, 8, 8)
