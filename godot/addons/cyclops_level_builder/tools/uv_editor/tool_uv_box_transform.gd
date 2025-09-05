@@ -396,8 +396,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var drag_offset_uv = mouse_uv_pos - drag_handle_start_pos_uv
 				
 			var start_tool_bounds_xform =  tool_xform_start * start_drag_bound_xform
-			var proj_x:Vector2 = drag_offset_uv.project(start_tool_bounds_xform.x)
-			var proj_y:Vector2 = drag_offset_uv.project(start_tool_bounds_xform.y)
 			
 			if drag_uv_style == DragHandleStyle.SCALE_FREE \
 				|| drag_uv_style == DragHandleStyle.SCALE_AXIS_X \
@@ -406,19 +404,15 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				
 				match drag_uv_style:
 					DragHandleStyle.SCALE_AXIS_X:
-						proj_y = Vector2(0, 0)
+						drag_offset_uv = drag_offset_uv.project(start_tool_bounds_xform.x)
 					DragHandleStyle.SCALE_AXIS_Y:
-						proj_x = Vector2(0, 0)
+						drag_offset_uv = drag_offset_uv.project(start_tool_bounds_xform.y)
 					DragHandleStyle.SCALE_UNIFORM:
-						var len_x:float = proj_x.length()
-						var len_y:float = proj_y.length()
-						if len_x < len_y:
-							proj_y = proj_y.normalized() * len_x
-						else:
-							proj_x = proj_x.normalized() * len_y
-					
+						var proj_axis:Vector2 = drag_handle_start_pos_uv - drag_pivot_pos_uv
+						drag_offset_uv = drag_offset_uv.project(proj_axis)
+						
 				var init_handle_offset:Vector2 = drag_handle_start_pos_uv - drag_pivot_pos_uv
-				var cur_handle_offset:Vector2 = init_handle_offset + proj_x + proj_y
+				var cur_handle_offset:Vector2 = init_handle_offset + drag_offset_uv
 				
 				var xform:Transform2D
 				xform = xform.translated_local(drag_pivot_pos_uv)
