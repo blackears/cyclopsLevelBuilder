@@ -31,6 +31,9 @@ var tool_state:ToolState = ToolState.NONE
 enum DragHandleStyle { NONE, TRANSLATE, ROTATE, SCALE_FREE, SCALE_UNIFORM, SCALE_AXIS_X, SCALE_AXIS_Y, PIVOT }
 var drag_uv_style:DragHandleStyle
 
+enum DragHandleType { NONE, SCALE_00, SCALE_01, SCALE_02, SCALE_10, SCALE_12, SCALE_20, SCALE_21, SCALE_22 }
+var drag_handle_type:DragHandleType
+
 var drag_handle_start_pos_uv:Vector2
 var drag_pivot_pos_uv:Vector2
 
@@ -131,7 +134,7 @@ func update_uv_handles():
 	
 
 func reset_tool():
-#	print("reset_tool()")
+	print("reset_tool()")
 	tool_xform_start = Transform2D.IDENTITY
 	tool_xform_cur = Transform2D.IDENTITY
 	
@@ -139,6 +142,7 @@ func reset_tool():
 	if uv_rect.size.is_zero_approx():
 #		visible = false
 		gizmo.visible = false
+		print("gizmo.visible = false")
 		return
 		
 	rotate_pivot_tool = Vector2(.5, .5)
@@ -156,6 +160,7 @@ func reset_tool():
 	
 	
 	gizmo.visible = true
+	print("gizmo.visible = true")
 
 	_draw_tool(null)
 	
@@ -296,36 +301,44 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 							drag_uv_style = DragHandleStyle.TRANSLATE
 							
 						GizmoTransformBox2D.Part.CORNER_00:
+							drag_handle_type = DragHandleType.SCALE_00
 							drag_uv_style = DragHandleStyle.SCALE_UNIFORM if shift_down else DragHandleStyle.SCALE_FREE
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_22.global_position
 							tool_xform_start = tool_xform_cur
 						GizmoTransformBox2D.Part.CORNER_01:
+							drag_handle_type = DragHandleType.SCALE_01
 							drag_uv_style = DragHandleStyle.SCALE_AXIS_X
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_21.global_position
 							tool_xform_start = tool_xform_cur
 						GizmoTransformBox2D.Part.CORNER_02:
+							drag_handle_type = DragHandleType.SCALE_02
 							drag_uv_style = DragHandleStyle.SCALE_UNIFORM if shift_down else DragHandleStyle.SCALE_FREE
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_20.global_position
 							tool_xform_start = tool_xform_cur
 							
 						GizmoTransformBox2D.Part.CORNER_10:
+							drag_handle_type = DragHandleType.SCALE_10
 							drag_uv_style = DragHandleStyle.SCALE_AXIS_Y
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_12.global_position
 							tool_xform_start = tool_xform_cur
 						GizmoTransformBox2D.Part.CORNER_12:
+							drag_handle_type = DragHandleType.SCALE_12
 							drag_uv_style = DragHandleStyle.SCALE_AXIS_Y
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_10.global_position
 							tool_xform_start = tool_xform_cur
 							
 						GizmoTransformBox2D.Part.CORNER_20:
+							drag_handle_type = DragHandleType.SCALE_20
 							drag_uv_style = DragHandleStyle.SCALE_UNIFORM if shift_down else DragHandleStyle.SCALE_FREE
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_02.global_position
 							tool_xform_start = tool_xform_cur
 						GizmoTransformBox2D.Part.CORNER_21:
+							drag_handle_type = DragHandleType.SCALE_21
 							drag_uv_style = DragHandleStyle.SCALE_AXIS_X
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_01.global_position
 							tool_xform_start = tool_xform_cur
 						GizmoTransformBox2D.Part.CORNER_22:
+							drag_handle_type = DragHandleType.SCALE_22
 							drag_uv_style = DragHandleStyle.SCALE_UNIFORM if shift_down else DragHandleStyle.SCALE_FREE
 							drag_pivot_pos_uv = viewport_to_uv_xform * gizmo.handle_00.global_position
 							tool_xform_start = tool_xform_cur
@@ -382,12 +395,26 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					return true
 			else:
+				#if tool_state == ToolState.NONE:
+					#select_face_vertices({},
+						#Selection.REPLACE)
+						#
+					#uv_ed.show_selection_rect = false
+					#
+					#tool_state = ToolState.NONE
+					#get_viewport().set_input_as_handled()
+					#reset_tool()
+					#return true
+					
 				if tool_state == ToolState.READY:
+					#print("tool ready unclick")
 					#Do single click
 					var block_indices:Dictionary = uv_ed.get_uv_indices_in_region(
 							Rect2(e.position - Vector2.ONE * builder.drag_start_radius / 2, 
 							Vector2.ONE * builder.drag_start_radius),
 							true)
+					
+					#print("block_indices: ", block_indices)
 					
 					select_face_vertices(block_indices,
 						Selection.choose_type(e.shift_pressed, e.ctrl_pressed))
@@ -457,8 +484,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			var mouse_uv_pos:Vector2 = viewport_to_uv_xform * e.position
 			var drag_offset_uv = mouse_uv_pos - drag_handle_start_pos_uv
-				
-			var start_tool_bounds_xform =  tool_xform_start * start_drag_bound_xform
+			
+			var start_tool_bounds_xform:Transform2D = tool_xform_start * start_drag_bound_xform
+#			print("start_tool_bounds_xform ", start_tool_bounds_xform)
 			
 			if drag_uv_style == DragHandleStyle.SCALE_FREE \
 				|| drag_uv_style == DragHandleStyle.SCALE_AXIS_X \
@@ -473,15 +501,51 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					DragHandleStyle.SCALE_UNIFORM:
 						var proj_axis:Vector2 = drag_handle_start_pos_uv - drag_pivot_pos_uv
 						drag_offset_uv = drag_offset_uv.project(proj_axis)
-						
-				var init_handle_offset:Vector2 = drag_handle_start_pos_uv - drag_pivot_pos_uv
-				var cur_handle_offset:Vector2 = init_handle_offset + drag_offset_uv
 				
-				var xform:Transform2D
-				xform = xform.translated_local(drag_pivot_pos_uv)
-				xform = xform.scaled_local(cur_handle_offset / init_handle_offset)
-				xform = xform.translated_local(-drag_pivot_pos_uv)
-				tool_xform_cur = xform * tool_xform_start
+				#print("drag_offset_uv ", drag_offset_uv)
+				#print("drag_pivot_pos_uv ", drag_pivot_pos_uv)
+
+				var drag_box_i:Vector2 = drag_offset_uv.project(start_tool_bounds_xform.x)
+				var drag_box_j:Vector2 = drag_offset_uv.project(start_tool_bounds_xform.y)
+				
+				var cur_tool_bounds_xform:Transform2D
+				
+				match drag_handle_type:
+					DragHandleType.SCALE_00:
+						cur_tool_bounds_xform.x = start_tool_bounds_xform.x - drag_box_i
+						cur_tool_bounds_xform.y = start_tool_bounds_xform.y - drag_box_j
+						cur_tool_bounds_xform.origin = start_tool_bounds_xform.origin + drag_box_i + drag_box_j
+					DragHandleType.SCALE_02:
+						cur_tool_bounds_xform.x = start_tool_bounds_xform.x - drag_box_i
+						cur_tool_bounds_xform.y = start_tool_bounds_xform.y + drag_box_j
+						cur_tool_bounds_xform.origin = start_tool_bounds_xform.origin + drag_box_i
+					DragHandleType.SCALE_20:
+						cur_tool_bounds_xform.x = start_tool_bounds_xform.x + drag_box_i
+						cur_tool_bounds_xform.y = start_tool_bounds_xform.y - drag_box_j
+						cur_tool_bounds_xform.origin = start_tool_bounds_xform.origin + drag_box_j
+					DragHandleType.SCALE_22:
+						cur_tool_bounds_xform.x = start_tool_bounds_xform.x + drag_box_i
+						cur_tool_bounds_xform.y = start_tool_bounds_xform.y + drag_box_j
+						cur_tool_bounds_xform.origin = start_tool_bounds_xform.origin
+
+					DragHandleType.SCALE_01:
+						cur_tool_bounds_xform.x = start_tool_bounds_xform.x - drag_box_i
+						cur_tool_bounds_xform.y = start_tool_bounds_xform.y
+						cur_tool_bounds_xform.origin = start_tool_bounds_xform.origin + drag_box_i
+					DragHandleType.SCALE_21:
+						cur_tool_bounds_xform.x = start_tool_bounds_xform.x + drag_box_i
+						cur_tool_bounds_xform.y = start_tool_bounds_xform.y
+						cur_tool_bounds_xform.origin = start_tool_bounds_xform.origin
+					DragHandleType.SCALE_10:
+						cur_tool_bounds_xform.x = start_tool_bounds_xform.x
+						cur_tool_bounds_xform.y = start_tool_bounds_xform.y - drag_box_j
+						cur_tool_bounds_xform.origin = start_tool_bounds_xform.origin + drag_box_j
+					DragHandleType.SCALE_12:
+						cur_tool_bounds_xform.x = start_tool_bounds_xform.x
+						cur_tool_bounds_xform.y = start_tool_bounds_xform.y + drag_box_j
+						cur_tool_bounds_xform.origin = start_tool_bounds_xform.origin
+
+				tool_xform_cur = cur_tool_bounds_xform * start_drag_bound_xform.affine_inverse()
 				
 				transform_uvs(tool_xform_cur, false)
 				
@@ -514,7 +578,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				transform_uvs(tool_xform_cur, false)
 				
 				_draw_tool(null)
-				
 			
 				return true
 				
@@ -580,12 +643,15 @@ func on_block_selection_changed():
 #	print("on_block_selection_changed()")
 	track_selected_blocks()
 	reset_tool()
-	_draw_tool(null)
+#	_draw_tool(null)
 
 #Override mesh changed signal
 func on_mesh_changed(block:CyclopsBlock):
-#	print("on_mesh_changed(block:CyclopsBlock)")
-	super.on_mesh_changed(block)
-	#reset_tool()
+	print("on_mesh_changed(block:CyclopsBlock)")
+#	print("tool_state ", tool_state)
+#	super.on_mesh_changed(block)
+	if tool_state == ToolState.NONE:
+#		print("on_mesh_changed(block:CyclopsBlock) tool_state == ToolState.NONE")
+		reset_tool()
 	#_draw_tool(null)
 	
