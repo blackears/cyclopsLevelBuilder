@@ -139,10 +139,11 @@ func reset_tool():
 	tool_xform_cur = Transform2D.IDENTITY
 	
 	var uv_rect:Rect2 = get_uv_bounds()
+#	print("uv_rect.size ", uv_rect.size)
 	if uv_rect.size.is_zero_approx():
 #		visible = false
 		gizmo.visible = false
-		print("gizmo.visible = false")
+#		print("gizmo.visible = false")
 		return
 		
 	rotate_pivot_tool = Vector2(.5, .5)
@@ -160,7 +161,7 @@ func reset_tool():
 	
 	
 	gizmo.visible = true
-	print("gizmo.visible = true")
+#	print("gizmo.visible = true")
 
 	_draw_tool(null)
 	
@@ -187,7 +188,6 @@ func transform_uvs(uv_xform:Transform2D, commit:bool):
 		var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
 		cmd.builder = builder
 		var fc:CommandSetMeshFeatureData.FeatureChanges = CommandSetMeshFeatureData.FeatureChanges.new()
-	#	print("block_index_map ", block_index_map)
 		
 		for block in builder.get_selected_blocks():
 			var block_path:NodePath = block.get_path()
@@ -213,7 +213,7 @@ func transform_uvs(uv_xform:Transform2D, commit:bool):
 			#print("new_uv_arr ", new_uv_arr.data)
 		
 		if cmd.will_change_anything():
-	#		print("cmd.will_change_anything() true")
+#			print("cmd.will_change_anything() true")
 			var undo:EditorUndoRedoManager = builder.get_undo_redo()
 			cmd.add_to_undo_manager(undo)
 	else:
@@ -421,14 +421,18 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					tool_state = ToolState.NONE
 					
-					#reset_tool()
+					reset_tool()
 					return true
 					
 				elif tool_state == ToolState.DRAG_HANDLE:
+					#print("commit trabnsform")
+					#Restore original transform before committing change
+					transform_uvs(tool_xform_start, false)
 					transform_uvs(tool_xform_cur, true)
 					
 					tool_state = ToolState.NONE
-					pass
+					return true
+					
 				elif tool_state == ToolState.DRAG_SELECTION:
 					#Finish drag rect
 #					print("finish drag rect")
@@ -647,9 +651,9 @@ func on_block_selection_changed():
 
 #Override mesh changed signal
 func on_mesh_changed(block:CyclopsBlock):
-	print("on_mesh_changed(block:CyclopsBlock)")
+#	print("on_mesh_changed(block:CyclopsBlock)")
 #	print("tool_state ", tool_state)
-#	super.on_mesh_changed(block)
+	super.on_mesh_changed(block)
 	if tool_state == ToolState.NONE:
 #		print("on_mesh_changed(block:CyclopsBlock) tool_state == ToolState.NONE")
 		reset_tool()

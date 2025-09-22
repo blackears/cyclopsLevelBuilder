@@ -519,7 +519,7 @@ func _draw() -> void:
 	draw_subdiv_grid()
 	draw_grid()
 
-	
+	#print("uv_editor:_draw()")
 	match select_feature:
 		SelectFeature.VERTEX:
 			if sync_selection:
