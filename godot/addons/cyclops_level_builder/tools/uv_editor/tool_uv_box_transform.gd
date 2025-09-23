@@ -185,6 +185,7 @@ func transform_uvs(uv_xform:Transform2D, commit:bool):
 	#print("commit ", commit)
 	
 	if commit:
+		
 		var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
 		cmd.builder = builder
 		var fc:CommandSetMeshFeatureData.FeatureChanges = CommandSetMeshFeatureData.FeatureChanges.new()
@@ -202,7 +203,6 @@ func transform_uvs(uv_xform:Transform2D, commit:bool):
 				if !sel_vec.get_value(i):
 					continue
 				var val:Vector2 = uv_arr.get_value_vec2(i)
-#				new_uv_arr.set_value_vec2(val + offset, i)
 				new_uv_arr.set_value_vec2(uv_xform * val, i)
 			
 			fc.new_data_values[MeshVectorData.FV_UV0] = new_uv_arr
@@ -213,9 +213,16 @@ func transform_uvs(uv_xform:Transform2D, commit:bool):
 			#print("new_uv_arr ", new_uv_arr.data)
 		
 		if cmd.will_change_anything():
+			var cmd_group:CommandUndoList = CommandUndoList.new()
+			cmd_group.append_command(cmd)
+			
+			var cmd_tool:CommandUvBoxTransform = CommandUvBoxTransform.new()
+			cmd_tool.tool_xform_old = tool_xform_start
+			cmd_tool.tool_xform_new = tool_xform_cur
+			
 #			print("cmd.will_change_anything() true")
 			var undo:EditorUndoRedoManager = builder.get_undo_redo()
-			cmd.add_to_undo_manager(undo)
+			cmd_group.add_to_undo_manager(undo)
 	else:
 		for block in builder.get_selected_blocks():
 			var block_path:NodePath = block.get_path()
@@ -230,7 +237,6 @@ func transform_uvs(uv_xform:Transform2D, commit:bool):
 				if !sel_vec.get_value(i):
 					continue
 				var val:Vector2 = uv_arr.get_value_vec2(i)
-#				new_uv_arr.set_value_vec2(val + offset, i)
 				new_uv_arr.set_value_vec2(uv_xform * val, i)
 			
 			var new_mvd:MeshVectorData = mvd.duplicate_explicit()
