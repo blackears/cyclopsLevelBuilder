@@ -179,70 +179,121 @@ func _draw_tool(viewport_camera:Camera3D):
 		if handle.viewport_handle:
 			handle.viewport_handle.position = uv_to_viewport_xform * handle.uv_position
 	
+func transform_uvs(uv_xform:Transform2D)->void:
+	for block in builder.get_selected_blocks():
+		var block_path:NodePath = block.get_path()
+		var mvd:MeshVectorData = mvd_cache[block_path]
+		
+		var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+		var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
 
-func transform_uvs(uv_xform:Transform2D, commit:bool):
+		var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+		
+		for i in uv_arr.num_components():
+			if !sel_vec.get_value(i):
+				continue
+			var val:Vector2 = uv_arr.get_value_vec2(i)
+			new_uv_arr.set_value_vec2(uv_xform * val, i)
+		
+		var new_mvd:MeshVectorData = mvd.duplicate_explicit()
+		new_mvd.set_face_vertex_data(MeshVectorData.FV_UV0, new_uv_arr)
+		
+		block.mesh_vector_data = new_mvd
+
+func transform_uvs_command(uv_xform:Transform2D)->CommandSetMeshFeatureData:
 	#print("transform_uvs uv_xform ", uv_xform)
 	#print("commit ", commit)
 	
-	if commit:
+	var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
+	cmd.builder = builder
+	var fc:CommandSetMeshFeatureData.FeatureChanges = CommandSetMeshFeatureData.FeatureChanges.new()
+	
+	for block in builder.get_selected_blocks():
+		var block_path:NodePath = block.get_path()
+		var mvd:MeshVectorData = mvd_cache[block_path]
 		
-		var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
-		cmd.builder = builder
-		var fc:CommandSetMeshFeatureData.FeatureChanges = CommandSetMeshFeatureData.FeatureChanges.new()
-		
-		for block in builder.get_selected_blocks():
-			var block_path:NodePath = block.get_path()
-			var mvd:MeshVectorData = mvd_cache[block_path]
-			
-			var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
-			var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
+		var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+		var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
 
-			var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
-			
-			for i in uv_arr.num_components():
-				if !sel_vec.get_value(i):
-					continue
-				var val:Vector2 = uv_arr.get_value_vec2(i)
-				new_uv_arr.set_value_vec2(uv_xform * val, i)
-			
-			fc.new_data_values[MeshVectorData.FV_UV0] = new_uv_arr
-
-			cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
+		var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
 		
-			#print("uv_arr ", uv_arr.data)
-			#print("new_uv_arr ", new_uv_arr.data)
+		for i in uv_arr.num_components():
+			if !sel_vec.get_value(i):
+				continue
+			var val:Vector2 = uv_arr.get_value_vec2(i)
+			new_uv_arr.set_value_vec2(uv_xform * val, i)
 		
-		if cmd.will_change_anything():
-			var cmd_group:CommandUndoList = CommandUndoList.new()
-			cmd_group.append_command(cmd)
-			
-			var cmd_tool:CommandUvBoxTransform = CommandUvBoxTransform.new()
-			cmd_tool.tool_xform_old = tool_xform_start
-			cmd_tool.tool_xform_new = tool_xform_cur
-			
-#			print("cmd.will_change_anything() true")
-			var undo:EditorUndoRedoManager = builder.get_undo_redo()
-			cmd_group.add_to_undo_manager(undo)
-	else:
-		for block in builder.get_selected_blocks():
-			var block_path:NodePath = block.get_path()
-			var mvd:MeshVectorData = mvd_cache[block_path]
-			
-			var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
-			var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
+		fc.new_data_values[MeshVectorData.FV_UV0] = new_uv_arr
 
-			var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
-			
-			for i in uv_arr.num_components():
-				if !sel_vec.get_value(i):
-					continue
-				var val:Vector2 = uv_arr.get_value_vec2(i)
-				new_uv_arr.set_value_vec2(uv_xform * val, i)
-			
-			var new_mvd:MeshVectorData = mvd.duplicate_explicit()
-			new_mvd.set_face_vertex_data(MeshVectorData.FV_UV0, new_uv_arr)
-			
-			block.mesh_vector_data = new_mvd
+		cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
+	
+		#print("uv_arr ", uv_arr.data)
+		#print("new_uv_arr ", new_uv_arr.data)
+	return cmd
+
+#func transform_uvs(uv_xform:Transform2D, commit:bool):
+	##print("transform_uvs uv_xform ", uv_xform)
+	##print("commit ", commit)
+	#
+	#if commit:
+		#
+		#var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
+		#cmd.builder = builder
+		#var fc:CommandSetMeshFeatureData.FeatureChanges = CommandSetMeshFeatureData.FeatureChanges.new()
+		#
+		#for block in builder.get_selected_blocks():
+			#var block_path:NodePath = block.get_path()
+			#var mvd:MeshVectorData = mvd_cache[block_path]
+			#
+			#var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+			#var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
+#
+			#var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+			#
+			#for i in uv_arr.num_components():
+				#if !sel_vec.get_value(i):
+					#continue
+				#var val:Vector2 = uv_arr.get_value_vec2(i)
+				#new_uv_arr.set_value_vec2(uv_xform * val, i)
+			#
+			#fc.new_data_values[MeshVectorData.FV_UV0] = new_uv_arr
+#
+			#cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
+		#
+			##print("uv_arr ", uv_arr.data)
+			##print("new_uv_arr ", new_uv_arr.data)
+		#
+		#if cmd.will_change_anything():
+			#var cmd_group:CommandUndoList = CommandUndoList.new()
+			#cmd_group.append_command(cmd)
+			#
+			#var cmd_tool:CommandUvBoxTransform = CommandUvBoxTransform.new()
+			#cmd_tool.tool_xform_old = tool_xform_start
+			#cmd_tool.tool_xform_new = tool_xform_cur
+			#
+##			print("cmd.will_change_anything() true")
+			#var undo:EditorUndoRedoManager = builder.get_undo_redo()
+			#cmd_group.add_to_undo_manager(undo)
+	#else:
+		#for block in builder.get_selected_blocks():
+			#var block_path:NodePath = block.get_path()
+			#var mvd:MeshVectorData = mvd_cache[block_path]
+			#
+			#var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+			#var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
+#
+			#var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+			#
+			#for i in uv_arr.num_components():
+				#if !sel_vec.get_value(i):
+					#continue
+				#var val:Vector2 = uv_arr.get_value_vec2(i)
+				#new_uv_arr.set_value_vec2(uv_xform * val, i)
+			#
+			#var new_mvd:MeshVectorData = mvd.duplicate_explicit()
+			#new_mvd.set_face_vertex_data(MeshVectorData.FV_UV0, new_uv_arr)
+			#
+			#block.mesh_vector_data = new_mvd
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	if !builder || !focused:
@@ -257,7 +308,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		
 		if e.keycode == KEY_ESCAPE:
 			if tool_state == ToolState.DRAG_HANDLE:
-				transform_uvs(Transform2D.IDENTITY, false)
+				transform_uvs(Transform2D.IDENTITY)
 				
 				get_viewport().set_input_as_handled()
 				tool_state = ToolState.NONE
@@ -433,8 +484,27 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				elif tool_state == ToolState.DRAG_HANDLE:
 					#print("commit trabnsform")
 					#Restore original transform before committing change
-					transform_uvs(tool_xform_start, false)
-					transform_uvs(tool_xform_cur, true)
+					#transform_uvs(tool_xform_start, false)
+					#transform_uvs(tool_xform_cur, true)
+					
+					transform_uvs(tool_xform_start)
+
+					var cmd:CommandSetMeshFeatureData = transform_uvs_command(tool_xform_cur)
+					
+					if cmd.will_change_anything():
+						var cmd_group:CommandUndoList = CommandUndoList.new()
+						
+						var cmd_tool:CommandUvBoxTransform = CommandUvBoxTransform.new()
+						cmd_tool.tool_path = get_path()
+						cmd_tool.tool_xform_old = tool_xform_start
+						cmd_tool.tool_xform_new = tool_xform_cur
+
+						cmd_group.append_command(cmd)
+						cmd_group.append_command(cmd_tool)
+						
+			#			print("cmd.will_change_anything() true")
+						var undo:EditorUndoRedoManager = builder.get_undo_redo()
+						cmd_group.add_to_undo_manager(undo)
 					
 					tool_state = ToolState.NONE
 					return true
@@ -557,7 +627,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 				tool_xform_cur = cur_tool_bounds_xform * start_drag_bound_xform.affine_inverse()
 				
-				transform_uvs(tool_xform_cur, false)
+#				transform_uvs(tool_xform_cur, false)
+				transform_uvs(tool_xform_cur)
 				
 				_draw_tool(null)
 				
@@ -585,7 +656,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				xform = xform.translated_local(-drag_pivot_pos_uv)
 				tool_xform_cur = xform * tool_xform_start
 				
-				transform_uvs(tool_xform_cur, false)
+#				transform_uvs(tool_xform_cur, false)
+				transform_uvs(tool_xform_cur)
 				
 				_draw_tool(null)
 			
