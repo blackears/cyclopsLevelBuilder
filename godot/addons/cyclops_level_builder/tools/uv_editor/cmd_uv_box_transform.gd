@@ -40,8 +40,9 @@ func do_it():
 	
 	tool.tool_xform_start = tool_xform_new
 	tool.tool_xform_cur = tool_xform_new
-	tool._draw_tool(null)
 	tool.update_uv_handles()
+	print("CommandUvBoxTransform::do_it()")
+#	tool._draw_tool(null)
 
 func undo_it():
 
@@ -49,5 +50,6 @@ func undo_it():
 	
 	tool.tool_xform_start = tool_xform_old
 	tool.tool_xform_cur = tool_xform_old
-	tool._draw_tool(null)
 	tool.update_uv_handles()
+	print("CommandUvBoxTransform::undo_it()")
+#	tool._draw_tool(null)

@@ -490,11 +490,14 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					transform_uvs(tool_xform_start)
 
 					var cmd:CommandSetMeshFeatureData = transform_uvs_command(tool_xform_cur)
+					cmd.builder = builder
 					
 					if cmd.will_change_anything():
 						var cmd_group:CommandUndoList = CommandUndoList.new()
+						cmd_group.builder = builder
 						
 						var cmd_tool:CommandUvBoxTransform = CommandUvBoxTransform.new()
+						cmd_tool.builder = builder
 						cmd_tool.tool_path = get_path()
 						cmd_tool.tool_xform_old = tool_xform_start
 						cmd_tool.tool_xform_new = tool_xform_cur
@@ -734,6 +737,7 @@ func on_mesh_changed(block:CyclopsBlock):
 	super.on_mesh_changed(block)
 	if tool_state == ToolState.NONE:
 #		print("on_mesh_changed(block:CyclopsBlock) tool_state == ToolState.NONE")
-		reset_tool()
+#		reset_tool()
+		pass
 	#_draw_tool(null)
 	
