@@ -1,69 +1,73 @@
 # ##############################################################################
-# This class joins together GUT, GUT Gui, GutConfig and is the main way to
-# run a test suite.
+# This class joins together GUT, GUT Gui, GutConfig and is THE way to kick off a
+# run of a test suite.
 #
-# This creates its own instance of gut.gd that it manages.
-# Use set_gut_config to set the gut_config.gd that should be used to configure
-# gut.
+# This creates its own instance of gut.gd that it manages.  You can set the
+# gut.gd instance if you need to for testing.
+#
+# Set gut_config to an instance of a configured gut_config.gd instance prior to
+# running tests.
+#
 # This will create a GUI and wire it up and apply gut_config.gd options.
 #
-# Running tests:
-# By default, this will run tests once this control has been added to the tree.
-# You can override this by setting auto_run_tests to false prior to adding
-# this to the tree.  To run tests manually, call run_tests.
-#
+# Running tests:  Call run_tests
 # ##############################################################################
 extends Node2D
+
+const EXIT_OK = 0
+const EXIT_ERROR = 1
 
 var Gut = load('res://addons/gut/gut.gd')
 var ResultExporter = load('res://addons/gut/result_exporter.gd')
 var GutConfig = load('res://addons/gut/gut_config.gd')
 
-const RUNNER_JSON_PATH = 'res://.gut_editor_config.json'
-const RESULT_FILE = 'user://.gut_editor.bbcode'
-const RESULT_JSON = 'user://.gut_editor.json'
+var runner_json_path = null
+var result_bbcode_path = null
+var result_json_path = null
 
-var _gut_config = null
-var _gut = null;
+var lgr = GutUtils.get_logger()
+var gut_config = null
+
+var error_tracker = GutUtils.get_error_tracker()
+
+var _hid_gut = null;
+# Lazy loaded gut instance.  Settable for testing purposes.
+var gut = _hid_gut :
+	get:
+		if(_hid_gut == null):
+			_hid_gut = Gut.new(lgr)
+			_hid_gut.error_tracker = error_tracker
+		return _hid_gut
+	set(val):
+		_hid_gut = val
+
 var _wrote_results = false
-# Flag for when this is being used at the command line.  Otherwise it is
-# assumed this is being used by the panel and being launched with
-# play_custom_scene
-var _cmdln_mode = false
+var _ran_from_editor = false
 
 @onready var _gut_layer = $GutLayer
 @onready var _gui = $GutLayer/GutScene
 
-# When true, tests will be kicked off in _ready.
-var auto_run_tests = true
 
 func _ready():
-	if(_gut_config == null):
-		_gut_config = GutConfig.new()
-		_gut_config.load_panel_options(RUNNER_JSON_PATH)
-
-	# The command line will call run_tests on its own.  When used from the panel
-	# we have to kick off the tests ourselves b/c there's no way I know of to
-	# interact with the scene that was run via play_custom_scene.
-	if(!_cmdln_mode and auto_run_tests):
-		call_deferred('run_tests')
+	GutUtils.WarningsManager.apply_warnings_dictionary(
+		GutUtils.warnings_at_start)
 
 
-func _lazy_make_gut():
-	if(_gut == null):
-		_gut = Gut.new()
+func _exit_tree():
+	if(!_wrote_results and _ran_from_editor):
+		_write_results_for_gut_panel()
 
 
 func _setup_gui(show_gui):
 	if(show_gui):
-		_gui.gut = _gut
-		var printer = _gut.logger.get_printer('gui')
+		_gui.gut = gut
+		var printer = gut.logger.get_printer('gui')
 		printer.set_textbox(_gui.get_textbox())
 	else:
-		_gut.logger.disable_printer('gui', true)
+		gut.logger.disable_printer('gui', true)
 		_gui.visible = false
 
-	var opts = _gut_config.options
+	var opts = gut_config.options
 	_gui.set_font_size(opts.font_size)
 	_gui.set_font(opts.font_name)
 	if(opts.font_color != null and opts.font_color.is_valid_html_color()):
@@ -72,15 +76,12 @@ func _setup_gui(show_gui):
 		_gui.set_background_color(Color(opts.background_color))
 
 	_gui.set_opacity(min(1.0, float(opts.opacity) / 100))
-	# if(opts.should_maximize):
-	# 	_tester.maximize()
 	_gui.use_compact_mode(opts.compact_mode)
 
 
-
-func _write_results():
+func _write_results_for_gut_panel():
 	var content = _gui.get_textbox().get_parsed_text() #_gut.logger.get_gui_bbcode()
-	var f = FileAccess.open(RESULT_FILE, FileAccess.WRITE)
+	var f = FileAccess.open(result_bbcode_path, FileAccess.WRITE)
 	if(f != null):
 		f.store_string(content)
 		f = null # closes file
@@ -88,56 +89,129 @@ func _write_results():
 		push_error('Could not save bbcode, result = ', FileAccess.get_open_error())
 
 	var exporter = ResultExporter.new()
-	var f_result = exporter.write_json_file(_gut, RESULT_JSON)
+	# TODO this should be checked and _wrote_results should maybe not be set, or
+	# maybe we do not care.  Whichever, it should be clear.
+	var _f_result = exporter.write_json_file(gut, result_json_path)
 	_wrote_results = true
 
 
-func _exit_tree():
-	if(!_wrote_results and !_cmdln_mode):
-		_write_results()
+func _handle_quit(should_exit, should_exit_on_success, override_exit_code=EXIT_OK):
+	var quitting_time = should_exit or \
+		(should_exit_on_success and gut.get_fail_count() == 0)
+
+	if(!quitting_time):
+		if(should_exit_on_success):
+			lgr.log("There are failing tests, exit manually.")
+		_gui.use_compact_mode(false)
+		return
+
+	# For some reason, tests fail asserting that quit was called with 0 if we
+	# do not do this, but everything is defaulted so I don't know why it gets
+	# null.
+	var exit_code = GutUtils.nvl(override_exit_code, EXIT_OK)
+
+	if(gut.get_fail_count() > 0):
+		exit_code = EXIT_ERROR
+
+	# Overwrite the exit code with the post_script's exit code if it is set
+	var post_hook_inst = gut.get_post_run_script_instance()
+	if(post_hook_inst != null and post_hook_inst.get_exit_code() != null):
+		exit_code = post_hook_inst.get_exit_code()
+
+	quit(exit_code)
 
 
-func _on_tests_finished(should_exit, should_exit_on_success):
-	_write_results()
+func _end_run(override_exit_code=EXIT_OK):
+	if(_ran_from_editor):
+		_write_results_for_gut_panel()
 
-	if(should_exit):
-		get_tree().quit()
-	elif(should_exit_on_success and _gut.get_fail_count() == 0):
-		get_tree().quit()
+	GutErrorTracker.deregister_logger(error_tracker)
+
+	_handle_quit(gut_config.options.should_exit,
+		gut_config.options.should_exit_on_success,
+		override_exit_code)
+
+
+# -------------
+# Events
+# -------------
+func _on_tests_finished():
+	_end_run()
+
+
+# -------------
+# Public
+# -------------
+# For internal use only, but still public.  Consider it "protected" and you
+# don't have my permission to call this, unless "you" is "me".
+func run_from_editor():
+	_ran_from_editor = true
+	var GutEditorGlobals = load('res://addons/gut/gui/editor_globals.gd')
+	runner_json_path = GutUtils.nvl(runner_json_path, GutEditorGlobals.editor_run_gut_config_path)
+	result_bbcode_path = GutUtils.nvl(result_bbcode_path, GutEditorGlobals.editor_run_bbcode_results_path)
+	result_json_path = GutUtils.nvl(result_json_path, GutEditorGlobals.editor_run_json_results_path)
+
+	if(gut_config == null):
+		gut_config = GutConfig.new()
+		gut_config.load_options(runner_json_path)
+
+	call_deferred('run_tests')
 
 
 func run_tests(show_gui=true):
-	_lazy_make_gut()
-
 	_setup_gui(show_gui)
 
-	_gut.add_children_to = self
-	if(_gut.get_parent() == null):
-		if(_gut_config.options.gut_on_top):
-			_gut_layer.add_child(_gut)
+	if(gut_config.options.dirs.size() + gut_config.options.tests.size() == 0):
+		var err_text = "You do not have any directories configured, so GUT " + \
+			"doesn't know where to find the tests.  Tell GUT where to find the " + \
+			"tests and GUT shall run the tests."
+		lgr.error(err_text)
+		push_error(err_text)
+		_end_run(EXIT_ERROR)
+		return
+
+	var install_check_text = GutUtils.make_install_check_text()
+	if(install_check_text != GutUtils.INSTALL_OK_TEXT):
+		print("\n\n", GutUtils.version_numbers.get_version_text())
+		lgr.error(install_check_text)
+		push_error(install_check_text)
+		_end_run(EXIT_ERROR)
+		return
+
+	gut.add_children_to = self
+	if(gut.get_parent() == null):
+		if(gut_config.options.gut_on_top):
+			_gut_layer.add_child(gut)
 		else:
-			add_child(_gut)
+			add_child(gut)
+	
+	if(!gut.end_run.is_connected(_on_tests_finished)):
+		gut.end_run.connect(_on_tests_finished)
 
-	if(!_cmdln_mode):
-		_gut.end_run.connect(_on_tests_finished.bind(_gut_config.options.should_exit, _gut_config.options.should_exit_on_success))
-
-	_gut_config.apply_options(_gut)
-	var run_rest_of_scripts = _gut_config.options.unit_test_name == ''
-
-	_gut.test_scripts(run_rest_of_scripts)
-
-
-func get_gut():
-	_lazy_make_gut()
-	return _gut
+	gut_config.apply_options(gut)
+	var run_rest_of_scripts = gut_config.options.unit_test_name == ''
+	GutErrorTracker.register_logger(error_tracker)
+	gut.test_scripts(run_rest_of_scripts)
 
 
 func set_gut_config(which):
-	_gut_config = which
+	gut_config = which
 
 
-func set_cmdln_mode(is_it):
-	_cmdln_mode = is_it
+# for backwards compatibility
+func get_gut():
+	return gut
+
+
+func quit(exit_code):
+	# Sometimes quitting takes a few seconds.  This gives some indicator
+	# of what is going on.
+	_gui.set_title("Exiting")
+
+	await get_tree().process_frame
+
+	lgr.info(str('Exiting with code ', exit_code))
+	get_tree().quit(exit_code)
 
 
 
@@ -146,7 +220,7 @@ func set_cmdln_mode(is_it):
 # The MIT License (MIT)
 # =====================
 #
-# Copyright (c) 2023 Tom "Butch" Wesley
+# Copyright (c) 2025 Tom "Butch" Wesley
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
