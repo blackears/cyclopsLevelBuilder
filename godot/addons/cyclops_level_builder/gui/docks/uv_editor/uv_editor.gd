@@ -50,6 +50,14 @@ var subdivisions_offset:Vector2:
 		subdivisions_offset_changed.emit(v)
 		queue_redraw()
 
+var underlay_opacity:float = 1:
+	set(v):
+		if v == underlay_opacity:
+			return
+		underlay_opacity = v
+		
+		queue_redraw()
+
 @export var face_sel_color:Color = Color(1, .5, 0, .4):
 	set(value):
 		face_sel_color = value
@@ -363,13 +371,19 @@ func draw_image_underlay(tex:Texture2D):
 		view_rect.end,
 		Vector2(view_rect.end.x, view_rect.position.y),
 		]
-	var colors:PackedColorArray = [Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE]
 	var uvs:PackedVector2Array = [
 		p00_uv,
 		Vector2(p00_uv.x, p11_uv.y),
 		p11_uv,
 		Vector2(p11_uv.x, p00_uv.y),
 	]
+	var colors:PackedColorArray = [
+		Color(1, 1, 1, underlay_opacity),
+		Color(1, 1, 1, underlay_opacity),
+		Color(1, 1, 1, underlay_opacity),
+		Color(1, 1, 1, underlay_opacity),
+	]
+	
 	draw_polygon(points, colors, uvs, tex)
 	
 func draw_material_underlay():

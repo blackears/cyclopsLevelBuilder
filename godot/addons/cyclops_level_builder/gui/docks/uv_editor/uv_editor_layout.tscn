@@ -11,26 +11,46 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gddga")
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer"]
 layout_mode = 2
 columns = 2
 
-[node name="Label2" type="Label" parent="GridContainer"]
+[node name="Label2" type="Label" parent="MarginContainer/GridContainer"]
 layout_mode = 2
 text = "Subdivisions"
 
-[node name="vectorEdit_subdiv" parent="GridContainer" instance=ExtResource("1_obnea")]
+[node name="vectorEdit_subdiv" parent="MarginContainer/GridContainer" instance=ExtResource("1_obnea")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Label" type="Label" parent="GridContainer"]
+[node name="Label" type="Label" parent="MarginContainer/GridContainer"]
 layout_mode = 2
 text = "Offset"
 
-[node name="vectorEdit_offset" parent="GridContainer" instance=ExtResource("1_obnea")]
+[node name="vectorEdit_offset" parent="MarginContainer/GridContainer" instance=ExtResource("1_obnea")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[connection signal="value_changed" from="GridContainer/vectorEdit_subdiv" to="." method="_on_vector_edit_subdiv_value_changed"]
-[connection signal="value_changed" from="GridContainer/vectorEdit_offset" to="." method="_on_vector_edit_offset_value_changed"]
+[node name="Label3" type="Label" parent="MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Underlay Opacity"
+
+[node name="scroll_underlay_opacity" type="HScrollBar" parent="MarginContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[connection signal="value_changed" from="MarginContainer/GridContainer/vectorEdit_subdiv" to="." method="_on_vector_edit_subdiv_value_changed"]
+[connection signal="value_changed" from="MarginContainer/GridContainer/vectorEdit_offset" to="." method="_on_vector_edit_offset_value_changed"]
+[connection signal="value_changed" from="MarginContainer/GridContainer/scroll_underlay_opacity" to="." method="_on_scroll_underlay_opacity_value_changed"]
