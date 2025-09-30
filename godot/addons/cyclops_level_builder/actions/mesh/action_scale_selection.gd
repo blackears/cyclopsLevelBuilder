@@ -40,7 +40,7 @@ func _execute(event:CyclopsActionEvent):
 	if blocks.is_empty():
 		return
 		
-	var pivot:Vector3 = calc_pivot_of_blocks(blocks)
+	var pivot:Vector3 = calc_pivot_of_blocks(blocks, event.plugin)
 	
 	var cmd:CommandTransformVertices = CommandTransformVertices.new()
 	cmd.builder = plugin

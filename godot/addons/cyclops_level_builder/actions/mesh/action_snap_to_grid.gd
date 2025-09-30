@@ -43,7 +43,7 @@ func _execute(event:CyclopsActionEvent):
 	if blocks.is_empty():
 		return
 		
-	var pivot:Vector3 = calc_pivot_of_blocks(blocks)
+	var pivot:Vector3 = calc_pivot_of_blocks(blocks, event.plugin)
 	
 	var cmd:CommandSnapToGrid = CommandSnapToGrid.new()
 	cmd.builder = plugin
@@ -51,13 +51,6 @@ func _execute(event:CyclopsActionEvent):
 	for block in blocks:
 		cmd.add_block(block.get_path())
 		
-	
-	#cmd.grid_size = pow(2, plugin.get_global_scene().grid_size)
-	#var snap_to_grid_util:SnapToGridUtil = CyclopsAutoload.calc_snap_to_grid_util()
-	#print("snap_to_grid_util  %s" % snap_to_grid_util)
-	#cmd.snap_to_grid_util = snap_to_grid_util
-	
-	
 	#print("cform %s" % xform)
 	
 	var undo:EditorUndoRedoManager = plugin.get_undo_redo()

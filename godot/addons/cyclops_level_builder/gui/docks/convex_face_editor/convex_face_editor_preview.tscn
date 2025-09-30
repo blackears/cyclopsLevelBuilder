@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bbfgpupliiqnm"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/convex_face_editor/convex_face_editor_preview.gd" id="1_bjhau"]
+[ext_resource type="Script" uid="uid://c4wb257umiic4" path="res://addons/cyclops_level_builder/gui/docks/convex_face_editor/convex_face_editor_preview.gd" id="1_bjhau"]
 [ext_resource type="Material" uid="uid://rdhrhgrb78ls" path="res://addons/cyclops_level_builder/materials/grid.tres" id="2_t8xtu"]
 [ext_resource type="PackedScene" uid="uid://716oipfa7f5l" path="res://addons/cyclops_level_builder/gui/docks/convex_face_editor/convex_face_editor_preview_studio.tscn" id="3_jtspd"]
 

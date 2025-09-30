@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dh6frljlp7oqe"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/controls/resource_inspector/line_editor_int.gd" id="1_ryygx"]
+[ext_resource type="Script" uid="uid://5xit5fl426n6" path="res://addons/cyclops_level_builder/gui/controls/resource_inspector/line_editor_int.gd" id="1_ryygx"]
 
 [node name="SpinBox" type="SpinBox"]
 offset_right = 83.0625

@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://4siqre3jhe80"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/cyclops_global_scene.gd" id="1_nu1d3"]
+[ext_resource type="Script" uid="uid://b04im8b8jvh4i" path="res://addons/cyclops_level_builder/cyclops_global_scene.gd" id="1_nu1d3"]
 [ext_resource type="FontFile" uid="uid://dejaio63tyi02" path="res://addons/cyclops_level_builder/art/fonts/Roboto/Roboto-Regular.ttf" id="2_savc6"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/cyclops_overlay.gd" id="3_uf260"]
+[ext_resource type="Script" uid="uid://cgeocjxri8v4n" path="res://addons/cyclops_level_builder/cyclops_overlay.gd" id="3_uf260"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_sl0cw"]
 

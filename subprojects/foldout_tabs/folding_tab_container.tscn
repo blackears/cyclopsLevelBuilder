@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://cb4ub7y7ri1p"]
+
+[ext_resource type="Script" uid="uid://8nddv6u061la" path="res://folding_tab_container.gd" id="1_m2iko"]
+
+[node name="FoldingTabContainer" type="Container"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_m2iko")
+
+[connection signal="child_entered_tree" from="." to="." method="_on_child_entered_tree"]
+[connection signal="child_exiting_tree" from="." to="." method="_on_child_exiting_tree"]
+[connection signal="child_order_changed" from="." to="." method="_on_child_order_changed"]

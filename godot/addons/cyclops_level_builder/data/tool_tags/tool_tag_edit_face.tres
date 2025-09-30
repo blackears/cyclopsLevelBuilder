@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="ToolTag" load_steps=6 format=3 uid="uid://cmdgd8wmfdo4a"]
 
 [ext_resource type="Texture2D" uid="uid://bi27fw31w4ssi" path="res://addons/cyclops_level_builder/art/icons/select_face.svg" id="1_s64xo"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/tool_tag.gd" id="2_qfyqw"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_edit_face.gd" id="3_y22x5"]
+[ext_resource type="Script" uid="uid://c6mrqg0hgbe04" path="res://addons/cyclops_level_builder/resources/tool_tag.gd" id="2_qfyqw"]
+[ext_resource type="Script" uid="uid://l60ocviod14l" path="res://addons/cyclops_level_builder/tools/tool_edit_face.gd" id="3_y22x5"]
 
 [sub_resource type="InputEventKey" id="InputEventKey_xxi5p"]
 pressed = true

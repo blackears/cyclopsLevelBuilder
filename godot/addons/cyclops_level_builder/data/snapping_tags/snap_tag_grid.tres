@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="SnappingTag" load_steps=4 format=3 uid="uid://dwxpsgoxb60yp"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/snapping/snapping_tag.gd" id="1_jbxkl"]
+[ext_resource type="Script" uid="uid://b2ry0wxf6ar6d" path="res://addons/cyclops_level_builder/snapping/snapping_tag.gd" id="1_jbxkl"]
 [ext_resource type="Texture2D" uid="uid://c6mucdu7wcbkm" path="res://addons/cyclops_level_builder/art/icons/snap_grid.svg" id="1_ngui8"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/snapping/snapping_system_grid.gd" id="2_thx8k"]
+[ext_resource type="Script" uid="uid://ejyh5i66ef7r" path="res://addons/cyclops_level_builder/snapping/snapping_system_grid.gd" id="2_thx8k"]
 
 [resource]
 script = ExtResource("1_jbxkl")

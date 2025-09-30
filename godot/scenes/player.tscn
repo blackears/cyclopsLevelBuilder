@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://k8coo8mweime"]
 
-[ext_resource type="Script" path="res://scenes/player.gd" id="1_orro8"]
+[ext_resource type="Script" uid="uid://fq08kmu3ki5m" path="res://scenes/player.gd" id="1_orro8"]
 [ext_resource type="PackedScene" uid="uid://bdu3fyn51c0nk" path="res://art/character/person.glb" id="2_bnhsm"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tb625"]

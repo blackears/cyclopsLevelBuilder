@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cuextwifemq7v"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_scale_2d.gd" id="1_la1e7"]
+[ext_resource type="Script" uid="uid://bch6vsc0ie8u8" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_scale_2d.gd" id="1_la1e7"]
 [ext_resource type="PackedScene" uid="uid://d24yjcg5fwnko" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_arrow_rect_2d.tscn" id="2_qktq5"]
 [ext_resource type="PackedScene" uid="uid://cqeuqgat4gbol" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_rect_2d.tscn" id="3_nku72"]
 

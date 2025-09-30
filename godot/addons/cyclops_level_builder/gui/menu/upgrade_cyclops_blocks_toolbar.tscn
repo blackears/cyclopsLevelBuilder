@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://u52a8gflbktl"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/menu/upgrade_cyclops_blocks_toolbar.gd" id="1_pbwhi"]
+[ext_resource type="Script" uid="uid://d365e87ocs55u" path="res://addons/cyclops_level_builder/gui/menu/upgrade_cyclops_blocks_toolbar.gd" id="1_pbwhi"]
 
 [node name="PanelContainer" type="PanelContainer"]
 offset_right = 40.0

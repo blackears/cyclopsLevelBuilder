@@ -36,8 +36,8 @@ signal config_changed
 const AUTOLOAD_NAME = "CyclopsAutoload"
 const CYCLOPS_HUD_NAME = "CyclopsGlobalHud"
 
-var config:CyclopsConfig = preload("res://addons/cyclops_level_builder/data/configuration.tres")
-@export_file("*.json") var config_file:String = "res://addons/cyclops_level_builder/data/cyclops_config.json"
+#var config:CyclopsConfig = preload("res://addons/cyclops_level_builder/data/configuration.tres")
+#@export_file("*.json") var config_file:String = "res://addons/cyclops_level_builder/data/cyclops_config.json"
 
 var logger:CyclopsLogger = CyclopsLogger.new()
 
@@ -123,6 +123,8 @@ signal xray_mode_changed(value:bool)
 
 var display_mode:DisplayMode.Type = DisplayMode.Type.MATERIAL
 
+var snap_node_list:Array[CyclopsSnappingSystem]
+var snapping_enabled:bool = false
 
 var editor_cache:Dictionary
 var editor_cache_file:String = "user://cyclops_editor_cache.json"
@@ -183,6 +185,8 @@ func _enter_tree():
 		#print("keymap = KeymapGroup.new()")
 		keymap = KeymapGroup.new()
 
+	init_view3d_snapping_tools()
+
 	#EditorInterface.get_resource_filesystem().filesystem_changed.connect(on_filesystem_changed)
 	
 	add_child(viewport_3d_manager)
@@ -208,7 +212,6 @@ func _enter_tree():
 
 	view_uv_editor = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/view_uv_editor.tscn").instantiate()
 	view_uv_editor.plugin = self
-#	view_uv_editor.forward_input.connect(on_uv_editor_forward_input)
 	
 	overlays_dock = preload("res://addons/cyclops_level_builder/gui/docks/overlays/overlays_dock.tscn").instantiate()
 	overlays_dock.plugin = self
@@ -245,7 +248,6 @@ func _enter_tree():
 	#load_tools()
 	update_activation()
 
-
 	#Wait until everything is loaded	
 	await get_tree().process_frame
 	
@@ -253,9 +255,24 @@ func _enter_tree():
 	global_scene.builder = self
 	
 	switch_to_snapping_system(SnappingSystemGrid.new())
-#	switch_to_tool(ToolBlock.new())
 	switch_to_tool(get_tool_by_id(ToolBlock.TOOL_ID))
+	
+	view_uv_editor.activate()
 
+func init_view3d_snapping_tools():
+	snap_node_list.clear()
+	var snap_tool_root = config_scene.get_node("Views/View3D/Snapping")
+	if snap_tool_root:
+		for child in snap_tool_root.get_children():
+			if child is SnapButtonRef && child.snapping_node:
+				var snap_node:CyclopsSnappingSystem = child.snapping_node
+				snap_node_list.append(snap_node)
+	
+func calc_snap_to_grid_util()->SnapToGridUtil:
+	for node in snap_node_list:
+		if node is SnappingSystemGrid:
+			return node.calc_snap_to_grid_util()
+	return null
 
 func _exit_tree():
 	
@@ -307,25 +324,6 @@ func _exit_tree():
 	remove_child(config_scene)
 	config_scene.queue_free()
 
-#@deprecated
-#func load_config():
-	##load_actions()
-	#var text:String = FileAccess.get_file_as_string(config_file)
-	#var config_dict:Dictionary = JSON.parse_string(text)
-		#
-	##Load tools
-	#tool_list.clear()
-#
-	#for path in config_dict["tools"]:
-		##print("Loading tool ", path)
-		#var script:Script = load(path)
-#
-		#var tool:CyclopsTool = script.new()
-		#tool.builder = self
-		#tool_list.append(tool)
-#
-	#for tool in tool_list:
-		#tool._ready()
 
 func log(message:String, level:CyclopsLogger.LogLevel = CyclopsLogger.LogLevel.ERROR):
 	logger.log(message, level)
@@ -469,22 +467,8 @@ func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent)->int:
 
 	return EditorPlugin.AFTER_GUI_INPUT_PASS
 
-#func on_uv_editor_forward_input(event:InputEvent):
-	#var sel_nodes:Array[Node] = EditorInterface.get_selection().get_selected_nodes()
-	#var active_node:Node = null if sel_nodes.is_empty() else sel_nodes.back()
-	#
-	#if active_tool && active_tool._can_handle_object(active_node)\
-		#&& active_tool.is_uv_tool():
-			#
-		#var result:bool = active_tool._gui_input(null, event)
-	#pass
-
-
 func _get_state()->Dictionary:
 	var state:Dictionary = {}
-	
-	#print("ed cache ", str(editor_cache))
-	#state["editor_cache"] = editor_cache.duplicate()
 	
 	material_dock.save_state(state)
 	view_uv_editor.save_state(state)
@@ -498,8 +482,6 @@ func _get_state()->Dictionary:
 	
 func _set_state(state):
 	#print("ed set_state ", str(state))
-	
-	#editor_cache = state.get("editor_cache", {}).duplicate()
 	
 	material_dock.load_state(state)
 	view_uv_editor.load_state(state)
@@ -546,28 +528,7 @@ func get_tool_by_id(tool_id:String)->CyclopsTool:
 			return tool
 	return null
 
-#func switch_to_tool_id(tool_id:String):
-	#var next_tool:CyclopsTool = get_tool_by_id(tool_id)
-	#
-	#if active_tool:
-		#if active_tool._get_tool_id() == tool_id:
-			#return
-		#
-		#active_tool._deactivate()
-		#tool_properties_dock.set_editor(null)
-	##print("switching to ", tool_id)
-	#active_tool = next_tool
-#
-	#if active_tool:
-		#active_tool._activate(self)
-		#var control:Control = active_tool._get_tool_properties_editor()
-		#tool_properties_dock.set_editor(control)
-	#
-	##print("emittng ", tool_id)
-	#tool_changed.emit(active_tool)
-
 func switch_to_tool(_tool:CyclopsTool):
-	#print(">> switch to tool")
 	
 	if active_tool:
 		active_tool._deactivate()

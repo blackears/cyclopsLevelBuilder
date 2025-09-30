@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cu2hyc0pa1nh3"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/snapping_properties/snapping_properties_dock.gd" id="1_rymgk"]
+[ext_resource type="Script" uid="uid://c301runio55hd" path="res://addons/cyclops_level_builder/gui/docks/snapping_properties/snapping_properties_dock.gd" id="1_rymgk"]
 
 [node name="Snapping" type="Control"]
 layout_mode = 3

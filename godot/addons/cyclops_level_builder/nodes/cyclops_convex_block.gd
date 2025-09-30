@@ -21,6 +21,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+##@deprecated: Replaced by cyclops_block.tres
+
 @tool
 extends Node
 class_name CyclopsConvexBlock

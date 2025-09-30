@@ -147,6 +147,10 @@ func replace_blocks_recursive(node:Node, root:Node):
 			node.remove_child(child)
 			child.queue_free()
 			new_child.name = child_name
+			
+			#Copy groups that were on source node
+			for group_name in child.get_groups():
+				new_child.add_to_group(group_name, true)
 		
 		else:
 			replace_blocks_recursive(child, root)

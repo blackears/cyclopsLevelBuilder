@@ -1,0 +1,62 @@
+[gd_scene load_steps=3 format=3 uid="uid://dmmxxxd4ahdvj"]
+
+[ext_resource type="Script" uid="uid://blspcyewd8ue6" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_box_transform.gd" id="1_net8d"]
+[ext_resource type="PackedScene" uid="uid://cekp071dby6d2" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_box_handle.tscn" id="2_wuylr"]
+
+[node name="ToolUvBoxTransform" type="Node"]
+script = ExtResource("1_net8d")
+
+[node name="handle_scale_00" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_scale_01" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_scale_02" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_scale_10" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_scale_12" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_scale_20" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_scale_21" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_scale_22" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_rot_00" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_rot_01" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_rot_02" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_rot_10" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_rot_12" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_rot_20" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_rot_21" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_rot_22" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+
+[node name="handle_transform" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true
+style = 1
+
+[node name="handle_pivot" parent="." instance=ExtResource("2_wuylr")]
+unique_name_in_owner = true

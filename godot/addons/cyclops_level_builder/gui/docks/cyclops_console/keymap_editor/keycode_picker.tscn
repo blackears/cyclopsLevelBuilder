@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://uv7sijir1cke"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keycode_picker.gd" id="1_vh43p"]
+[ext_resource type="Script" uid="uid://qv3nso10jsxp" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keycode_picker.gd" id="1_vh43p"]
 
 [node name="Popup" type="Popup"]
 size = Vector2i(186, 101)

@@ -54,8 +54,8 @@ func _execute(event:CyclopsActionEvent):
 	pass
 
 	
-func calc_pivot_of_blocks(blocks:Array[CyclopsBlock])->Vector3:
-	var snap_to_grid_util:SnapToGridUtil = CyclopsAutoload.calc_snap_to_grid_util()
+func calc_pivot_of_blocks(blocks:Array[CyclopsBlock], plugin:CyclopsLevelBuilder)->Vector3:
+	var snap_to_grid_util:SnapToGridUtil = plugin.calc_snap_to_grid_util()
 	
 	var bounds:AABB = blocks[0].control_mesh.bounds
 	for idx in range(1, blocks.size()):

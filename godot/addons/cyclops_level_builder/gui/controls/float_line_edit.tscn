@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://dcbxelosum70b"]
+
+[ext_resource type="Script" uid="uid://bvug3uvh6rsqk" path="res://addons/cyclops_level_builder/gui/controls/float_line_edit.gd" id="1_ph51l"]
+
+[node name="FloatLineEdit" type="LineEdit"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1040.0
+offset_bottom = -617.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "0"
+script = ExtResource("1_ph51l")
+drag_step = 0.1
+
+[connection signal="focus_exited" from="." to="." method="_on_focus_exited"]
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="text_submitted" from="." to="." method="_on_text_submitted"]

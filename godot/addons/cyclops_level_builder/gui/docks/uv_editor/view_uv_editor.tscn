@@ -1,13 +1,27 @@
-[gd_scene load_steps=6 format=3 uid="uid://cw1yjv8t33ii0"]
+[gd_scene load_steps=20 format=3 uid="uid://cw1yjv8t33ii0"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/view_uv_editor.gd" id="1_bjwq8"]
+[ext_resource type="Script" uid="uid://5l6u428jo0ce" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/view_uv_editor.gd" id="1_bjwq8"]
 [ext_resource type="PackedScene" uid="uid://dlouwod012q17" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_editor.tscn" id="2_iavjh"]
 [ext_resource type="ButtonGroup" uid="uid://bl5lk7tapf3fo" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/bn_grp_feature.tres" id="2_s00w6"]
 [ext_resource type="ButtonGroup" uid="uid://b5oy526v08suc" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/bn_group_sticky.tres" id="3_r8vmy"]
+[ext_resource type="Texture2D" uid="uid://cuds4haino51b" path="res://addons/cyclops_level_builder/art/icons/snap_off.svg" id="4_ou5d4"]
+[ext_resource type="Texture2D" uid="uid://dloyvoq8piwx0" path="res://addons/cyclops_level_builder/art/icons/snap.svg" id="4_tcddb"]
+[ext_resource type="Texture2D" uid="uid://c6mucdu7wcbkm" path="res://addons/cyclops_level_builder/art/icons/snap_grid.svg" id="5_dhpq5"]
+[ext_resource type="Texture2D" uid="uid://c0x011okomj8n" path="res://addons/cyclops_level_builder/art/icons/snap_vertex.svg" id="5_uwi28"]
+[ext_resource type="Script" uid="uid://b3wl2p04rjkyy" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping_grid.gd" id="6_nc8ii"]
+[ext_resource type="Script" uid="uid://5shtfh4pg660" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping_vertex.gd" id="7_t0xtm"]
+[ext_resource type="Script" uid="uid://beli1atd0sieb" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping.gd" id="9_v4lie"]
+[ext_resource type="PackedScene" uid="uid://c7qoththgg6wp" path="res://addons/cyclops_level_builder/gui/controls/h_slide_tab_container.tscn" id="10_mcgkv"]
+[ext_resource type="PackedScene" uid="uid://cxvieo0800p4g" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_editor_layout.tscn" id="11_mcgkv"]
+[ext_resource type="Script" uid="uid://ceics6oooyp10" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_move.gd" id="14_mcgkv"]
+[ext_resource type="Script" uid="uid://c0tl2kn33andn" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_rotate.gd" id="15_oec2b"]
+[ext_resource type="Script" uid="uid://bp7b6y48sxsbt" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_scale.gd" id="16_uxymb"]
+[ext_resource type="PackedScene" uid="uid://dmmxxxd4ahdvj" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_box_transform.tscn" id="17_uxymb"]
+[ext_resource type="Script" uid="uid://ba7db0xvjky6y" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_viewport_navigation.gd" id="18_uxymb"]
 
 [sub_resource type="World3D" id="World3D_bxn6v"]
 
-[node name="UvEditor" type="Control"]
+[node name="ViewUvEditor" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -100,22 +114,112 @@ layout_mode = 2
 tooltip_text = "Synchronize UV selection with selected mesh elements."
 text = "Sync"
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="VBoxContainer"]
+[node name="bn_use_snap" type="TextureButton" parent="VBoxContainer/PanelContainer/HBoxContainer3"]
 unique_name_in_owner = true
 layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("4_ou5d4")
+texture_pressed = ExtResource("4_tcddb")
+
+[node name="option_snapping" type="OptionButton" parent="VBoxContainer/PanelContainer/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Grid"
+popup/item_0/icon = ExtResource("5_dhpq5")
+popup/item_0/id = 0
+popup/item_1/text = "Vertex"
+popup/item_1/icon = ExtResource("5_uwi28")
+popup/item_1/id = 1
+
+[node name="Control" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="VBoxContainer/Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_vertical = 3
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="VBoxContainer/SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="VBoxContainer/Control/SubViewportContainer"]
 own_world_3d = true
 world_3d = SubResource("World3D_bxn6v")
 handle_input_locally = false
-size = Vector2i(1152, 613)
+size = Vector2i(1152, 612)
 render_target_update_mode = 4
 
-[node name="uv_editor" parent="VBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("2_iavjh")]
+[node name="uv_editor" parent="VBoxContainer/Control/SubViewportContainer/SubViewport" instance=ExtResource("2_iavjh")]
 unique_name_in_owner = true
 face_sel_color = Color(0.5, 0.5, 0.5, 0.4)
+min_grid_spacing = 100.0
+
+[node name="slide_tab_container" parent="VBoxContainer/Control" instance=ExtResource("10_mcgkv")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+grow_horizontal = 0
+view_width = 200.0
+
+[node name="Layout" parent="VBoxContainer/Control/slide_tab_container" node_paths=PackedStringArray("uv_editor") instance=ExtResource("11_mcgkv")]
+visible = false
+layout_mode = 2
+uv_editor = NodePath("../../SubViewportContainer/SubViewport/uv_editor")
+
+[node name="Tool" type="PanelContainer" parent="VBoxContainer/Control/slide_tab_container"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="Snapping" type="PanelContainer" parent="VBoxContainer/Control/slide_tab_container"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="snapping" type="Node" parent="." node_paths=PackedStringArray("cur_snap_tool")]
+unique_name_in_owner = true
+script = ExtResource("9_v4lie")
+cur_snap_tool = NodePath("Grid")
+
+[node name="Grid" type="Node" parent="snapping"]
+script = ExtResource("6_nc8ii")
+metadata/_custom_type_script = "uid://b3wl2p04rjkyy"
+
+[node name="Vertex" type="Node" parent="snapping"]
+script = ExtResource("7_t0xtm")
+metadata/_custom_type_script = "uid://5shtfh4pg660"
+
+[node name="tools" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="Move UV" type="Node" parent="tools" node_paths=PackedStringArray("view")]
+script = ExtResource("14_mcgkv")
+view = NodePath("../..")
+
+[node name="Rotate UV" type="Node" parent="tools" node_paths=PackedStringArray("view")]
+script = ExtResource("15_oec2b")
+view = NodePath("../..")
+
+[node name="Scale UV" type="Node" parent="tools" node_paths=PackedStringArray("view")]
+script = ExtResource("16_uxymb")
+view = NodePath("../..")
+
+[node name="Box Transform UV2" parent="tools" node_paths=PackedStringArray("view") instance=ExtResource("17_uxymb")]
+view = NodePath("../..")
+
+[node name="Navigation" type="Node" parent="tools" node_paths=PackedStringArray("view")]
+script = ExtResource("18_uxymb")
+view = NodePath("../..")
+
+[node name="menu" type="Node" parent="."]
+unique_name_in_owner = true
 
 [connection signal="focus_entered" from="." to="." method="_on_focus_entered"]
 [connection signal="focus_exited" from="." to="." method="_on_focus_exited"]
@@ -126,6 +230,10 @@ face_sel_color = Color(0.5, 0.5, 0.5, 0.4)
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer3/sticky/sticky_shared_location" to="." method="_on_sticky_shared_location_pressed"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer3/sticky/sticky_shared_vertex" to="." method="_on_sticky_shared_vertex_pressed"]
 [connection signal="toggled" from="VBoxContainer/PanelContainer/HBoxContainer3/check_sync_with_mesh" to="." method="_on_check_sync_with_mesh_toggled"]
-[connection signal="gui_input" from="VBoxContainer/SubViewportContainer" to="." method="_on_sub_viewport_container_gui_input"]
-[connection signal="resized" from="VBoxContainer/SubViewportContainer" to="." method="_on_sub_viewport_container_resized"]
-[connection signal="proj_transform_changed" from="VBoxContainer/SubViewportContainer/SubViewport/uv_editor" to="." method="_on_uv_editor_proj_transform_changed"]
+[connection signal="toggled" from="VBoxContainer/PanelContainer/HBoxContainer3/bn_use_snap" to="." method="_on_bn_use_snap_toggled"]
+[connection signal="item_selected" from="VBoxContainer/PanelContainer/HBoxContainer3/option_snapping" to="." method="_on_option_snapping_item_selected"]
+[connection signal="gui_input" from="VBoxContainer/Control/SubViewportContainer" to="." method="_on_sub_viewport_container_gui_input"]
+[connection signal="resized" from="VBoxContainer/Control/SubViewportContainer" to="." method="_on_sub_viewport_container_resized"]
+[connection signal="proj_transform_changed" from="VBoxContainer/Control/SubViewportContainer/SubViewport/uv_editor" to="." method="_on_uv_editor_proj_transform_changed"]
+[connection signal="snap_tool_changed" from="snapping" to="." method="_on_snapping_snap_tool_changed"]
+[connection signal="use_snap_changed" from="snapping" to="." method="_on_snapping_use_snap_changed"]

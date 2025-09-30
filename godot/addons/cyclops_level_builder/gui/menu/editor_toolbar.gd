@@ -26,8 +26,6 @@ extends PanelContainer
 class_name EditorToolbar
 
 var editor_plugin:CyclopsLevelBuilder:
-	get:
-		return editor_plugin
 	set(value):
 		if editor_plugin:
 			editor_plugin.xray_mode_changed.disconnect(on_xray_mode_changed)
@@ -49,6 +47,8 @@ var editor_plugin:CyclopsLevelBuilder:
 		
 		build_ui()
 
+
+#var snap_node_list:Array[CyclopsSnappingSystem]
 
 func on_active_node_changed():
 	update_grid()
@@ -139,14 +139,13 @@ func build_ui():
 	%display_mode.select(editor_plugin.display_mode)
 	
 	#Snapping
-	var config:CyclopsConfig = editor_plugin.config
-	for tag in config.snapping_tags:
-		if tag.icon:
-			%snap_options.add_icon_item(tag.icon, tag.name)
+	%snap_options.clear()
+	for snap_node:CyclopsSnappingSystem in editor_plugin.snap_node_list:
+		if snap_node.icon:
+			%snap_options.add_icon_item(snap_node.icon, snap_node.name)
 		else:
-			%snap_options.add_item(tag.name)
-
-
+			%snap_options.add_item(snap_node.name)
+	
 func update_grid():
 	if !editor_plugin:
 		return
@@ -185,11 +184,11 @@ func _on_bn_xray_toggled(button_pressed:bool):
 	editor_plugin.xray_mode = button_pressed
 
 func _on_snap_options_item_selected(index:int):
-	var tag:SnappingTag = editor_plugin.config.snapping_tags[index]
-	tag._activate(editor_plugin)
+	editor_plugin.switch_to_snapping_system(editor_plugin.snap_node_list[index])
 	
 
 
 func _on_bn_snap_toggled(toggled_on):
-	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_ENABLED, toggled_on)
+	editor_plugin.snapping_enabled = toggled_on
+	#CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_ENABLED, toggled_on)
 	pass # Replace with function body.

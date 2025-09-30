@@ -1,9 +1,16 @@
-[gd_scene load_steps=2 format=3 uid="uid://dlouwod012q17"]
+[gd_scene load_steps=3 format=3 uid="uid://dlouwod012q17"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_editor.gd" id="1_v805t"]
+[ext_resource type="Script" uid="uid://wla1iubfhcf8" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_editor.gd" id="1_v805t"]
+[ext_resource type="Script" uid="uid://d3e6vvnrlfsmv" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/pivot_cursor_2d.gd" id="2_eivyd"]
 
 [node name="UvEditor" type="Node2D"]
 script = ExtResource("1_v805t")
 
 [node name="gizmo_area" type="Node2D" parent="."]
 unique_name_in_owner = true
+
+[node name="pivot_cursor" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(1, 1)
+script = ExtResource("2_eivyd")
+radius = 20.0

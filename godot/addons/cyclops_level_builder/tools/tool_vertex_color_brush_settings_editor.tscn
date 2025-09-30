@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://djlowj2pi405u"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_vertex_color_brush_settings_editor.gd" id="1_1a32u"]
+[ext_resource type="Script" uid="uid://cysk2siq3ga0s" path="res://addons/cyclops_level_builder/tools/tool_vertex_color_brush_settings_editor.gd" id="1_1a32u"]
 
 [node name="PanelContainer" type="PanelContainer"]
 offset_right = 317.0

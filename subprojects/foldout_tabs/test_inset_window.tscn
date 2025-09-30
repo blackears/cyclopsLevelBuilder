@@ -1,0 +1,44 @@
+[gd_scene load_steps=2 format=3 uid="uid://iw71ec2syrbg"]
+
+[ext_resource type="Script" uid="uid://jfe3sqoyia0" path="res://test_inset_window.gd" id="1_m2g71"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_m2g71")
+metadata/_edit_lock_ = true
+
+[node name="PopupPanel" type="PopupPanel" parent="."]
+unique_name_in_owner = true
+position = Vector2i(526, 274)
+visible = true
+
+[node name="ColorRect" type="ColorRect" parent="PopupPanel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 96.0
+offset_bottom = 96.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Popup" type="Popup" parent="."]
+unique_name_in_owner = true
+position = Vector2i(90, 45)
+visible = true
+
+[node name="ColorRect" type="ColorRect" parent="Popup"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0, 1, 1)
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

@@ -49,7 +49,6 @@ var dragging:bool = false
 func _input(event: InputEvent) -> void:
 	
 	if event is InputEventMouseButton:
-		print("GizmoRect2D InputEventMouseButton")
 		var e:InputEventMouseButton = event
 		
 		if e.is_pressed():

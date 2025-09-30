@@ -41,5 +41,3 @@ func _activate(plugin:CyclopsLevelBuilder):
 		snapping_system = snapping_script.new()
 	
 	plugin.switch_to_snapping_system(snapping_system)
-
-

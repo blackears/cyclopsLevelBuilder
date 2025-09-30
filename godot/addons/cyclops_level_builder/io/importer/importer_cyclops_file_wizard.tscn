@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bl2ohfqvxwjke"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/io/importer/importer_cyclops_file_wizard.gd" id="1_sehb5"]
+[ext_resource type="Script" uid="uid://djg5kdryb22yo" path="res://addons/cyclops_level_builder/io/importer/importer_cyclops_file_wizard.gd" id="1_sehb5"]
 
 [sub_resource type="Theme" id="Theme_jvbwn"]
 MarginContainer/constants/margin_bottom = 10

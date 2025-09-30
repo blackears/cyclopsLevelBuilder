@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cekp071dby6d2"]
+
+[ext_resource type="Script" uid="uid://c06wrphihgk20" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_box_handle.gd" id="1_2vj2c"]
+
+[node name="ToolUvBoxHandle" type="Node"]
+script = ExtResource("1_2vj2c")

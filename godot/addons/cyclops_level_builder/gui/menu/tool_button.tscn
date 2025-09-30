@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://o67oxkh75aas"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/menu/tool_button.gd" id="1_gyfm5"]
+[ext_resource type="Script" uid="uid://cmfehrinsh1y2" path="res://addons/cyclops_level_builder/gui/menu/tool_button_ref.gd" id="1_gyfm5"]
 
 [node name="ToolButton" type="Button"]
 offset_right = 58.0

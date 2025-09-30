@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7qoththgg6wp"]
+
+[ext_resource type="Script" uid="uid://kvgfjqysaacs" path="res://new folder/h_slide_tab_container.gd" id="1_y3b5l"]
+[ext_resource type="PackedScene" uid="uid://bkhqdo54nlqkn" path="res://new folder/rotate_container.tscn" id="2_2l4b0"]
+
+[node name="HSlideContainer" type="Container"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_y3b5l")
+
+[node name="RotationContainer" parent="." instance=ExtResource("2_2l4b0")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="TabBar" type="TabBar" parent="RotationContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="slide_bar" type="ColorRect" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_default_cursor_shape = 10
+
+[connection signal="child_entered_tree" from="." to="." method="_on_child_entered_tree"]
+[connection signal="child_exiting_tree" from="." to="." method="_on_child_exiting_tree"]
+[connection signal="tab_selected" from="RotationContainer/TabBar" to="." method="_on_tab_bar_tab_selected"]
+[connection signal="gui_input" from="slide_bar" to="." method="_on_slide_bar_gui_input"]

@@ -76,4 +76,3 @@ func do_it()->void:
 
 func undo_it()->void:
 	pass
-

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dugi0xh84150p"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_material_brush_settings_editor.gd" id="1_q0hdg"]
+[ext_resource type="Script" uid="uid://dmvhlo50un4fe" path="res://addons/cyclops_level_builder/tools/tool_material_brush_settings_editor.gd" id="1_q0hdg"]
 
 [node name="PanelContainer" type="PanelContainer"]
 offset_right = 317.0

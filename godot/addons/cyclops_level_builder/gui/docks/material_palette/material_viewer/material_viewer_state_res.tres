@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="MaterialViewerState" load_steps=2 format=3 uid="uid://cwq6b2p7f631n"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/material_viewer_state.gd" id="1_3sifp"]
+[ext_resource type="Script" uid="uid://tjtlxclrvg0i" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/material_viewer_state.gd" id="1_3sifp"]
 
 [resource]
 script = ExtResource("1_3sifp")

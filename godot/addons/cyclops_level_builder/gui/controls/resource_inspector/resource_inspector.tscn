@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c2484sv0ymy2e"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/controls/resource_inspector/resource_inspector.gd" id="1_m3yhx"]
+[ext_resource type="Script" uid="uid://ciyviqok81cnn" path="res://addons/cyclops_level_builder/gui/controls/resource_inspector/resource_inspector.gd" id="1_m3yhx"]
 
 [node name="object_inspector" type="Control"]
 layout_mode = 3

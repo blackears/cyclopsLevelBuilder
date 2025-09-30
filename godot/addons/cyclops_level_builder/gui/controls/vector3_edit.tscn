@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cphtpklx81l3w"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/controls/vector3_edit.gd" id="1_lnptu"]
+[ext_resource type="Script" uid="uid://btfvpgpto6fkc" path="res://addons/cyclops_level_builder/gui/controls/vector3_edit.gd" id="1_lnptu"]
 [ext_resource type="PackedScene" uid="uid://diibmlqy1mpqb" path="res://addons/cyclops_level_builder/gui/controls/numeric_line_edit.tscn" id="2_wjq53"]
 
 [node name="vector3_edit" type="HBoxContainer"]

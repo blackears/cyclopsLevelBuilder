@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://716oipfa7f5l"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/convex_face_editor/convex_face_editor_preview_studio.gd" id="1_38c8p"]
+[ext_resource type="Script" uid="uid://b62t2llui8wyo" path="res://addons/cyclops_level_builder/gui/docks/convex_face_editor/convex_face_editor_preview_studio.gd" id="1_38c8p"]
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_lw55q"]
 

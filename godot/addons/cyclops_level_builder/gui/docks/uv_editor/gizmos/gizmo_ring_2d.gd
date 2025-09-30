@@ -23,7 +23,7 @@
 
 @tool
 extends Gizmo2D
-class_name GizmoCircle2D
+class_name GizmoRing2D
 
 @export var color:Color = Color(1, 1, 1, 1):
 	set(value):
@@ -76,10 +76,10 @@ func calc_mesh_points()->PackedVector2Array:
 	
 	return points
 
-func pick(p:Vector2, radius:float)->bool:
+func pick(p:Vector2, select_radius:float = 0)->bool:
 	var points:PackedVector2Array = calc_mesh_points()
 	
-	if MathUtil.intersects_2d_point_polyline(p, radius, points):
+	if MathUtil.intersects_2d_point_polyline(p, select_radius, points):
 		return true
 	
 	return false

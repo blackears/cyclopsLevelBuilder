@@ -1,0 +1,47 @@
+[gd_scene load_steps=4 format=3 uid="uid://sm5ha5rexkwl"]
+
+[ext_resource type="Script" uid="uid://dya1isa1h7fvy" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping_grid_editor.gd" id="1_kuusj"]
+[ext_resource type="PackedScene" uid="uid://xganp03k5qlp" path="res://addons/cyclops_level_builder/gui/controls/vector2_edit.tscn" id="2_8ipgp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ipgp"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="UvEditorSnappingGridEditor" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_8ipgp")
+script = ExtResource("1_kuusj")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="Label" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Grid Spacing"
+
+[node name="spin_grid_spacing" type="SpinBox" parent="GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Grid Offset"
+
+[node name="Vector2Edit_offset" parent="GridContainer" instance=ExtResource("2_8ipgp")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label4" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Rotation"
+
+[node name="spin_rotation" type="SpinBox" parent="GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2

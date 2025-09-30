@@ -1,0 +1,85 @@
+[gd_scene load_steps=3 format=3 uid="uid://diuid1042mual"]
+
+[ext_resource type="PackedScene" uid="uid://cvxqtmwu55gpd" path="res://panel_container_tab.tscn" id="1_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://cb4ub7y7ri1p" path="res://folding_tab_container.tscn" id="1_ig7tw"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "aaaa"
+
+[node name="TabContainer" type="TabContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+grow_horizontal = 2
+grow_vertical = 0
+current_tab = 2
+deselect_enabled = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Button" type="Button" parent="TabContainer/VBoxContainer"]
+layout_mode = 2
+text = "wwww"
+
+[node name="Button2" type="Button" parent="TabContainer/VBoxContainer"]
+layout_mode = 2
+text = "eeeee"
+
+[node name="Button3" type="Button" parent="TabContainer/VBoxContainer"]
+layout_mode = 2
+text = "rrrrrr"
+
+[node name="Button" type="Button" parent="TabContainer"]
+visible = false
+layout_mode = 2
+text = "tttttt"
+metadata/_tab_index = 1
+
+[node name="PanelContainer" parent="TabContainer" instance=ExtResource("1_0xm2m")]
+layout_mode = 2
+
+[node name="FoldingTabContainer" parent="." instance=ExtResource("1_ig7tw")]
+visible = false
+layout_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FoldingTabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Button" type="Button" parent="FoldingTabContainer/VBoxContainer"]
+layout_mode = 2
+text = "wwww"
+
+[node name="Button2" type="Button" parent="FoldingTabContainer/VBoxContainer"]
+layout_mode = 2
+text = "eeeee"
+
+[node name="Button3" type="Button" parent="FoldingTabContainer/VBoxContainer"]
+layout_mode = 2
+text = "rrrrrr"
+
+[node name="Button" type="Button" parent="FoldingTabContainer"]
+visible = false
+layout_mode = 2
+text = "tttttt"
+metadata/_tab_index = 1

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bk0eelj64x4fk"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/controls/fold_out_panel.gd" id="1_n3mr0"]
+[ext_resource type="Script" uid="uid://dcadjwt2g0icq" path="res://addons/cyclops_level_builder/gui/controls/fold_out_panel.gd" id="1_n3mr0"]
 [ext_resource type="Texture2D" uid="uid://c7c2vg6lbhmfn" path="res://addons/cyclops_level_builder/art/icons/arrow_right.svg" id="2_dwm1s"]
 
 [node name="FoldOutPanel" type="PanelContainer"]

@@ -107,9 +107,6 @@ func _ready():
 		add_child(mesh_wire)
 	
 	collision_shape = CollisionShape3D.new()
-
-	#occluder = OccluderInstance3D.new()
-	#add_child(occluder)
 	
 	build_from_block()
 	update_physics_body()
@@ -146,7 +143,6 @@ func build_from_block():
 	collision_shape.shape = null
 
 	if Engine.is_editor_hint():
-#		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 		if has_node("/root/CyclopsAutoload"):
 			var global_scene = get_node("/root/CyclopsAutoload")
 			display_mode = global_scene.builder.display_mode
@@ -199,12 +195,10 @@ func build_from_block():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if dirty:
-			
 		build_from_block()
 
 	if Engine.is_editor_hint():
 		if has_node("/root/CyclopsAutoload"):
-	#		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 			var global_scene = get_node("/root/CyclopsAutoload")
 
 			if display_mode != global_scene.builder.display_mode:
@@ -214,7 +208,7 @@ func _process(delta):
 func draw_unit_labels(viewport_camera:Camera3D, local_to_world:Transform3D):
 	if !has_node("/root/CyclopsAutoload"):
 		return
-		
+	
 	var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 
 	var font:Font = global_scene.units_font

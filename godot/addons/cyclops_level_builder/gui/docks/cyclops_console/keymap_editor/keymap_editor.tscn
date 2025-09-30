@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://6ox14xmdrbgw"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keymap_editor.gd" id="1_4sy8y"]
+[ext_resource type="Script" uid="uid://3afd0gnqqoww" path="res://addons/cyclops_level_builder/gui/docks/cyclops_console/keymap_editor/keymap_editor.gd" id="1_4sy8y"]
 [ext_resource type="PackedScene" uid="uid://rpx15l2fbu2o" path="res://addons/cyclops_level_builder/gui/keymap/keymap_group_editor.tscn" id="2_xp5rp"]
 
 [node name="PanelContainer" type="PanelContainer"]

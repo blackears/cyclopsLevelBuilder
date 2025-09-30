@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://o1efx0qxc4n3"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_palette_viewport.gd" id="1_xyxg3"]
+[ext_resource type="Script" uid="uid://s21movte5uc7" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_palette_viewport.gd" id="1_xyxg3"]
 [ext_resource type="PackedScene" uid="uid://denc7grw42qsu" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/material_viewer.tscn" id="3_bks23"]
 
 [node name="Materials" type="Control"]

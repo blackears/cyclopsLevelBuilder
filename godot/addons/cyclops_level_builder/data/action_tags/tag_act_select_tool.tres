@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="ActionTag" load_steps=3 format=3 uid="uid://ddj5apigq4bew"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/actions/action_tag.gd" id="1_jonab"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/actions/mesh/action_select_tool.gd" id="1_jsmgf"]
+[ext_resource type="Script" uid="uid://bi2vn4jvx6i5v" path="res://addons/cyclops_level_builder/actions/action_tag.gd" id="1_jonab"]
+[ext_resource type="Script" uid="uid://dvfquc35vv5jv" path="res://addons/cyclops_level_builder/actions/mesh/action_select_tool.gd" id="1_jsmgf"]
 
 [resource]
 script = ExtResource("1_jonab")
-id = ""
+enabled = false
 action_script = ExtResource("1_jsmgf")

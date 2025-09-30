@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://b5fu116s58c8"]
+
+[ext_resource type="Script" uid="uid://c16hsejgnwslo" path="res://new folder/vertical_label.gd" id="1_vgggq"]
+
+[node name="VerticalLabel" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_vgggq")
+text = null

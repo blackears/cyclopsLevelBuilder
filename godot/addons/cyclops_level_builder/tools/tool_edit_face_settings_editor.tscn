@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bxy3qukjatj4l"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/tools/tool_edit_face_settings_editor.gd" id="1_i7hy2"]
+[ext_resource type="Script" uid="uid://dfx7563tfist6" path="res://addons/cyclops_level_builder/tools/tool_edit_face_settings_editor.gd" id="1_i7hy2"]
 
 [node name="ToolMoveSettingsEditor" type="PanelContainer"]
 anchors_preset = 15

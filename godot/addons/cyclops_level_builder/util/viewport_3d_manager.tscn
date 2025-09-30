@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://du87cy64o04tb"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/util/viewport_3d_manager.gd" id="1_5kcsy"]
+[ext_resource type="Script" uid="uid://csybt5ijqoprj" path="res://addons/cyclops_level_builder/util/viewport_3d_manager.gd" id="1_5kcsy"]
 
 [node name="Viewport3dManager" type="Node"]
 script = ExtResource("1_5kcsy")

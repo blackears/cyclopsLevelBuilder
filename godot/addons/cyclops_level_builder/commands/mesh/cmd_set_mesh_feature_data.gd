@@ -53,7 +53,7 @@ var block_map:Dictionary = {}
 
 func set_data(block_path:NodePath, feature:MeshVectorData.Feature,
 		changes:FeatureChanges):
-			
+	
 	var block_changes:BlockFeatureChanges
 	
 	var block:CyclopsBlock = builder.get_node(block_path)
@@ -80,6 +80,7 @@ func set_data(block_path:NodePath, feature:MeshVectorData.Feature,
 		
 		var change_to_vec:DataVector = changes.new_data_values[vector_name]
 		var delta_vec:DataVector = block_vec.subtract(change_to_vec)
+		#print("delta_vec ", delta_vec)
 		if delta_vec.is_zero():
 			continue
 		
@@ -101,28 +102,28 @@ func will_change_anything()->bool:
 	for key:NodePath in block_map.keys():
 		if !block_map[key].is_empty():
 			return true
-		
-	return false
-	
-	for block_path in block_map.keys():
-		var changes:BlockFeatureChanges = block_map[block_path]
-		var new_mvd:MeshVectorData = changes.old_block_data.duplicate(true)
-		
-#		print("block_path ", block_path)
-		for feature:MeshVectorData.Feature in changes.feature_changes.keys():
-			var fc:FeatureChanges = changes.feature_changes[feature]
-			for layer_name:String in fc.new_data_values.keys():
-				var source_vector:DataVector = fc.new_data_values[layer_name]
-				var target_vector:DataVector = new_mvd.get_feature_data(feature, layer_name)
-		
-#				print("source_vector ", source_vector.data)
-#				print("target_vector ", target_vector.data)
-				
-				if target_vector && target_vector.data_type == source_vector.data_type:
-					if !target_vector.equals_data(source_vector):
-						return true
 	
 	return false
+	
+	#for block_path in block_map.keys():
+		#var changes:BlockFeatureChanges = block_map[block_path]
+		#var new_mvd:MeshVectorData = changes.old_block_data.duplicate(true)
+		#
+##		print("block_path ", block_path)
+		#for feature:MeshVectorData.Feature in changes.feature_changes.keys():
+			#var fc:FeatureChanges = changes.feature_changes[feature]
+			#for layer_name:String in fc.new_data_values.keys():
+				#var source_vector:DataVector = fc.new_data_values[layer_name]
+				#var target_vector:DataVector = new_mvd.get_feature_data(feature, layer_name)
+		#
+##				print("source_vector ", source_vector.data)
+##				print("target_vector ", target_vector.data)
+				#
+				#if target_vector && target_vector.data_type == source_vector.data_type:
+					#if !target_vector.equals_data(source_vector):
+						#return true
+	#
+	#return false
 
 func do_it():
 #	print("CommandSetMeshFeatureData do_it()")

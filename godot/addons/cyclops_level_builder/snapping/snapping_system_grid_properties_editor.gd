@@ -70,7 +70,7 @@ func _process(delta):
 func _on_spin_power_of_two_value_changed(value:float):
 	if !tool:
 		return
-		
+	
 	tool.snap_to_grid_util.power_of_two_scale = value
 	tool.flush_cache()
 	CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_GRID_POWER_OF_TWO_SCALE, int(value))

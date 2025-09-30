@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfbrxtkx738bi"]
+
+[ext_resource type="Script" uid="uid://tlvdh3corny2" path="res://new folder/side_slide_container.gd" id="1_6kpx5"]
+
+[node name="side_slide_container" type="Container"]
+clip_contents = true
+mouse_filter = 2
+script = ExtResource("1_6kpx5")
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="resized" from="." to="." method="_on_resized"]

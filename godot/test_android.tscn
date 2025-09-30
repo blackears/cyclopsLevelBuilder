@@ -1,11 +1,11 @@
 [gd_scene load_steps=13 format=3 uid="uid://dnda1dg2kqhnk"]
 
-[ext_resource type="Script" path="res://test_android.gd" id="1_dyl7y"]
+[ext_resource type="Script" uid="uid://bt4bmpbiqrtxu" path="res://test_android.gd" id="1_dyl7y"]
 [ext_resource type="Material" uid="uid://b4173ircb7rqb" path="res://materials/cinder_blocks_mat.tres" id="1_w3ws6"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/nodes/cyclops_blocks.gd" id="2_xnf0x"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/nodes/cyclops_convex_block.gd" id="3_vrp7a"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/resources/convex_block_data.gd" id="4_iotc1"]
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/nodes/cyclops_convex_block_body.gd" id="5_hkosp"]
+[ext_resource type="Script" uid="uid://u2kq7fluf2tu" path="res://addons/cyclops_level_builder/nodes/cyclops_blocks.gd" id="2_xnf0x"]
+[ext_resource type="Script" uid="uid://bjk0hm32xh5jj" path="res://addons/cyclops_level_builder/nodes/cyclops_convex_block.gd" id="3_vrp7a"]
+[ext_resource type="Script" uid="uid://bifdwtdim7xal" path="res://addons/cyclops_level_builder/resources/convex_block_data.gd" id="4_iotc1"]
+[ext_resource type="Script" uid="uid://epvb1oex5ok1" path="res://addons/cyclops_level_builder/nodes/cyclops_convex_block_body.gd" id="5_hkosp"]
 
 [sub_resource type="Environment" id="Environment_gck82"]
 ambient_light_color = Color(0.784314, 0.784314, 0.784314, 1)
@@ -25,20 +25,25 @@ physics_layer = 0
 physics_mask = 0
 vertex_points = PackedVector3Array(-5, 1, -9, -5, 1, -5, -5, -3, -5, -5, -3, -9, -1, 1, -9, -1, 1, -5, -1, -3, -5, -1, -3, -9)
 vertex_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0)
-active_vertex = -1
-edge_vertex_indices = PackedInt32Array(0, 1, 1, 2, 2, 3, 3, 0, 7, 6, 6, 5, 5, 4, 4, 7, 0, 4, 5, 1, 6, 2, 7, 3)
 edge_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-active_edge = -1
-edge_face_indices = PackedInt32Array(0, 2, 0, 3, 0, 4, 0, 5, 1, 4, 1, 3, 1, 2, 1, 5, 2, 5, 2, 3, 3, 4, 4, 5)
-face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
-face_vertex_indices = PackedInt32Array(0, 1, 2, 3, 7, 6, 5, 4, 1, 0, 4, 5, 2, 1, 5, 6, 3, 2, 6, 7, 0, 3, 7, 4)
 face_material_indices = PackedInt32Array(-1, -1, -1, -1, -1, -1)
 face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
 face_visible = PackedByteArray()
 face_color = PackedColorArray()
 face_selected = PackedByteArray(0, 0, 1, 0, 0, 0)
+face_vertex_face_index = PackedInt32Array()
+face_vertex_vertex_index = PackedInt32Array()
+face_vertex_normal = PackedVector3Array()
+face_vertex_color = PackedColorArray()
+face_vertex_uv0 = PackedVector2Array()
+edge_vertex_indices = PackedInt32Array(0, 1, 1, 2, 2, 3, 3, 0, 7, 6, 6, 5, 5, 4, 4, 7, 0, 4, 5, 1, 6, 2, 7, 3)
+edge_face_indices = PackedInt32Array(0, 2, 0, 3, 0, 4, 0, 5, 1, 4, 1, 3, 1, 2, 1, 5, 2, 5, 2, 3, 3, 4, 4, 5)
+face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
+face_vertex_indices = PackedInt32Array(0, 1, 2, 3, 7, 6, 5, 4, 1, 0, 4, 5, 2, 1, 5, 6, 3, 2, 6, 7, 0, 3, 7, 4)
+active_vertex = -1
+active_edge = -1
 active_face = 2
-face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
+active_face_vertex = 0
 
 [sub_resource type="Resource" id="Resource_6veas"]
 script = ExtResource("4_iotc1")
@@ -49,20 +54,25 @@ physics_layer = 0
 physics_mask = 0
 vertex_points = PackedVector3Array(-5, 1, -9, -5, 1, -5, -5, -3, -5, -5, -3, -9, -1, 1, -9, -1, 1, -5, -1, -3, -5, -1, -3, -9)
 vertex_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0)
-active_vertex = -1
-edge_vertex_indices = PackedInt32Array(0, 1, 1, 2, 2, 3, 3, 0, 7, 6, 6, 5, 5, 4, 4, 7, 0, 4, 5, 1, 6, 2, 7, 3)
 edge_selected = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-active_edge = -1
-edge_face_indices = PackedInt32Array(0, 2, 0, 3, 0, 4, 0, 5, 1, 4, 1, 3, 1, 2, 1, 5, 2, 5, 2, 3, 3, 4, 4, 5)
-face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
-face_vertex_indices = PackedInt32Array(0, 1, 2, 3, 7, 6, 5, 4, 1, 0, 4, 5, 2, 1, 5, 6, 3, 2, 6, 7, 0, 3, 7, 4)
 face_material_indices = PackedInt32Array(-1, -1, -1, -1, -1, -1)
 face_uv_transform = Array[Transform2D]([Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0), Transform2D(1, 0, 0, 1, 0, 0)])
 face_visible = PackedByteArray()
 face_color = PackedColorArray()
 face_selected = PackedByteArray(0, 0, 0, 0, 0, 0)
+face_vertex_face_index = PackedInt32Array()
+face_vertex_vertex_index = PackedInt32Array()
+face_vertex_normal = PackedVector3Array()
+face_vertex_color = PackedColorArray()
+face_vertex_uv0 = PackedVector2Array()
+edge_vertex_indices = PackedInt32Array(0, 1, 1, 2, 2, 3, 3, 0, 7, 6, 6, 5, 5, 4, 4, 7, 0, 4, 5, 1, 6, 2, 7, 3)
+edge_face_indices = PackedInt32Array(0, 2, 0, 3, 0, 4, 0, 5, 1, 4, 1, 3, 1, 2, 1, 5, 2, 5, 2, 3, 3, 4, 4, 5)
+face_vertex_count = PackedInt32Array(4, 4, 4, 4, 4, 4)
+face_vertex_indices = PackedInt32Array(0, 1, 2, 3, 7, 6, 5, 4, 1, 0, 4, 5, 2, 1, 5, 6, 3, 2, 6, 7, 0, 3, 7, 4)
+active_vertex = -1
+active_edge = -1
 active_face = -1
-face_ids = PackedInt32Array(0, 1, 2, 3, 4, 5)
+active_face_vertex = 0
 
 [node name="test_android" type="Node3D"]
 script = ExtResource("1_dyl7y")

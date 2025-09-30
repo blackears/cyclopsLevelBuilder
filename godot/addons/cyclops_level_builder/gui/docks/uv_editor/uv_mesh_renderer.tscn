@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://i7aq8s61y0mk"]
 
-[ext_resource type="Script" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_mesh_renderer.gd" id="1_w7w2b"]
+[ext_resource type="Script" uid="uid://dluqw67hepvke" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_mesh_renderer.gd" id="1_w7w2b"]
 [ext_resource type="Material" uid="uid://o73kkc2hlx6j" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_mesh_faces_material.tres" id="2_a3p2g"]
 [ext_resource type="Material" uid="uid://cag61rfyg5p1l" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_mesh_edges_material.tres" id="2_oga25"]
 

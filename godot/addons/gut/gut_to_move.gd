@@ -1,7 +1,6 @@
 # Temporary base script for gut.gd to hold the things to be remvoed and added
 # to some utility somewhere.
 extends Node
-var _utils = load('res://addons/gut/utils.gd').get_instance()
 
 # ------------------------------------------------------------------------------
 # deletes all files in a given directory
@@ -21,7 +20,7 @@ func directory_delete_files(path):
 	var full_path = ''
 	while(thing != ''):
 		full_path = path + "/" + thing
-		#file_exists returns fasle for directories
+		# file_exists returns fasle for directories
 		if(d.file_exists(full_path)):
 			d.remove(full_path)
 		thing = d.get_next()
@@ -51,7 +50,7 @@ func is_file_empty(path):
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 func get_file_as_text(path):
-	return _utils.get_file_as_text(path)
+	return GutUtils.get_file_as_text(path)
 
 # ------------------------------------------------------------------------------
 # Creates an empty file at the specified path
