@@ -1,17 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://ct2mftn2hge7k"]
+[gd_scene load_steps=2 format=3 uid="uid://ct2mftn2hge7k"]
 
 [ext_resource type="Script" uid="uid://oy8mrhrvm60j" path="res://addons/cyclops_level_builder/io/exporter/exporter_gltf_wizard.gd" id="1_asb2l"]
 
-[sub_resource type="Theme" id="Theme_pvimd"]
-MarginContainer/constants/margin_bottom = 10
-MarginContainer/constants/margin_left = 10
-MarginContainer/constants/margin_right = 10
-MarginContainer/constants/margin_top = 10
-
 [node name="Window" type="Window"]
+oversampling_override = 1.0
 title = "Gltf Wizard"
 position = Vector2i(0, 36)
-size = Vector2i(400, 150)
+size = Vector2i(400, 270)
 script = ExtResource("1_asb2l")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -20,7 +15,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = SubResource("Theme_pvimd")
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
@@ -39,13 +37,31 @@ tooltip_text = "Include Marker3Ds in export."
 button_pressed = true
 text = "Markers"
 
+[node name="check_cameras" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Include Marker3Ds in export."
+text = "Cameras"
+
+[node name="check_lights" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Include Marker3Ds in export."
+text = "Lights"
+
+[node name="check_exclude_invisible" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Exclude Invisible"
+
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 4
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-text = "Path
-"
+tooltip_text = "Path to exported file"
+text = "Path"
 
 [node name="lineEdit_path" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
@@ -69,7 +85,14 @@ text = "Okay"
 layout_mode = 2
 text = "Cancel"
 
+[node name="FileDialog" type="FileDialog" parent="MarginContainer"]
+unique_name_in_owner = true
+title = "Export Scene..."
+access = 2
+filters = PackedStringArray("*.glb, *.gltf; glTF files")
+
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/bn_browse" to="." method="_on_bn_browse_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/bn_okay" to="." method="_on_bn_okay_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/bn_cancel" to="." method="_on_bn_cancel_pressed"]
+[connection signal="file_selected" from="MarginContainer/FileDialog" to="." method="_on_file_dialog_file_selected"]
