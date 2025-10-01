@@ -56,7 +56,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		
 #	print("nav event")
 
-	var uv_ed:UvEditor = view.get_uv_editor()
+	var uv_ed:UvEditor = view_uv_editor.get_uv_editor()
 	var uv_to_view_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 	
 	if event is InputEventKey:
@@ -107,7 +107,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		elif e.button_index == MOUSE_BUTTON_RIGHT:
 			if e.is_pressed():
 				if e.shift_pressed:
-					var uv_editor:UvEditor = view.get_uv_editor()
+					var uv_editor:UvEditor = view_uv_editor.get_uv_editor()
 					var xform:Transform2D = uv_editor.get_uv_to_viewport_xform()
 					uv_editor.pivot_cursor_position = xform.affine_inverse() * e.position
 					

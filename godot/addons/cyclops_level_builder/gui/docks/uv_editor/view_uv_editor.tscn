@@ -111,7 +111,7 @@ text = "V"
 [node name="check_sync_with_mesh" type="CheckBox" parent="VBoxContainer/PanelContainer/HBoxContainer3"]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "Synchronize UV selection with selected mesh elements."
+tooltip_text = "When you select a UV element, select the coresponding mesh vertex too."
 text = "Sync"
 
 [node name="bn_use_snap" type="TextureButton" parent="VBoxContainer/PanelContainer/HBoxContainer3"]
@@ -199,24 +199,23 @@ metadata/_custom_type_script = "uid://5shtfh4pg660"
 [node name="tools" type="Node" parent="."]
 unique_name_in_owner = true
 
-[node name="Move UV" type="Node" parent="tools" node_paths=PackedStringArray("view")]
+[node name="Move UV" type="Node" parent="tools" node_paths=PackedStringArray("view_uv_editor")]
 script = ExtResource("14_mcgkv")
-view = NodePath("../..")
+view_uv_editor = NodePath("../..")
 
-[node name="Rotate UV" type="Node" parent="tools" node_paths=PackedStringArray("view")]
+[node name="Rotate UV" type="Node" parent="tools" node_paths=PackedStringArray("view_uv_editor")]
 script = ExtResource("15_oec2b")
-view = NodePath("../..")
+view_uv_editor = NodePath("../..")
 
-[node name="Scale UV" type="Node" parent="tools" node_paths=PackedStringArray("view")]
+[node name="Scale UV" type="Node" parent="tools" node_paths=PackedStringArray("view_uv_editor")]
 script = ExtResource("16_uxymb")
-view = NodePath("../..")
+view_uv_editor = NodePath("../..")
 
-[node name="Box Transform UV2" parent="tools" node_paths=PackedStringArray("view") instance=ExtResource("17_uxymb")]
-view = NodePath("../..")
+[node name="Box Transform UV2" parent="tools" instance=ExtResource("17_uxymb")]
 
-[node name="Navigation" type="Node" parent="tools" node_paths=PackedStringArray("view")]
+[node name="Navigation" type="Node" parent="tools" node_paths=PackedStringArray("view_uv_editor")]
 script = ExtResource("18_uxymb")
-view = NodePath("../..")
+view_uv_editor = NodePath("../..")
 
 [node name="menu" type="Node" parent="."]
 unique_name_in_owner = true

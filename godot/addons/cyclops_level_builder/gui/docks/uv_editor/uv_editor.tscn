@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://d3e6vvnrlfsmv" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/pivot_cursor_2d.gd" id="2_eivyd"]
 
 [node name="UvEditor" type="Node2D"]
+texture_filter = 1
 texture_repeat = 2
 script = ExtResource("1_v805t")
 
@@ -12,6 +13,6 @@ unique_name_in_owner = true
 
 [node name="pivot_cursor" type="Node2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(611.5, 260.5)
+position = Vector2(611.5, 419.5)
 script = ExtResource("2_eivyd")
 radius = 20.0

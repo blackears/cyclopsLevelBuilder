@@ -29,9 +29,13 @@ class_name ViewUvEditor
 #signal property_changed(name:StringName, value)
 signal tool_changed(tool:CyclopsTool)
 
-#@onready var side_tab_container:SideTabContainer = %SideTabContainer
-#@onready var side_tab_panel:SideTabPanel = %side_tab_panel
-@onready var snapping_panel:PanelContainer = %Snapping
+
+@onready var uv_editor:UvEditor = %uv_editor
+@onready var snapping_root:UvEditorSnapping = %snapping
+@onready var tools_list:Node = %tools
+
+@onready var tool_side_panel:PanelContainer = %Tool
+@onready var snapping_side_panel:PanelContainer = %Snapping
 @onready var slide_tab_container:HSlideTabContainer = %slide_tab_container
 @onready var bn_use_snap:TextureButton = %bn_use_snap
 
@@ -57,14 +61,8 @@ var plugin:CyclopsLevelBuilder:
 			ed_sel.selection_changed.connect(on_block_selection_changed)
 
 
-		#build_menus()
-		#for child in %tools.get_children():
-			#if child is CyclopsTool:
-				#switch_to_tool(child)
-				#break
-
 func get_snapping_manager()->UvEditorSnapping:
-	return %snapping
+	return snapping_root
 
 
 func switch_to_tool(_tool:CyclopsTool):
@@ -78,7 +76,7 @@ func switch_to_tool(_tool:CyclopsTool):
 		active_tool.focused = true
 		active_tool._activate(self)
 
-		for child in %Tool.get_children():
+		for child in tool_side_panel.get_children():
 			child.queue_free()
 		
 		var control:Control = active_tool._get_tool_properties_editor()
@@ -86,7 +84,7 @@ func switch_to_tool(_tool:CyclopsTool):
 			control.size_flags_horizontal = Control.SIZE_EXPAND
 			#control.size_flags_vertical = Control.SIZE_EXPAND
 		
-			%Tool.add_child(control)
+			tool_side_panel.add_child(control)
 		
 		var idx:int = active_tool.get_index()
 		%tool_buttons.get_child(idx).button_pressed = true
@@ -94,7 +92,7 @@ func switch_to_tool(_tool:CyclopsTool):
 	tool_changed.emit(active_tool)
 	
 func get_uv_editor()->UvEditor:
-	return %uv_editor
+	return uv_editor
 
 func build_menus():
 #	print("uv editor build_menus()")
@@ -112,11 +110,11 @@ func build_menus():
 	
 	#Snap drop down
 	%option_snapping.clear()
-	for child in %snapping.get_children():
+	for child in snapping_root.get_children():
 		%option_snapping.add_icon_item(child.icon, child.name)
 	
 	#Select current snapping tool
-	var snap_node:Node = %snapping.cur_snap_tool
+	var snap_node:Node = snapping_root.cur_snap_tool
 	if snap_node:
 		var idx = snap_node.get_index()
 		%option_snapping.selected = idx
@@ -156,7 +154,7 @@ func build_tool_buttons():
 	
 	var tool_button_group:ButtonGroup = ButtonGroup.new()
 	
-	var toolbar_root = %tools
+	var toolbar_root = tools_list
 	for tool_inst in toolbar_root.get_children():
 		if tool_inst is ToolUv:
 			if !tool_inst._is_selectable():
@@ -192,7 +190,7 @@ func on_block_selection_changed():
 				nodes.append(node)
 #				print("sel: ", node.name)
 		
-		%uv_editor.block_nodes = nodes
+		uv_editor.block_nodes = nodes
 #	pass
 	
 
@@ -211,14 +209,14 @@ func load_state(state:Dictionary):
 func _ready() -> void:
 	%SubViewportContainer.set_process_input(true)
 	
-	var snapping_node = %snapping.get_child(0)
+	var snapping_node = snapping_root.get_child(0)
 	var ed:Control = snapping_node.get_editor()
 	ed.size_flags_horizontal = Control.SIZE_EXPAND
 	ed.size_flags_vertical = Control.SIZE_EXPAND
 	
-	snapping_panel.add_child(ed)
+	snapping_side_panel.add_child(ed)
 
-	bn_use_snap.set_pressed_no_signal(%snapping.use_snap)
+	bn_use_snap.set_pressed_no_signal(snapping_root.use_snap)
 
 	build_menus()
 
@@ -235,7 +233,7 @@ func get_uv_editor_viewport_size()->Vector2:
 func _on_sub_viewport_container_gui_input(event: InputEvent) -> void:
 	#forward_input.emit(event)
 	
-	for tool in %tools.get_children():
+	for tool in tools_list.get_children():
 		if tool is ToolUv:
 			#print("chheck tool ", tool.name)
 			var result:bool = tool._gui_input(null, event)
@@ -251,31 +249,31 @@ func _on_sub_viewport_container_gui_input(event: InputEvent) -> void:
 
 
 func _on_feature_vertex_pressed() -> void:
-	%uv_editor.select_feature = UvEditor.SelectFeature.VERTEX
+	uv_editor.select_feature = UvEditor.SelectFeature.VERTEX
 
 
 func _on_feature_edge_pressed() -> void:
-	%uv_editor.select_feature = UvEditor.SelectFeature.EDGE
+	uv_editor.select_feature = UvEditor.SelectFeature.EDGE
 
 
 func _on_feature_face_pressed() -> void:
-	%uv_editor.select_feature = UvEditor.SelectFeature.FACE
+	uv_editor.select_feature = UvEditor.SelectFeature.FACE
 
 
 func _on_sticky_disabled_pressed() -> void:
-	%uv_editor.sticky_state = UvEditor.StickyState.DISABLED
+	uv_editor.sticky_state = UvEditor.StickyState.DISABLED
 
 
 func _on_sticky_shared_location_pressed() -> void:
-	%uv_editor.sticky_state = UvEditor.StickyState.SHARED_LOCATION
+	uv_editor.sticky_state = UvEditor.StickyState.SHARED_LOCATION
 
 
 func _on_sticky_shared_vertex_pressed() -> void:
-	%uv_editor.sticky_state = UvEditor.StickyState.SHARED_VERTEX
+	uv_editor.sticky_state = UvEditor.StickyState.SHARED_VERTEX
 
 
 func _on_check_sync_with_mesh_toggled(toggled_on: bool) -> void:
-	%uv_editor.sync_selection = toggled_on
+	uv_editor.sync_selection = toggled_on
 
 
 #func _on_uv_editor_forward_input(event: InputEvent) -> void:
@@ -301,29 +299,18 @@ func _on_uv_editor_proj_transform_changed(xform: Transform2D) -> void:
 	viewport_transform_changed()
 
 func viewport_transform_changed():
-	for tool in %tools.get_children():
+	for tool in tools_list.get_children():
 		if tool is ToolUv:
 			tool._draw_tool(null)
 
 
 func _on_option_snapping_item_selected(index: int) -> void:
-	var snapping_node:Node = %snapping.get_child(index)
-	%snapping.cur_snap_tool_path = snapping_node.get_path()
-	
-	#var ed:Control = snapping_node.get_editor()
-	#
-	#if snapping_panel.get_child_count() > 0:
-		#var child = snapping_panel.get_child(0)
-		#child.queue_free()
-	#
-	##print("swithing to ed ", ed.name, " ")
-	#snapping_panel.add_child(ed)
-	
-	pass # Replace with function body.
+	var snapping_node:Node = snapping_root.get_child(index)
+	snapping_root.cur_snap_tool_path = snapping_node.get_path()
 
 
 func _on_bn_use_snap_toggled(toggled_on: bool) -> void:
-	%snapping.use_snap = toggled_on
+	snapping_root.use_snap = toggled_on
 	pass # Replace with function body.
 
 
@@ -344,21 +331,19 @@ func _on_snapping_snap_tool_changed(snap_node: Node) -> void:
 	pass # Replace with function body.
 
 func update_snap_display():
-	#var snapping_node:Node = %snapping.get_child(index)
-	#%snapping.cur_snap_tool_path = snapping_node.get_path()
 
-	var snapping_node = %snapping.cur_snap_tool
+	var snapping_node = snapping_root.cur_snap_tool
 	
 	if snapping_node:
-		for child in snapping_panel.get_children():
+		for child in snapping_side_panel.get_children():
 			child.queue_free()
 		
 		var ed:Control = snapping_node.get_editor()
 		#print("swithing to ed ", ed.name, " ")
-		snapping_panel.add_child(ed)
+		snapping_side_panel.add_child(ed)
 
 func activate():
-	for child in %tools.get_children():
+	for child in tools_list.get_children():
 		if child is CyclopsTool:
 			switch_to_tool(child)
 			break

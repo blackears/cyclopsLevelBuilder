@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" uid="uid://c6q744o1guae2" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_circle_2d.gd" id="1_27q7b"]
 
-[node name="GizmoRect2d" type="Node2D"]
+[node name="GizmoCircle2d" type="Node2D"]
 script = ExtResource("1_27q7b")

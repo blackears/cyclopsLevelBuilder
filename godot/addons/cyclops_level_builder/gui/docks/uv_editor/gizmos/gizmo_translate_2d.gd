@@ -37,14 +37,14 @@ enum Part { NONE, AXIS_X, AXIS_Y, PLANE_Z }
 
 func pick_part(pos:Vector2)->Part:
 #	print("pick_part ", pos)
+	if plane_z.pick(plane_z.global_transform.affine_inverse() * pos, 0):
+		return Part.PLANE_Z
+
 	if axis_x.pick(axis_x.global_transform.affine_inverse() * pos, 0):
 		return Part.AXIS_X
 
 	if axis_y.pick(axis_y.global_transform.affine_inverse() * pos, 0):
 		return Part.AXIS_Y
-
-	if plane_z.pick(plane_z.global_transform.affine_inverse() * pos, 0):
-		return Part.PLANE_Z
 		
 	return Part.NONE
 

@@ -59,7 +59,7 @@ func _draw_tool(viewport_camera:Camera3D):
 	if !focused:
 		return
 	
-	var uv_ed:UvEditor = view.get_uv_editor()
+	var uv_ed:UvEditor = view_uv_editor.get_uv_editor()
 	var uv_to_viewport_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 	
 	var center_struct:Dictionary = get_selected_uv_center()
@@ -73,71 +73,72 @@ func _draw_tool(viewport_camera:Camera3D):
 		gizmo.visible = false
 
 
-func rotate_uvs(pivot:Vector2, angle:float, commit:bool):
+func rotate_uvs(pivot:Vector2, angle:float)->void:
 	var xform_uv:Transform2D
 	xform_uv = xform_uv.translated_local(pivot)
 	xform_uv = xform_uv.rotated_local(angle)
 	xform_uv = xform_uv.translated_local(-pivot)
 	
-	if commit:
-		var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
-		cmd.builder = builder
-		var fc:CommandSetMeshFeatureData.FeatureChanges = CommandSetMeshFeatureData.FeatureChanges.new()
-	#	print("block_index_map ", block_index_map)
+	for block in builder.get_selected_blocks():
+		var block_path:NodePath = block.get_path()
+		var mvd:MeshVectorData = mvd_cache[block_path]
 		
-		for block in builder.get_selected_blocks():
-			var block_path:NodePath = block.get_path()
-			var mvd:MeshVectorData = mvd_cache[block_path]
-			
-			var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
-			var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
+		var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+		var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
 
-			var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
-			
-			for i in uv_arr.num_components():
-				if !sel_vec.get_value(i):
-					continue
-				var val:Vector2 = uv_arr.get_value_vec2(i)
-				new_uv_arr.set_value_vec2(xform_uv * val, i)
-			
-			fc.new_data_values[MeshVectorData.FV_UV0] = new_uv_arr
-
-			cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
+		var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
 		
-			#print("uv_arr ", uv_arr.data)
-			#print("new_uv_arr ", new_uv_arr.data)
+		for i in uv_arr.num_components():
+			if !sel_vec.get_value(i):
+				continue
+			var val:Vector2 = uv_arr.get_value_vec2(i)
+			new_uv_arr.set_value_vec2(xform_uv * val, i)
 		
-		if cmd.will_change_anything():
-	#		print("cmd.will_change_anything() true")
-			var undo:EditorUndoRedoManager = builder.get_undo_redo()
-			cmd.add_to_undo_manager(undo)
-	else:
-		for block in builder.get_selected_blocks():
-			var block_path:NodePath = block.get_path()
-			var mvd:MeshVectorData = mvd_cache[block_path]
-			
-			var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
-			var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
+		var new_mvd:MeshVectorData = mvd.duplicate_explicit()
+		new_mvd.set_face_vertex_data(MeshVectorData.FV_UV0, new_uv_arr)
+		
+		block.mesh_vector_data = new_mvd
+	
+func rotate_uvs_command(pivot:Vector2, angle:float)->CommandSetMeshFeatureData:
+	var xform_uv:Transform2D
+	xform_uv = xform_uv.translated_local(pivot)
+	xform_uv = xform_uv.rotated_local(angle)
+	xform_uv = xform_uv.translated_local(-pivot)
+	
+	var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
+	cmd.builder = builder
+	var fc:CommandSetMeshFeatureData.FeatureChanges = CommandSetMeshFeatureData.FeatureChanges.new()
+#	print("block_index_map ", block_index_map)
+	
+	for block in builder.get_selected_blocks():
+		var block_path:NodePath = block.get_path()
+		var mvd:MeshVectorData = mvd_cache[block_path]
+		
+		var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+		var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
 
-			var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
-			
-			for i in uv_arr.num_components():
-				if !sel_vec.get_value(i):
-					continue
-				var val:Vector2 = uv_arr.get_value_vec2(i)
-				new_uv_arr.set_value_vec2(xform_uv * val, i)
-			
-			var new_mvd:MeshVectorData = mvd.duplicate_explicit()
-			new_mvd.set_face_vertex_data(MeshVectorData.FV_UV0, new_uv_arr)
-			
-			block.mesh_vector_data = new_mvd
+		var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+		
+		for i in uv_arr.num_components():
+			if !sel_vec.get_value(i):
+				continue
+			var val:Vector2 = uv_arr.get_value_vec2(i)
+			new_uv_arr.set_value_vec2(xform_uv * val, i)
+		
+		fc.new_data_values[MeshVectorData.FV_UV0] = new_uv_arr
 
+		cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
+	
+		#print("uv_arr ", uv_arr.data)
+		#print("new_uv_arr ", new_uv_arr.data)
+	return cmd
+		
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 	if !builder || !focused:
 		return false
 
 
-	var uv_ed:UvEditor = view.get_uv_editor()
+	var uv_ed:UvEditor = view_uv_editor.get_uv_editor()
 	var uv_to_view_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 	
 	if event is InputEventKey:
@@ -145,7 +146,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		
 		if e.keycode == KEY_ESCAPE:
 			if tool_state == ToolState.DRAG_UVS:
-				rotate_uvs(Vector2.ZERO, 0, false)
+				rotate_uvs(Vector2.ZERO, 0)
 				
 				get_viewport().set_input_as_handled()
 				tool_state = ToolState.NONE
@@ -208,10 +209,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 					var view_to_uv_vec_xform:Transform2D = uv_to_view_xform.affine_inverse()
 					view_to_uv_vec_xform.origin = Vector2.ZERO
-					#offset = view_to_uv_vec_xform * offset
 					
-					rotate_uvs(Vector2.ZERO, 0, false)
-					rotate_uvs(uv_pivot, delta_angle, true)
+					rotate_uvs(Vector2.ZERO, 0)
+					var cmd = rotate_uvs_command(uv_pivot, delta_angle)
+					if cmd.will_change_anything():
+						var undo:EditorUndoRedoManager = builder.get_undo_redo()
+						cmd.add_to_undo_manager(undo)
 					
 					tool_state = ToolState.NONE
 					return true
@@ -237,64 +240,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				
 					return true
 
-		#elif e.button_index == MOUSE_BUTTON_MIDDLE:
-#
-			#if e.is_pressed():
-				#if tool_state == ToolState.NONE:
-					#mouse_down_pos = e.position
-					#
-					#tool_state = ToolState.DRAG_VIEW
-					#drag_start_view_xform = uv_ed.proj_transform
-#
-					#return true
-				#
-				#
-				#pass
-			#else:
-				#if tool_state == ToolState.DRAG_VIEW:
-					#tool_state = ToolState.NONE
-					#return true
-#
-		#elif e.button_index == MOUSE_BUTTON_RIGHT:
-			#if e.is_pressed():
-				#if e.shift_pressed:
-					#var uv_editor:UvEditor = view.get_uv_editor()
-					#var xform:Transform2D = uv_editor.get_uv_to_viewport_xform()
-					#uv_editor.pivot_cursor_position = xform.affine_inverse() * e.position
-					#
-			#return true
-#
-		#elif e.button_index == MOUSE_BUTTON_WHEEL_UP:
-			#if e.pressed:
-##				print("uv_move wheel up")
-				#
-				#var view_xform:Transform2D = uv_ed.get_view_transform()
-				#
-				#var new_xform:Transform2D
-##				print("uv_to_view_xform ", uv_to_view_xform)
-				#new_xform = new_xform.translated_local(e.position)
-				#new_xform = new_xform.scaled_local(Vector2(zoom_wheel_amount, zoom_wheel_amount))
-				#new_xform = new_xform.translated_local(-e.position)
-				#new_xform = new_xform * view_xform * uv_ed.proj_transform
-				#
-				#uv_ed.proj_transform = view_xform.affine_inverse() * new_xform
-#
-				#return true
-#
-		#elif e.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			#if e.pressed:
-				#var view_xform:Transform2D = uv_ed.get_view_transform()
-				#
-				#var new_xform:Transform2D
-##				print("uv_to_view_xform ", uv_to_view_xform)
-				#new_xform = new_xform.translated_local(e.position)
-				#new_xform = new_xform.scaled_local(Vector2(1 / zoom_wheel_amount, 1 / zoom_wheel_amount))
-				#new_xform = new_xform.translated_local(-e.position)
-				#new_xform = new_xform * view_xform * uv_ed.proj_transform
-				#
-				#uv_ed.proj_transform = view_xform.affine_inverse() * new_xform
-				#
-				#return true
 			return true
 
 		return false
@@ -304,15 +249,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		
 		mouse_hover_pos = e.position
 		
-		#if tool_state == ToolState.DRAG_VIEW:
-			#var offset:Vector2 = e.position - mouse_down_pos
-			#var view_xform:Transform2D = uv_ed.get_view_transform()
-			#var new_xform:Transform2D = (view_xform * drag_start_view_xform).translated(offset)
-			#
-			#uv_ed.proj_transform = view_xform.affine_inverse() * new_xform
-			#
-			#return true
-
 		if tool_state == ToolState.READY:
 			var offset:Vector2 = e.position - mouse_down_pos
 			if offset.length_squared() > MathUtil.square(builder.drag_start_radius):
@@ -342,7 +278,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				if snap_mgr.use_snap:
 					pass
 			
-			rotate_uvs(uv_pivot, delta_angle, false)
+			rotate_uvs(uv_pivot, delta_angle)
 			
 			return true
 		
@@ -358,7 +294,7 @@ func on_block_selection_changed():
 	
 func _activate(tool_owner:Node):
 	super._activate(tool_owner)
-	var uv_ed:UvEditor = view.get_uv_editor()
+	var uv_ed:UvEditor = view_uv_editor.get_uv_editor()
 	
 	gizmo = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_rotate_2d.tscn").instantiate()
 	uv_ed.add_gizmo(gizmo)

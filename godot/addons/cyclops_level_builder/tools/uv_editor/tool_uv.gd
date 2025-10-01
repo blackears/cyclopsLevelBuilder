@@ -37,7 +37,8 @@ var mvd_cache:Dictionary
 
 var focused:bool
 
-@export var view:ViewUvEditor
+@export var view_uv_editor:ViewUvEditor
+
 
 ## @return if tool should appear in toolbar
 func _is_selectable()->bool:
@@ -53,7 +54,7 @@ func clear_tracked_blocks():
 func track_selected_blocks():
 	clear_tracked_blocks()
 	
-	var builder:CyclopsLevelBuilder = view.plugin
+	var builder:CyclopsLevelBuilder = view_uv_editor.plugin
 	var ed_iface:EditorInterface = builder.get_editor_interface()
 	var ed_sel:EditorSelection = ed_iface.get_selection()
 	
@@ -69,7 +70,7 @@ func on_mesh_changed(block:CyclopsBlock):
 func cache_selected_blocks():
 	mvd_cache.clear()
 	
-	var builder:CyclopsLevelBuilder = view.plugin
+	var builder:CyclopsLevelBuilder = view_uv_editor.plugin
 	for block in builder.get_selected_blocks():
 		var block_path:NodePath = block.get_path()
 		var mvd:MeshVectorData = block.mesh_vector_data
@@ -80,7 +81,7 @@ func get_selected_uv_center()->Dictionary:
 	var count:int = 0
 	var sum:Vector2
 	
-	var builder:CyclopsLevelBuilder = view.plugin
+	var builder:CyclopsLevelBuilder = view_uv_editor.plugin
 	for block in builder.get_selected_blocks():
 		var block_path:NodePath = block.get_path()
 		var mvd:MeshVectorData = block.mesh_vector_data
@@ -100,7 +101,7 @@ func focus_on_selected_uvs():
 	var count:int = 0
 	var bounds:Rect2
 	
-	var builder:CyclopsLevelBuilder = view.plugin
+	var builder:CyclopsLevelBuilder = view_uv_editor.plugin
 	for block in builder.get_selected_blocks():
 		var block_path:NodePath = block.get_path()
 		var mvd:MeshVectorData = block.mesh_vector_data
@@ -127,8 +128,8 @@ func focus_on_selected_uvs():
 #		bounds = Rect2(bounds.position - min_focus_size / 2.0, min_focus_size)
 		bounds = Rect2(bounds.position - Vector2.ONE / 2.0, Vector2.ONE)
 	
-	var uv_ed:UvEditor = view.get_uv_editor()
-	var viewport_size:Vector2 = view.get_uv_editor_viewport_size()
+	var uv_ed:UvEditor = view_uv_editor.get_uv_editor()
+	var viewport_size:Vector2 = view_uv_editor.get_uv_editor_viewport_size()
 	
 	var uv_bounds_size:float = max(bounds.size.x, bounds.size.y)
 	var view_bounds_size:float = min(viewport_size.x, viewport_size.y)
@@ -148,7 +149,7 @@ func get_uv_bounds()->Rect2:
 	var count:int = 0
 	var bounds:Rect2
 	
-	var builder:CyclopsLevelBuilder = view.plugin
+	var builder:CyclopsLevelBuilder = view_uv_editor.plugin
 	for block in builder.get_selected_blocks():
 		var block_path:NodePath = block.get_path()
 		var mvd:MeshVectorData = block.mesh_vector_data
@@ -174,7 +175,7 @@ func get_uv_bounds()->Rect2:
 	return bounds
 	
 func select_face_vertices(block_index_map:Dictionary, sel_type:Selection.Type):
-	var builder:CyclopsLevelBuilder = view.plugin
+	var builder:CyclopsLevelBuilder = view_uv_editor.plugin
 	
 	var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
 	cmd.builder = builder

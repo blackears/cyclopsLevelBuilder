@@ -25,7 +25,7 @@
 extends Gizmo2D
 class_name GizmoRotate2D
 
-@onready var ring_z:GizmoCircle2D = %rotate_z
+@onready var ring_z:GizmoRing2D = %rotate_z
 
 @export var center_point_color:Color = Color.WHITE:
 	set(value):

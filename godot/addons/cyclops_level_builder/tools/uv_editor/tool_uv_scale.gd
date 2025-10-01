@@ -63,7 +63,7 @@ func _draw_tool(viewport_camera:Camera3D):
 	if !focused:
 		return
 		
-	var uv_ed:UvEditor = view.get_uv_editor()
+	var uv_ed:UvEditor = view_uv_editor.get_uv_editor()
 	var uv_to_viewport_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 	
 	var center_struct:Dictionary = get_selected_uv_center()
@@ -77,66 +77,72 @@ func _draw_tool(viewport_camera:Camera3D):
 		gizmo.visible = false
 
 
-func scale_uvs(scale_axes:Vector2, pivot:Vector2, commit:bool):
+func scale_uvs(scale_axes:Vector2, pivot:Vector2)->void:
 	var uv_xform:Transform2D
 	uv_xform = uv_xform.translated_local(pivot)
 	uv_xform = uv_xform.scaled_local(scale_axes)
 	uv_xform = uv_xform.translated_local(-pivot)
 	
-	if commit:
-		var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
-		cmd.builder = builder
-		var fc:CommandSetMeshFeatureData.FeatureChanges = CommandSetMeshFeatureData.FeatureChanges.new()
-	#	print("block_index_map ", block_index_map)
+	for block in builder.get_selected_blocks():
+		var block_path:NodePath = block.get_path()
+		var mvd:MeshVectorData = mvd_cache[block_path]
 		
-		for block in builder.get_selected_blocks():
-			var block_path:NodePath = block.get_path()
-			var mvd:MeshVectorData = mvd_cache[block_path]
-			
-			var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
-			var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
+		var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+		var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
 
-			var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
-			
-			for i in uv_arr.num_components():
-				if !sel_vec.get_value(i):
-					continue
-				var val:Vector2 = uv_arr.get_value_vec2(i)
+		var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+		
+		for i in uv_arr.num_components():
+			if !sel_vec.get_value(i):
+				continue
+			var val:Vector2 = uv_arr.get_value_vec2(i)
 #				new_uv_arr.set_value_vec2(val + offset, i)
-				new_uv_arr.set_value_vec2(uv_xform * val, i)
-			
-			fc.new_data_values[MeshVectorData.FV_UV0] = new_uv_arr
+			new_uv_arr.set_value_vec2(uv_xform * val, i)
+		
+		var new_mvd:MeshVectorData = mvd.duplicate_explicit()
+		new_mvd.set_face_vertex_data(MeshVectorData.FV_UV0, new_uv_arr)
+		
+		block.mesh_vector_data = new_mvd
 
-			cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
+func scale_uvs_command(scale_axes:Vector2, pivot:Vector2)->CommandSetMeshFeatureData:
+	var uv_xform:Transform2D
+	uv_xform = uv_xform.translated_local(pivot)
+	uv_xform = uv_xform.scaled_local(scale_axes)
+	uv_xform = uv_xform.translated_local(-pivot)
+	
+	var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
+	cmd.builder = builder
+	var fc:CommandSetMeshFeatureData.FeatureChanges = CommandSetMeshFeatureData.FeatureChanges.new()
+#	print("block_index_map ", block_index_map)
+	
+	for block in builder.get_selected_blocks():
+		var block_path:NodePath = block.get_path()
+		var mvd:MeshVectorData = mvd_cache[block_path]
+		
+		var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+		var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
+
+		var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+		
+		for i in uv_arr.num_components():
+			if !sel_vec.get_value(i):
+				continue
+			var val:Vector2 = uv_arr.get_value_vec2(i)
+#				new_uv_arr.set_value_vec2(val + offset, i)
+			new_uv_arr.set_value_vec2(uv_xform * val, i)
+		
+		fc.new_data_values[MeshVectorData.FV_UV0] = new_uv_arr
+
+		cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
+	return cmd
 		
 			#print("uv_arr ", uv_arr.data)
 			#print("new_uv_arr ", new_uv_arr.data)
 		
-		if cmd.will_change_anything():
-	#		print("cmd.will_change_anything() true")
-			var undo:EditorUndoRedoManager = builder.get_undo_redo()
-			cmd.add_to_undo_manager(undo)
-	else:
-		for block in builder.get_selected_blocks():
-			var block_path:NodePath = block.get_path()
-			var mvd:MeshVectorData = mvd_cache[block_path]
-			
-			var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
-			var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
-
-			var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
-			
-			for i in uv_arr.num_components():
-				if !sel_vec.get_value(i):
-					continue
-				var val:Vector2 = uv_arr.get_value_vec2(i)
-#				new_uv_arr.set_value_vec2(val + offset, i)
-				new_uv_arr.set_value_vec2(uv_xform * val, i)
-			
-			var new_mvd:MeshVectorData = mvd.duplicate_explicit()
-			new_mvd.set_face_vertex_data(MeshVectorData.FV_UV0, new_uv_arr)
-			
-			block.mesh_vector_data = new_mvd
+		#if cmd.will_change_anything():
+	##		print("cmd.will_change_anything() true")
+			#var undo:EditorUndoRedoManager = builder.get_undo_redo()
+			#cmd.add_to_undo_manager(undo)
 
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
@@ -145,7 +151,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		
 	#print("tool_uv_move._gui_input()")
 	
-	var uv_ed:UvEditor = view.get_uv_editor()
+	var uv_ed:UvEditor = view_uv_editor.get_uv_editor()
 	var uv_to_view_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 	
 	if event is InputEventKey:
@@ -153,7 +159,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		
 		if e.keycode == KEY_ESCAPE:
 			if tool_state == ToolState.DRAG_UVS:
-				scale_uvs(Vector2.ONE, uv_pivot, false)
+				scale_uvs(Vector2.ONE, uv_pivot)
 				
 				get_viewport().set_input_as_handled()
 				tool_state = ToolState.NONE
@@ -230,8 +236,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 					axis_scale = axis_scale * scale_ratio + Vector2.ONE
 			
-					scale_uvs(Vector2.ONE, uv_pivot, false)
-					scale_uvs(axis_scale, uv_pivot, true)
+					scale_uvs(Vector2.ONE, uv_pivot)
+					var cmd = scale_uvs_command(axis_scale, uv_pivot)
+					if cmd.will_change_anything():
+						var undo:EditorUndoRedoManager = builder.get_undo_redo()
+						cmd.add_to_undo_manager(undo)
 					
 					tool_state = ToolState.NONE
 					return true
@@ -298,7 +307,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				if snap_mgr.use_snap:
 					pass
 			
-			scale_uvs(axis_scale, uv_pivot, false)
+			scale_uvs(axis_scale, uv_pivot)
 					
 		elif tool_state == ToolState.DRAG_SELECTION:
 			
@@ -311,7 +320,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 func _activate(tool_owner:Node):
 	super._activate(tool_owner)
 
-	var uv_ed:UvEditor = view.get_uv_editor()
+	var uv_ed:UvEditor = view_uv_editor.get_uv_editor()
 	
 	gizmo = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/gizmos/gizmo_scale_2d.tscn").instantiate()
 	uv_ed.add_gizmo(gizmo)
