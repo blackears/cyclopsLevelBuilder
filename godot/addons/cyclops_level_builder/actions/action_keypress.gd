@@ -21,35 +21,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-@abstract
 @tool
-extends Node
-class_name CyclopsAction
+class_name ActionKeypress
+extends Resource
 
-@export var hotkey:ActionKeypress
-@export_multiline var tooltip:String
-
-func _get_action_id():
-	return ""
-
-func invoke(context:CyclopsOperatorContext, event:InputEvent):
-	#_execute()
-	pass
-	
-func _execute(event:CyclopsActionEvent):
-	pass
-
-	
-func calc_pivot_of_blocks(blocks:Array[CyclopsBlock], plugin:CyclopsLevelBuilder)->Vector3:
-	var snap_to_grid_util:SnapToGridUtil = plugin.calc_snap_to_grid_util()
-	
-	var bounds:AABB = blocks[0].control_mesh.bounds
-	for idx in range(1, blocks.size()):
-		var block:CyclopsBlock = blocks[idx]
-		bounds = bounds.merge(block.control_mesh.bounds)
-	
-	var center:Vector3 = bounds.get_center()
-	center = snap_to_grid_util.snap_point(center)
-	
-	return center
-	
+@export var key:Key
+@export var modifiers:KeyModifierMask

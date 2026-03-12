@@ -21,35 +21,27 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-@abstract
 @tool
-extends Node
-class_name CyclopsAction
+extends ToolUv
+class_name ToolUvViewportKeymapRunner
 
-@export var hotkey:ActionKeypress
-@export_multiline var tooltip:String
+@export var keymap_list:Node
 
-func _get_action_id():
-	return ""
-
-func invoke(context:CyclopsOperatorContext, event:InputEvent):
-	#_execute()
-	pass
+func _is_selectable()->bool:
+	return false
 	
-func _execute(event:CyclopsActionEvent):
-	pass
-
+func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
+	var uv_ed:UvEditor = view_uv_editor.get_uv_editor()
+	var uv_to_view_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
 	
-func calc_pivot_of_blocks(blocks:Array[CyclopsBlock], plugin:CyclopsLevelBuilder)->Vector3:
-	var snap_to_grid_util:SnapToGridUtil = plugin.calc_snap_to_grid_util()
-	
-	var bounds:AABB = blocks[0].control_mesh.bounds
-	for idx in range(1, blocks.size()):
-		var block:CyclopsBlock = blocks[idx]
-		bounds = bounds.merge(block.control_mesh.bounds)
-	
-	var center:Vector3 = bounds.get_center()
-	center = snap_to_grid_util.snap_point(center)
-	
-	return center
-	
+	if event is InputEventKey:
+		var e:InputEventKey = event
+		
+		if keymap_list:
+			for child:KeymapNode in keymap_list.get_children().filter(func(a): return a is KeymapNode):
+				if child.key == e.keycode && e.get_modifiers_mask() == child.get_modifier_mask():
+					#Execute the command
+					
+					return true
+		
+	return false

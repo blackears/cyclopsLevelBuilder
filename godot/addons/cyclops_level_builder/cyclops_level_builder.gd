@@ -65,16 +65,20 @@ func on_keymap_changed():
 	ResourceSaver.save(keymap, user_keymap_path)
 	keymap_updated.emit()
 	
-var material_dock:MaterialPaletteViewport
-var overlays_dock:OverlaysDock
-var view_uv_editor:ViewUvEditor
 var convex_face_editor_dock:ConvexFaceEdtiorViewport
 var tool_properties_dock:ToolPropertiesDock
 var snapping_properties_dock:SnappingPropertiesDock
+var overlays_dock:OverlaysDock
+
+var material_dock_panel:MaterialPaletteViewport
+var material_dock:EditorDock
+var view_uv_editor_panel:ViewUvEditor
+var view_uv_editor_dock:EditorDock
 var cyclops_console_dock:CyclopsConsole
 var editor_toolbar:EditorToolbar
 var upgrade_cyclops_blocks_toolbar:UpgradeCyclopsBlocksToolbar
 var activated:bool = false
+
 
 var always_on:bool = false:
 	get:
@@ -163,6 +167,14 @@ func _get_plugin_name()->String:
 func _get_plugin_icon()->Texture2D:
 	return preload("res://addons/cyclops_level_builder/art/cyclops.svg")
 
+func create_dock(child:Node, title:String, slot:EditorDock.DockSlot, layout:EditorDock.DockLayout = EditorDock.DOCK_LAYOUT_ALL)->EditorDock:
+	var dock:EditorDock = EditorDock.new()
+	dock.add_child(child)
+	dock.title = title
+	dock.default_slot = slot
+	dock.available_layouts = layout
+	
+	return dock
 
 func _enter_tree():
 	config_scene = preload(config_scene_path).instantiate()
@@ -207,11 +219,13 @@ func _enter_tree():
 	overlay.plugin = self
 	overlay_list.append(overlay)
 	
-	material_dock = preload("res://addons/cyclops_level_builder/gui/docks/material_palette/material_palette_viewport.tscn").instantiate()
-	material_dock.builder = self
+	material_dock_panel = preload("res://addons/cyclops_level_builder/gui/docks/material_palette/material_palette_viewport.tscn").instantiate()
+	material_dock_panel.builder = self
+	material_dock = create_dock(material_dock_panel, "Materials", EditorDock.DOCK_SLOT_BOTTOM)
 
-	view_uv_editor = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/view_uv_editor.tscn").instantiate()
-	view_uv_editor.plugin = self
+	view_uv_editor_panel = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/view_uv_editor.tscn").instantiate()
+	view_uv_editor_panel.plugin = self
+	view_uv_editor_dock = create_dock(view_uv_editor_panel, "UV Editor", EditorDock.DOCK_SLOT_BOTTOM)
 	
 	overlays_dock = preload("res://addons/cyclops_level_builder/gui/docks/overlays/overlays_dock.tscn").instantiate()
 	overlays_dock.plugin = self
@@ -237,8 +251,10 @@ func _enter_tree():
 	add_control_to_bottom_panel(cyclops_console_dock, "Cyclops")
 	
 	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
-	add_control_to_bottom_panel(material_dock, "Materials")
-	add_control_to_bottom_panel(view_uv_editor, "UV Editor")
+	#add_control_to_bottom_panel(material_dock, "Materials")
+	add_dock(material_dock)
+	add_dock(view_uv_editor_dock)
+	#add_control_to_bottom_panel(view_uv_editor, "UV Editor")
 	
 	var editor:EditorInterface = get_editor_interface()
 	var selection:EditorSelection = editor.get_selection()
@@ -257,7 +273,7 @@ func _enter_tree():
 	switch_to_snapping_system(SnappingSystemGrid.new())
 	switch_to_tool(get_tool_by_id(ToolBlock.TOOL_ID))
 	
-	view_uv_editor.activate()
+	view_uv_editor_panel.activate()
 
 func init_view3d_snapping_tools():
 	snap_node_list.clear()
@@ -296,8 +312,10 @@ func _exit_tree():
 	remove_custom_type("CyclopsConvexBlockBody")
 	
 	remove_control_from_bottom_panel(cyclops_console_dock)
-	remove_control_from_bottom_panel(material_dock)
-	remove_control_from_bottom_panel(view_uv_editor)
+	#remove_control_from_bottom_panel(material_dock)
+	remove_dock(material_dock)
+	remove_dock(view_uv_editor_dock)
+	#remove_control_from_bottom_panel(view_uv_editor)
 	
 	if activated:
 		remove_control_from_docks(convex_face_editor_dock)
@@ -312,7 +330,7 @@ func _exit_tree():
 #	view_uv_editor.forward_input.disconnect(on_uv_editor_forward_input)
 
 	material_dock.queue_free()
-	view_uv_editor.queue_free()
+	view_uv_editor_dock.queue_free()
 	convex_face_editor_dock.queue_free()
 	tool_properties_dock.queue_free()
 	overlays_dock.queue_free()
@@ -470,8 +488,8 @@ func _forward_3d_gui_input(viewport_camera:Camera3D, event:InputEvent)->int:
 func _get_state()->Dictionary:
 	var state:Dictionary = {}
 	
-	material_dock.save_state(state)
-	view_uv_editor.save_state(state)
+	material_dock_panel.save_state(state)
+	view_uv_editor_panel.save_state(state)
 	convex_face_editor_dock.save_state(state)
 	tool_properties_dock.save_state(state)
 	snapping_properties_dock.save_state(state)
@@ -483,8 +501,8 @@ func _get_state()->Dictionary:
 func _set_state(state):
 	#print("ed set_state ", str(state))
 	
-	material_dock.load_state(state)
-	view_uv_editor.load_state(state)
+	material_dock_panel.load_state(state)
+	view_uv_editor_panel.load_state(state)
 	convex_face_editor_dock.load_state(state)
 	tool_properties_dock.load_state(state)
 	snapping_properties_dock.load_state(state)

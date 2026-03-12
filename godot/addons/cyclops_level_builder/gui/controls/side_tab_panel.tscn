@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://c55r3gtksrpcy"]
+[gd_scene format=3 uid="uid://c55r3gtksrpcy"]
 
 [ext_resource type="PackedScene" uid="uid://cassh222pussv" path="res://addons/cyclops_level_builder/gui/controls/rotation_container.tscn" id="1_2chuj"]
 [ext_resource type="Script" uid="uid://djl4llr3kcod1" path="res://addons/cyclops_level_builder/gui/controls/side_tab_panel.gd" id="1_nsiy8"]
 [ext_resource type="PackedScene" uid="uid://y5n7h7xo6isu" path="res://addons/cyclops_level_builder/gui/controls/h_slide_container.tscn" id="3_nsiy8"]
 
-[node name="side_tab_panel" type="HBoxContainer"]
+[node name="side_tab_panel" type="HBoxContainer" unique_id=322464559]
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
@@ -14,18 +14,18 @@ grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("1_nsiy8")
 
-[node name="RotationContainer" parent="." instance=ExtResource("1_2chuj")]
+[node name="RotationContainer" parent="." unique_id=1496002877 instance=ExtResource("1_2chuj")]
 layout_mode = 2
 
-[node name="TabBar" type="TabBar" parent="RotationContainer"]
+[node name="TabBar" type="TabBar" parent="RotationContainer" unique_id=1679338708]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="HSlideContainer" parent="." instance=ExtResource("3_nsiy8")]
+[node name="HSlideContainer" parent="." unique_id=162255967 instance=ExtResource("3_nsiy8")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="HSlideContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="HSlideContainer" unique_id=1670768565]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3

@@ -112,8 +112,11 @@ func _draw_tool(viewport_camera:Camera3D):
 	builder.viewport_3d_manager.clear_tool_display()
 
 	if tool_state == ToolState.DRAG_SELECTION:
-#		global_scene.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
 		builder.viewport_3d_manager.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
+
+	var vert_list_unselected:PackedVector3Array
+	var vert_list_selected:PackedVector3Array
+	var vert_list_active:PackedVector3Array
 	
 	#var blocks_root:CyclopsBlocks = builder.active_node
 	for h:HandleFace in handles:
@@ -124,9 +127,16 @@ func _draw_tool(viewport_camera:Camera3D):
 		var block:CyclopsBlock = builder.get_node(h.block_path)
 		var f:ConvexVolume.FaceInfo = block.control_mesh.faces[h.face_index]
 
-		var active:bool = block.control_mesh.active_face == h.face_index		
+		var active:bool = block.control_mesh.active_face == h.face_index
 #		global_scene.draw_vertex(h.p_center, pick_vertex_material(global_scene, f.selected, active))
-		builder.viewport_3d_manager.draw_vertex(h.p_center, pick_vertex_material(global_scene, f.selected, active))
+		if active:
+			vert_list_active.append(h.p_center)
+		elif f.selected:
+			vert_list_selected.append(h.p_center)
+		else:
+			vert_list_unselected.append(h.p_center)
+			
+		#builder.viewport_3d_manager.draw_vertex(h.p_center, pick_vertex_material(global_scene, f.selected, active))
 		
 		var l2w:Transform3D = block.global_transform
 		#var w2l:Transform3D = block.global_transform.affine_inverse()
@@ -146,6 +156,10 @@ func _draw_tool(viewport_camera:Camera3D):
 			var mat:Material = global_scene.tool_edit_active_fill_material if active else global_scene.tool_edit_selected_fill_material
 #			global_scene.draw_triangles(l2w * tris, mat)
 			builder.viewport_3d_manager.draw_triangles(l2w * tris, mat)
+
+	builder.viewport_3d_manager.draw_vertices(vert_list_active, global_scene.vertex_active_material)
+	builder.viewport_3d_manager.draw_vertices(vert_list_selected, global_scene.vertex_selected_material)
+	builder.viewport_3d_manager.draw_vertices(vert_list_unselected, global_scene.vertex_unselected_material)
 		
 	draw_gizmo(viewport_camera)
 	

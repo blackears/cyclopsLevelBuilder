@@ -8,16 +8,20 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="Cyclops Level Builder"
 run/main_scene="uid://b4ju5h8ydm0jh"
-config/features=PackedStringArray("4.5", "GL Compatibility")
+config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
-CyclopsAutoload="*res://addons/cyclops_level_builder/cyclops_global_scene.tscn"
+CyclopsAutoload="*uid://4siqre3jhe80"
 
 [debug]
 

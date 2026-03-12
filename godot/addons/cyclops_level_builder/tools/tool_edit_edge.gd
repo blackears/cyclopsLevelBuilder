@@ -110,13 +110,20 @@ func draw_gizmo(viewport_camera:Camera3D):
 
 func _draw_tool(viewport_camera:Camera3D):
 	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
-	global_scene.clear_tool_mesh()	
+	global_scene.clear_tool_mesh()
 
 	builder.viewport_3d_manager.clear_tool_display()
 
 	if tool_state == ToolState.DRAG_SELECTION:
 		#global_scene.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
 		builder.viewport_3d_manager.draw_screen_rect(viewport_camera, drag_select_start_pos, drag_select_to_pos, global_scene.selection_rect_material)
+
+	var vert_list_unselected:PackedVector3Array
+	var vert_list_selected:PackedVector3Array
+	var vert_list_active:PackedVector3Array
+	var line_list_unselected:PackedVector3Array
+	var line_list_selected:PackedVector3Array
+	var line_list_active:PackedVector3Array
 	
 	for h in handles:
 		var block:CyclopsBlock = builder.get_node(h.block_path)
@@ -131,10 +138,31 @@ func _draw_tool(viewport_camera:Camera3D):
 		var p1:Vector3 = block.global_transform * block.control_mesh.vertices[e.end_index].point
 
 		var active:bool = block.control_mesh.active_edge == h.edge_index
-		builder.viewport_3d_manager.draw_vertex((p0 + p1) / 2, pick_vertex_material(global_scene, e.selected, active))
+		var handle_pos:Vector3 = (p0 + p1) / 2
+		if active:
+			vert_list_active.append(handle_pos)
+			line_list_active.append(p0)
+			line_list_active.append(p1)
+		elif e.selected:
+			vert_list_selected.append(handle_pos)
+			line_list_selected.append(p0)
+			line_list_selected.append(p1)
+		else:
+			vert_list_unselected.append(handle_pos)
+			line_list_unselected.append(p0)
+			line_list_unselected.append(p1)
+		
+#		builder.viewport_3d_manager.draw_vertex((p0 + p1) / 2, pick_vertex_material(global_scene, e.selected, active))
 		builder.viewport_3d_manager.draw_line(p0, p1, pick_material(global_scene, e.selected, active))
 #		global_scene.draw_vertex((p0 + p1) / 2, pick_vertex_material(global_scene, e.selected, active))
 #		global_scene.draw_line(p0, p1, pick_material(global_scene, e.selected, active))
+	builder.viewport_3d_manager.draw_vertices(vert_list_active, global_scene.vertex_active_material)
+	builder.viewport_3d_manager.draw_vertices(vert_list_selected, global_scene.vertex_selected_material)
+	builder.viewport_3d_manager.draw_vertices(vert_list_unselected, global_scene.vertex_unselected_material)
+
+	builder.viewport_3d_manager.draw_line_segments(line_list_active, global_scene.vertex_active_material)
+	builder.viewport_3d_manager.draw_line_segments(line_list_selected, global_scene.vertex_selected_material)
+	builder.viewport_3d_manager.draw_line_segments(line_list_unselected, global_scene.vertex_unselected_material)
 
 	draw_gizmo(viewport_camera)
 	

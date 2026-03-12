@@ -65,6 +65,23 @@ func draw_line(p0:Vector3, p1:Vector3, mat:Material):
 	
 	mesh_shape.surface_end()
 
+func draw_line_segments(points:PackedVector3Array, mat:Material):
+	if points.size() <= 0:
+		return
+	
+	var mesh:MeshInstance3D = MeshInstance3D.new()
+	%tool_display.add_child(mesh)
+	
+	var mesh_shape:ImmediateMesh = ImmediateMesh.new()
+	mesh.mesh = mesh_shape
+	
+	mesh_shape.surface_begin(Mesh.PRIMITIVE_LINES, mat)
+
+	for p in points:
+		mesh_shape.surface_add_vertex(p)
+	
+	mesh_shape.surface_end()
+
 func draw_line_strip(points:PackedVector3Array, mat:Material, closed:bool = true):
 	if points.is_empty():
 		return
@@ -111,6 +128,9 @@ func draw_vertex(position:Vector3, mat:Material = null):
 	draw_vertices([position], mat)
 	
 func draw_vertices(vertices:PackedVector3Array, mat:Material = null):
+	if vertices.is_empty():
+		return
+	
 	var arr_mesh = ArrayMesh.new()
 	var arrays = []
 	arrays.resize(Mesh.ARRAY_MAX)

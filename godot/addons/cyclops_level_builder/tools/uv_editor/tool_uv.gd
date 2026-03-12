@@ -64,7 +64,7 @@ func track_selected_blocks():
 			node.mesh_changed.connect(on_mesh_changed)
 
 func on_mesh_changed(block:CyclopsBlock):
-	print("tool_uv: on_mesh_changed")
+	#print("tool_uv: on_mesh_changed")
 	_draw_tool(null)
 
 func cache_selected_blocks():

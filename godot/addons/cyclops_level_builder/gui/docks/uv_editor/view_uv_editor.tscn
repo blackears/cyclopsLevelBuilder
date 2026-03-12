@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cw1yjv8t33ii0"]
+[gd_scene load_steps=22 format=3 uid="uid://cw1yjv8t33ii0"]
 
 [ext_resource type="Script" uid="uid://5l6u428jo0ce" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/view_uv_editor.gd" id="1_bjwq8"]
 [ext_resource type="PackedScene" uid="uid://dlouwod012q17" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_editor.tscn" id="2_iavjh"]
@@ -18,6 +18,8 @@
 [ext_resource type="Script" uid="uid://bp7b6y48sxsbt" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_scale.gd" id="16_uxymb"]
 [ext_resource type="PackedScene" uid="uid://dmmxxxd4ahdvj" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_box_transform.tscn" id="17_uxymb"]
 [ext_resource type="Script" uid="uid://ba7db0xvjky6y" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_viewport_navigation.gd" id="18_uxymb"]
+[ext_resource type="Script" uid="uid://cga4xekcjlit0" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_keymap_runner.gd" id="19_71s50"]
+[ext_resource type="Script" uid="uid://c5akkeuico7qu" path="res://addons/cyclops_level_builder/actions/keymap_node.gd" id="19_dd6m4"]
 
 [sub_resource type="World3D" id="World3D_bxn6v"]
 
@@ -217,8 +219,20 @@ view_uv_editor = NodePath("../..")
 script = ExtResource("18_uxymb")
 view_uv_editor = NodePath("../..")
 
+[node name="KeymapRunner" type="Node" parent="tools" node_paths=PackedStringArray("keymap_list", "view_uv_editor")]
+script = ExtResource("19_71s50")
+keymap_list = NodePath("../../keymap")
+view_uv_editor = NodePath("../..")
+
 [node name="menu" type="Node" parent="."]
 unique_name_in_owner = true
+
+[node name="keymap" type="Node" parent="."]
+
+[node name="KeymapNode" type="Node" parent="keymap"]
+script = ExtResource("19_dd6m4")
+key = 65
+metadata/_custom_type_script = "uid://c5akkeuico7qu"
 
 [connection signal="focus_entered" from="." to="." method="_on_focus_entered"]
 [connection signal="focus_exited" from="." to="." method="_on_focus_exited"]

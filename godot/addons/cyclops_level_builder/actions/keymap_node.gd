@@ -21,35 +21,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-@abstract
 @tool
+class_name KeymapNode
 extends Node
-class_name CyclopsAction
 
-@export var hotkey:ActionKeypress
-@export_multiline var tooltip:String
+@export var keypress:ActionKeypress
 
-func _get_action_id():
-	return ""
+@export var key:Key
+#@export var modifiers:KeyModifierMask
+@export var shift:bool
+@export var ctrl:bool
+@export var alt:bool
+@export var meta:bool
 
-func invoke(context:CyclopsOperatorContext, event:InputEvent):
-	#_execute()
-	pass
-	
-func _execute(event:CyclopsActionEvent):
-	pass
+@export var command:Node
 
-	
-func calc_pivot_of_blocks(blocks:Array[CyclopsBlock], plugin:CyclopsLevelBuilder)->Vector3:
-	var snap_to_grid_util:SnapToGridUtil = plugin.calc_snap_to_grid_util()
-	
-	var bounds:AABB = blocks[0].control_mesh.bounds
-	for idx in range(1, blocks.size()):
-		var block:CyclopsBlock = blocks[idx]
-		bounds = bounds.merge(block.control_mesh.bounds)
-	
-	var center:Vector3 = bounds.get_center()
-	center = snap_to_grid_util.snap_point(center)
-	
-	return center
-	
+func get_modifier_mask()->KeyModifierMask:
+	return (KEY_MASK_SHIFT if shift else 0) | (KEY_MASK_CTRL if ctrl else 0) | (KEY_MASK_ALT if alt else 0) | (KEY_MASK_META if meta else 0)

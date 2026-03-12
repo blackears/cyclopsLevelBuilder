@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=5 format=3 uid="uid://cc5tovf48xmg1"]
+[gd_resource type="VisualShader" format=3 uid="uid://cc5tovf48xmg1"]
 
 [sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_mqcg1"]
 constant = Color(0, 0, 0, 1)
@@ -14,46 +14,6 @@ default_value = Color(0, 0, 0, 1)
 default_input_values = [0, 0.0, 1, 1.0]
 
 [resource]
-code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx;
-
-uniform vec4 ColorParameter : source_color = vec4(0.000000, 0.000000, 0.000000, 1.000000);
-uniform sampler2D depth_tex_frg_4 : hint_depth_texture;
-
-
-
-void fragment() {
-// ColorConstant:2
-	vec4 n_out2p0 = vec4(0.000000, 0.000000, 0.000000, 1.000000);
-
-
-// ColorParameter:3
-	vec4 n_out3p0 = ColorParameter;
-
-
-	float n_out4p0;
-// LinearSceneDepth:4
-	{
-		float __log_depth = textureLod(depth_tex_frg_4, SCREEN_UV, 0.0).x;
-	vec4 __depth_view = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, __log_depth, 1.0);
-		__depth_view.xyz /= __depth_view.w;
-		n_out4p0 = -__depth_view.z;
-	}
-
-
-// FloatOp:5
-	float n_in5p1 = 1.00000;
-	float n_out5p0 = n_out4p0 + n_in5p1;
-
-
-// Output:0
-	ALBEDO = vec3(n_out2p0.xyz);
-	EMISSION = vec3(n_out3p0.xyz);
-	NORMAL_MAP_DEPTH = n_out5p0;
-
-
-}
-"
 nodes/fragment/0/position = Vector2(480, 140)
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorConstant_mqcg1")
 nodes/fragment/2/position = Vector2(227.319, 156.469)
