@@ -37,7 +37,7 @@ func _init():
 
 func do_it():
 #	print("Add Materials do_it")
-	var mat_dock:MaterialPaletteViewport = builder.material_dock
+	var mat_dock:MaterialPaletteViewport = builder.material_panel
 	old_res_path_list = mat_dock.material_list.duplicate()
 
 #	print("old mat list %s" % str(old_res_path_list))
@@ -52,5 +52,5 @@ func do_it():
 	mat_dock.set_materials(new_list)
 
 func undo_it():
-	var mat_dock:MaterialPaletteViewport = builder.material_dock
+	var mat_dock:MaterialPaletteViewport = builder.material_panel
 	mat_dock.set_materials(old_res_path_list)

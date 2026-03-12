@@ -84,8 +84,3 @@ func save_to_cache():
 		"paint_uv": paint_uv,
 		"uv_matrix": var_to_str(uv_matrix)
 	}
-
-
-
-
-

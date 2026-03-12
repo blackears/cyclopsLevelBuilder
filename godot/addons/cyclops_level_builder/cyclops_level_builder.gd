@@ -36,9 +36,6 @@ signal config_changed
 const AUTOLOAD_NAME = "CyclopsAutoload"
 const CYCLOPS_HUD_NAME = "CyclopsGlobalHud"
 
-#var config:CyclopsConfig = preload("res://addons/cyclops_level_builder/data/configuration.tres")
-#@export_file("*.json") var config_file:String = "res://addons/cyclops_level_builder/data/cyclops_config.json"
-
 var logger:CyclopsLogger = CyclopsLogger.new()
 
 #For now, use a single keymap for all operations
@@ -65,19 +62,25 @@ func on_keymap_changed():
 	ResourceSaver.save(keymap, user_keymap_path)
 	keymap_updated.emit()
 	
-var convex_face_editor_dock:ConvexFaceEdtiorViewport
-var tool_properties_dock:ToolPropertiesDock
-var snapping_properties_dock:SnappingPropertiesDock
-var overlays_dock:OverlaysDock
-
 var material_dock_panel:MaterialPaletteViewport
 var material_dock:EditorDock
 var view_uv_editor_panel:ViewUvEditor
 var view_uv_editor_dock:EditorDock
-var cyclops_console_dock:CyclopsConsole
-var editor_toolbar:EditorToolbar
-var upgrade_cyclops_blocks_toolbar:UpgradeCyclopsBlocksToolbar
+var cyclops_console_panel:CyclopsConsole
+var cyclops_console_dock:EditorDock
+
+var convex_face_editor_panel:ConvexFaceEdtiorViewport
+var convex_face_editor_dock:EditorDock
+var tool_properties_panel:ToolPropertiesDock
+var tool_properties_dock:EditorDock
+var snapping_properties_panel:SnappingPropertiesDock
+var snapping_properties_dock:EditorDock
+var overlays_panel:OverlaysDock
+var overlays_dock:EditorDock
 var activated:bool = false
+
+var upgrade_cyclops_blocks_toolbar:UpgradeCyclopsBlocksToolbar
+var editor_toolbar:EditorToolbar
 
 
 var always_on:bool = false:
@@ -155,10 +158,6 @@ func get_snapping_manager()->SnappingManager:
 	return mgr
 
 func _ready():
-	#config_scene = preload(config_scene_path).instantiate()
-	#print("adding config scene")
-#
-	#add_child(config_scene)
 	pass
 
 func _get_plugin_name()->String:
@@ -219,6 +218,7 @@ func _enter_tree():
 	overlay.plugin = self
 	overlay_list.append(overlay)
 	
+	#Permanant docks
 	material_dock_panel = preload("res://addons/cyclops_level_builder/gui/docks/material_palette/material_palette_viewport.tscn").instantiate()
 	material_dock_panel.builder = self
 	material_dock = create_dock(material_dock_panel, "Materials", EditorDock.DOCK_SLOT_BOTTOM)
@@ -226,29 +226,33 @@ func _enter_tree():
 	view_uv_editor_panel = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/view_uv_editor.tscn").instantiate()
 	view_uv_editor_panel.plugin = self
 	view_uv_editor_dock = create_dock(view_uv_editor_panel, "UV Editor", EditorDock.DOCK_SLOT_BOTTOM)
+
+	cyclops_console_panel = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/cyclops_console.tscn").instantiate()
+	cyclops_console_panel.editor_plugin = self
+	cyclops_console_dock = create_dock(cyclops_console_panel, "Cyclops", EditorDock.DOCK_SLOT_BOTTOM)
 	
-	overlays_dock = preload("res://addons/cyclops_level_builder/gui/docks/overlays/overlays_dock.tscn").instantiate()
-	overlays_dock.plugin = self
+	#These docks toggle off and on when CyclopsBlock is selected
+	overlays_panel = preload("res://addons/cyclops_level_builder/gui/docks/overlays/overlays_dock.tscn").instantiate()
+	overlays_panel.plugin = self
 	
-	convex_face_editor_dock = preload("res://addons/cyclops_level_builder/gui/docks/convex_face_editor/convex_face_editor_viewport.tscn").instantiate()
-	convex_face_editor_dock.builder = self
+	convex_face_editor_panel = preload("res://addons/cyclops_level_builder/gui/docks/convex_face_editor/convex_face_editor_viewport.tscn").instantiate()
+	convex_face_editor_panel.builder = self
 	
-	tool_properties_dock = preload("res://addons/cyclops_level_builder/gui/docks/tool_properties/tool_properties_dock.tscn").instantiate()
-	tool_properties_dock.builder = self
+	tool_properties_panel = preload("res://addons/cyclops_level_builder/gui/docks/tool_properties/tool_properties_dock.tscn").instantiate()
+	tool_properties_panel.builder = self
 	
-	snapping_properties_dock = preload("res://addons/cyclops_level_builder/gui/docks/snapping_properties/snapping_properties_dock.tscn").instantiate()
-	snapping_properties_dock.builder = self
+	snapping_properties_panel = preload("res://addons/cyclops_level_builder/gui/docks/snapping_properties/snapping_properties_dock.tscn").instantiate()
+	snapping_properties_panel.builder = self
 	
-	cyclops_console_dock = preload("res://addons/cyclops_level_builder/gui/docks/cyclops_console/cyclops_console.tscn").instantiate()
-	cyclops_console_dock.editor_plugin = self
-	
+	#Toolbars
 	editor_toolbar = preload("gui/menu/editor_toolbar.tscn").instantiate()
 	editor_toolbar.editor_plugin = self
 
 	upgrade_cyclops_blocks_toolbar = preload("res://addons/cyclops_level_builder/gui/menu/upgrade_cyclops_blocks_toolbar.tscn").instantiate()
 	upgrade_cyclops_blocks_toolbar.editor_plugin = self
 
-	add_control_to_bottom_panel(cyclops_console_dock, "Cyclops")
+	#add_control_to_bottom_panel(cyclops_console_dock, "Cyclops")
+	add_dock(cyclops_console_dock)
 	
 	add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
 	#add_control_to_bottom_panel(material_dock, "Materials")
@@ -260,8 +264,6 @@ func _enter_tree():
 	var selection:EditorSelection = editor.get_selection()
 	selection.selection_changed.connect(on_selection_changed)
 	
-	#load_config()
-	#load_tools()
 	update_activation()
 
 	#Wait until everything is loaded	
@@ -311,23 +313,19 @@ func _exit_tree():
 	remove_custom_type("CyclopsConvexBlock")
 	remove_custom_type("CyclopsConvexBlockBody")
 	
-	remove_control_from_bottom_panel(cyclops_console_dock)
-	#remove_control_from_bottom_panel(material_dock)
+	remove_dock(cyclops_console_dock)
 	remove_dock(material_dock)
 	remove_dock(view_uv_editor_dock)
-	#remove_control_from_bottom_panel(view_uv_editor)
 	
 	if activated:
-		remove_control_from_docks(convex_face_editor_dock)
-		remove_control_from_docks(tool_properties_dock)
-		remove_control_from_docks(snapping_properties_dock)
-		remove_control_from_docks(overlays_dock)
+		remove_dock(convex_face_editor_dock)
+		remove_dock(tool_properties_dock)
+		remove_dock(snapping_properties_dock)
+		remove_dock(overlays_dock)
 		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
 
 	if upgrade_cyclops_blocks_toolbar.activated:
 		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, upgrade_cyclops_blocks_toolbar)
-
-#	view_uv_editor.forward_input.disconnect(on_uv_editor_forward_input)
 
 	material_dock.queue_free()
 	view_uv_editor_dock.queue_free()
@@ -420,17 +418,37 @@ func update_activation():
 	if node is CyclopsBlock || always_on:
 		#print("updarting activation")
 		if !activated:
-			add_control_to_dock(DOCK_SLOT_RIGHT_BL, convex_face_editor_dock)
-			add_control_to_dock(DOCK_SLOT_RIGHT_BL, tool_properties_dock)
-			add_control_to_dock(DOCK_SLOT_RIGHT_BL, snapping_properties_dock)
-			add_control_to_dock(DOCK_SLOT_RIGHT_BL, overlays_dock)
+			tool_properties_dock = create_dock(tool_properties_panel, "Tool Props", EditorDock.DOCK_SLOT_RIGHT_BL)
+			add_dock(tool_properties_dock)
+			snapping_properties_dock = create_dock(snapping_properties_panel, "Snap", EditorDock.DOCK_SLOT_RIGHT_BL)
+			add_dock(snapping_properties_dock)
+			overlays_dock = create_dock(overlays_panel, "Overlays", EditorDock.DOCK_SLOT_RIGHT_BL)
+			add_dock(overlays_dock)
+			convex_face_editor_dock = create_dock(convex_face_editor_panel, "Face Editor", EditorDock.DOCK_SLOT_RIGHT_BL)
+			add_dock(convex_face_editor_dock)
 			activated = true
 	else:
 		if activated:
-			remove_control_from_docks(convex_face_editor_dock)
-			remove_control_from_docks(tool_properties_dock)
-			remove_control_from_docks(snapping_properties_dock)
-			remove_control_from_docks(overlays_dock)
+			remove_dock(tool_properties_dock)
+			tool_properties_dock.remove_child(tool_properties_panel)
+			tool_properties_dock.queue_free()
+			tool_properties_dock = null
+			
+			remove_dock(snapping_properties_dock)
+			snapping_properties_dock.remove_child(snapping_properties_panel)
+			snapping_properties_dock.queue_free()
+			snapping_properties_dock = null
+			
+			remove_dock(overlays_dock)
+			overlays_dock.remove_child(overlays_panel)
+			overlays_dock.queue_free()
+			overlays_dock = null
+			
+			remove_dock(convex_face_editor_dock)
+			convex_face_editor_dock.remove_child(convex_face_editor_panel)
+			convex_face_editor_dock.queue_free()
+			convex_face_editor_dock = null
+
 			activated = false
 	
 	if node is CyclopsBlocks:
@@ -490,11 +508,11 @@ func _get_state()->Dictionary:
 	
 	material_dock_panel.save_state(state)
 	view_uv_editor_panel.save_state(state)
-	convex_face_editor_dock.save_state(state)
-	tool_properties_dock.save_state(state)
-	snapping_properties_dock.save_state(state)
-	overlays_dock.save_state(state)
-	cyclops_console_dock.save_state(state)
+	cyclops_console_panel.save_state(state)
+	convex_face_editor_panel.save_state(state)
+	tool_properties_panel.save_state(state)
+	snapping_properties_panel.save_state(state)
+	overlays_panel.save_state(state)
 	
 	return state
 	
@@ -503,11 +521,11 @@ func _set_state(state):
 	
 	material_dock_panel.load_state(state)
 	view_uv_editor_panel.load_state(state)
-	convex_face_editor_dock.load_state(state)
-	tool_properties_dock.load_state(state)
-	snapping_properties_dock.load_state(state)
-	overlays_dock.load_state(state)
-	cyclops_console_dock.load_state(state)
+	cyclops_console_panel.load_state(state)
+	convex_face_editor_panel.load_state(state)
+	tool_properties_panel.load_state(state)
+	snapping_properties_panel.load_state(state)
+	overlays_panel.load_state(state)
 
 
 func get_tool_cache(tool_id:String):
@@ -556,7 +574,7 @@ func switch_to_tool(_tool:CyclopsTool):
 	if active_tool:
 		active_tool._activate(self)
 		var control:Control = active_tool._get_tool_properties_editor()
-		tool_properties_dock.set_editor(control)
+		tool_properties_panel.set_editor(control)
 	
 	tool_changed.emit(active_tool)
 
@@ -569,7 +587,7 @@ func switch_to_snapping_system(_snapping_system:CyclopsSnappingSystem):
 	if snapping_system:
 		snapping_system._activate(self)
 		var control:Control = snapping_system._get_properties_editor()
-		snapping_properties_dock.set_editor(control)
+		snapping_properties_panel.set_editor(control)
 	
 	snapping_tool_changed.emit()
 
