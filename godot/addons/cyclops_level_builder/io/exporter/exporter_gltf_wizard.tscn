@@ -1,15 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://ct2mftn2hge7k"]
+[gd_scene format=3 uid="uid://ct2mftn2hge7k"]
 
 [ext_resource type="Script" uid="uid://oy8mrhrvm60j" path="res://addons/cyclops_level_builder/io/exporter/exporter_gltf_wizard.gd" id="1_asb2l"]
 
-[node name="Window" type="Window"]
+[node name="Window" type="Window" unique_id=666131664]
 oversampling_override = 1.0
 title = "Gltf Wizard"
 position = Vector2i(0, 36)
 size = Vector2i(400, 270)
 script = ExtResource("1_asb2l")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1845763377]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -20,72 +20,72 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=991095497]
 layout_mode = 2
 
-[node name="check_flatten" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+[node name="check_flatten" type="CheckBox" parent="MarginContainer/VBoxContainer" unique_id=1966315991]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "If unchecked, the scene heierarchy will be refelected in the exported nodes.  Otherwise all nodes will be children of the root."
 button_pressed = true
 text = "Flatten"
 
-[node name="check_markers" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+[node name="check_markers" type="CheckBox" parent="MarginContainer/VBoxContainer" unique_id=1234423408]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Include Marker3Ds in export."
 button_pressed = true
 text = "Markers"
 
-[node name="check_cameras" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+[node name="check_cameras" type="CheckBox" parent="MarginContainer/VBoxContainer" unique_id=305863246]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Include Marker3Ds in export."
 text = "Cameras"
 
-[node name="check_lights" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+[node name="check_lights" type="CheckBox" parent="MarginContainer/VBoxContainer" unique_id=590825697]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Include Marker3Ds in export."
 text = "Lights"
 
-[node name="check_exclude_invisible" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+[node name="check_exclude_invisible" type="CheckBox" parent="MarginContainer/VBoxContainer" unique_id=635053943]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Exclude Invisible"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=754889358]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1106217873]
 layout_mode = 2
 tooltip_text = "Path to exported file"
 text = "Path"
 
-[node name="lineEdit_path" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="lineEdit_path" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=2031133947]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="bn_browse" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="bn_browse" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=654988787]
 layout_mode = 2
 tooltip_text = "Browse"
 text = "..."
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1927947891]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="bn_okay" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="bn_okay" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1474460149]
 layout_mode = 2
 text = "Okay"
 
-[node name="bn_cancel" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+[node name="bn_cancel" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=86882573]
 layout_mode = 2
 text = "Cancel"
 
-[node name="FileDialog" type="FileDialog" parent="MarginContainer"]
+[node name="FileDialog" type="FileDialog" parent="MarginContainer" unique_id=1100597492]
 unique_name_in_owner = true
 title = "Export Scene..."
 access = 2

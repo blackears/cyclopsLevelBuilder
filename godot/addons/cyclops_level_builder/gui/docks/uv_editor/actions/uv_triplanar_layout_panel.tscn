@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://nhkpqcs2ogo8"]
+
+[ext_resource type="Script" uid="uid://dvyig388jch67" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/actions/uv_triplanar_layout_panel.gd" id="1_of802"]
+[ext_resource type="PackedScene" uid="uid://cphtpklx81l3w" path="res://addons/cyclops_level_builder/gui/controls/vector3_edit.tscn" id="2_be6ua"]
+
+[node name="TriplanarLayoutPanel" type="PanelContainer" unique_id=1121592329]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_of802")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1778092067]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer" unique_id=1916142450]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/GridContainer" unique_id=774503713]
+layout_mode = 2
+text = "Length"
+
+[node name="vector3_scale" parent="VBoxContainer/GridContainer" unique_id=1593495266 instance=ExtResource("2_be6ua")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+value = Vector3(1, 1, 1)
+
+[node name="Label2" type="Label" parent="VBoxContainer/GridContainer" unique_id=957297908]
+layout_mode = 2
+text = "Offset"
+
+[node name="vector3_offset" parent="VBoxContainer/GridContainer" unique_id=2141339717 instance=ExtResource("2_be6ua")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label3" type="Label" parent="VBoxContainer/GridContainer" unique_id=1542806471]
+layout_mode = 2
+text = "Selected Faces Only"
+
+[node name="CheckBox_selected_faces" type="CheckBox" parent="VBoxContainer/GridContainer" unique_id=1160875569]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer" unique_id=1819265469]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/CenterContainer" unique_id=287398755]
+layout_mode = 2
+
+[node name="bn_okay" type="Button" parent="VBoxContainer/CenterContainer/HBoxContainer" unique_id=271116612]
+layout_mode = 2
+text = "Okay"
+
+[node name="bn_cancel" type="Button" parent="VBoxContainer/CenterContainer/HBoxContainer" unique_id=1780123549]
+layout_mode = 2
+text = "Cancel"
+
+[connection signal="pressed" from="VBoxContainer/CenterContainer/HBoxContainer/bn_okay" to="." method="_on_bn_okay_pressed"]
+[connection signal="pressed" from="VBoxContainer/CenterContainer/HBoxContainer/bn_cancel" to="." method="_on_bn_cancel_pressed"]

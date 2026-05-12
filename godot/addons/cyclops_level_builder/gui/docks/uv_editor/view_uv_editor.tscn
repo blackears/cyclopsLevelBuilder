@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://cw1yjv8t33ii0"]
+[gd_scene format=3 uid="uid://cw1yjv8t33ii0"]
 
 [ext_resource type="Script" uid="uid://5l6u428jo0ce" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/view_uv_editor.gd" id="1_bjwq8"]
 [ext_resource type="PackedScene" uid="uid://dlouwod012q17" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/uv_editor.tscn" id="2_iavjh"]
@@ -20,10 +20,13 @@
 [ext_resource type="Script" uid="uid://ba7db0xvjky6y" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_viewport_navigation.gd" id="18_uxymb"]
 [ext_resource type="Script" uid="uid://cga4xekcjlit0" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_keymap_runner.gd" id="19_71s50"]
 [ext_resource type="Script" uid="uid://c5akkeuico7qu" path="res://addons/cyclops_level_builder/actions/keymap_node.gd" id="19_dd6m4"]
+[ext_resource type="PackedScene" uid="uid://d20nq3erg8h6y" path="res://addons/cyclops_level_builder/gui/keymap/menu_line_item_group.tscn" id="20_ym7dh"]
+[ext_resource type="Script" uid="uid://0bxs1qu3nngq" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/actions/action_uv_triplanar_layout.gd" id="21_avca2"]
+[ext_resource type="PackedScene" uid="uid://3bofw5ja324o" path="res://addons/cyclops_level_builder/gui/keymap/menu_line_item_action.tscn" id="21_lhjwj"]
 
 [sub_resource type="World3D" id="World3D_bxn6v"]
 
-[node name="ViewUvEditor" type="Control"]
+[node name="ViewUvEditor" type="Control" unique_id=1010781405]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -32,7 +35,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_bjwq8")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2016417281]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -40,24 +43,24 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=315153532]
 layout_mode = 2
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/PanelContainer" unique_id=1880959670]
 layout_mode = 2
 
-[node name="MenuBar" type="MenuBar" parent="VBoxContainer/PanelContainer/HBoxContainer3"]
+[node name="MenuBar" type="MenuBar" parent="VBoxContainer/PanelContainer/HBoxContainer3" unique_id=1420103397]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="tool_buttons" type="HBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer3"]
+[node name="tool_buttons" type="HBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer3" unique_id=1857336464]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="feature" type="HBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer3"]
+[node name="feature" type="HBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer3" unique_id=426080961]
 layout_mode = 2
 
-[node name="feature_vertex" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer3/feature"]
+[node name="feature_vertex" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer3/feature" unique_id=1337979164]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Vertex"
@@ -66,7 +69,7 @@ button_pressed = true
 button_group = ExtResource("2_s00w6")
 text = "V"
 
-[node name="feature_edge" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer3/feature"]
+[node name="feature_edge" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer3/feature" unique_id=1343930696]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Edge"
@@ -74,7 +77,7 @@ toggle_mode = true
 button_group = ExtResource("2_s00w6")
 text = "E"
 
-[node name="feature_face" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer3/feature"]
+[node name="feature_face" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer3/feature" unique_id=2131085188]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Face"
@@ -82,10 +85,10 @@ toggle_mode = true
 button_group = ExtResource("2_s00w6")
 text = "F"
 
-[node name="sticky" type="HBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer3"]
+[node name="sticky" type="HBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer3" unique_id=1372531548]
 layout_mode = 2
 
-[node name="sticky_disabled" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer3/sticky"]
+[node name="sticky_disabled" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer3/sticky" unique_id=805070070]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Disabled"
@@ -93,7 +96,7 @@ toggle_mode = true
 button_group = ExtResource("3_r8vmy")
 text = "D"
 
-[node name="sticky_shared_location" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer3/sticky"]
+[node name="sticky_shared_location" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer3/sticky" unique_id=621796820]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Shared Location"
@@ -102,7 +105,7 @@ button_pressed = true
 button_group = ExtResource("3_r8vmy")
 text = "L"
 
-[node name="sticky_shared_vertex" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer3/sticky"]
+[node name="sticky_shared_vertex" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer3/sticky" unique_id=387473712]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Shared Vertex"
@@ -110,20 +113,20 @@ toggle_mode = true
 button_group = ExtResource("3_r8vmy")
 text = "V"
 
-[node name="check_sync_with_mesh" type="CheckBox" parent="VBoxContainer/PanelContainer/HBoxContainer3"]
+[node name="check_sync_with_mesh" type="CheckBox" parent="VBoxContainer/PanelContainer/HBoxContainer3" unique_id=1427313595]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "When you select a UV element, select the coresponding mesh vertex too."
 text = "Sync"
 
-[node name="bn_use_snap" type="TextureButton" parent="VBoxContainer/PanelContainer/HBoxContainer3"]
+[node name="bn_use_snap" type="TextureButton" parent="VBoxContainer/PanelContainer/HBoxContainer3" unique_id=875863976]
 unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 texture_normal = ExtResource("4_ou5d4")
 texture_pressed = ExtResource("4_tcddb")
 
-[node name="option_snapping" type="OptionButton" parent="VBoxContainer/PanelContainer/HBoxContainer3"]
+[node name="option_snapping" type="OptionButton" parent="VBoxContainer/PanelContainer/HBoxContainer3" unique_id=220200284]
 unique_name_in_owner = true
 layout_mode = 2
 selected = 0
@@ -135,11 +138,11 @@ popup/item_1/text = "Vertex"
 popup/item_1/icon = ExtResource("5_uwi28")
 popup/item_1/id = 1
 
-[node name="Control" type="Control" parent="VBoxContainer"]
+[node name="Control" type="Control" parent="VBoxContainer" unique_id=811082248]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="VBoxContainer/Control"]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="VBoxContainer/Control" unique_id=649765121]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -150,19 +153,19 @@ grow_vertical = 2
 size_flags_vertical = 3
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="VBoxContainer/Control/SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="VBoxContainer/Control/SubViewportContainer" unique_id=1027936030]
 own_world_3d = true
 world_3d = SubResource("World3D_bxn6v")
 handle_input_locally = false
 size = Vector2i(1152, 612)
 render_target_update_mode = 4
 
-[node name="uv_editor" parent="VBoxContainer/Control/SubViewportContainer/SubViewport" instance=ExtResource("2_iavjh")]
+[node name="uv_editor" parent="VBoxContainer/Control/SubViewportContainer/SubViewport" unique_id=1039017071 instance=ExtResource("2_iavjh")]
 unique_name_in_owner = true
 face_sel_color = Color(0.5, 0.5, 0.5, 0.4)
 min_grid_spacing = 100.0
 
-[node name="slide_tab_container" parent="VBoxContainer/Control" instance=ExtResource("10_mcgkv")]
+[node name="slide_tab_container" parent="VBoxContainer/Control" unique_id=1312988332 instance=ExtResource("10_mcgkv")]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 11
@@ -170,69 +173,80 @@ anchor_left = 1.0
 grow_horizontal = 0
 view_width = 200.0
 
-[node name="Layout" parent="VBoxContainer/Control/slide_tab_container" node_paths=PackedStringArray("uv_editor") instance=ExtResource("11_mcgkv")]
+[node name="Layout" parent="VBoxContainer/Control/slide_tab_container" unique_id=2018701736 node_paths=PackedStringArray("uv_editor") instance=ExtResource("11_mcgkv")]
 visible = false
 layout_mode = 2
 uv_editor = NodePath("../../SubViewportContainer/SubViewport/uv_editor")
 
-[node name="Tool" type="PanelContainer" parent="VBoxContainer/Control/slide_tab_container"]
+[node name="Tool" type="PanelContainer" parent="VBoxContainer/Control/slide_tab_container" unique_id=1215042716]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="Snapping" type="PanelContainer" parent="VBoxContainer/Control/slide_tab_container"]
+[node name="Snapping" type="PanelContainer" parent="VBoxContainer/Control/slide_tab_container" unique_id=1914109320]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="snapping" type="Node" parent="." node_paths=PackedStringArray("cur_snap_tool")]
+[node name="snapping" type="Node" parent="." unique_id=1544074021 node_paths=PackedStringArray("cur_snap_tool")]
 unique_name_in_owner = true
 script = ExtResource("9_v4lie")
 cur_snap_tool = NodePath("Grid")
 
-[node name="Grid" type="Node" parent="snapping"]
+[node name="Grid" type="Node" parent="snapping" unique_id=943150464]
 script = ExtResource("6_nc8ii")
 metadata/_custom_type_script = "uid://b3wl2p04rjkyy"
 
-[node name="Vertex" type="Node" parent="snapping"]
+[node name="Vertex" type="Node" parent="snapping" unique_id=1969287272]
 script = ExtResource("7_t0xtm")
 metadata/_custom_type_script = "uid://5shtfh4pg660"
 
-[node name="tools" type="Node" parent="."]
+[node name="tools" type="Node" parent="." unique_id=149665352]
 unique_name_in_owner = true
 
-[node name="Move UV" type="Node" parent="tools" node_paths=PackedStringArray("view_uv_editor")]
+[node name="Move UV" type="Node" parent="tools" unique_id=1172086647 node_paths=PackedStringArray("view_uv_editor")]
 script = ExtResource("14_mcgkv")
 view_uv_editor = NodePath("../..")
 
-[node name="Rotate UV" type="Node" parent="tools" node_paths=PackedStringArray("view_uv_editor")]
+[node name="Rotate UV" type="Node" parent="tools" unique_id=1867083421 node_paths=PackedStringArray("view_uv_editor")]
 script = ExtResource("15_oec2b")
 view_uv_editor = NodePath("../..")
 
-[node name="Scale UV" type="Node" parent="tools" node_paths=PackedStringArray("view_uv_editor")]
+[node name="Scale UV" type="Node" parent="tools" unique_id=1340306186 node_paths=PackedStringArray("view_uv_editor")]
 script = ExtResource("16_uxymb")
 view_uv_editor = NodePath("../..")
 
-[node name="Box Transform UV2" parent="tools" instance=ExtResource("17_uxymb")]
+[node name="Box Transform UV2" parent="tools" unique_id=609188213 instance=ExtResource("17_uxymb")]
 
-[node name="Navigation" type="Node" parent="tools" node_paths=PackedStringArray("view_uv_editor")]
+[node name="Navigation" type="Node" parent="tools" unique_id=1889144128 node_paths=PackedStringArray("view_uv_editor")]
 script = ExtResource("18_uxymb")
 view_uv_editor = NodePath("../..")
 
-[node name="KeymapRunner" type="Node" parent="tools" node_paths=PackedStringArray("keymap_list", "view_uv_editor")]
+[node name="KeymapRunner" type="Node" parent="tools" unique_id=448007463 node_paths=PackedStringArray("keymap_list", "view_uv_editor")]
 script = ExtResource("19_71s50")
 keymap_list = NodePath("../../keymap")
 view_uv_editor = NodePath("../..")
 
-[node name="menu" type="Node" parent="."]
+[node name="menu" type="Node" parent="." unique_id=1984122635]
 unique_name_in_owner = true
 
-[node name="keymap" type="Node" parent="."]
+[node name="Uv Layout" parent="menu" unique_id=430235151 instance=ExtResource("20_ym7dh")]
 
-[node name="KeymapNode" type="Node" parent="keymap"]
+[node name="Triplanar" parent="menu/Uv Layout" unique_id=1552618151 node_paths=PackedStringArray("action") instance=ExtResource("21_lhjwj")]
+action = NodePath("../../../actions/uv_triplanar_layout")
+
+[node name="keymap" type="Node" parent="." unique_id=1951619657]
+
+[node name="KeymapNode" type="Node" parent="keymap" unique_id=1441623861]
 script = ExtResource("19_dd6m4")
 key = 65
 metadata/_custom_type_script = "uid://c5akkeuico7qu"
+
+[node name="actions" type="Node" parent="." unique_id=993436066]
+script = ExtResource("21_avca2")
+
+[node name="uv_triplanar_layout" type="Node" parent="actions" unique_id=592000918]
+script = ExtResource("21_avca2")
 
 [connection signal="focus_entered" from="." to="." method="_on_focus_entered"]
 [connection signal="focus_exited" from="." to="." method="_on_focus_exited"]

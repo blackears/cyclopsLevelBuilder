@@ -1,5 +1,5 @@
 @tool
-extends HBoxContainer
+extends PanelContainer
 class_name Vector3Edit
 
 signal value_changed(value:Vector3)

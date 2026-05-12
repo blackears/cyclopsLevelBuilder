@@ -84,6 +84,49 @@ func _process(delta):
 		$VBoxContainer/Preview.texture = tex	
 	pass
 
+func calc_points_to_uv_least_squares(points:PackedVector4Array, uvs:PackedVector2Array):
+	#Find coefficient vectors
+	#    x = (A^T * A)^-1 * A^T * y
+	# where A is the points matrix, y is the UV vectors and x is the coefficients we're trying
+	# to find
+	
+	var a0:Projection
+	for row_i in 4:
+		for col_i in 4:
+			for i in points.size():
+				a0[col_i][row_i] += points[row_i] * points[col_i]
+	
+	if is_zero_approx(a0.determinant()):
+		#Degenerate points
+		return Transform3D()
+#		return [Vector4(1, 0, 0, 0), Vector4(0, 1, 0, 0)]
+		
+	a0 = a0.inverse()
+	
+	var a1:PackedVector4Array
+	for i in points.size():
+		var p:Vector4 = a0 * points[i]
+		a1.push_back(p)
+	
+	#Calc coefficient vectors
+	var c0:Vector4
+	var c1:Vector4
+	for j in 4:
+		for i in points.size():
+			c0 += a1[i] * uvs[i][0]
+			c1 += a1[i] * uvs[i][1]
+	
+#	return [c0, c1]
+	var xform:Transform3D
+	xform.origin = Vector3(c0[3], c1[3], 0)
+	xform.basis = Basis(
+		Vector3(c0[0], c1[0], 0),
+		Vector3(c0[1], c1[1], 0),
+		Vector3(c0[2], c1[2], 0),
+	)
+	return xform
+#	return [c0, c1]
+
 func on_selection_changed():
 	material_thumbnail_dirty = true
 	target_material = empty_material
@@ -95,6 +138,10 @@ func on_selection_changed():
 		var face_idx = vol.active_face if vol.active_face != -1 else 0
 		
 		var f:ConvexVolume.FaceInfo = vol.get_face(face_idx)
+		
+		vol.face_vertices[0].uv0
+		for fv_i in f.face_vertex_indices:
+			pass
 		
 		
 		spin_offset_x.value = f.uv_transform.origin.x

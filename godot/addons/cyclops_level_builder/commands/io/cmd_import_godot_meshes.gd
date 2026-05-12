@@ -114,4 +114,3 @@ func undo_it():
 		block.queue_free()
 
 	added_blocks.clear()
-

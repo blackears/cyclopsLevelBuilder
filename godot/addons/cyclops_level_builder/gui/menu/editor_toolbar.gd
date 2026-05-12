@@ -38,7 +38,7 @@ var editor_plugin:CyclopsLevelBuilder:
 		editor_plugin = value
 		
 		if editor_plugin:
-			editor_plugin.active_node_changed.connect(on_active_node_changed)			
+			editor_plugin.active_node_changed.connect(on_active_node_changed)
 			editor_plugin.xray_mode_changed.connect(on_xray_mode_changed)
 #			editor_plugin.main_screen_changed.connect(_on_main_screen_changed)
 			editor_plugin.tool_changed.connect(on_tool_changed)

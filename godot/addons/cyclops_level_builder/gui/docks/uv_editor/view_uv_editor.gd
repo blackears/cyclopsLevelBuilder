@@ -132,8 +132,9 @@ func build_menus():
 	for child in menu_root.get_children():
 		var event:CyclopsActionEvent = CyclopsActionEvent.new()
 		event.plugin = plugin
-			
+
 		if child is MenuLineItemGroup:
+			#old
 			var popup:LineItemPopupMenu = child.create_popup_menu()
 			%MenuBar.add_child(popup)
 			
