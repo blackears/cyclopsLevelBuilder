@@ -53,11 +53,11 @@ layout_mode = 2
 
 [node name="bn_okay" type="Button" parent="VBoxContainer/CenterContainer/HBoxContainer" unique_id=271116612]
 layout_mode = 2
-text = "Okay"
+text = "Apply"
 
 [node name="bn_cancel" type="Button" parent="VBoxContainer/CenterContainer/HBoxContainer" unique_id=1780123549]
 layout_mode = 2
-text = "Cancel"
+text = "Close"
 
 [connection signal="pressed" from="VBoxContainer/CenterContainer/HBoxContainer/bn_okay" to="." method="_on_bn_okay_pressed"]
 [connection signal="pressed" from="VBoxContainer/CenterContainer/HBoxContainer/bn_cancel" to="." method="_on_bn_cancel_pressed"]

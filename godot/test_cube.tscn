@@ -57,7 +57,7 @@ data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 
 [sub_resource type="Resource" id="Resource_qcf68"]
 script = ExtResource("4_mip3e")
-data = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 2, 0, 3, 0, 1, 0, 2, 0, 3, 0, 2, 0, 0, 0, 1, 0, 2, 0, 1, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+data = PackedFloat32Array(0, -1, 1, -1, 1, 0, 0, 0, 0, 0, 1, 0, 1, -1, 0, -1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, -1, 1, -1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, -1, 0, 0, 1, 0, 1, -1)
 data_type = 5
 stride = 2
 

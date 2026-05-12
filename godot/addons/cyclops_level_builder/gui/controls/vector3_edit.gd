@@ -29,7 +29,6 @@ func _process(delta):
 		%edit_y.value = value.y
 		%edit_z.value = value.z
 		dirty = false
-	
 
 
 func _on_edit_x_value_changed(v:float):

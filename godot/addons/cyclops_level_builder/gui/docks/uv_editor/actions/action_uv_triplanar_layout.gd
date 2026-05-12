@@ -35,24 +35,26 @@ func _ready():
 	pass
 
 func do_layout():
-	window.hide()
+	#window.hide()
 	
-	var uv_xform:Transform3D = control.get_uv_transform()
-	print("uv_xform ", uv_xform)
+	var uv_xform_x:Transform3D = control.get_uv_transform(MathUtil.Axis.X)
+	var uv_xform_y:Transform3D = control.get_uv_transform(MathUtil.Axis.Y)
+	var uv_xform_z:Transform3D = control.get_uv_transform(MathUtil.Axis.Z)
+	#print("uv_xform ", uv_xform)
 	
 	var plugin:CyclopsLevelBuilder = control.plugin
 	
 	var selected_faces_only:bool = control.is_selected_faces_only()
-	print("selected_faces_only ", selected_faces_only)
+#	print("selected_faces_only ", selected_faces_only)
 	
 	var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
 	cmd.builder = plugin
 	var fc:CommandSetMeshFeatureData.FeatureChanges = CommandSetMeshFeatureData.FeatureChanges.new()
 
-	print("triplanar layout")
+#	print("triplanar layout")
 
 	for block in plugin.get_selected_blocks():
-		print("setting uvs ", block.name)
+#		print("setting uvs ", block.name)
 		
 		var block_path:NodePath = block.get_path()
 		var mvd:MeshVectorData = block.mesh_vector_data
@@ -62,29 +64,31 @@ func do_layout():
 		
 		var cv:ConvexVolume = ConvexVolume.new()
 		cv.init_from_mesh_vector_data(mvd)
-		print("<<0>>")
+#		print("<<0>>")
 		for fi:ConvexVolume.FaceInfo in cv.faces:
-			print("<<1>>")
+#			print("<<1>>")
 			if selected_faces_only && !fi.is_selected():
 				continue
 			
 			var axis:MathUtil.Axis = MathUtil.get_longest_axis(fi.normal)
-			print("fi.normal ", fi.normal)
-			print("axis ", axis)
+#			print("fi.normal ", fi.normal)
+#			print("axis ", axis)
 			
 			for fv_i:int in fi.face_vertex_indices:
-				print("fv_i ", fv_i)
+#				print("fv_i ", fv_i)
 				var fv:ConvexVolume.FaceVertexInfo = cv.face_vertices[fv_i]
 				var v:ConvexVolume.VertexInfo = cv.vertices[fv.vertex_index]
 			
-				var uvw:Vector3 = uv_xform * v.point
-				print("uvw ", uvw)
+#				print("uvw ", uvw)
 				match axis:
 					MathUtil.Axis.X:
-						new_uv_arr.set_value_vec2(Vector2(uvw.y, uvw.z), fv.index)
+						var uvw:Vector3 = uv_xform_x * v.point
+						new_uv_arr.set_value_vec2(Vector2(uvw.x, uvw.y), fv.index)
 					MathUtil.Axis.Y:
-						new_uv_arr.set_value_vec2(Vector2(uvw.x, uvw.z), fv.index)
+						var uvw:Vector3 = uv_xform_y * v.point
+						new_uv_arr.set_value_vec2(Vector2(uvw.x, uvw.y), fv.index)
 					MathUtil.Axis.Z:
+						var uvw:Vector3 = uv_xform_z * v.point
 						new_uv_arr.set_value_vec2(Vector2(uvw.x, uvw.y), fv.index)
 				
 		var new_mvd:MeshVectorData = cv.to_mesh_vector_data()
@@ -96,30 +100,6 @@ func do_layout():
 		var undo:EditorUndoRedoManager = plugin.get_undo_redo()
 		cmd.add_to_undo_manager(undo)
 		
-		################
-		
-		#var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
-		#var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
-#
-		#var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
-		#
-		#for i in uv_arr.num_components():
-			#if !sel_vec.get_value(i):
-				#continue
-			#var val:Vector2 = uv_arr.get_value_vec2(i)
-##				new_uv_arr.set_value_vec2(val + offset, i)
-			#new_uv_arr.set_value_vec2(uv_xform * val, i)
-		#
-		#fc.new_data_values[MeshVectorData.FV_UV0] = new_uv_arr
-#
-		#cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
-#
-#
-	#if cmd.will_change_anything():
-		#var undo:EditorUndoRedoManager = builder.get_undo_redo()
-		#cmd.add_to_undo_manager(undo)
-		
-	pass
 
 func _execute(event:CyclopsActionEvent):
 	var plugin:CyclopsLevelBuilder = event.plugin
@@ -128,6 +108,7 @@ func _execute(event:CyclopsActionEvent):
 		window = Window.new()
 		window.title = "Uv Triplanar Layout"
 		window.exclusive = true
+#		window.always_on_top = true
 		
 		window.add_child(control)
 		
