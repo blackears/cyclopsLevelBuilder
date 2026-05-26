@@ -22,16 +22,24 @@
 # SOFTWARE.
 
 @tool
-extends Node
+extends UvEditorSnappingNode
 class_name UvEditorSnappingGrid
 
 @export var icon:Texture2D = preload("res://addons/cyclops_level_builder/art/icons/snap_grid.svg")
 
-@export var grid_spacing:float = .125
-@export var grid_offset:Vector2
 
-@export var rotation_angle:float = 15
-
+func snap_point(point:Vector2)->Vector2:
+	if view_uv_editor:
+		var uv_ed:UvEditor = view_uv_editor.get_uv_editor()
+		var minor_grid_to_uv_xform = Transform2D(0, uv_ed.subdivisions, 0, uv_ed.subdivisions_offset)
+		var uv_to_minor_grid_xform = minor_grid_to_uv_xform.affine_inverse()
+		
+		var minor_point:Vector2 = uv_to_minor_grid_xform * point
+		minor_point = minor_point.round()
+		return minor_grid_to_uv_xform * minor_point
+	
+	return point
+	
 func get_editor()->UvEditorSnappingGridEditor:
 	var ed:UvEditorSnappingGridEditor = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping_grid_editor.tscn").instantiate()
 	ed.settings = self

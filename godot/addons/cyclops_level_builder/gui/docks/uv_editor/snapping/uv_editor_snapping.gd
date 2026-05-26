@@ -19,6 +19,19 @@ signal snap_tool_changed(snap_tool:Node)
 		cur_snap_tool = v
 		snap_tool_changed.emit(cur_snap_tool)
 
+@export var rotation_increment:float = 15
+
+@export var affects_flags:int = AFFECTS_MOVE | AFFECTS_ROTATE
+
+const AFFECTS_MOVE:int = 1
+const AFFECTS_ROTATE:int = 0b10
+const AFFECTS_SCALE:int = 0b100
+
+func snap_point(point:Vector2)->Vector2:
+	if use_snap && cur_snap_tool:
+		return cur_snap_tool.snap_point(point)
+	return point
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.

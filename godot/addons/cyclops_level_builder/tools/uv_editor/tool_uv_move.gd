@@ -88,7 +88,29 @@ func _draw_tool(viewport_camera:Camera3D):
 		gizmo.visible = true
 	else:
 		gizmo.visible = false
+
+func get_closest_selected_uv(ref_uv_position:Vector2):
+	var best_dist:float = INF
+	var best_position:Vector2 = ref_uv_position
 	
+	for block in builder.get_selected_blocks():
+		var block_path:NodePath = block.get_path()
+		var mvd:MeshVectorData = mvd_cache[block_path]
+
+		var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+		var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+
+		for i in uv_arr.num_components():
+			if !sel_vec.get_value(i):
+				continue
+			var val:Vector2 = uv_arr.get_value_vec2(i)
+			var dist = val.distance_squared_to(ref_uv_position)
+			if dist < best_dist:
+				best_dist = dist
+				best_position = val
+		
+	return best_position
+
 
 func translate_uvs(offset:Vector2)->void:
 	for block in builder.get_selected_blocks():
@@ -216,16 +238,30 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					return true
 					
 				elif tool_state == ToolState.DRAG_UVS:
-					var offset:Vector2 = e.position - mouse_down_pos
+
+					var view_to_uv_xform:Transform2D = uv_to_view_xform.affine_inverse()
+					var drag_from_pt = view_to_uv_xform * mouse_down_pos
+					drag_from_pt = get_closest_selected_uv(drag_from_pt)
+					var drag_to_pt = view_to_uv_xform * e.position
+						
+					if view_uv_editor:
+						#if settings.a
+						var snap_mgr:UvEditorSnapping = view_uv_editor.get_snapping_manager()
+						if snap_mgr.use_snap && (snap_mgr.affects_flags & UvEditorSnapping.AFFECTS_MOVE):
+							drag_to_pt = snap_mgr.snap_point(drag_to_pt)
+					
 					if move_constraint == MoveConstraint.Type.AXIS_X:
-						offset.y = 0
+						var x_axis:Vector2 = view_to_uv_xform.x
+						var offset:Vector2 = drag_to_pt - drag_from_pt
+						offset = offset.project(x_axis)
+						drag_to_pt = drag_from_pt + offset
 					elif move_constraint == MoveConstraint.Type.AXIS_Y:
-						offset.x = 0
-					
-					var view_to_uv_vec_xform:Transform2D = uv_to_view_xform.affine_inverse()
-					view_to_uv_vec_xform.origin = Vector2.ZERO
-					offset = view_to_uv_vec_xform * offset
-					
+						var y_axis:Vector2 = view_to_uv_xform.y
+						var offset:Vector2 = drag_to_pt - drag_from_pt
+						offset = offset.project(y_axis)
+						drag_to_pt = drag_from_pt + offset
+
+					var offset = drag_to_pt - drag_from_pt
 					translate_uvs(Vector2.ZERO)
 					var cmd = translate_uvs_command(offset)
 					
@@ -279,26 +315,29 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			return true
 			
 		elif tool_state == ToolState.DRAG_UVS:
-			var offset:Vector2 = e.position - mouse_down_pos
-			if move_constraint == MoveConstraint.Type.AXIS_X:
-				offset.y = 0
-			elif move_constraint == MoveConstraint.Type.AXIS_Y:
-				offset.x = 0
-			
-			var view_to_uv_vec_xform:Transform2D = uv_to_view_xform.affine_inverse()
-			view_to_uv_vec_xform.origin = Vector2.ZERO
-			offset = view_to_uv_vec_xform * offset
-			
-			if view_uv_editor:
-				var snap_mgr:UvEditorSnapping = view_uv_editor.get_snapping_manager()
-				if snap_mgr.use_snap:
-					pass
+			var view_to_uv_xform:Transform2D = uv_to_view_xform.affine_inverse()
+			var drag_from_pt = view_to_uv_xform * mouse_down_pos
+			drag_from_pt = get_closest_selected_uv(drag_from_pt)
+			var drag_to_pt = view_to_uv_xform * e.position
 				
-			#if tool_owner is ViewUvEditor:
-				#var view_ed:ViewUvEditor = tool_owner
-				#var snap_mgr:UvEditorSnapping = view_ed.get_snapping_manager()
-				#if snap_mgr.use_snap:
-					#pass
+			if view_uv_editor:
+				#if settings.a
+				var snap_mgr:UvEditorSnapping = view_uv_editor.get_snapping_manager()
+				if snap_mgr.use_snap && (snap_mgr.affects_flags & UvEditorSnapping.AFFECTS_MOVE):
+					drag_to_pt = snap_mgr.snap_point(drag_to_pt)
+			
+			if move_constraint == MoveConstraint.Type.AXIS_X:
+				var x_axis:Vector2 = view_to_uv_xform.x
+				var offset:Vector2 = drag_to_pt - drag_from_pt
+				offset = offset.project(x_axis)
+				drag_to_pt = drag_from_pt + offset
+			elif move_constraint == MoveConstraint.Type.AXIS_Y:
+				var y_axis:Vector2 = view_to_uv_xform.y
+				var offset:Vector2 = drag_to_pt - drag_from_pt
+				offset = offset.project(y_axis)
+				drag_to_pt = drag_from_pt + offset
+
+			var offset = drag_to_pt - drag_from_pt
 			
 			translate_uvs(offset)
 					

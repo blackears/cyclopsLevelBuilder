@@ -31,7 +31,7 @@ signal proj_transform_changed(xform:Transform2D)
 signal subdivisions_changed(value:Vector2)
 signal subdivisions_offset_changed(value:Vector2)
 
-var subdivisions:Vector2 = Vector2(.1, .1):
+var subdivisions:Vector2 = Vector2(.125, .125):
 	set(v):
 		if v == subdivisions:
 			return

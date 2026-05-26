@@ -22,12 +22,7 @@
 # SOFTWARE.
 
 @tool
-extends UvEditorSnappingNode
-class_name UvEditorSnappingVertex
+extends Node
+class_name UvEditorSnappingNode
 
-@export var icon:Texture2D = preload("res://addons/cyclops_level_builder/art/icons/snap_vertex.svg")
-
-func get_editor()->UvEditorSnappingVertexEditor:
-	var ed:UvEditorSnappingVertexEditor = preload("res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping_vertex_editor.tscn").instantiate()
-	ed.settings = self
-	return ed
+@export var view_uv_editor:ViewUvEditor

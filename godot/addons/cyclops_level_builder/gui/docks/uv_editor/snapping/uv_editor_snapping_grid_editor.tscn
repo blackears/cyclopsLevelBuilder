@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://sm5ha5rexkwl"]
+[gd_scene format=3 uid="uid://sm5ha5rexkwl"]
 
 [ext_resource type="Script" uid="uid://dya1isa1h7fvy" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping_grid_editor.gd" id="1_kuusj"]
 [ext_resource type="PackedScene" uid="uid://xganp03k5qlp" path="res://addons/cyclops_level_builder/gui/controls/vector2_edit.tscn" id="2_8ipgp"]
@@ -6,7 +6,7 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ipgp"]
 bg_color = Color(0, 0, 0, 1)
 
-[node name="UvEditorSnappingGridEditor" type="PanelContainer"]
+[node name="UvEditorSnappingGridEditor" type="PanelContainer" unique_id=926643840]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -16,32 +16,91 @@ size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_8ipgp")
 script = ExtResource("1_kuusj")
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="GridContainer" type="GridContainer" parent="." unique_id=2136038141]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 columns = 2
 
-[node name="Label" type="Label" parent="GridContainer"]
+[node name="Label" type="Label" parent="GridContainer" unique_id=819680294]
 layout_mode = 2
 text = "Grid Spacing"
 
-[node name="spin_grid_spacing" type="SpinBox" parent="GridContainer"]
+[node name="Vector2Edit_spacing" parent="GridContainer" unique_id=848333848 instance=ExtResource("2_8ipgp")]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+value = Vector2(1, 1)
 
-[node name="Label2" type="Label" parent="GridContainer"]
+[node name="Label2" type="Label" parent="GridContainer" unique_id=1322678002]
 layout_mode = 2
 text = "Grid Offset"
 
-[node name="Vector2Edit_offset" parent="GridContainer" instance=ExtResource("2_8ipgp")]
+[node name="Vector2Edit_offset" parent="GridContainer" unique_id=1483986197 instance=ExtResource("2_8ipgp")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label4" type="Label" parent="GridContainer"]
+[node name="Label4" type="Label" parent="GridContainer" unique_id=1407453285]
 layout_mode = 2
 text = "Rotation"
 
-[node name="spin_rotation" type="SpinBox" parent="GridContainer"]
+[node name="spin_rotation" type="SpinBox" parent="GridContainer" unique_id=602981896]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="Label5" type="Label" parent="GridContainer" unique_id=100926347]
+layout_mode = 2
+text = "Skew"
+
+[node name="spin_skew" type="SpinBox" parent="GridContainer" unique_id=1439257719]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=924853395]
+visible = false
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=28504605]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1447710695]
+layout_mode = 2
+text = "Affects"
+
+[node name="bn_affect_move" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1298641732]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+text = "Move"
+
+[node name="bn_affect_rotate" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=496791993]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+text = "Rotate"
+
+[node name="bn_affect_scale" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=865118539]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+text = "Scale"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=969989654]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2" unique_id=1679329497]
+layout_mode = 2
+text = "Rotation Increment"
+
+[node name="spin_rotation_increment" type="SpinBox" parent="VBoxContainer/HBoxContainer2" unique_id=1633190436]
+unique_name_in_owner = true
+layout_mode = 2
+
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/bn_affect_move" to="." method="_on_bn_affect_move_toggled"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/bn_affect_rotate" to="." method="_on_bn_affect_rotate_toggled"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/bn_affect_scale" to="." method="_on_bn_affect_scale_toggled"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainer2/spin_rotation_increment" to="." method="_on_spin_rotation_increment_value_changed"]
