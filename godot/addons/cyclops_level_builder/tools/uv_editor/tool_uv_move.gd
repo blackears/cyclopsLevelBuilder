@@ -88,13 +88,37 @@ func _draw_tool(viewport_camera:Camera3D):
 		gizmo.visible = true
 	else:
 		gizmo.visible = false
+#
+#func get_closest_selected_uv(ref_uv_position:Vector2):
+	#var best_dist:float = INF
+	#var best_position:Vector2 = ref_uv_position
+	#
+	#for block in builder.get_selected_blocks():
+		#var block_path:NodePath = block.get_path()
+		#var mvd:MeshVectorData = mvd_cache[block_path]
+#
+		#var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+		#var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+#
+		#for i in uv_arr.num_components():
+			#if !sel_vec.get_value(i):
+				#continue
+			#var val:Vector2 = uv_arr.get_value_vec2(i)
+			#var dist = val.distance_squared_to(ref_uv_position)
+			#if dist < best_dist:
+				#best_dist = dist
+				#best_position = val
+		#
+	#return best_position
 
-func get_closest_selected_uv(ref_uv_position:Vector2):
-	var best_dist:float = INF
-	var best_position:Vector2 = ref_uv_position
+func get_selected_uv_centroid()->Vector2:
+	var count:int = 0
+	var centroid:Vector2
 	
 	for block in builder.get_selected_blocks():
 		var block_path:NodePath = block.get_path()
+		if !block_path in mvd_cache:
+			continue
 		var mvd:MeshVectorData = mvd_cache[block_path]
 
 		var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
@@ -104,13 +128,11 @@ func get_closest_selected_uv(ref_uv_position:Vector2):
 			if !sel_vec.get_value(i):
 				continue
 			var val:Vector2 = uv_arr.get_value_vec2(i)
-			var dist = val.distance_squared_to(ref_uv_position)
-			if dist < best_dist:
-				best_dist = dist
-				best_position = val
-		
-	return best_position
-
+			centroid += val
+			count += 1
+	if count > 0:
+		centroid /= count
+	return centroid
 
 func translate_uvs(offset:Vector2)->void:
 	for block in builder.get_selected_blocks():
@@ -240,8 +262,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				elif tool_state == ToolState.DRAG_UVS:
 
 					var view_to_uv_xform:Transform2D = uv_to_view_xform.affine_inverse()
-					var drag_from_pt = view_to_uv_xform * mouse_down_pos
-					drag_from_pt = get_closest_selected_uv(drag_from_pt)
+					#var drag_from_pt = view_to_uv_xform * mouse_down_pos
+					#drag_from_pt = get_closest_selected_uv(drag_from_pt)
+					var drag_from_pt = get_selected_uv_centroid()
 					var drag_to_pt = view_to_uv_xform * e.position
 						
 					if view_uv_editor:
@@ -316,8 +339,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 		elif tool_state == ToolState.DRAG_UVS:
 			var view_to_uv_xform:Transform2D = uv_to_view_xform.affine_inverse()
-			var drag_from_pt = view_to_uv_xform * mouse_down_pos
-			drag_from_pt = get_closest_selected_uv(drag_from_pt)
+			#var drag_from_pt = view_to_uv_xform * mouse_down_pos
+			#drag_from_pt = get_closest_selected_uv(drag_from_pt)
+			var drag_from_pt = get_selected_uv_centroid()
 			var drag_to_pt = view_to_uv_xform * e.position
 				
 			if view_uv_editor:
