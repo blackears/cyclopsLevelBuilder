@@ -47,6 +47,7 @@ var gizmo:GizmoTranslate2D
 @export var tool_icon:Texture2D = preload("res://addons/cyclops_level_builder/art/icons/move.svg")
 @export_multiline var tool_tooltip:String = "Move UVs"
 
+var drag_from_pt:Vector2
 
 func is_uv_tool():
 	return true
@@ -111,14 +112,17 @@ func _draw_tool(viewport_camera:Camera3D):
 		#
 	#return best_position
 
-func get_selected_uv_centroid()->Vector2:
+func get_selected_uv_bbox_center()->Vector2:
+#	print("get_selected_uv_bbox_center")
+	var bb_min:Vector2
+	var bb_max:Vector2
 	var count:int = 0
-	var centroid:Vector2
 	
 	for block in builder.get_selected_blocks():
 		var block_path:NodePath = block.get_path()
 		if !block_path in mvd_cache:
 			continue
+#		print("block.name ", block.name)
 		var mvd:MeshVectorData = mvd_cache[block_path]
 
 		var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
@@ -128,14 +132,29 @@ func get_selected_uv_centroid()->Vector2:
 			if !sel_vec.get_value(i):
 				continue
 			var val:Vector2 = uv_arr.get_value_vec2(i)
-			centroid += val
+#			print("val ", val)
+			if count == 0:
+				bb_min = val
+				bb_max = val
+			else:
+				bb_min = bb_min.min(val)
+				bb_max = bb_max.max(val)
+			
 			count += 1
+
+	#print("bb_min ", bb_min)
+	#print("bb_max ", bb_max)
+	#print("count ", count)
+
 	if count > 0:
-		centroid /= count
-	return centroid
+		return (bb_min + bb_max) / 2.0
+	return Vector2.ZERO
 
 func translate_uvs(offset:Vector2)->void:
+	#print("translate_uvs offset:", offset)
 	for block in builder.get_selected_blocks():
+		#print("block.name ", block.name)
+		
 		var block_path:NodePath = block.get_path()
 		var mvd:MeshVectorData = mvd_cache[block_path]
 		
@@ -149,6 +168,7 @@ func translate_uvs(offset:Vector2)->void:
 				continue
 			var val:Vector2 = uv_arr.get_value_vec2(i)
 			new_uv_arr.set_value_vec2(val + offset, i)
+			#print("m ", val, " -> ", val + offset)
 		
 		var new_mvd:MeshVectorData = mvd.duplicate_explicit()
 		new_mvd.set_face_vertex_data(MeshVectorData.FV_UV0, new_uv_arr)
@@ -219,6 +239,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			if e.is_pressed():
 				if tool_state == ToolState.NONE:
 					mouse_down_pos = e.position
+					drag_from_pt = get_selected_uv_bbox_center()
+					#print("---drag uv start")
+					#print("drag_from_pt ", drag_from_pt)
 					
 					var part:GizmoTranslate2D.Part = gizmo.pick_part(e.position)
 					
@@ -260,18 +283,24 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					return true
 					
 				elif tool_state == ToolState.DRAG_UVS:
-
 					var view_to_uv_xform:Transform2D = uv_to_view_xform.affine_inverse()
-					#var drag_from_pt = view_to_uv_xform * mouse_down_pos
-					#drag_from_pt = get_closest_selected_uv(drag_from_pt)
-					var drag_from_pt = get_selected_uv_centroid()
-					var drag_to_pt = view_to_uv_xform * e.position
-						
+		#			var drag_from_pt = get_selected_uv_centroid()
+					drag_from_pt = get_selected_uv_bbox_center()
+					var mouse_down_uv:Vector2 = view_to_uv_xform * mouse_down_pos
+					
+					var mouse_drag_to_pt:Vector2 = view_to_uv_xform * e.position
+					var offset_uv:Vector2 = mouse_drag_to_pt - mouse_down_uv
+					
+					var drag_to_pt:Vector2 = drag_from_pt + offset_uv
 					if view_uv_editor:
 						#if settings.a
 						var snap_mgr:UvEditorSnapping = view_uv_editor.get_snapping_manager()
 						if snap_mgr.use_snap && (snap_mgr.affects_flags & UvEditorSnapping.AFFECTS_MOVE):
-							drag_to_pt = snap_mgr.snap_point(drag_to_pt)
+							var dest = drag_from_pt + offset_uv
+							drag_to_pt = snap_mgr.snap_point(dest)
+					
+					#print("drag_from_pt ", drag_from_pt)
+					#print("drag_to_pt ", drag_to_pt)
 					
 					if move_constraint == MoveConstraint.Type.AXIS_X:
 						var x_axis:Vector2 = view_to_uv_xform.x
@@ -338,17 +367,22 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			return true
 			
 		elif tool_state == ToolState.DRAG_UVS:
+			drag_from_pt = get_selected_uv_bbox_center()
+			
 			var view_to_uv_xform:Transform2D = uv_to_view_xform.affine_inverse()
-			#var drag_from_pt = view_to_uv_xform * mouse_down_pos
-			#drag_from_pt = get_closest_selected_uv(drag_from_pt)
-			var drag_from_pt = get_selected_uv_centroid()
-			var drag_to_pt = view_to_uv_xform * e.position
-				
+#			var drag_from_pt = get_selected_uv_centroid()
+			var mouse_down_uv:Vector2 = view_to_uv_xform * mouse_down_pos
+			
+			var mouse_drag_to_pt:Vector2 = view_to_uv_xform * e.position
+			var offset_uv:Vector2 = mouse_drag_to_pt - mouse_down_uv
+			
+			var drag_to_pt:Vector2 = drag_from_pt + offset_uv
 			if view_uv_editor:
 				#if settings.a
 				var snap_mgr:UvEditorSnapping = view_uv_editor.get_snapping_manager()
 				if snap_mgr.use_snap && (snap_mgr.affects_flags & UvEditorSnapping.AFFECTS_MOVE):
-					drag_to_pt = snap_mgr.snap_point(drag_to_pt)
+					var dest = drag_from_pt + offset_uv
+					drag_to_pt = snap_mgr.snap_point(dest)
 			
 			if move_constraint == MoveConstraint.Type.AXIS_X:
 				var x_axis:Vector2 = view_to_uv_xform.x
@@ -361,7 +395,12 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				offset = offset.project(y_axis)
 				drag_to_pt = drag_from_pt + offset
 
+			
+			#print("drag_from_pt ", drag_from_pt)
+			#print("drag_to_pt ", drag_to_pt)
 			var offset = drag_to_pt - drag_from_pt
+
+#			print("offset ", offset)
 			
 			translate_uvs(offset)
 					
