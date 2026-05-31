@@ -192,8 +192,6 @@ layout_mode = 2
 unique_name_in_owner = true
 script = ExtResource("9_v4lie")
 cur_snap_tool = NodePath("Grid")
-rotation_increment = null
-affects_flags = null
 
 [node name="Grid" type="Node" parent="snapping" unique_id=943150464 node_paths=PackedStringArray("view_uv_editor")]
 script = ExtResource("6_nc8ii")

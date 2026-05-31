@@ -28,7 +28,7 @@ class_name UvEditorSnappingGrid
 @export var icon:Texture2D = preload("res://addons/cyclops_level_builder/art/icons/snap_grid.svg")
 
 
-func snap_point(point:Vector2)->Vector2:
+func snap_point(point:Vector2, exclude_uvs:Dictionary)->Vector2:
 	if view_uv_editor:
 		var uv_ed:UvEditor = view_uv_editor.get_uv_editor()
 		var minor_grid_to_uv_xform = Transform2D(0, uv_ed.subdivisions, 0, uv_ed.subdivisions_offset)

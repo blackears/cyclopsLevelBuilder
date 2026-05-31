@@ -39,6 +39,8 @@ signal tool_changed(tool:CyclopsTool)
 @onready var slide_tab_container:HSlideTabContainer = %slide_tab_container
 @onready var bn_use_snap:TextureButton = %bn_use_snap
 
+@onready var option_snapping:OptionButton = %option_snapping
+
 @onready var theme_tool_button:Theme = preload("res://addons/cyclops_level_builder/themes/tool_button_theme.tres")
 
 var active_tool:CyclopsTool
@@ -109,15 +111,15 @@ func build_menus():
 		child.queue_free()
 	
 	#Snap drop down
-	%option_snapping.clear()
+	option_snapping.clear()
 	for child in snapping_root.get_children():
-		%option_snapping.add_icon_item(child.icon, child.name)
+		option_snapping.add_icon_item(child.icon, child.name)
 	
 	#Select current snapping tool
 	var snap_node:Node = snapping_root.cur_snap_tool
 	if snap_node:
 		var idx = snap_node.get_index()
-		%option_snapping.selected = idx
+		option_snapping.selected = idx
 	
 	update_snap_display()
 	
@@ -307,7 +309,7 @@ func viewport_transform_changed():
 
 func _on_option_snapping_item_selected(index: int) -> void:
 	var snapping_node:Node = snapping_root.get_child(index)
-	snapping_root.cur_snap_tool_path = snapping_node.get_path()
+	snapping_root.cur_snap_tool = snapping_node
 
 
 func _on_bn_use_snap_toggled(toggled_on: bool) -> void:
@@ -323,10 +325,10 @@ func _on_snapping_use_snap_changed(use_snap: bool) -> void:
 func _on_snapping_snap_tool_changed(snap_node: Node) -> void:
 	if snap_node:
 		var idx:int = snap_node.get_index()
-		if %option_snapping.selected != idx:
-			%option_snapping.set_block_signals(true)
-			%option_snapping.selected = idx
-			%option_snapping.set_block_signals(false)
+		if option_snapping.selected != idx:
+			option_snapping.set_block_signals(true)
+			option_snapping.selected = idx
+			option_snapping.set_block_signals(false)
 	
 	update_snap_display()
 	pass # Replace with function body.

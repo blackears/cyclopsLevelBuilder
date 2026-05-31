@@ -48,6 +48,7 @@ var gizmo:GizmoTranslate2D
 @export_multiline var tool_tooltip:String = "Move UVs"
 
 var drag_from_pt:Vector2
+var uvs_to_move:Dictionary
 
 func is_uv_tool():
 	return true
@@ -149,6 +150,27 @@ func get_selected_uv_bbox_center()->Vector2:
 	if count > 0:
 		return (bb_min + bb_max) / 2.0
 	return Vector2.ZERO
+
+func find_uvs_to_move()->Dictionary:
+#	var sel_vertices:Array = []
+	var sel_vertices:Dictionary = {}
+	
+	for block in builder.get_selected_blocks():
+		#print("block.name ", block.name)
+		
+		var block_path:NodePath = block.get_path()
+		var mvd:MeshVectorData = mvd_cache[block_path]
+		
+		var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+		var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+
+		for i in uv_arr.num_components():
+			if sel_vec.get_value(i):
+				if !(block_path in sel_vertices):
+					sel_vertices[block_path] = []
+				sel_vertices[block_path].push_back(i)
+	
+	return sel_vertices
 
 func translate_uvs(offset:Vector2)->void:
 	#print("translate_uvs offset:", offset)
@@ -294,10 +316,11 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var drag_to_pt:Vector2 = drag_from_pt + offset_uv
 					if view_uv_editor:
 						#if settings.a
+						var exclude_uvs:Dictionary = find_uvs_to_move()
 						var snap_mgr:UvEditorSnapping = view_uv_editor.get_snapping_manager()
 						if snap_mgr.use_snap && (snap_mgr.affects_flags & UvEditorSnapping.AFFECTS_MOVE):
 							var dest = drag_from_pt + offset_uv
-							drag_to_pt = snap_mgr.snap_point(dest)
+							drag_to_pt = snap_mgr.snap_point(dest, exclude_uvs)
 					
 					#print("drag_from_pt ", drag_from_pt)
 					#print("drag_to_pt ", drag_to_pt)
@@ -377,12 +400,13 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var offset_uv:Vector2 = mouse_drag_to_pt - mouse_down_uv
 			
 			var drag_to_pt:Vector2 = drag_from_pt + offset_uv
+			var exclude_uvs:Dictionary = find_uvs_to_move()
 			if view_uv_editor:
 				#if settings.a
 				var snap_mgr:UvEditorSnapping = view_uv_editor.get_snapping_manager()
 				if snap_mgr.use_snap && (snap_mgr.affects_flags & UvEditorSnapping.AFFECTS_MOVE):
 					var dest = drag_from_pt + offset_uv
-					drag_to_pt = snap_mgr.snap_point(dest)
+					drag_to_pt = snap_mgr.snap_point(dest, exclude_uvs)
 			
 			if move_constraint == MoveConstraint.Type.AXIS_X:
 				var x_axis:Vector2 = view_to_uv_xform.x

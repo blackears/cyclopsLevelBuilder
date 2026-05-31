@@ -27,9 +27,9 @@ const AFFECTS_MOVE:int = 1
 const AFFECTS_ROTATE:int = 0b10
 const AFFECTS_SCALE:int = 0b100
 
-func snap_point(point:Vector2)->Vector2:
+func snap_point(point:Vector2, exclude_uvs:Dictionary)->Vector2:
 	if use_snap && cur_snap_tool:
-		return cur_snap_tool.snap_point(point)
+		return cur_snap_tool.snap_point(point, exclude_uvs)
 	return point
 
 # Called when the node enters the scene tree for the first time.
