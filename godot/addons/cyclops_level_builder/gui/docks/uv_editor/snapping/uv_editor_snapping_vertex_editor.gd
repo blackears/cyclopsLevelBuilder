@@ -22,7 +22,31 @@
 # SOFTWARE.
 
 @tool
-extends Control
+extends PanelContainer
 class_name UvEditorSnappingVertexEditor
 
-var settings:UvEditorSnappingVertex
+@onready var spinbox_snap_radius:SpinBox = %SpinBox_snap_radius
+
+var settings:UvEditorSnappingVertex:
+	set(v):
+		if v == settings:
+			return
+		
+		settings = v
+		
+		if is_node_ready():
+			update_from_settings()
+
+func _ready() -> void:
+	update_from_settings()
+
+func update_from_settings():
+	if !settings:
+		return
+	
+	spinbox_snap_radius.value = settings.snap_radius_pixels
+	
+func _on_spin_box_snap_radius_value_changed(value: float) -> void:
+	if settings:
+		settings.snap_radius_pixels = value
+	

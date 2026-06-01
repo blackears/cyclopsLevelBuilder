@@ -39,9 +39,9 @@ var drag_start_size:Vector2
 @export var bar_width:float = 6: set = set_bar_width
 @export var view_width:float = 100: set = set_view_width
 @export var active_tab:int = -1: set = set_active_tab
+@export var panel_background_color:Color = Color(0, 0, 0, .7)
 
 var tab_min_size:Vector2
-#var suspend_tabs:bool = false
 
 func set_active_tab(v:float):
 	if v == active_tab:
@@ -49,8 +49,6 @@ func set_active_tab(v:float):
 	active_tab = v
 	
 	update_minimum_size()
-	#if !suspend_tabs:
-		#update_tab_layout()
 
 func set_view_width(v:float):
 	if v == view_width:
@@ -167,6 +165,14 @@ func _get_minimum_size() -> Vector2:
 		var total_size:Vector2 = children_size + Vector2(bar_width + tab_min_size.x, tab_min_size.y)
 		#print("total_size ", total_size)
 		return total_size
+
+func _draw() -> void:
+	if active_tab != -1:
+		var s:Vector2 = size
+		tab_min_size = tab_rot_bar.get_minimum_size()
+		
+		draw_rect(Rect2(tab_min_size.x + bar_width, 0, s.x - bar_width - tab_min_size.x, s.y), panel_background_color)
+	pass
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_SORT_CHILDREN:

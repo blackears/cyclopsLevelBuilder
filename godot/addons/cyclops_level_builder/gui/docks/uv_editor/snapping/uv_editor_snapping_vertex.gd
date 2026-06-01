@@ -39,7 +39,7 @@ func snap_point(point:Vector2, exclude_uvs:Dictionary)->Vector2:
 		
 		var builder = view_uv_editor.plugin
 		for block:CyclopsBlock in builder.get_selected_blocks():
-			print("vertex snap scanning ", block.name)
+			#print("vertex snap scanning ", block.name)
 			var block_path:NodePath = block.get_path()
 			var mvd:MeshVectorData = block.mesh_vector_data
 			
@@ -59,11 +59,11 @@ func snap_point(point:Vector2, exclude_uvs:Dictionary)->Vector2:
 				var offset_view:Vector2 = uv_to_view_xform.x * offset.x + uv_to_view_xform.y * offset.y
 				var offset_view_dist_sq:float = offset_view.length_squared()
 
-				print("check mesh uv ", val)
+				#print("check mesh uv ", val)
 				
 				var dist_sq:float = val.distance_squared_to(point)
-#				if dist_sq < best_snap_dist_sq && offset_view_dist_sq <= snap_radius_pixels * snap_radius_pixels:
-				if dist_sq < best_snap_dist_sq:
+				if dist_sq < best_snap_dist_sq && offset_view_dist_sq <= snap_radius_pixels * snap_radius_pixels:
+#				if dist_sq < best_snap_dist_sq:
 					best_snap_dist_sq = dist_sq
 					best_snap_value = val
 		

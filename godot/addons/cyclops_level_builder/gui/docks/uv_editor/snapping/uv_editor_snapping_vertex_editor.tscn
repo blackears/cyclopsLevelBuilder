@@ -1,12 +1,27 @@
-[gd_scene load_steps=2 format=3 uid="uid://bai5f2eie8uls"]
+[gd_scene format=3 uid="uid://bai5f2eie8uls"]
 
 [ext_resource type="Script" uid="uid://dg5y7utdgnhds" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/snapping/uv_editor_snapping_vertex_editor.gd" id="1_750cx"]
 
-[node name="UvEditorSnappingVertexEditor" type="Control"]
-layout_mode = 3
+[node name="UvEditorSnappingVertexEditor" type="PanelContainer" unique_id=1745777561]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_750cx")
+
+[node name="GridContainer" type="GridContainer" parent="." unique_id=1169007602]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="GridContainer" unique_id=2106677563]
+layout_mode = 2
+text = "Snap Radius"
+
+[node name="SpinBox_snap_radius" type="SpinBox" parent="GridContainer" unique_id=1584630197]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+allow_greater = true
+
+[connection signal="value_changed" from="GridContainer/SpinBox_snap_radius" to="." method="_on_spin_box_snap_radius_value_changed"]
