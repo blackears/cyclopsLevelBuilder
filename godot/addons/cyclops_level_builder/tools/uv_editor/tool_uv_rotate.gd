@@ -205,7 +205,18 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 					var start_ang:float = (start_pos_uv - uv_pivot).angle()
 					var cur_ang:float = (cur_pos_uv - uv_pivot).angle()
-					var delta_angle:float = fposmod(cur_ang - start_ang, PI * 2)
+					var delta_angle:float
+					
+					if view_uv_editor:
+						#if settings.a
+						var snap_mgr:UvEditorSnapping = view_uv_editor.get_snapping_manager()
+						if snap_mgr.use_snap && (snap_mgr.affects_flags & UvEditorSnapping.AFFECTS_ROTATE):
+							var rot_amount:float = (cur_ang - start_ang) / deg_to_rad(snap_mgr.rotation_increment)
+							delta_angle = int(rot_amount) * deg_to_rad(snap_mgr.rotation_increment)
+							pass
+						else:
+							delta_angle = fposmod(cur_ang - start_ang, PI * 2)
+
 					
 					var view_to_uv_vec_xform:Transform2D = uv_to_view_xform.affine_inverse()
 					view_to_uv_vec_xform.origin = Vector2.ZERO
@@ -269,14 +280,24 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			
 			var start_ang:float = (start_pos_uv - uv_pivot).angle()
 			var cur_ang:float = (cur_pos_uv - uv_pivot).angle()
-			var delta_angle:float = fposmod(cur_ang - start_ang, PI * 2)
+			var delta_angle:float
 			
-			
-			if tool_owner is ViewUvEditor:
-				var view_ed:ViewUvEditor = tool_owner
-				var snap_mgr:UvEditorSnapping = view_ed.get_snapping_manager()
-				if snap_mgr.use_snap:
+			if view_uv_editor:
+				#if settings.a
+				var snap_mgr:UvEditorSnapping = view_uv_editor.get_snapping_manager()
+				if snap_mgr.use_snap && (snap_mgr.affects_flags & UvEditorSnapping.AFFECTS_ROTATE):
+					var rot_amount:float = (cur_ang - start_ang) / deg_to_rad(snap_mgr.rotation_increment)
+					delta_angle = int(rot_amount) * deg_to_rad(snap_mgr.rotation_increment)
 					pass
+				else:
+					delta_angle = fposmod(cur_ang - start_ang, PI * 2)
+
+			
+			#if tool_owner is ViewUvEditor:
+				#var view_ed:ViewUvEditor = tool_owner
+				#var snap_mgr:UvEditorSnapping = view_ed.get_snapping_manager()
+				#if snap_mgr.use_snap:
+					#pass
 			
 			rotate_uvs(uv_pivot, delta_angle)
 			

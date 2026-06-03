@@ -97,6 +97,44 @@ func get_selected_uv_center()->Dictionary:
 	
 	return {"centroid": sum / count, "count": count}
 
+func get_selected_uv_bbox_center()->Vector2:
+#	print("get_selected_uv_bbox_center")
+	var bb_min:Vector2
+	var bb_max:Vector2
+	var count:int = 0
+	
+	for block in builder.get_selected_blocks():
+		var block_path:NodePath = block.get_path()
+		if !block_path in mvd_cache:
+			continue
+#		print("block.name ", block.name)
+		var mvd:MeshVectorData = mvd_cache[block_path]
+
+		var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+		var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+
+		for i in uv_arr.num_components():
+			if !sel_vec.get_value(i):
+				continue
+			var val:Vector2 = uv_arr.get_value_vec2(i)
+#			print("val ", val)
+			if count == 0:
+				bb_min = val
+				bb_max = val
+			else:
+				bb_min = bb_min.min(val)
+				bb_max = bb_max.max(val)
+			
+			count += 1
+
+	#print("bb_min ", bb_min)
+	#print("bb_max ", bb_max)
+	#print("count ", count)
+
+	if count > 0:
+		return (bb_min + bb_max) / 2.0
+	return Vector2.ZERO
+	
 func focus_on_selected_uvs():
 	var count:int = 0
 	var bounds:Rect2
