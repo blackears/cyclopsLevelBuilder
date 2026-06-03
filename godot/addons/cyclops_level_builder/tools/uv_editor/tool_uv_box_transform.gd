@@ -566,7 +566,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 				tool_xform_cur = cur_tool_bounds_xform * start_drag_bound_xform.affine_inverse()
 				
-#				transform_uvs(tool_xform_cur, false)
 				transform_uvs(tool_xform_cur)
 				
 				_draw_tool(null)

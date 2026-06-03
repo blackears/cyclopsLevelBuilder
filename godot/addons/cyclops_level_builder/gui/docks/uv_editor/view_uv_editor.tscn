@@ -218,7 +218,8 @@ view_uv_editor = NodePath("../..")
 script = ExtResource("16_uxymb")
 view_uv_editor = NodePath("../..")
 
-[node name="Box Transform UV2" parent="tools" unique_id=609188213 instance=ExtResource("17_uxymb")]
+[node name="Box Transform UV2" parent="tools" unique_id=609188213 node_paths=PackedStringArray("view_uv_editor") instance=ExtResource("17_uxymb")]
+view_uv_editor = NodePath("../..")
 
 [node name="Navigation" type="Node" parent="tools" unique_id=1889144128 node_paths=PackedStringArray("view_uv_editor")]
 script = ExtResource("18_uxymb")
