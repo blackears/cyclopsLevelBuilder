@@ -211,7 +211,43 @@ func get_uv_bounds()->Rect2:
 		bounds = Rect2(Vector2.ZERO, Vector2.ZERO)
 	
 	return bounds
+
+
+func get_sticky_uvs():
+	var uv_ed:UvEditor = view_uv_editor.get_uv_editor()
+	var sticky_uvs:Dictionary = {}
 	
+	for block in builder.get_selected_blocks():
+		#print("block.name ", block.name)
+		var uv_indices:Array = []
+		var vert_indices:Array = []
+		sticky_uvs[block.get_path()] = uv_indices
+		
+		var block_path:NodePath = block.get_path()
+		var mvd:MeshVectorData = mvd_cache[block_path]
+		var vol:ConvexVolume = ConvexVolume.new()
+		vol.init_from_mesh_vector_data(mvd)
+		
+		for fv_idx in vol.face_vertices.size():
+			var fv:ConvexVolume.FaceVertexInfo = vol.face_vertices[fv_idx]
+			if fv.selected:
+				if !(fv_idx in uv_indices):
+					uv_indices.append(fv_idx)
+				
+				#Check for sticky uvs
+				if uv_ed.sticky_state == UvEditor.StickyState.SHARED_LOCATION || uv_ed.sticky_state == UvEditor.StickyState.SHARED_VERTEX:
+					var v:ConvexVolume.VertexInfo = vol.vertices[fv.vertex_index]
+					for fv_idx2 in vol.face_vertices.size():
+						var fv2:ConvexVolume.FaceVertexInfo = vol.face_vertices[fv_idx2]
+						if fv2.vertex_index == fv.vertex_index && fv_idx2 != fv_idx:
+							if uv_ed.sticky_state == UvEditor.StickyState.SHARED_LOCATION && !fv.uv0.is_equal_approx(fv2.uv0):
+								continue
+							if !(fv_idx2 in uv_indices):
+								uv_indices.append(fv_idx2)
+	
+	return sticky_uvs
+	
+
 func select_face_vertices(block_index_map:Dictionary, sel_type:Selection.Type):
 	var builder:CyclopsLevelBuilder = view_uv_editor.plugin
 	
@@ -258,7 +294,7 @@ func select_face_vertices(block_index_map:Dictionary, sel_type:Selection.Type):
 				if block_index_map.has(block_path):
 					var sel_indices:PackedInt32Array = block_index_map[block_path]
 					for i in sel_indices:
-						new_sel_vec[i] = !new_sel_vec[i]
+						new_sel_vec[i] = ~new_sel_vec[i]
 		
 #		print("end tgt sel ", new_sel_vec)
 		fc.new_data_values[MeshVectorData.FV_SELECTED] = DataVectorByte.new(new_sel_vec, DataVector.DataType.BOOL)

@@ -113,40 +113,6 @@ func find_uvs_to_move()->Dictionary:
 	
 	return sel_vertices
 
-func get_sticky_uvs():
-	var uv_ed:UvEditor = view_uv_editor.get_uv_editor()
-	var sticky_uvs:Dictionary = {}
-	
-	for block in builder.get_selected_blocks():
-		#print("block.name ", block.name)
-		var uv_indices:Array = []
-		var vert_indices:Array = []
-		sticky_uvs[block.get_path()] = uv_indices
-		
-		var block_path:NodePath = block.get_path()
-		var mvd:MeshVectorData = mvd_cache[block_path]
-		var vol:ConvexVolume = ConvexVolume.new()
-		vol.init_from_mesh_vector_data(mvd)
-		
-		for fv_idx in vol.face_vertices.size():
-			var fv:ConvexVolume.FaceVertexInfo = vol.face_vertices[fv_idx]
-			if fv.selected:
-				if !(fv_idx in uv_indices):
-					uv_indices.append(fv_idx)
-				
-				#Check for sticky uvs
-				if uv_ed.sticky_state == UvEditor.StickyState.SHARED_LOCATION || uv_ed.sticky_state == UvEditor.StickyState.SHARED_VERTEX:
-					var v:ConvexVolume.VertexInfo = vol.vertices[fv.vertex_index]
-					for fv_idx2 in vol.face_vertices.size():
-						var fv2:ConvexVolume.FaceVertexInfo = vol.face_vertices[fv_idx2]
-						if fv2.vertex_index == fv.vertex_index && fv_idx2 != fv_idx:
-							if uv_ed.sticky_state == UvEditor.StickyState.SHARED_LOCATION && !fv.uv0.is_equal_approx(fv2.uv0):
-								continue
-							if !(fv_idx2 in uv_indices):
-								uv_indices.append(fv_idx2)
-	
-	return sticky_uvs
-	
 
 func translate_uvs(offset:Vector2)->void:
 	#print("translate_uvs offset:", offset)
@@ -167,29 +133,6 @@ func translate_uvs(offset:Vector2)->void:
 		
 		block.mesh_vector_data = new_mvd
 	
-	
-	#for block in builder.get_selected_blocks():
-		##print("block.name ", block.name)
-		#
-		#var block_path:NodePath = block.get_path()
-		#var mvd:MeshVectorData = mvd_cache[block_path]
-		#
-		#var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
-		#var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
-#
-		#var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
-		#
-		#for i in uv_arr.num_components():
-			#if !sel_vec.get_value(i):
-				#continue
-			#var val:Vector2 = uv_arr.get_value_vec2(i)
-			#new_uv_arr.set_value_vec2(val + offset, i)
-			##print("m ", val, " -> ", val + offset)
-		#
-		#var new_mvd:MeshVectorData = mvd.duplicate_explicit()
-		#new_mvd.set_face_vertex_data(MeshVectorData.FV_UV0, new_uv_arr)
-		#
-		#block.mesh_vector_data = new_mvd
 	
 func translate_uvs_command(offset:Vector2)->CommandSetMeshFeatureData:
 	
@@ -213,26 +156,6 @@ func translate_uvs_command(offset:Vector2)->CommandSetMeshFeatureData:
 		fc.new_data_values[MeshVectorData.FV_UV0] = new_uv_arr
 
 		cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
-
-	
-	#for block in builder.get_selected_blocks():
-		#var block_path:NodePath = block.get_path()
-		#var mvd:MeshVectorData = mvd_cache[block_path]
-		#
-		#var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
-		#var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
-#
-		#var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
-		#
-		#for i in uv_arr.num_components():
-			#if !sel_vec.get_value(i):
-				#continue
-			#var val:Vector2 = uv_arr.get_value_vec2(i)
-			#new_uv_arr.set_value_vec2(val + offset, i)
-		#
-		#fc.new_data_values[MeshVectorData.FV_UV0] = new_uv_arr
-#
-		#cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
 	
 	return cmd
 
@@ -305,8 +228,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 				if tool_state == ToolState.READY:
 					#Do single click
 					var block_indices:Dictionary = uv_ed.get_uv_indices_in_region(
-							Rect2(e.position - Vector2.ONE * builder.drag_start_radius / 2, 
-							Vector2.ONE * builder.drag_start_radius),
+							Rect2(e.position - Vector2.ONE * uv_ed.single_click_radius / 2, 
+							Vector2.ONE * uv_ed.single_click_radius),
 							true)
 					
 					select_face_vertices(block_indices,

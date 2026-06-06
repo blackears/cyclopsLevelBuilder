@@ -413,6 +413,8 @@ func draw_material_underlay():
 @export var grid_font:Font = preload("res://addons/cyclops_level_builder/art/fonts/Roboto/Roboto-Regular.ttf")
 @export var grid_font_size:float = 10
 
+@export var single_click_radius:float = 20
+
 func draw_subdiv_grid():
 #	var minor_grid_xform = Transform2D(0, Vector2(1 / subdivisions.x, 1 / subdivisions.y), 0, subdivisions_offset)
 	var minor_grid_xform = Transform2D(0, subdivisions, 0, subdivisions_offset)

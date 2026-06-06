@@ -403,8 +403,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					#print("tool ready unclick")
 					#Do single click
 					var block_indices:Dictionary = uv_ed.get_uv_indices_in_region(
-							Rect2(e.position - Vector2.ONE * builder.drag_start_radius / 2, 
-							Vector2.ONE * builder.drag_start_radius),
+							Rect2(e.position - Vector2.ONE * uv_ed.single_click_radius / 2, 
+							Vector2.ONE * uv_ed.single_click_radius),
 							true)
 					
 					#print("block_indices: ", block_indices)
