@@ -213,7 +213,7 @@ func get_uv_bounds()->Rect2:
 	return bounds
 
 
-func get_sticky_uvs():
+func get_sticky_uvs()->Dictionary:
 	var uv_ed:UvEditor = view_uv_editor.get_uv_editor()
 	var sticky_uvs:Dictionary = {}
 	

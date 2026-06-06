@@ -179,53 +179,89 @@ func _draw_tool(viewport_camera:Camera3D):
 		if handle.viewport_handle:
 			handle.viewport_handle.position = uv_to_viewport_xform * handle.uv_position
 	
-func transform_uvs(uv_xform:Transform2D)->void:
-	for block in builder.get_selected_blocks():
-		var block_path:NodePath = block.get_path()
+func transform_uvs(xform_uv:Transform2D)->void:
+	var uv_indices_to_move:Dictionary = get_sticky_uvs()
+	for block_path:NodePath in uv_indices_to_move.keys():
+		var block:CyclopsBlock = get_node(block_path)
 		var mvd:MeshVectorData = mvd_cache[block_path]
-		
+	
 		var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
 		var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
-
-		var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
-		
-		for i in uv_arr.num_components():
-			if !sel_vec.get_value(i):
-				continue
-			var val:Vector2 = uv_arr.get_value_vec2(i)
-			new_uv_arr.set_value_vec2(uv_xform * val, i)
-		
+	
+		for uv_idx in uv_indices_to_move[block_path]:
+			var val:Vector2 = uv_arr.get_value_vec2(uv_idx)
+			new_uv_arr.set_value_vec2(xform_uv * val, uv_idx)
+	
 		var new_mvd:MeshVectorData = mvd.duplicate_explicit()
 		new_mvd.set_face_vertex_data(MeshVectorData.FV_UV0, new_uv_arr)
 		
 		block.mesh_vector_data = new_mvd
 
-func transform_uvs_command(uv_xform:Transform2D)->CommandSetMeshFeatureData:
+	#########################
+	
+	#for block in builder.get_selected_blocks():
+		#var block_path:NodePath = block.get_path()
+		#var mvd:MeshVectorData = mvd_cache[block_path]
+		#
+		#var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+		#var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
+#
+		#var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+		#
+		#for i in uv_arr.num_components():
+			#if !sel_vec.get_value(i):
+				#continue
+			#var val:Vector2 = uv_arr.get_value_vec2(i)
+			#new_uv_arr.set_value_vec2(uv_xform * val, i)
+		#
+		#var new_mvd:MeshVectorData = mvd.duplicate_explicit()
+		#new_mvd.set_face_vertex_data(MeshVectorData.FV_UV0, new_uv_arr)
+		#
+		#block.mesh_vector_data = new_mvd
+
+func transform_uvs_command(xform_uv:Transform2D)->CommandSetMeshFeatureData:
 	#print("transform_uvs uv_xform ", uv_xform)
 	#print("commit ", commit)
 	
 	var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
 	cmd.builder = builder
 	var fc:CommandSetMeshFeatureData.FeatureChanges = CommandSetMeshFeatureData.FeatureChanges.new()
-	
-	for block in builder.get_selected_blocks():
-		var block_path:NodePath = block.get_path()
+
+	var uv_indices_to_move:Dictionary = get_sticky_uvs()
+	for block_path:NodePath in uv_indices_to_move.keys():
+		var block:CyclopsBlock = get_node(block_path)
 		var mvd:MeshVectorData = mvd_cache[block_path]
-		
+	
 		var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
 		var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
-
-		var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
-		
-		for i in uv_arr.num_components():
-			if !sel_vec.get_value(i):
-				continue
-			var val:Vector2 = uv_arr.get_value_vec2(i)
-			new_uv_arr.set_value_vec2(uv_xform * val, i)
-		
+	
+		for uv_idx in uv_indices_to_move[block_path]:
+			var val:Vector2 = uv_arr.get_value_vec2(uv_idx)
+			new_uv_arr.set_value_vec2(xform_uv * val, uv_idx)
+	
 		fc.new_data_values[MeshVectorData.FV_UV0] = new_uv_arr
 
 		cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
+		
+		
+	#for block in builder.get_selected_blocks():
+		#var block_path:NodePath = block.get_path()
+		#var mvd:MeshVectorData = mvd_cache[block_path]
+		#
+		#var uv_arr:DataVectorFloat = mvd.get_face_vertex_data(MeshVectorData.FV_UV0)
+		#var new_uv_arr:DataVectorFloat = uv_arr.duplicate_explicit()
+#
+		#var sel_vec:DataVectorByte = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
+		#
+		#for i in uv_arr.num_components():
+			#if !sel_vec.get_value(i):
+				#continue
+			#var val:Vector2 = uv_arr.get_value_vec2(i)
+			#new_uv_arr.set_value_vec2(uv_xform * val, i)
+		#
+		#fc.new_data_values[MeshVectorData.FV_UV0] = new_uv_arr
+#
+		#cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
 	
 		#print("uv_arr ", uv_arr.data)
 		#print("new_uv_arr ", new_uv_arr.data)
