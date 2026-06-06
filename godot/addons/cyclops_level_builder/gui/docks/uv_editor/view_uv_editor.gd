@@ -37,7 +37,7 @@ signal tool_changed(tool:CyclopsTool)
 @onready var tool_side_panel:PanelContainer = %Tool
 @onready var snapping_side_panel:PanelContainer = %Snapping
 @onready var slide_tab_container:HSlideTabContainer = %slide_tab_container
-@onready var bn_use_snap:TextureButton = %bn_use_snap
+@onready var bn_use_snap:Button = %bn_use_snap
 
 @onready var option_snapping:OptionButton = %option_snapping
 
