@@ -23,13 +23,35 @@
 [ext_resource type="Script" uid="uid://bp7b6y48sxsbt" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_scale.gd" id="16_uxymb"]
 [ext_resource type="PackedScene" uid="uid://dmmxxxd4ahdvj" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_box_transform.tscn" id="17_uxymb"]
 [ext_resource type="Script" uid="uid://ba7db0xvjky6y" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_viewport_navigation.gd" id="18_uxymb"]
-[ext_resource type="Script" uid="uid://cga4xekcjlit0" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_keymap_runner.gd" id="19_71s50"]
+[ext_resource type="Script" uid="uid://cga4xekcjlit0" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_script_hotkey_mapper.gd" id="19_71s50"]
 [ext_resource type="Script" uid="uid://c5akkeuico7qu" path="res://addons/cyclops_level_builder/actions/keymap_node.gd" id="19_dd6m4"]
+[ext_resource type="Script" uid="uid://cqwla5thtu64p" path="res://addons/cyclops_level_builder/gui/keymap/keymap_keypress.gd" id="20_5so20"]
 [ext_resource type="PackedScene" uid="uid://d20nq3erg8h6y" path="res://addons/cyclops_level_builder/gui/keymap/menu_line_item_group.tscn" id="20_ym7dh"]
 [ext_resource type="Script" uid="uid://0bxs1qu3nngq" path="res://addons/cyclops_level_builder/gui/docks/uv_editor/actions/action_uv_triplanar_layout.gd" id="21_avca2"]
 [ext_resource type="PackedScene" uid="uid://3bofw5ja324o" path="res://addons/cyclops_level_builder/gui/keymap/menu_line_item_action.tscn" id="21_lhjwj"]
+[ext_resource type="Script" uid="uid://q7kj3l0ee8s1" path="res://addons/cyclops_level_builder/tools/uv_editor/tool_uv_tool_hotkey_mapper.gd" id="25_ljit5"]
 
 [sub_resource type="World3D" id="World3D_bxn6v"]
+
+[sub_resource type="Resource" id="Resource_ljit5"]
+script = ExtResource("20_5so20")
+keycode = 77
+metadata/_custom_type_script = "uid://cqwla5thtu64p"
+
+[sub_resource type="Resource" id="Resource_j5fp0"]
+script = ExtResource("20_5so20")
+keycode = 82
+metadata/_custom_type_script = "uid://cqwla5thtu64p"
+
+[sub_resource type="Resource" id="Resource_5so20"]
+script = ExtResource("20_5so20")
+keycode = 83
+metadata/_custom_type_script = "uid://cqwla5thtu64p"
+
+[sub_resource type="Resource" id="Resource_ao1qi"]
+script = ExtResource("20_5so20")
+keycode = 66
+metadata/_custom_type_script = "uid://cqwla5thtu64p"
 
 [node name="ViewUvEditor" type="Control" unique_id=1010781405]
 layout_mode = 3
@@ -221,24 +243,33 @@ unique_name_in_owner = true
 
 [node name="Move UV" type="Node" parent="tools" unique_id=1172086647 node_paths=PackedStringArray("view_uv_editor")]
 script = ExtResource("14_mcgkv")
+default_hotkey = SubResource("Resource_ljit5")
 view_uv_editor = NodePath("../..")
 
 [node name="Rotate UV" type="Node" parent="tools" unique_id=1867083421 node_paths=PackedStringArray("view_uv_editor")]
 script = ExtResource("15_oec2b")
+default_hotkey = SubResource("Resource_j5fp0")
 view_uv_editor = NodePath("../..")
 
 [node name="Scale UV" type="Node" parent="tools" unique_id=1340306186 node_paths=PackedStringArray("view_uv_editor")]
 script = ExtResource("16_uxymb")
+default_hotkey = SubResource("Resource_5so20")
 view_uv_editor = NodePath("../..")
 
 [node name="Box Transform UV2" parent="tools" unique_id=609188213 node_paths=PackedStringArray("view_uv_editor") instance=ExtResource("17_uxymb")]
+default_hotkey = SubResource("Resource_ao1qi")
 view_uv_editor = NodePath("../..")
 
 [node name="Navigation" type="Node" parent="tools" unique_id=1889144128 node_paths=PackedStringArray("view_uv_editor")]
 script = ExtResource("18_uxymb")
 view_uv_editor = NodePath("../..")
 
-[node name="KeymapRunner" type="Node" parent="tools" unique_id=448007463 node_paths=PackedStringArray("keymap_list", "view_uv_editor")]
+[node name="ToolHotkeyMapper" type="Node" parent="tools" unique_id=1808122415 node_paths=PackedStringArray("tool_list", "view_uv_editor")]
+script = ExtResource("25_ljit5")
+tool_list = NodePath("..")
+view_uv_editor = NodePath("../..")
+
+[node name="ScriptHotkeyMapper" type="Node" parent="tools" unique_id=448007463 node_paths=PackedStringArray("keymap_list", "view_uv_editor")]
 script = ExtResource("19_71s50")
 keymap_list = NodePath("../../keymap")
 view_uv_editor = NodePath("../..")

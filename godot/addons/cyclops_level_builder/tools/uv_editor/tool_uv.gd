@@ -37,6 +37,7 @@ var mvd_cache:Dictionary
 
 var focused:bool
 
+@export var default_hotkey:KeymapKeypress
 @export var view_uv_editor:ViewUvEditor
 
 

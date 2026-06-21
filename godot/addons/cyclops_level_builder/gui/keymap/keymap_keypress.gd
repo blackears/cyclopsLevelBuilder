@@ -49,7 +49,14 @@ class_name KeymapKeypress
 	set(value):
 		meta = value
 		changed.emit()
-		
+
+func  _init(_keycode:Key = KEY_NONE, _shift:bool = false, _ctrl:bool = false, _alt:bool = false, _meta:bool = false) -> void:
+	keycode = _keycode
+	shift = _shift
+	ctrl = _ctrl
+	alt = _alt
+	meta = _meta
+	
 
 func is_invoked_by(context:CyclopsOperatorContext, event:InputEvent)->bool:
 	if event is InputEventKey:
@@ -69,6 +76,13 @@ func is_invoked_by(context:CyclopsOperatorContext, event:InputEvent)->bool:
 		return true
 	
 	return false
+
+func to_hash_string()->StringName:
+	return OS.get_keycode_string(keycode) \
+		+ ("S" if shift else "") \
+		+ ("C" if ctrl else "") \
+		+ ("A" if alt else "") \
+		+ ("M" if meta else "")
 
 func _to_string()->String:
 	return ("Shift + " if shift else "") \

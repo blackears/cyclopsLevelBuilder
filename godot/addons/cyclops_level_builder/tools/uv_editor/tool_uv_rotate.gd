@@ -36,7 +36,6 @@ var uv_pivot:Vector2
 @export var tool_icon:Texture2D = preload("res://addons/cyclops_level_builder/art/icons/rotate.svg")
 @export_multiline var tool_tooltip:String = "Rotate UVs"
 
-
 func _get_tool_name()->String:
 	return tool_name
 

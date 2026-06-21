@@ -22,8 +22,26 @@
 # SOFTWARE.
 
 @tool
-extends Resource
-class_name KeymapInputEvent
+extends ToolUv
+class_name ToolUvViewportScriptHotkeyMapper
 
-func is_invoked_by(context:CyclopsOperatorContext, event:InputEvent)->bool:
+@export var keymap_list:Node
+
+func _is_selectable()->bool:
+	return false
+	
+func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
+	var uv_ed:UvEditor = view_uv_editor.get_uv_editor()
+	var uv_to_view_xform:Transform2D = uv_ed.get_uv_to_viewport_xform()
+	
+	if event is InputEventKey:
+		var e:InputEventKey = event
+		
+		if keymap_list:
+			for child:KeymapNode in keymap_list.get_children().filter(func(a): return a is KeymapNode):
+				if child.key == e.keycode && e.get_modifiers_mask() == child.get_modifier_mask():
+					#Execute the command
+					
+					return true
+		
 	return false
