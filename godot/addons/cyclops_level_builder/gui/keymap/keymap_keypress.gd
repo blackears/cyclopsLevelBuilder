@@ -79,10 +79,10 @@ func is_invoked_by(context:CyclopsOperatorContext, event:InputEvent)->bool:
 
 func to_hash_string()->StringName:
 	return OS.get_keycode_string(keycode) \
-		+ ("S" if shift else "") \
-		+ ("C" if ctrl else "") \
-		+ ("A" if alt else "") \
-		+ ("M" if meta else "")
+		+ ("_S" if shift else "") \
+		+ ("_C" if ctrl else "") \
+		+ ("_A" if alt else "") \
+		+ ("_M" if meta else "")
 
 func _to_string()->String:
 	return ("Shift + " if shift else "") \

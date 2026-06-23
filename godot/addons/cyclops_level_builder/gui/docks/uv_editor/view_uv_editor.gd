@@ -43,6 +43,15 @@ signal tool_changed(tool:CyclopsTool)
 
 @onready var theme_tool_button:Theme = preload("res://addons/cyclops_level_builder/themes/tool_button_theme.tres")
 
+##NodePath to hotkey
+@export var toolmap_list:Dictionary[Node, KeymapKeypress]:
+	set(v):
+		toolmap_list = v
+		update_tools_key_mapping()
+
+var compiled_keypress_to_tool_map:Dictionary[StringName, Node]
+var compiled_tool_to_keypress_map:Dictionary[Node, KeymapKeypress]
+
 var active_tool:CyclopsTool
 
 var plugin:CyclopsLevelBuilder:
@@ -62,7 +71,7 @@ var plugin:CyclopsLevelBuilder:
 			var ed_sel:EditorSelection = ed_iface.get_selection()
 			ed_sel.selection_changed.connect(on_block_selection_changed)
 
-
+			
 func get_snapping_manager()->UvEditorSnapping:
 	return snapping_root
 
@@ -89,7 +98,8 @@ func switch_to_tool(_tool:CyclopsTool):
 			tool_side_panel.add_child(control)
 		
 		var idx:int = active_tool.get_index()
-		%tool_buttons.get_child(idx).button_pressed = true
+		if idx >= 0:
+			%tool_buttons.get_child(idx).button_pressed = true
 	
 	tool_changed.emit(active_tool)
 	
@@ -150,12 +160,55 @@ func build_menus():
 	
 	build_tool_buttons()
 
+func update_tools_key_mapping():
+	compiled_keypress_to_tool_map.clear()
+	compiled_tool_to_keypress_map.clear()
+	
+	for node in tools_list.get_children():
+		if node is ToolUv:
+			if node.default_hotkey:
+				var key:StringName = node.default_hotkey.to_hash_string()
+				compiled_keypress_to_tool_map[key] = node
+				compiled_tool_to_keypress_map[node] = node.default_hotkey
+	
+	for node in toolmap_list.keys():
+		if node is ToolUv:
+			var key:StringName = toolmap_list[node].to_hash_string()
+			compiled_keypress_to_tool_map[key] = node
+			compiled_tool_to_keypress_map[node] = toolmap_list[node]
+	
+	build_tool_buttons()
+
+func get_tool_from_keypress(key:KeymapKeypress)->ToolUv:
+	var hash_string:StringName = key.to_hash_string()
+	
+	#print("get_tool_from_keypress ", key._to_string())
+	#print("hash_string '", hash_string, "'")
+	#for kkey in compiled_keypress_to_tool_map.keys():
+		#print(kkey)
+		#print(compiled_keypress_to_tool_map[kkey])
+	
+	if hash_string in compiled_keypress_to_tool_map:
+		return compiled_keypress_to_tool_map[hash_string]
+		
+	return null
+	
+	
+
 func build_tool_buttons():
 	#Build tool buttons
 #	print("Build tool bns")
+	if !plugin:
+		return
+		
 	var active_block:CyclopsBlock = plugin.get_active_block()
 	
 	var tool_button_group:ButtonGroup = ButtonGroup.new()
+	
+	#var reverse_tools_keymap:Dictionary[Node, StringName]
+	#for key in tools_keymap_map.keys():
+		#reverse_tools_keymap[tools_keymap_map[key]] = key
+		
 	
 	var toolbar_root = tools_list
 	for tool_inst in toolbar_root.get_children():
@@ -171,7 +224,13 @@ func build_tool_buttons():
 			bn.icon = tool_inst._get_tool_icon()
 			if !bn.icon:
 				bn.text = tool_inst._get_tool_name()
-			bn.tooltip_text = tool_inst._get_tool_tooltip()
+			
+			var hotkey_text:String = ""
+			if tool_inst in compiled_tool_to_keypress_map:
+				var keypress:KeymapKeypress = compiled_tool_to_keypress_map[tool_inst]
+				hotkey_text = "<" + keypress._to_string() + ">\n"
+				
+			bn.tooltip_text = hotkey_text + tool_inst._get_tool_tooltip()
 			
 			bn.pressed.connect(func():
 				switch_to_tool(tool_inst)
@@ -180,6 +239,7 @@ func build_tool_buttons():
 			%tool_buttons.add_child(bn)
 	
 func on_block_selection_changed():
+	update_tools_key_mapping()
 	build_menus()
 	
 	if is_node_ready():
@@ -221,6 +281,7 @@ func _ready() -> void:
 
 	bn_use_snap.set_pressed_no_signal(snapping_root.use_snap)
 
+	update_tools_key_mapping()
 	build_menus()
 
 	pass # Replace with function body.
