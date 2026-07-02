@@ -192,5 +192,4 @@ func _on_snap_options_item_selected(index:int):
 
 func _on_bn_snap_toggled(toggled_on):
 	editor_plugin.snapping_enabled = toggled_on
-	#CyclopsAutoload.settings.set_property(CyclopsGlobalScene.SNAPPING_ENABLED, toggled_on)
 	pass # Replace with function body.

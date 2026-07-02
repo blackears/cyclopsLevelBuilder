@@ -96,7 +96,6 @@ func build_from_block():
 	var mesh:ArrayMesh
 
 	if Engine.is_editor_hint():
-#		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 		var global_scene = get_node("/root/CyclopsAutoload")
 		mesh_wire.mesh = vol.create_mesh_wire(global_scene.outline_material)
 
@@ -134,7 +133,6 @@ func _process(delta):
 
 		
 	if Engine.is_editor_hint():
-#		var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 		var global_scene = get_node("/root/CyclopsAutoload")
 
 		if display_mode != global_scene.builder.display_mode:

@@ -536,9 +536,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 							
 							var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
 
-							#var global_scene:CyclopsGlobalScene = builder.get_global_scene()
-
-							#print("precheck")
 							#Obstruction check
 							if !builder.xray_mode && builder.display_mode != DisplayMode.Type.WIRE:
 								var result:IntersectResults = builder.intersect_ray_closest(origin, point_w - origin)

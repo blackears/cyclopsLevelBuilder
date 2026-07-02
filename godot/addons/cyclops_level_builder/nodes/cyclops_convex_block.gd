@@ -93,7 +93,6 @@ func select_face(face_idx:int, select_type:Selection.Type = Selection.Type.REPLA
 
 func append_mesh(mesh:ImmediateMesh):
 #	print("adding block mesh %s" % name)
-	#var global_scene:CyclopsGlobalScene = get_node("/root/CyclopsAutoload")
 
 	control_mesh.append_mesh(mesh, materials, default_material)
 
