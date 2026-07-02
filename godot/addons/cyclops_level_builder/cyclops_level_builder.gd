@@ -322,8 +322,14 @@ func _exit_tree():
 	if activated:
 #		remove_dock(convex_face_editor_dock)
 		remove_dock(tool_properties_dock)
+		tool_properties_dock.queue_free()
+
 		remove_dock(snapping_properties_dock)
+		snapping_properties_dock.queue_free()
+
 		remove_dock(overlays_dock)
+		overlays_dock.queue_free()
+
 		remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, editor_toolbar)
 
 	if upgrade_cyclops_blocks_toolbar.activated:
@@ -332,9 +338,6 @@ func _exit_tree():
 	material_dock.queue_free()
 	view_uv_editor_dock.queue_free()
 #	convex_face_editor_dock.queue_free()
-	tool_properties_dock.queue_free()
-	overlays_dock.queue_free()
-	snapping_properties_dock.queue_free()
 	cyclops_console_dock.queue_free()
 	editor_toolbar.queue_free()
 	upgrade_cyclops_blocks_toolbar.queue_free()
