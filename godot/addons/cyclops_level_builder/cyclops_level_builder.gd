@@ -175,6 +175,14 @@ func create_dock(child:Node, title:String, slot:EditorDock.DockSlot, layout:Edit
 	
 	return dock
 
+func _enable_plugin() -> void:
+	add_autoload_singleton(AUTOLOAD_NAME, "res://addons/cyclops_level_builder/cyclops_autoload.tscn")
+	pass
+
+func _disable_plugin() -> void:
+	remove_autoload_singleton(AUTOLOAD_NAME)
+	pass
+
 func _enter_tree():
 	config_scene = preload(config_scene_path).instantiate()
 	add_child(config_scene)
@@ -211,8 +219,6 @@ func _enter_tree():
 	add_custom_type("CyclopsBlocks", "Node3D", preload("nodes/cyclops_blocks.gd"), preload("nodes/cyclops_blocks_icon.png"))
 	add_custom_type("CyclopsConvexBlock", "Node", preload("nodes/cyclops_convex_block.gd"), preload("nodes/cyclops_blocks_icon.png"))
 	add_custom_type("CyclopsConvexBlockBody", "Node", preload("nodes/cyclops_convex_block_body.gd"), preload("nodes/cyclops_blocks_icon.png"))
-
-	add_autoload_singleton(AUTOLOAD_NAME, "res://addons/cyclops_level_builder/cyclops_autoload.tscn")
 
 	var overlay:ObjectInfoOverlay = ObjectInfoOverlay.new()
 	overlay.plugin = self
@@ -304,8 +310,6 @@ func _exit_tree():
 	
 	
 	# Clean-up of the plugin goes here.
-	remove_autoload_singleton(AUTOLOAD_NAME)
-	
 	remove_custom_type("CyclopsScene")
 	
 	remove_custom_type("CyclopsBlock")
