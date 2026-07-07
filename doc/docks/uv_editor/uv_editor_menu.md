@@ -2,7 +2,7 @@
 
 The UV Editor Menu provides access to commands:
 
-* [![Triplanar Unwrap]](menu/triplanar_unwrap.md)
+* [Triplanar Unwrap](menu/triplanar_unwrap.md)
 
 
 
