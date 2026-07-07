@@ -143,7 +143,7 @@ icon = ExtResource("9_ljit5")
 [node name="sticky_shared_vertex" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer3/PanelContainer2/sticky" unique_id=387473712]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "Automatically adjust all UVs that are on the same vertex. even if they are not in the same location."
+tooltip_text = "Automatically adjust all UVs that are on the same vertex, even if they are not in the same location."
 toggle_mode = true
 button_group = ExtResource("3_r8vmy")
 icon = ExtResource("10_j5fp0")

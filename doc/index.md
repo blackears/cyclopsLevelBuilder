@@ -133,9 +133,9 @@ The display mode lets you determine how blocks are displayed in the viewport.
 
 When the CyclopsBlocks object is selected, extra docked windows will appear to give you further editng options:
 
-* [Material](dock_material.md)
-* [Face Properties](dock_face_properties.md)
 * [Tool Properties](dock_tool_properties.md)
+* [UV Editor](docks/uv_editor/index.md)
+* [Material](dock_material.md)
 
 ## Materials
 
