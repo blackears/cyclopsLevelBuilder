@@ -54,7 +54,7 @@ The drop down menu allows you to switch between various types of snapping.
 
 Click on the tabs on the right side of the editor window to show panels that allow you to adjust settings for various aspects of the UV editor.
 
-[![Sidebar]](uv_editor_sidebar.md)
+[![Sidebar]](uv_editor_sidebar.png)
 
 * Layout - Adjust general proverties of the layout editor, such as the grid size.
 * Tool - Some tools have settings that can be adjusted.  They will appear in this tab when the coresponding tool is selected.

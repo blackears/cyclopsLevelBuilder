@@ -24,7 +24,7 @@ You may notice a lot of errors being thrown when you first open your project aft
 
 If you're upgrading your project from Cyclops v1.0.0, v1.0.1 or an earlier development version of v1.0.2, you will need to upgrade your CyclopsBlocks object.  To do this, simply select your CyclopsBlocks object in the Scene outliner and click the Upgrade button that appears in the toolbar.  This will create a new subtree in your scene where the CyclopsConvexBlock objects are replaced with the new CyclopsBlock object.  Your old CyclopsBlocks will still be there, but with its visibility turned off.  You can now delete the CyclopsBlocks object if you no longer require it.
 
-## Usage
+## Documentation
 
 [Documentation for using Cyclops Level Builder is available here.](doc/index.md)
 
