@@ -8,7 +8,7 @@ on:
     paths:
 #      - 'doc/mkdocs/**'
       - 'doc/mkdocs/mkdocs.yml'
-      - 'doc/mkdocs/doc/**'
+      - 'doc/mkdocs/docs/**'
 permissions:
   contents: write
   pages: write
