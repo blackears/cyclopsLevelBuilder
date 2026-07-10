@@ -1,10 +1,14 @@
 name: Build GitHub Pages
 on:
+  workflow_call:
+  workflow_dispatch:
   push:
     branches:
       - master
     paths:
-      - 'doc/mkdocs/**'      
+#      - 'doc/mkdocs/**'
+      - 'doc/mkdocs/mkdocs.yml'
+      - 'doc/mkdocs/doc/**'
 permissions:
   contents: write
   pages: write
