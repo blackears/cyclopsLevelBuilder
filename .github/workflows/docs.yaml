@@ -1,0 +1,70 @@
+name: Build GitHub Pages
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'doc/mkdocs/**'      
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build_mkdocs:
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+      - run: pip install \
+            mkdocs-material
+      - run: mkdocs gh-deploy --config-file doc/mkdocs/mkdocs.yml --force    
+
+  deploy_mkdocs:
+    needs: build_mkdocs
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # deploy:
+  #   runs-on: ububtu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Configure Git Credentials
+  #       run: |
+  #         git config user.name github-actions[bot]
+  #         git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+  #     - uses: actions/setup-python@v5
+  #       with:
+  #         python-version: 3.x
+  #     - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV 
+  #     - uses: actions/cache@v4
+  #       with:
+  #         key: mkdocs-material-${{ env.cache_id }}
+  #         path: .cache
+  #         restore-keys: |
+  #           mkdocs-material-
+  #     - run: pip install mkdocs-material 
+  #     - run: mkdocs gh-deploy --force
+      

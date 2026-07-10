@@ -1,0 +1,6 @@
+site_name: Cyclops Level Builder Docs
+site_url: https://blackears.github.io/cyclopsLevelBuilder/
+nav:
+  - Home: index.md
+  - About: about.md
+theme: readthedocs

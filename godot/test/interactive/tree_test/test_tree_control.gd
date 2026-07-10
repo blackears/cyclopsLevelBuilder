@@ -104,14 +104,14 @@ func _can_drop_data(at_position:Vector2, data:Variant)->bool:
 func _drop_data(at_position:Vector2, data:Variant):
 #	print("_drop_data")
 	if !(data is TestTreeDataModel.Path):
-		return false
+		return
 	
 	var src_path:TestTreeDataModel.Path = data
 	var src_tier:TestTreeDataModel.Tier = model.get_tier_from_path(src_path)
 	
 	var item:TreeItem = get_item_at_position(at_position)
 	if !item:
-		return false
+		return
 
 	var section:int = get_drop_section_at_position(at_position)
 	var parent_item:TreeItem = item.get_parent()
@@ -231,5 +231,3 @@ func _on_popup_menu_id_pressed(id):
 		1:
 			delete_selected_item()
 			
-
-
