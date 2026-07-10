@@ -11,7 +11,7 @@ permissions:
   id-token: write
 
 jobs:
-  build_mkdocs:
+  build:
     runs-on: ubuntu-latest
   
     steps:
@@ -26,8 +26,8 @@ jobs:
             mkdocs-material
       - run: mkdocs gh-deploy --config-file doc/mkdocs/mkdocs.yml --force    
 
-  deploy_mkdocs:
-    needs: build_mkdocs
+  deploy:
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
