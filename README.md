@@ -6,6 +6,7 @@ Cyclops Level Builder 1.0.2 works with Godot version 4.2 and later.  Versions 1.
 
 [![Quick demo video](https://img.youtube.com/vi/mbw_6dnOt_g/0.jpg)](https://www.youtube.com/watch?v=mbw_6dnOt_g)
 
+
 ## Installation
 
 * [Download the latest release](https://github.com/blackears/cyclopsLevelBuilder/releases) from the releases page.  Unzip it into a temporary directory.
@@ -16,6 +17,7 @@ Cyclops Level Builder 1.0.2 works with Godot version 4.2 and later.  Versions 1.
     * Select the Plugins tab and check Enable next to the Cyclops Level Builder entry.
     ![Enable addon](doc/enable_addon.jpg)
 
+
 ## Upgrading
 
 It is strongly recommended that you make a backup of your project before you upgrade or change your version of Cyclops Level Builder.
@@ -24,25 +26,21 @@ You may notice a lot of errors being thrown when you first open your project aft
 
 If you're upgrading your project from Cyclops v1.0.0, v1.0.1 or an earlier development version of v1.0.2, you will need to upgrade your CyclopsBlocks object.  To do this, simply select your CyclopsBlocks object in the Scene outliner and click the Upgrade button that appears in the toolbar.  This will create a new subtree in your scene where the CyclopsConvexBlock objects are replaced with the new CyclopsBlock object.  Your old CyclopsBlocks will still be there, but with its visibility turned off.  You can now delete the CyclopsBlocks object if you no longer require it.
 
+
 ## Documentation
 
-[Documentation for using Cyclops Level Builder is available here.](doc/index.md)
+[Documentation for using Cyclops Level Builder is available here.](https://blackears.github.io/cyclopsLevelBuilder/)
 
-## Design
-
-[An overview of the architecture of Cyclops Level Builder](doc/design.md) for those who want to dive into the code.
-
-## Change Log
-
-[Change log](doc/change_log.md)
 
 ## Contributing 
 
 Please open small issues.  PRs are welcome for small fixes.  Broader ideas can be opened for discussion in the [Discussions](https://github.com/blackears/cyclopsLevelBuilder/discussions) forum.
 
+
 ## Roadmap
 
 [A list of things that I hope to have implemented in the future.](doc/roadmap.md)
+
 
 ## Support
 

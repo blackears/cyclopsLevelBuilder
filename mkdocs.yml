@@ -1,0 +1,63 @@
+site_name: Cyclops Level Builder
+site_url: https://blackears.github.io/cyclopsLevelBuilder/
+repo_url: https://github.com/blackears/cyclopsLevelBuilder
+edit_uri: docs/
+copyright: 'Copyright &copy; 2023 Mark McKay'
+#docs_dir: docs
+
+nav:
+  - Home:
+    - Overview: index.md
+    - License: license.md
+    - Design: design.md
+    - Roadmap: roadmap.md
+    - Change log: change_log.md
+  - Docks:
+    - Material Dock:
+      - docks/materials/index.md
+    - Uv Editor Dock:
+      - docks/uv_editor/index.md
+      - Uv Editor Dock Menu: 
+        - docks/uv_editor/uv_editor_menu.md
+        - docks\uv_editor\menu\triplanar_unwrap.md
+    - Tool Properties:
+      - dock_tool_properties.md
+    - Snapping:
+      - snapping.md
+
+  - Tools:
+    - tools/index.md
+    - Navigation:
+      - Move: tools/tool_move.md
+      - Rotate: tools/tool_rotate.md
+    
+    - Generators:
+      - Block: tools/tool_block.md
+      - Cylinder: tools/tool_cylinder.md
+      - Prism: tools/tool_prism.md
+      - Stairs: tools/tool_stairs.md
+    
+    - Modifiers:
+      - Clip: tools/tool_clip.md
+
+    - Feature Editors:
+      - Vertex: tools/tool_vertex.md
+      - Edge: tools/tool_edge.md
+      - Face: tools/tool_face.md
+      - Material Brush: tools/tool_material_brush.md
+      - Vertex Color Brush: tools\tool_vertex_color_brush.md
+
+    - Other:
+      - Duplicate: tools/tool_duplicate.md
+
+  - Materials:
+      - materials/material_quick_start.md
+
+theme: 
+  name: readthedocs
+  navigation_depth: 6
+#  logo: img.jpg
+  analytics:
+    gtag: GTM-N9485S7P
+  features:
+    - footer.md
