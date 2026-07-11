@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://blackears.github.io/cyclopsLevelBuilder/materials/material_quick_start/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Getting started with Materials - Cyclops Level Builder</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Getting started with Materials";
+        var mkdocs_page_input_path = "materials/material_quick_start.md";
+        var mkdocs_page_url = "/cyclopsLevelBuilder/materials/material_quick_start/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+      <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-N9485S7P"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', "GTM-N9485S7P");
+      </script>
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Cyclops Level Builder
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Home</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../..">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../license/">License</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/">Design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../roadmap/">Roadmap</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../change_log/">Change log</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Docks</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Material Dock</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../docks/materials/">Material Dock</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Uv Editor Dock</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../docks/uv_editor/">UV Editor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Uv Editor Dock Menu</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../../docks/uv_editor/uv_editor_menu/">UV Editor Menu</a>
+                </li>
+                <li class="toctree-l3"><a class="" href="../../docks/uv_editor/menu/triplanar_unwrap.md">None</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Tool Properties</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../dock_tool_properties/">Tool Properties Dock</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Snapping</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../snapping/">Snapping</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tools</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tools/">Tools</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Navigation</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/tool_move/">Move</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/tool_rotate/">Rotate</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Generators</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/tool_block/">Block</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/tool_cylinder/">Cylinder</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/tool_prism/">Prism</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/tool_stairs/">Stairs</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Modifiers</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/tool_clip/">Clip</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Feature Editors</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/tool_vertex/">Vertex</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/tool_edge/">Edge</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/tool_face/">Face</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/tool_material_brush/">Material Brush</a>
+                </li>
+                <li class="toctree-l2"><a class="" href="../../tools/tool_vertex_color_brush.md">Vertex Color Brush</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Other</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/tool_duplicate/">Duplicate</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Materials</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Getting started with Materials</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#what-is-a-material">What is a Material?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#creating-a-basic-standardshader3d">Creating a basic StandardShader3D</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#creating-materials-for-cyclops-level-builder">Creating materials for Cyclops Level Builder</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#support">Support</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Cyclops Level Builder</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Materials</li>
+      <li class="breadcrumb-item active">Getting started with Materials</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/blackears/cyclopsLevelBuilder/edit/master/docs/materials/material_quick_start.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="getting-started-with-materials">Getting started with Materials</h1>
+<h2 id="what-is-a-material">What is a Material?</h2>
+<p>Godot has a wide variety of materials that effect how your 3D geometry is displayed.  Materials can be simple and just draw your geometry with a solid color.  They can also let you wrap an image texture over your object like wallpaper.  Materials can add lighting effects to make your object glow or be see through like glass.  Materials can even change the shape of your geometry and make it animate with time.  Once you start getting into materials, you'll find they can have a huge impact on how your scene looks.</p>
+<p>In Godot, all materials extend the Material base class.  The StandardMaterial3D handles most typical cases and is a good place to start.  It is highly configurable and has a lot of parameters, so it may be a bit overwhelming at first.  Start by setting the Albedo to the color that you want your mesh to be.  You can then explore all the other options to change how your mesh can glow, shine like metal, become see through and do other things.  <a href="https://docs.godotengine.org/en/stable/tutorials/3d/standard_material_3d.html">The Godot website has a page describing all the properties of this versitile shader.</a></p>
+<p>Godot provides more complex materials too.  If the StandardMaterial3D doesn't provide the effect you need, you can create your own custom material using written using Godot's own shader langage.  A shader is a separate program which can be attached to the special ShaderMaterial which allows it to be displayed on objects.  Shaders must be written in a separate programming specially designed for them.  It can be tricky to program your own shader, but sometimes it's the best route to take if you need your material to do something very specific.  Godot also provides VisualShaders which are similar to shader programs, but allow you to build your shader by joining nodes together instead of writing a program, which you may find easier to do.  <a href="https://docs.godotengine.org/en/stable/tutorials/shaders/your_first_shader/index.html">Godot has a great webpage describing how to get started writing your own custom shader.</a></p>
+<h2 id="creating-a-basic-standardshader3d">Creating a basic StandardShader3D</h2>
+<p>First, let's create a scene that we can use to display our material.  Create a new scene and save it as main.tscn.  Then add a MeshInstance3D as a child of the root node.  Click on the MeshInsance3D node so that its properties appear in the Inspector panel.  Finally, click on the Mesh property in the Inspector tab and select New BoxMesh from the dropdown menu.</p>
+<p><img alt="create the main file" src="../quick_start_main_setup.png" /></p>
+<p>Now let's create a new StandardMaterial3D.  Right click on the root of the FileSystem and select Create New/Resource.  Type the word 'standard' into the search bar and then double click StandardMaterial3D in the Matches window.</p>
+<p><img alt="creating a resource" src="../quick_start_create_resource.png" />
+<img alt="selecting StandardMaterial3D" src="../quick_start_pick_standard_material_3d.png" /></p>
+<p>Save your new material as my_material.tres.</p>
+<p><img alt="saving the material" src="../quick_start_save_material.png" /></p>
+<p>A new material has been created and is stored in your filesystem.  Double click on it to show its properties in the Inspector tab.</p>
+<p><img alt="show material in inspector" src="../quick_start_show_material.png" /></p>
+<p>We can now edit the properties of the StandardMaterial3D.  Click on the Albedo drop down in the inspector panel.  Next, click on the Color property.  A color picker will pop up allowing you to choose a color.  You can choose whatever color you like.  I'll pick red for this demonstration.  You can also play around with changing other properties to see how they affect your material.</p>
+<p><img alt="setting the material color" src="../quick_start_change_color.png" /></p>
+<p>Now let's apply this material to the mesh we created back in the first step.  Click on the MeshInstance3D in the Scene panel to show it's properties in the Inspector panel.  Then in the Inspector panel, click on the Surface Material Override drop down to open it.  Finally, drag and drop the my_material.tres file we created into the first slot in the Surface Material Override menu.</p>
+<p><img alt="applying the material to the mesh" src="../quick_start_applying_material.png" /></p>
+<p>You material is now applied to your mesh object.  If you click on your material resource object again, you can continue to change its properties and see the effects on the mesh as you do so.</p>
+<p>Let's add a texture to our shader.  Click on the material in the Surface Material Override to expand it.  Now change the Albedo color back to white.  Finally, let's drag the icon.svg texture from the FileSystem into the Albedo/Texture slot.  Now our material is drawing the texture on the object.</p>
+<p><img alt="using a texture with our material" src="../quick_start_applying_texture.png" /></p>
+<h2 id="creating-materials-for-cyclops-level-builder">Creating materials for Cyclops Level Builder</h2>
+<p>You can create materials for Cyclops Level Builder in the same way you create materials for any other object in Godot.  One thing to keep in mind is that Cyclops will automatically generate UV coordinates based on the world position of the block vertices.  You may need to adjust the UV1 scale and offset to get your textures to render at your desired size.</p>
+<h2 id="support">Support</h2>
+<p>If you found this software useful, please consider buying me a coffee on Kofi.  Every contribution helps me to make more software:</p>
+<p><a href="https://ko-fi.com/Y8Y43J6OB"><img alt="ko-fi" src="https://ko-fi.com/img/githubbutton_sm.svg" /></a></p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../tools/tool_duplicate/" class="btn btn-neutral float-left" title="Duplicate"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2023 Mark McKay</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/blackears/cyclopsLevelBuilder" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../../tools/tool_duplicate/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -3,16 +3,16 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="None" /><link rel="canonical" href="https://blackears.github.io/cyclopsLevelBuilder/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://blackears.github.io/cyclopsLevelBuilder/" />
       <link rel="shortcut icon" href="img/favicon.ico" />
-    <title>Cyclops Level Builder Docs</title>
+    <title>Overview - Cyclops Level Builder</title>
     <link rel="stylesheet" href="css/theme.css" />
     <link rel="stylesheet" href="css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Home";
+        var mkdocs_page_name = "Overview";
         var mkdocs_page_input_path = "index.md";
         var mkdocs_page_url = "/cyclopsLevelBuilder/";
       </script>
@@ -22,6 +22,14 @@
     <![endif]-->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
       <script>hljs.highlightAll();</script> 
+      <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-N9485S7P"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', "GTM-N9485S7P");
+      </script>
 </head>
 
 <body class="wy-body-for-nav" role="document">
@@ -30,7 +38,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
-          <a href="." class="icon icon-home"> Cyclops Level Builder Docs
+          <a href="." class="icon icon-home"> Cyclops Level Builder
         </a><div role="search">
   <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
       <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
@@ -39,19 +47,147 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Home</span></p>
               <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="#">Home</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Overview</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#commands">Commands</a>
+    <li class="toctree-l2"><a class="reference internal" href="#tutorial-videos">Tutorial videos</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#project-layout">Project layout</a>
+    <li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting Started</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#create-the-cyclopsblock-environment-root">Create the CyclopsBlock environment root</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#creating-more-blocks">Creating more blocks</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#design-considerations">Design considerations</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#cyclopsblock-object">CyclopsBlock object</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#tools">Tools</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#menus">Menus</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#main-menu">Main Menu</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cyclops-menu">Cyclops Menu</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#snapping">Snapping</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#display-mode">Display Mode</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#general-commands">General Commands</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#docks">Docks</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#materials">Materials</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#support">Support</a>
     </li>
     </ul>
-                </li>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="license/">License</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="design/">Design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="roadmap/">Roadmap</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="change_log/">Change log</a>
+                  </li>
               </ul>
+              <p class="caption"><span class="caption-text">Docks</span></p>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="about/">About</a>
+                  <li class="toctree-l1"><a class="reference internal" >Material Dock</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="docks/materials/">Material Dock</a>
                 </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Uv Editor Dock</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="docks/uv_editor/">UV Editor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Uv Editor Dock Menu</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="docks/uv_editor/uv_editor_menu/">UV Editor Menu</a>
+                </li>
+                <li class="toctree-l3"><a class="" href="docks/uv_editor/menu/triplanar_unwrap.md">None</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Tool Properties</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="dock_tool_properties/">Tool Properties Dock</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Snapping</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="snapping/">Snapping</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tools</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="tools/">Tools</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Navigation</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="tools/tool_move/">Move</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="tools/tool_rotate/">Rotate</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Generators</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="tools/tool_block/">Block</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="tools/tool_cylinder/">Cylinder</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="tools/tool_prism/">Prism</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="tools/tool_stairs/">Stairs</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Modifiers</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="tools/tool_clip/">Clip</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Feature Editors</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="tools/tool_vertex/">Vertex</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="tools/tool_edge/">Edge</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="tools/tool_face/">Face</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="tools/tool_material_brush/">Material Brush</a>
+                </li>
+                <li class="toctree-l2"><a class="" href="tools/tool_vertex_color_brush.md">Vertex Color Brush</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Other</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="tools/tool_duplicate/">Duplicate</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Materials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="materials/material_quick_start/">Getting started with Materials</a>
+                  </li>
               </ul>
       </div>
     </div>
@@ -60,15 +196,17 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
       <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href=".">Cyclops Level Builder Docs</a>
+          <a href=".">Cyclops Level Builder</a>
         
       </nav>
       <div class="wy-nav-content">
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Home</li>
+          <li class="breadcrumb-item">Home</li>
+      <li class="breadcrumb-item active">Overview</li>
     <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/blackears/cyclopsLevelBuilder/edit/master/docs/index.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -76,32 +214,141 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="welcome-to-mklorem">Welcome to MkLorem</h1>
-<p>For full documentation visit <a href="https://www.mkdocs.org">mkdocs.org</a>.</p>
-<h2 id="commands">Commands</h2>
+                <h1 id="documentation">Documentation</h1>
+<p>Cyclops Level Builder is an addon for Godot that lets ypo design levels inside the editor.</p>
+<p>The project is hosted on <a href="https://github.com/blackears/cyclopsLevelBuilder">Github</a>.</p>
+<h3 id="tutorial-videos">Tutorial videos</h3>
+<p><a href="https://www.youtube.com/watch?v=0nxUR5Giy_g"><img alt="Version 1.0.4 updates" src="https://img.youtube.com/vi/0nxUR5Giy_g/0.jpg" /></a>
+<a href="https://www.youtube.com/watch?v=2foYulFeZG4"><img alt="Version 1.0.3 updates" src="https://img.youtube.com/vi/2foYulFeZG4/0.jpg" /></a>
+<a href="https://www.youtube.com/watch?v=mbw_6dnOt_g"><img alt="Version 1.0.2 updates" src="https://img.youtube.com/vi/mbw_6dnOt_g/0.jpg" /></a>
+<a href="https://www.youtube.com/watch?v=AoG6olKg2_8"><img alt="Version 1.0.1 updates" src="https://img.youtube.com/vi/AoG6olKg2_8/0.jpg" /></a>
+<a href="https://www.youtube.com/watch?v=UAqmm6WIWhA"><img alt="Version 1.0.0" src="https://img.youtube.com/vi/UAqmm6WIWhA/0.jpg" /></a></p>
+<h2 id="getting-started">Getting Started</h2>
+<h3 id="create-the-cyclopsblock-environment-root">Create the CyclopsBlock environment root</h3>
+<p>You will need to begin with a 3D scene in Godot.  You can create a new empty scene, or modify a 3D scene you've already started working on.</p>
+<p>Your first step to using Cyclops is to create a CyclopsBlock.  The Cyclops system currently requires a block to be selected for Cyclops to be activated (this is a limitation of how the Godot Editor works.)  The easiest way to do this is to select the Cyclops tab in the bottom center window and press the <code>Create Block</code> button.  This will create a basic block with the dimensions you specified in the work area.</p>
+<p><img alt="Creating the first CyclopsBlock node" src="create_starting_block.png" /></p>
+<p>You will now need to select this block to activate the tool menu.  You can continue creating blocks in this way, but will probably find it easier to use the <code>Block</code> tool to make new blocks.</p>
+<h3 id="creating-more-blocks">Creating more blocks</h3>
+<p>Make sure a <code>CyclopsBlock</code> is selected to show the Cyclops buttons in the editor toolbar.</p>
+<p><img alt="Starting editor menu" src="starting_editor_menu.jpg" /></p>
+<p>Make sure the Block button is pressed, then click and drag in the viewport to start drawing your block.  You will need to click and drag to create the base, then move the mouse to drag out the height and click again to finish drawing the cube.</p>
+<p><img alt="Dragging out your first block" src="drag_create_cube.gif" /></p>
+<h3 id="design-considerations">Design considerations</h3>
+<p>Cyclops Level Builder uses convex blocks to build scenes.  This is means that no block in your scene can have indentations or inside corners.  You can still create scenes that have holes, arches and other concave architecture, but you will need to build them out of convex pieces.  Using the Clip tool can be very helpful to carve holes and empty spaces into convex blocks.</p>
+<p>This is in the tradition of level design techniques from early 3D games such as Quake.  The advantages of using convex blocks is that it keeps things clean and convex collision detection is very fast.  However, it is less expressive and I might change this to use a general mesh in future updates to this project. </p>
+<p>Cyclops Level Builder also uses a grid and most operations will automatically snap vertices to the grid.  This is because in level design, you usually want walls, floors and ceiling to join up and be flush with each other.  Many other modeling programs make this difficult to do.</p>
+<p>Most commands are undoable, so you can use Ctrl-Z to undo most actions and Ctrl-Shift-Z to redo them.</p>
+<p>Most of the tools support pressing the Escape key to cancel the current operation.</p>
+<h2 id="cyclopsblock-object">CyclopsBlock object</h2>
+<p>Each block you create is encapsulated in a CyclopsBlock object.  There are a number of properties on it that you can change.</p>
 <ul>
-<li><code>mkdocs new [dir-name]</code> - Create a new project.</li>
-<li><code>mkdocs serve</code> - Start the live-reloading docs server.</li>
-<li><code>mkdocs build</code> - Build the documentation site.</li>
-<li><code>mkdocs -h</code> - Print help message and exit.</li>
+<li>Collision Type - Affects the type of collision generated for the object<ul>
+<li>None - No collision</li>
+<li>Static - A StaticBody3D will be used for collision</li>
+<li>Kinematic - A CharacterBody3D will be used for collision</li>
+<li>Rigid - A RigidBody3D will be used for collision</li>
 </ul>
-<h2 id="project-layout">Project layout</h2>
-<pre><code>mkdocs.yml    # The configuration file.
-docs/
-    index.md  # The documentation homepage.
-    ...       # Other markdown pages, images and other files.
-</code></pre>
+</li>
+</ul>
+<h2 id="tools">Tools</h2>
+<p>Cyclops has many tools to let you create and edit your scene.</p>
+<p><a href="tools/">Cyclops Tools</a></p>
+<h2 id="menus">Menus</h2>
+<h3 id="main-menu">Main Menu</h3>
+<p><img alt="Main Menu" src="edit_menu.jpg" /></p>
+<p>The Menu has a number of useful commands.</p>
+<ul>
+<li>Duplicate Selected Blocks - Duplicates selected blocks.  Click with mouse to place duplication.</li>
+<li>Merge Selected Blocks - Combine all selected blocks into a single convex shape.</li>
+<li>Subtract Block - Subtract active block from all selected blocks</li>
+<li>Intersect Blocks - Replaces all selected blocks with their intersection</li>
+<li>Delete Selected Blocks - Delete all currently selected blocks.</li>
+<li>
+<p>Snap to Grid - Snaps all vertices to the grid, just in case some are misaligned.</p>
+</li>
+<li>
+<p>Convert to Godot Mesh - Builds a replica of the CyclopsBlocks in your level using core Godot objects.  Places them inside a node called 'converted_blocks' at the root of your scene.</p>
+</li>
+<li>Export As Gltf... - Generates a gltf file based on the current blocks in the scene.</li>
+<li>Export as Godot Scene - Creates a new scene file in your project that contains duplicates the current scene but where all the CyclopsBlock objects have been replaced with Godot library objects.</li>
+<li>
+<p>Export as Cyclops File - Exports all Cyclops objects to a custom file format.  Allows for your cyclops scene to be stored in a format independent of the Godot scene file.  This is intended to help with transitioning between different Cyclops version which may not be backwards compatible.</p>
+</li>
+<li>
+<p>Rotate 90 Ccw X - Rotate 90 degrees counter clockwise around the X axis</p>
+</li>
+<li>Rotate 90 Cw X - Rotate 90 degrees clockwise around the X axis</li>
+<li>Rotate 180 X - Rotate 180 degrees around the X axis</li>
+<li>
+<p>Mirror Selection X - Mirror the selection in the X axis</p>
+</li>
+<li>
+<p>Rotate 90 Ccw Y - Rotate 90 degrees counter clockwise around the Y axis</p>
+</li>
+<li>Rotate 90 Cw Y - Rotate 90 degrees clockwise around the Y axis</li>
+<li>Rotate 180 Y - Rotate 180 degrees around the Y axis</li>
+<li>
+<p>Mirror Selection Y - Mirror the selection in the Y axis</p>
+</li>
+<li>
+<p>Rotate 90 Ccw Z - Rotate 90 degrees counter clockwise around the Z axis</p>
+</li>
+<li>Rotate 90 Cw Z - Rotate 90 degrees clockwise around the Z axis</li>
+<li>Rotate 180 Z - Rotate 180 degrees around the Z axis</li>
+<li>Mirror Selection Z - Mirror the selection in the Z axis</li>
+</ul>
+<h3 id="cyclops-menu">Cyclops Menu</h3>
+<p><img alt="Cyclops Menu" src="menu_cyclops.png" /></p>
+<p>A second menu has been created for import commands, since these need to be able to run even if no Cyclops block has been created.</p>
+<ul>
+<li>Import Godot MeshInstance - Will convert the currently selected Godot MeshInstance into a CyclopsBlock</li>
+<li>Import Cyclops File - Will import a file exported using the <code>Export as Cyclops File</code> command.</li>
+</ul>
+<h2 id="snapping">Snapping</h2>
+<p><img alt="Snapping Menu" src="snapping_menu.png" /></p>
+<p>When the magnet button is pressed, snapping is enabled.  The dropdown allows you to switch between snapping modes.</p>
+<p><a href="snapping/">Snapping</a></p>
+<h2 id="display-mode">Display Mode</h2>
+<p>The display mode lets you determine how blocks are displayed in the viewport.</p>
+<p><img alt="Switching display mode" src="switching_display_mode.gif" /></p>
+<h2 id="general-commands">General Commands</h2>
+<ul>
+<li>
+<p>Ctrl-D will activate the duplicate tool.  When you type this in Block mode, the current selection will be duplicated and will follow the mouse cursor.  Click to drop the duplicated blocks at your desired location.</p>
+</li>
+<li>
+<p>X key to delete all selected blocks.</p>
+<ul>
+<li>I wanted to use the Delete key, but this was causing a conflict with Godot so I went with the X key instead.</li>
+</ul>
+</li>
+</ul>
+<h2 id="docks">Docks</h2>
+<p>When the CyclopsBlocks object is selected, extra docked windows will appear to give you further editng options:</p>
+<ul>
+<li><a href="dock_tool_properties/">Tool Properties</a></li>
+<li><a href="docks/uv_editor/">UV Editor</a></li>
+<li><a href="dock_material.md">Material</a></li>
+</ul>
+<h2 id="materials">Materials</h2>
+<p>Cyclops is designed to be able to use any material Godot supports.</p>
+<p>There are a many different ways to create materials.  <a href="materials/material_quick_start/">Here is a quick overview if you're new to materials and want to dive in.</a></p>
+<h2 id="support">Support</h2>
+<p>If you found this software useful, please consider buying me a coffee on Kofi.  Every contribution helps me to make more software:</p>
+<p><a href="https://ko-fi.com/Y8Y43J6OB"><img alt="ko-fi" src="https://ko-fi.com/img/githubbutton_sm.svg" /></a></p>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="about/" class="btn btn-neutral float-right" title="About">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="license/" class="btn btn-neutral float-right" title="License">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <!-- Copyright etc -->
+      <p>Copyright &copy; 2023 Mark McKay</p>
   </div>
 
   Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
@@ -117,9 +364,13 @@ docs/
   <div class="rst-versions" role="note" aria-label="Versions">
   <span class="rst-current-version" data-toggle="rst-current-version">
     
+        <span>
+          <a href="https://github.com/blackears/cyclopsLevelBuilder" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
     
     
-      <span><a href="about/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+      <span><a href="license/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
@@ -136,8 +387,3 @@ docs/
 
 </body>
 </html>
-
-<!--
-MkDocs version : 1.6.1
-Build Date UTC : 2026-07-11 06:32:03.624174+00:00
--->

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://blackears.github.io/cyclopsLevelBuilder/design/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Design - Cyclops Level Builder</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Design";
+        var mkdocs_page_input_path = "design.md";
+        var mkdocs_page_url = "/cyclopsLevelBuilder/design/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+      <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-N9485S7P"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', "GTM-N9485S7P");
+      </script>
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cyclops Level Builder
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Home</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="..">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../license/">License</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Design</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#major-components-of-the-project">Major components of the project</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#cyclops-global-scene">Cyclops Global Scene</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cyclops-level-builder">Cyclops Level Builder</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#nodes">Nodes</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#commands">Commands</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#actions">Actions</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#tools">Tools</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#docks">Docks</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#math">Math</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#support">Support</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../roadmap/">Roadmap</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../change_log/">Change log</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Docks</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Material Dock</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../docks/materials/">Material Dock</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Uv Editor Dock</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../docks/uv_editor/">UV Editor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Uv Editor Dock Menu</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../docks/uv_editor/uv_editor_menu/">UV Editor Menu</a>
+                </li>
+                <li class="toctree-l3"><a class="" href="../docks/uv_editor/menu/triplanar_unwrap.md">None</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Tool Properties</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../dock_tool_properties/">Tool Properties Dock</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Snapping</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../snapping/">Snapping</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tools</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/">Tools</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Navigation</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/tool_move/">Move</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/tool_rotate/">Rotate</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Generators</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/tool_block/">Block</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/tool_cylinder/">Cylinder</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/tool_prism/">Prism</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/tool_stairs/">Stairs</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Modifiers</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/tool_clip/">Clip</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Feature Editors</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/tool_vertex/">Vertex</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/tool_edge/">Edge</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/tool_face/">Face</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/tool_material_brush/">Material Brush</a>
+                </li>
+                <li class="toctree-l2"><a class="" href="../tools/tool_vertex_color_brush.md">Vertex Color Brush</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Other</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/tool_duplicate/">Duplicate</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Materials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../materials/material_quick_start/">Getting started with Materials</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cyclops Level Builder</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Home</li>
+      <li class="breadcrumb-item active">Design</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/blackears/cyclopsLevelBuilder/edit/master/docs/design.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="design">Design</h1>
+<p>This is an overview of the general design ideas behind Cyclops Level Builder.  It is focused on providing a way to block in levels for rapid level design.  While the blocks can be used directly in final levels, it is meant more to sketch out levels with the blocks later being replaced with finished assets.</p>
+<p>Cyclops Level Builder is currently based around using convex blocks, a technique used in games such as the original Quake.  Convex blocks allow for a clean design and provide for very fast collision detection.  That said, they can also be somewhat limiting, so this might change in future revisions of the project.</p>
+<p>Snapping is useful in making sure that blocks line up, and Cyclops Level Builder was built with snapping in mind.  For level design, keeping blocks flush and aligned with each other makes for smooth transitions between blocks.  Right now all blocks will snap to the grid, and the gird snapping size can be adjusted.  Snapping cannot be turned off at the moment, but this may change in a future version.</p>
+<p>Each CyclopsBlock has automatically generated uvs that are calculated using the triplanar mapping technique.  Essentially, the normal of each face is compared to each major axis and then the texture is projected onto that face along that axis.  Each face also has a Transform2D to further modify the uvs.  The UVs cannot be individually set at this time.  Since this tool is meant for designing levels, it treats uvs as primarily existing in world space, although you can 'lock' the uvs so that when you move blocks the uvs stay relative to the object rather than the world.  Only one uv layer is generated, so any materials you design should be aware only the first uv slot will have uv information.</p>
+<h2 id="major-components-of-the-project">Major components of the project</h2>
+<h3 id="cyclops-global-scene">Cyclops Global Scene</h3>
+<p>The <code>CyclopsGlobalScene</code> is an autoloaded scene used mostly to display graphics related to tools.  When the <code>_draw_tool()</code> method of a tool is called, it will usually make a call to one of the global scene's <code>draw_*</code> methods to actually show the geometry.  The global scene also contains general settings that define the look of the tools.</p>
+<h3 id="cyclops-level-builder">Cyclops Level Builder</h3>
+<p>This file is in the root of the <code>/addons</code> folder and extends <code>EditorPlugin</code>.  It is the first point of contact for everything Cyclops Level Builder does and mostly acts as a dispatcher to send user input out to the tools which do the bulk of the work.</p>
+<h3 id="nodes">Nodes</h3>
+<p>The <code>/nodes</code> directory contains the <code>Node</code> derived classes that are placed in your scene and which form the bodies of the blocks.  In the current design, <code>CyclopsBlocks</code> is the root of a blocks construct and <code>CyclopsBlock</code> nodes are added to it as children to represent each block.  Since <code>CyclopsBlock</code> extends a <code>Node</code> rather than a <code>Node3D</code>, they cannot exist outside of the <code>CyclopsBlocks</code> root.  Whenever the <code>CyclopsBlocks</code> updates itself, it will create a <code>CyclopsBlockBody</code> for each <code>CyclopsBlock</code>.  These will not be visible in the editor's outliner, but they are still present and provide both the mesh and collision objects used by Godot.</p>
+<h3 id="commands">Commands</h3>
+<p>Ultimately, all key presses, mouse inputs and user interface interactions are translated into commands.  In fact, you can think of everything that Cyclops Level Editor does as just a fancy user interface that produces a series of commands.</p>
+<p>Commands are the only part of Cyclops Level Builder that should interact with the nodes directly.  Commands implement an interface that lets them work with Godot's undo editor.  Each command has a <code>do_it()</code> method for performing its work, and an <code>undo_it()</code> method to restore the editor state to what it was before.  </p>
+<p>You start to use a command by creating a new instance of it and setting its parameters.  You should be careful not to include any data in a command that could potentially not be the same after undoing.  In particular, do not store a direct reference to any <code>Node</code> since the objects they point to can potentially be freed later.  This can cause problems when the user uses undo to restore a deleted object.  A better approach is to store a <code>NodePath</code> so that you can fetch the <code>Node</code> from the scene.</p>
+<p>When your command is set up, get the <code>EditorUndoRedoManager</code> manager from the plugin and then pass it to the <code>add_to_undo_manager()</code> method of the command.  This will place the command in the undo stack and call the <code>do_it()</code> method on it.</p>
+<p>Some tools will call the <code>do_it()</code> method several times before calling <code>undo_it()</code>.  Generally this is done to support mouse dragging operations.  If your command is going to be used by a tool, make sure it can handle multiple calls to <code>do_it()</code> before <code>undo_it()</code> is called.</p>
+<p>Commands are kept in the <code>/commands</code> folder.  The filename of a command should start with <code>cmd_</code> and have a class name that starts with <code>Command</code>.  All commands extend the <code>CyclopsCommand</code> class.</p>
+<h3 id="actions">Actions</h3>
+<p>Actions are meant to link user interface buttons and menu options to commands.  They provide a name and accellerator key along with code to call the command you're wrapping.</p>
+<p>Actions are kept in the <code>/actions</code> subdirectory.  Action files start with the <code>action_</code> prefix and their class names begin with the word <code>Action</code>.  All actions extend the <code>CyclopsAction</code> class.  The <code>_execute()</code> method of an action is meant to perform its work and will be called when it is invoked by the user interface.</p>
+<h3 id="tools">Tools</h3>
+<p>Tools are meant to be used over an extended period of time to allow the users to perform complicated operations that involve mouse input, key presses and other user input.  Tools will generally start building a command when they are first activated and execute the command when they come to a commit point in the process.  Tools are very flexible and each will have unique ways to define when they start building a command and when they execute it.</p>
+<p>Every tool is started by selecting its activation button in the toolbar.  The tool will then run until a new tool is selected from the toolbar.</p>
+<p>Tools are stored in the <code>/tools</code> directory.  Tool files begin with the 'tool_' prefix and their class names begin with the word 'Tool'.  All tools extend the <code>CyclopsTool</code> class.</p>
+<p>A button will be displayed for each tool in the editor toolbar whenever the CyclopsBlocks is selected.  When a user clicks on a tool button, they switch to using that tool.  <code>_activate()</code> will be called when the user switches to using the tool and <code>_deactivate()</code> will be called when the users switches away.  <code>_draw_tool()</code> will be used to draw extra graphics needed to illustrate the current state of the tool.  <code>_gui_input()</code> will receive key, mouse and other input events from the plugin so the tool can operate on them.  Tools should try to avoid consuming input events they do not need so that they can be used by other parts of the Godot editor.</p>
+<h3 id="docks">Docks</h3>
+<p>The <code>/docks</code> directory contains the extra docking windows used in the project.  At the moment, the Material and UV Transform docks are stored there.</p>
+<h3 id="math">Math</h3>
+<p>The <code>/math</code> directory contains classes purely related to math and meshes.  <code>MathUtil</code> is a general math class with static methods for a lot of basic math calculations.  <code>QuickHull</code> implements the quick hull algorithm and is the backbone for creating blocks.  <code>ConvexVolume</code> is the main class the block nodes rely on for storing their data.</p>
+<h2 id="support">Support</h2>
+<p>If you found this software useful, please consider buying me a coffee on Kofi.  Every contribution helps me to make more software:</p>
+<p><a href="https://ko-fi.com/Y8Y43J6OB"><img alt="ko-fi" src="https://ko-fi.com/img/githubbutton_sm.svg" /></a></p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../license/" class="btn btn-neutral float-left" title="License"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../roadmap/" class="btn btn-neutral float-right" title="Roadmap">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2023 Mark McKay</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/blackears/cyclopsLevelBuilder" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../license/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../roadmap/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

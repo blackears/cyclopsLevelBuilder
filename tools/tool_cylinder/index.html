@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://blackears.github.io/cyclopsLevelBuilder/tools/tool_cylinder/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Cylinder - Cyclops Level Builder</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Cylinder";
+        var mkdocs_page_input_path = "tools/tool_cylinder.md";
+        var mkdocs_page_url = "/cyclopsLevelBuilder/tools/tool_cylinder/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+      <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-N9485S7P"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', "GTM-N9485S7P");
+      </script>
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Cyclops Level Builder
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Home</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../..">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../license/">License</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/">Design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../roadmap/">Roadmap</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../change_log/">Change log</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Docks</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Material Dock</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../docks/materials/">Material Dock</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Uv Editor Dock</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../docks/uv_editor/">UV Editor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Uv Editor Dock Menu</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../../docks/uv_editor/uv_editor_menu/">UV Editor Menu</a>
+                </li>
+                <li class="toctree-l3"><a class="" href="../../docks/uv_editor/menu/triplanar_unwrap.md">None</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Tool Properties</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../dock_tool_properties/">Tool Properties Dock</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Snapping</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../snapping/">Snapping</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tools</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../">Tools</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Navigation</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../tool_move/">Move</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tool_rotate/">Rotate</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" >Generators</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../tool_block/">Block</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Cylinder</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#tool-properties">Tool Properties</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#support">Support</a>
+    </li>
+    </ul>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tool_prism/">Prism</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tool_stairs/">Stairs</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Modifiers</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../tool_clip/">Clip</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Feature Editors</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../tool_vertex/">Vertex</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tool_edge/">Edge</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tool_face/">Face</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tool_material_brush/">Material Brush</a>
+                </li>
+                <li class="toctree-l2"><a class="" href="../tool_vertex_color_brush.md">Vertex Color Brush</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Other</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../tool_duplicate/">Duplicate</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Materials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../materials/material_quick_start/">Getting started with Materials</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Cyclops Level Builder</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Tools</li>
+          <li class="breadcrumb-item">Generators</li>
+      <li class="breadcrumb-item active">Cylinder</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/blackears/cyclopsLevelBuilder/edit/master/docs/tools/tool_cylinder.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="cylinder-tool">Cylinder Tool</h1>
+<p>The cylinder tool lets you draw cylinders and tubes.
+Checking the <code>tube</code> option in the tool properties dock will enable drawing tubes, which are hollow cylinders.</p>
+<ul>
+<li>Click in empty space or on the surface of a block to place the center of your cylinder or tube.<ul>
+<li>Drag the mouse and release the button to make the base of your cylinder</li>
+<li>If you are drawing a tube, you with then need to click and drag again to define the second ring.</li>
+<li>Drag the mouse along the central axis to define the height of the cylinder.  You can use the mouse wheel to change the number of sides the cylinder has.</li>
+<li>To cancel building the block, press the Escape key.  You can also right click with the mouse.</li>
+</ul>
+</li>
+</ul>
+<p><img alt="Create cylinder" src="../create_cylinder.gif" /></p>
+<p><img alt="Create tube" src="../create_tube.gif" /></p>
+<h3 id="tool-properties">Tool Properties</h3>
+<ul>
+<li>Collision Type - Type of collision shape that will be created for this block when it is exported</li>
+<li>Collision Layers - Collision layer flags for created block</li>
+<li>Collision Mask - Collision mask flags for created block</li>
+<li>
+<p>Alignment</p>
+<ul>
+<li>Align to surface - The base of the block you're creating will lie along the surface of the nearest surface under the cursor</li>
+<li>XY Plane - The base of the block will lie on the XY plane</li>
+<li>XZ Plane - The base of the block will lie on the XZ plane</li>
+<li>YZ Plane - The base of the block will lie on the YZ plane</li>
+</ul>
+</li>
+<li>
+<p>Match active block - Elevation and height properties of the block you are drawing will be copied from the current active block.  This will be in effect if you start drawing the block when the mouse is over an empty space or if <code>Alignment</code> has been set to something other than <code>Align to surface</code>.</p>
+</li>
+<li>Orthogonal Viewport - These properties affect properties of the shape you create when you are drawing in an orthogonal viewport and you are not using the active block to define these properties<ul>
+<li>Default Block Elevation - Default elevation of block.</li>
+<li>Default Block Height - Default height of block.</li>
+</ul>
+</li>
+</ul>
+<h2 id="support">Support</h2>
+<p>If you found this software useful, please consider buying me a coffee on Kofi.  Every contribution helps me to make more software:</p>
+<p><a href="https://ko-fi.com/Y8Y43J6OB"><img alt="ko-fi" src="https://ko-fi.com/img/githubbutton_sm.svg" /></a></p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../tool_block/" class="btn btn-neutral float-left" title="Block"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../tool_prism/" class="btn btn-neutral float-right" title="Prism">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Copyright &copy; 2023 Mark McKay</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/blackears/cyclopsLevelBuilder" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../tool_block/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../tool_prism/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
