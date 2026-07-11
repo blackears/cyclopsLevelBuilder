@@ -6,7 +6,6 @@ on:
     branches:
       - master
     paths:
-#      - 'doc/mkdocs/**'
       - 'mkdocs.yml'
       - 'docs/**'
 permissions:
@@ -28,7 +27,7 @@ jobs:
           python-version: 3.13
       - run: pip install \
             mkdocs-material
-      - run: mkdocs gh-deploy --config-file doc/mkdocs/mkdocs.yml --force    
+      - run: mkdocs gh-deploy --config-file mkdocs.yml --force    
 
   deploy:
     needs: build
