@@ -1,7 +1,7 @@
 site_name: Cyclops Level Builder
 site_url: https://blackears.github.io/cyclopsLevelBuilder/
 repo_url: https://github.com/blackears/cyclopsLevelBuilder
-edit_uri: docs/
+#edit_uri: docs/
 copyright: 'Copyright &copy; 2023 Mark McKay'
 #docs_dir: docs
 
@@ -59,5 +59,5 @@ theme:
 #  logo: img.jpg
   analytics:
     gtag: GTM-N9485S7P
-  features:
-    - footer.md
+  # features:
+  #   - footer.md
