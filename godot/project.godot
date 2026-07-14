@@ -17,7 +17,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 config/name="Cyclops Level Builder"
 run/main_scene="uid://b4ju5h8ydm0jh"
 config/features=PackedStringArray("4.7", "GL Compatibility")
-config/icon="uid://cg3yjatinkymb"
+config/icon="uid://davhqv3ir7vwv"
 
 [autoload]
 
@@ -32,7 +32,7 @@ gdscript/warnings/unsafe_call_argument=1
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/cyclops_level_builder/plugin.cfg", "res://addons/gut/plugin.cfg")
+enabled=PackedStringArray("res://addons/cyclops_level_builder/plugin.cfg")
 
 [filesystem]
 
