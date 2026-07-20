@@ -47,8 +47,10 @@ func on_snapping_tool_changed():
 func update_ui():
 	if builder:
 		var snap_tool:CyclopsSnappingSystem = builder.snapping_system
-	
-		var ed = snap_tool._get_properties_editor()
+		
+		var ed:Control
+		if snap_tool:
+			ed = snap_tool._get_properties_editor()
 		
 		#print("Clearing editor")
 		
