@@ -316,10 +316,11 @@ func init_sphere(block_bounds:AABB, segments:int, rings:int, uv_transform:Transf
 	
 	var angle_seg_increment:float = (PI * 2) / segments
 	for r0_idx in range(1, rings):
-#		print("r0_idx ", r0_idx)
-		var latitude_angle:float = (float(r0_idx) / rings) * PI * 2 - PI
+		#print("r0_idx ", r0_idx)
+		var latitude_angle:float = (float(r0_idx) / rings) * PI - PI / 2
+#		print("latitude_angle ", latitude_angle)
 		var ring_height:float = sin(latitude_angle)
-		var ring_radius:float= cos(latitude_angle)
+		var ring_radius:float = cos(latitude_angle)
 		
 #		var ring_height:float = (float(r0_idx) / rings) * 2 - 1
 #		var ring_radius:float = sqrt(1 - ring_height * ring_height)
@@ -332,10 +333,12 @@ func init_sphere(block_bounds:AABB, segments:int, rings:int, uv_transform:Transf
 				ring_height, 
 				cos(s0_idx * angle_seg_increment) * ring_radius)
 			
+#			print("unit_sphere_pt ", unit_sphere_pt)
+			
 			var v:VertexInfo = VertexInfo.new(self, bounds_xform * unit_sphere_pt)
 			v.index = vertices.size()
 			vertices.append(v)
-			
+	
 	var v_bottom:VertexInfo = VertexInfo.new(self, bounds_xform * Vector3(0, -1, 0))
 	v_bottom.index = vertices.size()
 	vertices.append(v_bottom)
@@ -359,8 +362,10 @@ func init_sphere(block_bounds:AABB, segments:int, rings:int, uv_transform:Transf
 			var v01:VertexInfo = vertices[(r0_idx - 1) * segments + s1_idx]
 			var v10:VertexInfo = vertices[(r1_idx - 1) * segments + s0_idx]
 			var v11:VertexInfo = vertices[(r1_idx - 1) * segments + s1_idx]
+			#print("quad ", v00.point, v01.point, v10.point, v11.point)
 			
 			var base_normal:Vector3 = (v01.point - v00.point).cross(v11.point - v00.point).normalized()
+			#print("mid ring ", base_normal)
 			var f:FaceInfo = FaceInfo.new(self, base_normal, uv_transform, material_id, visible, color)
 			f.index = faces.size()
 			f.vertex_indices = [
@@ -383,6 +388,7 @@ func init_sphere(block_bounds:AABB, segments:int, rings:int, uv_transform:Transf
 		var v01:VertexInfo = vertices[s1_idx]
 		
 		var base_normal:Vector3 = (v01.point - v_bottom.point).cross(v00.point - v_bottom.point).normalized()
+		#print("base ring ", base_normal)
 		var f:FaceInfo = FaceInfo.new(self, base_normal, uv_transform, material_id, visible, color)
 		f.index = faces.size()
 		f.vertex_indices = [
@@ -404,6 +410,7 @@ func init_sphere(block_bounds:AABB, segments:int, rings:int, uv_transform:Transf
 		var v01:VertexInfo = vertices[(rings - 2) * segments + s1_idx]
 		
 		var base_normal:Vector3 = (v00.point - v_top.point).cross(v01.point - v_top.point).normalized()
+		#print("top ring ", base_normal)
 		var f:FaceInfo = FaceInfo.new(self, base_normal, uv_transform, material_id, visible, color)
 		f.index = faces.size()
 		f.vertex_indices = [
@@ -790,12 +797,15 @@ func calc_vertex_normals(smooth:bool = false):
 		
 		v.normal = weighted_normal.normalized()
 
-		#Calc face vertices
-		for f_idx in faces.size():
-			var face:FaceInfo = faces[f_idx]
-			if face.vertex_indices.has(v_idx):
-				var fv:FaceVertexInfo = face_vertex_coord_map[Vector2i(f_idx, v_idx)]
-				fv.normal = v.normal if smooth else face.normal
+	#Calc face vertices
+	for fv:FaceVertexInfo in face_vertices:
+		if smooth:
+			var v:VertexInfo = vertices[fv.vertex_index]
+			fv.normal = v.normal
+		else:
+			var face:FaceInfo = faces[fv.face_index]
+			fv.normal = face.normal
+		
 
 func get_vertices_in_sphere(center:Vector3, radius:float)->Array[VertexInfo]:
 	var result:Array[VertexInfo]
@@ -838,6 +848,7 @@ func build_face_vertices():
 			fv.vertex_index = v_idx
 			fv.vertex_local_index = v_local_idx
 			fv.color = face.color
+			fv.normal = face.normal
 			
 			match (MathUtil.get_longest_axis(face.normal)):
 				MathUtil.Axis.X:
@@ -1545,6 +1556,7 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 				uv1s.append(fv.uv0)
 #				uv2s.append(face.lightmap_uvs[v_local_idx])
 
+#				print("fv.normal ", fv.normal)
 				normals.append(fv.normal)
 				colors.append(fv.color)
 

@@ -164,9 +164,9 @@ func create_block():
 		
 		command.builder = builder
 		command.blocks_root_path = blocks_root.get_path()
-		command.block_name = GeneralUtil.find_unique_name(blocks_root, "Block_")						
+		command.block_name = GeneralUtil.find_unique_name(blocks_root, "Block_")
 		command.bounds = bounds
-#						command.origin = block_drag_p0
+
 		command.segments = settings.segments
 		command.rings = settings.rings
 		command.uv_transform = builder.tool_uv_transform
@@ -264,7 +264,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					var undo:EditorUndoRedoManager = builder.get_undo_redo()
 					cmd_move_face.add_to_undo_manager(undo)
 					
-					tool_state = ToolState.NONE			
+					tool_state = ToolState.NONE
 				
 			return true
 		
