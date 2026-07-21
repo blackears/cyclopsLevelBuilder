@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://uamc56mld5o6"]
+
+[ext_resource type="Script" uid="uid://c6oti2r5xfd58" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/material_preview_scene.gd" id="1_tijg7"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_tijg7"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_tijg7"]
+
+[sub_resource type="TorusMesh" id="TorusMesh_tijg7"]
+inner_radius = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_cxhjv"]
+
+[sub_resource type="Environment" id="Environment_m3w0j"]
+background_mode = 1
+
+[node name="material_preview_scene" type="Node3D" unique_id=954020953]
+script = ExtResource("1_tijg7")
+mesh_type = null
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=348627651]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.0785024)
+
+[node name="mesh_sphere" type="MeshInstance3D" parent="." unique_id=2071963061]
+unique_name_in_owner = true
+visible = false
+mesh = SubResource("SphereMesh_tijg7")
+
+[node name="mesh_rectangle" type="MeshInstance3D" parent="." unique_id=1639260535]
+unique_name_in_owner = true
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0, 0, 0)
+visible = false
+mesh = SubResource("QuadMesh_tijg7")
+
+[node name="mesh_torus" type="MeshInstance3D" parent="." unique_id=1393701900]
+unique_name_in_owner = true
+transform = Transform3D(0.64, 0, 0, 0, 0.5703118, -0.29042122, 0, 0.29042122, 0.5703118, 0, 0, 0)
+visible = false
+mesh = SubResource("TorusMesh_tijg7")
+
+[node name="mesh_cube" type="MeshInstance3D" parent="." unique_id=1080550671]
+unique_name_in_owner = true
+transform = Transform3D(0.56568545, 0, -0.56568545, -0.24351414, 0.7220816, -0.24351414, 0.5105888, 0.344381, 0.51058877, 0, 0, 0)
+mesh = SubResource("BoxMesh_cxhjv")
+
+[node name="DirectionalLight3D" type="OmniLight3D" parent="." unique_id=1241997569]
+transform = Transform3D(0.75, 0.047367208, -0.6597396, 0.49999997, 0.61237246, 0.61237246, 0.4330127, -0.78914917, 0.43559572, -0.12527502, 0.55001414, 0.8905604)
+light_energy = 0.8
+omni_range = 1.5980179
+
+[node name="DirectionalLight3D2" type="OmniLight3D" parent="." unique_id=1250208778]
+transform = Transform3D(0.75, 0.047367208, -0.6597396, 0.49999997, 0.61237246, 0.61237246, 0.4330127, -0.78914917, 0.43559572, 0.9923638, -0.9947891, 1.2282618)
+light_energy = 0.4
+omni_range = 2.5605342
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1137498102]
+environment = SubResource("Environment_m3w0j")

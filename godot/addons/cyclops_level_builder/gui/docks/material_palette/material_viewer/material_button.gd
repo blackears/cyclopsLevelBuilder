@@ -28,6 +28,8 @@ class_name MaterialButton
 signal apply_material(mat_bn:MaterialButton)
 signal select_material(mat_bn:MaterialButton, selection_type:SelectionList.Type)
 
+@onready var material_preview_scene:MaterialPreviewScene = %material_preview_scene
+
 @export var selected:bool = false:
 	get:
 		return selected
@@ -96,17 +98,18 @@ func rebuild_thumbnail():
 	if !plugin:
 		return
 	
-	var rp:EditorResourcePreview = plugin.get_editor_interface().get_resource_previewer()
-	rp.queue_resource_preview(material_path, self, "resource_preview_callback", null)
+	#var rp:EditorResourcePreview = plugin.get_editor_interface().get_resource_previewer()
+	#rp.queue_resource_preview(material_path, self, "resource_preview_callback", null)
 	
 	material_local = ResourceLoader.load(material_path, "Material")
+	material_preview_scene.display_material = material_local
 #	material_local = load(material_path)
 	%MaterialName.text = GeneralUtil.calc_resource_name(material_local)
 	tooltip_text = material_path
 
-func resource_preview_callback(path:String, preview:Texture2D, thumbnail_preview:Texture2D, userdata:Variant):
-	#print("Set bn tex ", path)
-	%TextureRect.texture = preview
+#func resource_preview_callback(path:String, preview:Texture2D, thumbnail_preview:Texture2D, userdata:Variant):
+	##print("Set bn tex ", path)
+	#%TextureRect.texture = preview
 
 
 func _gui_input(event:InputEvent):
@@ -152,3 +155,23 @@ func _process(delta):
 		rebuild_thumbnail()
 		dirty = false
 	pass
+
+
+func _on_bn_rect_pressed() -> void:
+	material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.RECTANGLE
+	pass # Replace with function body.
+
+
+func _on_bn_sphere_pressed() -> void:
+	material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.SPHERE
+	pass # Replace with function body.
+
+
+func _on_bn_cube_pressed() -> void:
+	material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.CUBE
+	pass # Replace with function body.
+
+
+func _on_bn_torus_pressed() -> void:
+	material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.TORUS
+	pass # Replace with function body.

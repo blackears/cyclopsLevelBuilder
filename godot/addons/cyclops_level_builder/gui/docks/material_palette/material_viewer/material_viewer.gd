@@ -25,7 +25,7 @@
 extends PanelContainer
 class_name MaterialViewer
 
-#var button_group:RadioButtonGroup = RadioButtonGroup.new()
+@onready var button_area:HFlowContainer = %ButtonArea
 
 var builder:CyclopsLevelBuilder:
 	get:
@@ -75,8 +75,8 @@ func on_resources_reload(resources:PackedStringArray):
 func reload_materials():
 	#return
 	
-	for child in %ButtonArea.get_children():
-		%ButtonArea.remove_child(child)
+	for child:MaterialButton in button_area.get_children():
+		button_area.remove_child(child)
 		child.queue_free()
 	
 	if !builder:
@@ -98,8 +98,8 @@ func reload_materials_recursive(dir:EditorFileSystemDirectory):
 	#print("reload check path ", dir.get_path(), " vis ", vis)
 	#get_hidden_directories()
 	
-	var ed_iface:EditorInterface = builder.get_editor_interface()
-	var res_prev:EditorResourcePreview = ed_iface.get_resource_previewer()
+	#var ed_iface:EditorInterface = builder.get_editor_interface()
+	var res_prev:EditorResourcePreview = EditorInterface.get_resource_previewer()
 
 	for i in dir.get_file_count():
 #		dir.get_file(i)
@@ -124,7 +124,7 @@ func reload_materials_recursive(dir:EditorFileSystemDirectory):
 			bn.apply_material.connect(func(mat_bn:MaterialButton): apply_material(mat_bn))
 			bn.select_material.connect(func(mat_bn:MaterialButton, type:SelectionList.Type): select_material(mat_bn, type))
 			
-			%ButtonArea.add_child(bn)
+			button_area.add_child(bn)
 			pass
 
 	for i in dir.get_subdir_count():
@@ -165,7 +165,7 @@ func select_material(mat_bn:MaterialButton, sel_type:SelectionList.Type):
 			else:
 				selected_material_paths.append(mat_bn.material_path)
 		SelectionList.Type.RANGE:
-			var bn_list = %ButtonArea.get_children()
+			var bn_list = button_area.get_children()
 			var range_from_idx:int = -1
 			var range_to_idx:int = -1
 			for i in bn_list.size():
@@ -186,7 +186,7 @@ func select_material(mat_bn:MaterialButton, sel_type:SelectionList.Type):
 	#print("set sel mat: ", material_viewer_state.active_material_path)
 	#print("sel mat list: ", selected_material_paths)
 
-	for bn in %ButtonArea.get_children():
+	for bn:MaterialButton in button_area.get_children():
 		var mat_idx:int = selected_material_paths.find(bn.material_path)
 		if mat_idx >= 0:
 			if mat_idx == selected_material_paths.size() - 1:
