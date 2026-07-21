@@ -7,7 +7,7 @@
    viewBox="0 0 6.3499999 6.35"
    version="1.1"
    id="svg1"
-   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
    sodipodi:docname="materials_sphere.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -16,7 +16,7 @@
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
      id="namedview1"
-     pagecolor="#ffffff"
+     pagecolor="#000000"
      bordercolor="#000000"
      borderopacity="0.25"
      inkscape:showpageshadow="2"
@@ -55,11 +55,11 @@
        id="linearGradient3"
        inkscape:collect="always">
       <stop
-         style="stop-color:#000000;stop-opacity:0;"
+         style="stop-color:#ffffff;stop-opacity:0.19599108;"
          offset="0"
          id="stop3" />
       <stop
-         style="stop-color:#000000;stop-opacity:0.39420936;"
+         style="stop-color:#ffffff;stop-opacity:0.84855235;"
          offset="1"
          id="stop4" />
     </linearGradient>
@@ -79,7 +79,7 @@
      inkscape:groupmode="layer"
      id="layer1">
     <circle
-       style="fill:url(#radialGradient4);fill-opacity:0.302857;stroke:#000000;stroke-width:0.15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:url(#radialGradient4);fill-opacity:0.302857;stroke:#ffffff;stroke-width:0.15;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
        id="path3"
        cx="3.2594354"
        cy="3.2009699"
