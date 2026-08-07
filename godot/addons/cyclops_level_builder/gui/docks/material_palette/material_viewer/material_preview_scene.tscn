@@ -16,7 +16,6 @@ background_mode = 1
 
 [node name="material_preview_scene" type="Node3D" unique_id=954020953]
 script = ExtResource("1_tijg7")
-mesh_type = null
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=348627651]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.0785024)
@@ -29,7 +28,6 @@ mesh = SubResource("SphereMesh_tijg7")
 [node name="mesh_rectangle" type="MeshInstance3D" parent="." unique_id=1639260535]
 unique_name_in_owner = true
 transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0, 0, 0)
-visible = false
 mesh = SubResource("QuadMesh_tijg7")
 
 [node name="mesh_torus" type="MeshInstance3D" parent="." unique_id=1393701900]
@@ -41,6 +39,7 @@ mesh = SubResource("TorusMesh_tijg7")
 [node name="mesh_cube" type="MeshInstance3D" parent="." unique_id=1080550671]
 unique_name_in_owner = true
 transform = Transform3D(0.56568545, 0, -0.56568545, -0.24351414, 0.7220816, -0.24351414, 0.5105888, 0.344381, 0.51058877, 0, 0, 0)
+visible = false
 mesh = SubResource("BoxMesh_cxhjv")
 
 [node name="DirectionalLight3D" type="OmniLight3D" parent="." unique_id=1241997569]

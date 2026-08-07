@@ -634,8 +634,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 			
 			var offset = drag_to - drag_handle_start_pos
-#			offset = MathUtil.snap_to_grid(offset, grid_step_size)
-			offset = builder.get_snapping_manager().snap_point(offset, SnappingQuery.new(viewport_camera))
+			if builder.snapping_enabled:
+				offset = builder.get_snapping_manager().snap_point(offset, SnappingQuery.new(viewport_camera))
 
 			#print("offset %s" % offset)
 			

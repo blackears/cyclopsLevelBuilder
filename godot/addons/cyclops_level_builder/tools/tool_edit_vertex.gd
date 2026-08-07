@@ -624,7 +624,8 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 
 			
 			#print("send snap bock-2- ", drag_home_block)
-			drag_to = builder.get_snapping_manager().snap_point(drag_to, SnappingQuery.new(viewport_camera, [drag_home_block]))
+			if builder.snapping_enabled:
+				drag_to = builder.get_snapping_manager().snap_point(drag_to, SnappingQuery.new(viewport_camera, [drag_home_block]))
 			#print("drag_to snapped ", drag_to)
 			
 			cmd_move_vertex.move_offset = drag_to - drag_handle_start_pos
@@ -645,9 +646,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			else:
 				drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, Vector3.UP)
 
-			#drag_to = MathUtil.snap_to_grid(drag_to, grid_step_size)
 			#print("send snap bock ", drag_home_block)
-			drag_to = builder.get_snapping_manager().snap_point(drag_to, SnappingQuery.new(viewport_camera, [drag_home_block]))
+			if builder.snapping_enabled:
+				drag_to = builder.get_snapping_manager().snap_point(drag_to, SnappingQuery.new(viewport_camera, [drag_home_block]))
 
 			added_point_pos = drag_to
 			#print("drag point to %s" % drag_to)
