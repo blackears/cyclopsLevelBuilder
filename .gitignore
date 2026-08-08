@@ -7,3 +7,4 @@
 site/
 /art/branding/*.kra~
 /art/branding/*.png~
+/godot/addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/*.bak

@@ -1,14 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://cchlfqbh0djdn"]
+[gd_scene format=3 uid="uid://cchlfqbh0djdn"]
 
 [ext_resource type="Script" uid="uid://nbqh0sd2p0vh" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/material_groups_tree.gd" id="1_u4dlj"]
 [ext_resource type="PackedScene" uid="uid://b510d4yme5xtx" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/create_material_dialog.tscn" id="2_adfk6"]
 
-[node name="MatGroupTree" type="Tree"]
+[node name="MatGroupTree" type="Tree" unique_id=1616695390]
 unique_name_in_owner = true
 columns = 2
 script = ExtResource("1_u4dlj")
 
-[node name="PopupMenu" type="PopupMenu" parent="."]
+[node name="PopupMenu" type="PopupMenu" parent="." unique_id=392585955]
 unique_name_in_owner = true
 item_count = 3
 item_0/text = "New Group"
@@ -18,7 +18,7 @@ item_1/id = 1
 item_2/text = "Rename"
 item_2/id = 2
 
-[node name="CreateMaterialDialog" parent="." instance=ExtResource("2_adfk6")]
+[node name="CreateMaterialDialog" parent="." unique_id=1673822058 instance=ExtResource("2_adfk6")]
 unique_name_in_owner = true
 visible = false
 

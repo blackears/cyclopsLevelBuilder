@@ -26,6 +26,7 @@ extends PanelContainer
 class_name MaterialViewer
 
 @onready var button_area:HFlowContainer = %ButtonArea
+@onready var mat_group_tree:MaterialGroupsTree = %MatGroupTree
 
 var builder:CyclopsLevelBuilder:
 	get:
@@ -42,7 +43,7 @@ var builder:CyclopsLevelBuilder:
 			efs.resources_reload.disconnect(on_resources_reload)
 			
 		builder = value
-		%MatGroupTree.plugin = builder
+		mat_group_tree.plugin = builder
 		
 		if builder:
 			var ed_iface:EditorInterface = builder.get_editor_interface()
@@ -92,13 +93,9 @@ func reload_materials():
 func reload_materials_recursive(dir:EditorFileSystemDirectory):
 	var mat_name_filter:String = %lineEd_filter.text
 	
-	if !%MatGroupTree.is_path_visible(dir.get_path()):
+	if !mat_group_tree.is_path_visible(dir.get_path()):
 		return
-	#var vis = %MatGroupTree.is_path_visible(dir.get_path())
-	#print("reload check path ", dir.get_path(), " vis ", vis)
-	#get_hidden_directories()
 	
-	#var ed_iface:EditorInterface = builder.get_editor_interface()
 	var res_prev:EditorResourcePreview = EditorInterface.get_resource_previewer()
 
 	for i in dir.get_file_count():
@@ -112,8 +109,6 @@ func reload_materials_recursive(dir:EditorFileSystemDirectory):
 				continue
 			
 			#print("path %s type %s" % [path, type])
-			
-			#res_prev.queue_resource_preview(path, self, "resource_preview_callback", null)
 			
 			var bn:MaterialButton = preload("res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/material_button.tscn").instantiate()
 			bn.material_path = path
@@ -207,17 +202,6 @@ func select_material(mat_bn:MaterialButton, sel_type:SelectionList.Type):
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	#material_groups = MaterialGroup.new("All")
-	#
-	#reload_materials()
-	
-	
-	#var root:TreeItem = %Tree.create_item()
-	#var child1:TreeItem = %Tree.create_item(root)
-	#var child2:TreeItem = %Tree.create_item(root)
-	#var subchild1:TreeItem = %Tree.create_item(child1)
-	#subchild1.set_text(0, "Subchild1")
-	
 	pass
 	
 
@@ -237,4 +221,21 @@ func _on_mat_group_tree_visiblity_changed():
 
 
 func _on_bn_show_unused_dirs_toggled(toggled_on):
-	%MatGroupTree.show_unused_dirs = toggled_on
+	mat_group_tree.show_unused_dirs = toggled_on
+
+
+func load_state(state:Dictionary):
+	#print("material_viewer load_state:", state)
+	
+	mat_group_tree.load_state(state.get("tree", {}))
+	pass
+
+
+func save_state(state:Dictionary):
+	var tree_state:Dictionary = {}
+	mat_group_tree.save_state(tree_state)
+	
+	state["tree"] = tree_state
+	
+	#print("material_viewer save_state:", state)
+	

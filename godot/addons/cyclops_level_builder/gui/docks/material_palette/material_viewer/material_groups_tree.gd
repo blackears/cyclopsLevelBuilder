@@ -32,6 +32,8 @@ enum ButtonType { VISIBLE }
 const bn_vis_off = preload("res://addons/cyclops_level_builder/art/icons/eye_closed.svg")
 const bn_vis_on = preload("res://addons/cyclops_level_builder/art/icons/eye_open.svg")
 
+@onready var create_material_dialog:CreateMaterialDialog = %CreateMaterialDialog
+
 @export var show_unused_dirs:bool = true:
 	get:
 		return show_unused_dirs
@@ -57,7 +59,7 @@ var plugin:CyclopsLevelBuilder:
 			efs.resources_reload.disconnect(on_resources_reload)
 			
 		plugin = value
-		%CreateMaterialDialog.plugin = plugin
+		create_material_dialog.plugin = plugin
 		
 		if plugin:
 			var ed_iface:EditorInterface = plugin.get_editor_interface()
@@ -68,8 +70,8 @@ var plugin:CyclopsLevelBuilder:
 		
 		reload_materials()
 
-var tree_item_to_path_map:Dictionary
-var path_to_tree_item_map:Dictionary
+var tree_item_to_path_map:Dictionary[TreeItem, String]
+var path_to_tree_item_map:Dictionary[String, TreeItem]
 
 
 func reload_materials():
@@ -235,8 +237,7 @@ func collapse_unused_dirs_recursive(dir:EditorFileSystemDirectory)->bool:
 	var item:TreeItem = path_to_tree_item_map[dir.get_path()]
 	#print("item ", item.get_text(0))
 	var expanded:bool = dir_has_materials(dir)
-#	item.collapsed = !dir_has_materials(dir)
-	#
+
 	for i in dir.get_subdir_count():
 		var child_dir:EditorFileSystemDirectory = dir.get_subdir(i)
 		var result:bool = collapse_unused_dirs_recursive(child_dir)
@@ -273,10 +274,10 @@ func _drop_data(at_position:Vector2, data:Variant):
 	
 	var parent_dir_path:String = tree_item_to_path_map[item]
 	
-	%CreateMaterialDialog.parent_dir_path = parent_dir_path
-	%CreateMaterialDialog.texture_list = texture_list
-	%CreateMaterialDialog.popup_centered()
-	#%CreateMaterialDialog.popup_on_parent()
+	create_material_dialog.parent_dir_path = parent_dir_path
+	create_material_dialog.texture_list = texture_list
+	create_material_dialog.popup_centered()
+	
 
 func _on_create_material_dialog_create_material(params:Dictionary):
 	
@@ -319,3 +320,31 @@ func _on_create_material_dialog_create_material(params:Dictionary):
 		ResourceSaver.save(new_mat, params["parent_dir"] + "/" + params["name"] + ".tres")
 		
 	pass # Replace with function body.
+
+
+func load_state(state:Dictionary):
+	if state.has("paths"):
+		var path_arr:Array[Dictionary] = state["paths"]
+		
+		for path_tuple:Dictionary in path_arr:
+			var fs_path:String = path_tuple.get("path")
+			if !path_to_tree_item_map.has(fs_path):
+				continue
+			
+#			print("setting ", path_tuple)
+			var item:TreeItem = path_to_tree_item_map[fs_path]
+			item.set_checked(1, path_tuple.get("checked", true))
+			item.collapsed = path_tuple.get("collapsed", false)
+			
+
+
+func save_state(state:Dictionary):
+	var path_arr:Array[Dictionary]
+	
+	for fs_path:String in path_to_tree_item_map:
+		var item:TreeItem = path_to_tree_item_map[fs_path]
+		path_arr.append({"path": fs_path, "checked": item.is_checked(1), "collapsed": item.collapsed})
+	
+	state["paths"] = path_arr
+	
+	
