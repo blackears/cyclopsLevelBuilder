@@ -201,7 +201,7 @@ func _process(delta):
 		if has_node("/root/CyclopsAutoload"):
 			var global_scene = get_node("/root/CyclopsAutoload")
 
-			if global_scene:
+			if global_scene && global_scene.builder:
 				if display_mode != global_scene.builder.display_mode:
 					dirty = true
 					return
