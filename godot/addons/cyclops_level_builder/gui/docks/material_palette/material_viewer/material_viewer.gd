@@ -27,6 +27,7 @@ class_name MaterialViewer
 
 @onready var button_area:HFlowContainer = %ButtonArea
 @onready var mat_group_tree:MaterialGroupsTree = %MatGroupTree
+@onready var filter_lineEdit:LineEdit = %lineEd_filter
 
 var builder:CyclopsLevelBuilder:
 	get:
@@ -74,24 +75,24 @@ func on_resources_reload(resources:PackedStringArray):
 	pass
 
 func reload_materials():
-	#return
+	if !is_node_ready():
+		return
 	
 	for child:MaterialButton in button_area.get_children():
 		button_area.remove_child(child)
 		child.queue_free()
 	
-	if !builder:
-		return
+	#if !builder:
+		#return
 		
-	var ed_iface:EditorInterface = builder.get_editor_interface()
-	var efs:EditorFileSystem = ed_iface.get_resource_filesystem()
+	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
 	
 	var efsd:EditorFileSystemDirectory = efs.get_filesystem()
 	reload_materials_recursive(efsd)
-	pass
+
 
 func reload_materials_recursive(dir:EditorFileSystemDirectory):
-	var mat_name_filter:String = %lineEd_filter.text
+	var mat_name_filter:String = filter_lineEdit.text
 	
 	if !mat_group_tree.is_path_visible(dir.get_path()):
 		return
