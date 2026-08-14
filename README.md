@@ -19,7 +19,9 @@ Cyclops Level Builder 1.5.0 works with Godot version 4.7 and later.  Cyclops Lev
 
 ## Upgrading
 
-It is strongly recommended that you make a backup of your project before you upgrade or change your version of Cyclops Level Builder.
+> It is strongly recommended that you make a backup of your project before upgrading to a newer version of Cyclops Level Builder.
+
+Some updates may break previously built scenes.  You can use the import/export features to migrate level assets between incompatible versions.  Also, if you use a version control system - such as Github - you can restore previously trashed data and then export it.
 
 If you're upgrading your project from Cyclops v1.0.0, v1.0.1 or an earlier development version of v1.0.2, you will need to upgrade your CyclopsBlocks object.  To do this, simply select your CyclopsBlocks object in the Scene outliner and click the Upgrade button that appears in the toolbar.  This will create a new subtree in your scene where the CyclopsConvexBlock objects are replaced with the new CyclopsBlock object.  Your old CyclopsBlocks will still be there, but with its visibility turned off.  You can now delete the CyclopsBlocks object if you no longer require it.
 
