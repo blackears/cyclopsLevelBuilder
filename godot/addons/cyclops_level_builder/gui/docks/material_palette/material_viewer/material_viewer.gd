@@ -36,22 +36,20 @@ var builder:CyclopsLevelBuilder:
 		if value == builder:
 			return
 			
-		if builder:
-			var ed_iface:EditorInterface = builder.get_editor_interface()
-			var efs:EditorFileSystem = ed_iface.get_resource_filesystem()
-			efs.filesystem_changed.disconnect(on_filesystem_changed)
-			efs.resources_reimported.disconnect(on_resources_reimported)
-			efs.resources_reload.disconnect(on_resources_reload)
+		#if builder:
+			#var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
+			#efs.filesystem_changed.disconnect(on_filesystem_changed)
+			#efs.resources_reimported.disconnect(on_resources_reimported)
+			#efs.resources_reload.disconnect(on_resources_reload)
 			
 		builder = value
-		mat_group_tree.plugin = builder
+		#mat_group_tree.plugin = builder
 		
-		if builder:
-			var ed_iface:EditorInterface = builder.get_editor_interface()
-			var efs:EditorFileSystem = ed_iface.get_resource_filesystem()
-			efs.filesystem_changed.connect(on_filesystem_changed)
-			efs.resources_reimported.connect(on_resources_reimported)
-			efs.resources_reload.connect(on_resources_reload)
+		#if builder:
+			#var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
+			#efs.filesystem_changed.connect(on_filesystem_changed)
+			#efs.resources_reimported.connect(on_resources_reimported)
+			#efs.resources_reload.connect(on_resources_reload)
 		
 		reload_materials()
 
@@ -138,7 +136,7 @@ func apply_material(mat_bn:MaterialButton):
 		if is_obj_mode:
 			cmd.add_target(block.get_path(), block.control_mesh.get_face_indices())
 		else:
-			var face_indices:PackedInt32Array = block.control_mesh.get_face_indices(true)					
+			var face_indices:PackedInt32Array = block.control_mesh.get_face_indices(true)
 			if !face_indices.is_empty():
 				cmd.add_target(block.get_path(), face_indices)
 	
@@ -223,6 +221,22 @@ func _on_mat_group_tree_visiblity_changed():
 
 func _on_bn_show_unused_dirs_toggled(toggled_on):
 	mat_group_tree.show_unused_dirs = toggled_on
+
+
+func _on_tree_entered() -> void:
+	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
+	efs.filesystem_changed.connect(on_filesystem_changed)
+	efs.resources_reimported.connect(on_resources_reimported)
+	efs.resources_reload.connect(on_resources_reload)
+	
+	reload_materials()
+
+
+func _on_tree_exiting() -> void:
+	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
+	efs.filesystem_changed.disconnect(on_filesystem_changed)
+	efs.resources_reimported.disconnect(on_resources_reimported)
+	efs.resources_reload.disconnect(on_resources_reload)
 
 
 func load_state(state:Dictionary):

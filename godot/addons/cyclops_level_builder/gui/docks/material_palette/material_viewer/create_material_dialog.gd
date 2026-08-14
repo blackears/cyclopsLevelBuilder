@@ -30,14 +30,14 @@ signal create_material(params:Dictionary)
 var texture_list:Array[Texture2D]
 var parent_dir_path:String
 
-var plugin:CyclopsLevelBuilder:
-	get:
-		return plugin
-	set(value):
-		if value == plugin:
-			return
-			
-		plugin = value
+#var plugin:CyclopsLevelBuilder:
+	#get:
+		#return plugin
+	#set(value):
+		#if value == plugin:
+			#return
+			#
+		#plugin = value
 		#print("CreateMaterialDialog setting plugin")
 
 # Called when the node enters the scene tree for the first time.
@@ -82,8 +82,7 @@ func _on_bn_browse_shader_pressed():
 func _on_about_to_popup():
 	#print("CreateMaterialDialog about to popup")
 	
-	var ed_iface:EditorInterface = plugin.get_editor_interface()
-	var efs:EditorFileSystem = ed_iface.get_resource_filesystem()
+	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
 
 	var root_dir:EditorFileSystemDirectory = efs.get_filesystem()
 	

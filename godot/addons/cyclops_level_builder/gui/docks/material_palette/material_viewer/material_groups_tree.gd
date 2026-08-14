@@ -44,31 +44,29 @@ const bn_vis_on = preload("res://addons/cyclops_level_builder/art/icons/eye_open
 		
 		reload_materials()
 
-var plugin:CyclopsLevelBuilder:
-	get:
-		return plugin
-	set(value):
-		if value == plugin:
-			return
-		
-		if plugin:
-			var ed_iface:EditorInterface = plugin.get_editor_interface()
-			var efs:EditorFileSystem = ed_iface.get_resource_filesystem()
-			efs.filesystem_changed.disconnect(on_filesystem_changed)
-			efs.resources_reimported.disconnect(on_resources_reimported)
-			efs.resources_reload.disconnect(on_resources_reload)
-			
-		plugin = value
-		create_material_dialog.plugin = plugin
-		
-		if plugin:
-			var ed_iface:EditorInterface = plugin.get_editor_interface()
-			var efs:EditorFileSystem = ed_iface.get_resource_filesystem()
-			efs.filesystem_changed.connect(on_filesystem_changed)
-			efs.resources_reimported.connect(on_resources_reimported)
-			efs.resources_reload.connect(on_resources_reload)
-		
-		reload_materials()
+#var plugin:CyclopsLevelBuilder:
+	#get:
+		#return plugin
+	#set(value):
+		#if value == plugin:
+			#return
+		#
+		##if plugin:
+			##var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
+			##efs.filesystem_changed.disconnect(on_filesystem_changed)
+			##efs.resources_reimported.disconnect(on_resources_reimported)
+			##efs.resources_reload.disconnect(on_resources_reload)
+			#
+		#plugin = value
+		##create_material_dialog.plugin = plugin
+		#
+		##if plugin:
+			##var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
+			##efs.filesystem_changed.connect(on_filesystem_changed)
+			##efs.resources_reimported.connect(on_resources_reimported)
+			##efs.resources_reload.connect(on_resources_reload)
+		#
+		#reload_materials()
 
 var tree_item_to_path_map:Dictionary[TreeItem, String]
 var path_to_tree_item_map:Dictionary[String, TreeItem]
@@ -80,11 +78,10 @@ func reload_materials():
 	tree_item_to_path_map.clear()
 	path_to_tree_item_map.clear()
 
-	if !plugin:
-		return
+	#if !plugin:
+		#return
 
-	var ed_iface:EditorInterface = plugin.get_editor_interface()
-	var efs:EditorFileSystem = ed_iface.get_resource_filesystem()
+	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
 
 	var root_dir:EditorFileSystemDirectory = efs.get_filesystem()
 	
@@ -98,7 +95,7 @@ func reload_materials():
 	
 	build_tree_recursive(root_dir, root_tree_item)
 	
-	collapse_unused_dirs()	
+	collapse_unused_dirs()
 
 
 func build_tree_recursive(parent_dir:EditorFileSystemDirectory, tree_item_parent:TreeItem):
@@ -219,11 +216,8 @@ func dir_has_materials_recursive(dir:EditorFileSystemDirectory)->bool:
 	return false
 
 func collapse_unused_dirs():
-	if !plugin:
-		return
 
-	var ed_iface:EditorInterface = plugin.get_editor_interface()
-	var efs:EditorFileSystem = ed_iface.get_resource_filesystem()
+	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
 
 	var root_dir:EditorFileSystemDirectory = efs.get_filesystem()
 	collapse_unused_dirs_recursive(root_dir)
@@ -348,3 +342,20 @@ func save_state(state:Dictionary):
 	state["paths"] = path_arr
 	
 	
+
+
+func _on_tree_entered() -> void:
+	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
+	efs.filesystem_changed.connect(on_filesystem_changed)
+	efs.resources_reimported.connect(on_resources_reimported)
+	efs.resources_reload.connect(on_resources_reload)
+	pass # Replace with function body.
+
+
+
+
+func _on_tree_exiting() -> void:
+	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
+	efs.filesystem_changed.disconnect(on_filesystem_changed)
+	efs.resources_reimported.disconnect(on_resources_reimported)
+	efs.resources_reload.disconnect(on_resources_reload)

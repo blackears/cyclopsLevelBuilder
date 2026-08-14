@@ -62,6 +62,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[connection signal="tree_entered" from="." to="." method="_on_tree_entered"]
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 [connection signal="toggled" from="HSplitContainer/VBoxContainer2/HBoxContainer/bn_show_unused_dirs" to="." method="_on_bn_show_unused_dirs_toggled"]
 [connection signal="visiblity_changed" from="HSplitContainer/VBoxContainer2/MatGroupTree" to="." method="_on_mat_group_tree_visiblity_changed"]
 [connection signal="text_changed" from="HSplitContainer/VBoxContainer/HBoxContainer/lineEd_filter" to="." method="_on_line_ed_filter_text_changed"]
