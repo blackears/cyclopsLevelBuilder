@@ -19,7 +19,7 @@ jobs:
   
     steps:
       - name: Checkout directory
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         
       - name: Zip the directory
         run: |
@@ -27,7 +27,7 @@ jobs:
           zip -r $ADDON_ARCHIVE godot/addons/cyclops_level_builder
       
       - name: Upload zip as an artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: cyclops_level_builder_${{ env.PLUGIN_VERSION }}_for_Godot_${{ env.GODOT_VERSION }}
           path: $ADDON_ARCHIVE
