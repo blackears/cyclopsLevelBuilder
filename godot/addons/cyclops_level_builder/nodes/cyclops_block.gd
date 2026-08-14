@@ -145,7 +145,8 @@ func build_from_block():
 	if Engine.is_editor_hint():
 		if has_node("/root/CyclopsAutoload"):
 			var global_scene = get_node("/root/CyclopsAutoload")
-			display_mode = global_scene.builder.display_mode
+			if global_scene && global_scene.builder:
+				display_mode = global_scene.builder.display_mode
 	
 #	print("block_data %s" % block_data)
 #	print("vert points %s" % block_data.vertex_points)
