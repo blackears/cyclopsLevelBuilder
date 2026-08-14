@@ -35,6 +35,7 @@ var tool_state:ToolState = ToolState.NONE
 #var drag_handle:HandleEdge
 var drag_mouse_start_pos:Vector2
 var drag_handle_start_pos:Vector3
+var drag_start_pos:Vector3
 
 #enum MoveConstraint { NONE, AXIS_X, AXIS_Y, AXIS_Z, PLANE_XY, PLANE_XZ, PLANE_YZ, PLANE_VIEWPORT }
 var move_constraint:MoveConstraint.Type = MoveConstraint.Type.NONE
@@ -300,10 +301,15 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 	var e:InputEventMouseMotion = event
 	move_constraint = MoveConstraint.Type.NONE
 
+	var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
+	var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+	var active_block:Node3D = builder.get_active_block()
+	var xform_basis:Basis = calc_gizmo_basis(average_normal, active_block, viewport_camera, settings.transform_space)
+
 	if gizmo_translate:
 	
-		var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
-		var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
+		#var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
+		#var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 		
 		var part_res:GizmoTranslate.IntersectResult = gizmo_translate.intersect(origin, dir, viewport_camera)
 		if part_res:
@@ -323,6 +329,7 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 					move_constraint = MoveConstraint.Type.PLANE_YZ
 		
 			drag_handle_start_pos = part_res.pos_world
+			drag_start_pos = constrain_cursor(move_constraint, origin, dir, drag_handle_start_pos, xform_basis, viewport_camera)
 
 	#		print("res obj %s" % result.object.get_path())
 			var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
@@ -353,9 +360,8 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 
 	if res:
 		var handle:HandleEdge = res.handle
-#		drag_handle = handle
-#					drag_handle_start_pos = handle.p_ref
 		drag_handle_start_pos = res.position
+		drag_start_pos = constrain_cursor(move_constraint, origin, dir, drag_handle_start_pos, xform_basis, viewport_camera)
 		tool_state = ToolState.DRAGGING
 		#print("drag habdle start pos ", drag_handle_start_pos)
 
@@ -610,41 +616,27 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			var active_block:Node3D = builder.get_active_block()
 			var xform_basis:Basis = calc_gizmo_basis(average_normal, active_block, viewport_camera, settings.transform_space)
 			
-			#match settings.transform_space:
-				#TransformSpace.Type.GLOBAL:
-					#xform_basis = Basis.IDENTITY
-				#TransformSpace.Type.LOCAL:
-					#var active_block:Node3D = builder.get_active_block()
-					#xform_basis = active_block.basis
-				#TransformSpace.Type.NORMAL:
-					#var up:Vector3 = Vector3.UP
-					#var x:Vector3 = up.cross(average_normal).normalized()
-					#var y:Vector3 = average_normal.cross(x)
-					#xform_basis = Basis(x, y, average_normal)
-				#TransformSpace.Type.VIEW:
-					#xform_basis = viewport_camera.global_basis
-				#TransformSpace.Type.PARENT:
-					#var active_block:Node3D = builder.get_active_block().get_parent_node_3d()
-					#xform_basis = active_block.basis
 
-			var drag_to:Vector3
-			match move_constraint:
-				MoveConstraint.Type.AXIS_X:
-					drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, xform_basis.x)
-				MoveConstraint.Type.AXIS_Y:
-					drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, xform_basis.y)
-				MoveConstraint.Type.AXIS_Z:
-					drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, xform_basis.z)
-				MoveConstraint.Type.PLANE_XY:
-					drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, xform_basis.z)
-				MoveConstraint.Type.PLANE_XZ:
-					drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, xform_basis.y)
-				MoveConstraint.Type.PLANE_YZ:
-					drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, xform_basis.x)
-				MoveConstraint.Type.PLANE_VIEWPORT:
-					drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, viewport_camera.global_transform.basis.z)
+			var drag_to:Vector3 = constrain_cursor(move_constraint, origin, dir, drag_handle_start_pos, xform_basis, viewport_camera)
 			
-			var offset:Vector3 = drag_to - drag_handle_start_pos
+			#var drag_to:Vector3
+			#match move_constraint:
+				#MoveConstraint.Type.AXIS_X:
+					#drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, xform_basis.x)
+				#MoveConstraint.Type.AXIS_Y:
+					#drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, xform_basis.y)
+				#MoveConstraint.Type.AXIS_Z:
+					#drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, xform_basis.z)
+				#MoveConstraint.Type.PLANE_XY:
+					#drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, xform_basis.z)
+				#MoveConstraint.Type.PLANE_XZ:
+					#drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, xform_basis.y)
+				#MoveConstraint.Type.PLANE_YZ:
+					#drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, xform_basis.x)
+				#MoveConstraint.Type.PLANE_VIEWPORT:
+					#drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, viewport_camera.global_transform.basis.z)
+			
+			var offset:Vector3 = drag_to - drag_start_pos
 			if builder.snapping_enabled:
 				offset = builder.get_snapping_manager().snap_point(offset, SnappingQuery.new(viewport_camera))
 			
