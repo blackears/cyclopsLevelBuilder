@@ -1,0 +1,36 @@
+name: Build Addon
+on:
+  workflow_dispatch:
+  # push:
+    # branches: [ "master" ]
+
+# permissions:
+  # contents: write
+  # pages: write
+  # id-token: write
+
+env:
+  PLUGIN_VERSION: 1.5.0_dev_1
+  GODOT_VERSION: 4.7
+
+jobs:
+  build-addon:
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Checkout directory
+        uses: actions/checkout@v4
+        
+      - name: Zip the directory
+        run: |
+          $ADDON_ARCHIVE = cyclops_level_builder_${{ env.PLUGIN_VERSION }}_for_Godot_${{ env.GODOT_VERSION }}.zip
+          zip -r $ADDON_ARCHIVE godot/addons/cyclops_level_builder
+      
+      - name: Upload zip as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cyclops_level_builder_${{ env.PLUGIN_VERSION }}_for_Godot_${{ env.GODOT_VERSION }}
+          path: $ADDON_ARCHIVE
+
+          
+        
