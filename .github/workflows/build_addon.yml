@@ -23,7 +23,7 @@ jobs:
         
       - name: Zip the directory
         run: |
-          $ADDON_ARCHIVE = cyclops_level_builder_${{ env.PLUGIN_VERSION }}_for_Godot_${{ env.GODOT_VERSION }}.zip
+          $ADDON_ARCHIVE="cyclops_level_builder_${{ env.PLUGIN_VERSION }}_for_Godot_${{ env.GODOT_VERSION }}.zip"
           zip -r $ADDON_ARCHIVE godot/addons/cyclops_level_builder
       
       - name: Upload zip as an artifact
