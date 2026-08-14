@@ -1585,8 +1585,10 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 			var r:float = 1.0 / (duv1.x * duv2.y - duv2.x * duv1.y)
 			var t:Vector3 = (e1 * duv2.y - e2 * duv1.y) * r
 			var b:Vector3 = (e2 * duv1.x - e1 * duv2.x) * r
-			
-			t = t.normalized()
+
+			#t = t.normalized()
+			if t.is_zero_approx():
+				t = t.normalized()
 			
 			for j in 3:
 				tangents.append(t.x)
