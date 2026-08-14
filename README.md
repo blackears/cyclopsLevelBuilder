@@ -19,7 +19,7 @@ Cyclops Level Builder 1.5.0 works with Godot version 4.7 and later.  Cyclops Lev
 
 ## Upgrading
 
-> It is strongly recommended that you make a backup of your project before upgrading to a newer version of Cyclops Level Builder.
+<div class="alert"> It is strongly recommended that you make a backup of your project before upgrading to a newer version of Cyclops Level Builder.</div>
 
 Some updates may break previously built scenes.  You can use the import/export features to migrate level assets between incompatible versions.  Also, if you use a version control system - such as Github - you can restore previously trashed data and then export it.
 
