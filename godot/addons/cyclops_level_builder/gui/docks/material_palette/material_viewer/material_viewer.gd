@@ -73,16 +73,15 @@ func on_resources_reload(resources:PackedStringArray):
 	pass
 
 func reload_materials():
+#	print("material_viewer Reload materials")
 	if !is_node_ready():
 		return
+	print("material_viewer Reload materials +")
 	
 	for child:MaterialButton in button_area.get_children():
 		button_area.remove_child(child)
 		child.queue_free()
 	
-	#if !builder:
-		#return
-		
 	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
 	
 	var efsd:EditorFileSystemDirectory = efs.get_filesystem()
@@ -92,8 +91,10 @@ func reload_materials():
 func reload_materials_recursive(dir:EditorFileSystemDirectory):
 	var mat_name_filter:String = filter_lineEdit.text
 	
+	print("mat recur path ", dir.get_path())
 	if !mat_group_tree.is_path_visible(dir.get_path()):
 		return
+	print("pah visible")
 	
 	var res_prev:EditorResourcePreview = EditorInterface.get_resource_previewer()
 
@@ -201,6 +202,7 @@ func select_material(mat_bn:MaterialButton, sel_type:SelectionList.Type):
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	#reload_materials()
 	pass
 	
 
@@ -240,9 +242,14 @@ func _on_tree_exiting() -> void:
 
 
 func load_state(state:Dictionary):
+	#if true:
+		#return
+		
 	#print("material_viewer load_state:", state)
 	
 	mat_group_tree.load_state(state.get("tree", {}))
+	
+	reload_materials()
 	pass
 
 
