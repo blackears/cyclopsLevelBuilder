@@ -454,10 +454,6 @@ func update_activation():
 			overlays_dock.queue_free()
 			overlays_dock = null
 			
-			#remove_dock(convex_face_editor_dock)
-			#convex_face_editor_dock.remove_child(convex_face_editor_panel)
-			#convex_face_editor_dock.queue_free()
-			#convex_face_editor_dock = null
 
 			activated = false
 	

@@ -100,4 +100,24 @@ func calc_gizmo_basis(average_normal:Vector3, active_block:Node3D, viewport_came
 			#var xform:Transform3D = active_block.get_parent_node_3d().global_transform
 			#gizmo_translate.global_transform = xform
 
-	return result	
+	return result
+
+func constrain_cursor(move_constraint:MoveConstraint.Type, origin:Vector3, dir:Vector3, drag_handle_start_pos:Vector3, xform_basis:Basis, viewport_camera:Camera3D):
+	var drag_to:Vector3
+	match move_constraint:
+		MoveConstraint.Type.AXIS_X:
+			drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, xform_basis.x)
+		MoveConstraint.Type.AXIS_Y:
+			drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, xform_basis.y)
+		MoveConstraint.Type.AXIS_Z:
+			drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, xform_basis.z)
+		MoveConstraint.Type.PLANE_XY:
+			drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, xform_basis.z)
+		MoveConstraint.Type.PLANE_XZ:
+			drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, xform_basis.y)
+		MoveConstraint.Type.PLANE_YZ:
+			drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, xform_basis.x)
+		MoveConstraint.Type.PLANE_VIEWPORT:
+			drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, viewport_camera.global_transform.basis.z)
+	
+	return drag_to
