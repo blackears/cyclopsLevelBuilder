@@ -201,9 +201,10 @@ func _process(delta):
 		if has_node("/root/CyclopsAutoload"):
 			var global_scene = get_node("/root/CyclopsAutoload")
 
-			if global_scene && display_mode != global_scene.builder.display_mode:
-				dirty = true
-				return
+			if global_scene:
+				if display_mode != global_scene.builder.display_mode:
+					dirty = true
+					return
 
 func draw_unit_labels(viewport_camera:Camera3D, local_to_world:Transform3D):
 	if !has_node("/root/CyclopsAutoload"):
