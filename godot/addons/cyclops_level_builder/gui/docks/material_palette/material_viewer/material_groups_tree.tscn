@@ -5,7 +5,6 @@
 
 [node name="MatGroupTree" type="Tree" unique_id=1616695390]
 unique_name_in_owner = true
-columns = 2
 script = ExtResource("1_u4dlj")
 
 [node name="PopupMenu" type="PopupMenu" parent="." unique_id=392585955]

@@ -44,30 +44,6 @@ const bn_vis_on = preload("res://addons/cyclops_level_builder/art/icons/eye_open
 		
 		reload_materials()
 
-#var plugin:CyclopsLevelBuilder:
-	#get:
-		#return plugin
-	#set(value):
-		#if value == plugin:
-			#return
-		#
-		##if plugin:
-			##var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
-			##efs.filesystem_changed.disconnect(on_filesystem_changed)
-			##efs.resources_reimported.disconnect(on_resources_reimported)
-			##efs.resources_reload.disconnect(on_resources_reload)
-			#
-		#plugin = value
-		##create_material_dialog.plugin = plugin
-		#
-		##if plugin:
-			##var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
-			##efs.filesystem_changed.connect(on_filesystem_changed)
-			##efs.resources_reimported.connect(on_resources_reimported)
-			##efs.resources_reload.connect(on_resources_reload)
-		#
-		#reload_materials()
-
 var tree_item_to_path_map:Dictionary[TreeItem, String]
 var path_to_tree_item_map:Dictionary[String, TreeItem]
 
@@ -78,17 +54,14 @@ func reload_materials():
 	tree_item_to_path_map.clear()
 	path_to_tree_item_map.clear()
 
-	#if !plugin:
-		#return
-
 	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
 
 	var root_dir:EditorFileSystemDirectory = efs.get_filesystem()
 	
 	var root_tree_item:TreeItem = create_item()
 	root_tree_item.set_text(0, root_dir.get_name())
-	root_tree_item.set_checked(1, true)
-	root_tree_item.set_editable(1, true)
+	root_tree_item.set_checked(0, true)
+	root_tree_item.set_editable(0, true)
 	
 	tree_item_to_path_map[root_tree_item] = root_dir.get_path()
 	path_to_tree_item_map[root_dir.get_path()] = root_tree_item
@@ -110,9 +83,9 @@ func build_tree_recursive(parent_dir:EditorFileSystemDirectory, tree_item_parent
 
 		var item:TreeItem = create_item(tree_item_parent)
 		item.set_text(0, child_dir.get_name())
-		item.set_checked(1, true)
-		#item.set_editable(1, true)
-		item.add_button(1, bn_vis_on, ButtonType.VISIBLE, false, "Visible")
+		item.add_button(0, bn_vis_on, ButtonType.VISIBLE, false, "Visible")
+		item.set_checked(0, true)
+
 
 		tree_item_to_path_map[item] = child_dir.get_path()
 		path_to_tree_item_map[child_dir.get_path()] = item
@@ -133,6 +106,7 @@ func on_resources_reload(resources: PackedStringArray):
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	set_column_expand(0, true)
 	pass # Replace with function body.
 
 
@@ -150,13 +124,13 @@ func rename_selected_group():
 	pass
 
 func _on_item_selected():
-	var item:TreeItem = get_selected()
-	item.get_index()
+	#var item:TreeItem = get_selected()
+	#item.get_index()
 	pass # Replace with function body.
 
 
 func _on_item_edited():
-	var item:TreeItem = get_edited()
+#	var item:TreeItem = get_edited()
 	pass # Replace with function body.
 
 
@@ -168,13 +142,12 @@ func _on_popup_menu_id_pressed(id:int):
 			delete_selected_group()
 		2:
 			rename_selected_group()
-			
 
 
 func _on_button_clicked(item:TreeItem, column:int, id:int, mouse_button_index:int):
-	var checked:bool = !item.is_checked(1)
-	item.set_checked(1, checked)
-	item.set_button(1, ButtonType.VISIBLE, bn_vis_on if checked else bn_vis_off)
+	var checked:bool = !item.is_checked(0)
+	item.set_checked(0, checked)
+	item.set_button(0, ButtonType.VISIBLE, bn_vis_on if checked else bn_vis_off)
 	visiblity_changed.emit()
 
 func is_path_visible(path:String)->bool:
@@ -182,7 +155,7 @@ func is_path_visible(path:String)->bool:
 		return false
 	
 	var item:TreeItem = path_to_tree_item_map[path]
-	return item.is_checked(1)
+	return item.is_checked(0)
 	
 
 func get_hidden_directories()->Array[String]:
@@ -190,7 +163,7 @@ func get_hidden_directories()->Array[String]:
 	
 	for path in path_to_tree_item_map.keys():
 		var item:TreeItem = path_to_tree_item_map[path]
-		if !item.is_checked(1):
+		if !item.is_checked(0):
 			ret_paths.append(path)
 		
 	return ret_paths
@@ -274,7 +247,6 @@ func _drop_data(at_position:Vector2, data:Variant):
 	
 
 func _on_create_material_dialog_create_material(params:Dictionary):
-	
 	#Prepare texture
 	var target_texture:Texture2D
 
@@ -327,9 +299,8 @@ func load_state(state:Dictionary):
 			
 #			print("setting ", path_tuple)
 			var item:TreeItem = path_to_tree_item_map[fs_path]
-			item.set_checked(1, path_tuple.get("checked", true))
+			item.set_checked(0, path_tuple.get("checked", true))
 			item.collapsed = path_tuple.get("collapsed", false)
-			
 
 
 func save_state(state:Dictionary):
@@ -337,10 +308,9 @@ func save_state(state:Dictionary):
 	
 	for fs_path:String in path_to_tree_item_map:
 		var item:TreeItem = path_to_tree_item_map[fs_path]
-		path_arr.append({"path": fs_path, "checked": item.is_checked(1), "collapsed": item.collapsed})
+		path_arr.append({"path": fs_path, "checked": item.is_checked(0), "collapsed": item.collapsed})
 	
 	state["paths"] = path_arr
-	
 	
 
 
