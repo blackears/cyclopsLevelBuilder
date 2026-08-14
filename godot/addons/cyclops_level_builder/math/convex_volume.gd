@@ -626,7 +626,7 @@ func init_from_mesh_vector_data(mvd:MeshVectorData):
 
 	var fv_selected:DataVectorByte
 	var face_vertex_selected:PackedByteArray
-	if mvd.has_face_vertex_data(MeshVectorData.FV_SELECTED):	
+	if mvd.has_face_vertex_data(MeshVectorData.FV_SELECTED):
 		fv_selected = mvd.get_face_vertex_data(MeshVectorData.FV_SELECTED)
 		face_vertex_selected = fv_selected.data
 	
@@ -636,7 +636,8 @@ func init_from_mesh_vector_data(mvd:MeshVectorData):
 		v.index = i
 		
 		v.point = vertex_points[i]
-		v.selected = vertex_selected[i] != 0
+		if i < vertex_selected.size():
+			v.selected = vertex_selected[i] != 0
 		if v_normal:
 			#Old models don't precalculate vertex normals
 			v.normal = vertex_normals[i]

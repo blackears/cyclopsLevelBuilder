@@ -25,18 +25,18 @@
 extends DataVector
 class_name DataVectorFloat
 
-#@export var data:PackedFloat32Array
-@export var data:PackedFloat32Array:
-	get():
-		return data_base.to_float32_array()
-	set(value):
-		data_base = value.to_byte_array()
+@export var data:PackedFloat32Array
+#@export var data:PackedFloat32Array:
+	#get():
+		#return data_base.to_float32_array()
+	#set(value):
+		#data_base = value.to_byte_array()
 
-func _init(data:PackedFloat32Array = [], data_type:DataType = DataType.FLOAT):
+func _init(_data:PackedFloat32Array = [], _data_type:DataType = DataType.FLOAT):
 #	self.name = name
-	self.data = data
-	self.data_type = data_type
-	self.stride = data_type_num_components(data_type)
+	data = _data
+	data_type = _data_type
+	stride = data_type_num_components(data_type)
 
 func duplicate_explicit()->DataVectorFloat:
 	var v:DataVectorFloat = DataVectorFloat.new(data.duplicate(), data_type)

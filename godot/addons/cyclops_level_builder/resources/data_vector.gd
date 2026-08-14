@@ -35,11 +35,11 @@ enum DataType { BOOL, INT, FLOAT, STRING, COLOR, VECTOR2, VECTOR3, VECTOR4, TRAN
 
 var data_base:PackedByteArray
 
-func get_data_raw()->PackedByteArray:
-	return data_base
+#func get_data_raw()->PackedByteArray:
+	#return data_base
 
-func set_data_raw(data:PackedByteArray):
-	data_base = data
+#func set_data_raw(data:PackedByteArray):
+	#data_base = data
 
 func add(peer:DataVector)->DataVector:
 	printerr("not implemented on base")

@@ -91,10 +91,8 @@ func reload_materials():
 func reload_materials_recursive(dir:EditorFileSystemDirectory):
 	var mat_name_filter:String = filter_lineEdit.text
 	
-	print("mat recur path ", dir.get_path())
 	if !mat_group_tree.is_path_visible(dir.get_path()):
 		return
-	print("pah visible")
 	
 	var res_prev:EditorResourcePreview = EditorInterface.get_resource_previewer()
 

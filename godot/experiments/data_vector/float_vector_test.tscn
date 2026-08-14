@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://cngvk75vm8x3s"]
+
+[ext_resource type="Script" uid="uid://cpopqsxrx7amn" path="res://experiments/data_vector/float_vector_test.gd" id="1_n056p"]
+
+[node name="FloatVectorTest" type="Control" unique_id=926160341]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_n056p")
+
+[node name="Button" type="Button" parent="." unique_id=261316943]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Test"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

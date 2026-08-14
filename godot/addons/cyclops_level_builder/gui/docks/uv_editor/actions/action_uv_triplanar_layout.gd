@@ -45,7 +45,7 @@ func do_layout():
 	var plugin:CyclopsLevelBuilder = control.plugin
 	
 	var selected_faces_only:bool = control.is_selected_faces_only()
-#	print("selected_faces_only ", selected_faces_only)
+	#print("selected_faces_only ", selected_faces_only)
 	
 	var cmd:CommandSetMeshFeatureData = CommandSetMeshFeatureData.new()
 	cmd.builder = plugin
@@ -64,9 +64,7 @@ func do_layout():
 		
 		var cv:ConvexVolume = ConvexVolume.new()
 		cv.init_from_mesh_vector_data(mvd)
-#		print("<<0>>")
 		for fi:ConvexVolume.FaceInfo in cv.faces:
-#			print("<<1>>")
 			if selected_faces_only && !fi.is_selected():
 				continue
 			
@@ -79,20 +77,24 @@ func do_layout():
 				var fv:ConvexVolume.FaceVertexInfo = cv.face_vertices[fv_i]
 				var v:ConvexVolume.VertexInfo = cv.vertices[fv.vertex_index]
 			
-#				print("uvw ", uvw)
+#				print("axis ", axis)
 				match axis:
 					MathUtil.Axis.X:
 						var uvw:Vector3 = uv_xform_x * v.point
-						new_uv_arr.set_value_vec2(Vector2(uvw.x, uvw.y), fv.index)
+#						print("uvw ", uvw)
+						new_uv_arr.set_value_vec2(Vector2(uvw.x, uvw.y), fv_i)
 					MathUtil.Axis.Y:
 						var uvw:Vector3 = uv_xform_y * v.point
-						new_uv_arr.set_value_vec2(Vector2(uvw.x, uvw.y), fv.index)
+#						print("uvw ", uvw)
+						new_uv_arr.set_value_vec2(Vector2(uvw.x, uvw.y), fv_i)
 					MathUtil.Axis.Z:
 						var uvw:Vector3 = uv_xform_z * v.point
-						new_uv_arr.set_value_vec2(Vector2(uvw.x, uvw.y), fv.index)
+#						print("uvw ", uvw)
+						new_uv_arr.set_value_vec2(Vector2(uvw.x, uvw.y), fv_i)
 				
 		var new_mvd:MeshVectorData = cv.to_mesh_vector_data()
 		
+#		print("new_uv_arr ", new_uv_arr)
 		fc.new_data_values[MeshVectorData.FV_UV0] = new_uv_arr
 		cmd.set_data(block_path, MeshVectorData.Feature.FACE_VERTEX, fc)
 
