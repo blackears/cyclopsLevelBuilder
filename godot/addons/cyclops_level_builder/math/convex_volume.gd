@@ -108,6 +108,12 @@ class FaceInfo extends RefCounted:
 			if !mesh.face_vertices[fv_idx].selected:
 				return false
 		return true
+		
+	func calc_normal()->Vector3:
+		return -MathUtil.estimate_plane_normal_from_points_3d(get_points())
+	
+	func calc_plane()->Plane:
+		return Plane(calc_normal(), mesh.vertices[vertex_indices[0]].point)
 	
 	func get_plane()->Plane:
 		return Plane(normal, mesh.vertices[vertex_indices[0]].point)
@@ -1166,18 +1172,26 @@ func get_centroid()->Vector3:
 # Creates a new volume that is equal to the portion of this volume on the top 
 # side of the passed plane.  Does not modify the geometry of this volume.
 func cut_with_plane(plane:Plane, uv_transform:Transform2D = Transform2D.IDENTITY, material_id:int = 0)->ConvexVolume:
-#
+	#print("cut_with_plane ", plane)
+	var vert_points:PackedVector3Array
+	for v in vertices:
+		vert_points.append(v.point)
+	#print("start vert points ", vert_points)
+	
 	var planes:Array[Plane]
-	for f in faces:
-		#Top of planr should point toward interior
-		planes.append(MathUtil.flip_plane(f.get_plane()))
+	for f:FaceInfo in faces:
+		#Top of plane should point toward interior
+		var face_plane:Plane = f.calc_plane()
+		
+		planes.append(MathUtil.flip_plane(face_plane))
 	planes.append(plane)
 	
-	#print("planes %s" % GeneralUtil.format_planes_string(planes))
+#	print("planes ", planes)
 	
 	var hull_points:Array[Vector3] = MathUtil.get_convex_hull_points_from_planes(planes)
 	if hull_points.is_empty():
 		return null
+#	print("hull points ", hull_points)
 		
 	var new_vol:ConvexVolume = ConvexVolume.new()
 	new_vol.init_from_points(hull_points)

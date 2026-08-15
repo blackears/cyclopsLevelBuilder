@@ -10,7 +10,7 @@ on:
   # id-token: write
 
 env:
-  PLUGIN_VERSION: 1.5.0_dev_1
+  PLUGIN_VERSION: 1.5.0_dev_2
   GODOT_VERSION: 4.7
 
 jobs:

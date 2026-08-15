@@ -1109,3 +1109,26 @@ static func intersects_2d_polygon_polygon(poly0:PackedVector2Array, poly1:Packed
 	return false
 		
 	
+
+static func estimate_plane_normal_from_points_3d(points:PackedVector3Array)->Vector3:
+	if points.size() <= 2:
+		return Vector3.ZERO
+
+	if points.size() == 3:
+		return (points[1] - points[0]).cross(points[2] - points[0]).normalized()
+
+	if points.size() == 4:
+		return (points[2] - points[0]).cross(points[3] - points[1]).normalized()
+	
+	#Normal is proportionate to area of polygon projected onto ZY, XZ and XY planes respectively
+	var areas:Vector3
+	for i in points.size():
+		var p0:Vector3 = points[i]
+		var p1:Vector3 = points[wrap(i + 1, 0, points.size())]
+		
+		areas += Vector3(p0.y * p1.z - p0.z * p1.y, p0.z * p1.x - p0.x * p1.z, p0.x * p1.y - p0.y * p1.x)
+		
+	return areas.normalized()
+		
+	
+	

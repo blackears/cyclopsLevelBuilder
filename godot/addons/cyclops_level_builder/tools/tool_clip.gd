@@ -79,10 +79,7 @@ func _draw_tool(viewport_camera:Camera3D):
 	
 
 func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:	
-		
 	var blocks_root:Node = builder.get_block_add_parent()
-	#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
-
 
 	if event is InputEventKey:
 		var e:InputEventKey = event
@@ -102,7 +99,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			clip_points.clear()
 			clip_normals.clear()
 			clip_block = null
-#			_draw_tool(viewport_camera)
 			return true
 			
 		elif e.keycode == KEY_ENTER:
@@ -117,7 +113,13 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			elif clip_points.size() == 2:
 				var dir:Vector3 = clip_points[1] - clip_points[0]
 				var face_dir:Vector3 = clip_normals[0].cross(dir)
-				cut_plane = Plane(face_dir.normalized(), clip_points[0])
+				if face_dir.is_zero_approx():
+					face_dir = Vector3.UP.cross(dir)
+				if face_dir.is_zero_approx():
+					face_dir = Vector3.FORWARD.cross(dir)
+				
+				face_dir = face_dir.normalized()
+				cut_plane = Plane(face_dir, clip_points[0])
 			else:
 				#Cannot cut with fewer than 2 points
 				return true
@@ -153,18 +155,20 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 		if e.button_index == MOUSE_BUTTON_LEFT:
 
 			if e.is_pressed():
-				
+				pass
+			else:
 				var origin:Vector3 = viewport_camera.project_ray_origin(e.position)
-				var dir:Vector3 = viewport_camera.project_ray_normal(e.position)				
+				var dir:Vector3 = viewport_camera.project_ray_normal(e.position)
 				
 				var result:IntersectResults = builder.intersect_ray_closest(origin, dir)
 				
 				if result:
-					#var p:Vector3 = to_local(result.position, blocks_root.global_transform.inverse(), grid_step_size)
-#					var p:Vector3 = MathUtil.snap_to_grid(result.get_world_position(), grid_step_size)
 					var p_hit:Vector3 = result.get_world_position()
 					var p_norm:Vector3 = result.get_world_normal()
-					var p:Vector3 = builder.get_snapping_manager().snap_point(p_hit, SnappingQuery.new(viewport_camera))
+
+					var p:Vector3 = p_hit
+					if builder.snapping_enabled:
+						p = builder.get_snapping_manager().snap_point(p_hit, SnappingQuery.new(viewport_camera))
 					p = MathUtil.closest_point_on_plane(p, p_hit, p_norm)
 					
 					if !has_clip_point(p):

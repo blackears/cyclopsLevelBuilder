@@ -615,23 +615,6 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			#print("basis ", xform_basis)
 			var drag_to:Vector3 = constrain_cursor(move_constraint, origin, dir, drag_handle_start_pos, xform_basis, viewport_camera)
 			
-			#var drag_to:Vector3
-			#match move_constraint:
-				#MoveConstraint.Type.AXIS_X:
-					#drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, xform_basis.x)
-				#MoveConstraint.Type.AXIS_Y:
-					#drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, xform_basis.y)
-				#MoveConstraint.Type.AXIS_Z:
-					#drag_to = MathUtil.closest_point_on_line(origin, dir, drag_handle_start_pos, xform_basis.z)
-				#MoveConstraint.Type.PLANE_XY:
-					#drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, xform_basis.z)
-				#MoveConstraint.Type.PLANE_XZ:
-					#drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, xform_basis.y)
-				#MoveConstraint.Type.PLANE_YZ:
-					#drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, xform_basis.x)
-				#MoveConstraint.Type.PLANE_VIEWPORT:
-					#drag_to = MathUtil.intersect_plane(origin, dir, drag_handle_start_pos, viewport_camera.global_transform.basis.z)
-
 			
 			#print("send snap bock-2- ", drag_home_block)
 			if builder.snapping_enabled:
