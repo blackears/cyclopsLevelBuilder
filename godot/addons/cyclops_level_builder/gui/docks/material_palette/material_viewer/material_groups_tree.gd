@@ -32,6 +32,8 @@ enum ButtonType { VISIBLE }
 const bn_vis_off = preload("res://addons/cyclops_level_builder/art/icons/eye_closed.svg")
 const bn_vis_on = preload("res://addons/cyclops_level_builder/art/icons/eye_open.svg")
 
+const column_visible:int = 0
+
 @onready var create_material_dialog:CreateMaterialDialog = %CreateMaterialDialog
 
 @export var show_unused_dirs:bool = true:
@@ -44,27 +46,49 @@ const bn_vis_on = preload("res://addons/cyclops_level_builder/art/icons/eye_open
 		
 		reload_materials()
 
+class PathInfo:
+	var visible:bool
+	var collapsed:bool
+	var tree_item:TreeItem
+
+
 var tree_item_to_path_map:Dictionary[TreeItem, String]
-var path_to_tree_item_map:Dictionary[String, TreeItem]
+#var path_to_tree_item_map:Dictionary[String, TreeItem]
+var path_to_path_info:Dictionary[String, PathInfo]
+
 
 
 func reload_materials():
 	#print("reload_materials")
 	clear()
 	tree_item_to_path_map.clear()
-	path_to_tree_item_map.clear()
+	#path_to_tree_item_map.clear()
 
 	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
-
 	var root_dir:EditorFileSystemDirectory = efs.get_filesystem()
+	
+	var path = root_dir.get_path()
+	var path_info:PathInfo
+	if path_to_path_info.has(path):
+		path_info = path_to_path_info[path]
+	else:
+		path_info = PathInfo.new()
+		path_info.collapsed = false
+		path_info.visible = true
+		path_to_path_info[path] = path_info
 	
 	var root_tree_item:TreeItem = create_item()
 	root_tree_item.set_text(0, root_dir.get_name())
-	root_tree_item.set_checked(0, true)
-	root_tree_item.set_editable(0, true)
+	#root_tree_item.set_editable(column_visible, true)
+#	var path_visible:bool = path_to_tree_item_map[path].is_checked(column_visible) if path_to_tree_item_map.has(path) else true
+	root_tree_item.add_button(column_visible, bn_vis_on if path_info.visible else bn_vis_off, ButtonType.VISIBLE, false, "Visible")
+#	root_tree_item.set_checked(column_visible, path_visible)
+	root_tree_item.set_checked(column_visible, path_info.visible)
 	
-	tree_item_to_path_map[root_tree_item] = root_dir.get_path()
-	path_to_tree_item_map[root_dir.get_path()] = root_tree_item
+	path_info.tree_item = root_tree_item
+	
+	tree_item_to_path_map[root_tree_item] = path
+	#path_to_tree_item_map[path] = root_tree_item
 	
 	build_tree_recursive(root_dir, root_tree_item)
 	
@@ -81,14 +105,27 @@ func build_tree_recursive(parent_dir:EditorFileSystemDirectory, tree_item_parent
 		if !show_unused_dirs && !dir_has_materials_recursive(child_dir):
 			continue
 
+		var path = child_dir.get_path()
+		var path_info:PathInfo
+		if path_to_path_info.has(path):
+			path_info = path_to_path_info[path]
+		else:
+			path_info = PathInfo.new()
+			path_info.collapsed = false
+			path_info.visible = true
+			path_to_path_info[path] = path_info
+
+
 		var item:TreeItem = create_item(tree_item_parent)
 		item.set_text(0, child_dir.get_name())
-		item.add_button(0, bn_vis_on, ButtonType.VISIBLE, false, "Visible")
-		item.set_checked(0, true)
+		item.add_button(column_visible, bn_vis_on if path_info.visible else bn_vis_off, ButtonType.VISIBLE, false, "Visible")
+#		item.set_checked(column_visible, true)
+		item.set_checked(column_visible, path_info.visible)
 
+		path_info.tree_item = item
 
 		tree_item_to_path_map[item] = child_dir.get_path()
-		path_to_tree_item_map[child_dir.get_path()] = item
+		#path_to_tree_item_map[child_dir.get_path()] = item
 		#print("path ", child_dir.get_path())
 		
 		build_tree_recursive(child_dir, item)
@@ -123,15 +160,6 @@ func delete_selected_group():
 func rename_selected_group():
 	pass
 
-func _on_item_selected():
-	#var item:TreeItem = get_selected()
-	#item.get_index()
-	pass # Replace with function body.
-
-
-func _on_item_edited():
-#	var item:TreeItem = get_edited()
-	pass # Replace with function body.
 
 
 func _on_popup_menu_id_pressed(id:int):
@@ -145,28 +173,44 @@ func _on_popup_menu_id_pressed(id:int):
 
 
 func _on_button_clicked(item:TreeItem, column:int, id:int, mouse_button_index:int):
-	var checked:bool = !item.is_checked(0)
-	item.set_checked(0, checked)
-	item.set_button(0, ButtonType.VISIBLE, bn_vis_on if checked else bn_vis_off)
+	var checked:bool = !item.is_checked(column_visible)
+	item.set_checked(column_visible, checked)
+	item.set_button(column_visible, ButtonType.VISIBLE, bn_vis_on if checked else bn_vis_off)
+	
+	var path:String = tree_item_to_path_map[item]
+	path_to_path_info[path].visible = checked
+	
 	visiblity_changed.emit()
 
-func is_path_visible(path:String)->bool:
-	if !path_to_tree_item_map.has(path):
-		return false
+func _on_item_collapsed(item: TreeItem) -> void:
+	var path:String = tree_item_to_path_map[item]
+	path_to_path_info[path].collapsed = item.collapsed
 	
-	var item:TreeItem = path_to_tree_item_map[path]
-	return item.is_checked(0)
+	pass # Replace with function body.
+	
+	
+func is_path_visible(path:String)->bool:
+	if path_to_path_info.has(path):
+		return path_to_path_info[path].visible
+		
+	return false
+	
+	#if !path_to_tree_item_map.has(path):
+		#return false
+	#
+	#var item:TreeItem = path_to_tree_item_map[path]
+	#return item.is_checked(column_visible)
 	
 
-func get_hidden_directories()->Array[String]:
-	var ret_paths:Array[String]
-	
-	for path in path_to_tree_item_map.keys():
-		var item:TreeItem = path_to_tree_item_map[path]
-		if !item.is_checked(0):
-			ret_paths.append(path)
-		
-	return ret_paths
+#func get_hidden_directories()->Array[String]:
+	#var ret_paths:Array[String]
+	#
+	#for path in path_to_tree_item_map.keys():
+		#var item:TreeItem = path_to_tree_item_map[path]
+		#if !item.is_checked(column_visible):
+			#ret_paths.append(path)
+		#
+	#return ret_paths
 
 func dir_has_materials(dir:EditorFileSystemDirectory)->bool:
 	for i in dir.get_file_count():
@@ -198,10 +242,11 @@ func collapse_unused_dirs():
 
 func collapse_unused_dirs_recursive(dir:EditorFileSystemDirectory)->bool:
 	#print("path ", dir.get_path())
-	if !path_to_tree_item_map.has(dir.get_path()):
+	var path:String = dir.get_path()
+	if !path_to_path_info.has(path):
 		return false
 		
-	var item:TreeItem = path_to_tree_item_map[dir.get_path()]
+	var item:TreeItem = path_to_path_info[path].tree_item
 	#print("item ", item.get_text(0))
 	var expanded:bool = dir_has_materials(dir)
 
@@ -294,21 +339,37 @@ func load_state(state:Dictionary):
 		
 		for path_tuple:Dictionary in path_arr:
 			var fs_path:String = path_tuple.get("path")
-			if !path_to_tree_item_map.has(fs_path):
-				continue
+			
+			var path_info:PathInfo
+			if path_to_path_info.has(fs_path):
+				path_info = path_to_path_info[fs_path]
+			else:
+				path_info = PathInfo.new()
+				path_to_path_info[fs_path] = path_info
+			
+			path_info.visible = path_tuple.get("visible", true)
+			path_info.collapsed = path_tuple.get("collapsed", false)
+			
+			#if !path_to_tree_item_map.has(fs_path):
+				#continue
 			
 #			print("setting ", path_tuple)
-			var item:TreeItem = path_to_tree_item_map[fs_path]
-			item.set_checked(0, path_tuple.get("checked", true))
-			item.collapsed = path_tuple.get("collapsed", false)
+			#var item:TreeItem = path_to_tree_item_map[fs_path]
+			#item.set_checked(column_visible, path_tuple.get("visible", true))
+			#item.collapsed = path_tuple.get("collapsed", false)
 
+	reload_materials()
 
 func save_state(state:Dictionary):
 	var path_arr:Array[Dictionary]
+
+	for fs_path:String in path_to_path_info:
+		var path_info:PathInfo = path_to_path_info[fs_path]
+		path_arr.append({"path": fs_path, "visible": path_info.visible, "collapsed": path_info.collapsed})
 	
-	for fs_path:String in path_to_tree_item_map:
-		var item:TreeItem = path_to_tree_item_map[fs_path]
-		path_arr.append({"path": fs_path, "checked": item.is_checked(0), "collapsed": item.collapsed})
+	#for fs_path:String in path_to_tree_item_map:
+		#var item:TreeItem = path_to_tree_item_map[fs_path]
+		#path_arr.append({"path": fs_path, "visible": item.is_checked(column_visible), "collapsed": item.collapsed})
 	
 	state["paths"] = path_arr
 	
