@@ -53,16 +53,13 @@ class PathInfo:
 
 
 var tree_item_to_path_map:Dictionary[TreeItem, String]
-#var path_to_tree_item_map:Dictionary[String, TreeItem]
 var path_to_path_info:Dictionary[String, PathInfo]
-
 
 
 func reload_materials():
 	#print("reload_materials")
 	clear()
 	tree_item_to_path_map.clear()
-	#path_to_tree_item_map.clear()
 
 	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
 	var root_dir:EditorFileSystemDirectory = efs.get_filesystem()
@@ -79,17 +76,13 @@ func reload_materials():
 	
 	var root_tree_item:TreeItem = create_item()
 	root_tree_item.set_text(0, root_dir.get_name())
-	#root_tree_item.set_editable(column_visible, true)
-#	var path_visible:bool = path_to_tree_item_map[path].is_checked(column_visible) if path_to_tree_item_map.has(path) else true
 	root_tree_item.add_button(column_visible, bn_vis_on if path_info.visible else bn_vis_off, ButtonType.VISIBLE, false, "Visible")
-#	root_tree_item.set_checked(column_visible, path_visible)
 	root_tree_item.set_checked(column_visible, path_info.visible)
 	root_tree_item.collapsed = path_info.collapsed
 	
 	path_info.tree_item = root_tree_item
 	
 	tree_item_to_path_map[root_tree_item] = path
-	#path_to_tree_item_map[path] = root_tree_item
 	
 	build_tree_recursive(root_dir, root_tree_item)
 	
@@ -116,19 +109,17 @@ func build_tree_recursive(parent_dir:EditorFileSystemDirectory, tree_item_parent
 			path_info.visible = true
 			path_to_path_info[path] = path_info
 
-		print("build_tree_recursive ", path, " ", path_info.collapsed)
+		#print("build_tree_recursive ", path, " ", path_info.collapsed)
 
 		var item:TreeItem = create_item(tree_item_parent)
 		item.set_text(0, child_dir.get_name())
 		item.add_button(column_visible, bn_vis_on if path_info.visible else bn_vis_off, ButtonType.VISIBLE, false, "Visible")
-#		item.set_checked(column_visible, true)
 		item.set_checked(column_visible, path_info.visible)
 		item.collapsed = path_info.collapsed
 
 		path_info.tree_item = item
 
 		tree_item_to_path_map[item] = path
-		#path_to_tree_item_map[child_dir.get_path()] = item
 		#print("path ", child_dir.get_path())
 		
 		build_tree_recursive(child_dir, item)
@@ -191,8 +182,7 @@ func _on_item_collapsed(item: TreeItem) -> void:
 	var path:String = tree_item_to_path_map[item]
 	path_to_path_info[path].collapsed = item.collapsed
 	
-	print("_on_item_collapsed ", path, " ", path_to_path_info[path].collapsed)
-	pass # Replace with function body.
+	#print("_on_item_collapsed ", path, " ", path_to_path_info[path].collapsed)
 	
 	
 func is_path_visible(path:String)->bool:
@@ -201,22 +191,6 @@ func is_path_visible(path:String)->bool:
 		
 	return false
 	
-	#if !path_to_tree_item_map.has(path):
-		#return false
-	#
-	#var item:TreeItem = path_to_tree_item_map[path]
-	#return item.is_checked(column_visible)
-	
-
-#func get_hidden_directories()->Array[String]:
-	#var ret_paths:Array[String]
-	#
-	#for path in path_to_tree_item_map.keys():
-		#var item:TreeItem = path_to_tree_item_map[path]
-		#if !item.is_checked(column_visible):
-			#ret_paths.append(path)
-		#
-	#return ret_paths
 
 func dir_has_materials(dir:EditorFileSystemDirectory)->bool:
 	for i in dir.get_file_count():
@@ -336,8 +310,6 @@ func _on_create_material_dialog_create_material(params:Dictionary):
 		
 		ResourceSaver.save(new_mat, params["parent_dir"] + "/" + params["name"] + ".tres")
 		
-	pass # Replace with function body.
-
 
 func load_state(state:Dictionary):
 	if state.has("paths"):
@@ -355,14 +327,6 @@ func load_state(state:Dictionary):
 			
 			path_info.visible = path_tuple.get("visible", true)
 			path_info.collapsed = path_tuple.get("collapsed", false)
-			
-			#if !path_to_tree_item_map.has(fs_path):
-				#continue
-			
-#			print("setting ", path_tuple)
-			#var item:TreeItem = path_to_tree_item_map[fs_path]
-			#item.set_checked(column_visible, path_tuple.get("visible", true))
-			#item.collapsed = path_tuple.get("collapsed", false)
 
 	reload_materials()
 
@@ -373,10 +337,6 @@ func save_state(state:Dictionary):
 		var path_info:PathInfo = path_to_path_info[fs_path]
 		path_arr.append({"path": fs_path, "visible": path_info.visible, "collapsed": path_info.collapsed})
 	
-	#for fs_path:String in path_to_tree_item_map:
-		#var item:TreeItem = path_to_tree_item_map[fs_path]
-		#path_arr.append({"path": fs_path, "visible": item.is_checked(column_visible), "collapsed": item.collapsed})
-	
 	state["paths"] = path_arr
 	
 
@@ -386,9 +346,6 @@ func _on_tree_entered() -> void:
 	efs.filesystem_changed.connect(on_filesystem_changed)
 	efs.resources_reimported.connect(on_resources_reimported)
 	efs.resources_reload.connect(on_resources_reload)
-	pass # Replace with function body.
-
-
 
 
 func _on_tree_exiting() -> void:
