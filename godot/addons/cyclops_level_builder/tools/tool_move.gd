@@ -170,10 +170,10 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 					move_constraint = MoveConstraint.Type.PLANE_YZ
 		
 			var start_pos:Vector3 = part_res.pos_world
-#			var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
 
-			#block_drag_p0 = MathUtil.snap_to_grid(start_pos, grid_step_size)
-			block_drag_p0 = builder.get_snapping_manager().snap_point(start_pos, SnappingQuery.new(viewport_camera))
+			block_drag_p0 = start_pos
+			if builder.snapping_enabled:
+				block_drag_p0 = builder.get_snapping_manager().snap_point(start_pos, SnappingQuery.new(viewport_camera))
 
 	#		print("res obj %s" % result.object.get_path())
 			var sel_blocks:Array[CyclopsBlock] = builder.get_selected_blocks()
@@ -201,11 +201,11 @@ func start_drag(viewport_camera:Camera3D, event:InputEvent):
 		else:
 			move_constraint = MoveConstraint.Type.PLANE_XZ
 
-		var start_pos:Vector3 = result.get_world_position()			
-		#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
+		var start_pos:Vector3 = result.get_world_position()
 
-		#block_drag_p0 = MathUtil.snap_to_grid(start_pos, grid_step_size)
-		block_drag_p0 = builder.get_snapping_manager().snap_point(start_pos, SnappingQuery.new(viewport_camera))
+		block_drag_p0 = start_pos
+		if builder.snapping_enabled:
+			block_drag_p0 = builder.get_snapping_manager().snap_point(start_pos, SnappingQuery.new(viewport_camera))
 		
 		#print("block_drag_p0 %s" % block_drag_p0)
 
@@ -445,11 +445,9 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 					
 			#print("dragging move_constraint %s block_drag_cur %s" % [move_constraint, block_drag_cur])
 
-			#var grid_step_size:float = pow(2, builder.get_global_scene().grid_size)
-			#block_drag_cur = MathUtil.snap_to_grid(block_drag_cur, grid_step_size)
-			block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur, SnappingQuery.new(viewport_camera))
+			if builder.snapping_enabled:
+				block_drag_cur = builder.get_snapping_manager().snap_point(block_drag_cur, SnappingQuery.new(viewport_camera))
 			
-			#cmd_move_blocks.move_offset = block_drag_cur - block_drag_p0
 			cmd_xform_blocks.transform = Transform3D(Basis.IDENTITY, block_drag_cur - block_drag_p0)
 			#print("cmd_move_blocks.move_offset %s" % cmd_move_blocks.move_offset)
 			cmd_xform_blocks.do_it()
