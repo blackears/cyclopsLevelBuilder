@@ -84,6 +84,7 @@ func reload_materials():
 	root_tree_item.add_button(column_visible, bn_vis_on if path_info.visible else bn_vis_off, ButtonType.VISIBLE, false, "Visible")
 #	root_tree_item.set_checked(column_visible, path_visible)
 	root_tree_item.set_checked(column_visible, path_info.visible)
+	root_tree_item.collapsed = path_info.collapsed
 	
 	path_info.tree_item = root_tree_item
 	
@@ -92,7 +93,7 @@ func reload_materials():
 	
 	build_tree_recursive(root_dir, root_tree_item)
 	
-	collapse_unused_dirs()
+	#collapse_unused_dirs()
 
 
 func build_tree_recursive(parent_dir:EditorFileSystemDirectory, tree_item_parent:TreeItem):
@@ -115,16 +116,18 @@ func build_tree_recursive(parent_dir:EditorFileSystemDirectory, tree_item_parent
 			path_info.visible = true
 			path_to_path_info[path] = path_info
 
+		print("build_tree_recursive ", path, " ", path_info.collapsed)
 
 		var item:TreeItem = create_item(tree_item_parent)
 		item.set_text(0, child_dir.get_name())
 		item.add_button(column_visible, bn_vis_on if path_info.visible else bn_vis_off, ButtonType.VISIBLE, false, "Visible")
 #		item.set_checked(column_visible, true)
 		item.set_checked(column_visible, path_info.visible)
+		item.collapsed = path_info.collapsed
 
 		path_info.tree_item = item
 
-		tree_item_to_path_map[item] = child_dir.get_path()
+		tree_item_to_path_map[item] = path
 		#path_to_tree_item_map[child_dir.get_path()] = item
 		#print("path ", child_dir.get_path())
 		
@@ -183,9 +186,12 @@ func _on_button_clicked(item:TreeItem, column:int, id:int, mouse_button_index:in
 	visiblity_changed.emit()
 
 func _on_item_collapsed(item: TreeItem) -> void:
+	if !tree_item_to_path_map.has(item):
+		return
 	var path:String = tree_item_to_path_map[item]
 	path_to_path_info[path].collapsed = item.collapsed
 	
+	print("_on_item_collapsed ", path, " ", path_to_path_info[path].collapsed)
 	pass # Replace with function body.
 	
 	
