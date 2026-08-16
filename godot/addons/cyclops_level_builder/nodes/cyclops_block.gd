@@ -155,7 +155,7 @@ func build_from_block():
 	if !mesh_vector_data:
 		return
 	
-#	print("got block data")		
+#	print("got block data")
 	
 	var vol:ConvexVolume = ConvexVolume.new()
 	vol.init_from_mesh_vector_data(mesh_vector_data)

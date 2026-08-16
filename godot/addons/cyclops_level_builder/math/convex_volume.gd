@@ -1572,8 +1572,7 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 	var shadow_mesh:ArrayMesh = ArrayMesh.new()
 	shadow_mesh.blend_shape_mode = Mesh.BLEND_SHAPE_MODE_NORMALIZED
 
-	#print("create_mesh")
-	#print("faces.size() ", faces.size())
+#	print("create_mesh <<0>>")
 
 	var face_dict:Dictionary = {}
 	for f_idx in faces.size():
@@ -1588,6 +1587,7 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 		else:
 			face_dict[face.material_id] = [f_idx]
 #			print("starting %s to %s" % [f_idx, face.material_id])
+#	print("create_mesh <<1>>")
 
 	var surface_idx:int = 0
 	for mat_id in face_dict.keys():
@@ -1598,12 +1598,12 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 		var tangents:PackedFloat32Array
 		var colors:PackedColorArray
 		var uv1s:PackedVector2Array
-#		var uv2s:PackedVector2Array
 
 		var material = default_material
 		if !override_with_default_material:
 			if mat_id >= 0 && mat_id < material_list.size():
 				material = material_list[mat_id]
+#		print("create_mesh <<1.0>>")
 
 		for f_idx in face_dict[mat_id]:
 #			print("f_idx %s" % f_idx)
@@ -1624,13 +1624,12 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 				var p:Vector3 = vertices[v_idx].point
 
 				uv1s.append(fv.uv0)
-#				uv2s.append(face.lightmap_uvs[v_local_idx])
 
-#				print("fv.normal ", fv.normal)
 				normals.append(fv.normal)
 				colors.append(fv.color)
 
 				points.append(p)
+#		print("create_mesh <<1.1>>")
 
 		#Calculate tangents
 		#http://foundationsofgameenginedev.com/FGED2-sample.pdf
@@ -1643,28 +1642,56 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 			var uv1:Vector2 = uv1s[i + 1]
 			var uv2:Vector2 = uv1s[i + 2]
 			
+			var duv1:Vector2 = uv1 - uv0
+			var duv2:Vector2 = uv2 - uv0
+
+			#print("-duv1 ", duv1)
+			#print("-duv2 ", duv2)
+			
+			#Create fake uv vectors if none supplied
+			if duv1.is_zero_approx() && duv2.is_zero_approx():
+				duv1 = Vector2(1, 0)
+				duv2 = Vector2(0, 1)
+			elif duv1.is_zero_approx():
+				#Rotate other uv 90 degrees
+				duv1 = Vector2(duv2.y, -duv2.x)
+			elif duv2.is_zero_approx():
+				#Rotate other uv 90 degrees
+				duv2 = Vector2(duv1.y, -duv1.x)
+			elif is_zero_approx(duv1.x * duv2.y - duv2.x * duv1.y):
+				#duv1 and duv2 are parallel
+				duv2 = Vector2(duv1.y, -duv1.x)
+				
+			
 			var n:Vector3 = normals[i]
 			
 			var e1:Vector3 = p1 - p0
 			var e2:Vector3 = p2 - p0
 			
-			var duv1:Vector2 = uv1 - uv0
-			var duv2:Vector2 = uv2 - uv0
-			
+			#Cramer's rule
 			var r:float = 1.0 / (duv1.x * duv2.y - duv2.x * duv1.y)
-			var t:Vector3 = (e1 * duv2.y - e2 * duv1.y) * r
+			var tangent:Vector3 = (e1 * duv2.y - e2 * duv1.y) * r
 			var b:Vector3 = (e2 * duv1.x - e1 * duv2.x) * r
+			
+			#if !tangent.is_finite():
+				#print("duv1 ", duv1)
+				#print("duv2 ", duv2)
+				#print("tangent ", tangent)
 
-			if !t.is_zero_approx():
-				t = t.normalized()
+			tangent = tangent.normalized()
+			if tangent.is_zero_approx():
+				var tan_bi:PackedVector3Array = MathUtil.get_axis_aligned_tangent_and_binormal(n)
+				tangent = tan_bi[0]
+				
+			#b = b.normalized()
 			
 			for j in 3:
-				tangents.append(t.x)
-				tangents.append(t.y)
-				tangents.append(t.z)
-				tangents.append(-1.0 if t.cross(b).dot(n) > 0 else 1.0)
+				tangents.append(tangent.x)
+				tangents.append(tangent.y)
+				tangents.append(tangent.z)
+				tangents.append(-1.0 if tangent.cross(b).dot(n) > 0 else 1.0)
+#		print("create_mesh <<1.2>>")
 		
-#		var arrays:Array = create_indexed_vertex_array(points, normals, tangents, colors, uv1s, uv2s)
 		var arrays:Array = create_indexed_vertex_array(points, normals, tangents, colors, uv1s)
 		
 		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
@@ -1680,8 +1707,9 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 		surface_idx += 1
 
 	mesh.shadow_mesh = shadow_mesh
-#	var err = mesh.lightmap_unwrap(Transform3D.IDENTITY, 10)
-#	print("Lightmap unwrap Error: %s" % err)
+
+#	print("create_mesh <<->>")
+
 	return mesh
 
 

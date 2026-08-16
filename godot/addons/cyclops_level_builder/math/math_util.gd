@@ -614,7 +614,7 @@ static func create_circle_points(center:Vector3, normal:Vector3, radius:float, n
 	
 	return result
 	
-static func get_axis_aligned_tangent_and_binormal(normal:Vector3)->Array[Vector3]:
+static func get_axis_aligned_tangent_and_binormal(normal:Vector3)->PackedVector3Array:
 	var axis:MathUtil.Axis = MathUtil.get_longest_axis(normal)
 	#calc tangent and binormal
 	var u_normal:Vector3
