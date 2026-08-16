@@ -64,6 +64,13 @@ class EdgeInfo extends RefCounted:
 		var p0:Vector3 = mesh.vertices[start_index].point
 		var p1:Vector3 = mesh.vertices[end_index].point
 		return (p0 + p1) / 2
+	
+	func get_other_vertex_index(v_idx:int):
+		if v_idx == start_index:
+			return end_index
+		if v_idx == end_index:
+			return start_index
+		return -1
 		
 	func _to_string():
 		var s:String = "%s %s [" % [start_index, end_index]
@@ -789,7 +796,55 @@ func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Tran
 	
 	bounds = calc_bounds()
 	calc_lightmap_uvs()
+
+func recalculate_normals(smooth_normals:bool = false):
+	#Face normals
+	for f:FaceInfo in faces:
+		var face_normal:Vector3 = -MathUtil.estimate_plane_normal_from_points_3d(f.get_points())
+		f.normal = face_normal
+#		print("face ", f.index, " ", f.normal)
 	
+	#Vertex normals
+	var vertex_weighted_normals:Dictionary[int, Vector3]
+	
+	for fv:FaceVertexInfo in face_vertices:
+		var f:FaceInfo = faces[fv.face_index]
+		var v0:VertexInfo = vertices[fv.vertex_index]
+		
+		var fv_local_idx:int = f.face_vertex_indices.find(fv.index)
+		var fv_local_idx_prev:int = wrap(fv_local_idx - 1, 0, f.face_vertex_indices.size())
+		var fv_local_idx_next:int = wrap(fv_local_idx + 1, 0, f.face_vertex_indices.size())
+		
+		var fv_prev:FaceVertexInfo = face_vertices[f.face_vertex_indices[fv_local_idx_prev]]
+		var fv_next:FaceVertexInfo = face_vertices[f.face_vertex_indices[fv_local_idx_next]]
+		
+		var v_prev:VertexInfo = vertices[fv_prev.vertex_index]
+		var v_next:VertexInfo = vertices[fv_next.vertex_index]
+		
+		var face_weighted_norm:Vector3 = (v_prev.point - v0.point).cross(v_next.point - v0.point)
+		
+		if vertex_weighted_normals.has(fv.vertex_index):
+			vertex_weighted_normals[fv.vertex_index] += face_weighted_norm
+		else:
+			vertex_weighted_normals[fv.vertex_index] = face_weighted_norm
+	
+	for v_idx in vertex_weighted_normals.keys():
+		var v:VertexInfo = vertices[v_idx]
+		v.normal = vertex_weighted_normals[v_idx].normalized()
+		
+#		print("vertex ", v.index, " ", v.normal)
+		
+	#Update face vertex normals
+	for fv:FaceVertexInfo in face_vertices:
+		if smooth_normals:
+			var v:VertexInfo = vertices[fv.vertex_index]
+			fv.normal = v.normal
+		else:
+			var f:FaceInfo = faces[fv.face_index]
+			fv.normal = f.normal
+	
+#		print("fv ", fv.index, " ", fv.normal)
+
 func calc_vertex_normals(smooth:bool = false):
 	#print("calc_vertex_normals ", _to_string())
 	#print("calc_vertex_normals face_vertex_coord_map ", face_vertex_coord_map)

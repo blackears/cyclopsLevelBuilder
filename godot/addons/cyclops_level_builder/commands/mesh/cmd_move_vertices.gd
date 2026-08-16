@@ -80,7 +80,9 @@ func pre_do_it():
 		for v_idx in vol.vertices.size():
 			if rec.vertex_indices.has(v_idx):
 				vol.vertices[v_idx].point += move_offset_local
-				
+		
+		vol.recalculate_normals()
+		
 		block.mesh_vector_data = vol.to_mesh_vector_data()
 	
 
