@@ -309,7 +309,8 @@ func init_prism(base_points:Array[Vector3], extrude_dir:Vector3, uv_transform:Tr
 	
 	build_edges()
 	build_face_vertices()
-	calc_vertex_normals()
+#	calc_vertex_normals()
+	recalculate_normals()
 	
 	bounds = calc_bounds()
 	calc_lightmap_uvs()
@@ -439,7 +440,8 @@ func init_sphere(block_bounds:AABB, segments:int, rings:int, uv_transform:Transf
 
 	build_edges()
 	build_face_vertices()
-	calc_vertex_normals()
+#	calc_vertex_normals()
+	recalculate_normals()
 	
 #	print("extra calc")
 	
@@ -554,7 +556,8 @@ func init_from_convex_block_data(data:ConvexBlockData):
 				face.face_vertex_indices.append(face_vertex_coord_map[Vector2i(f_idx, v_idx)].index)
 				
 	
-	calc_vertex_normals()
+#	calc_vertex_normals()
+	recalculate_normals()
 	
 	#print("init_from_convex_block_data %s" % format_faces_string())
 	
@@ -752,7 +755,8 @@ func init_from_mesh_vector_data(mvd:MeshVectorData):
 			face.face_vertex_indices.append(face_vertex_coord_map[Vector2i(f_idx, v_idx)].index)
 
 	if !v_normal || face_vertex_normal.size() == 0:
-		calc_vertex_normals()
+	#	calc_vertex_normals()
+		recalculate_normals()
 	
 	#Calculate edge -> neighbor faces map
 	
@@ -792,7 +796,8 @@ func init_from_points(points:PackedVector3Array, uv_transform:Transform2D = Tran
 
 	build_edges()
 	build_face_vertices()
-	calc_vertex_normals()
+	recalculate_normals()
+#	calc_vertex_normals()
 	
 	bounds = calc_bounds()
 	calc_lightmap_uvs()
@@ -845,29 +850,29 @@ func recalculate_normals(smooth_normals:bool = false):
 	
 #		print("fv ", fv.index, " ", fv.normal)
 
-func calc_vertex_normals(smooth:bool = false):
-	#print("calc_vertex_normals ", _to_string())
-	#print("calc_vertex_normals face_vertex_coord_map ", face_vertex_coord_map)
-	
-	for v_idx in vertices.size():
-		var v:VertexInfo = vertices[v_idx]
-		var weighted_normal:Vector3
-		
-		for face in faces:
-			if face.vertex_indices.has(v_idx):
-				weighted_normal += MathUtil.face_area_x2(face.get_points())
-		
-		v.normal = weighted_normal.normalized()
-
-	#Calc face vertices
-	for fv:FaceVertexInfo in face_vertices:
-		if smooth:
-			var v:VertexInfo = vertices[fv.vertex_index]
-			fv.normal = v.normal
-		else:
-			var face:FaceInfo = faces[fv.face_index]
-			fv.normal = face.normal
-		
+#func calc_vertex_normals(smooth:bool = false):
+	##print("calc_vertex_normals ", _to_string())
+	##print("calc_vertex_normals face_vertex_coord_map ", face_vertex_coord_map)
+	#
+	#for v_idx in vertices.size():
+		#var v:VertexInfo = vertices[v_idx]
+		#var weighted_normal:Vector3
+		#
+		#for face in faces:
+			#if face.vertex_indices.has(v_idx):
+				#weighted_normal += MathUtil.face_area_x2(face.get_points())
+		#
+		#v.normal = weighted_normal.normalized()
+#
+	##Calc face vertices
+	#for fv:FaceVertexInfo in face_vertices:
+		#if smooth:
+			#var v:VertexInfo = vertices[fv.vertex_index]
+			#fv.normal = v.normal
+		#else:
+			#var face:FaceInfo = faces[fv.face_index]
+			#fv.normal = face.normal
+		#
 
 func get_vertices_in_sphere(center:Vector3, radius:float)->Array[VertexInfo]:
 	var result:Array[VertexInfo]
