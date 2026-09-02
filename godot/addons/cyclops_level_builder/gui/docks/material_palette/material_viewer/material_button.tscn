@@ -35,7 +35,6 @@ render_target_update_mode = 4
 
 [node name="material_preview_scene" parent="VBoxContainer/SubViewportContainer/SubViewport" unique_id=954020953 instance=ExtResource("3_2jgpr")]
 unique_name_in_owner = true
-mesh_type = 0
 
 [node name="MaterialName" type="Label" parent="VBoxContainer" unique_id=1567459128]
 unique_name_in_owner = true

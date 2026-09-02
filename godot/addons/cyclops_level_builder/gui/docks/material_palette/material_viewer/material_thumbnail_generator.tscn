@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://ypgd484mnha"]
+
+[ext_resource type="Script" uid="uid://chq8ssuffk0s4" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/material_thumbnail_generator.gd" id="1_04jgi"]
+[ext_resource type="PackedScene" uid="uid://uamc56mld5o6" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/material_preview_scene.tscn" id="1_vexpa"]
+
+[sub_resource type="World3D" id="World3D_04jgi"]
+
+[node name="MaterialThumbnailGenerator" type="Node" unique_id=2043812007]
+script = ExtResource("1_04jgi")
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=824187445]
+own_world_3d = true
+world_3d = SubResource("World3D_04jgi")
+handle_input_locally = false
+size = Vector2i(128, 128)
+render_target_update_mode = 4
+
+[node name="material_preview_scene" parent="SubViewport" unique_id=954020953 instance=ExtResource("1_vexpa")]
+unique_name_in_owner = true

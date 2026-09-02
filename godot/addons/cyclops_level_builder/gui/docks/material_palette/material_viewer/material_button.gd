@@ -98,7 +98,8 @@ func rebuild_thumbnail():
 	if !plugin:
 		return
 	
-	#var rp:EditorResourcePreview = plugin.get_editor_interface().get_resource_previewer()
+	EditorResourcePreview
+	#var rp:EditorResourcePreview = EditorInterface.get_resource_previewer()
 	#rp.queue_resource_preview(material_path, self, "resource_preview_callback", null)
 	
 	material_local = ResourceLoader.load(material_path, "Material")
