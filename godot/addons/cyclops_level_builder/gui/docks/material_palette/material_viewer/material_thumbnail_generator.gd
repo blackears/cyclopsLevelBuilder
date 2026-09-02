@@ -1,6 +1,8 @@
 extends Node
 class_name MaterialThumbnailGenerator
 
+@onready var subviewport:SubViewport = %SubViewport
+
 enum Shape { PLANE, SPHERE, CUBE, TORUS }
 
 class Request extends Resource:
@@ -13,6 +15,8 @@ class Request extends Resource:
 var queue:Array[Request]
 var mutex:Mutex = Mutex.new()
 
+var cur_request:Request
+
 func generate_thumbnail(material:Material, mesh_type:MaterialPreviewScene.MeshType, size:Vector2i, callback:Callable):
 	var request:Request = Request.new()
 	request.material = material
@@ -20,5 +24,18 @@ func generate_thumbnail(material:Material, mesh_type:MaterialPreviewScene.MeshTy
 	request.size = size
 	request.callback = callback
 	
-	queue.append(request)
+	mutex.lock()
+	queue.push_front(request)
+	mutex.unlock()
+	
+func _process(delta: float) -> void:
+	if !cur_request:
+		if queue.is_empty():
+			return
+		
+		cur_request = queue.pop_back()
+		subviewport.size = cur_request.size
+		
+		
+	
 	pass

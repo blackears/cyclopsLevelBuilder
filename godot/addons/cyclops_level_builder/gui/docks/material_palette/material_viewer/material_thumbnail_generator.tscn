@@ -9,9 +9,9 @@
 script = ExtResource("1_04jgi")
 
 [node name="SubViewport" type="SubViewport" parent="." unique_id=824187445]
+unique_name_in_owner = true
 own_world_3d = true
 world_3d = SubResource("World3D_04jgi")
-handle_input_locally = false
 size = Vector2i(128, 128)
 render_target_update_mode = 4
 
