@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://nke18tf4e83i"]
+[gd_scene format=3 uid="uid://nke18tf4e83i"]
 
 [ext_resource type="Script" uid="uid://ddgqa4qj6q43p" path="res://addons/cyclops_level_builder/actions/mesh/action_convert_to_mesh.gd" id="1_0hgma"]
 [ext_resource type="Script" uid="uid://drc7uouh60w7i" path="res://addons/cyclops_level_builder/actions/mesh/action_delete_selected_blocks.gd" id="2_emaam"]
@@ -29,6 +29,7 @@
 [ext_resource type="Script" uid="uid://drntw35qsu3ne" path="res://addons/cyclops_level_builder/actions/io/action_import_mesh_instance.gd" id="26_fi00w"]
 [ext_resource type="PackedScene" uid="uid://d20nq3erg8h6y" path="res://addons/cyclops_level_builder/gui/keymap/menu_line_item_group.tscn" id="27_s523r"]
 [ext_resource type="PackedScene" uid="uid://3bofw5ja324o" path="res://addons/cyclops_level_builder/gui/keymap/menu_line_item_action.tscn" id="28_78y5y"]
+[ext_resource type="Script" uid="uid://bq8r7ht35jmjd" path="res://addons/cyclops_level_builder/tools/tool_select_box.gd" id="28_cygk3"]
 [ext_resource type="PackedScene" uid="uid://xw6bq4jaq65g" path="res://addons/cyclops_level_builder/gui/keymap/hotkey_group.tscn" id="29_erm3v"]
 [ext_resource type="PackedScene" uid="uid://d1q536mp4gca8" path="res://addons/cyclops_level_builder/gui/keymap/toolbar_button_ref.tscn" id="29_ly0y2"]
 [ext_resource type="PackedScene" uid="uid://rfwc7ptt2jlp" path="res://addons/cyclops_level_builder/gui/keymap/menu_line_item_separator.tscn" id="30_sbask"]
@@ -54,507 +55,513 @@
 [ext_resource type="Texture2D" uid="uid://c0x011okomj8n" path="res://addons/cyclops_level_builder/art/icons/snap_vertex.svg" id="52_b6dcn"]
 [ext_resource type="Script" uid="uid://cnuk6orsomncy" path="res://addons/cyclops_level_builder/snapping/snapping_system_vertex.gd" id="53_du7dj"]
 
-[node name="Configuration" type="Node"]
+[node name="Configuration" type="Node" unique_id=15051854]
 
-[node name="Actions" type="Node" parent="."]
+[node name="Actions" type="Node" parent="." unique_id=140490240]
 
-[node name="Mesh" type="Node" parent="Actions"]
+[node name="Mesh" type="Node" parent="Actions" unique_id=848863094]
 
-[node name="Convert To Godot Mesh" type="Node" parent="Actions/Mesh"]
+[node name="Convert To Godot Mesh" type="Node" parent="Actions/Mesh" unique_id=610556577]
 script = ExtResource("1_0hgma")
 
-[node name="Delete Selected Blocks" type="Node" parent="Actions/Mesh"]
+[node name="Delete Selected Blocks" type="Node" parent="Actions/Mesh" unique_id=1183908459]
 script = ExtResource("2_emaam")
 
-[node name="Duplicate Selected Blocks" type="Node" parent="Actions/Mesh"]
+[node name="Duplicate Selected Blocks" type="Node" parent="Actions/Mesh" unique_id=1535965677]
 script = ExtResource("3_kf7cu")
 
-[node name="Intersect Blocks" type="Node" parent="Actions/Mesh"]
+[node name="Intersect Blocks" type="Node" parent="Actions/Mesh" unique_id=143908187]
 script = ExtResource("4_l4l65")
 
-[node name="Merge Selected Blocks" type="Node" parent="Actions/Mesh"]
+[node name="Merge Selected Blocks" type="Node" parent="Actions/Mesh" unique_id=2088367182]
 script = ExtResource("5_0rdkr")
 
-[node name="Merge Vertices Center" type="Node" parent="Actions/Mesh"]
+[node name="Merge Vertices Center" type="Node" parent="Actions/Mesh" unique_id=152983047]
 script = ExtResource("6_qqbvp")
 
-[node name="Select Tools" type="Node" parent="Actions/Mesh"]
+[node name="Select Tools" type="Node" parent="Actions/Mesh" unique_id=1204270034]
 
-[node name="select tool block" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
+[node name="select tool block" type="Node" parent="Actions/Mesh/Select Tools" unique_id=1663960128 node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "cube"
 tool = NodePath("../../../../Tools/View3D/Block")
 
-[node name="select tool clip" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
+[node name="select tool clip" type="Node" parent="Actions/Mesh/Select Tools" unique_id=17576850 node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "cube"
 tool = NodePath("../../../../Tools/View3D/Clip")
 
-[node name="select tool cylinder" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
+[node name="select tool cylinder" type="Node" parent="Actions/Mesh/Select Tools" unique_id=1519465934 node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "cylinder"
 tool = NodePath("../../../../Tools/View3D/Cylinder")
 
-[node name="select tool duplicate" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
+[node name="select tool duplicate" type="Node" parent="Actions/Mesh/Select Tools" unique_id=296577212 node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
 tool = NodePath("../../../../Tools/View3D/Duplicate")
 
-[node name="select tool edit edge" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
+[node name="select tool edit edge" type="Node" parent="Actions/Mesh/Select Tools" unique_id=79496854 node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
 tool = NodePath("../../../../Tools/View3D/Edit Edge")
 
-[node name="select tool edit face" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
+[node name="select tool edit face" type="Node" parent="Actions/Mesh/Select Tools" unique_id=1900773943 node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
 tool = NodePath("../../../../Tools/View3D/Edit Face")
 
-[node name="select tool edit vertex" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
+[node name="select tool edit vertex" type="Node" parent="Actions/Mesh/Select Tools" unique_id=1518160616 node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
 tool = NodePath("../../../../Tools/View3D/Edit Vertex")
 
-[node name="select tool material brush" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
+[node name="select tool material brush" type="Node" parent="Actions/Mesh/Select Tools" unique_id=966648765 node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
 tool = NodePath("../../../../Tools/View3D/Material Brush")
 
-[node name="select tool move" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
+[node name="select tool move" type="Node" parent="Actions/Mesh/Select Tools" unique_id=145477283 node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
 tool = NodePath("../../../../Tools/View3D/Move")
 
-[node name="select tool prism" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
+[node name="select tool prism" type="Node" parent="Actions/Mesh/Select Tools" unique_id=811210260 node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
 tool = NodePath("../../../../Tools/View3D/Prism")
 
-[node name="select tool rotate" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
+[node name="select tool rotate" type="Node" parent="Actions/Mesh/Select Tools" unique_id=1986629873 node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
 tool = NodePath("../../../../Tools/View3D/Rotate")
 
-[node name="select tool stairs" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
+[node name="select tool stairs" type="Node" parent="Actions/Mesh/Select Tools" unique_id=1834113974 node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
 tool = NodePath("../../../../Tools/View3D/Stairs")
 
-[node name="select tool vertex color brush" type="Node" parent="Actions/Mesh/Select Tools" node_paths=PackedStringArray("tool")]
+[node name="select tool vertex color brush" type="Node" parent="Actions/Mesh/Select Tools" unique_id=1410296882 node_paths=PackedStringArray("tool")]
 script = ExtResource("19_crfh4")
 tool_id = "duplicate"
 tool = NodePath("../../../../Tools/View3D/Vertex Color Brush")
 
-[node name="Transforms" type="Node" parent="Actions/Mesh"]
+[node name="Transforms" type="Node" parent="Actions/Mesh" unique_id=376871651]
 
-[node name="Mirror Selection X" type="Node" parent="Actions/Mesh/Transforms"]
+[node name="Mirror Selection X" type="Node" parent="Actions/Mesh/Transforms" unique_id=1838125596]
 script = ExtResource("7_5c24b")
 scale = Vector3(-1, 1, 1)
 
-[node name="Mirror Selection Y" type="Node" parent="Actions/Mesh/Transforms"]
+[node name="Mirror Selection Y" type="Node" parent="Actions/Mesh/Transforms" unique_id=1841529850]
 script = ExtResource("8_wam5i")
 scale = Vector3(1, -1, 1)
 
-[node name="Mirror Selection Z" type="Node" parent="Actions/Mesh/Transforms"]
+[node name="Mirror Selection Z" type="Node" parent="Actions/Mesh/Transforms" unique_id=690555828]
 script = ExtResource("9_fc33v")
 scale = Vector3(1, 1, -1)
 
-[node name="Rotate 90 Ccw X" type="Node" parent="Actions/Mesh/Transforms"]
+[node name="Rotate 90 Ccw X" type="Node" parent="Actions/Mesh/Transforms" unique_id=1770352426]
 script = ExtResource("10_6x5p0")
 rotation_axis = Vector3(1, 0, 0)
 rotation_angle = 1.5708
 
-[node name="Rotate 90 Cw X" type="Node" parent="Actions/Mesh/Transforms"]
+[node name="Rotate 90 Cw X" type="Node" parent="Actions/Mesh/Transforms" unique_id=1703699205]
 script = ExtResource("11_ev7l6")
 rotation_axis = Vector3(1, 0, 0)
 rotation_angle = -1.5708
 
-[node name="Rotate 180 X" type="Node" parent="Actions/Mesh/Transforms"]
+[node name="Rotate 180 X" type="Node" parent="Actions/Mesh/Transforms" unique_id=484332110]
 script = ExtResource("12_fh7r3")
 rotation_axis = Vector3(1, 0, 0)
 rotation_angle = 3.14159
 
-[node name="Rotate 90 Ccw Y" type="Node" parent="Actions/Mesh/Transforms"]
+[node name="Rotate 90 Ccw Y" type="Node" parent="Actions/Mesh/Transforms" unique_id=1994399289]
 script = ExtResource("13_11xap")
 rotation_axis = Vector3(0, 1, 0)
 rotation_angle = 1.5708
 
-[node name="Rotate 90 Cw Y" type="Node" parent="Actions/Mesh/Transforms"]
+[node name="Rotate 90 Cw Y" type="Node" parent="Actions/Mesh/Transforms" unique_id=1924153260]
 script = ExtResource("14_i36wq")
 rotation_axis = Vector3(0, 1, 0)
 rotation_angle = -1.5708
 
-[node name="Rotate 180 Y" type="Node" parent="Actions/Mesh/Transforms"]
+[node name="Rotate 180 Y" type="Node" parent="Actions/Mesh/Transforms" unique_id=444195616]
 script = ExtResource("15_6whjl")
 rotation_axis = Vector3(0, 1, 0)
 rotation_angle = 3.14159
 
-[node name="Rotate 90 Ccw Z" type="Node" parent="Actions/Mesh/Transforms"]
+[node name="Rotate 90 Ccw Z" type="Node" parent="Actions/Mesh/Transforms" unique_id=1857802703]
 script = ExtResource("16_swu80")
 rotation_axis = Vector3(0, 0, 1)
 rotation_angle = 1.5708
 
-[node name="Rotate 90 Cw Z" type="Node" parent="Actions/Mesh/Transforms"]
+[node name="Rotate 90 Cw Z" type="Node" parent="Actions/Mesh/Transforms" unique_id=1512884690]
 script = ExtResource("17_p7m85")
 rotation_axis = Vector3(0, 0, 1)
 rotation_angle = -1.5708
 
-[node name="Rotate 180 Z" type="Node" parent="Actions/Mesh/Transforms"]
+[node name="Rotate 180 Z" type="Node" parent="Actions/Mesh/Transforms" unique_id=2029507760]
 script = ExtResource("18_vjnk4")
 rotation_axis = Vector3(0, 0, 1)
 rotation_angle = 3.14159
 
-[node name="Snap to grid" type="Node" parent="Actions/Mesh"]
+[node name="Snap to grid" type="Node" parent="Actions/Mesh" unique_id=785480955]
 script = ExtResource("20_e2ed5")
 
-[node name="Subtract Block" type="Node" parent="Actions/Mesh"]
+[node name="Subtract Block" type="Node" parent="Actions/Mesh" unique_id=454117287]
 script = ExtResource("21_p6w58")
 
-[node name="Generate UVs Triplanar" type="Node" parent="Actions/Mesh"]
+[node name="Generate UVs Triplanar" type="Node" parent="Actions/Mesh" unique_id=2008652346]
 script = ExtResource("22_vggen")
 
-[node name="IO" type="Node" parent="Actions"]
+[node name="IO" type="Node" parent="Actions" unique_id=1239141065]
 
-[node name="Export As Cyclops File___" type="Node" parent="Actions/IO"]
+[node name="Export As Cyclops File___" type="Node" parent="Actions/IO" unique_id=29823213]
 script = ExtResource("22_dy3rm")
 
-[node name="Export As Gltf___" type="Node" parent="Actions/IO"]
+[node name="Export As Gltf___" type="Node" parent="Actions/IO" unique_id=793205699]
 script = ExtResource("23_nnsqu")
 
-[node name="Export As Godot Scene___" type="Node" parent="Actions/IO"]
+[node name="Export As Godot Scene___" type="Node" parent="Actions/IO" unique_id=1845946768]
 script = ExtResource("24_m0xgf")
 
-[node name="Import Cyclops File___" type="Node" parent="Actions/IO"]
+[node name="Import Cyclops File___" type="Node" parent="Actions/IO" unique_id=1771765212]
 script = ExtResource("25_4g35j")
 
-[node name="Import Godot MeshInstance___" type="Node" parent="Actions/IO"]
+[node name="Import Godot MeshInstance___" type="Node" parent="Actions/IO" unique_id=586525631]
 script = ExtResource("26_fi00w")
 
-[node name="Tools" type="Node" parent="."]
+[node name="Tools" type="Node" parent="." unique_id=702355991]
 
-[node name="View3D" type="Node" parent="Tools"]
+[node name="View3D" type="Node" parent="Tools" unique_id=830921094]
 
-[node name="Move" type="Node" parent="Tools/View3D"]
+[node name="Select Box" type="Node" parent="Tools/View3D" unique_id=2036028722]
+script = ExtResource("28_cygk3")
+
+[node name="Move" type="Node" parent="Tools/View3D" unique_id=1479189542]
 script = ExtResource("39_d3762")
 
-[node name="Rotate" type="Node" parent="Tools/View3D"]
+[node name="Rotate" type="Node" parent="Tools/View3D" unique_id=562810573]
 script = ExtResource("41_unjic")
 
-[node name="Block" type="Node" parent="Tools/View3D"]
+[node name="Block" type="Node" parent="Tools/View3D" unique_id=242068968]
 script = ExtResource("31_i0r0b")
 
-[node name="Sphere" type="Node" parent="Tools/View3D"]
+[node name="Sphere" type="Node" parent="Tools/View3D" unique_id=1099462857]
 script = ExtResource("31_3jwb6")
 
-[node name="Cylinder" type="Node" parent="Tools/View3D"]
+[node name="Cylinder" type="Node" parent="Tools/View3D" unique_id=1352988280]
 script = ExtResource("33_d3xxe")
 
-[node name="Prism" type="Node" parent="Tools/View3D"]
+[node name="Prism" type="Node" parent="Tools/View3D" unique_id=1316720033]
 script = ExtResource("40_hiraq")
 
-[node name="Stairs" type="Node" parent="Tools/View3D"]
+[node name="Stairs" type="Node" parent="Tools/View3D" unique_id=329664546]
 script = ExtResource("42_l6okp")
 
-[node name="Clip" type="Node" parent="Tools/View3D"]
+[node name="Clip" type="Node" parent="Tools/View3D" unique_id=2036606602]
 script = ExtResource("32_o11u8")
 
-[node name="Duplicate" type="Node" parent="Tools/View3D"]
+[node name="Duplicate" type="Node" parent="Tools/View3D" unique_id=1826361075]
 script = ExtResource("34_bxx15")
 
-[node name="Edit Vertex" type="Node" parent="Tools/View3D"]
+[node name="Edit Vertex" type="Node" parent="Tools/View3D" unique_id=174701729]
 script = ExtResource("37_vfe51")
 
-[node name="Edit Edge" type="Node" parent="Tools/View3D"]
+[node name="Edit Edge" type="Node" parent="Tools/View3D" unique_id=992522553]
 script = ExtResource("35_rsoxq")
 
-[node name="Edit Face" type="Node" parent="Tools/View3D"]
+[node name="Edit Face" type="Node" parent="Tools/View3D" unique_id=438563993]
 script = ExtResource("36_0crd5")
 
-[node name="Material Brush" type="Node" parent="Tools/View3D"]
+[node name="Material Brush" type="Node" parent="Tools/View3D" unique_id=1089217180]
 script = ExtResource("38_r23xl")
 
-[node name="Vertex Color Brush" type="Node" parent="Tools/View3D"]
+[node name="Vertex Color Brush" type="Node" parent="Tools/View3D" unique_id=838890063]
 script = ExtResource("43_36wj4")
 
-[node name="UvEditor" type="Node" parent="Tools"]
+[node name="UvEditor" type="Node" parent="Tools" unique_id=1675900492]
 
-[node name="Move UV" type="Node" parent="Tools/UvEditor"]
+[node name="Move UV" type="Node" parent="Tools/UvEditor" unique_id=1599579398]
 script = ExtResource("41_1e7oi")
 
-[node name="Rotate UV" type="Node" parent="Tools/UvEditor"]
+[node name="Rotate UV" type="Node" parent="Tools/UvEditor" unique_id=1977440330]
 script = ExtResource("41_1e7oi")
 
-[node name="Scale UV" type="Node" parent="Tools/UvEditor"]
+[node name="Scale UV" type="Node" parent="Tools/UvEditor" unique_id=1923793596]
 script = ExtResource("41_1e7oi")
 
-[node name="Box Transform UV" type="Node" parent="Tools/UvEditor"]
+[node name="Box Transform UV" type="Node" parent="Tools/UvEditor" unique_id=488758295]
 script = ExtResource("41_1e7oi")
 
-[node name="Views" type="Node" parent="."]
+[node name="Views" type="Node" parent="." unique_id=638920835]
 
-[node name="Default" type="Node" parent="Views"]
+[node name="Default" type="Node" parent="Views" unique_id=1520106610]
 
-[node name="Menu" type="Node" parent="Views/Default"]
+[node name="Menu" type="Node" parent="Views/Default" unique_id=680482476]
 
-[node name="File" parent="Views/Default/Menu" instance=ExtResource("27_s523r")]
+[node name="File" parent="Views/Default/Menu" unique_id=555475612 instance=ExtResource("27_s523r")]
 
-[node name="Import Cyclops File" parent="Views/Default/Menu/File" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Import Cyclops File" parent="Views/Default/Menu/File" unique_id=1143521729 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../Actions/IO/Import Cyclops File___")
 
-[node name="Import Godot MeshInstance" parent="Views/Default/Menu/File" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Import Godot MeshInstance" parent="Views/Default/Menu/File" unique_id=298123580 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../Actions/IO/Import Godot MeshInstance___")
 
-[node name="Toolbar" type="Node" parent="Views/Default"]
+[node name="Toolbar" type="Node" parent="Views/Default" unique_id=459478593]
 
-[node name="Block" parent="Views/Default/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Block" parent="Views/Default/Toolbar" unique_id=1360991843 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/View3D/Block")
 
-[node name="Cylinder" parent="Views/Default/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Cylinder" parent="Views/Default/Toolbar" unique_id=839299097 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/View3D/Cylinder")
 
-[node name="Prism" parent="Views/Default/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Prism" parent="Views/Default/Toolbar" unique_id=570195632 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/View3D/Prism")
 
-[node name="Stairs" parent="Views/Default/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Stairs" parent="Views/Default/Toolbar" unique_id=1857595891 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/View3D/Stairs")
 
-[node name="View3D" type="Node" parent="Views"]
+[node name="View3D" type="Node" parent="Views" unique_id=714916830]
 
-[node name="Toolbar" type="Node" parent="Views/View3D"]
+[node name="Toolbar" type="Node" parent="Views/View3D" unique_id=1409917510]
 
-[node name="Move" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Select Box" parent="Views/View3D/Toolbar" unique_id=636773467 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+tool = NodePath("../../../../Tools/View3D/Select Box")
+
+[node name="Move" parent="Views/View3D/Toolbar" unique_id=1477306874 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/View3D/Move")
 
-[node name="Rotate" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Rotate" parent="Views/View3D/Toolbar" unique_id=1283237466 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/View3D/Rotate")
 
-[node name="Block" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Block" parent="Views/View3D/Toolbar" unique_id=2105394433 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/View3D/Block")
 
-[node name="Sphere" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Sphere" parent="Views/View3D/Toolbar" unique_id=1919063272 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/View3D/Sphere")
 
-[node name="Cylinder" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Cylinder" parent="Views/View3D/Toolbar" unique_id=448942951 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/View3D/Cylinder")
 
-[node name="Prism" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Prism" parent="Views/View3D/Toolbar" unique_id=700932373 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/View3D/Prism")
 
-[node name="Stairs" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Stairs" parent="Views/View3D/Toolbar" unique_id=782871637 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/View3D/Stairs")
 
-[node name="Clip" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Clip" parent="Views/View3D/Toolbar" unique_id=236959202 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/View3D/Clip")
 
-[node name="Edit Vertex" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Edit Vertex" parent="Views/View3D/Toolbar" unique_id=308448622 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/View3D/Edit Vertex")
 
-[node name="Edit Edge" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Edit Edge" parent="Views/View3D/Toolbar" unique_id=1386612264 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/View3D/Edit Edge")
 
-[node name="Edit Face" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Edit Face" parent="Views/View3D/Toolbar" unique_id=1111862392 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/View3D/Edit Face")
 
-[node name="Material Brush" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Material Brush" parent="Views/View3D/Toolbar" unique_id=523974506 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/View3D/Material Brush")
 
-[node name="Vertex Color Brush" parent="Views/View3D/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Vertex Color Brush" parent="Views/View3D/Toolbar" unique_id=844468585 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/View3D/Vertex Color Brush")
 
-[node name="Menu" type="Node" parent="Views/View3D"]
+[node name="Menu" type="Node" parent="Views/View3D" unique_id=720546441]
 
-[node name="File" parent="Views/View3D/Menu" instance=ExtResource("27_s523r")]
+[node name="File" parent="Views/View3D/Menu" unique_id=1916769809 instance=ExtResource("27_s523r")]
 
-[node name="Export as Cyclops File" parent="Views/View3D/Menu/File" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Export as Cyclops File" parent="Views/View3D/Menu/File" unique_id=2030840980 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../Actions/IO/Export As Cyclops File___")
 
-[node name="Export as Gltf" parent="Views/View3D/Menu/File" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Export as Gltf" parent="Views/View3D/Menu/File" unique_id=1866258344 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../Actions/IO/Export As Gltf___")
 
-[node name="Export as Godot Scene" parent="Views/View3D/Menu/File" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Export as Godot Scene" parent="Views/View3D/Menu/File" unique_id=442708963 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../Actions/IO/Export As Godot Scene___")
 
-[node name="Import Cyclops File" parent="Views/View3D/Menu/File" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Import Cyclops File" parent="Views/View3D/Menu/File" unique_id=843794169 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../Actions/IO/Import Cyclops File___")
 
-[node name="Import Godot MeshInstance" parent="Views/View3D/Menu/File" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Import Godot MeshInstance" parent="Views/View3D/Menu/File" unique_id=631182457 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../Actions/IO/Import Godot MeshInstance___")
 
-[node name="___separator" parent="Views/View3D/Menu/File" instance=ExtResource("30_sbask")]
+[node name="___separator" parent="Views/View3D/Menu/File" unique_id=1524934020 instance=ExtResource("30_sbask")]
 
-[node name="Duplicate Selected Blocks" parent="Views/View3D/Menu/File" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Duplicate Selected Blocks" parent="Views/View3D/Menu/File" unique_id=754761709 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../Actions/Mesh/Duplicate Selected Blocks")
 
-[node name="Delete Selected Blocks" parent="Views/View3D/Menu/File" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Delete Selected Blocks" parent="Views/View3D/Menu/File" unique_id=2023838483 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../Actions/Mesh/Delete Selected Blocks")
 
-[node name="Convert to Godot Mesh" parent="Views/View3D/Menu/File" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Convert to Godot Mesh" parent="Views/View3D/Menu/File" unique_id=651287105 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../Actions/Mesh/Convert To Godot Mesh")
 
-[node name="Merge Vertices Center" parent="Views/View3D/Menu/File" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Merge Vertices Center" parent="Views/View3D/Menu/File" unique_id=155899560 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../Actions/Mesh/Merge Vertices Center")
 
-[node name="Snap to Grid" parent="Views/View3D/Menu/File" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Snap to Grid" parent="Views/View3D/Menu/File" unique_id=1787908499 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../Actions/Mesh/Snap to grid")
 
-[node name="Snap Block" parent="Views/View3D/Menu/File" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Snap Block" parent="Views/View3D/Menu/File" unique_id=1362428525 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../Actions/Mesh/Snap to grid")
 
-[node name="Generate UVs Triplanar" parent="Views/View3D/Menu/File" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Generate UVs Triplanar" parent="Views/View3D/Menu/File" unique_id=76496557 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../Actions/Mesh/Generate UVs Triplanar")
 
-[node name="Boolean" parent="Views/View3D/Menu/File" instance=ExtResource("27_s523r")]
+[node name="Boolean" parent="Views/View3D/Menu/File" unique_id=1366327537 instance=ExtResource("27_s523r")]
 
-[node name="Merge Blocks" parent="Views/View3D/Menu/File/Boolean" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Merge Blocks" parent="Views/View3D/Menu/File/Boolean" unique_id=2092028271 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../../Actions/Mesh/Merge Selected Blocks")
 
-[node name="Intersect Blocks" parent="Views/View3D/Menu/File/Boolean" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Intersect Blocks" parent="Views/View3D/Menu/File/Boolean" unique_id=1184886127 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../../Actions/Mesh/Intersect Blocks")
 
-[node name="Subtract Block" parent="Views/View3D/Menu/File/Boolean" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Subtract Block" parent="Views/View3D/Menu/File/Boolean" unique_id=116378488 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../../Actions/Mesh/Subtract Block")
 
-[node name="Transforms" parent="Views/View3D/Menu/File" instance=ExtResource("27_s523r")]
+[node name="Transforms" parent="Views/View3D/Menu/File" unique_id=407334583 instance=ExtResource("27_s523r")]
 
-[node name="Mirror X" parent="Views/View3D/Menu/File/Transforms" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Mirror X" parent="Views/View3D/Menu/File/Transforms" unique_id=1419159059 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../../Actions/Mesh/Transforms/Mirror Selection X")
 
-[node name="Mirror Y" parent="Views/View3D/Menu/File/Transforms" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Mirror Y" parent="Views/View3D/Menu/File/Transforms" unique_id=1799961955 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../../Actions/Mesh/Transforms/Mirror Selection Y")
 
-[node name="Mirror Z" parent="Views/View3D/Menu/File/Transforms" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Mirror Z" parent="Views/View3D/Menu/File/Transforms" unique_id=2104806985 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../../Actions/Mesh/Transforms/Mirror Selection Z")
 
-[node name="Rotate Ccw 90 X" parent="Views/View3D/Menu/File/Transforms" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Rotate Ccw 90 X" parent="Views/View3D/Menu/File/Transforms" unique_id=735708346 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../../Actions/Mesh/Transforms/Rotate 90 Ccw X")
 
-[node name="Rotate Cw 90 X" parent="Views/View3D/Menu/File/Transforms" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Rotate Cw 90 X" parent="Views/View3D/Menu/File/Transforms" unique_id=526342808 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../../Actions/Mesh/Transforms/Rotate 90 Cw X")
 
-[node name="Rotate 180 X" parent="Views/View3D/Menu/File/Transforms" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Rotate 180 X" parent="Views/View3D/Menu/File/Transforms" unique_id=1573885748 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../../Actions/Mesh/Transforms/Rotate 180 X")
 
-[node name="Rotate Ccw 90 Y" parent="Views/View3D/Menu/File/Transforms" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Rotate Ccw 90 Y" parent="Views/View3D/Menu/File/Transforms" unique_id=256646769 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../../Actions/Mesh/Transforms/Rotate 90 Ccw Y")
 
-[node name="Rotate Cw 90 Y" parent="Views/View3D/Menu/File/Transforms" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Rotate Cw 90 Y" parent="Views/View3D/Menu/File/Transforms" unique_id=1226842347 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../../Actions/Mesh/Transforms/Rotate 90 Cw Z")
 
-[node name="Rotate 180 Y" parent="Views/View3D/Menu/File/Transforms" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Rotate 180 Y" parent="Views/View3D/Menu/File/Transforms" unique_id=849489025 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../../Actions/Mesh/Transforms/Rotate 180 Y")
 
-[node name="Rotate Ccw 90 Z" parent="Views/View3D/Menu/File/Transforms" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Rotate Ccw 90 Z" parent="Views/View3D/Menu/File/Transforms" unique_id=1200648686 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../../Actions/Mesh/Transforms/Rotate 90 Ccw Z")
 
-[node name="Rotate Cw 90 Z" parent="Views/View3D/Menu/File/Transforms" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Rotate Cw 90 Z" parent="Views/View3D/Menu/File/Transforms" unique_id=476067883 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../../Actions/Mesh/Transforms/Rotate 90 Cw Z")
 
-[node name="Rotate 180 Z" parent="Views/View3D/Menu/File/Transforms" node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
+[node name="Rotate 180 Z" parent="Views/View3D/Menu/File/Transforms" unique_id=810163803 node_paths=PackedStringArray("action") instance=ExtResource("28_78y5y")]
 action = NodePath("../../../../../../Actions/Mesh/Transforms/Rotate 180 Z")
 
-[node name="Hotkeys" parent="Views/View3D" instance=ExtResource("29_erm3v")]
+[node name="Hotkeys" parent="Views/View3D" unique_id=1061843592 instance=ExtResource("29_erm3v")]
 
-[node name="delete selection" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="delete selection" parent="Views/View3D/Hotkeys" unique_id=1102833288 node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "X"
 key = 88
 action = NodePath("../../../../Actions/Mesh/Delete Selected Blocks")
 
-[node name="duplicate selection" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="duplicate selection" parent="Views/View3D/Hotkeys" unique_id=297860121 node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "D + shift"
 key = 68
 shift = true
 action = NodePath("../../../../Actions/Mesh/Select Tools/select tool duplicate")
 
-[node name="sel tool move" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="sel tool move" parent="Views/View3D/Hotkeys" unique_id=1067200562 node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "G"
 key = 71
 action = NodePath("../../../../Actions/Mesh/Select Tools/select tool move")
 
-[node name="sel tool rotate" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="sel tool rotate" parent="Views/View3D/Hotkeys" unique_id=1452750059 node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "R"
 key = 82
 action = NodePath("../../../../Actions/Mesh/Select Tools/select tool rotate")
 
-[node name="sel tool block" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="sel tool block" parent="Views/View3D/Hotkeys" unique_id=1279388495 node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "1 + alt"
 key = 49
 alt = true
 action = NodePath("../../../../Actions/Mesh/Select Tools/select tool block")
 
-[node name="sel tool cylinder" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="sel tool cylinder" parent="Views/View3D/Hotkeys" unique_id=767453929 node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "2 + alt"
 key = 50
 alt = true
 action = NodePath("../../../../Actions/Mesh/Select Tools/select tool cylinder")
 
-[node name="sel tool prism" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="sel tool prism" parent="Views/View3D/Hotkeys" unique_id=1242853821 node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "3 + alt"
 key = 51
 alt = true
 action = NodePath("../../../../Actions/Mesh/Select Tools/select tool prism")
 
-[node name="sel tool stairs" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="sel tool stairs" parent="Views/View3D/Hotkeys" unique_id=1439785113 node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "4 + alt"
 key = 52
 alt = true
 action = NodePath("../../../../Actions/Mesh/Select Tools/select tool stairs")
 
-[node name="sel tool edit vertices" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="sel tool edit vertices" parent="Views/View3D/Hotkeys" unique_id=1511105069 node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "5 + alt"
 key = 53
 alt = true
 action = NodePath("../../../../Actions/Mesh/Select Tools/select tool edit vertex")
 
-[node name="sel tool edit edges" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="sel tool edit edges" parent="Views/View3D/Hotkeys" unique_id=291790064 node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "6 + alt"
 key = 54
 alt = true
 action = NodePath("../../../../Actions/Mesh/Select Tools/select tool edit edge")
 
-[node name="sel tool edit faces" parent="Views/View3D/Hotkeys" node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
+[node name="sel tool edit faces" parent="Views/View3D/Hotkeys" unique_id=532525230 node_paths=PackedStringArray("action") instance=ExtResource("30_u8e7a")]
 editor_description = "7 + alt"
 key = 55
 alt = true
 action = NodePath("../../../../Actions/Mesh/Select Tools/select tool edit face")
 
-[node name="Snapping" type="Node" parent="Views/View3D"]
+[node name="Snapping" type="Node" parent="Views/View3D" unique_id=1568500926]
 
-[node name="snap grid" parent="Views/View3D/Snapping" node_paths=PackedStringArray("snapping_node") instance=ExtResource("49_e5oe6")]
+[node name="snap grid" parent="Views/View3D/Snapping" unique_id=447873980 node_paths=PackedStringArray("snapping_node") instance=ExtResource("49_e5oe6")]
 snapping_node = NodePath("../../../../Snapping/View3D/Snap Grid")
 
-[node name="snap vertex" parent="Views/View3D/Snapping" node_paths=PackedStringArray("snapping_node") instance=ExtResource("49_e5oe6")]
+[node name="snap vertex" parent="Views/View3D/Snapping" unique_id=1134652904 node_paths=PackedStringArray("snapping_node") instance=ExtResource("49_e5oe6")]
 snapping_node = NodePath("../../../../Snapping/View3D/Snap Vertex")
 
-[node name="UvEditor" type="Node" parent="Views"]
+[node name="UvEditor" type="Node" parent="Views" unique_id=1749953956]
 
-[node name="Toolbar" type="Node" parent="Views/UvEditor"]
+[node name="Toolbar" type="Node" parent="Views/UvEditor" unique_id=2020351125]
 
-[node name="Move UVs" parent="Views/UvEditor/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Move UVs" parent="Views/UvEditor/Toolbar" unique_id=877903551 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/UvEditor/Move UV")
 
-[node name="Rotate UVs" parent="Views/UvEditor/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Rotate UVs" parent="Views/UvEditor/Toolbar" unique_id=1421048900 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/UvEditor/Rotate UV")
 
-[node name="Scale UVs" parent="Views/UvEditor/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Scale UVs" parent="Views/UvEditor/Toolbar" unique_id=1308554839 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/UvEditor/Scale UV")
 
-[node name="Box Transform UVs" parent="Views/UvEditor/Toolbar" node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
+[node name="Box Transform UVs" parent="Views/UvEditor/Toolbar" unique_id=558302989 node_paths=PackedStringArray("tool") instance=ExtResource("29_ly0y2")]
 tool = NodePath("../../../../Tools/UvEditor/Box Transform UV")
 
-[node name="Menu" type="Node" parent="Views/UvEditor"]
+[node name="Menu" type="Node" parent="Views/UvEditor" unique_id=1573361051]
 
-[node name="Hotkeys" type="Node" parent="Views/UvEditor"]
+[node name="Hotkeys" type="Node" parent="Views/UvEditor" unique_id=472458007]
 
-[node name="Snapping" type="Node" parent="."]
+[node name="Snapping" type="Node" parent="." unique_id=1532760511]
 
-[node name="View3D" type="Node" parent="Snapping"]
+[node name="View3D" type="Node" parent="Snapping" unique_id=1921264051]
 
-[node name="Snap Grid" type="Node" parent="Snapping/View3D"]
+[node name="Snap Grid" type="Node" parent="Snapping/View3D" unique_id=1429028772]
 script = ExtResource("51_i5uvs")
 icon = ExtResource("50_rxpkw")
 tooltip = "Snap to grid points"
 
-[node name="Snap Vertex" type="Node" parent="Snapping/View3D"]
+[node name="Snap Vertex" type="Node" parent="Snapping/View3D" unique_id=353279402]
 script = ExtResource("53_du7dj")
 icon = ExtResource("52_b6dcn")
 tooltip = "Snap to vertices"

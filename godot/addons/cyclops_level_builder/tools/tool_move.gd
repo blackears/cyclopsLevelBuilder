@@ -55,9 +55,6 @@ var gizmo_translate:GizmoTranslate
 
 var settings:ToolMoveSettings = ToolMoveSettings.new()
 
-#var tag:ToolTag = preload("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_move.tres")
-#var tag = preload("res://addons/cyclops_level_builder/data/tool_tags/tool_tag_move.tres")
-
 func _get_tool_id()->String:
 	return TOOL_ID
 
@@ -459,7 +456,7 @@ func _gui_input(viewport_camera:Camera3D, event:InputEvent)->bool:
 			return true
 			
 	
-	return super._gui_input(viewport_camera, event)		
+	return super._gui_input(viewport_camera, event)
 
 
 func _activate(tool_owner:Node):
