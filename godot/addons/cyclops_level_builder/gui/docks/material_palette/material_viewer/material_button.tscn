@@ -2,13 +2,10 @@
 
 [ext_resource type="Theme" uid="uid://di7ydnvl4n54r" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/mat_bn_normal_theme.tres" id="1_t260s"]
 [ext_resource type="Script" uid="uid://clxmjij01lerf" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/material_button.gd" id="1_vd4oe"]
-[ext_resource type="PackedScene" uid="uid://uamc56mld5o6" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/material_preview_scene.tscn" id="3_2jgpr"]
 [ext_resource type="Texture2D" uid="uid://cq2l5le3at3pf" path="res://addons/cyclops_level_builder/art/icons/materials_torus.svg" id="4_o63td"]
 [ext_resource type="Texture2D" uid="uid://c8oh4i1mu0w2d" path="res://addons/cyclops_level_builder/art/icons/materials_cube.svg" id="5_lv6ue"]
 [ext_resource type="Texture2D" uid="uid://crhb7egf6sq4h" path="res://addons/cyclops_level_builder/art/icons/materials_sphere.svg" id="6_h8a4e"]
 [ext_resource type="Texture2D" uid="uid://37pk3qa1akgt" path="res://addons/cyclops_level_builder/art/icons/materials_rectangle.svg" id="7_nq4ch"]
-
-[sub_resource type="World3D" id="World3D_u66f6"]
 
 [node name="MaterialButton" type="PanelContainer" unique_id=1918758208]
 offset_right = 89.0
@@ -21,20 +18,9 @@ script = ExtResource("1_vd4oe")
 layout_mode = 2
 metadata/_edit_lock_ = true
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="VBoxContainer" unique_id=409749910]
-custom_minimum_size = Vector2(128, 128)
-layout_mode = 2
-stretch = true
-
-[node name="SubViewport" type="SubViewport" parent="VBoxContainer/SubViewportContainer" unique_id=1353922306]
-own_world_3d = true
-world_3d = SubResource("World3D_u66f6")
-handle_input_locally = false
-size = Vector2i(128, 128)
-render_target_update_mode = 4
-
-[node name="material_preview_scene" parent="VBoxContainer/SubViewportContainer/SubViewport" unique_id=954020953 instance=ExtResource("3_2jgpr")]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer" unique_id=668722014]
 unique_name_in_owner = true
+layout_mode = 2
 
 [node name="MaterialName" type="Label" parent="VBoxContainer" unique_id=1567459128]
 unique_name_in_owner = true

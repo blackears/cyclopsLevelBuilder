@@ -30,6 +30,10 @@ signal select_material(mat_bn:MaterialButton, selection_type:SelectionList.Type)
 
 @onready var material_preview_scene:MaterialPreviewScene = %material_preview_scene
 
+@export var thumbnail_generator:MaterialThumbnailGenerator
+
+@export var mesh_type:MaterialPreviewScene.MeshType
+
 @export var selected:bool = false:
 	get:
 		return selected
@@ -79,26 +83,34 @@ signal select_material(mat_bn:MaterialButton, selection_type:SelectionList.Type)
 @export var theme_selected:Theme = preload("res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/mat_bn_selected_theme.tres")
 @export var theme_active:Theme = preload("res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/mat_bn_active_theme.tres")
 
-var plugin:CyclopsLevelBuilder:
-	get:
-		return plugin
-	set(value):
-		if value == plugin:
-			return
-		
-		plugin = value
-		
-		dirty = true
+#var plugin:CyclopsLevelBuilder:
+	#get:
+		#return plugin
+	#set(value):
+		#if value == plugin:
+			#return
+		#
+		#plugin = value
+		#
+		#dirty = true
 
 var dirty:bool = true
 
 var material_local:Material
 
 func rebuild_thumbnail():
-	if !plugin:
-		return
+	if thumbnail_generator:
+		material_local = ResourceLoader.load(material_path, "Material")
+		thumbnail_generator.generate_thumbnail(material_local, mesh_type, Vector2i(128, 128), func(result:ImageTexture):
+			%TextureRect.texture = result
+		)
+		pass
+	pass
+
+func rebuild_thumbnail_old():
+	#if !plugin:
+		#return
 	
-	EditorResourcePreview
 	#var rp:EditorResourcePreview = EditorInterface.get_resource_previewer()
 	#rp.queue_resource_preview(material_path, self, "resource_preview_callback", null)
 	
@@ -159,20 +171,24 @@ func _process(delta):
 
 
 func _on_bn_rect_pressed() -> void:
+	mesh_type = MaterialPreviewScene.MeshType.RECTANGLE
 	material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.RECTANGLE
 	pass # Replace with function body.
 
 
 func _on_bn_sphere_pressed() -> void:
+	mesh_type = MaterialPreviewScene.MeshType.SPHERE
 	material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.SPHERE
 	pass # Replace with function body.
 
 
 func _on_bn_cube_pressed() -> void:
+	mesh_type = MaterialPreviewScene.MeshType.CUBE
 	material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.CUBE
 	pass # Replace with function body.
 
 
 func _on_bn_torus_pressed() -> void:
+	mesh_type = MaterialPreviewScene.MeshType.TORUS
 	material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.TORUS
 	pass # Replace with function body.

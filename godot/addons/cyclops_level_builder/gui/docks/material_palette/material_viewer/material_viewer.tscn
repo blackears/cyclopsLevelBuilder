@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d3nlj300thhqs" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/material_viewer.gd" id="1_nrjye"]
 [ext_resource type="PackedScene" uid="uid://cchlfqbh0djdn" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/material_groups_tree.tscn" id="2_8hnut"]
+[ext_resource type="PackedScene" uid="uid://ypgd484mnha" path="res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/material_thumbnail_generator.tscn" id="3_3cjp5"]
 
 [node name="MaterialViewer" type="PanelContainer" unique_id=1632003731]
 offset_right = 523.0
@@ -61,6 +62,9 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="MaterialThumbnailGenerator" parent="." unique_id=2043812007 instance=ExtResource("3_3cjp5")]
+unique_name_in_owner = true
 
 [connection signal="tree_entered" from="." to="." method="_on_tree_entered"]
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]

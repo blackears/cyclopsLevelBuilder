@@ -28,6 +28,9 @@ class_name MaterialViewer
 @onready var button_area:HFlowContainer = %ButtonArea
 @onready var mat_group_tree:MaterialGroupsTree = %MatGroupTree
 @onready var filter_lineEdit:LineEdit = %lineEd_filter
+@onready var material_thumbnail_generator:MaterialThumbnailGenerator = %MaterialThumbnailGenerator
+
+const material_button_ps:Resource = preload("res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/material_button.tscn")
 
 var builder:CyclopsLevelBuilder:
 	get:
@@ -87,7 +90,6 @@ func reload_materials():
 	var efsd:EditorFileSystemDirectory = efs.get_filesystem()
 	reload_materials_recursive(efsd)
 
-
 func reload_materials_recursive(dir:EditorFileSystemDirectory):
 	var mat_name_filter:String = filter_lineEdit.text
 	
@@ -108,9 +110,10 @@ func reload_materials_recursive(dir:EditorFileSystemDirectory):
 			
 			#print("path %s type %s" % [path, type])
 			
-			var bn:MaterialButton = preload("res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/material_button.tscn").instantiate()
+			var bn:MaterialButton = material_button_ps.instantiate()
 			bn.material_path = path
-			bn.plugin = builder
+			#bn.plugin = builder
+			bn.thumbnail_generator = material_thumbnail_generator
 			bn.selected = selected_material_paths.has(path)
 			bn.active = !selected_material_paths.is_empty() && path == selected_material_paths[-1]
 			#button_group.add_button(bn)

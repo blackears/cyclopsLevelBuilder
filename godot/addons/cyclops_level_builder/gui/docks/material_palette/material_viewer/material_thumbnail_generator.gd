@@ -1,9 +1,9 @@
+@tool
 extends Node
 class_name MaterialThumbnailGenerator
 
 @onready var subviewport:SubViewport = %SubViewport
-
-enum Shape { PLANE, SPHERE, CUBE, TORUS }
+@onready var material_preview_scene:MaterialPreviewScene = %material_preview_scene
 
 class Request extends Resource:
 	var material:Material
@@ -33,9 +33,25 @@ func _process(delta: float) -> void:
 		if queue.is_empty():
 			return
 		
+		mutex.lock()
+
 		cur_request = queue.pop_back()
 		subviewport.size = cur_request.size
+		subviewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 		
+		material_preview_scene.mesh_type = cur_request.mesh_type
+		material_preview_scene.display_material = cur_request.material
 		
+		mutex.unlock()
+		
+		#Wait for image to be ready
+		#await ???
+		await RenderingServer.frame_post_draw
+		
+		mutex.lock()
+		var img:Image = subviewport.get_texture().get_image()
+		var result:ImageTexture = ImageTexture.create_from_image(img)
+		cur_request.callback.call(result)
+		cur_request = null
+		mutex.unlock()
 	
-	pass
