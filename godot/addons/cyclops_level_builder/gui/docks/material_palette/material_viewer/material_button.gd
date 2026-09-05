@@ -28,7 +28,7 @@ class_name MaterialButton
 signal apply_material(mat_bn:MaterialButton)
 signal select_material(mat_bn:MaterialButton, selection_type:SelectionList.Type)
 
-@onready var material_preview_scene:MaterialPreviewScene = %material_preview_scene
+#@onready var material_preview_scene:MaterialPreviewScene = %material_preview_scene
 
 @export var thumbnail_generator:MaterialThumbnailGenerator
 
@@ -107,18 +107,26 @@ func rebuild_thumbnail():
 		pass
 	pass
 
-func rebuild_thumbnail_old():
-	#if !plugin:
-		#return
+#func rebuild_thumbnail_old():
+
+	##var rp:EditorResourcePreview = EditorInterface.get_resource_previewer()
+	##rp.queue_resource_preview(material_path, self, "resource_preview_callback", null)
+	#
+	#material_local = ResourceLoader.load(material_path, "Material")
+	#material_preview_scene.display_material = material_local
+##	material_local = load(material_path)
+	#%MaterialName.text = GeneralUtil.calc_resource_name(material_local)
+	#tooltip_text = material_path
 	
+#func rebuild_thumbnail_old2():
+	#
 	#var rp:EditorResourcePreview = EditorInterface.get_resource_previewer()
 	#rp.queue_resource_preview(material_path, self, "resource_preview_callback", null)
-	
-	material_local = ResourceLoader.load(material_path, "Material")
-	material_preview_scene.display_material = material_local
-#	material_local = load(material_path)
-	%MaterialName.text = GeneralUtil.calc_resource_name(material_local)
-	tooltip_text = material_path
+	#
+	#material_local = ResourceLoader.load(material_path, "Material")
+	#material_local = load(material_path)
+	#%MaterialName.text = GeneralUtil.calc_resource_name(material_local)
+	#tooltip_text = material_path
 
 #func resource_preview_callback(path:String, preview:Texture2D, thumbnail_preview:Texture2D, userdata:Variant):
 	##print("Set bn tex ", path)
@@ -172,23 +180,23 @@ func _process(delta):
 
 func _on_bn_rect_pressed() -> void:
 	mesh_type = MaterialPreviewScene.MeshType.RECTANGLE
-	material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.RECTANGLE
+	#material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.RECTANGLE
 	pass # Replace with function body.
 
 
 func _on_bn_sphere_pressed() -> void:
 	mesh_type = MaterialPreviewScene.MeshType.SPHERE
-	material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.SPHERE
+	#material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.SPHERE
 	pass # Replace with function body.
 
 
 func _on_bn_cube_pressed() -> void:
 	mesh_type = MaterialPreviewScene.MeshType.CUBE
-	material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.CUBE
+	#material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.CUBE
 	pass # Replace with function body.
 
 
 func _on_bn_torus_pressed() -> void:
 	mesh_type = MaterialPreviewScene.MeshType.TORUS
-	material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.TORUS
+	#material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.TORUS
 	pass # Replace with function body.
