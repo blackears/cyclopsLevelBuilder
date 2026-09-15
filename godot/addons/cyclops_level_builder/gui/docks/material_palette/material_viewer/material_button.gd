@@ -116,20 +116,29 @@ signal select_material(mat_bn:MaterialButton, selection_type:SelectionList.Type)
 		#dirty = true
 
 var dirty:bool = true
+var waiting_for_thumbnail:bool = false
 
 var material_local:Material
 
 func on_material_changed():
 	print("on_material_changed()", material_path)
 	rebuild_thumbnail()
+	#dirty = true
 	
 func rebuild_thumbnail():
+	if waiting_for_thumbnail:
+		dirty = true
+		return
+	
 	if thumbnail_generator:
+		waiting_for_thumbnail = true
 		#material_local = ResourceLoader.load(material_path, "Material")
 		thumbnail_generator.generate_thumbnail(material_local, mesh_type, thumbnail_size, func(result:ImageTexture):
 			thumbnail_image.texture = result
 			material_name.text = GeneralUtil.calc_resource_name(material_local)
 			tooltip_text = material_path
+			waiting_for_thumbnail = false
+			dirty = false
 		)
 		pass
 	pass
@@ -203,12 +212,12 @@ func _ready():
 func _process(delta):
 	if dirty:
 		rebuild_thumbnail()
-		dirty = false
+		#dirty = false
 	pass
 
 func on_resources_reimported(resources: PackedStringArray):
-	print("--on_resources_reimported ", material_path)
-	print("resoruces ", resources)
+	#print("--on_resources_reimported ", material_path)
+	#print("resoruces ", resources)
 	
 	if resources.has(material_path):
 		rebuild_thumbnail()
@@ -216,24 +225,28 @@ func on_resources_reimported(resources: PackedStringArray):
 
 func _on_bn_rect_pressed() -> void:
 	mesh_type = MaterialPreviewScene.MeshType.RECTANGLE
+	dirty = true
 	#material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.RECTANGLE
 	pass # Replace with function body.
 
 
 func _on_bn_sphere_pressed() -> void:
 	mesh_type = MaterialPreviewScene.MeshType.SPHERE
+	dirty = true
 	#material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.SPHERE
 	pass # Replace with function body.
 
 
 func _on_bn_cube_pressed() -> void:
 	mesh_type = MaterialPreviewScene.MeshType.CUBE
+	dirty = true
 	#material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.CUBE
 	pass # Replace with function body.
 
 
 func _on_bn_torus_pressed() -> void:
 	mesh_type = MaterialPreviewScene.MeshType.TORUS
+	dirty = true
 	#material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.TORUS
 	pass # Replace with function body.
 
