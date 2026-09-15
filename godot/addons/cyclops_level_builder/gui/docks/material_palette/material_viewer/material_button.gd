@@ -31,6 +31,7 @@ signal select_material(mat_bn:MaterialButton, selection_type:SelectionList.Type)
 #@onready var material_preview_scene:MaterialPreviewScene = %material_preview_scene
 
 @onready var material_name:Label = %MaterialName
+@onready var thumbnail_image:TextureRect = %thumbnail_image
 
 @export var thumbnail_generator:MaterialThumbnailGenerator
 
@@ -53,6 +54,16 @@ signal select_material(mat_bn:MaterialButton, selection_type:SelectionList.Type)
 			return
 		active = value
 		update_border()
+		
+@export var thumbnail_size:Vector2i = Vector2i(128, 128):
+	set(v):
+		if thumbnail_size == v:
+			return
+			
+		thumbnail_size = v
+		
+		if is_node_ready():
+			thumbnail_image.custom_minimum_size = thumbnail_size
 
 @export_file("*.tres") var material_path:String:
 	get:
@@ -62,6 +73,14 @@ signal select_material(mat_bn:MaterialButton, selection_type:SelectionList.Type)
 			return
 		
 		material_path = value
+
+		if material_local:
+			material_local.changed.disconnect(on_material_changed)
+		
+		material_local = ResourceLoader.load(material_path, "Material")
+		
+		if material_local:
+			material_local.changed.connect(on_material_changed)
 		
 		dirty = true
 
@@ -100,11 +119,15 @@ var dirty:bool = true
 
 var material_local:Material
 
+func on_material_changed():
+	print("on_material_changed()", material_path)
+	rebuild_thumbnail()
+	
 func rebuild_thumbnail():
 	if thumbnail_generator:
-		material_local = ResourceLoader.load(material_path, "Material")
-		thumbnail_generator.generate_thumbnail(material_local, mesh_type, Vector2i(128, 128), func(result:ImageTexture):
-			%TextureRect.texture = result
+		#material_local = ResourceLoader.load(material_path, "Material")
+		thumbnail_generator.generate_thumbnail(material_local, mesh_type, thumbnail_size, func(result:ImageTexture):
+			thumbnail_image.texture = result
 			material_name.text = GeneralUtil.calc_resource_name(material_local)
 			tooltip_text = material_path
 		)
@@ -171,6 +194,8 @@ func update_border():
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	update_border()
+	
+	thumbnail_image.custom_minimum_size = thumbnail_size
 	pass # Replace with function body.
 
 
@@ -181,6 +206,13 @@ func _process(delta):
 		dirty = false
 	pass
 
+func on_resources_reimported(resources: PackedStringArray):
+	print("--on_resources_reimported ", material_path)
+	print("resoruces ", resources)
+	
+	if resources.has(material_path):
+		rebuild_thumbnail()
+	pass
 
 func _on_bn_rect_pressed() -> void:
 	mesh_type = MaterialPreviewScene.MeshType.RECTANGLE
@@ -204,3 +236,16 @@ func _on_bn_torus_pressed() -> void:
 	mesh_type = MaterialPreviewScene.MeshType.TORUS
 	#material_preview_scene.mesh_type = MaterialPreviewScene.MeshType.TORUS
 	pass # Replace with function body.
+
+
+func _on_tree_entered() -> void:
+	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
+#	efs.filesystem_changed.connect(on_filesystem_changed)
+	efs.resources_reimported.connect(on_resources_reimported)
+#	efs.resources_reload.connect(on_resources_reload)
+
+
+func _on_tree_exiting() -> void:
+	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
+	efs.resources_reimported.disconnect(on_resources_reimported)
+#	pass # Replace with function body.
