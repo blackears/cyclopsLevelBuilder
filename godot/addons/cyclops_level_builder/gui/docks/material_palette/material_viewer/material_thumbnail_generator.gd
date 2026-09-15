@@ -46,7 +46,8 @@ func _process(delta: float) -> void:
 		
 		#Wait for image to be ready
 		#await ???
-		await RenderingServer.frame_post_draw
+		#await RenderingServer.frame_post_draw
+		await get_tree().process_frame
 		
 		mutex.lock()
 		var img:Image = subviewport.get_texture().get_image()

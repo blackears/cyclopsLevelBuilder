@@ -30,6 +30,8 @@ signal select_material(mat_bn:MaterialButton, selection_type:SelectionList.Type)
 
 #@onready var material_preview_scene:MaterialPreviewScene = %material_preview_scene
 
+@onready var material_name:Label = %MaterialName
+
 @export var thumbnail_generator:MaterialThumbnailGenerator
 
 @export var mesh_type:MaterialPreviewScene.MeshType
@@ -103,6 +105,8 @@ func rebuild_thumbnail():
 		material_local = ResourceLoader.load(material_path, "Material")
 		thumbnail_generator.generate_thumbnail(material_local, mesh_type, Vector2i(128, 128), func(result:ImageTexture):
 			%TextureRect.texture = result
+			material_name.text = GeneralUtil.calc_resource_name(material_local)
+			tooltip_text = material_path
 		)
 		pass
 	pass

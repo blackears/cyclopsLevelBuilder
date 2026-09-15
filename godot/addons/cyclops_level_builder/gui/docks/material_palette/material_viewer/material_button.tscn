@@ -9,7 +9,7 @@
 
 [node name="MaterialButton" type="PanelContainer" unique_id=1918758208]
 offset_right = 89.0
-offset_bottom = 91.0
+offset_bottom = 116.0
 mouse_filter = 1
 theme = ExtResource("1_t260s")
 script = ExtResource("1_vd4oe")

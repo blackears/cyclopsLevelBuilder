@@ -39,20 +39,7 @@ var builder:CyclopsLevelBuilder:
 		if value == builder:
 			return
 			
-		#if builder:
-			#var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
-			#efs.filesystem_changed.disconnect(on_filesystem_changed)
-			#efs.resources_reimported.disconnect(on_resources_reimported)
-			#efs.resources_reload.disconnect(on_resources_reload)
-			
 		builder = value
-		#mat_group_tree.plugin = builder
-		
-		#if builder:
-			#var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
-			#efs.filesystem_changed.connect(on_filesystem_changed)
-			#efs.resources_reimported.connect(on_resources_reimported)
-			#efs.resources_reload.connect(on_resources_reload)
 		
 		reload_materials()
 
@@ -79,18 +66,33 @@ func reload_materials():
 #	print("material_viewer Reload materials")
 	if !is_node_ready():
 		return
+		
 	print("material_viewer Reload materials +")
+	
+	var existing_buttons:Dictionary[String, MaterialButton]
+	var inserted_buttons:Array[MaterialButton]
 	
 	for child:MaterialButton in button_area.get_children():
 		button_area.remove_child(child)
-		child.queue_free()
+		existing_buttons[child.material_path] = child
+		
+		#child.queue_free()
 	
 	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
 	
 	var efsd:EditorFileSystemDirectory = efs.get_filesystem()
-	reload_materials_recursive(efsd)
+	reload_materials_recursive(efsd, existing_buttons, inserted_buttons)
+	
+	for bn:MaterialButton in inserted_buttons:
+		button_area.add_child(bn)
+	
+	for bn:MaterialButton in existing_buttons.values():
+		if !inserted_buttons.has(bn):
+			bn.queue_free()
+	
 
-func reload_materials_recursive(dir:EditorFileSystemDirectory):
+
+func reload_materials_recursive(dir:EditorFileSystemDirectory, existing_buttons:Dictionary[String, MaterialButton], inserted_buttons:Array[MaterialButton]):
 	var mat_name_filter:String = filter_lineEdit.text
 	
 	if !mat_group_tree.is_path_visible(dir.get_path()):
@@ -105,26 +107,29 @@ func reload_materials_recursive(dir:EditorFileSystemDirectory):
 		if type == "StandardMaterial3D" || type == "ShaderMaterial" || type == "ORMMaterial3D":
 			var path:String = dir.get_file_path(i)
 			
-			if !mat_name_filter.is_empty() && !path.contains(mat_name_filter):
-				continue
+			if existing_buttons.has(path):
+				inserted_buttons.append(existing_buttons[path])
+			else:
 			
-			#print("path %s type %s" % [path, type])
-			
-			var bn:MaterialButton = material_button_ps.instantiate()
-			bn.material_path = path
-			#bn.plugin = builder
-			bn.thumbnail_generator = material_thumbnail_generator
-			bn.selected = selected_material_paths.has(path)
-			bn.active = !selected_material_paths.is_empty() && path == selected_material_paths[-1]
-			#button_group.add_button(bn)
-			bn.apply_material.connect(func(mat_bn:MaterialButton): apply_material(mat_bn))
-			bn.select_material.connect(func(mat_bn:MaterialButton, type:SelectionList.Type): select_material(mat_bn, type))
-			
-			button_area.add_child(bn)
+				if !mat_name_filter.is_empty() && !path.contains(mat_name_filter):
+					continue
+				
+				#print("path %s type %s" % [path, type])
+				
+				var bn:MaterialButton = material_button_ps.instantiate()
+				bn.material_path = path
+				bn.thumbnail_generator = material_thumbnail_generator
+				bn.selected = selected_material_paths.has(path)
+				bn.active = !selected_material_paths.is_empty() && path == selected_material_paths[-1]
+				bn.apply_material.connect(func(mat_bn:MaterialButton): apply_material(mat_bn))
+				bn.select_material.connect(func(mat_bn:MaterialButton, type:SelectionList.Type): select_material(mat_bn, type))
+				
+				#button_area.add_child(bn)
+				inserted_buttons.append(bn)
 			pass
 
 	for i in dir.get_subdir_count():
-		reload_materials_recursive(dir.get_subdir(i))
+		reload_materials_recursive(dir.get_subdir(i), existing_buttons, inserted_buttons)
 
 func apply_material(mat_bn:MaterialButton):
 	var cmd:CommandSetMaterial = CommandSetMaterial.new()
