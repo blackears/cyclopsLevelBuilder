@@ -215,6 +215,14 @@ func _process(delta):
 		#dirty = false
 	pass
 
+
+func _on_property_edited(property: String)->void:
+	var inspector = EditorInterface.get_inspector()
+	var object = inspector.get_edited_object()
+#	if object is Material:
+	if object == material_local:
+		dirty = true
+
 func on_resources_reimported(resources: PackedStringArray):
 	#print("--on_resources_reimported ", material_path)
 	#print("resoruces ", resources)
@@ -255,10 +263,15 @@ func _on_tree_entered() -> void:
 	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
 #	efs.filesystem_changed.connect(on_filesystem_changed)
 	efs.resources_reimported.connect(on_resources_reimported)
-#	efs.resources_reload.connect(on_resources_reload)
+	var inspector = EditorInterface.get_inspector()
+	inspector.property_edited.connect(_on_property_edited)
+	#	efs.resources_reload.connect(on_resources_reload)
 
 
 func _on_tree_exiting() -> void:
 	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
 	efs.resources_reimported.disconnect(on_resources_reimported)
+	var inspector = EditorInterface.get_inspector()
+	if inspector.property_edited.is_connected(_on_property_edited):
+		inspector.property_edited.disconnect(_on_property_edited)
 #	pass # Replace with function body.
