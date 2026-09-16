@@ -223,13 +223,13 @@ func on_material_property_edited(property: String)->void:
 	if object == material_local:
 		dirty = true
 
-func on_resources_reimported(resources: PackedStringArray):
-	#print("--on_resources_reimported ", material_path)
-	#print("resoruces ", resources)
-	
-	if resources.has(material_path):
-		rebuild_thumbnail()
-	pass
+#func on_resources_reimported(resources: PackedStringArray):
+	##print("--on_resources_reimported ", material_path)
+	##print("resoruces ", resources)
+	#
+	#if resources.has(material_path):
+		#rebuild_thumbnail()
+	#pass
 
 func _on_bn_rect_pressed() -> void:
 	mesh_type = MaterialPreviewScene.MeshType.RECTANGLE
@@ -260,17 +260,17 @@ func _on_bn_torus_pressed() -> void:
 
 
 func _on_tree_entered() -> void:
-	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
+#	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
 #	efs.filesystem_changed.connect(on_filesystem_changed)
-	efs.resources_reimported.connect(on_resources_reimported)
+#	efs.resources_reimported.connect(on_resources_reimported)
 	var inspector = EditorInterface.get_inspector()
 	inspector.property_edited.connect(on_material_property_edited)
 	#	efs.resources_reload.connect(on_resources_reload)
 
 
 func _on_tree_exiting() -> void:
-	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
-	efs.resources_reimported.disconnect(on_resources_reimported)
+#	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
+#	efs.resources_reimported.disconnect(on_resources_reimported)
 	var inspector = EditorInterface.get_inspector()
 	if inspector.property_edited.is_connected(on_material_property_edited):
 		inspector.property_edited.disconnect(on_material_property_edited)
