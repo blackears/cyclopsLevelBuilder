@@ -79,6 +79,7 @@ layout_mode = 2
 [node name="MenuBar" type="MenuBar" parent="VBoxContainer/PanelContainer/HBoxContainer3" unique_id=1420103397]
 unique_name_in_owner = true
 layout_mode = 2
+prefer_global_menu = false
 
 [node name="tool_buttons" type="HBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer3" unique_id=1857336464]
 unique_name_in_owner = true

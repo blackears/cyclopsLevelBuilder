@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c3cl77r65dexu"]
+[gd_scene format=3 uid="uid://c3cl77r65dexu"]
 
 [ext_resource type="Script" uid="uid://do355qmxduvtd" path="res://addons/cyclops_level_builder/gui/menu/editor_toolbar.gd" id="1_o71fd"]
 [ext_resource type="Script" uid="uid://cfj47olbvn1f7" path="res://addons/cyclops_level_builder/gui/menu/action_popup_menu.gd" id="2_ni0c8"]
@@ -10,31 +10,33 @@
 [sub_resource type="Theme" id="Theme_0hxey"]
 PanelContainer/styles/panel = SubResource("StyleBoxEmpty_o7kxq")
 
-[node name="PanelContainer" type="PanelContainer"]
+[node name="PanelContainer" type="PanelContainer" unique_id=1667248902]
 offset_right = 739.0
 offset_bottom = 31.0
 size_flags_horizontal = 3
 theme = SubResource("Theme_0hxey")
 script = ExtResource("1_o71fd")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1635233235]
 layout_mode = 2
 
-[node name="MenuBar2" type="MenuBar" parent="HBoxContainer"]
+[node name="MenuBar2" type="MenuBar" parent="HBoxContainer" unique_id=1537720889]
 unique_name_in_owner = true
 layout_mode = 2
+prefer_global_menu = false
 
-[node name="MenuBar" type="MenuBar" parent="HBoxContainer"]
+[node name="MenuBar" type="MenuBar" parent="HBoxContainer" unique_id=940271528]
 unique_name_in_owner = true
-visible = false
-layout_mode = 2
-
-[node name="MenuBar_old" type="MenuBar" parent="HBoxContainer"]
 visible = false
 layout_mode = 2
 prefer_global_menu = false
 
-[node name="Menu" type="PopupMenu" parent="HBoxContainer/MenuBar_old"]
+[node name="MenuBar_old" type="MenuBar" parent="HBoxContainer" unique_id=160436683]
+visible = false
+layout_mode = 2
+prefer_global_menu = false
+
+[node name="Menu" type="PopupMenu" parent="HBoxContainer/MenuBar_old" unique_id=2135222099]
 unique_name_in_owner = true
 item_count = 4
 item_0/id = -1
@@ -47,35 +49,36 @@ item_3/id = -1
 item_3/separator = true
 script = ExtResource("2_ni0c8")
 
-[node name="ToolButtonContainer" type="HBoxContainer" parent="HBoxContainer"]
+[node name="ToolButtonContainer" type="HBoxContainer" parent="HBoxContainer" unique_id=1510962730]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="bn_snap" type="Button" parent="HBoxContainer"]
+[node name="bn_snap" type="Button" parent="HBoxContainer" unique_id=235356233]
 layout_mode = 2
 tooltip_text = "Snapping on/off"
 toggle_mode = true
 button_pressed = true
 icon = ExtResource("4_begwr")
 
-[node name="snap_options" type="OptionButton" parent="HBoxContainer"]
+[node name="snap_options" type="OptionButton" parent="HBoxContainer" unique_id=1630040242]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Snapping system"
 
-[node name="display_mode" type="OptionButton" parent="HBoxContainer"]
+[node name="display_mode" type="OptionButton" parent="HBoxContainer" unique_id=1795902190]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "How the mesh is shown in the viewport."
 selected = 1
 item_count = 3
 popup/item_0/text = "Wireframe"
+popup/item_0/id = 0
 popup/item_1/text = "Mesh"
 popup/item_1/id = 1
 popup/item_2/text = "Materials"
 popup/item_2/id = 2
 
-[node name="bn_xray" type="Button" parent="HBoxContainer"]
+[node name="bn_xray" type="Button" parent="HBoxContainer" unique_id=1171660321]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Xray"
