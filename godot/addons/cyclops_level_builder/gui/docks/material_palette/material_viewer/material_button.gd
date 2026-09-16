@@ -216,7 +216,7 @@ func _process(delta):
 	pass
 
 
-func _on_property_edited(property: String)->void:
+func on_material_property_edited(property: String)->void:
 	var inspector = EditorInterface.get_inspector()
 	var object = inspector.get_edited_object()
 #	if object is Material:
@@ -264,7 +264,7 @@ func _on_tree_entered() -> void:
 #	efs.filesystem_changed.connect(on_filesystem_changed)
 	efs.resources_reimported.connect(on_resources_reimported)
 	var inspector = EditorInterface.get_inspector()
-	inspector.property_edited.connect(_on_property_edited)
+	inspector.property_edited.connect(on_material_property_edited)
 	#	efs.resources_reload.connect(on_resources_reload)
 
 
@@ -272,6 +272,6 @@ func _on_tree_exiting() -> void:
 	var efs:EditorFileSystem = EditorInterface.get_resource_filesystem()
 	efs.resources_reimported.disconnect(on_resources_reimported)
 	var inspector = EditorInterface.get_inspector()
-	if inspector.property_edited.is_connected(_on_property_edited):
-		inspector.property_edited.disconnect(_on_property_edited)
+	if inspector.property_edited.is_connected(on_material_property_edited):
+		inspector.property_edited.disconnect(on_material_property_edited)
 #	pass # Replace with function body.
