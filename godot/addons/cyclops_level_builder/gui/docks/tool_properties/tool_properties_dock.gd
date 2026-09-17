@@ -46,7 +46,7 @@ func set_editor(control:Control):
 
 func save_state(state:Dictionary):
 	var substate:Dictionary = {}
-	print("saving dock ", substate)
+	#print("saving dock ", substate)
 	
 	state["tool_properties_dock"] = substate
 	
@@ -56,4 +56,4 @@ func load_state(state:Dictionary):
 		return
 	
 	var substate:Dictionary = state["tool_properties_dock"]
-	print("loading dock ", substate)
+	#print("loading dock ", substate)

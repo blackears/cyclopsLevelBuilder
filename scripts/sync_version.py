@@ -27,8 +27,8 @@ replace_text(".github/workflows/build_addon.yml", r"(\s*PLUGIN_VERSION\s*:).*", 
 #print(r"(\s*PLUGIN_VERSION\s*:\s*).*")
 #print(version_id)
 
-subprocess.run(["git", "add", "-A"])
-subprocess.run(["git", "commit", "-m", "Updating version to " + version_id])
-subprocess.run(["git", "tag", "v" + version_id])
+# subprocess.run(["git", "add", "-A"])
+# subprocess.run(["git", "commit", "-m", "Updating version to " + version_id])
+# subprocess.run(["git", "tag", "v" + version_id])
 
 input("Press Enter to continue...")

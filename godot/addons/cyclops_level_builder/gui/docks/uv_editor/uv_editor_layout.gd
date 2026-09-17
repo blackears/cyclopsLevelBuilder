@@ -60,21 +60,21 @@ func _process(delta: float) -> void:
 	pass
 
 func on_subdivisions_changed(v:Vector2):
-	print("on_subdivisions_changed ", v)
+	#print("on_subdivisions_changed ", v)
 	vec_ed_subdiv.set_value_no_signal(v)
 
 func on_subdivisions_offset_changed(v:Vector2):
-	print("on_subdivisions_offset_changed ", v)
+	#print("on_subdivisions_offset_changed ", v)
 	vec_ed_subdiv_offset.set_value_no_signal(v)
 
 func _on_vector_edit_subdiv_value_changed(value: Vector2) -> void:
-	print("_on_vector_edit_subdiv_value_changed ", value)
+#	print("_on_vector_edit_subdiv_value_changed ", value)
 	uv_editor.subdivisions = value
 	pass # Replace with function body.
 
 
 func _on_vector_edit_offset_value_changed(value: Vector2) -> void:
-	print("_on_vector_edit_offset_value_changed ", value)
+	#print("_on_vector_edit_offset_value_changed ", value)
 	uv_editor.subdivisions_offset = value
 	pass # Replace with function body.
 

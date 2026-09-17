@@ -67,7 +67,7 @@ func reload_materials():
 	if !is_node_ready():
 		return
 		
-	print("material_viewer Reload materials +")
+	#print("material_viewer Reload materials +")
 	
 	var existing_buttons:Dictionary[String, MaterialButton]
 	var inserted_buttons:Array[MaterialButton]
