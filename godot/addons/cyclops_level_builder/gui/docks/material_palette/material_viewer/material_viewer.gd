@@ -29,8 +29,11 @@ class_name MaterialViewer
 @onready var mat_group_tree:MaterialGroupsTree = %MatGroupTree
 @onready var filter_lineEdit:LineEdit = %lineEd_filter
 @onready var material_thumbnail_generator:MaterialThumbnailGenerator = %MaterialThumbnailGenerator
+@onready var bn_show_in_inspector:Button = %bn_show_in_inspector
 
 const material_button_ps:Resource = preload("res://addons/cyclops_level_builder/gui/docks/material_palette/material_viewer/material_button.tscn")
+
+var show_selected_in_inspector:bool
 
 var builder:CyclopsLevelBuilder:
 	get:
@@ -156,9 +159,11 @@ func is_active_material(path:String):
 	return !selected_material_paths.is_empty() && path == selected_material_paths[-1]
 
 func select_material(mat_bn:MaterialButton, sel_type:SelectionList.Type):
+	
 	match sel_type:
 		SelectionList.Type.REPLACE:
 			selected_material_paths = [mat_bn.material_path]
+			
 		SelectionList.Type.TOGGLE:
 			var idx:int = selected_material_paths.find(mat_bn.material_path)
 			if idx >= 0:
@@ -200,7 +205,10 @@ func select_material(mat_bn:MaterialButton, sel_type:SelectionList.Type):
 		else:
 			bn.active = false
 			bn.selected = false
-		
+	
+	if show_selected_in_inspector:
+		if mat_bn.active:
+			EditorInterface.get_inspector().edit(mat_bn.material_local)
 		
 	
 #func resource_preview_callback(path:String, preview:Texture2D, userdata:Variant):
@@ -253,6 +261,8 @@ func load_state(state:Dictionary):
 		
 	#print("material_viewer load_state:", state)
 	
+	show_selected_in_inspector = state.get("show_selected_in_inspector", false) as bool
+	
 	mat_group_tree.load_state(state.get("tree", {}))
 	
 	reload_materials()
@@ -263,7 +273,12 @@ func save_state(state:Dictionary):
 	var tree_state:Dictionary = {}
 	mat_group_tree.save_state(tree_state)
 	
+	state["show_selected_in_inspector"] = show_selected_in_inspector
 	state["tree"] = tree_state
 	
 	#print("material_viewer save_state:", state)
 	
+
+
+func _on_bn_show_in_inspector_toggled(toggled_on: bool) -> void:
+	show_selected_in_inspector = toggled_on

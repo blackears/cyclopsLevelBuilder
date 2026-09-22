@@ -50,6 +50,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Filter materials"
 
+[node name="bn_show_in_inspector" type="Button" parent="HSplitContainer/VBoxContainer/HBoxContainer" unique_id=1187170531]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Show in Inspector"
+toggle_mode = true
+text = "📄"
+
 [node name="PanelContainer" type="PanelContainer" parent="HSplitContainer/VBoxContainer" unique_id=713930041]
 layout_mode = 2
 size_flags_vertical = 3
@@ -71,3 +78,4 @@ unique_name_in_owner = true
 [connection signal="toggled" from="HSplitContainer/VBoxContainer2/HBoxContainer/bn_show_unused_dirs" to="." method="_on_bn_show_unused_dirs_toggled"]
 [connection signal="visiblity_changed" from="HSplitContainer/VBoxContainer2/MatGroupTree" to="." method="_on_mat_group_tree_visiblity_changed"]
 [connection signal="text_changed" from="HSplitContainer/VBoxContainer/HBoxContainer/lineEd_filter" to="." method="_on_line_ed_filter_text_changed"]
+[connection signal="toggled" from="HSplitContainer/VBoxContainer/HBoxContainer/bn_show_in_inspector" to="." method="_on_bn_show_in_inspector_toggled"]
