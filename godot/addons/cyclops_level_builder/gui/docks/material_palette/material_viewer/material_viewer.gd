@@ -262,6 +262,7 @@ func load_state(state:Dictionary):
 	#print("material_viewer load_state:", state)
 	
 	show_selected_in_inspector = state.get("show_selected_in_inspector", false) as bool
+	bn_show_in_inspector.button_pressed = show_selected_in_inspector
 	
 	mat_group_tree.load_state(state.get("tree", {}))
 	

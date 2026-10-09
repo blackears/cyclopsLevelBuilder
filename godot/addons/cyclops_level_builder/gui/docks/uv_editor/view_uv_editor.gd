@@ -42,6 +42,7 @@ signal tool_changed(tool:CyclopsTool)
 @onready var option_snapping:OptionButton = %option_snapping
 
 @onready var theme_tool_button:Theme = preload("res://addons/cyclops_level_builder/themes/tool_button_theme.tres")
+@onready var menu_bar:MenuBar = %MenuBar
 
 ##NodePath to hotkey
 @export var toolmap_list:Dictionary[Node, KeymapKeypress]:
@@ -112,8 +113,8 @@ func build_menus():
 	if !is_node_ready():
 		return
 	
-	for child in %MenuBar.get_children():
-		%MenuBar.remove_child(child)
+	for child in menu_bar.get_children():
+		menu_bar.remove_child(child)
 		child.queue_free()
 	
 	for child in %tool_buttons.get_children():
@@ -148,7 +149,7 @@ func build_menus():
 		if child is MenuLineItemGroup:
 			#old
 			var popup:LineItemPopupMenu = child.create_popup_menu()
-			%MenuBar.add_child(popup)
+			menu_bar.add_child(popup)
 			
 			popup.action_chosen.connect(
 				func(action:CyclopsAction): \
@@ -204,11 +205,6 @@ func build_tool_buttons():
 	var active_block:CyclopsBlock = plugin.get_active_block()
 	
 	var tool_button_group:ButtonGroup = ButtonGroup.new()
-	
-	#var reverse_tools_keymap:Dictionary[Node, StringName]
-	#for key in tools_keymap_map.keys():
-		#reverse_tools_keymap[tools_keymap_map[key]] = key
-		
 	
 	var toolbar_root = tools_list
 	for tool_inst in toolbar_root.get_children():

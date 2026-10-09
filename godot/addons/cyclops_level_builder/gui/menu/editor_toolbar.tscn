@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://c3cl77r65dexu"]
 
 [ext_resource type="Script" uid="uid://do355qmxduvtd" path="res://addons/cyclops_level_builder/gui/menu/editor_toolbar.gd" id="1_o71fd"]
-[ext_resource type="Script" uid="uid://cfj47olbvn1f7" path="res://addons/cyclops_level_builder/gui/menu/action_popup_menu.gd" id="2_ni0c8"]
 [ext_resource type="Texture2D" uid="uid://bs54uhn80ykrr" path="res://addons/cyclops_level_builder/art/icons/xray_normal.svg" id="3_ldp0l"]
 [ext_resource type="Texture2D" uid="uid://dloyvoq8piwx0" path="res://addons/cyclops_level_builder/art/icons/snap.svg" id="4_begwr"]
 
@@ -20,34 +19,10 @@ script = ExtResource("1_o71fd")
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1635233235]
 layout_mode = 2
 
-[node name="MenuBar2" type="MenuBar" parent="HBoxContainer" unique_id=1537720889]
+[node name="MenuBar" type="MenuBar" parent="HBoxContainer" unique_id=1537720889]
 unique_name_in_owner = true
 layout_mode = 2
 prefer_global_menu = false
-
-[node name="MenuBar" type="MenuBar" parent="HBoxContainer" unique_id=940271528]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-prefer_global_menu = false
-
-[node name="MenuBar_old" type="MenuBar" parent="HBoxContainer" unique_id=160436683]
-visible = false
-layout_mode = 2
-prefer_global_menu = false
-
-[node name="Menu" type="PopupMenu" parent="HBoxContainer/MenuBar_old" unique_id=2135222099]
-unique_name_in_owner = true
-item_count = 4
-item_0/id = -1
-item_0/separator = true
-item_1/id = -1
-item_1/separator = true
-item_2/id = -1
-item_2/separator = true
-item_3/id = -1
-item_3/separator = true
-script = ExtResource("2_ni0c8")
 
 [node name="ToolButtonContainer" type="HBoxContainer" parent="HBoxContainer" unique_id=1510962730]
 unique_name_in_owner = true

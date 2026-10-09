@@ -25,6 +25,8 @@
 extends PanelContainer
 class_name EditorToolbar
 
+@onready var menu_bar:MenuBar = %MenuBar
+
 var editor_plugin:CyclopsLevelBuilder:
 	set(value):
 		if editor_plugin:
@@ -66,16 +68,16 @@ func _ready():
 	
 
 func build_menu():
+	if !is_node_ready():
+		return
 	
-	###########
-	# This is the new rewrite of the action menu
 	if !editor_plugin:
 		return
 	if !editor_plugin.config_scene:
 		return
 	
-	for child in %MenuBar2.get_children():
-		%MenuBar2.remove_child(child)
+	for child in menu_bar.get_children():
+		menu_bar.remove_child(child)
 		child.queue_free()
 	
 	var menu_root = editor_plugin.config_scene.get_node("Views/View3D/Menu")
@@ -85,7 +87,7 @@ func build_menu():
 			
 		if child is MenuLineItemGroup:
 			var popup:LineItemPopupMenu = child.create_popup_menu()
-			%MenuBar2.add_child(popup)
+			menu_bar.add_child(popup)
 			
 			popup.action_chosen.connect(
 				func(action:CyclopsAction): \
