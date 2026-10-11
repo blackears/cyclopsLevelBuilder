@@ -1,9 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://ddilp7pdmxg0"]
+[gd_scene format=3 uid="uid://ddilp7pdmxg0"]
 
 [ext_resource type="Script" uid="uid://dsmye04gphxgv" path="res://addons/cyclops_level_builder/gui/keymap/line_item_popup_menu.gd" id="1_t288v"]
 
-[node name="LineItemMenu" type="PopupMenu"]
-visible = true
+[node name="LineItemMenu" type="PopupMenu" unique_id=41270715]
+oversampling_override = 1.0
 unfocusable = true
 script = ExtResource("1_t288v")
 

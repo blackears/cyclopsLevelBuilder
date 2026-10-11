@@ -140,7 +140,6 @@ func build_menus():
 
 #	print("Build menu")
 	#Build view menu
-#	var menu_root = plugin.config_scene.get_node("Views/UvEditor/Menu")
 	var menu_root = %menu
 	for child in menu_root.get_children():
 		var event:CyclopsActionEvent = CyclopsActionEvent.new()
