@@ -292,9 +292,7 @@ func _activate(tool_owner:Node):
 func _deactivate():
 	super._deactivate()
 	builder.active_node_changed.disconnect(active_node_changed)
-
-	var global_scene:CyclopsGlobalScene = builder.get_global_scene()
-	global_scene.set_custom_gizmo(null)
+	builder.viewport_3d_manager.set_custom_gizmo(null)
 	
 
 func start_drag(viewport_camera:Camera3D, event:InputEvent):
