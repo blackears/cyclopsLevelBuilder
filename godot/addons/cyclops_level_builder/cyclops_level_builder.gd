@@ -190,15 +190,22 @@ func create_dock(child:Node, title:String, slot:EditorDock.DockSlot, layout:Edit
 
 func _enable_plugin() -> void:
 	add_autoload_singleton(AUTOLOAD_NAME, "res://addons/cyclops_level_builder/cyclops_autoload.tscn")
+
+	EditorInterface.set_plugin_enabled("res://addons/cyclops_level_builder/main_scene_cyclops_3d/", true)
+
 	pass
 
 func _disable_plugin() -> void:
 	remove_autoload_singleton(AUTOLOAD_NAME)
+
+	EditorInterface.set_plugin_enabled("res://addons/cyclops_level_builder/main_scene_cyclops_3d/", false)
+
 	pass
 
 func _enter_tree():
 	config_scene = preload(config_scene_path).instantiate()
 	add_child(config_scene)
+	
 	
 	if FileAccess.file_exists(editor_cache_file):
 		#print(">> _enter_tree")

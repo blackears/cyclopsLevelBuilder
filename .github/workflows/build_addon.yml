@@ -34,6 +34,7 @@ jobs:
         with:
           name: cyclops_level_builder_${{ env.PLUGIN_VERSION }}_for_Godot_${{ env.GODOT_VERSION }}
           path: godot/addons
+          retention-days: 400
 
           
         

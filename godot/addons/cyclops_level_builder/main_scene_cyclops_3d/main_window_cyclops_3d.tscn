@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dbqtd2ur6fh4f"]
+
+[ext_resource type="Script" uid="uid://bfgpymbx6lpv" path="res://addons/cyclops_level_builder/main_scene_cyclops_3d/main_window_cyclops_3d.gd" id="1_ksogu"]
+
+[node name="MainCyclops3d" type="Node3D" unique_id=234831129]
+script = ExtResource("1_ksogu")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1357594478]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=43248893]
