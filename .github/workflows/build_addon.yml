@@ -32,7 +32,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: cyclops_level_builder_${{ env.PLUGIN_VERSION }}_for_Godot_${{ env.GODOT_VERSION }}.zip
-          #path: godot
+          path: 
           archive: false
 
           
