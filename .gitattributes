@@ -1,3 +1,6 @@
+# Normalize line endings for all files that Git considers text files.
+* text=auto eol=lf
+
 *.mdp filter=lfs diff=lfs merge=lfs -text
 *.png filter=lfs diff=lfs merge=lfs -text
 *.jpg filter=lfs diff=lfs merge=lfs -text
