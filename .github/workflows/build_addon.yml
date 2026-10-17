@@ -10,7 +10,7 @@ on:
   # id-token: write
 
 env:
-  PLUGIN_VERSION: 1.5.1_dev
+  PLUGIN_VERSION: 1.5.1
   GODOT_VERSION: 4.7
 
 jobs:
@@ -23,17 +23,17 @@ jobs:
         with:
           lfs: true
         
-      # - name: Zip the directory
-        # run: |
-          # cd godot/addons
-          # ADDON_ARCHIVE="cyclops_level_builder_${{ env.PLUGIN_VERSION }}_for_Godot_${{ env.GODOT_VERSION }}.zip"
-          # zip -r ${ADDON_ARCHIVE} cyclops_level_builder
+      - name: Zip the directory
+        run: |
+          ADDON_ARCHIVE="cyclops_level_builder_${{ env.PLUGIN_VERSION }}_for_Godot_${{ env.GODOT_VERSION }}.zip"
+          zip -r ${ADDON_ARCHIVE} godot/addons
       
       - name: Upload zip as an artifact
         uses: actions/upload-artifact@v7
         with:
-          name: cyclops_level_builder_${{ env.PLUGIN_VERSION }}_for_Godot_${{ env.GODOT_VERSION }}
-          path: godot/addons
+          name: cyclops_level_builder_${{ env.PLUGIN_VERSION }}_for_Godot_${{ env.GODOT_VERSION }}.zip
+          #path: godot
+          archive: false
 
           
         
