@@ -1,4 +1,0 @@
-{
-	"plugin-version": "1.5.2",
-	"godot-version": "4.7",
-}
