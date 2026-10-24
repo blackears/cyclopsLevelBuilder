@@ -4,6 +4,12 @@
 
 Cyclops Level Builder is an addon for Godot that lets you design levels inside the editor.
 
+### Download
+
+You can download the latest release from the [Releases page](https://github.com/blackears/cyclopsLevelBuilder/releases).
+
+Cyclops Level Builder is also available from the [Godot Asset Library](https://godotengine.org/asset-library/asset/5532).
+
 ### Home Page
 
 The project is hosted on [Github](https://github.com/blackears/cyclopsLevelBuilder).

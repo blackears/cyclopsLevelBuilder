@@ -103,20 +103,27 @@ var display_mode:DisplayMode.Type = DisplayMode.Type.MATERIAL
 			collision_body.collision_mask = collision_mask
 
 func _init():
-	#The render mesh is created here rather than in _ready() so that it already exists
-	#when a LightmapGI node resolves its stored node paths on entering the tree.
-	#LightmapGI ignores nodes that have no owner, so the mesh is owned by this block.
-	#Nodes whose owner is not the scene root are not saved with the scene.
+	##The render mesh is created here rather than in _ready() so that it already exists
+	##when a LightmapGI node resolves its stored node paths on entering the tree.
+	##LightmapGI ignores nodes that have no owner, so the mesh is owned by this block.
+	##Nodes whose owner is not the scene root are not saved with the scene.
+	#mesh_instance = MeshInstance3D.new()
+	#mesh_instance.name = &"BlockMesh"
+	#add_child(mesh_instance)
+	#mesh_instance.owner = self
+	#
+	#mesh_instance.gi_mode = GeometryInstance3D.GI_MODE_STATIC
+	pass
+	
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
 	mesh_instance = MeshInstance3D.new()
 	mesh_instance.name = &"BlockMesh"
 	add_child(mesh_instance)
 	mesh_instance.owner = self
 	
 	mesh_instance.gi_mode = GeometryInstance3D.GI_MODE_STATIC
-	
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
 
 	#print("block owner path %s" % owner.get_path())
 
@@ -129,11 +136,17 @@ func _ready():
 	
 	build_from_block()
 	update_physics_body()
+	
+	#This is a work around to reattach lightmaps when the scene loads.  Needed until 
+	# way to load individual node refreshes are possible.
+	# https://github.com/godotengine/godot-proposals/discussions/15696
 	_queue_lightmap_refresh()
+
 
 #Baked lightmaps are assigned by LightmapGI as the scene enters the tree, which is before the
 #blocks have built their meshes (in _ready). Once every block has built, ask any LightmapGI
 #in the scene to assign its lightmaps again. Only one refresh is queued per scene load.
+
 static var _lightmap_refresh_queued:bool = false
 
 func _queue_lightmap_refresh():
