@@ -66,6 +66,14 @@ var control_mesh:ConvexVolume
 			dirty = true
 			mesh_changed.emit(self)
 
+## Size of one lightmap texel in local units. Smaller values give sharper baked lighting
+## at the cost of larger lightmaps. Set to 0 to skip lightmap UV (UV2) generation.
+@export_range(0.0, 2.0, 0.01, "or_greater") var lightmap_texel_size:float = 0.1:
+	set(value):
+		if lightmap_texel_size != value:
+			lightmap_texel_size = value
+			dirty = true
+
 @export var materials:Array[Material]
 
 var default_material:Material = preload("res://addons/cyclops_level_builder/materials/grid.tres")
@@ -94,22 +102,56 @@ var display_mode:DisplayMode.Type = DisplayMode.Type.MATERIAL
 		if collision_body:
 			collision_body.collision_mask = collision_mask
 
+func _init():
+	#The render mesh is created here rather than in _ready() so that it already exists
+	#when a LightmapGI node resolves its stored node paths on entering the tree.
+	#LightmapGI ignores nodes that have no owner, so the mesh is owned by this block.
+	#Nodes whose owner is not the scene root are not saved with the scene.
+	mesh_instance = MeshInstance3D.new()
+	mesh_instance.name = &"BlockMesh"
+	add_child(mesh_instance)
+	mesh_instance.owner = self
+	
+	mesh_instance.gi_mode = GeometryInstance3D.GI_MODE_STATIC
+	
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	mesh_instance = MeshInstance3D.new()
-	add_child(mesh_instance)
-	mesh_instance.gi_mode = GeometryInstance3D.GI_MODE_STATIC
 
 	#print("block owner path %s" % owner.get_path())
 
 	if Engine.is_editor_hint():
 		mesh_wire = MeshInstance3D.new()
 		add_child(mesh_wire)
+		mesh_wire.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
 	
 	collision_shape = CollisionShape3D.new()
 	
 	build_from_block()
 	update_physics_body()
+	_queue_lightmap_refresh()
+
+#Baked lightmaps are assigned by LightmapGI as the scene enters the tree, which is before the
+#blocks have built their meshes (in _ready). Once every block has built, ask any LightmapGI
+#in the scene to assign its lightmaps again. Only one refresh is queued per scene load.
+static var _lightmap_refresh_queued:bool = false
+
+func _queue_lightmap_refresh():
+	if _lightmap_refresh_queued || !is_inside_tree():
+		return
+	_lightmap_refresh_queued = true
+	_refresh_lightmaps.call_deferred(owner if owner else get_tree().root)
+
+static func _refresh_lightmaps(scene_root:Node):
+	_lightmap_refresh_queued = false
+	if !is_instance_valid(scene_root) || !scene_root.is_inside_tree():
+		return
+	for n in scene_root.find_children("*", "LightmapGI", true, false):
+		var gi:LightmapGI = n
+		var data:LightmapGIData = gi.light_data
+		if data:
+			gi.light_data = null
+			gi.light_data = data
 
 func update_physics_body():
 	
@@ -173,12 +215,12 @@ func build_from_block():
 
 			#print("rebuilding mesh")
 			if display_mode == DisplayMode.Type.MATERIAL:
-				mesh = vol.create_mesh(materials, default_material)
+				mesh = vol.create_mesh(materials, default_material, false, lightmap_texel_size)
 			if display_mode == DisplayMode.Type.MESH:
-				mesh = vol.create_mesh(materials, default_material, true)
+				mesh = vol.create_mesh(materials, default_material, true, lightmap_texel_size)
 				#print ("added faces")
 	else:
-		mesh = vol.create_mesh(materials, default_material)
+		mesh = vol.create_mesh(materials, default_material, false, lightmap_texel_size)
 	
 	mesh_instance.mesh = mesh
 	
@@ -186,12 +228,6 @@ func build_from_block():
 	shape.points = vol.get_points()
 	collision_shape.shape = shape
 	
-	#if !Engine.is_editor_hint():
-		##Disabling this in the editor for now since this is causing slowdown
-		#var occluder_object:ArrayOccluder3D = ArrayOccluder3D.new()
-		#occluder_object.vertices = vol.get_points()
-		#occluder_object.indices = vol.get_trimesh_indices()
-		#occluder.occluder = occluder_object
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -283,5 +319,5 @@ func export_to_cyclops_file(file_builder:CyclopsFileBuilder)->Dictionary:
 	
 	if mesh_vector_data:
 		result["mesh"] = mesh_vector_data.to_dictionary(file_builder)
-	#build_mesh["mesh"] = cur_node.mesh_vector_data.to_dictionary(self)
+		
 	return result

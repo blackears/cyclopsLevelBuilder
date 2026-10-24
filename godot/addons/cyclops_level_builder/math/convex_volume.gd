@@ -235,6 +235,9 @@ var bounds:AABB
 
 var lightmap_uvs_dirty = true
 
+#Size of the packed lightmap (UV2) atlas, in local units. Set by calc_lightmap_uvs()
+var lightmap_extent:Vector2 = Vector2.ZERO
+
 var active_vertex:int = -1
 var active_edge:int = -1
 var active_face:int = -1
@@ -568,6 +571,8 @@ func init_from_mesh_vector_data(mvd:MeshVectorData):
 	face_vertices = []
 	face_vertex_coord_map.clear()
 	bounds = AABB()
+	
+	lightmap_uvs_dirty = true
 	
 	if !mvd:
 		return
@@ -1510,6 +1515,9 @@ func tristrip_vertex_range_reverse(num_verts:int)->PackedInt32Array:
 	return result
 
 func calc_lightmap_uvs():
+	lightmap_uvs_dirty = false
+	lightmap_extent = Vector2.ZERO
+	
 	var packer:FacePacker = FacePacker.new()
 	var max_dim:float = max(bounds.size.x, bounds.size.y, bounds.size.z)
 	var tree:FacePacker.FaceTree = packer.build_faces(self, max_dim * .1)
@@ -1517,30 +1525,13 @@ func calc_lightmap_uvs():
 	var xform:Transform2D = Transform2D.IDENTITY
 	xform = xform.scaled(tree.bounds.size)
 	if is_zero_approx(xform.determinant()):
-		return		
+		return
 	var xform_inv = xform.affine_inverse()
+	lightmap_extent = tree.bounds.size
 
 	for ft in tree.face_list:
 		var face:FaceInfo = faces[ft.face_index]
 		face.lightmap_uvs = xform_inv * ft.points
-
-#func create_mesh_wire_old(material:Material)->ImmediateMesh:
-##	if Engine.is_editor_hint():
-##		return
-	#var mesh:ImmediateMesh = ImmediateMesh.new()
-#
-	#mesh.surface_begin(Mesh.PRIMITIVE_LINES, material)
-#
-	#for e in edges:
-		#var v0:VertexInfo = vertices[e.start_index]
-		#var v1:VertexInfo = vertices[e.end_index]
-#
-		#mesh.surface_add_vertex(v0.point)
-		#mesh.surface_add_vertex(v1.point)
-#
-	#mesh.surface_end()
-	#
-	#return mesh
 
 
 func create_mesh_wire(material:Material)->ArrayMesh:
@@ -1568,11 +1559,24 @@ func create_mesh_wire(material:Material)->ArrayMesh:
 	return mesh
 
 
-func create_mesh(material_list:Array[Material], default_material:Material, override_with_default_material:bool = false)->ArrayMesh:
+#func create_mesh(material_list:Array[Material], default_material:Material, override_with_default_material:bool = false)->ArrayMesh:
+## lightmap_texel_size is the size of one lightmap texel in local units. Values <= 0 disable UV2 generation.
+func create_mesh(material_list:Array[Material], default_material:Material, override_with_default_material:bool = false, lightmap_texel_size:float = 0.1)->ArrayMesh:
 
 	var mesh:ArrayMesh = ArrayMesh.new()
 	mesh.blend_shape_mode = Mesh.BLEND_SHAPE_MODE_NORMALIZED
-	mesh.lightmap_size_hint = Vector2(1000, 1000)
+#	mesh.lightmap_size_hint = Vector2(1000, 1000)
+
+	#Lightmap (UV2) support. LightmapGI silently skips meshes that have no UV2.
+	var gen_uv2:bool = lightmap_texel_size > 0.0
+	if gen_uv2 && lightmap_uvs_dirty:
+		calc_lightmap_uvs()
+	if gen_uv2 && !lightmap_extent.is_zero_approx():
+		var hint:Vector2 = (lightmap_extent / lightmap_texel_size).ceil()
+		mesh.lightmap_size_hint = Vector2i(clampi(int(hint.x), 4, 4096), clampi(int(hint.y), 4, 4096))
+	else:
+		gen_uv2 = false
+		mesh.lightmap_size_hint = Vector2(1024, 1024)
 
 	var shadow_mesh:ArrayMesh = ArrayMesh.new()
 	shadow_mesh.blend_shape_mode = Mesh.BLEND_SHAPE_MODE_NORMALIZED
@@ -1603,6 +1607,7 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 		var tangents:PackedFloat32Array
 		var colors:PackedColorArray
 		var uv1s:PackedVector2Array
+		var uv2s:PackedVector2Array
 
 		var material = default_material
 		if !override_with_default_material:
@@ -1629,6 +1634,11 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 				var p:Vector3 = vertices[v_idx].point
 
 				uv1s.append(fv.uv0)
+				
+				if gen_uv2 && face.lightmap_uvs.size() == face.vertex_indices.size():
+					uv2s.append(face.lightmap_uvs[v_local_idx])
+				else:
+					uv2s.append(Vector2.ZERO)
 
 				normals.append(fv.normal)
 				colors.append(fv.color)
@@ -1700,7 +1710,8 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 				tangents.append(1.0)
 #		print("create_mesh <<1.2>>")
 		
-		var arrays:Array = create_indexed_vertex_array(points, normals, tangents, colors, uv1s)
+		#var arrays:Array = create_indexed_vertex_array(points, normals, tangents, colors, uv1s)
+		var arrays:Array = create_indexed_vertex_array(points, normals, tangents, colors, uv1s, uv2s if gen_uv2 else PackedVector2Array())
 		
 		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 		mesh.surface_set_material(surface_idx, material)
@@ -1722,8 +1733,8 @@ func create_mesh(material_list:Array[Material], default_material:Material, overr
 
 
 
-#func create_indexed_vertex_array(points:PackedVector3Array, normals:PackedVector3Array, tangents:PackedFloat32Array, colors:PackedColorArray, uv1s:PackedVector2Array, uv2s:PackedVector2Array)->Array:
-func create_indexed_vertex_array(points:PackedVector3Array, normals:PackedVector3Array, tangents:PackedFloat32Array, colors:PackedColorArray, uv1s:PackedVector2Array)->Array:
+func create_indexed_vertex_array(points:PackedVector3Array, normals:PackedVector3Array, tangents:PackedFloat32Array, colors:PackedColorArray, uv1s:PackedVector2Array, uv2s:PackedVector2Array)->Array:
+	var has_uv2:bool = uv2s.size() == points.size() && points.size() > 0
 	var vert_idx_map:Dictionary
 	var indices:PackedInt32Array
 	var points_indexed:PackedVector3Array
@@ -1731,7 +1742,7 @@ func create_indexed_vertex_array(points:PackedVector3Array, normals:PackedVector
 	var tangents_indexed:PackedFloat32Array
 	var colors_indexed:PackedColorArray
 	var uv1s_indexed:PackedVector2Array
-#	var uv2s_indexed:PackedVector2Array
+	var uv2s_indexed:PackedVector2Array
 	
 	for v_idx in points.size():
 		var vertex:PackedFloat32Array
@@ -1756,8 +1767,9 @@ func create_indexed_vertex_array(points:PackedVector3Array, normals:PackedVector
 		vertex.append(uv1s[v_idx].x)
 		vertex.append(uv1s[v_idx].y)
 
-		#vertex.append(uv2s[v_idx].x)
-		#vertex.append(uv2s[v_idx].y)
+		if has_uv2:
+			vertex.append(uv2s[v_idx].x)
+			vertex.append(uv2s[v_idx].y)
 
 		var new_index:int
 		if !vert_idx_map.has(vertex):
@@ -1773,7 +1785,8 @@ func create_indexed_vertex_array(points:PackedVector3Array, normals:PackedVector
 			tangents_indexed.append(tangents[v_idx * 4 + 3])
 			colors_indexed.append(colors[v_idx])
 			uv1s_indexed.append(uv1s[v_idx])
-#			uv2s_indexed.append(uv2s[v_idx])
+			if has_uv2:
+				uv2s_indexed.append(uv2s[v_idx])
 		else:
 			new_index = vert_idx_map[vertex]
 		
@@ -1788,7 +1801,8 @@ func create_indexed_vertex_array(points:PackedVector3Array, normals:PackedVector
 	arrays[Mesh.ARRAY_NORMAL] = normals_indexed
 	arrays[Mesh.ARRAY_TANGENT] = tangents_indexed
 	arrays[Mesh.ARRAY_TEX_UV] = uv1s_indexed
-#	arrays[Mesh.ARRAY_TEX_UV2] = uv2s_indexed
+	if has_uv2:
+		arrays[Mesh.ARRAY_TEX_UV2] = uv2s_indexed
 	arrays[Mesh.ARRAY_COLOR] = colors_indexed
 	arrays[Mesh.ARRAY_INDEX] = indices
 
