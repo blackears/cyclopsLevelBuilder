@@ -107,17 +107,6 @@ func _init():
 	##when a LightmapGI node resolves its stored node paths on entering the tree.
 	##LightmapGI ignores nodes that have no owner, so the mesh is owned by this block.
 	##Nodes whose owner is not the scene root are not saved with the scene.
-	#mesh_instance = MeshInstance3D.new()
-	#mesh_instance.name = &"BlockMesh"
-	#add_child(mesh_instance)
-	#mesh_instance.owner = self
-	#
-	#mesh_instance.gi_mode = GeometryInstance3D.GI_MODE_STATIC
-	pass
-	
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
 	mesh_instance = MeshInstance3D.new()
 	mesh_instance.name = &"BlockMesh"
 	add_child(mesh_instance)
@@ -125,14 +114,34 @@ func _ready():
 	
 	mesh_instance.gi_mode = GeometryInstance3D.GI_MODE_STATIC
 
-	#print("block owner path %s" % owner.get_path())
-
 	if Engine.is_editor_hint():
 		mesh_wire = MeshInstance3D.new()
 		add_child(mesh_wire)
 		mesh_wire.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
 	
 	collision_shape = CollisionShape3D.new()
+	collision_shape.name = &"CollisionShape"
+	
+	pass
+	
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	#mesh_instance = MeshInstance3D.new()
+	#mesh_instance.name = &"BlockMesh"
+	#add_child(mesh_instance)
+	#mesh_instance.owner = self
+	#
+	#mesh_instance.gi_mode = GeometryInstance3D.GI_MODE_STATIC
+
+	#print("block owner path %s" % owner.get_path())
+
+	#if Engine.is_editor_hint():
+		#mesh_wire = MeshInstance3D.new()
+		#add_child(mesh_wire)
+		#mesh_wire.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
+	#
+	#collision_shape = CollisionShape3D.new()
 	
 	build_from_block()
 	update_physics_body()
@@ -140,6 +149,7 @@ func _ready():
 	#This is a work around to reattach lightmaps when the scene loads.  Needed until 
 	# way to load individual node refreshes are possible.
 	# https://github.com/godotengine/godot-proposals/discussions/15696
+	
 	_queue_lightmap_refresh()
 
 
